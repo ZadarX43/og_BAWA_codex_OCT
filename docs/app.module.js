@@ -124,10 +124,10 @@ const COLORS = {
   ring: '#9EE7E3'
 };
 
-const SURFACE_EPS = 0.006;   // marker altitude = SURFACE_EPS × globeRadius
-const RADIUS_BASE = 0.010;   // marker radius (× globeRadius)
-const RADIUS_ACTIVE = 0.022; // active marker radius
-const CAMERA_ALT = 2.0;
+const SURFACE_EPS   = 0.006;  // marker altitude = SURFACE_EPS × globeRadius
+const RADIUS_BASE   = 0.010;  // marker radius (× globeRadius)
+const RADIUS_ACTIVE = 0.022;  // active marker radius
+const CAMERA_ALT    = 2.0;
 
 const BLOOM = { strength: 0.6, radius: 0.5, threshold: 0.85 };
 
@@ -142,26 +142,27 @@ function clearNode(node) {
   while (node.firstChild) node.removeChild(node.firstChild);
 }
 
-function setBadge(elm, url, initials) {
+function setBadge(elm, url, initTxt) {
   if (!elm) return;
   elm.innerHTML = '';
   elm.classList.remove('has-logo');
   if (url && /^https?:\/\//i.test(url)) {
     const img = document.createElement('img');
     img.src = url;
-    img.alt = initials || '';
+    img.alt = initTxt || '';
     img.loading = 'lazy';
     img.decoding = 'async';
     img.onerror = () => {
-      elm.textContent = initials || '';
+      elm.textContent = initTxt || '';
       elm.classList.remove('has-logo');
     };
     elm.appendChild(img);
     elm.classList.add('has-logo');
   } else {
-    elm.textContent = initials || '';
+    elm.textContent = initTxt || '';
   }
 }
+
 function initials(name = '') {
   const words = name.split(/\s+/).filter(Boolean);
   if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
@@ -246,14 +247,13 @@ async function init() {
 
   scene.add(globe);
 
-  // Hover (guarded)
+  // Hover / click (guarded for builds without these hooks)
   if (typeof globe.onPointHover === 'function') {
     globe.onPointHover(handleHover);
   } else {
     console.info('[three-globe] onPointHover() not available in this build — hover enhancement disabled.');
   }
 
-  // Click select (guarded)
   if (typeof globe.onPointClick === 'function') {
     globe.onPointClick(pt => {
       if (!pt) return;
