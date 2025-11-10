@@ -18,7 +18,8 @@
 }
 
 body {
-  background: radial-gradient(circle at 20% 20%, rgba(28, 61, 92, 0.65), transparent 60%),
+  background:
+    radial-gradient(circle at 20% 20%, rgba(28, 61, 92, 0.65), transparent 60%),
     radial-gradient(circle at 80% 10%, rgba(26, 89, 70, 0.55), transparent 70%),
     #00040a;
   color: var(--text-primary);
@@ -99,7 +100,8 @@ body {
   flex: 1;
   min-height: 420px;
   border-radius: 24px;
-  background: radial-gradient(circle at 50% 30%, rgba(0, 93, 139, 0.3), transparent 65%),
+  background:
+    radial-gradient(circle at 50% 30%, rgba(0, 93, 139, 0.3), transparent 65%),
     rgba(3, 9, 15, 0.9);
   position: relative;
 }
@@ -296,11 +298,11 @@ canvas {
   cursor: pointer;
 }
 
+/* ---------- Responsive ---------- */
 @media (max-width: 1100px) {
   .hero {
     grid-template-columns: 1fr;
   }
-
   .hero__insights {
     order: -1;
   }
@@ -311,15 +313,12 @@ canvas {
     flex-direction: column;
     gap: 18px;
   }
-
   .nav-links {
     align-self: flex-end;
   }
-
   .floating-bar {
     border-radius: 28px;
   }
-
   .floating-bar__content {
     flex-direction: column;
     align-items: flex-start;
@@ -330,14 +329,51 @@ canvas {
   .page {
     padding-top: 20px;
   }
-
   .nav-links {
     align-self: flex-start;
     flex-wrap: wrap;
     gap: 12px;
   }
-
   #globe-container {
     min-height: 320px;
   }
 }
+
+/* --- League Selector (UI above globe) --- */
+.hero__globe { position: relative; }
+
+.league-selector{
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  z-index: 5;
+  background: rgba(4, 25, 36, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 6px 10px;
+  backdrop-filter: saturate(130%) blur(6px);
+}
+
+.league-selector select{
+  background: #0e3540;
+  color: #e6f5ff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 6px 10px;
+  min-width: 220px;
+}
+
+.ls-btn{
+  background: #103f37;
+  color: #e6f5ff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.ls-btn:hover { background: #145047; }
