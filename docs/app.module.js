@@ -126,7 +126,7 @@ const COLORS = {
 
 const SURFACE_EPS = 0.006;      // marker altitude = SURFACE_EPS × globeRadius
 const RADIUS_BASE = 0.010;      // marker radius (× globeRadius)
-const RADIUS_ACTIVE = 0.022;    // active marker radius
+the selected ring; we animate scale based on sine wave const RADIUS_ACTIVE = 0.022;    // active marker radius
 const CAMERA_ALT = 2.0;
 
 const BLOOM = { strength: 0.6, radius: 0.5, threshold: 0.85 };
@@ -168,6 +168,16 @@ function initials(name = '') {
   return (words[0][0] || '').toUpperCase() + (words[1]?.[0]?.toUpperCase() || '');
 }
 
+// Helper: robust globe radius (some builds don’t expose getGlobeRadius)
+function getGlobeRadius() {
+  if (globe?.getGlobeRadius) return globe.getGlobeRadius();
+  // fallback: inspect globe mesh if present, else use 100
+  try {
+    const m = globe.children?.find(c => c.geometry?.parameters?.radius);
+    return m?.geometry?.parameters?.radius || 100;
+  } catch { return 100; }
+}
+
 // ----------------------------
 // Scene init
 // ----------------------------
@@ -201,7 +211,7 @@ async function init() {
 
   scene.add(new THREE.AmbientLight(0xffffff, 0.9));
 
-  // Postprocessing
+  // --- Postprocessing (named imports) ---
   composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
 
@@ -209,7 +219,7 @@ async function init() {
   const setFXAA = () => {
     const px = renderer.getPixelRatio();
     fxaaPass.material.uniforms['resolution'].value.set(
-      1 / (el.globeWrap.clientWidth * px),
+      1 / (el.globeWrap.clientWidth  * px),
       1 / (el.globeWrap.clientHeight * px)
     );
   };
@@ -237,8 +247,14 @@ async function init() {
 
   scene.add(globe);
 
-  globe.onPointHover(handleHover);
-  globe.onPointClick(pt => {
+  // Safe hover hook (some builds lack onPointHover)
+  if (typeof globe.onPointHover === 'function') {
+    globe.onPointHover(handleHover);
+  } else {
+    console.info('[three-globe] onPointHover() not available in this build — hover enhancement disabled.');
+  }
+
+  globe.onPointClick?.(pt => {
     if (!pt) return;
     const idx = fixtures.findIndex(f => f.fixture_id === pt.fixture_id);
     if (idx >= 0) selectIndex(idx, { fly: true });
@@ -380,7 +396,7 @@ function flyToFixture(f) {
 // Selection halo aligned to surface
 // ----------------------------
 function createSelectionRing() {
-  const R = globe.getGlobeRadius ? globe.getGlobeRadius() : 100;
+  const R = getGlobeRadius();
   const inner = R * (1 + SURFACE_EPS + 0.001);
   const outer = inner + R * 0.007;
   const ringGeom = new THREE.RingGeometry(inner, outer, 48);
@@ -399,7 +415,7 @@ function createSelectionRing() {
 
 function updateSelectionRing(f) {
   if (!pulseRing || !f) return;
-  const R = globe.getGlobeRadius ? globe.getGlobeRadius() : 100;
+  const R = getGlobeRadius();
 
   // Convert lat/lng to Cartesian at the ring altitude
   const latRad = THREE.MathUtils.degToRad(90 - f.latitude);
