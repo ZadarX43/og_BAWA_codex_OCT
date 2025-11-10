@@ -8,19 +8,12 @@
     <!-- Fonts & main stylesheet -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="./styles.css" />
 
-    <!-- Polyfill so import maps work on Safari/older browsers.
-         NOTE: If your host blocks this CDN (CORS), download it to /vendor and serve locally. -->
-    <script
-      async
-      src="https://unpkg.com/es-module-shims@1.10.0/dist/es-module-shims.min.js"
-      crossorigin="anonymous"
-    ></script>
+    <!-- If you need import-map support on older Safari, host the shim locally and uncomment:
+    <script async src="./vendor/es-module-shims.min.js"></script>
+    -->
 
     <!-- Import map: map bare specifiers to local vendored modules -->
     <script type="importmap">
@@ -42,10 +35,11 @@
     <link rel="modulepreload" href="./vendor/examples/jsm/postprocessing/UnrealBloomPass.js" />
     <link rel="modulepreload" href="./app.module.js" />
 
-    <!-- Tiny inline fallback loader/error styles (global look lives in styles.css) -->
     <style>
-      #globe-container{position:relative;height:70vh;border-radius:14px;overflow:hidden;
-        background:radial-gradient(120% 120% at 50% 50%, #0d0f13 0%, #06070a 100%);}
+      #globe-container{
+        position:relative;height:70vh;border-radius:14px;overflow:hidden;
+        background:radial-gradient(120% 120% at 50% 50%, #0d0f13 0%, #06070a 100%);
+      }
       .globe-loading{position:absolute;inset:0;display:grid;place-items:center;color:#a7ffea;font-weight:600}
       .globe-error{padding:1rem;color:#ffb4a9}
     </style>
@@ -66,18 +60,17 @@
       </header>
 
       <main class="hero">
-        <!-- ===== Globe pane ===== -->
+        <!-- Globe pane -->
         <section class="hero__globe" aria-label="Upcoming fixtures globe">
           <div id="globe-container">
             <div class="globe-loading" role="status">Loading globe…</div>
           </div>
-
-          <!-- On-globe nav pills (paired to app.module.js el.prevBtn / el.nextBtn) -->
+          <!-- On-globe nav pills -->
           <button id="nav-prev" aria-label="Previous fixture" title="Previous (←)">&#x2039;</button>
           <button id="nav-next" aria-label="Next fixture"   title="Next (→)">&#x203A;</button>
         </section>
 
-        <!-- ===== Insights panel ===== -->
+        <!-- Insights panel -->
         <aside class="hero__insights" aria-live="polite">
           <div class="insights__header">
             <div class="badge badge--home" id="home-badge"></div>
