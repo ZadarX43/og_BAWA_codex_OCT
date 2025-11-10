@@ -11,6 +11,34 @@ const homeBadge = document.getElementById('home-badge');
 const awayBadge = document.getElementById('away-badge');
 const uploadInput = document.getElementById('bet-upload');
 
+// --- Helpers for parsing + stadium fallback ---
+
+// Safe number parse
+const num = (v) => {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : undefined;
+};
+
+// Stadium -> lat/lng fallback (approximate coords)
+const stadiumLookup = {
+  "Stadio Olimpico (Roma)": { lat: 41.9339, lng: 12.4545 },
+  "Volksparkstadion (Hamburg)": { lat: 53.5870, lng: 9.8980 },
+  "Stadion Feijenoord (Rotterdam)": { lat: 51.8939, lng: 4.5233 },
+  "Parc des Princes (Paris)": { lat: 48.8414, lng: 2.2530 },
+  "Stadio Giuseppe Meazza (Milano)": { lat: 45.4781, lng: 9.1240 },
+  "Etihad Stadium (Manchester)": { lat: 53.4831, lng: -2.2004 },
+  "Stadion Wankdorf (Bern)": { lat: 46.9630, lng: 7.4630 },
+  "Estadi Olímpic Lluís Companys (Barcelona)": { lat: 41.3649, lng: 2.1516 },
+  "Rams Global Stadium (İstanbul)": { lat: 41.1033, lng: 28.9913 },
+  "Estadio Ramón Sánchez Pizjuán (Sevilla)": { lat: 37.3840, lng: -5.9700 },
+  "Allianz Arena (München)": { lat: 48.2188, lng: 11.6247 },
+  "Emirates Stadium (London)": { lat: 51.5550, lng: -0.1080 },
+  "Estadio Santiago Bernabéu (Madrid)": { lat: 40.4531, lng: -3.6883 },
+  "Estádio Municipal de Braga (Braga)": { lat: 41.5610, lng: -8.4270 },
+  "Estádio do Sport Lisboa e Benfica (da Luz) (Lisboa)": { lat: 38.7527, lng: -9.1847 },
+  "Reale Arena (Donostia-San Sebastián)": { lat: 43.3030, lng: -1.9730 }
+};
+
 // ====== Error helper ======
 function showDependencyError(message) {
   if (!globeContainer) {
@@ -160,7 +188,7 @@ function badgeLabel(name) {
     .map((part) => part[0])
     .join('')
     .slice(0, 3)
-  .toUpperCase();
+    .toUpperCase();
 }
 
 // Smooth camera fly-to
@@ -191,7 +219,15 @@ function renderFixture(index) {
 
   activeIndex = index;
   fixtureTitle.textContent = `${fixture.home_team} vs ${fixture.away_team}`;
-  fixtureContext.textContent = `${fixture.competition} • ${formatDate(fixture.date_utc)} • ${fixture.stadium}, ${fixture.city}, ${fixture.country}`;
+
+  const parts = [
+    fixture.stadium?.trim?.(),
+    fixture.city?.trim?.(),
+    fixture.country?.trim?.()
+  ].filter(Boolean).join(", ");
+  const ctxTail = parts ? ` • ${parts}` : "";
+  fixtureContext.textContent =
+    `${fixture.competition} • ${formatDate(fixture.date_utc)}${ctxTail}`;
 
   homeBadge.textContent = badgeLabel(fixture.home_team);
   awayBadge.textContent = badgeLabel(fixture.away_team);
@@ -200,8 +236,8 @@ function renderFixture(index) {
   matchIntelligenceList.innerHTML = '';
   const intelligenceItems = [
     { label: 'Full-time prediction', value: `${fixture.predicted_winner} (${toPercent(fixture.confidence_ftr)})` },
-    { label: 'xG edge', value: `${fixture.home_team} ${fixture.xg_home.toFixed(1)} vs ${fixture.away_team} ${fixture.xg_away.toFixed(1)}` },
-    { label: 'Points momentum', value: `${fixture.home_team} ${fixture.ppg_home.toFixed(1)} PPG • ${fixture.away_team} ${fixture.ppg_away.toFixed(1)} PPG` },
+    { label: 'xG edge', value: `${fixture.home_team} ${fixture.xg_home?.toFixed?.(1)} vs ${fixture.away_team} ${fixture.xg_away?.toFixed?.(1)}` },
+    { label: 'Points momentum', value: `${fixture.home_team} ${fixture.ppg_home?.toFixed?.(1)} PPG • ${fixture.away_team} ${fixture.ppg_away?.toFixed?.(1)} PPG` },
   ];
   intelligenceItems.forEach((item) => {
     const li = document.createElement('li');
@@ -256,25 +292,45 @@ function hydrateFixtures(rawFixtures) {
   return rawFixtures
     .filter((f) => f.fixture_id) // basic guard
     .map((f) => {
-      const cf = Number(f.confidence_ftr);
+      // Prefer CSV lat/lng if present, else fallback via stadium name
+      const latCsv = num(f.latitude);
+      const lngCsv = num(f.longitude);
+      const fallback = stadiumLookup[f.stadium?.trim?.() || ""];
+
+      const latitude = latCsv ?? fallback?.lat;
+      const longitude = lngCsv ?? fallback?.lng;
+
+      const cf = num(f.confidence_ftr) || 0;
+
       return {
         ...f,
-        latitude: Number(f.latitude),
-        longitude: Number(f.longitude),
-        xg_home: Number(f.xg_home),
-        xg_away: Number(f.xg_away),
-        ppg_home: Number(f.ppg_home),
-        ppg_away: Number(f.ppg_away),
+        latitude,
+        longitude,
+        xg_home: num(f.xg_home),
+        xg_away: num(f.xg_away),
+        ppg_home: num(f.ppg_home),
+        ppg_away: num(f.ppg_away),
         confidence_ftr: cf,
-        over25_prob: Number(f.over25_prob),
-        btts_prob: Number(f.btts_prob),
+        over25_prob: num(f.over25_prob),
+        btts_prob: num(f.btts_prob),
+
+        stadium: f.stadium?.trim?.() || "",
+        city: f.city?.trim?.() || "",
+        country: f.country?.trim?.() || "",
+
         key_players_shots: processPlayerField(f.key_players_shots),
         key_players_bookings: processPlayerField(f.key_players_bookings),
         key_players_tackles: processPlayerField(f.key_players_tackles),
+
         pointAltitude: 0.18 + cf * 0.12,
-        pointColor: cf > 0.7 ? '#64d863' : (cf > 0.5 ? '#00bcd4' : '#ff8a65'),
+        pointColor:
+          cf > 0.7 ? '#64d863' :
+          cf > 0.5 ? '#00bcd4' :
+                     '#ff8a65',
       };
-    });
+    })
+    // ensure we can plot on globe
+    .filter((fx) => Number.isFinite(fx.latitude) && Number.isFinite(fx.longitude));
 }
 
 // ====== Focus fixture with smooth POV ======
@@ -285,10 +341,12 @@ function focusFixture(index) {
   flyTo(fixture.latitude, fixture.longitude, 2.0, 1000);
 }
 
-// ====== Load fixtures CSV and boot ======
+// ====== Load fixtures TSV and boot ======
 Papa.parse('data/fixtures.csv', {
   download: true,
   header: true,
+  delimiter: "\t",       // tab-delimited snapshot
+  skipEmptyLines: true,  // ignore blank/trailing lines
   dynamicTyping: false,
   complete: (results) => {
     fixtures = hydrateFixtures(results.data);
