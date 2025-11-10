@@ -28,10 +28,10 @@ async function importScriptUMD(src) {
 }
 
 async function loadThreeGlobe() {
-  // 1) Try local ESM copies if you add them to the repo
+  // 1) Prefer local ESM (your file) first
   const localEsm = [
-    './vendor/three-globe.module.js', // preferred official filename
-    './vendor/three-globe.mjs'        // alternative if you saved it this way
+    './vendor/three-globe.mjs',        // <-- your local module
+    './vendor/three-globe.module.js'   // optional alt name if you add it
   ];
   for (const p of localEsm) {
     try {
@@ -75,7 +75,7 @@ async function loadThreeGlobe() {
   if (gc) {
     gc.innerHTML = `<div class="globe-error">
       <strong>three-globe failed to load.</strong><br/>
-      Add a local copy at <code>docs/vendor/three-globe.module.js</code> (ESM)
+      Add a local copy at <code>docs/vendor/three-globe.mjs</code> (ESM)
       or <code>docs/vendor/three-globe.min.js</code> (UMD).
     </div>`;
   }
