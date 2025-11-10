@@ -13,8 +13,26 @@ import { FXAAShader }               from 'three/examples/jsm/shaders/FXAAShader.
 import { CopyShader }               from 'three/examples/jsm/shaders/CopyShader.js';
 import { LuminosityHighPassShader } from 'three/examples/jsm/shaders/LuminosityHighPassShader.js';
 
-// three-globe as ESM (LOCAL file)
-import ThreeGlobe from './vendor/three-globe.mjs';
+// ---------- Robust three-globe import (local first, then CDN) ----------
+let ThreeGlobe;
+try {
+  // 1) try local file you meant to add under docs/vendor/
+  ThreeGlobe = (await import('./vendor/three-globe.mjs')).default;
+} catch (e1) {
+  try {
+    // 2) fallback: official module build from unpkg
+    // (three-globe publishes ESM at dist/three-globe.module.js)
+    ThreeGlobe = (await import('https://unpkg.com/three-globe@2.28.0/dist/three-globe.module.js')).default;
+    console.warn('[three-globe] using CDN fallback');
+  } catch (e2) {
+    console.error('Failed to load three-globe from local and CDN:', e1, e2);
+    const gc = document.getElementById('globe-container');
+    if (gc) {
+      gc.innerHTML = `<div class="globe-error">three-globe failed to load. Ensure <code>docs/vendor/three-globe.mjs</code> exists or allow CDN.</div>`;
+    }
+    throw e2;
+  }
+}
 
 // PapaParse is UMD on window
 const Papa = window.Papa;
@@ -312,8 +330,7 @@ csvUrl.searchParams.set('v', Date.now().toString()); // cache-bust
 Papa.parse(csvUrl.href, {
   download: true,
   header: true,
-  // If your snapshot is TSV, uncomment next line:
-  // delimiter: "\t",
+  // delimiter: "\t", // uncomment if TSV
   skipEmptyLines: true,
   dynamicTyping: false,
   complete: (results) => {
