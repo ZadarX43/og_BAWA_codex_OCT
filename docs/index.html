@@ -22,15 +22,25 @@
         <nav class="nav-links">
           <a href="#bet-checker">Bet Checker</a>
           <a href="#acca-builder">Acca Builder</a>
-          <a href="#og-copilot">GPT 5 – OG Co Pilot</a>
+          <a href="#og-copilot">GPT 5 – OG Co&nbsp;Pilot</a>
         </nav>
       </header>
 
       <main class="hero">
         <section class="hero__globe" aria-label="Upcoming fixtures globe">
+          <!-- League Selector -->
+          <div class="league-selector" id="league-selector">
+            <button class="ls-btn" id="ls-prev" aria-label="Previous league">◀</button>
+            <select id="ls-select" aria-label="League">
+              <!-- options populated by app.js -->
+            </select>
+            <button class="ls-btn" id="ls-next" aria-label="Next league">▶</button>
+          </div>
+
           <div id="globe-container">
             <div class="globe-loading" role="status">Loading globe&hellip;</div>
           </div>
+
           <div class="globe-controls">
             <p>
               Drag to spin the world, scroll to zoom. Use ← → keys to jump between
@@ -80,6 +90,7 @@
       </footer>
     </div>
 
+    <!-- Core libs -->
     <script defer src="vendor/three.min.js"></script>
     <script defer src="vendor/OrbitControls.js"></script>
     <script defer src="vendor/three-globe.min.js"></script>
@@ -92,7 +103,8 @@
     <script defer src="vendor/postprocessing/ShaderPass.js"></script>
     <script defer src="vendor/shaders/CopyShader.js"></script>
     <script defer src="vendor/shaders/FXAAShader.js"></script>
-     <!-- App -->
+
+    <!-- App -->
     <script defer src="app.js"></script>
   </body>
 </html>
