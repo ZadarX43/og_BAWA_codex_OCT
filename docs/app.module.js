@@ -1,554 +1,602 @@
-// ===== Imports (ESM) =====
+// app.module.js
+// Odds Genius — Globe Fixtures UI (enhanced)
+// ------------------------------------------------------------
+// - Accurate ground-level markers using globe radius
+// - Selected-marker ring highlight + larger sphere
+// - Left/right keyboard nav & click to select
+// - Robust three-globe loader (ESM → CDN fallback)
+// - Club logos in header with fallback initials
+// - Performance optimizations for hundreds of fixtures
+// - Cleaner panel updates and stat formatting
+// ------------------------------------------------------------
+
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
-// Postprocessing
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass }     from 'three/examples/jsm/postprocessing/RenderPass.js';
-import { ShaderPass }     from 'three/examples/jsm/postprocessing/ShaderPass.js';
-import { UnrealBloomPass }from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+// --- Postprocessing / controls (local vendor copies) ---
+import 'https://esm.sh/three@0.160.0/examples/js/controls/OrbitControls.js';
+import 'https://esm.sh/three@0.160.0/examples/js/postprocessing/EffectComposer.js';
+import 'https://esm.sh/three@0.160.0/examples/js/postprocessing/RenderPass.js';
+import 'https://esm.sh/three@0.160.0/examples/js/postprocessing/ShaderPass.js';
+import 'https://esm.sh/three@0.160.0/examples/js/shaders/FXAAShader.js';
+import 'https://esm.sh/three@0.160.0/examples/js/postprocessing/UnrealBloomPass.js';
 
-// Shaders
-import { FXAAShader }               from 'three/examples/jsm/shaders/FXAAShader.js';
-import { CopyShader }               from 'three/examples/jsm/shaders/CopyShader.js';
-import { LuminosityHighPassShader } from 'three/examples/jsm/shaders/LuminosityHighPassShader.js';
+import Papa from 'https://esm.sh/papaparse@5.4.1';
 
-// ---------- Robust three-globe loader (ESM preferred, UMD fallback) ----------
-async function importScriptUMD(src) {
-  await new Promise((resolve, reject) => {
-    const s = document.createElement('script');
-    s.src = src;
-    s.async = true;
-    s.onload = () => resolve();
-    s.onerror = (e) => reject(e);
-    document.head.appendChild(s);
-  });
-  if (window.Globe) return window.Globe;
-  throw new Error('UMD three-globe loaded but window.Globe was not defined');
-}
+// ----------------------------
+// DOM refs (must exist in HTML)
+// ----------------------------
+const el = {
+  globeWrap: document.getElementById('globe-container'),
+  insights: document.getElementById('insights-content'),
+  fixtureTitle: document.getElementById('fixture-title'),
+  fixtureContext: document.getElementById('fixture-context'),
+  matchList: document.getElementById('match-intelligence'),
+  watchlist: document.getElementById('player-watchlist'),
+  market: document.getElementById('market-snapshot'),
+  deepBtn: document.getElementById('deep-dive-btn'),
+  homeBadge: document.getElementById('home-badge'),
+  awayBadge: document.getElementById('away-badge'),
+  upload: document.getElementById('bet-upload'),
+  // Optional: left/right UI buttons (if present in your HTML)
+  prevBtn: document.getElementById('nav-prev'),
+  nextBtn: document.getElementById('nav-next')
+};
 
+// ------------------------------------
+// Utility: robust three-globe loader
+// ------------------------------------
 async function loadThreeGlobe() {
-  // 1) Try local ESM copies if you add them to the repo
-  const localEsm = [
-    './vendor/three-globe.module.js', // preferred official filename
-    './vendor/three-globe.mjs'        // alternative if you saved it this way
-  ];
-  for (const p of localEsm) {
-    try {
-      const m = await import(p);
-      console.info('[three-globe] using local ESM:', p);
-      return m.default ?? m;
-    } catch {}
+  // 1) Try local ESM if present
+  try {
+    const mod = await import('./vendor/three-globe.module.js');
+    return mod.default || mod;
+  } catch (e) {
+    console.warn('[three-globe] local ESM not found, falling back to CDN…');
   }
-
-  // 2) Try esm.sh (ESM) across a few versions; bundle to avoid deep import churn; externalize three
-  const esmVersions = ['2.30.1', '2.29.3', '2.28.0'];
-  for (const v of esmVersions) {
-    const url = `https://esm.sh/three-globe@${v}?bundle&external=three`;
-    try {
-      const m = await import(url);
-      console.warn('[three-globe] using esm.sh ESM:', url);
-      return m.default ?? m;
-    } catch (e) {
-      console.warn('[three-globe] esm.sh failed:', url, e);
-    }
+  // 2) Try esm.sh (locks version for stability)
+  try {
+    const mod = await import('https://esm.sh/three-globe@2.28.0');
+    return mod.default || mod;
+  } catch (e) {
+    console.warn('[three-globe] esm.sh failed, trying jsDelivr UMD…', e);
   }
-
-  // 3) Fall back to UMD (local first, then CDNs)
-  const umdCandidates = [
-    './vendor/three-globe.min.js',
-    'https://cdn.jsdelivr.net/npm/three-globe@2.29.3/dist/three-globe.min.js',
-    'https://unpkg.com/three-globe@2.29.3/dist/three-globe.min.js'
-  ];
-  for (const url of umdCandidates) {
-    try {
-      const ctor = await importScriptUMD(url);
-      console.warn('[three-globe] using UMD:', url);
-      return ctor;
-    } catch (e) {
-      console.warn('[three-globe] UMD failed:', url, e);
-    }
-  }
-
-  // If everything failed, show a visible error and abort
-  const gc = document.getElementById('globe-container');
-  if (gc) {
-    gc.innerHTML = `<div class="globe-error">
-      <strong>three-globe failed to load.</strong><br/>
-      Add a local copy at <code>docs/vendor/three-globe.module.js</code> (ESM)
-      or <code>docs/vendor/three-globe.min.js</code> (UMD).
-    </div>`;
-  }
-  throw new Error('three-globe could not be loaded from any source');
-}
-const ThreeGlobeCtor = await loadThreeGlobe();
-
-// PapaParse is UMD on window
-const Papa = window.Papa;
-
-// ====== DOM refs ======
-const globeContainer = document.getElementById('globe-container');
-const insightsContent = document.getElementById('insights-content');
-const fixtureTitle = document.getElementById('fixture-title');
-const fixtureContext = document.getElementById('fixture-context');
-const matchIntelligenceList = document.getElementById('match-intelligence');
-const playerWatchlist = document.getElementById('player-watchlist');
-const marketSnapshot = document.getElementById('market-snapshot');
-const deepDiveButton = document.getElementById('deep-dive-btn');
-const homeBadge = document.getElementById('home-badge');
-const awayBadge = document.getElementById('away-badge');
-const uploadInput = document.getElementById('bet-upload');
-
-// Quick dependency sanity
-if (!Papa) {
-  globeContainer.innerHTML = `<div class="globe-error">PapaParse failed to load.</div>`;
-  throw new Error('PapaParse missing');
+  // 3) Fallback UMD
+  const url = './vendor/three-globe.min.js';
+  await new Promise((res, rej) => {
+    const s = document.createElement('script');
+    s.src = url;
+    s.onload = () => res();
+    s.onerror = rej;
+    document.body.appendChild(s);
+  });
+  // UMD exposes global
+  // eslint-disable-next-line no-undef
+  return window.ThreeGlobe || window.THREE.Globe;
 }
 
-// ====== State ======
+let ThreeGlobeCtor;
+let globe;
+let renderer, scene, camera, controls, composer, bloomPass;
 let fixtures = [];
-let activeIndex = 0;
+let activeIdx = 0;
+let selectedId = null;
+let globeReady = false;
+let pulseRing;
 
-// ====== THREE basics ======
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-renderer.setPixelRatio(window.devicePixelRatio || 1);
-if ('outputColorSpace' in renderer) {
-  renderer.outputColorSpace = THREE.SRGBColorSpace;
-} else if ('outputEncoding' in renderer) {
-  renderer.outputEncoding = THREE.sRGBEncoding;
+// tuneable style constants
+const COLORS = {
+  marker: '#A1F2EA',
+  markerInactive: '#79E3D7',
+  markerActive: '#A7FFF6',
+  ring: '#9EE7E3',
+  selected: '#FFFFFF'
+};
+const SURFACE_EPS = 0.006;      // fraction of globe radius for marker altitude
+const RING_INNER = 0.010;       // relative to globe radius
+const RING_OUTER = 0.015;
+const RADIUS_BASE = 0.010;      // base sphere radius (× globe radius)
+const RADIUS_ACTIVE = 0.022;    // active sphere radius (× globe radius)
+const CAMERA_ALT = 2.1;         // camera altitude in radius units
+const MAX_LABELS = 80;          // optional future label LOD
+const BLOOM = { strength: 0.6, radius: 0.5, threshold: 0.85 };
+
+// helpers
+const clamp01 = v => Math.max(0, Math.min(1, v));
+const pct = n => `${Math.round(clamp01(n) * 100)}%`;
+
+function clearNode(node) {
+  if (!node) return;
+  while (node.firstChild) node.removeChild(node.firstChild);
 }
-renderer.setSize(globeContainer.clientWidth, globeContainer.clientHeight);
 
-const scene = new THREE.Scene();
-scene.add(new THREE.AmbientLight(0xffffff, 1.0));
-
-const camera = new THREE.PerspectiveCamera(
-  45,
-  globeContainer.clientWidth / globeContainer.clientHeight,
-  0.1,
-  1000
-);
-camera.position.set(0, 0, 220);
-
-globeContainer.innerHTML = '';
-globeContainer.appendChild(renderer.domElement);
-
-// Controls
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-controls.dampingFactor = 0.08;
-controls.enablePan = false;
-controls.minDistance = 130;
-controls.maxDistance = 320;
-controls.autoRotate = true;
-controls.autoRotateSpeed = 0.45;
-
-// ====== Globe + atmosphere ======
-const globe = new ThreeGlobeCtor({ waitForGlobeReady: true })
-  .showAtmosphere(true)
-  .atmosphereAltitude(0.22)
-  .atmosphereColor('#66e3d2')
-  .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-dark.jpg')
-  .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
-  .pointAltitude('pointAltitude')
-  .pointColor('pointColor')
-  .pointLabel((d) => `${d.city || ''} • ${d.home_team} vs ${d.away_team}`) // tooltip
-  .pointRadius((d) => d.__active ? 0.65 : 0.22); // enlarged active marker
-
-scene.add(globe);
-
-// Useful helpers
-function getGlobeRadius() {
-  // find the globe mesh and read its bounding sphere
-  const mesh = globe.children.find(o => o.type === 'Mesh' && o.geometry);
-  if (mesh && mesh.geometry) {
-    mesh.geometry.computeBoundingSphere();
-    return mesh.geometry.boundingSphere.radius || 100;
+function setBadge(el, url, initials) {
+  if (!el) return;
+  el.innerHTML = '';
+  el.classList.remove('has-logo');
+  if (url && /^https?:\/\//i.test(url)) {
+    const img = document.createElement('img');
+    img.src = url;
+    img.alt = initials || '';
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.onerror = () => {
+      el.textContent = initials || '';
+      el.classList.remove('has-logo');
+    };
+    el.appendChild(img);
+    el.classList.add('has-logo');
+  } else {
+    el.textContent = initials || '';
   }
-  return 100; // sane default
 }
 
-// Loading overlay until globe textures ready
-const loaderDiv = document.createElement('div');
-loaderDiv.className = 'globe-loading';
-loaderDiv.textContent = 'Loading globe…';
-globeContainer.appendChild(loaderDiv);
-if (typeof globe.onGlobeReady === 'function') {
-  globe.onGlobeReady(() => loaderDiv.remove());
-} else {
-  setTimeout(() => loaderDiv.remove(), 1500);
+function formatTeamInitials(name = '') {
+  const words = (name || '').split(/\s+/).filter(Boolean);
+  if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
+  return (words[0][0] || '').toUpperCase() + (words[1]?.[0]?.toUpperCase() || '');
 }
 
-// ====== Starfield backdrop ======
-const starGeom = new THREE.BufferGeometry();
-const starCount = (window.devicePixelRatio > 2 || window.innerWidth < 480) ? 1200 : 2000;
-const positions = new Float32Array(starCount * 3);
-for (let i = 0; i < starCount; i++) {
-  const r = 520 + Math.random() * 480;
-  const theta = Math.random() * Math.PI * 2;
-  const phi = Math.acos(Math.random() * 2 - 1);
-  positions[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
-  positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-  positions[i * 3 + 2] = r * Math.cos(phi);
-}
-starGeom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-const starMat = new THREE.PointsMaterial({ size: 0.9, transparent: true, opacity: 0.6 });
-const stars = new THREE.Points(starGeom, starMat);
-scene.add(stars);
+// --- Build scene ---
+async function init() {
+  ThreeGlobeCtor = await loadThreeGlobe();
 
-// ====== Postprocessing: EffectComposer + FXAA + Bloom ======
-const composer = new EffectComposer(renderer);
-const renderPass = new RenderPass(scene, camera);
-composer.addPass(renderPass);
+  // Scene
+  scene = new THREE.Scene();
 
-const fxaaPass = new ShaderPass(FXAAShader);
-function updateFXAA() {
-  const d = renderer.domElement;
-  const px = renderer.getPixelRatio?.() ?? (window.devicePixelRatio || 1);
+  // Renderer
+  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setSize(el.globeWrap.clientWidth, el.globeWrap.clientHeight);
+  el.globeWrap.innerHTML = '';
+  el.globeWrap.appendChild(renderer.domElement);
+
+  // Camera
+  const aspect = el.globeWrap.clientWidth / el.globeWrap.clientHeight;
+  camera = new THREE.PerspectiveCamera(45, aspect, 0.1, 10000);
+  camera.position.z = 300;
+
+  // Controls
+  // @ts-ignore (added globally by import)
+  const { OrbitControls } = THREE;
+  controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.enablePan = false;
+  controls.enableZoom = true;
+  controls.autoRotate = true;
+  controls.autoRotateSpeed = 0.6;
+  controls.minDistance = 140;
+  controls.maxDistance = 1200;
+
+  // Lights
+  scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+
+  // Postprocessing
+  // @ts-ignore
+  const { EffectComposer } = THREE;
+  // @ts-ignore
+  const { RenderPass } = THREE;
+  // @ts-ignore
+  const { ShaderPass } = THREE;
+  // @ts-ignore
+  const { UnrealBloomPass } = THREE;
+
+  const renderPass = new RenderPass(scene, camera);
+  composer = new THREE.EffectComposer(renderer);
+  composer.addPass(renderPass);
+
+  const fxaaPass = new THREE.ShaderPass(THREE.FXAAShader);
   fxaaPass.material.uniforms['resolution'].value.set(
-    1 / (d.clientWidth * px),
-    1 / (d.clientHeight * px)
+    1 / (el.globeWrap.clientWidth * renderer.getPixelRatio()),
+    1 / (el.globeWrap.clientHeight * renderer.getPixelRatio())
   );
+  composer.addPass(fxaaPass);
+
+  bloomPass = new UnrealBloomPass(
+    new THREE.Vector2(el.globeWrap.clientWidth, el.globeWrap.clientHeight),
+    BLOOM.strength,
+    BLOOM.radius,
+    BLOOM.threshold
+  );
+  composer.addPass(bloomPass);
+
+  // Globe
+  globe = new ThreeGlobeCtor()
+    .showAtmosphere(true)
+    .atmosphereColor('#94f1ea')
+    .atmosphereAltitude(0.2)
+    .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-dark.jpg')
+    .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
+    .pointAltitude(() => SURFACE_EPS) // ground-level pins
+    .pointRadius(d => (d.__active ? RADIUS_ACTIVE : RADIUS_BASE))
+    .pointColor(d => (d.__active ? COLORS.markerActive : COLORS.marker));
+
+  scene.add(globe);
+
+  // Track hover to subtly brighten
+  globe.onPointHover(handleHover);
+
+  // Selection (click)
+  globe.onPointClick(d => {
+    if (!d) return;
+    const idx = fixtures.findIndex(f => f.fixture_id === d.fixture_id);
+    if (idx >= 0) selectIndex(idx, { fly: true });
+  });
+
+  // Window resize
+  window.addEventListener('resize', onResize);
+
+  // Keyboard navigation
+  window.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      step(+1);
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      step(-1);
+    }
+  });
+
+  // Optional nav buttons
+  if (el.prevBtn) el.prevBtn.addEventListener('click', () => step(-1));
+  if (el.nextBtn) el.nextBtn.addEventListener('click', () => step(+1));
+
+  // CSV load → render
+  await loadFixturesCSV('./data/fixtures.csv');
+
+  // Start loop
+  animate();
 }
-updateFXAA();
-composer.addPass(fxaaPass);
 
-// Bloom: lower strength/raise threshold so points/rings don’t square out
-const bloomPass = new UnrealBloomPass(
-  new THREE.Vector2(renderer.domElement.width, renderer.domElement.height),
-  0.35,   // strength
-  0.4,    // radius
-  0.92    // threshold (higher => fewer blown highlights)
-);
-composer.addPass(bloomPass);
+function onResize() {
+  const { clientWidth, clientHeight } = el.globeWrap;
+  renderer.setSize(clientWidth, clientHeight);
+  camera.aspect = clientWidth / clientHeight;
+  camera.updateProjectionMatrix();
+  // update fxaa + bloom
+  const res = new THREE.Vector2(
+    1 / (clientWidth * renderer.getPixelRatio()),
+    1 / (clientHeight * renderer.getPixelRatio())
+  );
+  composer.passes.forEach(p => {
+    if (p instanceof THREE.ShaderPass && p.material?.uniforms?.resolution) {
+      p.material.uniforms.resolution.value.copy(res);
+    }
+  });
+  if (bloomPass?.setSize) {
+    bloomPass.setSize(clientWidth, clientHeight);
+  }
+}
 
-// ====== Render loop ======
 function animate() {
   requestAnimationFrame(animate);
   controls.update();
   composer.render();
 }
-animate();
 
-// ====== Helpers ======
-function formatDate(iso) {
-  const date = new Date(iso);
-  return new Intl.DateTimeFormat('en-GB', {
-    weekday: 'short', day: 'numeric', month: 'short',
-    hour: '2-digit', minute: '2-digit', timeZoneName: 'short',
-  }).format(date);
-}
-function toPercent(value, dp = 0) {
-  const v = Number(value);
-  return Number.isFinite(v) ? `${(v * 100).toFixed(dp)}%` : '—';
-}
-function badgeLabel(name) {
-  return (name || '')
-    .split(/\s+/).filter(Boolean)
-    .map((p)=>p[0]).join('').slice(0,3).toUpperCase();
-}
-function setBadge(el, url, fallbackText) {
-  if (url && /^https?:\/\//i.test(url)) {
-    el.innerHTML = `<img src="${url}" alt="" />`;
-    el.classList.add('has-logo');
-  } else {
-    el.textContent = fallbackText;
-    el.classList.remove('has-logo');
+// ---------------------------
+// CSV ingest & normalization
+// ---------------------------
+async function loadFixturesCSV(url) {
+  const res = await fetch(`${url}?v=${Date.now()}`);
+  const text = await res.text();
+  const { data, errors } = Papa.parse(text, { header: true, skipEmptyLines: true });
+  if (errors?.length) {
+    console.warn('[CSV parse errors]', errors);
   }
-}
-function flyTo(lat, lng, altitude = 1.8, ms = 900) {
-  const pv = globe.pointOfView() || { lat: 0, lng: 0, altitude: 2 };
-  const start = { lat: pv.lat || 0, lng: pv.lng || 0, altitude: pv.altitude || 2 };
-  const end = { lat, lng, altitude };
-  const t0 = performance.now();
-  function tick(now) {
-    const t = Math.min(1, (now - t0) / ms);
-    const ease = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-    const lerp = (a,b)=> a + (b-a)*ease;
-    globe.pointOfView({ lat: lerp(start.lat,end.lat), lng: lerp(start.lng,end.lng), altitude: lerp(start.altitude,end.altitude) });
-    if (t < 1) requestAnimationFrame(tick);
-  }
-  requestAnimationFrame(tick);
-}
 
-// ====== CSV helpers ======
-const num = (v) => { const n = Number(v); return Number.isFinite(n) ? n : undefined; };
-const stadiumLookup = {
-  "Stadio Olimpico (Roma)": { lat: 41.9339, lng: 12.4545 },
-  "Volksparkstadion (Hamburg)": { lat: 53.5870, lng: 9.8980 },
-  "Stadion Feijenoord (Rotterdam)": { lat: 51.8939, lng: 4.5233 },
-  "Parc des Princes (Paris)": { lat: 48.8414, lng: 2.2530 },
-  "Stadio Giuseppe Meazza (Milano)": { lat: 45.4781, lng: 9.1240 },
-  "Etihad Stadium (Manchester)": { lat: 53.4831, lng: -2.2004 },
-  "Stadion Wankdorf (Bern)": { lat: 46.9630, lng: 7.4630 },
-  "Estadi Olímpic Lluís Companys (Barcelona)": { lat: 41.3649, lng: 2.1516 },
-  "Rams Global Stadium (İstanbul)": { lat: 41.1033, lng: 28.9913 },
-  "Estadio Ramón Sánchez Pizjuán (Sevilla)": { lat: 37.3840, lng: -5.9700 },
-  "Allianz Arena (München)": { lat: 48.2188, lng: 11.6247 },
-  "Emirates Stadium (London)": { lat: 51.5550, lng: -0.1080 },
-  "Estadio Santiago Bernabéu (Madrid)": { lat: 40.4531, lng: -3.6883 },
-  "Estádio Municipal de Braga (Braga)": { lat: 41.5610, lng: -8.4270 },
-  "Estádio do Sport Lisboa e Benfica (da Luz) (Lisboa)": { lat: 38.7527, lng: -9.1847 },
-  "Reale Arena (Donostia-San Sebastián)": { lat: 43.3030, lng: -1.9730 }
-};
-function processPlayerField(field) {
-  if (!field) return [];
-  return field.split(';').map((entry) => {
-    const [name, detail] = entry.split('|');
-    return { name: (name || '').trim(), detail: (detail || '').trim() };
-  });
-}
-function tidyStat(value, dp=1) {
-  const n = Number(value);
-  if (!Number.isFinite(n)) return '—';
-  return n.toFixed(dp);
-}
-function hydrateFixtures(rawFixtures) {
-  return rawFixtures
-    .filter((f) => f.fixture_id) // basic guard
-    .map((f) => {
-      const latCsv = num(f.latitude);
-      const lngCsv = num(f.longitude);
-      const fallback = stadiumLookup[f.stadium?.trim?.() || ""];
-      const latitude  = latCsv ?? fallback?.lat;
-      const longitude = lngCsv ?? fallback?.lng;
-
-      // Normalize strings/numbers
-      const cf = num(f.confidence_ftr) ?? 0;
+  fixtures = (data || [])
+    .map(row => {
+      const lat = parseFloat(row.latitude || row.lat || row.Latitude || row.lat_deg);
+      const lng = parseFloat(row.longitude || row.lon || row.lng || row.Longitude);
 
       return {
-        ...f,
-        latitude, longitude,
-        xg_home: num(f.xg_home),
-        xg_away: num(f.xg_away),
-        ppg_home: num(f.ppg_home),
-        ppg_away: num(f.ppg_away),
-        confidence_ftr: cf,
-        over25_prob: num(f.over25_prob),
-        btts_prob: num(f.btts_prob),
-
-        stadium: f.stadium?.trim?.() || "",
-        city:    f.city?.trim?.()    || "",
-        country: f.country?.trim?.() || "",
-
-        home_logo_url: (f.home_logo_url || '').trim(),
-        away_logo_url: (f.away_logo_url || '').trim(),
-
-        key_players_shots:    processPlayerField(f.key_players_shots),
-        key_players_bookings: processPlayerField(f.key_players_bookings),
-        key_players_tackles:  processPlayerField(f.key_players_tackles),
-
-        // keep markers low to the surface; add tiny lift for visibility
-        pointAltitude: 0.02 + Math.max(0, cf) * 0.04,
-        pointColor:
-          cf > 0.7 ? '#65e3d3' :
-          cf > 0.5 ? '#56cfe1' :
-                     '#ffae8b',
-
-        __active: false // selection state
+        fixture_id: (row.fixture_id || row.id || `${row.home_team}-${row.away_team}-${row.date_utc || ''}`).trim(),
+        home_team: (row.home_team || row.Home || '').trim(),
+        away_team: (row.away_team || row.Away || '').trim(),
+        home_logo_url: row.home_logo_url || row.home_logo || '',
+        away_logo_url: row.away_logo_url || row.away_logo || '',
+        date_utc: row.date_utc || row.date || '',
+        competition: row.competition || row.league || '',
+        stadium: row.stadium || '',
+        city: row.city || '',
+        country: row.country || row.venue_country || '',
+        latitude: Number.isFinite(lat) ? lat : undefined,
+        longitude: Number.isFinite(lng) ? lng : undefined,
+        // Metrics (defaults):
+        predicted_winner: row.predicted_winner || '',
+        confidence_ftr: parseFloat(row.confidence_ftr || row.confidence || 0) || 0,
+        xg_home: parseFloat(row.xg_home || 0) || 0,
+        xg_away: parseFloat(row.xg_away || 0) || 0,
+        ppg_home: parseFloat(row.ppg_home || 0) || 0,
+        ppg_away: parseFloat(row.ppg_away || 0) || 0,
+        over25_prob: parseFloat(row.over25_prob || 0) || 0,
+        btts_prob: parseFloat(row.btts_prob || 0) || 0,
+        key_players_shots: (row.key_players_shots || '').trim(),
+        key_players_tackles: (row.key_players_tackles || '').trim(),
+        key_players_bookings: (row.key_players_bookings || '').trim()
       };
     })
-    .filter((fx) => Number.isFinite(fx.latitude) && Number.isFinite(fx.longitude));
-}
+    .filter(f => Number.isFinite(f.latitude) && Number.isFinite(f.longitude));
 
-// ====== Highlight helpers (rings + active marker) ======
-function updateHighlight() {
-  fixtures.forEach((d, i) => { d.__active = i === activeIndex; });
-  // refresh points so the accessor for radius re-evaluates
-  globe.pointsData(fixtures);
+  if (!fixtures.length) {
+    el.fixtureTitle.textContent = 'No fixtures available';
+    el.fixtureContext.textContent = 'Please check your data file.';
+    return;
+  }
 
-  const active = fixtures[activeIndex];
-  if (!active) return;
+  // Seed active flag
+  fixtures.forEach(f => (f.__active = false));
 
-  // a soft pulse ring anchored at ground
+  // Performance: for very large sets, reduce overhead
+  const many = fixtures.length > 250;
   globe
-    .ringsData([
-      {
-        lat: active.latitude,
-        lng: active.longitude,
-        maxR: 2.2,           // in degrees
-        propagationSpeed: 1, // deg/s
-        repeatPeriod: 1200,  // ms
-        altitude: 0.02       // same scale as pointAltitude for ground-hug
-      }
-    ])
-    .ringColor(() => 'rgba(102,227,210,0.85)')
-    .ringAltitude((d) => d.altitude)
-    .ringMaxRadius((d) => d.maxR)
-    .ringPropagationSpeed((d) => d.propagationSpeed)
-    .ringRepeatPeriod((d) => d.repeatPeriod);
+    .pointsMerge(many)
+    .pointResolution(many ? 4 : 8);
+
+  // Bind to globe
+  globe
+    .pointLat('latitude')
+    .pointLng('longitude')
+    .pointsData(fixtures);
+
+  // Ready to interact
+  globe.addEventListener('ready', () => {
+    globeReady = true;
+    // Ensure we have at least one selection
+    selectIndex(0, { fly: true, skipUpdate: false });
+
+    // Create pulse ring (tangent to surface)
+    createSelectionRing();
+  });
+
+  // If globe already in DOM, kick readiness after a tick
+  setTimeout(() => {
+    if (!globeReady) {
+      // Not strictly required; safety check
+    }
+  }, 300);
 }
 
-// ====== Render a single fixture’s side panel ======
-function renderFixture(index) {
-  const fixture = fixtures[index];
-  if (!fixture) return;
+// ---------------------------
+// Selection & Navigation
+// ---------------------------
+function step(delta) {
+  if (!fixtures.length) return;
+  const next = (activeIdx + delta + fixtures.length) % fixtures.length;
+  selectIndex(next, { fly: true });
+}
 
-  activeIndex = index;
+function selectIndex(idx, opts = {}) {
+  const { fly = false, skipUpdate = false } = opts;
+  activeIdx = idx;
+  const f = fixtures[activeIdx];
+  selectedId = f?.fixture_id || null;
 
-  // Top name + crests
-  fixtureTitle.innerHTML = `
-    <span class="fixture-title-text">
-      ${fixture.home_team} <span class="vs">vs</span> ${fixture.away_team}
-    </span>`;
+  fixtures.forEach(d => (d.__active = d.fixture_id === selectedId));
+  // Update markers without full rebuild (re-apply accessors)
+  globe
+    .pointAltitude(() => SURFACE_EPS)
+    .pointRadius(d => (d.__active ? RADIUS_ACTIVE : RADIUS_BASE))
+    .pointColor(d => (d.__active ? COLORS.markerActive : COLORS.marker))
+    .pointsData(fixtures); // trigger refresh
 
-  // Club logos (if present)
-  setBadge(homeBadge, fixture.home_logo_url, badgeLabel(fixture.home_team));
-  setBadge(awayBadge, fixture.away_logo_url, badgeLabel(fixture.away_team));
+  if (fly) flyToFixture(f);
+  if (!skipUpdate) renderPanel(f);
+  updateSelectionRing(f);
+}
 
-  // Context line
-  const parts = [fixture.stadium?.trim?.(), fixture.city?.trim?.(), fixture.country?.trim?.()]
-    .filter(Boolean).join(", ");
-  const ctxTail = parts ? ` • ${parts}` : "";
-  fixtureContext.textContent =
-    `${fixture.competition} • ${formatDate(fixture.date_utc)}${ctxTail}`;
+function flyToFixture(f) {
+  if (!f || !globe) return;
+  try {
+    globe.pointOfView(
+      { lat: f.latitude, lng: f.longitude, altitude: CAMERA_ALT },
+      800
+    );
+  } catch (e) {
+    // Fallback: orbit controls
+    // no-op
+  }
+}
 
-  // Match Intelligence
-  matchIntelligenceList.innerHTML = '';
-  const ft = `${fixture.predicted_winner || '—'} (${toPercent(fixture.confidence_ftr,0)})`;
-  const xg = `${fixture.home_team} ${tidyStat(fixture.xg_home)} vs ${fixture.away_team} ${tidyStat(fixture.xg_away)}`;
-  const pm = `${fixture.home_team} ${tidyStat(fixture.ppg_home)} PPG • ${fixture.away_team} ${tidyStat(fixture.ppg_away)} PPG`;
-  [
-    { label: 'Full-time prediction', value: ft },
-    { label: 'xG edge',              value: xg },
-    { label: 'Points momentum',      value: pm },
-  ].forEach((item) => {
-    const li = document.createElement('li');
-    li.innerHTML = `<strong>${item.label}:</strong> ${item.value}`;
-    matchIntelligenceList.appendChild(li);
+// ---------------------------
+// Selection ring (tangent halo)
+// ---------------------------
+function createSelectionRing() {
+  const R = globe.getGlobeRadius ? globe.getGlobeRadius() : 100;
+  const ringGeom = new THREE.RingGeometry(R * (1 + SURFACE_EPSlocal()), R * (1 + SURFACE_EPSlocal() + 0.006), 48);
+  const ringMat = new THREE.MeshBasicMaterial({
+    color: new THREE.Color(COLORS.ring),
+    transparent: true,
+    opacity: 0.55,
+    side: THREE.DoubleSide,
+    depthWrite: false
   });
+  pulseRing = new THREE.Mesh(ringGeom, ringMat);
+  pulseRing.visible = false;
+  globe.add(pulseRing);
+  animateRing();
+}
 
-  // Player watchlist
-  playerWatchlist.innerHTML = '';
-  fixture.key_players_shots.forEach((p) => {
-    const li = document.createElement('li');
-    li.innerHTML = `<strong>${p.name}</strong> ${p.detail}`;
-    playerWatchlist.appendChild(li);
+function SURFACE_EPSlocal() {
+  // Slightly larger than SURFACE_EPS to sit just above point altitude
+  return SURFACE_EPS * 1.2;
+}
+
+function updateSelectionRing(f) {
+  if (!pulseRing || !f) return;
+  const R = globe.getGlobeRadius ? globe.getGlobeRadius() : 100;
+  const lat = THREE.MathUtils.degToRad(90 - f.latitude);
+  const lon = THREE.MathUtils.degToRad(180 - f.longitude);
+
+  const r = R * (1 + SURFACE_EPSlocal());
+  const x = r * Math.sin(lat) * Math.cos(lon);
+  const y = r * Math.cos(lat);
+  const z = r * Math.sin(lat) * Math.sin(lon);
+
+  // Update geometry to match world scale
+  pulseRing.geometry.dispose();
+  pulseRing.geometry = new THREE.RingGeometry(R * (1 + SURFACE_EPSlocal() - 0.0005), R * (1 + SURFACE_EPSlocal() + 0.006), 48);
+  pulseRing.position.set(x, y, z);
+  // Orient tangent to surface (normal aligned with radial vector)
+  const outward = new THREE.Vector3(x, y, z).normalize();
+  const target = outward.clone().multiplyScalar(R * 2.0); // look outward so +Z aligns radial
+  pulseRing.lookAt(target);
+  pulseRing.visible = true;
+}
+
+function animateRing() {
+  if (!pulseRing) return;
+  const T = 1800; // ms per pulse
+  const t = (performance.now() % T) / T;
+  const base = 0.35 + 0.25 * Math.sin(t * Math.PI * 2);
+  pulseRing.material.opacity = 0.15 + 0.35 * Math.pow(Math.sin(t * Math.PI), 2);
+  const R = globe.getGlobeRadius ? globe.getGlobeRadius() : 100;
+  const inner = R * (1 + SURFACE_EPSlocal() + base * 0.001);
+  const outer = inner + R * 0.007;
+  pulseRing.geometry.dispose();
+  pulseRing.geometry = new THREE.RingGeometry(inner, outer, 48);
+  requestAnimationFrame(animateRing);
+}
+
+// ---------------------------
+// Hover feedback
+// ---------------------------
+let hoverId = null;
+function handleHover(d) {
+  hoverId = d?.fixture_id || null;
+  // make hovered (non-selected) pop a bit
+  globe.pointRadius(pt => {
+    if (pt.fixture_id === selectedId) return RADIUS_ACTIVE;
+    if (hoverId && pt.fixture_id === hoverId) return RADIUS_BASE * 1.6;
+    return RADIUS_BASE;
   });
+}
 
-  // Market snapshot
-  marketSnapshot.innerHTML = '';
-  const marketItems = [
-    { label: 'Over 2.5 goals', value: toPercent(fixture.over25_prob,0) },
-    { label: 'Both teams to score', value: toPercent(fixture.btts_prob,0) },
-  ];
-  fixture.key_players_bookings.forEach((p) => marketItems.push({ label: `${p.name} booking risk`, value: p.detail }));
-  fixture.key_players_tackles.forEach((p) => marketItems.push({ label: `${p.name} tackles`, value: p.detail }));
-  marketItems.forEach((item) => {
-    const li = document.createElement('li');
-    li.innerHTML = `<strong>${item.label}:</strong> ${item.value}`;
-    marketSnapshot.appendChild(li);
-  });
+// ---------------------------
+// Panel rendering
+// ---------------------------
+function renderPanel(f) {
+  if (!f) return;
 
-  // Deep dive
-  deepDiveButton.onclick = () => {
-    const summary =
-      `Fixture: ${fixture.home_team} vs ${fixture.away_team}\n` +
-      `Kick-off: ${formatDate(fixture.date_utc)}\n` +
-      `Prediction: ${ft}\n` +
-      `Over 2.5: ${toPercent(fixture.over25_prob)}\n` +
-      `BTTS: ${toPercent(fixture.btts_prob)}`;
-    alert(summary);
+  // Title + subtitle
+  const formatDate = (iso) => {
+    try {
+      const d = new Date(iso);
+      const date = d.toLocaleDateString(undefined, { weekday: 'short', day: '2-digit', month: 'short' });
+      const time = d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+      return `${date} · ${time} GMT`;
+    } catch {
+      return iso || '';
+    }
   };
 
-  // Globe camera + highlight
-  updateHighlight();
-  flyTo(fixture.latitude, fixture.longitude, 2.1, 1000);
+  el.fixtureTitle.textContent = `${f.home_team} vs ${f.away_team}`;
+  const ctx = [f.competition, formatDate(f.date_utc), f.stadium && `${f.stadium} (${f.city || ''})`, f.country]
+    .filter(Boolean)
+    .join(' • ');
+  el.fixtureContext.textContent = ctx;
+
+  // Logos (fallback to initials)
+  setBadge(el.homeBadge, f.home_logo_url, formatTeamInitials(f.home_team));
+  setBadge(el.awayBadge, f.away_logo_url, formatTeamInitials(f.away_team));
+
+  // Match intelligence
+  clearNode(el.matchList);
+  const mi = document.createElement('div');
+  mi.className = 'mi-wrap';
+  mi.innerHTML = `
+    <div><strong>Full-time prediction:</strong> ${f.predicted_winner || '–'} ${f.confidence_ftr ? `(${pct(f.confidence_ftr)})` : ''}</div>
+    <div><strong>xG edge:</strong> ${num(f.xg_home)} vs ${num(f.xg_away)}</div>
+    <div><strong>Points momentum:</strong> ${num(f.ppg_home)} PPG • ${num(f.ppg_away)} PPG</div>
+  `;
+  el.matchList.appendChild(mi);
+
+  // Player watchlist
+  clearNode(el.watchlist);
+  const watch = parseKV(f.key_players_shots).slice(0, 6);
+  if (watch.length) {
+    watch.forEach(w => {
+      const li = document.createElement('div');
+      li.className = 'row';
+      li.textContent = `${w.k} ${w.v}`;
+      el.watchlist.appendChild(li);
+    });
+  } else {
+    const empty = document.createElement('div');
+    empty.className = 'row';
+    empty.textContent = 'No player highlights available.';
+    el.watchlist.appendChild(empty);
+  }
+
+  // Market snapshot
+  clearNode(el.market);
+  el.market.innerHTML = `
+    <div><strong>Over 2.5 goals:</strong> ${pct(f.over25_prob)}</div>
+    <div><strong>Both teams to score:</strong> ${pct(f.btts_prob)}</div>
+  `;
+
+  // Keep right-hand list scroll in sync if needed (no-op by default)
 }
 
-// ====== Focus fixture with smooth POV (and ensure selection state) ======
-function focusFixture(index) {
-  if (index < 0 || index >= fixtures.length) return;
-  renderFixture(index);
+function num(x) {
+  const n = Number(x);
+  return Number.isFinite(n) ? n.toFixed(1) : '–';
 }
 
-// ====== Load fixtures and boot ======
-const csvUrl = new URL('./data/fixtures.csv', window.location.href);
-csvUrl.searchParams.set('v', Date.now().toString()); // cache-bust
+// ---------------------------
+// Selection buttons (optional)
+// ---------------------------
+function wireFixtureButtons() {
+  if (!el.prevBtn || !el.nextBtn) return;
+  el.prevBtn.addEventListener('click', () => step(-1));
+  el.nextBtn.addEventListener('click', () => step(+1));
+}
 
-Papa.parse(csvUrl.href, {
-  download: true,
-  header: true,
-  // delimiter: "\t", // uncomment if your snapshot is TSV
-  skipEmptyLines: true,
-  dynamicTyping: false,
-  complete: (results) => {
-    fixtures = hydrateFixtures(results.data || []);
-
-    if (!fixtures.length) {
-      fixtureTitle.textContent = 'No fixtures found';
-      fixtureContext.textContent = 'Check data/fixtures.csv format.';
-      return;
-    }
-
-    // Prefer first EU fixture if present
-    const eu = fixtures.findIndex(f =>
-      ['England','Scotland','Wales','Northern Ireland','Ireland','Spain','Portugal','France','Germany','Italy','Netherlands','Belgium','Norway','Sweden','Denmark','Switzerland','Austria','Poland','Czech Republic','Slovakia','Slovenia','Croatia','Serbia','Greece','Turkey'].includes(f.country)
-    );
-    activeIndex = eu !== -1 ? eu : 0;
-
-    // Bind to globe
-    globe.pointsData(fixtures);
-
-    // Initial panel + focus
-    renderFixture(activeIndex);
-  },
-  error: (error) => {
-    console.error('Failed to load fixtures:', error);
-    fixtureTitle.textContent = 'Unable to load fixtures';
-    fixtureContext.textContent = 'Check the data directory and reload the page.';
-  },
-});
-
-// Click → focus that fixture
-if (typeof globe.onPointClick === 'function') {
-  globe.onPointClick((pt) => {
-    const idx = fixtures.findIndex((f) => f.fixture_id === pt.fixture_id);
-    if (idx !== -1) {
-      focusFixture(idx);
-    }
+// ---------------------------
+// Upload CTA (kept simple)
+// ---------------------------
+if (el.upload) {
+  el.upload.addEventListener('change', () => {
+    // TODO: integrate OCR / audit pipeline
+    toast('Your slip was uploaded. Parsing…');
   });
 }
 
-// Keyboard: Left/Right to switch fixtures (and keep selection synced)
-window.addEventListener('keydown', (event) => {
-  if (!fixtures.length) return;
-  if (event.key === 'ArrowRight') {
-    activeIndex = (activeIndex + 1) % fixtures.length;
-    focusFixture(activeIndex);
-  }
-  if (event.key === 'ArrowLeft') {
-    activeIndex = (activeIndex - 1 + fixtures.length) % fixtures.length;
-    focusFixture(activeIndex);
-  }
-});
+// ---------------------------
+// Toasts (simple UI helper)
+// ---------------------------
+function toast(msg, type = 'success') {
+  const div = document.createElement('div');
+  div.className = `og-toast ${type}`;
+  div.textContent = msg;
+  document.body.appendChild(div);
+  setTimeout(() => {
+    div.classList.add('show');
+    setTimeout(() => {
+      div.classList.remove('show');
+      setTimeout(() => div.remove(), 300);
+    }, 2500);
+  }, 0);
+}
 
-// Resize handling
-window.addEventListener('resize', () => {
-  const w = globeContainer.clientWidth, h = globeContainer.clientHeight;
-  camera.aspect = w / h;
-  camera.updateProjectionMatrix();
-  renderer.setSize(w, h);
-  composer.setSize(w, h);
-  updateFXAA();
-});
+// ---------------------------
+// Keyboard & selection pairing
+// ---------------------------
+function findFixtureById(id) {
+  return fixtures.find(f => f.fixture_id === id);
+}
 
-// Upload placeholder
-uploadInput?.addEventListener('change', (event) => {
-  const file = event.target.files?.[0];
-  if (!file) return;
-  alert(
-    `Bet slip uploaded: ${file.name}\n\nNext steps:\n` +
-    `• OCR the slip to extract selections\n` +
-    `• Run the BetChecker audit pipeline\n` +
-    `• Generate OG Co-Pilot insights`
-  );
-  uploadInput.value = '';
-});
+function createSelectorIndexFromId(id) {
+  const idx = fixtures.findIndex(f => f.fixture_id === id);
+  return Math.max(0, idx);
+}
 
-/* ----------- SMALL CSS hook for crest images ----------- *
-   Add to styles.css (already styled in your theme; included here for clarity)
+// -----------------------------------
+// Init + public entrypoint
+// -----------------------------------
+init();
 
-   .badge img { width: 100%; height: 100%; object-fit: contain; display:block; }
-   .badge.has-logo { background: rgba(255,255,255,.08); }
-*/
+// -----------------------------------
+// Export helper (optional for Codex)
+// -----------------------------------
+export {};
