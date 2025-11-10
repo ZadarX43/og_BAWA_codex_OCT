@@ -1,4 +1,3 @@
-
 // ===== Imports (ESM) =====
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -10,12 +9,12 @@ import { ShaderPass }     from 'three/examples/jsm/postprocessing/ShaderPass.js'
 import { UnrealBloomPass }from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 
 // Shaders
-import { FXAAShader }                 from 'three/examples/jsm/shaders/FXAAShader.js';
-import { CopyShader }                 from 'three/examples/jsm/shaders/CopyShader.js';
-import { LuminosityHighPassShader }   from 'three/examples/jsm/shaders/LuminosityHighPassShader.js';
+import { FXAAShader }               from 'three/examples/jsm/shaders/FXAAShader.js';
+import { CopyShader }               from 'three/examples/jsm/shaders/CopyShader.js';
+import { LuminosityHighPassShader } from 'three/examples/jsm/shaders/LuminosityHighPassShader.js';
 
-// three-globe as ESM (externalized to 'three')
-import GlobeCtor from 'https://esm.sh/three-globe@2.28.0?external=three';
+// three-globe from LOCAL vendor (so it resolves its JSM deps via your import map)
+import GlobeCtor from './vendor/three-globe.mjs';
 
 // PapaParse is UMD on window
 const Papa = window.Papa;
@@ -95,10 +94,22 @@ const loaderDiv = document.createElement('div');
 loaderDiv.className = 'globe-loading';
 loaderDiv.textContent = 'Loading globe…';
 globeContainer.appendChild(loaderDiv);
+
+const removeLoader = () => {
+  if (!loaderDiv.parentNode) return;
+  loaderDiv.style.transition = 'opacity 250ms ease';
+  loaderDiv.style.opacity = '0';
+  setTimeout(() => loaderDiv.remove(), 260);
+};
+
 if (typeof globe.onGlobeReady === 'function') {
-  globe.onGlobeReady(() => loaderDiv.remove());
+  globe.onGlobeReady(() => {
+    removeLoader();
+    console.log('Globe ready');
+  });
 } else {
-  setTimeout(() => loaderDiv.remove(), 1500);
+  // Fallback in case onGlobeReady isn’t exposed
+  setTimeout(removeLoader, 1500);
 }
 
 // ====== Starfield backdrop ======
@@ -313,12 +324,12 @@ csvUrl.searchParams.set('v', Date.now().toString()); // cache-bust
 Papa.parse(csvUrl.href, {
   download: true,
   header: true,
-  // If your snapshot is TSV, uncomment next line:
-  // delimiter: "\t",
+  delimiter: "\t",        // Your snapshot is TSV
   skipEmptyLines: true,
   dynamicTyping: false,
   complete: (results) => {
     fixtures = hydrateFixtures(results.data || []);
+    console.log('Fixtures parsed:', fixtures.length);
     if (!fixtures.length) {
       fixtureTitle.textContent = 'No fixtures found';
       fixtureContext.textContent = 'Check data/fixtures.csv format.';
