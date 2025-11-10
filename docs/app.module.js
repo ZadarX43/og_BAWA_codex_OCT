@@ -124,10 +124,11 @@ const COLORS = {
   ring: '#9EE7E3'
 };
 
-const SURFACE_EPS = 0.006;      // marker altitude = SURFACE_EPS × globeRadius
-const RADIUS_BASE = 0.010;      // marker radius (× globeRadius)
-the selected ring; we animate scale based on sine wave const RADIUS_ACTIVE = 0.022;    // active marker radius
-const CAMERA_ALT = 2.0;
+const SURFACE_EPS   = 0.006; // marker altitude = SURFACE_EPS × globeRadius
+const RADIUS_BASE   = 0.010; // marker sphere radius (× globeRadius)
+// selected ring animation handled by pulsePulse() (opacity modulation)
+const RADIUS_ACTIVE = 0.022; // active marker radius (× globeRadius)
+const CAMERA_ALT    = 2.0;
 
 const BLOOM = { strength: 0.6, radius: 0.5, threshold: 0.85 };
 
@@ -142,24 +143,24 @@ function clearNode(node) {
   while (node.firstChild) node.removeChild(node.firstChild);
 }
 
-function setBadge(el, url, initials) {
-  if (!el) return;
-  el.innerHTML = '';
-  el.classList.remove('has-logo');
+function setBadge(elm, url, initialsText) {
+  if (!elm) return;
+  elm.innerHTML = '';
+  elm.classList.remove('has-logo');
   if (url && /^https?:\/\//i.test(url)) {
     const img = document.createElement('img');
     img.src = url;
-    img.alt = initials || '';
+    img.alt = initialsText || '';
     img.loading = 'lazy';
     img.decoding = 'async';
     img.onerror = () => {
-      el.textContent = initials || '';
-      el.classList.remove('has-logo');
+      elm.textContent = initialsText || '';
+      elm.classList.remove('has-logo');
     };
-    el.appendChild(img);
-    el.classList.add('has-logo');
+    elm.appendChild(img);
+    elm.classList.add('has-logo');
   } else {
-    el.textContent = initials || '';
+    elm.textContent = initialsText || '';
   }
 }
 function initials(name = '') {
@@ -171,7 +172,6 @@ function initials(name = '') {
 // Helper: robust globe radius (some builds don’t expose getGlobeRadius)
 function getGlobeRadius() {
   if (globe?.getGlobeRadius) return globe.getGlobeRadius();
-  // fallback: inspect globe mesh if present, else use 100
   try {
     const m = globe.children?.find(c => c.geometry?.parameters?.radius);
     return m?.geometry?.parameters?.radius || 100;
@@ -248,12 +248,9 @@ async function init() {
   scene.add(globe);
 
   // Safe hover hook (some builds lack onPointHover)
-  if (typeof globe.onPointHover === 'function') {
-    globe.onPointHover(handleHover);
-  } else {
-    console.info('[three-globe] onPointHover() not available in this build — hover enhancement disabled.');
-  }
+  globe.onPointHover?.(handleHover);
 
+  // Safe click hook
   globe.onPointClick?.(pt => {
     if (!pt) return;
     const idx = fixtures.findIndex(f => f.fixture_id === pt.fixture_id);
