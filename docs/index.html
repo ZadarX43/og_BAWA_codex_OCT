@@ -1,16 +1,37 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
     <title>Odds Genius</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+
+    <!-- Import map: where modules resolve -->
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "./vendor/three.module.js",
+        "three/examples/jsm/": "./vendor/examples/jsm/"
+      }
+    }
+    </script>
+
+    <style>
+      /* simple loader so we see progress */
+      #globe-container{
+        position:relative;height:70vh;border-radius:14px;overflow:hidden;
+        background:radial-gradient(120% 120% at 50% 50%, #0d0f13 0%, #06070a 100%);
+      }
+      .globe-loading{position:absolute;inset:0;display:grid;place-items:center;color:#a7ffea;font-weight:600}
+      .globe-error{padding:1rem;color:#ffb4a9}
+    </style>
   </head>
   <body>
     <div class="page">
@@ -28,24 +49,8 @@
 
       <main class="hero">
         <section class="hero__globe" aria-label="Upcoming fixtures globe">
-          <!-- League Selector -->
-          <div class="league-selector" id="league-selector">
-            <button class="ls-btn" id="ls-prev" aria-label="Previous league">◀</button>
-            <select id="ls-select" aria-label="League">
-              <!-- options populated by app.js -->
-            </select>
-            <button class="ls-btn" id="ls-next" aria-label="Next league">▶</button>
-          </div>
-
           <div id="globe-container">
-            <div class="globe-loading" role="status">Loading globe&hellip;</div>
-          </div>
-
-          <div class="globe-controls">
-            <p>
-              Drag to spin the world, scroll to zoom. Use ← → keys to jump between
-              fixtures.
-            </p>
+            <div class="globe-loading" role="status">Loading globe…</div>
           </div>
         </section>
 
@@ -53,7 +58,7 @@
           <div class="insights__header">
             <div class="badge badge--home" id="home-badge"></div>
             <div class="fixture-meta">
-              <h1 id="fixture-title">Loading fixtures&hellip;</h1>
+              <h1 id="fixture-title">Loading fixtures…</h1>
               <p id="fixture-context"></p>
             </div>
             <div class="badge badge--away" id="away-badge"></div>
@@ -90,23 +95,10 @@
       </footer>
     </div>
 
-    <!-- Core libs -->
-    <script defer src="vendor/three.min.js"></script>
-    <script defer src="vendor/OrbitControls.js"></script>
-    <script defer src="vendor/three-globe.min.js"></script>
-    <script defer src="vendor/papaparse.min.js"></script>
-    
-    <!-- Postprocessing + shaders -->
-    <script defer src="vendor/postprocessing/EffectComposer.js"></script>
-    <script defer src="vendor/postprocessing/RenderPass.js"></script>
-    <script defer src="vendor/postprocessing/UnrealBloomPass.js"></script>
-    <script defer src="vendor/postprocessing/ShaderPass.js"></script>
-    <script defer src="vendor/shaders/CopyShader.js"></script>
-    <script defer src="vendor/shaders/FXAAShader.js"></script>
-    
-    <!-- App -->
-    <script defer src="app.js"></script>
+    <!-- PapaParse (UMD). Provides window.Papa -->
+    <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
 
-
+    <!-- Our app as an ES Module -->
+    <script type="module" src="./app.module.js"></script>
   </body>
 </html>
