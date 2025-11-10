@@ -1,29 +1,28 @@
 // app.module.js
-// Odds Genius — Globe Fixtures UI (enhanced)
+// Odds Genius — Globe Fixtures UI (ESM + local vendor imports)
 // ------------------------------------------------------------
-// - Accurate ground-level markers using globe radius
-// - Selected-marker ring highlight + larger sphere
-// - Left/right keyboard nav & click to select
-// - Robust three-globe loader (ESM → CDN fallback)
-// - Club logos in header with fallback initials
-// - Performance optimizations for hundreds of fixtures
-// - Cleaner panel updates and stat formatting
+// - Correct named imports from three/examples/jsm/* (via import map)
+// - Ground-level geo markers; selected marker halo
+// - Left/right keyboard nav; click-to-select
+// - Robust three-globe loader (local → CDN fallback)
+// - Club logo badges (with initials fallback)
+// - CSV → globe linkage + panel renderer
+// - FXAA/Bloom postprocessing sized to container
 // ------------------------------------------------------------
 
 import * as THREE from 'three';
+import { OrbitControls }   from 'three/examples/jsm/controls/OrbitControls.js';
+import { EffectComposer }  from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass }      from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { ShaderPass }      from 'three/examples/jsm/postprocessing/ShaderPass.js';
+import { FXAAShader }      from 'three/examples/jsm/shaders/FXAAShader.js';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 
-// --- Postprocessing / controls (local vendor copies) ---
-import 'https://esm.sh/three@0.160.0/examples/js/controls/OrbitControls.js';
-import 'https://esm.sh/three@0.160.0/examples/js/postprocessing/EffectComposer.js';
-import 'https://esm.sh/three@0.160.0/examples/js/postprocessing/RenderPass.js';
-import 'https://esm.sh/three@0.160.0/examples/js/postprocessing/ShaderPass.js';
-import 'https://esm.sh/three@0.160.0/examples/js/shaders/FXAAShader.js';
-import 'https://esm.sh/three@0.160.0/examples/js/postprocessing/UnrealBloomPass.js';
-
-import Papa from 'https://esm.sh/papaparse@5.4.1';
+// PapaParse (UMD) is loaded in index.html
+const Papa = window.Papa;
 
 // ----------------------------
-// DOM refs (must exist in HTML)
+// DOM refs
 // ----------------------------
 const el = {
   globeWrap: document.getElementById('globe-container'),
@@ -37,70 +36,104 @@ const el = {
   homeBadge: document.getElementById('home-badge'),
   awayBadge: document.getElementById('away-badge'),
   upload: document.getElementById('bet-upload'),
-  // Optional: left/right UI buttons (if present in your HTML)
-  prevBtn: document.getElementById('nav-prev'),
-  nextBtn: document.getElementById('nav-next')
+  prevBtn: document.getElementById('nav-prev'), // optional in HTML
+  nextBtn: document.getElementById('nav-next')  // optional in HTML
 };
 
-// ------------------------------------
-// Utility: robust three-globe loader
-// ------------------------------------
-async function loadThreeGlobe() {
-  // 1) Try local ESM if present
-  try {
-    const mod = await import('./vendor/three-globe.module.js');
-    return mod.default || mod;
-  } catch (e) {
-    console.warn('[three-globe] local ESM not found, falling back to CDN…');
-  }
-  // 2) Try esm.sh (locks version for stability)
-  try {
-    const mod = await import('https://esm.sh/three-globe@2.28.0');
-    return mod.default || mod;
-  } catch (e) {
-    console.warn('[three-globe] esm.sh failed, trying jsDelivr UMD…', e);
-  }
-  // 3) Fallback UMD
-  const url = './vendor/three-globe.min.js';
-  await new Promise((res, rej) => {
+// ----------------------------
+// three-globe loader (ESM → UMD)
+// ----------------------------
+async function importScriptUMD(src) {
+  await new Promise((resolve, reject) => {
     const s = document.createElement('script');
-    s.src = url;
-    s.onload = () => res();
-    s.onerror = rej;
-    document.body.appendChild(s);
+    s.src = src;
+    s.async = true;
+    s.onload = resolve;
+    s.onerror = reject;
+    document.head.appendChild(s);
   });
-  // UMD exposes global
-  // eslint-disable-next-line no-undef
-  return window.ThreeGlobe || window.THREE.Globe;
+  if (window.Globe) return window.Globe;
+  throw new Error('UMD three-globe loaded but window.Globe was not defined');
 }
 
+async function loadThreeGlobe() {
+  // 1) Local ESM first (place the file in docs/vendor/)
+  const localEsm = [
+    './vendor/three-globe.module.js',
+    './vendor/three-globe.mjs'
+  ];
+  for (const p of localEsm) {
+    try {
+      const m = await import(p);
+      console.info('[three-globe] using local ESM:', p);
+      return m.default ?? m;
+    } catch {}
+  }
+  // 2) esm.sh ESM (with three externalized)
+  for (const v of ['2.30.1', '2.29.3', '2.28.0']) {
+    const url = `https://esm.sh/three-globe@${v}?bundle&external=three`;
+    try {
+      const m = await import(url);
+      console.warn('[three-globe] using esm.sh ESM:', url);
+      return m.default ?? m;
+    } catch (e) {
+      console.warn('[three-globe] esm.sh failed:', url, e);
+    }
+  }
+  // 3) UMD fallback
+  const umd = [
+    './vendor/three-globe.min.js',
+    'https://cdn.jsdelivr.net/npm/three-globe@2.29.3/dist/three-globe.min.js',
+    'https://unpkg.com/three-globe@2.29.3/dist/three-globe.min.js'
+  ];
+  for (const url of umd) {
+    try {
+      const ctor = await importScriptUMD(url);
+      console.warn('[three-globe] using UMD:', url);
+      return ctor;
+    } catch (e) {
+      console.warn('[three-globe] UMD failed:', url, e);
+    }
+  }
+  const gc = document.getElementById('globe-container');
+  if (gc) {
+    gc.innerHTML = `<div class="globe-error">
+      <strong>three-globe failed to load.</strong><br/>
+      Add a local copy at <code>docs/vendor/three-globe.module.js</code> (ESM)
+      or <code>docs/vendor/three-globe.min.js</code> (UMD).
+    </div>`;
+  }
+  throw new Error('three-globe could not be loaded from any source');
+}
+
+// ----------------------------
+// Globals / tuning
+// ----------------------------
 let ThreeGlobeCtor;
 let globe;
 let renderer, scene, camera, controls, composer, bloomPass;
 let fixtures = [];
 let activeIdx = 0;
 let selectedId = null;
-let globeReady = false;
 let pulseRing;
 
-// tuneable style constants
 const COLORS = {
-  marker: '#A1F2EA',
+  marker: '#9DEDE6',
   markerInactive: '#79E3D7',
-  markerActive: '#A7FFF6',
-  ring: '#9EE7E3',
-  selected: '#FFFFFF'
+  markerActive: '#BAFFFB',
+  ring: '#9EE7E3'
 };
-const SURFACE_EPS = 0.006;      // fraction of globe radius for marker altitude
-const RING_INNER = 0.010;       // relative to globe radius
-const RING_OUTER = 0.015;
-const RADIUS_BASE = 0.010;      // base sphere radius (× globe radius)
-const RADIUS_ACTIVE = 0.022;    // active sphere radius (× globe radius)
-const CAMERA_ALT = 2.1;         // camera altitude in radius units
-const MAX_LABELS = 80;          // optional future label LOD
+
+const SURFACE_EPS = 0.006;      // marker altitude = SURFACE_EPS × globeRadius
+const RADIUS_BASE = 0.010;      // marker radius (× globeRadius)
+const RADIUS_ACTIVE = 0.022;    // active marker radius
+const CAMERA_ALT = 2.0;
+
 const BLOOM = { strength: 0.6, radius: 0.5, threshold: 0.85 };
 
-// helpers
+// ----------------------------
+// Utilities
+// ----------------------------
 const clamp01 = v => Math.max(0, Math.min(1, v));
 const pct = n => `${Math.round(clamp01(n) * 100)}%`;
 
@@ -129,35 +162,34 @@ function setBadge(el, url, initials) {
     el.textContent = initials || '';
   }
 }
-
-function formatTeamInitials(name = '') {
-  const words = (name || '').split(/\s+/).filter(Boolean);
+function initials(name = '') {
+  const words = name.split(/\s+/).filter(Boolean);
   if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
   return (words[0][0] || '').toUpperCase() + (words[1]?.[0]?.toUpperCase() || '');
 }
 
-// --- Build scene ---
+// ----------------------------
+// Scene init
+// ----------------------------
 async function init() {
   ThreeGlobeCtor = await loadThreeGlobe();
 
-  // Scene
   scene = new THREE.Scene();
 
-  // Renderer
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.setSize(el.globeWrap.clientWidth, el.globeWrap.clientHeight);
   el.globeWrap.innerHTML = '';
   el.globeWrap.appendChild(renderer.domElement);
 
-  // Camera
-  const aspect = el.globeWrap.clientWidth / el.globeWrap.clientHeight;
-  camera = new THREE.PerspectiveCamera(45, aspect, 0.1, 10000);
-  camera.position.z = 300;
+  camera = new THREE.PerspectiveCamera(
+    45,
+    el.globeWrap.clientWidth / el.globeWrap.clientHeight,
+    0.1,
+    5000
+  );
+  camera.position.set(0, 0, 300);
 
-  // Controls
-  // @ts-ignore (added globally by import)
-  const { OrbitControls } = THREE;
   controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
   controls.enablePan = false;
@@ -167,28 +199,21 @@ async function init() {
   controls.minDistance = 140;
   controls.maxDistance = 1200;
 
-  // Lights
   scene.add(new THREE.AmbientLight(0xffffff, 0.9));
 
   // Postprocessing
-  // @ts-ignore
-  const { EffectComposer } = THREE;
-  // @ts-ignore
-  const { RenderPass } = THREE;
-  // @ts-ignore
-  const { ShaderPass } = THREE;
-  // @ts-ignore
-  const { UnrealBloomPass } = THREE;
+  composer = new EffectComposer(renderer);
+  composer.addPass(new RenderPass(scene, camera));
 
-  const renderPass = new RenderPass(scene, camera);
-  composer = new THREE.EffectComposer(renderer);
-  composer.addPass(renderPass);
-
-  const fxaaPass = new THREE.ShaderPass(THREE.FXAAShader);
-  fxaaPass.material.uniforms['resolution'].value.set(
-    1 / (el.globeWrap.clientWidth * renderer.getPixelRatio()),
-    1 / (el.globeWrap.clientHeight * renderer.getPixelRatio())
-  );
+  const fxaaPass = new ShaderPass(FXAAShader);
+  const setFXAA = () => {
+    const px = renderer.getPixelRatio();
+    fxaaPass.material.uniforms['resolution'].value.set(
+      1 / (el.globeWrap.clientWidth * px),
+      1 / (el.globeWrap.clientHeight * px)
+    );
+  };
+  setFXAA();
   composer.addPass(fxaaPass);
 
   bloomPass = new UnrealBloomPass(
@@ -200,71 +225,52 @@ async function init() {
   composer.addPass(bloomPass);
 
   // Globe
-  globe = new ThreeGlobeCtor()
+  globe = new ThreeGlobeCtor({ waitForGlobeReady: true })
     .showAtmosphere(true)
     .atmosphereColor('#94f1ea')
     .atmosphereAltitude(0.2)
     .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-dark.jpg')
     .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
-    .pointAltitude(() => SURFACE_EPS) // ground-level pins
+    .pointAltitude(() => SURFACE_EPS)
     .pointRadius(d => (d.__active ? RADIUS_ACTIVE : RADIUS_BASE))
     .pointColor(d => (d.__active ? COLORS.markerActive : COLORS.marker));
 
   scene.add(globe);
 
-  // Track hover to subtly brighten
   globe.onPointHover(handleHover);
-
-  // Selection (click)
-  globe.onPointClick(d => {
-    if (!d) return;
-    const idx = fixtures.findIndex(f => f.fixture_id === d.fixture_id);
+  globe.onPointClick(pt => {
+    if (!pt) return;
+    const idx = fixtures.findIndex(f => f.fixture_id === pt.fixture_id);
     if (idx >= 0) selectIndex(idx, { fly: true });
   });
 
-  // Window resize
-  window.addEventListener('resize', onResize);
-
-  // Keyboard navigation
-  window.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight') {
-      e.preventDefault();
-      step(+1);
-    } else if (e.key === 'ArrowLeft') {
-      e.preventDefault();
-      step(-1);
-    }
+  window.addEventListener('resize', () => {
+    const { clientWidth, clientHeight } = el.globeWrap;
+    renderer.setSize(clientWidth, clientHeight);
+    camera.aspect = clientWidth / clientHeight;
+    camera.updateProjectionMatrix();
+    // update FXAA & bloom
+    const px = renderer.getPixelRatio();
+    fxaaPass.material.uniforms.resolution.value.set(
+      1 / (clientWidth * px),
+      1 / (clientHeight * px)
+    );
+    bloomPass.setSize?.(clientWidth, clientHeight);
   });
 
-  // Optional nav buttons
+  // keyboard nav
+  window.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') { e.preventDefault(); step(+1); }
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); step(-1); }
+  });
+
   if (el.prevBtn) el.prevBtn.addEventListener('click', () => step(-1));
   if (el.nextBtn) el.nextBtn.addEventListener('click', () => step(+1));
 
-  // CSV load → render
+  // Load fixtures
   await loadFixturesCSV('./data/fixtures.csv');
 
-  // Start loop
   animate();
-}
-
-function onResize() {
-  const { clientWidth, clientHeight } = el.globeWrap;
-  renderer.setSize(clientWidth, clientHeight);
-  camera.aspect = clientWidth / clientHeight;
-  camera.updateProjectionMatrix();
-  // update fxaa + bloom
-  const res = new THREE.Vector2(
-    1 / (clientWidth * renderer.getPixelRatio()),
-    1 / (clientHeight * renderer.getPixelRatio())
-  );
-  composer.passes.forEach(p => {
-    if (p instanceof THREE.ShaderPass && p.material?.uniforms?.resolution) {
-      p.material.uniforms.resolution.value.copy(res);
-    }
-  });
-  if (bloomPass?.setSize) {
-    bloomPass.setSize(clientWidth, clientHeight);
-  }
 }
 
 function animate() {
@@ -273,22 +279,19 @@ function animate() {
   composer.render();
 }
 
-// ---------------------------
-// CSV ingest & normalization
-// ---------------------------
+// ----------------------------
+// CSV ingest & bind
+// ----------------------------
 async function loadFixturesCSV(url) {
   const res = await fetch(`${url}?v=${Date.now()}`);
   const text = await res.text();
   const { data, errors } = Papa.parse(text, { header: true, skipEmptyLines: true });
-  if (errors?.length) {
-    console.warn('[CSV parse errors]', errors);
-  }
+  if (errors?.length) console.warn('[CSV parse errors]', errors);
 
   fixtures = (data || [])
     .map(row => {
       const lat = parseFloat(row.latitude || row.lat || row.Latitude || row.lat_deg);
       const lng = parseFloat(row.longitude || row.lon || row.lng || row.Longitude);
-
       return {
         fixture_id: (row.fixture_id || row.id || `${row.home_team}-${row.away_team}-${row.date_utc || ''}`).trim(),
         home_team: (row.home_team || row.Home || '').trim(),
@@ -302,18 +305,18 @@ async function loadFixturesCSV(url) {
         country: row.country || row.venue_country || '',
         latitude: Number.isFinite(lat) ? lat : undefined,
         longitude: Number.isFinite(lng) ? lng : undefined,
-        // Metrics (defaults):
         predicted_winner: row.predicted_winner || '',
-        confidence_ftr: parseFloat(row.confidence_ftr || row.confidence || 0) || 0,
-        xg_home: parseFloat(row.xg_home || 0) || 0,
-        xg_away: parseFloat(row.xg_away || 0) || 0,
-        ppg_home: parseFloat(row.ppg_home || 0) || 0,
-        ppg_away: parseFloat(row.ppg_away || 0) || 0,
-        over25_prob: parseFloat(row.over25_prob || 0) || 0,
-        btts_prob: parseFloat(row.btts_prob || 0) || 0,
+        confidence_ftr: +row.confidence_ftr || +row.confidence || 0,
+        xg_home: +row.xg_home || 0,
+        xg_away: +row.xg_away || 0,
+        ppg_home: +row.ppg_home || 0,
+        ppg_away: +row.ppg_away || 0,
+        over25_prob: +row.over25_prob || 0,
+        btts_prob: +row.btts_prob || 0,
         key_players_shots: (row.key_players_shots || '').trim(),
         key_players_tackles: (row.key_players_tackles || '').trim(),
-        key_players_bookings: (row.key_players_bookings || '').trim()
+        key_players_bookings: (row.key_players_bookings || '').trim(),
+        __active: false
       };
     })
     .filter(f => Number.isFinite(f.latitude) && Number.isFinite(f.longitude));
@@ -324,42 +327,23 @@ async function loadFixturesCSV(url) {
     return;
   }
 
-  // Seed active flag
-  fixtures.forEach(f => (f.__active = false));
-
-  // Performance: for very large sets, reduce overhead
   const many = fixtures.length > 250;
-  globe
-    .pointsMerge(many)
-    .pointResolution(many ? 4 : 8);
-
-  // Bind to globe
+  globe.pointsMerge(many).pointResolution(many ? 4 : 8);
   globe
     .pointLat('latitude')
     .pointLng('longitude')
     .pointsData(fixtures);
 
-  // Ready to interact
-  globe.addEventListener('ready', () => {
-    globeReady = true;
-    // Ensure we have at least one selection
-    selectIndex(0, { fly: true, skipUpdate: false });
+  // Initial selection
+  selectIndex(0, { fly: true });
 
-    // Create pulse ring (tangent to surface)
-    createSelectionRing();
-  });
-
-  // If globe already in DOM, kick readiness after a tick
-  setTimeout(() => {
-    if (!globeReady) {
-      // Not strictly required; safety check
-    }
-  }, 300);
+  // Build selection ring after first selection
+  createSelectionRing();
 }
 
-// ---------------------------
-// Selection & Navigation
-// ---------------------------
+// ----------------------------
+// Selection & nav
+// ----------------------------
 function step(delta) {
   if (!fixtures.length) return;
   const next = (activeIdx + delta + fixtures.length) % fixtures.length;
@@ -367,104 +351,88 @@ function step(delta) {
 }
 
 function selectIndex(idx, opts = {}) {
-  const { fly = false, skipUpdate = false } = opts;
+  const { fly = false } = opts;
   activeIdx = idx;
   const f = fixtures[activeIdx];
   selectedId = f?.fixture_id || null;
 
   fixtures.forEach(d => (d.__active = d.fixture_id === selectedId));
-  // Update markers without full rebuild (re-apply accessors)
   globe
     .pointAltitude(() => SURFACE_EPS)
     .pointRadius(d => (d.__active ? RADIUS_ACTIVE : RADIUS_BASE))
     .pointColor(d => (d.__active ? COLORS.markerActive : COLORS.marker))
-    .pointsData(fixtures); // trigger refresh
+    .pointsData(fixtures);
 
   if (fly) flyToFixture(f);
-  if (!skipUpdate) renderPanel(f);
+  renderPanel(f);
   updateSelectionRing(f);
 }
 
 function flyToFixture(f) {
-  if (!f || !globe) return;
-  try {
-    globe.pointOfView(
-      { lat: f.latitude, lng: f.longitude, altitude: CAMERA_ALT },
-      800
-    );
-  } catch (e) {
-    // Fallback: orbit controls
-    // no-op
-  }
+  if (!f || !globe?.pointOfView) return;
+  globe.pointOfView(
+    { lat: f.latitude, lng: f.longitude, altitude: CAMERA_ALT },
+    800
+  );
 }
 
-// ---------------------------
-// Selection ring (tangent halo)
-// ---------------------------
+// ----------------------------
+// Selection halo aligned to surface
+// ----------------------------
 function createSelectionRing() {
   const R = globe.getGlobeRadius ? globe.getGlobeRadius() : 100;
-  const ringGeom = new THREE.RingGeometry(R * (1 + SURFACE_EPSlocal()), R * (1 + SURFACE_EPSlocal() + 0.006), 48);
+  const inner = R * (1 + SURFACE_EPS + 0.001);
+  const outer = inner + R * 0.007;
+  const ringGeom = new THREE.RingGeometry(inner, outer, 48);
   const ringMat = new THREE.MeshBasicMaterial({
     color: new THREE.Color(COLORS.ring),
     transparent: true,
-    opacity: 0.55,
+    opacity: 0.3,
     side: THREE.DoubleSide,
     depthWrite: false
   });
   pulseRing = new THREE.Mesh(ringGeom, ringMat);
   pulseRing.visible = false;
-  globe.add(pulseRing);
-  animateRing();
-}
-
-function SURFACE_EPSlocal() {
-  // Slightly larger than SURFACE_EPS to sit just above point altitude
-  return SURFACE_EPS * 1.2;
+  scene.add(pulseRing);
+  pulsePulse();
 }
 
 function updateSelectionRing(f) {
   if (!pulseRing || !f) return;
   const R = globe.getGlobeRadius ? globe.getGlobeRadius() : 100;
-  const lat = THREE.MathUtils.degToRad(90 - f.latitude);
-  const lon = THREE.MathUtils.degToRad(180 - f.longitude);
 
-  const r = R * (1 + SURFACE_EPSlocal());
-  const x = r * Math.sin(lat) * Math.cos(lon);
-  const y = r * Math.cos(lat);
-  const z = r * Math.sin(lat) * Math.sin(lon);
+  // Convert lat/lng to Cartesian at the ring altitude
+  const latRad = THREE.MathUtils.degToRad(90 - f.latitude);
+  const lonRad = THREE.MathUtils.degToRad(180 - f.longitude);
+  const r = R * (1 + SURFACE_EPS + 0.001);
 
-  // Update geometry to match world scale
-  pulseRing.geometry.dispose();
-  pulseRing.geometry = new THREE.RingGeometry(R * (1 + SURFACE_EPSlocal() - 0.0005), R * (1 + SURFACE_EPSlocal() + 0.006), 48);
+  const x = r * Math.sin(latRad) * Math.cos(lonRad);
+  const y = r * Math.cos(latRad);
+  const z = r * Math.sin(latRad) * Math.sin(lonRad);
+
   pulseRing.position.set(x, y, z);
-  // Orient tangent to surface (normal aligned with radial vector)
+  // Align ring plane tangent to sphere (normal = radial outward)
   const outward = new THREE.Vector3(x, y, z).normalize();
-  const target = outward.clone().multiplyScalar(R * 2.0); // look outward so +Z aligns radial
-  pulseRing.lookAt(target);
+  const look = outward.clone().multiplyScalar(R * 2);
+  pulseRing.lookAt(look);
   pulseRing.visible = true;
 }
 
-function animateRing() {
+function pulsePulse() {
   if (!pulseRing) return;
-  const T = 1800; // ms per pulse
+  const T = 1800; // ms
   const t = (performance.now() % T) / T;
-  const base = 0.35 + 0.25 * Math.sin(t * Math.PI * 2);
-  pulseRing.material.opacity = 0.15 + 0.35 * Math.pow(Math.sin(t * Math.PI), 2);
-  const R = globe.getGlobeRadius ? globe.getGlobeRadius() : 100;
-  const inner = R * (1 + SURFACE_EPSlocal() + base * 0.001);
-  const outer = inner + R * 0.007;
-  pulseRing.geometry.dispose();
-  pulseRing.geometry = new THREE.RingGeometry(inner, outer, 48);
-  requestAnimationFrame(animateRing);
+  const intensity = 0.15 + 0.35 * Math.sin(t * Math.PI) ** 2;
+  pulseRing.material.opacity = intensity;
+  requestAnimationFrame(pulsePulse);
 }
 
-// ---------------------------
-// Hover feedback
-// ---------------------------
+// ----------------------------
+// Hover feedback (size pop)
+// ----------------------------
 let hoverId = null;
 function handleHover(d) {
   hoverId = d?.fixture_id || null;
-  // make hovered (non-selected) pop a bit
   globe.pointRadius(pt => {
     if (pt.fixture_id === selectedId) return RADIUS_ACTIVE;
     if (hoverId && pt.fixture_id === hoverId) return RADIUS_BASE * 1.6;
@@ -472,38 +440,31 @@ function handleHover(d) {
   });
 }
 
-// ---------------------------
-// Panel rendering
-// ---------------------------
+// ----------------------------
+// Panel
+// ----------------------------
 function renderPanel(f) {
   if (!f) return;
 
-  // Title + subtitle
-  const formatDate = (iso) => {
+  const fmt = iso => {
     try {
       const d = new Date(iso);
       const date = d.toLocaleDateString(undefined, { weekday: 'short', day: '2-digit', month: 'short' });
       const time = d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
       return `${date} · ${time} GMT`;
-    } catch {
-      return iso || '';
-    }
+    } catch { return iso || ''; }
   };
 
   el.fixtureTitle.textContent = `${f.home_team} vs ${f.away_team}`;
-  const ctx = [f.competition, formatDate(f.date_utc), f.stadium && `${f.stadium} (${f.city || ''})`, f.country]
-    .filter(Boolean)
-    .join(' • ');
-  el.fixtureContext.textContent = ctx;
+  el.fixtureContext.textContent = [f.competition, fmt(f.date_utc), f.stadium && `${f.stadium} (${f.city || ''})`, f.country]
+    .filter(Boolean).join(' • ');
 
-  // Logos (fallback to initials)
-  setBadge(el.homeBadge, f.home_logo_url, formatTeamInitials(f.home_team));
-  setBadge(el.awayBadge, f.away_logo_url, formatTeamInitials(f.away_team));
+  setBadge(el.homeBadge, f.home_logo_url, initials(f.home_team));
+  setBadge(el.awayBadge, f.away_logo_url, initials(f.away_team));
 
-  // Match intelligence
+  // Match Intelligence
   clearNode(el.matchList);
   const mi = document.createElement('div');
-  mi.className = 'mi-wrap';
   mi.innerHTML = `
     <div><strong>Full-time prediction:</strong> ${f.predicted_winner || '–'} ${f.confidence_ftr ? `(${pct(f.confidence_ftr)})` : ''}</div>
     <div><strong>xG edge:</strong> ${num(f.xg_home)} vs ${num(f.xg_away)}</div>
@@ -511,15 +472,15 @@ function renderPanel(f) {
   `;
   el.matchList.appendChild(mi);
 
-  // Player watchlist
+  // Player Watchlist (shots)
   clearNode(el.watchlist);
-  const watch = parseKV(f.key_players_shots).slice(0, 6);
-  if (watch.length) {
-    watch.forEach(w => {
-      const li = document.createElement('div');
-      li.className = 'row';
-      li.textContent = `${w.k} ${w.v}`;
-      el.watchlist.appendChild(li);
+  const shots = parseKV(f.key_players_shots).slice(0, 6);
+  if (shots.length) {
+    shots.forEach(s => {
+      const row = document.createElement('div');
+      row.className = 'row';
+      row.textContent = `${s.k} ${s.v}`;
+      el.watchlist.appendChild(row);
     });
   } else {
     const empty = document.createElement('div');
@@ -528,14 +489,24 @@ function renderPanel(f) {
     el.watchlist.appendChild(empty);
   }
 
-  // Market snapshot
+  // Market
   clearNode(el.market);
   el.market.innerHTML = `
     <div><strong>Over 2.5 goals:</strong> ${pct(f.over25_prob)}</div>
     <div><strong>Both teams to score:</strong> ${pct(f.btts_prob)}</div>
   `;
 
-  // Keep right-hand list scroll in sync if needed (no-op by default)
+  // Deep-dive
+  if (el.deepBtn) {
+    el.deepBtn.onclick = () => {
+      alert(
+        `Fixture: ${f.home_team} vs ${f.away_team}\n` +
+        `Kick-off: ${fmt(f.date_utc)}\n` +
+        `Prediction: ${f.predicted_winner} (${pct(f.confidence_ftr)})\n` +
+        `Over 2.5: ${pct(f.over25_prob)} • BTTS: ${pct(f.btts_prob)}`
+      );
+    };
+  }
 }
 
 function num(x) {
@@ -543,60 +514,28 @@ function num(x) {
   return Number.isFinite(n) ? n.toFixed(1) : '–';
 }
 
-// ---------------------------
-// Selection buttons (optional)
-// ---------------------------
-function wireFixtureButtons() {
-  if (!el.prevBtn || !el.nextBtn) return;
-  el.prevBtn.addEventListener('click', () => step(-1));
-  el.nextBtn.addEventListener('click', () => step(+1));
+function parseKV(s='') {
+  // "Name|Value;Name2|Value2"
+  return s.split(';')
+    .map(x => x.trim())
+    .filter(Boolean)
+    .map(pair => {
+      const [k, v] = pair.split('|');
+      return { k: (k||'').trim(), v: (v||'').trim() };
+    });
 }
 
-// ---------------------------
-// Upload CTA (kept simple)
-// ---------------------------
-if (el.upload) {
-  el.upload.addEventListener('change', () => {
-    // TODO: integrate OCR / audit pipeline
-    toast('Your slip was uploaded. Parsing…');
-  });
-}
+// ----------------------------
+// Upload (placeholder)
+// ----------------------------
+el.upload?.addEventListener('change', (e) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+  alert(`Bet slip uploaded: ${file.name}\n\nNext steps:\n• OCR the slip\n• Run BetChecker\n• Generate OG Co-Pilot insights`);
+  el.upload.value = '';
+});
 
-// ---------------------------
-// Toasts (simple UI helper)
-// ---------------------------
-function toast(msg, type = 'success') {
-  const div = document.createElement('div');
-  div.className = `og-toast ${type}`;
-  div.textContent = msg;
-  document.body.appendChild(div);
-  setTimeout(() => {
-    div.classList.add('show');
-    setTimeout(() => {
-      div.classList.remove('show');
-      setTimeout(() => div.remove(), 300);
-    }, 2500);
-  }, 0);
-}
-
-// ---------------------------
-// Keyboard & selection pairing
-// ---------------------------
-function findFixtureById(id) {
-  return fixtures.find(f => f.fixture_id === id);
-}
-
-function createSelectorIndexFromId(id) {
-  const idx = fixtures.findIndex(f => f.fixture_id === id);
-  return Math.max(0, idx);
-}
-
-// -----------------------------------
-// Init + public entrypoint
-// -----------------------------------
+// ----------------------------
+// Start
+// ----------------------------
 init();
-
-// -----------------------------------
-// Export helper (optional for Codex)
-// -----------------------------------
-export {};
