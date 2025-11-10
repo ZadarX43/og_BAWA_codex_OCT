@@ -82,7 +82,9 @@ let activeIndex = 0;
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(globeContainer.clientWidth, globeContainer.clientHeight);
-renderer.outputEncoding = THREE.sRGBEncoding;
+// three r150 deprecates outputEncoding in favor of outputColorSpace
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+
 
 const scene = new THREE.Scene();
 scene.add(new THREE.AmbientLight(0xffffff, 1));
