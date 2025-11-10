@@ -1,3 +1,4 @@
+// ====== DOM refs ======
 const globeContainer = document.getElementById('globe-container');
 const insightsContent = document.getElementById('insights-content');
 const fixtureTitle = document.getElementById('fixture-title');
@@ -8,13 +9,14 @@ const marketSnapshot = document.getElementById('market-snapshot');
 const deepDiveButton = document.getElementById('deep-dive-btn');
 const homeBadge = document.getElementById('home-badge');
 const awayBadge = document.getElementById('away-badge');
+const uploadInput = document.getElementById('bet-upload');
 
+// ====== Error helper ======
 function showDependencyError(message) {
   if (!globeContainer) {
     console.error(message);
     return;
   }
-
   globeContainer.innerHTML = '';
   const errorBox = document.createElement('div');
   errorBox.className = 'globe-error';
@@ -22,37 +24,33 @@ function showDependencyError(message) {
     <h2>Globe assets unavailable</h2>
     <p>${message}</p>
     <p class="globe-error__hint">
-      Check your internet connection or download the libraries locally and update the
-      <code>&lt;script&gt;</code> tags in <code>index.html</code>.
+      Check your internet connection or vendor the libraries locally in <code>docs/vendor/</code>, then update
+      the <code>&lt;script&gt;</code> tags in <code>index.html</code>.
     </p>
   `;
   globeContainer.appendChild(errorBox);
 }
 
+// ====== Dependency checks (local vendor versions) ======
 const dependencyChecks = [
-  { name: 'three.js', ref: window.THREE, url: 'https://unpkg.com/three@0.160.0/build/three.min.js' },
-  {
-    name: 'OrbitControls',
-    ref: window.THREE?.OrbitControls,
-    url: 'https://unpkg.com/three@0.160.0/examples/js/controls/OrbitControls.js',
-  },
-  { name: 'ThreeGlobe', ref: window.ThreeGlobe, url: 'https://unpkg.com/three-globe@2.34.0/build/three-globe.min.js' },
-  { name: 'PapaParse', ref: window.Papa, url: 'https://unpkg.com/papaparse@5.4.1/papaparse.min.js' },
+  { name: 'three.js',            ref: window.THREE,                              url: 'vendor/three.min.js' },
+  { name: 'OrbitControls',       ref: window.THREE && window.THREE.OrbitControls, url: 'vendor/OrbitControls.js' },
+  { name: 'ThreeGlobe/Globe',    ref: window.ThreeGlobe || window.Globe,         url: 'vendor/three-globe.min.js' },
+  { name: 'PapaParse',           ref: window.Papa,                                url: 'vendor/papaparse.min.js' },
 ];
 
-const missingDeps = dependencyChecks.filter((dep) => !dep.ref);
-
-if (missingDeps.length > 0) {
-  const advice = missingDeps
-    .map((dep) => `• ${dep.name} from ${dep.url}`)
-    .join('<br />');
-  showDependencyError(`The following scripts failed to load:<br />${advice}`);
+const missingDeps = dependencyChecks.filter((d) => !d.ref);
+if (missingDeps.length) {
+  const advice = missingDeps.map((d) => `• ${d.name} from ${d.url}`).join('<br/>');
+  showDependencyError(`The following scripts failed to load:<br/>${advice}`);
   throw new Error('Required globe dependencies did not load.');
 }
 
+// ====== State ======
 let fixtures = [];
 let activeIndex = 0;
 
+// ====== THREE basics ======
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(globeContainer.clientWidth, globeContainer.clientHeight);
@@ -77,46 +75,69 @@ controls.maxDistance = 320;
 controls.autoRotate = true;
 controls.autoRotateSpeed = 0.6;
 
-const globe = new ThreeGlobe({ waitForGlobeReady: true })
-  .globeImageUrl('//unpkg.com/three-globe/example/img/earth-night.jpg')
-  .bumpImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png')
+globeContainer.innerHTML = '';
+globeContainer.appendChild(renderer.domElement);
+
+// ====== Globe (supports either UMD name) + nicer atmosphere ======
+const GlobeCtor = window.ThreeGlobe || window.Globe;
+const globe = new GlobeCtor({ waitForGlobeReady: true })
+  .showAtmosphere(true)
+  .atmosphereAltitude(0.22)
+  .atmosphereColor('#66e3d2')
+  .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-dark.jpg')
+  .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
   .pointAltitude('pointAltitude')
   .pointColor('pointColor')
   .pointLabel((d) => `${d.home_team} vs ${d.away_team}`);
 
 scene.add(globe);
 
-const atmosphere = new THREE.Mesh(
-  new THREE.SphereGeometry(globe.getGlobeRadius() * 1.02, 75, 75),
-  new THREE.MeshBasicMaterial({
-    color: 0x7df9c4,
-    transparent: true,
-    opacity: 0.08,
-  })
+// ====== Starfield backdrop ======
+const starGeom = new THREE.BufferGeometry();
+const starCount = (window.devicePixelRatio > 2 || window.innerWidth < 480) ? 1200 : 2000;
+const positions = new Float32Array(starCount * 3);
+for (let i = 0; i < starCount; i++) {
+  const r = 500 + Math.random() * 500;
+  const theta = Math.random() * Math.PI * 2;
+  const phi = Math.acos(Math.random() * 2 - 1);
+  positions[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
+  positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+  positions[i * 3 + 2] = r * Math.cos(phi);
+}
+starGeom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+const starMat = new THREE.PointsMaterial({ size: 0.9, transparent: true, opacity: 0.8 });
+const stars = new THREE.Points(starGeom, starMat);
+scene.add(stars);
+
+// ====== Postprocessing: EffectComposer + FXAA + Bloom ======
+const composer = new THREE.EffectComposer(renderer);
+const renderPass = new THREE.RenderPass(scene, camera);
+composer.addPass(renderPass);
+
+const fxaaPass = new THREE.ShaderPass(THREE.FXAAShader);
+fxaaPass.material.uniforms['resolution'].value.set(
+  1 / renderer.domElement.width,
+  1 / renderer.domElement.height
 );
-scene.add(atmosphere);
+composer.addPass(fxaaPass);
 
-const halo = new THREE.Mesh(
-  new THREE.SphereGeometry(globe.getGlobeRadius() * 1.12, 50, 50),
-  new THREE.MeshBasicMaterial({
-    color: 0x0093c7,
-    transparent: true,
-    opacity: 0.06,
-  })
+const bloomPass = new THREE.UnrealBloomPass(
+  new THREE.Vector2(renderer.domElement.width, renderer.domElement.height),
+  (window.devicePixelRatio > 2 || window.innerWidth < 480) ? 0.4 : 0.6, // strength
+  0.4,  // radius
+  0.85  // threshold
 );
-scene.add(halo);
+composer.addPass(bloomPass);
 
-globeContainer.innerHTML = '';
-globeContainer.appendChild(renderer.domElement);
-
+// ====== Render loop (composer) ======
 function animate() {
   controls.update();
-  renderer.render(scene, camera);
+  composer.render(); // replaces renderer.render(scene, camera)
   requestAnimationFrame(animate);
 }
-
 animate();
 
+// ====== Helpers ======
 function formatDate(iso) {
   const date = new Date(iso);
   return new Intl.DateTimeFormat('en-GB', {
@@ -130,7 +151,7 @@ function formatDate(iso) {
 }
 
 function toPercent(value) {
-  return `${Math.round(value * 100)}%`;
+  return `${Math.round(Number(value) * 100)}%`;
 }
 
 function badgeLabel(name) {
@@ -139,9 +160,31 @@ function badgeLabel(name) {
     .map((part) => part[0])
     .join('')
     .slice(0, 3)
-    .toUpperCase();
+  .toUpperCase();
 }
 
+// Smooth camera fly-to
+function flyTo(lat, lng, altitude = 1.8, ms = 900) {
+  const pv = globe.pointOfView() || { lat: 0, lng: 0, altitude: 2 };
+  const start = { lat: pv.lat || 0, lng: pv.lng || 0, altitude: pv.altitude || 2 };
+  const end = { lat, lng, altitude };
+  const t0 = performance.now();
+
+  function tick(now) {
+    const t = Math.min(1, (now - t0) / ms);
+    const ease = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; // easeInOutCubic
+    const lerp = (a, b) => a + (b - a) * ease;
+    globe.pointOfView({
+      lat: lerp(start.lat, end.lat),
+      lng: lerp(start.lng, end.lng),
+      altitude: lerp(start.altitude, end.altitude)
+    });
+    if (t < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+// ====== Render a single fixture’s side panel ======
 function renderFixture(index) {
   const fixture = fixtures[index];
   if (!fixture) return;
@@ -153,118 +196,111 @@ function renderFixture(index) {
   homeBadge.textContent = badgeLabel(fixture.home_team);
   awayBadge.textContent = badgeLabel(fixture.away_team);
 
+  // Match Intelligence
   matchIntelligenceList.innerHTML = '';
   const intelligenceItems = [
-    {
-      label: 'Full-time prediction',
-      value: `${fixture.predicted_winner} (${toPercent(fixture.confidence_ftr)})`,
-    },
-    {
-      label: 'xG edge',
-      value: `${fixture.home_team} ${fixture.xg_home.toFixed(1)} vs ${fixture.away_team} ${fixture.xg_away.toFixed(1)}`,
-    },
-    {
-      label: 'Points momentum',
-      value: `${fixture.home_team} ${fixture.ppg_home.toFixed(1)} PPG • ${fixture.away_team} ${fixture.ppg_away.toFixed(1)} PPG`,
-    },
+    { label: 'Full-time prediction', value: `${fixture.predicted_winner} (${toPercent(fixture.confidence_ftr)})` },
+    { label: 'xG edge', value: `${fixture.home_team} ${fixture.xg_home.toFixed(1)} vs ${fixture.away_team} ${fixture.xg_away.toFixed(1)}` },
+    { label: 'Points momentum', value: `${fixture.home_team} ${fixture.ppg_home.toFixed(1)} PPG • ${fixture.away_team} ${fixture.ppg_away.toFixed(1)} PPG` },
   ];
-
   intelligenceItems.forEach((item) => {
     const li = document.createElement('li');
     li.innerHTML = `<strong>${item.label}:</strong> ${item.value}`;
     matchIntelligenceList.appendChild(li);
   });
 
+  // Player watchlist
   playerWatchlist.innerHTML = '';
-  fixture.key_players_shots.forEach((player) => {
+  fixture.key_players_shots.forEach((p) => {
     const li = document.createElement('li');
-    li.innerHTML = `<strong>${player.name}</strong> ${player.detail}`;
+    li.innerHTML = `<strong>${p.name}</strong> ${p.detail}`;
     playerWatchlist.appendChild(li);
   });
 
+  // Market snapshot
   marketSnapshot.innerHTML = '';
   const marketItems = [
     { label: 'Over 2.5 goals', value: toPercent(fixture.over25_prob) },
     { label: 'Both teams to score', value: toPercent(fixture.btts_prob) },
   ];
-
-  fixture.key_players_bookings.forEach((player) => {
-    marketItems.push({ label: `${player.name} booking risk`, value: player.detail });
-  });
-
-  fixture.key_players_tackles.forEach((player) => {
-    marketItems.push({ label: `${player.name} tackles`, value: player.detail });
-  });
-
+  fixture.key_players_bookings.forEach((p) => marketItems.push({ label: `${p.name} booking risk`, value: p.detail }));
+  fixture.key_players_tackles.forEach((p) => marketItems.push({ label: `${p.name} tackles`, value: p.detail }));
   marketItems.forEach((item) => {
     const li = document.createElement('li');
     li.innerHTML = `<strong>${item.label}:</strong> ${item.value}`;
     marketSnapshot.appendChild(li);
   });
 
+  // Deep dive (placeholder)
   deepDiveButton.onclick = () => {
-    const summary = `Fixture: ${fixture.home_team} vs ${fixture.away_team}\nKick-off: ${formatDate(fixture.date_utc)}\nPrediction: ${fixture.predicted_winner} (${toPercent(
-      fixture.confidence_ftr
-    )})\nOver 2.5: ${toPercent(fixture.over25_prob)}\nBTTS: ${toPercent(fixture.btts_prob)}`;
+    const summary =
+      `Fixture: ${fixture.home_team} vs ${fixture.away_team}\n` +
+      `Kick-off: ${formatDate(fixture.date_utc)}\n` +
+      `Prediction: ${fixture.predicted_winner} (${toPercent(fixture.confidence_ftr)})\n` +
+      `Over 2.5: ${toPercent(fixture.over25_prob)}\n` +
+      `BTTS: ${toPercent(fixture.btts_prob)}`;
     alert(summary);
   };
 }
 
+// ====== CSV helpers ======
 function processPlayerField(field) {
   if (!field) return [];
   return field.split(';').map((entry) => {
     const [name, detail] = entry.split('|');
-    return { name: name.trim(), detail: (detail || '').trim() };
+    return { name: (name || '').trim(), detail: (detail || '').trim() };
   });
 }
 
 function hydrateFixtures(rawFixtures) {
   return rawFixtures
-    .filter((fixture) => fixture.fixture_id)
-    .map((fixture) => ({
-      ...fixture,
-      latitude: Number(fixture.latitude),
-      longitude: Number(fixture.longitude),
-      xg_home: Number(fixture.xg_home),
-      xg_away: Number(fixture.xg_away),
-      ppg_home: Number(fixture.ppg_home),
-      ppg_away: Number(fixture.ppg_away),
-      confidence_ftr: Number(fixture.confidence_ftr),
-      over25_prob: Number(fixture.over25_prob),
-      btts_prob: Number(fixture.btts_prob),
-      key_players_shots: processPlayerField(fixture.key_players_shots),
-      key_players_bookings: processPlayerField(fixture.key_players_bookings),
-      key_players_tackles: processPlayerField(fixture.key_players_tackles),
-      pointAltitude: 0.18 + Number(fixture.confidence_ftr) * 0.12,
-      pointColor:
-        Number(fixture.confidence_ftr) > 0.7
-          ? '#64d863'
-          : Number(fixture.confidence_ftr) > 0.5
-          ? '#00bcd4'
-          : '#ff8a65',
-    }));
+    .filter((f) => f.fixture_id) // basic guard
+    .map((f) => {
+      const cf = Number(f.confidence_ftr);
+      return {
+        ...f,
+        latitude: Number(f.latitude),
+        longitude: Number(f.longitude),
+        xg_home: Number(f.xg_home),
+        xg_away: Number(f.xg_away),
+        ppg_home: Number(f.ppg_home),
+        ppg_away: Number(f.ppg_away),
+        confidence_ftr: cf,
+        over25_prob: Number(f.over25_prob),
+        btts_prob: Number(f.btts_prob),
+        key_players_shots: processPlayerField(f.key_players_shots),
+        key_players_bookings: processPlayerField(f.key_players_bookings),
+        key_players_tackles: processPlayerField(f.key_players_tackles),
+        pointAltitude: 0.18 + cf * 0.12,
+        pointColor: cf > 0.7 ? '#64d863' : (cf > 0.5 ? '#00bcd4' : '#ff8a65'),
+      };
+    });
 }
 
+// ====== Focus fixture with smooth POV ======
 function focusFixture(index) {
   const fixture = fixtures[index];
   if (!fixture) return;
-
-  const target = globe
-    .pointOfView({ lat: fixture.latitude, lng: fixture.longitude, altitude: 2.2 }, 1200)
-    .then(() => renderFixture(index));
-
-  return target;
+  renderFixture(index);
+  flyTo(fixture.latitude, fixture.longitude, 2.0, 1000);
 }
 
+// ====== Load fixtures CSV and boot ======
 Papa.parse('data/fixtures.csv', {
   download: true,
   header: true,
   dynamicTyping: false,
   complete: (results) => {
     fixtures = hydrateFixtures(results.data);
+
+    // Default to first UK/EU fixture if present
+    const eu = fixtures.findIndex(f =>
+      ['England','Scotland','Wales','Northern Ireland','Ireland','Spain','Portugal','France','Germany','Italy','Netherlands','Belgium','Norway','Sweden','Denmark','Switzerland','Austria','Poland','Czech Republic','Slovakia','Slovenia','Croatia','Serbia','Greece','Turkey'].includes(f.country)
+    );
+    activeIndex = eu !== -1 ? eu : 0;
+
     globe.pointsData(fixtures);
-    renderFixture(0);
-    focusFixture(0);
+    focusFixture(activeIndex);
   },
   error: (error) => {
     console.error('Failed to load fixtures:', error);
@@ -273,24 +309,30 @@ Papa.parse('data/fixtures.csv', {
   },
 });
 
-globe.onPointClick((point) => {
-  const index = fixtures.findIndex((fixture) => fixture.fixture_id === point.fixture_id);
-  if (index !== -1) {
-    activeIndex = index;
-    focusFixture(index);
-  }
-});
+// Point click -> focus that fixture
+if (typeof globe.onPointClick === 'function') {
+  globe.onPointClick((pt) => {
+    const idx = fixtures.findIndex((f) => f.fixture_id === pt.fixture_id);
+    if (idx !== -1) {
+      activeIndex = idx;
+      focusFixture(idx);
+    }
+  });
+}
 
+// Resize handling (renderer + composer + FXAA)
 window.addEventListener('resize', () => {
-  const { clientWidth, clientHeight } = globeContainer;
-  camera.aspect = clientWidth / clientHeight;
+  const w = globeContainer.clientWidth, h = globeContainer.clientHeight;
+  camera.aspect = w / h;
   camera.updateProjectionMatrix();
-  renderer.setSize(clientWidth, clientHeight);
+  renderer.setSize(w, h);
+  composer.setSize(w, h);
+  fxaaPass.material.uniforms['resolution'].value.set(1 / w, 1 / h);
 });
 
+// Keyboard nav
 window.addEventListener('keydown', (event) => {
-  if (fixtures.length === 0) return;
-
+  if (!fixtures.length) return;
   if (event.key === 'ArrowRight') {
     activeIndex = (activeIndex + 1) % fixtures.length;
     focusFixture(activeIndex);
@@ -301,12 +343,15 @@ window.addEventListener('keydown', (event) => {
   }
 });
 
-const uploadInput = document.getElementById('bet-upload');
+// Upload placeholder
 uploadInput.addEventListener('change', (event) => {
   const file = event.target.files?.[0];
   if (!file) return;
-
-  const message = `Bet slip uploaded: ${file.name}\n\nNext steps:\n• OCR the slip to extract selections\n• Run the BetChecker audit pipeline\n• Generate OG Co Pilot insights`; // placeholder for pipeline hookup
+  const message =
+    `Bet slip uploaded: ${file.name}\n\nNext steps:\n` +
+    `• OCR the slip to extract selections\n` +
+    `• Run the BetChecker audit pipeline\n` +
+    `• Generate OG Co-Pilot insights`;
   alert(message);
   uploadInput.value = '';
 });
