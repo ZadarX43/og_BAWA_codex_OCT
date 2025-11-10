@@ -84,10 +84,11 @@ const globe = new GlobeCtor({ waitForGlobeReady: true })
   .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-dark.jpg')
   .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
   .pointAltitude('pointAltitude')
-  .pointColor('pointColor')
-  .pointLabel((d) => `${d.home_team} vs ${d.away_team}`);
+  .pointColor('pointColor');
+//  .pointLabel((d) => `${d.home_team} vs ${d.away_team}`); // <- not available in this build
 
 scene.add(globe);
+
 
 // Loading overlay until globe textures ready
 const loaderDiv = document.createElement('div');
