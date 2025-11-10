@@ -28,10 +28,10 @@ async function importScriptUMD(src) {
 }
 
 async function loadThreeGlobe() {
-  // 1) Prefer local ESM (your file) first
+  // 1) Try local ESM copies if present
   const localEsm = [
-    './vendor/three-globe.mjs',        // <-- your local module
-    './vendor/three-globe.module.js'   // optional alt name if you add it
+    './vendor/three-globe.module.js',
+    './vendor/three-globe.mjs'
   ];
   for (const p of localEsm) {
     try {
@@ -41,7 +41,7 @@ async function loadThreeGlobe() {
     } catch {}
   }
 
-  // 2) Try esm.sh (ESM) across a few versions; bundle to avoid deep import churn; externalize three
+  // 2) esm.sh (bundle; externalize three)
   const esmVersions = ['2.30.1', '2.29.3', '2.28.0'];
   for (const v of esmVersions) {
     const url = `https://esm.sh/three-globe@${v}?bundle&external=three`;
@@ -54,7 +54,7 @@ async function loadThreeGlobe() {
     }
   }
 
-  // 3) Fall back to UMD (local first, then CDNs)
+  // 3) UMD fallback (local → CDNs)
   const umdCandidates = [
     './vendor/three-globe.min.js',
     'https://cdn.jsdelivr.net/npm/three-globe@2.29.3/dist/three-globe.min.js',
@@ -75,7 +75,7 @@ async function loadThreeGlobe() {
   if (gc) {
     gc.innerHTML = `<div class="globe-error">
       <strong>three-globe failed to load.</strong><br/>
-      Add a local copy at <code>docs/vendor/three-globe.mjs</code> (ESM)
+      Add a local copy at <code>docs/vendor/three-globe.module.js</code> (ESM)
       or <code>docs/vendor/three-globe.min.js</code> (UMD).
     </div>`;
   }
@@ -98,6 +98,17 @@ const deepDiveButton = document.getElementById('deep-dive-btn');
 const homeBadge = document.getElementById('home-badge');
 const awayBadge = document.getElementById('away-badge');
 const uploadInput = document.getElementById('bet-upload');
+
+// Nav chevrons
+const navLeft = document.createElement('button');
+const navRight = document.createElement('button');
+Object.assign(navLeft.style,  {position:'absolute',left:'10px',top:'50%',transform:'translateY(-50%)',zIndex:2,background:'rgba(255,255,255,0.08)',border:'1px solid rgba(255,255,255,0.1)',borderRadius:'50%',width:'42px',height:'42px',color:'#a7ffea',backdropFilter:'blur(6px)',cursor:'pointer'});
+Object.assign(navRight.style, {position:'absolute',right:'10px',top:'50%',transform:'translateY(-50%)',zIndex:2,background:'rgba(255,255,255,0.08)',border:'1px solid rgba(255,255,255,0.1)',borderRadius:'50%',width:'42px',height:'42px',color:'#a7ffea',backdropFilter:'blur(6px)',cursor:'pointer'});
+navLeft.innerHTML  = '&#10094;'; // ‹
+navRight.innerHTML = '&#10095;'; // ›
+globeContainer.style.position = 'relative';
+globeContainer.appendChild(navLeft);
+globeContainer.appendChild(navRight);
 
 // Quick dependency sanity
 if (!Papa) {
@@ -151,8 +162,7 @@ const globe = new ThreeGlobeCtor({ waitForGlobeReady: true })
   .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-dark.jpg')
   .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
   .pointAltitude('pointAltitude')
-  .pointColor('pointColor');
-// some builds don’t expose .pointLabel chainable — we’ll set labels after pointsData
+  .pointColor('pointColor'); // labels set later
 
 scene.add(globe);
 
@@ -226,10 +236,43 @@ function formatDate(iso) {
   }).format(date);
 }
 function toPercent(value) {
+  if (value == null || isNaN(value)) return '–';
   return `${Math.round(Number(value) * 100)}%`;
+}
+function td(num, dp = 1) {
+  if (num == null || isNaN(num)) return '–';
+  return Number(num).toFixed(dp);
 }
 function badgeLabel(name) {
   return name.split(' ').map((p)=>p[0]).join('').slice(0,3).toUpperCase();
+}
+function setBadge(el, teamName, logoUrl) {
+  if (logoUrl) {
+    el.style.backgroundImage = `url(${logoUrl})`;
+    el.style.backgroundSize = 'cover';
+    el.style.backgroundPosition = 'center';
+    el.textContent = '';
+    el.classList.add('badge--img');
+  } else {
+    el.style.backgroundImage = '';
+    el.textContent = badgeLabel(teamName);
+    el.classList.remove('badge--img');
+  }
+}
+function pickLogoUrl(fx, side /* 'home' | 'away' */) {
+  const candidates = [
+    'logo','logo_url','badge','badge_url','crest','crest_url','emblem','emblem_url'
+  ];
+  for (const c of candidates) {
+    const k = `${side}_${c}`;
+    if (fx[k] && /^https?:\/\//i.test(String(fx[k]))) return String(fx[k]);
+  }
+  // tolerate HomeLogoUrl etc.
+  for (const c of candidates) {
+    const k = `${side}${c.startsWith('_') ? '' : '_'}${c}`; 
+    if (fx[k] && /^https?:\/\//i.test(String(fx[k]))) return String(fx[k]);
+  }
+  return undefined;
 }
 function flyTo(lat, lng, altitude = 1.8, ms = 900) {
   const pv = globe.pointOfView() || { lat: 0, lng: 0, altitude: 2 };
@@ -306,6 +349,43 @@ function hydrateFixtures(rawFixtures) {
     .filter((fx) => Number.isFinite(fx.latitude) && Number.isFinite(fx.longitude));
 }
 
+// ====== Globe labels / clicks ======
+function attachGlobeOverlays() {
+  if (typeof globe.labelsData === 'function') {
+    globe
+      .labelsData(fixtures)
+      .labelLat('latitude')
+      .labelLng('longitude')
+      .labelAltitude(d => (d.pointAltitude ?? 0.2) + 0.02)
+      .labelDotRadius(() => 0.35)
+      .labelColor(() => '#a7ffea')
+      .labelSize(() => 1.6)
+      .labelText(d =>
+        [d.city, `${d.home_team} vs ${d.away_team}`].filter(Boolean).join(' • ')
+      );
+
+    if (typeof globe.onLabelClick === 'function') {
+      globe.onLabelClick(pt => {
+        const idx = fixtures.findIndex(f => f.fixture_id === pt.fixture_id);
+        if (idx !== -1) {
+          activeIndex = idx;
+          focusFixture(idx);
+        }
+      });
+    }
+  }
+
+  if (typeof globe.onPointClick === 'function') {
+    globe.onPointClick(pt => {
+      const idx = fixtures.findIndex(f => f.fixture_id === pt.fixture_id);
+      if (idx !== -1) {
+        activeIndex = idx;
+        focusFixture(idx);
+      }
+    });
+  }
+}
+
 // ====== Render a single fixture’s side panel ======
 function renderFixture(index) {
   const fixture = fixtures[index];
@@ -315,49 +395,56 @@ function renderFixture(index) {
   fixtureTitle.textContent = `${fixture.home_team} vs ${fixture.away_team}`;
 
   const parts = [fixture.stadium?.trim?.(), fixture.city?.trim?.(), fixture.country?.trim?.()]
-    .filter(Boolean).join(", ");
-  const ctxTail = parts ? ` • ${parts}` : "";
+    .filter(Boolean).join(', ');
+  const ctxTail = parts ? ` • ${parts}` : '';
   fixtureContext.textContent = `${fixture.competition} • ${formatDate(fixture.date_utc)}${ctxTail}`;
 
-  homeBadge.textContent = badgeLabel(fixture.home_team);
-  awayBadge.textContent = badgeLabel(fixture.away_team);
+  // badges with logo if present
+  const homeLogo = pickLogoUrl(fixture, 'home');
+  const awayLogo = pickLogoUrl(fixture, 'away');
+  setBadge(homeBadge, fixture.home_team, homeLogo);
+  setBadge(awayBadge, fixture.away_team, awayLogo);
 
+  // Match Intelligence
   matchIntelligenceList.innerHTML = '';
   [
-    { label: 'Full-time prediction', value: `${fixture.predicted_winner} (${toPercent(fixture.confidence_ftr)})` },
-    { label: 'xG edge', value: `${fixture.home_team} ${fixture.xg_home?.toFixed?.(1)} vs ${fixture.away_team} ${fixture.xg_away?.toFixed?.(1)}` },
-    { label: 'Points momentum', value: `${fixture.home_team} ${fixture.ppg_home?.toFixed?.(1)} PPG • ${fixture.away_team} ${fixture.ppg_away?.toFixed?.(1)} PPG` },
+    { label: 'Full-time prediction', value: `${fixture.predicted_winner || '—'} (${toPercent(fixture.confidence_ftr)})` },
+    { label: 'xG edge', value: `${fixture.home_team} ${td(fixture.xg_home)} vs ${fixture.away_team} ${td(fixture.xg_away)}` },
+    { label: 'Points momentum', value: `${fixture.home_team} ${td(fixture.ppg_home)} PPG • ${fixture.away_team} ${td(fixture.ppg_away)} PPG` },
   ].forEach((item) => {
     const li = document.createElement('li');
     li.innerHTML = `<strong>${item.label}:</strong> ${item.value}`;
     matchIntelligenceList.appendChild(li);
   });
 
+  // Player watchlist
   playerWatchlist.innerHTML = '';
   fixture.key_players_shots.forEach((p) => {
     const li = document.createElement('li');
-    li.innerHTML = `<strong>${p.name}</strong> ${p.detail}`;
+    li.innerHTML = `<strong>${p.name}</strong> ${p.detail || ''}`;
     playerWatchlist.appendChild(li);
   });
 
+  // Market snapshot
   marketSnapshot.innerHTML = '';
   const marketItems = [
     { label: 'Over 2.5 goals', value: toPercent(fixture.over25_prob) },
     { label: 'Both teams to score', value: toPercent(fixture.btts_prob) },
   ];
-  fixture.key_players_bookings.forEach((p) => marketItems.push({ label: `${p.name} booking risk`, value: p.detail }));
-  fixture.key_players_tackles.forEach((p) => marketItems.push({ label: `${p.name} tackles`, value: p.detail }));
+  fixture.key_players_bookings.forEach((p) => marketItems.push({ label: `${p.name} booking risk`, value: p.detail || '' }));
+  fixture.key_players_tackles.forEach((p) => marketItems.push({ label: `${p.name} tackles`, value: p.detail || '' }));
   marketItems.forEach((item) => {
     const li = document.createElement('li');
     li.innerHTML = `<strong>${item.label}:</strong> ${item.value}`;
     marketSnapshot.appendChild(li);
   });
 
+  // Deep dive
   deepDiveButton.onclick = () => {
     const summary =
       `Fixture: ${fixture.home_team} vs ${fixture.away_team}\n` +
       `Kick-off: ${formatDate(fixture.date_utc)}\n` +
-      `Prediction: ${fixture.predicted_winner} (${toPercent(fixture.confidence_ftr)})\n` +
+      `Prediction: ${fixture.predicted_winner || '—'} (${toPercent(fixture.confidence_ftr)})\n` +
       `Over 2.5: ${toPercent(fixture.over25_prob)}\n` +
       `BTTS: ${toPercent(fixture.btts_prob)}`;
     alert(summary);
@@ -371,6 +458,25 @@ function focusFixture(index) {
   renderFixture(index);
   flyTo(fixture.latitude, fixture.longitude, 2.0, 1000);
 }
+
+// ====== Navigation helpers ======
+function goPrev() {
+  if (!fixtures.length) return;
+  activeIndex = (activeIndex - 1 + fixtures.length) % fixtures.length;
+  focusFixture(activeIndex);
+}
+function goNext() {
+  if (!fixtures.length) return;
+  activeIndex = (activeIndex + 1) % fixtures.length;
+  focusFixture(activeIndex);
+}
+navLeft.onclick = goPrev;
+navRight.onclick = goNext;
+// keyboard arrows
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowLeft')  goPrev();
+  if (e.key === 'ArrowRight') goNext();
+});
 
 // ====== Load fixtures and boot ======
 const csvUrl = new URL('./data/fixtures.csv', window.location.href);
@@ -393,11 +499,15 @@ Papa.parse(csvUrl.href, {
       ['England','Scotland','Wales','Northern Ireland','Ireland','Spain','Portugal','France','Germany','Italy','Netherlands','Belgium','Norway','Sweden','Denmark','Switzerland','Austria','Poland','Czech Republic','Slovakia','Slovenia','Croatia','Serbia','Greece','Turkey'].includes(f.country)
     );
     activeIndex = eu !== -1 ? eu : 0;
+
+    // push points and labels
     globe.pointsData(fixtures);
-    // Attach labels here to be compatible with all builds
+    // attach text labels + click handlers if supported
     if (typeof globe.pointLabel === 'function') {
       globe.pointLabel((d) => `${d.home_team} vs ${d.away_team}`);
     }
+    attachGlobeOverlays();
+
     focusFixture(activeIndex);
   },
   error: (error) => {
@@ -406,17 +516,6 @@ Papa.parse(csvUrl.href, {
     fixtureContext.textContent = 'Check the data directory and reload the page.';
   },
 });
-
-// Click → focus that fixture
-if (typeof globe.onPointClick === 'function') {
-  globe.onPointClick((pt) => {
-    const idx = fixtures.findIndex((f) => f.fixture_id === pt.fixture_id);
-    if (idx !== -1) {
-      activeIndex = idx;
-      focusFixture(idx);
-    }
-  });
-}
 
 // Resize handling
 window.addEventListener('resize', () => {
