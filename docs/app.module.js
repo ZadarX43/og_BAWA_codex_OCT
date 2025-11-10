@@ -13,26 +13,48 @@ import { FXAAShader }               from 'three/examples/jsm/shaders/FXAAShader.
 import { CopyShader }               from 'three/examples/jsm/shaders/CopyShader.js';
 import { LuminosityHighPassShader } from 'three/examples/jsm/shaders/LuminosityHighPassShader.js';
 
-// ---------- Robust three-globe import (local first, then CDN) ----------
-let ThreeGlobe;
-try {
-  // 1) try local file you meant to add under docs/vendor/
-  ThreeGlobe = (await import('./vendor/three-globe.mjs')).default;
-} catch (e1) {
-  try {
-    // 2) fallback: official module build from unpkg
-    // (three-globe publishes ESM at dist/three-globe.module.js)
-    ThreeGlobe = (await import('https://unpkg.com/three-globe@2.28.0/dist/three-globe.module.js')).default;
-    console.warn('[three-globe] using CDN fallback');
-  } catch (e2) {
-    console.error('Failed to load three-globe from local and CDN:', e1, e2);
-    const gc = document.getElementById('globe-container');
-    if (gc) {
-      gc.innerHTML = `<div class="globe-error">three-globe failed to load. Ensure <code>docs/vendor/three-globe.mjs</code> exists or allow CDN.</div>`;
-    }
-    throw e2;
+// ---------- Robust three-globe import (local first, then CDNs) ----------
+async function loadThreeGlobe() {
+  const localCandidates = [
+    './vendor/three-globe.module.js', // official filename in dist/
+    './vendor/three-globe.mjs'        // alternate you may have added
+  ];
+  for (const p of localCandidates) {
+    try {
+      const m = await import(p);
+      console.info('[three-globe] using local', p);
+      return m.default ?? m;
+    } catch {}
   }
+
+  const cdnCandidates = [
+    // jsDelivr
+    'https://cdn.jsdelivr.net/npm/three-globe@2.28.0/dist/three-globe.module.js',
+    // unpkg (fallback)
+    'https://unpkg.com/three-globe@2.28.0/dist/three-globe.module.js'
+  ];
+  for (const url of cdnCandidates) {
+    try {
+      const m = await import(url);
+      console.warn('[three-globe] using CDN', url);
+      return m.default ?? m;
+    } catch (e) {
+      console.warn('[three-globe] CDN failed:', url, e);
+    }
+  }
+
+  const gc = document.getElementById('globe-container');
+  if (gc) {
+    gc.innerHTML = `<div class="globe-error">
+      three-globe failed to load from <code>docs/vendor/three-globe.module.js</code>,
+      <code>docs/vendor/three-globe.mjs</code>, jsDelivr, and unpkg.
+      <br/>Add the file locally (preferred):<br/>
+      <code>docs/vendor/three-globe.module.js</code>
+    </div>`;
+  }
+  throw new Error('three-globe could not be loaded from any source');
 }
+const ThreeGlobe = await loadThreeGlobe();
 
 // PapaParse is UMD on window
 const Papa = window.Papa;
@@ -103,7 +125,7 @@ const globe = new ThreeGlobe({ waitForGlobeReady: true })
   .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
   .pointAltitude('pointAltitude')
   .pointColor('pointColor');
-// .pointLabel((d) => `${d.home_team} vs ${d.away_team}`); // not in this build
+// NOTE: some builds omit .pointLabel in the chain; attach labels when setting data instead
 
 scene.add(globe);
 
@@ -345,6 +367,8 @@ Papa.parse(csvUrl.href, {
     );
     activeIndex = eu !== -1 ? eu : 0;
     globe.pointsData(fixtures);
+    // attach labels here (works across builds)
+    globe.pointLabel && globe.pointLabel((d) => `${d.home_team} vs ${d.away_team}`);
     focusFixture(activeIndex);
   },
   error: (error) => {
