@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Odds Genius</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="top-bar">
+        <div class="brand">
+          <span class="brand__name">Odds Genius</span>
+          <span class="brand__tagline">Sports Prediction Super Intelligence Made Easy</span>
+        </div>
+        <nav class="nav-links">
+          <a href="#bet-checker">Bet Checker</a>
+          <a href="#acca-builder">Acca Builder</a>
+          <a href="#og-copilot">GPT 5 – OG Co Pilot</a>
+        </nav>
+      </header>
+
+      <main class="hero">
+        <section class="hero__globe" aria-label="Upcoming fixtures globe">
+          <div id="globe-container">
+            <div class="globe-loading" role="status">Loading globe&hellip;</div>
+          </div>
+          <div class="globe-controls">
+            <p>
+              Drag to spin the world, scroll to zoom. Use ← → keys to jump between
+              fixtures.
+            </p>
+          </div>
+        </section>
+
+        <aside class="hero__insights" aria-live="polite">
+          <div class="insights__header">
+            <div class="badge badge--home" id="home-badge"></div>
+            <div class="fixture-meta">
+              <h1 id="fixture-title">Loading fixtures&hellip;</h1>
+              <p id="fixture-context"></p>
+            </div>
+            <div class="badge badge--away" id="away-badge"></div>
+          </div>
+          <div class="insights__content" id="insights-content">
+            <div class="insight-card">
+              <h2>Match Intelligence</h2>
+              <ul id="match-intelligence"></ul>
+            </div>
+            <div class="insight-card">
+              <h2>Player Watchlist</h2>
+              <ul id="player-watchlist"></ul>
+            </div>
+            <div class="insight-card">
+              <h2>Market Snapshot</h2>
+              <ul id="market-snapshot"></ul>
+            </div>
+            <button class="cta" id="deep-dive-btn">Open full fixture intelligence</button>
+          </div>
+        </aside>
+      </main>
+
+      <footer class="floating-bar">
+        <div class="floating-bar__content">
+          <div>
+            <h2>BetChecker Upload</h2>
+            <p>Drop a slip screenshot to unlock instant probability audits powered by Odds Genius.</p>
+          </div>
+          <label class="upload-btn">
+            <span>Upload slip</span>
+            <input type="file" id="bet-upload" accept="image/*" />
+          </label>
+        </div>
+      </footer>
+    </div>
+
+    <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://unpkg.com/three-globe@2.34.0/build/three-globe.min.js"></script>
+    <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
+    <script src="app.js" type="module"></script>
+  </body>
+</html>
