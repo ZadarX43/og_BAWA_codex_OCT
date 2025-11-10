@@ -10,33 +10,59 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="./styles.css" />
 
-    <!-- Import map: map bare specifiers to vendored modules -->
+    <!-- Polyfill so import maps work on Safari/older browsers (no-op on modern Chrome/Edge/Firefox) -->
+    <script async src="https://unpkg.com/es-module-shims@1.10.0/dist/es-module-shims.min.js" crossorigin="anonymous"></script>
+
+    <!-- Import map: map bare specifiers to local vendored modules -->
     <script type="importmap">
-    {
-      "imports": {
-        "three": "./vendor/three.module.js",
-        "three/examples/jsm/": "./vendor/examples/jsm/"
+      {
+        "imports": {
+          "three": "./vendor/three.module.js",
+          "three/examples/jsm/": "./vendor/examples/jsm/"
+        }
       }
-    }
     </script>
 
-    <!-- (Optional) Preload a couple of hot modules for faster start -->
+    <!-- Optional: Preload modules for faster startup -->
     <link rel="modulepreload" href="./vendor/three.module.js" />
     <link rel="modulepreload" href="./app.module.js" />
+    <link rel="modulepreload" href="./vendor/examples/jsm/controls/OrbitControls.js" />
+    <link rel="modulepreload" href="./vendor/examples/jsm/postprocessing/EffectComposer.js" />
+    <link rel="modulepreload" href="./vendor/examples/jsm/postprocessing/RenderPass.js" />
+    <link rel="modulepreload" href="./vendor/examples/jsm/postprocessing/ShaderPass.js" />
+    <link rel="modulepreload" href="./vendor/examples/jsm/shaders/FXAAShader.js" />
+    <link rel="modulepreload" href="./vendor/examples/jsm/postprocessing/UnrealBloomPass.js" />
 
     <style>
       /* simple loader so we see progress */
-      #globe-container{
-        position:relative;height:70vh;border-radius:14px;overflow:hidden;
-        background:radial-gradient(120% 120% at 50% 50%, #0d0f13 0%, #06070a 100%);
+      #globe-container {
+        position: relative;
+        height: 70vh;
+        border-radius: 14px;
+        overflow: hidden;
+        background: radial-gradient(120% 120% at 50% 50%, #0d0f13 0%, #06070a 100%);
       }
-      .globe-loading{position:absolute;inset:0;display:grid;place-items:center;color:#a7ffea;font-weight:600}
-      .globe-error{padding:1rem;color:#ffb4a9}
+      .globe-loading {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        color: #a7ffea;
+        font-weight: 600;
+      }
+      .globe-error {
+        padding: 1rem;
+        color: #ffb4a9;
+      }
     </style>
   </head>
+
   <body>
     <div class="page">
       <header class="top-bar">
@@ -61,25 +87,29 @@
         <aside class="hero__insights" aria-live="polite">
           <div class="insights__header">
             <div class="badge badge--home" id="home-badge"></div>
-            <div class="fixture-meta">
+            <div class="fixture-title-wrap">
               <h1 id="fixture-title">Loading fixtures…</h1>
               <p id="fixture-context"></p>
             </div>
             <div class="badge badge--away" id="away-badge"></div>
           </div>
+
           <div class="insights__content" id="insights-content">
             <div class="insight-card">
               <h2>Match Intelligence</h2>
               <ul id="match-intelligence"></ul>
             </div>
+
             <div class="insight-card">
               <h2>Player Watchlist</h2>
               <ul id="player-watchlist"></ul>
             </div>
+
             <div class="insight-card">
               <h2>Market Snapshot</h2>
               <ul id="market-snapshot"></ul>
             </div>
+
             <button class="cta" id="deep-dive-btn">Open full fixture intelligence</button>
           </div>
         </aside>
@@ -99,10 +129,14 @@
       </footer>
     </div>
 
-    <!-- PapaParse (UMD) – load locally so it works on GitHub Pages -->
+    <!-- PapaParse (UMD) -->
     <script src="./vendor/papaparse.min.js"></script>
 
     <!-- App entry (ES module) -->
     <script type="module" src="./app.module.js"></script>
+
+    <noscript>
+      <div class="globe-error">JavaScript is required to run this application.</div>
+    </noscript>
   </body>
 </html>
