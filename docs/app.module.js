@@ -13,8 +13,8 @@ import { FXAAShader }               from 'three/examples/jsm/shaders/FXAAShader.
 import { CopyShader }               from 'three/examples/jsm/shaders/CopyShader.js';
 import { LuminosityHighPassShader } from 'three/examples/jsm/shaders/LuminosityHighPassShader.js';
 
-// three-globe from LOCAL vendor (so it resolves its JSM deps via your import map)
-import GlobeCtor from './vendor/three-globe.mjs';
+// three-globe as ESM (LOCAL file)
+import ThreeGlobe from './vendor/three-globe.mjs';
 
 // PapaParse is UMD on window
 const Papa = window.Papa;
@@ -77,7 +77,7 @@ controls.autoRotate = true;
 controls.autoRotateSpeed = 0.5;
 
 // ====== Globe + atmosphere ======
-const globe = new GlobeCtor({ waitForGlobeReady: true })
+const globe = new ThreeGlobe({ waitForGlobeReady: true })
   .showAtmosphere(true)
   .atmosphereAltitude(0.22)
   .atmosphereColor('#66e3d2')
@@ -85,32 +85,19 @@ const globe = new GlobeCtor({ waitForGlobeReady: true })
   .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
   .pointAltitude('pointAltitude')
   .pointColor('pointColor');
-//  .pointLabel((d) => `${d.home_team} vs ${d.away_team}`); // <- not available in this build
+// .pointLabel((d) => `${d.home_team} vs ${d.away_team}`); // not in this build
 
 scene.add(globe);
-
 
 // Loading overlay until globe textures ready
 const loaderDiv = document.createElement('div');
 loaderDiv.className = 'globe-loading';
 loaderDiv.textContent = 'Loading globe…';
 globeContainer.appendChild(loaderDiv);
-
-const removeLoader = () => {
-  if (!loaderDiv.parentNode) return;
-  loaderDiv.style.transition = 'opacity 250ms ease';
-  loaderDiv.style.opacity = '0';
-  setTimeout(() => loaderDiv.remove(), 260);
-};
-
 if (typeof globe.onGlobeReady === 'function') {
-  globe.onGlobeReady(() => {
-    removeLoader();
-    console.log('Globe ready');
-  });
+  globe.onGlobeReady(() => loaderDiv.remove());
 } else {
-  // Fallback in case onGlobeReady isn’t exposed
-  setTimeout(removeLoader, 1500);
+  setTimeout(() => loaderDiv.remove(), 1500);
 }
 
 // ====== Starfield backdrop ======
@@ -325,12 +312,12 @@ csvUrl.searchParams.set('v', Date.now().toString()); // cache-bust
 Papa.parse(csvUrl.href, {
   download: true,
   header: true,
-  delimiter: "\t",        // Your snapshot is TSV
+  // If your snapshot is TSV, uncomment next line:
+  // delimiter: "\t",
   skipEmptyLines: true,
   dynamicTyping: false,
   complete: (results) => {
     fixtures = hydrateFixtures(results.data || []);
-    console.log('Fixtures parsed:', fixtures.length);
     if (!fixtures.length) {
       fixtureTitle.textContent = 'No fixtures found';
       fixtureContext.textContent = 'Check data/fixtures.csv format.';
