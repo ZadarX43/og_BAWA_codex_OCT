@@ -342,7 +342,11 @@ function focusFixture(index) {
 }
 
 // ====== Load fixtures TSV and boot ======
-Papa.parse('data/fixtures.csv', {
+// Build cache-busted URL so GH Pages doesn’t serve stale CSV/TSV
+const csvUrl = new URL('data/fixtures.csv', window.location.href);
+csvUrl.searchParams.set('v', Date.now().toString());
+
+Papa.parse(csvUrl.href, {
   download: true,
   header: true,
   delimiter: "\t",       // tab-delimited snapshot
