@@ -142,6 +142,7 @@ canvas{ border-radius:24px; }
   margin-top:18px; font-size:.85rem; color:var(--text-secondary);
   display:flex; justify-content:space-between; align-items:center;
 }
+
 /* ===== On-globe HTML fixture tabs =====
    Rendered by three-globe via htmlElementsData()
    - Always visible for all fixtures
@@ -150,10 +151,10 @@ canvas{ border-radius:24px; }
 */
 .fixture-tab{
   /* Layout & placement */
-  position: relative;            /* three-globe handles positioning */
-  transform: translate(-50%, -120%); /* center above the point */
+  position: relative;                  /* three-globe handles positioning */
+  transform: translate(-50%, -120%);   /* center above the point */
   will-change: transform, opacity;
-  pointer-events: auto;          /* allow clicks (camera orbit still ok elsewhere) */
+  pointer-events: auto;                /* allow clicks (camera orbit still ok elsewhere) */
   user-select: none;
 
   /* Size & shape */
@@ -227,14 +228,21 @@ canvas{ border-radius:24px; }
   border-bottom-color: rgba(125,249,196,.55);
 }
 
-/* Optional: dim non-selected tabs (enable by adding .is-dim in JS if desired) */
+/* Optional: dim non-selected tabs (enable via JS) */
 .fixture-tab.is-dim{
   opacity: .65;
   filter: saturate(.85);
 }
 
-/* Make sure tabs don't block camera interactions outside their own bounds */
-#globe-container > * { pointer-events: none; }       /* three-globe injects wrapper divs */
+/* HTML overlay container safety (different lib versions) */
+#globe-container .globe-html-elements,
+#globe-container .globeHtmlElements,
+#globe-container .globe-html-overlay {
+  position:absolute; inset:0; z-index:6; pointer-events:none;
+}
+
+/* Keep overlay click-through except the actual tab */
+#globe-container > * { pointer-events: none; }
 #globe-container .fixture-tab{ pointer-events: auto; }
 
 /* Responsive tweaks: slightly larger tap targets on mobile */
