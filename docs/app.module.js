@@ -158,72 +158,73 @@ function showToast(type, text, ms=2600){
 function elmEmpty(msg){ const d=document.createElement('div'); d.className='empty'; d.textContent=msg; return d; }
 
 // ==============================
-// Local logo setup (no proxy, zero CORS)
+// Local logo setup (no proxy, zero CORS) — OPTION B PATH
 // ==============================
 
-// Local logos live here (relative path so it works on GitHub Pages)
-const LOGO_LOCAL_BASE = './assets/logos';
+// NOTE: your files are under docs/assets/assets/logos/, so the page should use:
+const LOGO_LOCAL_BASE = './assets/assets/logos';
 
-// Force local logos for your exact CSV team names → filenames
 const TEAM_LOGO_OVERRIDES = {
-  'Celtic': './assets/logos/celtic.svg',
-  'Lazio': './assets/logos/lazio.svg',
+  // matches your CSV team names → the filenames you created
+  'Celtic':               './assets/assets/logos/celtic.svg',
+  'Lazio':                './assets/assets/logos/lazio.svg',
 
-  'Royal Antwerp FC': './assets/logos/royal-antwerp.svg',
-  'Shakhtar Donetsk': './assets/logos/shakhtar-donetsk.svg',
+  'Royal Antwerp FC':     './assets/assets/logos/royal-antwerp.svg',
+  'Shakhtar Donetsk':     './assets/assets/logos/shakhtar-donetsk.svg',
 
-  'Atlético Madrid': './assets/logos/atletico-madrid.svg',
-  'Atletico Madrid': './assets/logos/atletico-madrid.svg',
-  'Feyenoord': './assets/logos/feyenoord.svg',
+  'Atlético Madrid':      './assets/assets/logos/atletico-madrid.svg',
+  'Atletico Madrid':      './assets/assets/logos/atletico-madrid.svg',
+  'Feyenoord':            './assets/assets/logos/feyenoord.svg',
 
-  'PSG': './assets/logos/paris-saint-germain.svg',
-  'Paris Saint-Germain': './assets/logos/paris-saint-germain.svg',
-  'Newcastle United': './assets/logos/newcastle-united.svg',
+  'PSG':                  './assets/assets/logos/paris-saint-germain.svg',
+  'Paris Saint-Germain':  './assets/assets/logos/paris-saint-germain.svg',
+  'Newcastle United':     './assets/assets/logos/newcastle-united.svg',
 
-  'AC Milan': './assets/logos/ac-milan.svg',
-  'Borussia Dortmund': './assets/logos/borussia-dortmund.svg',
+  'AC Milan':             './assets/assets/logos/ac-milan.svg',
+  'Borussia Dortmund':    './assets/assets/logos/borussia-dortmund.svg',
 
-  'Manchester City': './assets/logos/manchester-city.svg',
-  'RB Leipzig': './assets/logos/rb-leipzig.svg',
+  'Manchester City':      './assets/assets/logos/manchester-city.svg',
+  'RB Leipzig':           './assets/assets/logos/rb-leipzig.svg',
 
-  'Young Boys': './assets/logos/young-boys.svg',
-  'Red Star Belgrade': './assets/logos/red-star-belgrade.svg',
-  'Crvena Zvezda': './assets/logos/red-star-belgrade.svg',
+  'Young Boys':           './assets/assets/logos/young-boys.svg',
+  'Red Star Belgrade':    './assets/assets/logos/red-star-belgrade.svg',
+  'Crvena Zvezda':        './assets/assets/logos/red-star-belgrade.svg',
 
-  'FC Barcelona': './assets/logos/fc-barcelona.svg',
-  'Barcelona': './assets/logos/fc-barcelona.svg',
-  'Porto': './assets/logos/fc-porto.svg',
-  'FC Porto': './assets/logos/fc-porto.svg',
+  'FC Barcelona':         './assets/assets/logos/fc-barcelona.svg',
+  'Barcelona':            './assets/assets/logos/fc-barcelona.svg',
+  'Porto':                './assets/assets/logos/fc-porto.svg',
+  'FC Porto':             './assets/assets/logos/fc-porto.svg',
 
-  'Galatasaray': './assets/logos/galatasaray.svg',
-  'Manchester United': './assets/logos/manchester-united.svg',
+  'Galatasaray':          './assets/assets/logos/galatasaray.svg',
+  'Manchester United':    './assets/assets/logos/manchester-united.svg',
 
-  'Sevilla FC': './assets/logos/sevilla-fc.svg',
-  'PSV': './assets/logos/psv.svg',
-  'PSV Eindhoven': './assets/logos/psv.svg',
+  'Sevilla FC':           './assets/assets/logos/sevilla-fc.svg',
+  'PSV':                  './assets/assets/logos/psv.svg',
+  'PSV Eindhoven':        './assets/assets/logos/psv.svg',
 
-  'København': './assets/logos/fc-kobenhavn.svg',
-  'FC Copenhagen': './assets/logos/fc-kobenhavn.svg',
+  'København':            './assets/assets/logos/fc-kobenhavn.svg',
+  'FC Copenhagen':        './assets/assets/logos/fc-kobenhavn.svg',
 
-  'Arsenal': './assets/logos/arsenal.svg',
-  'Lens': './assets/logos/lens.svg',
+  'Arsenal':              './assets/assets/logos/arsenal.svg',
+  'Lens':                 './assets/assets/logos/lens.svg',
 
-  'Real Madrid': './assets/logos/real-madrid.svg',
-  'Napoli': './assets/logos/ssc-napoli.svg',
-  'SSC Napoli': './assets/logos/ssc-napoli.svg',
+  'Real Madrid':          './assets/assets/logos/real-madrid.svg',
+  'Napoli':               './assets/assets/logos/ssc-napoli.svg',
+  'SSC Napoli':           './assets/assets/logos/ssc-napoli.svg',
 
-  'Benfica': './assets/logos/sl-benfica.svg',
-  'SL Benfica': './assets/logos/sl-benfica.svg',
+  'Benfica':              './assets/assets/logos/sl-benfica.svg',
+  'SL Benfica':           './assets/assets/logos/sl-benfica.svg',
 
-  'Inter Milan': './assets/logos/inter-milan.svg',
-  'Inter': './assets/logos/inter-milan.svg',
+  'Inter Milan':          './assets/assets/logos/inter-milan.svg',
+  'Inter':                './assets/assets/logos/inter-milan.svg',
 
-  'Real Sociedad': './assets/logos/real-sociedad.svg',
-  'Salzburg': './assets/logos/rb-salzburg.svg',
+  'Real Sociedad':        './assets/assets/logos/real-sociedad.svg',
+  'Salzburg':             './assets/assets/logos/rb-salzburg.svg',
 
-  'Bayern München': './assets/logos/bayern-munich.svg',
-  'Bayern Munich': './assets/logos/bayern-munich.svg'
+  'Bayern München':       './assets/assets/logos/bayern-munich.svg',
+  'Bayern Munich':        './assets/assets/logos/bayern-munich.svg'
 };
+
 
 // Optional last-resort (only if you want)
 const USE_SPORTSDB_FALLBACK = true;
