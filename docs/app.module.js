@@ -33,7 +33,7 @@ const el = {
 };
 
 // ----------------------------
-// three-globe loader (ESM → UMD)
+// three-globe loader (CDN-first; ESM → UMD)
 // ----------------------------
 async function importScriptUMD(src) {
   await new Promise((resolve, reject) => {
@@ -49,20 +49,8 @@ async function importScriptUMD(src) {
 }
 
 async function loadThreeGlobe() {
-  // 1) Local ESM first
-  const localEsm = [
-    './vendor/three-globe.module.js',
-    './vendor/three-globe.mjs'
-  ];
-  for (const p of localEsm) {
-    try {
-      const m = await import(p);
-      console.info('[three-globe] using local ESM:', p);
-      return m.default ?? m;
-    } catch {}
-  }
-  // 2) esm.sh ESM (externalize three)
-  for (const v of ['2.30.1','2.29.3','2.28.0']) {
+  // Prefer esm.sh ESM with 2.31.x (has htmlElementsData)
+  for (const v of ['2.31.3','2.31.1','2.30.1','2.29.3']) {
     const url = `https://esm.sh/three-globe@${v}?bundle&external=three`;
     try {
       const m = await import(url);
@@ -72,13 +60,12 @@ async function loadThreeGlobe() {
       console.warn('[three-globe] esm.sh failed:', url, e);
     }
   }
-  // 3) UMD
-  const umd = [
-    './vendor/three-globe.min.js',
-    'https://cdn.jsdelivr.net/npm/three-globe@2.29.3/dist/three-globe.min.js',
-    'https://unpkg.com/three-globe@2.29.3/dist/three-globe.min.js'
-  ];
-  for (const url of umd) {
+  // UMD fallbacks (newest first, then local if provided)
+  for (const url of [
+    'https://cdn.jsdelivr.net/npm/three-globe@2.31.1/dist/three-globe.min.js',
+    'https://unpkg.com/three-globe@2.31.1/dist/three-globe.min.js',
+    './vendor/three-globe.min.js'
+  ]) {
     try {
       const ctor = await importScriptUMD(url);
       console.warn('[three-globe] using UMD:', url);
@@ -90,8 +77,7 @@ async function loadThreeGlobe() {
   if (el.globeWrap) {
     el.globeWrap.innerHTML = `<div class="globe-error">
       <strong>three-globe failed to load.</strong><br/>
-      Add a local copy at <code>vendor/three-globe.module.js</code> (ESM)
-      or <code>vendor/three-globe.min.js</code> (UMD).
+      Check your network or add <code>vendor/three-globe.min.js</code>.
     </div>`;
   }
   throw new Error('three-globe could not be loaded from any source');
@@ -200,6 +186,13 @@ function getGlobeRadius() {
     const m = globe.children?.find(c => c.geometry?.parameters?.radius);
     return m?.geometry?.parameters?.radius || 100;
   } catch { return 100; }
+}
+
+// Feature detection for HTML label overlay
+function hasHtmlElementsApi(g){
+  return g && typeof g.htmlElementsData === 'function' &&
+               typeof g.htmlElement      === 'function' &&
+               typeof g.htmlLat          === 'function';
 }
 
 // Toasts
@@ -411,14 +404,21 @@ async function loadFixturesCSV(url) {
       .pointLng('longitude')
       .pointsData(fixtures);
 
-    // Build overlay HTML tabs anchored to exact lat/lng
-    renderHtmlTabs();
-
     buildRail(fixtures);
 
+    // ---- Render overlays after the globe is ready
     const boot = () => {
       selectIndex(0, { fly: true });
       createSelectionRing();
+
+      if (hasHtmlElementsApi(globe)) {
+        renderHtmlTabs();
+        globe.htmlTransitionDuration?.(220);
+      } else if (typeof globe.labelsData === 'function') {
+        console.warn('[globe] htmlElementsData not available; using label sprites fallback');
+        renderLabelSprites();
+      }
+
       if (typeof globe.pointLabel === 'function') {
         globe.pointLabel(d => `${d.city ? d.city + ' • ' : ''}${d.home_team} vs ${d.away_team}`);
       }
@@ -426,7 +426,11 @@ async function loadFixturesCSV(url) {
       showToast('success', `Loaded ${fixtures.length} fixtures`);
     };
 
-    globe.onGlobeReady ? globe.onGlobeReady(boot) : setTimeout(boot, 300);
+    if (typeof globe.onGlobeReady === 'function') {
+      globe.onGlobeReady(boot);
+    } else {
+      setTimeout(boot, 300);
+    }
 
   } catch (err) {
     console.error('[CSV] Failed to fetch/parse]:', err);
@@ -471,7 +475,13 @@ function selectIndex(idx, opts = {}) {
   renderPanel(f);
   updateSelectionRing(f);
   syncRail();
-  updateHtmlTabsSelection();  // << highlight the selected on-globe tab
+
+  // Update whichever overlay is active
+  if (hasHtmlElementsApi(globe)) {
+    updateHtmlTabsSelection();
+  } else if (typeof globe.labelsData === 'function') {
+    renderLabelSprites(); // refresh sprite styles
+  }
 
   // outer glow + tiny pop
   const globeWrap = document.querySelector('.hero__globe');
@@ -636,7 +646,7 @@ function parseKV(s='') {
 }
 
 // ----------------------------
-// On-globe HTML fixture tabs
+// On-globe HTML fixture tabs (preferred)
 // ----------------------------
 function renderHtmlTabs(){
   htmlTabsData = fixtures.map((f, i) => ({
@@ -653,13 +663,12 @@ function renderHtmlTabs(){
     .htmlLng('lng')
     .htmlAltitude('altitude')
     .htmlElement(d => {
-      // Build a tab node; style via .fixture-tab in CSS
       const w = document.createElement('div');
       w.className = 'fixture-tab' + (d.idx === activeIdx ? ' is-selected' : '');
       w.dataset.idx = String(d.idx);
       const f = fixtures[d.idx];
       w.title = `${f.home_team} vs ${f.away_team}${f.city ? ` — ${f.city}` : ''}`;
-      w.style.pointerEvents = 'auto'; // allow clicks without blocking the globe
+      w.style.pointerEvents = 'auto';
 
       const title = document.createElement('div');
       title.className = 'fixture-tab__title';
@@ -675,7 +684,6 @@ function renderHtmlTabs(){
         selectIndex(d.idx, { fly: true });
       });
 
-      // keep reference for fast selection toggling
       d.el = w;
       return w;
     });
@@ -684,12 +692,27 @@ function renderHtmlTabs(){
 }
 
 function updateHtmlTabsSelection(){
-  // toggle selected class based on activeIdx
   if (!htmlTabsData?.length) return;
   htmlTabsData.forEach(d => {
     const el = d.el || document.querySelector(`.fixture-tab[data-idx="${d.idx}"]`);
     if (el) el.classList.toggle('is-selected', d.idx === activeIdx);
   });
+}
+
+// ----------------------------
+// Fallback: sprite labels if HTML overlay not available
+// ----------------------------
+function renderLabelSprites(){
+  globe
+    .labelsData(fixtures)
+    .labelLat('latitude')
+    .labelLng('longitude')
+    .labelAltitude(() => SURFACE_EPS + 0.06)
+    .labelText(f => `${f.home_team} vs ${f.away_team}`)
+    .labelColor(f => (f.fixture_id === selectedId ? 'rgba(125,249,196,0.95)' : 'rgba(255,255,255,0.85)'))
+    .labelSize(f => (f.fixture_id === selectedId ? 1.4 : 1.0))
+    .labelDotRadius(f => (f.fixture_id === selectedId ? 0.5 : 0.28))
+    .labelResolution(2);
 }
 
 // ----------------------------
