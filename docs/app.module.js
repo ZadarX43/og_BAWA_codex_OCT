@@ -150,12 +150,24 @@ const globe = new ThreeGlobeCtor({ waitForGlobeReady: true })
   .atmosphereColor('#66e3d2')
   .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-dark.jpg')
   .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
-  .pointAltitude('pointAltitude')
-  .pointColor('pointColor')
   .pointLabel((d) => `${d.city || ''} • ${d.home_team} vs ${d.away_team}`) // tooltip
-  .pointRadius((d) => d.__active ? 0.65 : 0.22); // enlarged active marker
+  .pointRadius((d) => d.__active ? 0.7 : 0.24); // enlarged active marker
 
 scene.add(globe);
+
+globe
+  .pointAltitude((d) => (d.baseAltitude ?? 0.02) + (d.__active ? 0.085 : 0))
+  .pointColor((d) => d.__active ? '#7df9c4' : (d.baseColor ?? '#56cfe1'))
+  .pointsTransitionDuration?.(700);
+
+globe
+  .htmlElementsData([])
+  .htmlElement((d) => createFixtureCallout(d.fixture))
+  .htmlLat((d) => d.lat)
+  .htmlLng((d) => d.lng)
+  .htmlAltitude((d) => d.altitude ?? 0.04);
+
+globe.htmlTransitionDuration?.(320);
 
 // Useful helpers
 function getGlobeRadius() {
@@ -247,14 +259,103 @@ function badgeLabel(name) {
     .split(/\s+/).filter(Boolean)
     .map((p)=>p[0]).join('').slice(0,3).toUpperCase();
 }
+const badgeLoadTokens = new WeakMap();
 function setBadge(el, url, fallbackText) {
+  const token = {};
+  badgeLoadTokens.set(el, token);
+  el.classList.remove('has-logo');
+
   if (url && /^https?:\/\//i.test(url)) {
-    el.innerHTML = `<img src="${url}" alt="" />`;
-    el.classList.add('has-logo');
+    el.innerHTML = '';
+    const img = new Image();
+    img.decoding = 'async';
+    img.alt = '';
+    img.loading = 'lazy';
+    img.onload = () => {
+      if (badgeLoadTokens.get(el) !== token) return;
+      el.innerHTML = '';
+      el.appendChild(img);
+      el.classList.add('has-logo');
+    };
+    img.onerror = () => {
+      if (badgeLoadTokens.get(el) !== token) return;
+      el.innerHTML = '';
+      el.textContent = fallbackText;
+      el.classList.remove('has-logo');
+    };
+    img.src = url;
   } else {
+    el.innerHTML = '';
     el.textContent = fallbackText;
-    el.classList.remove('has-logo');
   }
+}
+
+function formatShortDate(iso) {
+  if (!iso) return 'Kick-off TBC';
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return 'Kick-off TBC';
+  return new Intl.DateTimeFormat('en-GB', {
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  }).format(date);
+}
+
+function fixtureLocationString(fixture) {
+  const grouped = [fixture.city, fixture.country].filter(Boolean).join(', ');
+  if (grouped) return grouped;
+  if (fixture.stadium) return fixture.stadium;
+  return 'Venue TBC';
+}
+
+function createFixtureCallout(fixture) {
+  const anchor = document.createElement('div');
+  anchor.className = 'fixture-callout-anchor';
+  anchor.setAttribute('data-fixture-id', fixture.fixture_id || '');
+
+  const wrapper = document.createElement('div');
+  wrapper.className = 'fixture-callout';
+
+  const teams = document.createElement('div');
+  teams.className = 'fixture-callout__teams';
+  const home = document.createElement('span');
+  home.className = 'fixture-callout__team';
+  home.textContent = fixture.home_team || 'Home';
+  const vs = document.createElement('span');
+  vs.className = 'fixture-callout__vs';
+  vs.textContent = 'vs';
+  const away = document.createElement('span');
+  away.className = 'fixture-callout__team';
+  away.textContent = fixture.away_team || 'Away';
+  teams.append(home, vs, away);
+
+  const meta = document.createElement('div');
+  meta.className = 'fixture-callout__meta';
+  const metaParts = [formatShortDate(fixture.date_utc), fixtureLocationString(fixture)]
+    .filter(Boolean)
+    .join(' • ');
+  meta.textContent = metaParts;
+
+  const prediction = document.createElement('div');
+  prediction.className = 'fixture-callout__prediction';
+  prediction.textContent = fixture.predicted_winner
+    ? `Predicted: ${fixture.predicted_winner}`
+    : 'Prediction pending';
+
+  const confidence = document.createElement('div');
+  confidence.className = 'fixture-callout__confidence';
+  const dot = document.createElement('span');
+  dot.className = 'fixture-callout__confidence-dot';
+  const confidenceText = document.createElement('span');
+  confidenceText.textContent = Number.isFinite(fixture.confidence_ftr)
+    ? `${toPercent(fixture.confidence_ftr, 0)} confidence edge`
+    : 'Confidence pending';
+  confidence.append(dot, confidenceText);
+
+  wrapper.append(teams, meta, prediction, confidence);
+  anchor.appendChild(wrapper);
+  return anchor;
 }
 function flyTo(lat, lng, altitude = 1.8, ms = 900) {
   const pv = globe.pointOfView() || { lat: 0, lng: 0, altitude: 2 };
@@ -314,11 +415,15 @@ function hydrateFixtures(rawFixtures) {
       const longitude = lngCsv ?? fallback?.lng;
 
       // Normalize strings/numbers
-      const cf = num(f.confidence_ftr) ?? 0;
+      const cfRaw = num(f.confidence_ftr);
+      const cf = Number.isFinite(cfRaw) ? cfRaw : undefined;
+      const safeCf = Math.max(0, cf ?? 0);
 
       return {
         ...f,
         latitude, longitude,
+        lat: latitude,
+        lng: longitude,
         xg_home: num(f.xg_home),
         xg_away: num(f.xg_away),
         ppg_home: num(f.ppg_home),
@@ -339,10 +444,10 @@ function hydrateFixtures(rawFixtures) {
         key_players_tackles:  processPlayerField(f.key_players_tackles),
 
         // keep markers low to the surface; add tiny lift for visibility
-        pointAltitude: 0.02 + Math.max(0, cf) * 0.04,
-        pointColor:
-          cf > 0.7 ? '#65e3d3' :
-          cf > 0.5 ? '#56cfe1' :
+        baseAltitude: 0.018 + safeCf * 0.04,
+        baseColor:
+          safeCf > 0.7 ? '#65e3d3' :
+          safeCf > 0.5 ? '#56cfe1' :
                      '#ffae8b',
 
         __active: false // selection state
@@ -358,7 +463,13 @@ function updateHighlight() {
   globe.pointsData(fixtures);
 
   const active = fixtures[activeIndex];
-  if (!active) return;
+  if (!active) {
+    globe.ringsData([]);
+    globe.htmlElementsData([]);
+    return;
+  }
+
+  const altitude = (active.baseAltitude ?? 0.02);
 
   // a soft pulse ring anchored at ground
   globe
@@ -366,10 +477,10 @@ function updateHighlight() {
       {
         lat: active.latitude,
         lng: active.longitude,
-        maxR: 2.2,           // in degrees
-        propagationSpeed: 1, // deg/s
-        repeatPeriod: 1200,  // ms
-        altitude: 0.02       // same scale as pointAltitude for ground-hug
+        maxR: 2.05,           // in degrees
+        propagationSpeed: 1.25, // deg/s
+        repeatPeriod: 1400,  // ms
+        altitude
       }
     ])
     .ringColor(() => 'rgba(102,227,210,0.85)')
@@ -377,6 +488,15 @@ function updateHighlight() {
     .ringMaxRadius((d) => d.maxR)
     .ringPropagationSpeed((d) => d.propagationSpeed)
     .ringRepeatPeriod((d) => d.repeatPeriod);
+
+  globe.htmlElementsData([
+    {
+      lat: active.latitude,
+      lng: active.longitude,
+      altitude: altitude + 0.04,
+      fixture: active
+    }
+  ]);
 }
 
 // ====== Render a single fixture’s side panel ======
