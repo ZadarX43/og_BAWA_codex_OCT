@@ -26,7 +26,7 @@ body{
 
 .page {
   width: min(1200px, 95vw);
-  padding: 32px 0 120px;
+  padding: 32px 0 180px; /* was 120px: make room for floating footer */
   display: flex;
   flex-direction: column;
   gap: 32px;
@@ -260,17 +260,22 @@ canvas{ border-radius:24px; }
   background:rgba(255,255,255,.08);
   border:1px solid rgba(255,255,255,.08);
 }
+/* Make initials larger when there is no logo */
+.badge:not(.has-logo){
+  font-size:1.25rem; letter-spacing:.09em;
+}
 
 .fixture-meta h1{ font-size:1.35rem; font-weight:600; line-height:1.3; letter-spacing:.015em; }
 .fixture-meta p{ margin-top:.35rem; font-size:.9rem; color:var(--text-secondary); opacity:.9; }
 
-/* Tabs & panes */
-.tabs{display:flex;gap:8px;flex-wrap:wrap}
+/* Tabs & panes (legibility bump) */
+.tabs{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:2px; }
 .tab{
   padding:8px 14px;border-radius:999px;font-weight:600;cursor:pointer;
   color:var(--text-secondary);background:rgba(255,255,255,.06);
   border:1px solid rgba(255,255,255,.08);
-  transition:background .25s ease,color .25s ease,transform .2s ease
+  transition:background .25s ease,color .25s ease,transform .2s ease;
+  font-size:.9rem;
 }
 .tab.is-active{color:var(--bg-dark);background:linear-gradient(135deg,var(--gradient-start),var(--gradient-end))}
 .tabpanes{margin-top:14px}
@@ -313,19 +318,28 @@ canvas{ border-radius:24px; }
 }
 .cta:hover{ transform:translateY(-1px); box-shadow:0 12px 28px rgba(100,216,99,.25); }
 
-/* ===== Fixture rail ===== */
+/* ===== Fixture rail (clear of footer, more readable) ===== */
 .fixture-rail{
-  margin-top:14px; padding:10px; border-radius:16px;
+  margin-top:14px; margin-bottom:18px;
+  padding:10px; border-radius:16px;
   background:rgba(17,28,40,.7); border:1px solid rgba(125,249,196,.14);
-  display:flex; gap:10px; overflow:auto; scroll-snap-type:x proximity
+  display:flex; gap:10px; overflow:auto; scroll-snap-type:x proximity;
+  position:relative; z-index:1;
 }
 .rail-item{
-  min-width:140px; padding:10px; border-radius:12px; scroll-snap-align:start;
+  min-width:180px;
+  padding:10px 12px; border-radius:12px; scroll-snap-align:start;
   background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); cursor:pointer;
   text-align:left; color:var(--text-primary)
 }
-.rail-item h4{font-size:.9rem;margin-bottom:4px}
-.rail-item p{font-size:.75rem;color:var(--text-secondary)}
+.rail-item h4{
+  font-size:.92rem; margin-bottom:2px;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.rail-item p{
+  font-size:.75rem; color:var(--text-secondary);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
 .rail-item.is-active{ outline:2px solid var(--accent); background:rgba(125,249,196,.12) }
 
 /* ===== Floating upload bar ===== */
@@ -336,17 +350,23 @@ canvas{ border-radius:24px; }
   border-radius:999px; padding:16px 28px;
   border:1px solid rgba(125,249,196,.32);
   backdrop-filter:blur(18px);
+  z-index:10; /* sit above rail */
 }
 .floating-bar__content{ display:flex; justify-content:space-between; align-items:center; gap:18px; }
 .floating-bar h2{ font-size:1rem; font-weight:600; }
 .floating-bar p{ font-size:.85rem; color:var(--text-secondary); }
 
 .upload-btn{
-  display:inline-flex; align-items:center; gap:10px; padding:12px 22px; border-radius:999px;
+  display:inline-flex; align-items:center; gap:12px; /* was 10px */
+  padding:12px 22px; border-radius:999px;
   background:linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
   color:var(--bg-dark); font-weight:600; cursor:pointer; position:relative; overflow:hidden;
 }
 .upload-btn input{ position:absolute; inset:0; opacity:0; cursor:pointer; }
+.upload-hint{
+  font-weight:500; opacity:.8; margin-left:4px;
+  color:#042018; /* dark-on-green still readable */
+}
 
 /* ===== Toasts ===== */
 .og-toast{
@@ -397,6 +417,7 @@ canvas{ border-radius:24px; }
   .top-nav-pill{ align-self:flex-start; padding:8px 10px; }
   .floating-bar{ border-radius:28px; }
   .floating-bar__content{ flex-direction:column; align-items:flex-start; }
+  .page{ padding-bottom:220px; } /* extra space for footer on small screens */
 }
 @media (max-width:520px){
   .page{ padding-top:20px; }
