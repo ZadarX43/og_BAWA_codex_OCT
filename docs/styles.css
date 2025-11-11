@@ -537,3 +537,54 @@ canvas{ border-radius:24px; }
   #globe-container{ min-height:320px; }
   .top-nav-pill a{ padding:8px 12px; }
 }
+/* ===== Router views ===== */
+.view{display:none}
+.view.is-active{display:block}
+.screen{background:var(--bg-panel); border:1px solid rgba(108,229,177,.18); border-radius:20px; padding:24px;}
+
+/* Header additions */
+.header__menu{display:none; border:1px solid rgba(255,255,255,.15); background:rgba(5,18,31,.6); color:#e6f5ff; border-radius:10px; padding:6px 10px; margin-right:10px}
+@media (max-width:900px){ .header__menu{display:inline-block} .top-nav-pill .nav-link{display:none} .profile{margin-left:8px} }
+
+.nav-link{padding:8px 14px;border-radius:999px;text-decoration:none;color:var(--text-secondary)}
+.nav-link.is-active{background:linear-gradient(135deg,var(--gradient-start),var(--gradient-end));color:var(--bg-dark);font-weight:700}
+
+/* Profile menu */
+.profile{position:relative;margin-left:8px}
+.profile-btn{display:flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid rgba(255,255,255,.15);background:rgba(5,18,31,.6);color:#e6f5ff;border-radius:999px}
+.profile .avatar{background:#0e1c26;border-radius:50%;padding:6px 8px;font-weight:700}
+.profile-menu{position:absolute;right:0;top:110%;min-width:180px;background:rgba(17,28,40,.98);border:1px solid rgba(255,255,255,.12);border-radius:12px;box-shadow:0 12px 28px rgba(0,0,0,.35);padding:8px;display:none;z-index:20}
+.profile-menu.show{display:block}
+.profile-item{display:block;color:#e6f5ff;text-decoration:none;padding:8px 10px;border-radius:8px}
+.profile-item:hover{background:rgba(255,255,255,.06)}
+
+/* Sidebar (mobile) */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(2px);opacity:0;pointer-events:none;transition:.2s;z-index:30}
+.scrim.show{opacity:1;pointer-events:auto}
+.side-drawer{position:fixed;top:0;left:-320px;width:300px;height:100vh;background:rgba(10,18,28,.98);border-right:1px solid rgba(255,255,255,.08);box-shadow:8px 0 30px rgba(0,0,0,.4);transition:left .25s;z-index:40;display:flex;flex-direction:column}
+.side-drawer.show{left:0}
+.side-drawer__header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
+.side-drawer__nav{padding:10px}
+.side-link{display:block;color:#e6f5ff;text-decoration:none;padding:10px 12px;border-radius:8px}
+.side-link:hover,.side-link.active{background:rgba(255,255,255,.08)}
+.icon-btn{background:transparent;border:1px solid rgba(255,255,255,.15);color:#e6f5ff;border-radius:8px;padding:6px 8px}
+
+/* Simple components for stubs */
+.muted{color:var(--text-secondary)}
+.panel-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.filters select{background:rgba(255,255,255,.06);color:#e6f5ff;border:1px solid rgba(255,255,255,.12);padding:8px 10px;border-radius:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:10px}
+.grid::before{content:"No selections yet. Use filters and Build."; color:var(--text-secondary)}
+.chat-window{min-height:260px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px;overflow:auto}
+.chat-input{margin-top:10px;display:flex;gap:8px}
+.chat-input input{flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#e6f5ff;border-radius:999px;padding:10px 14px}
+.auth-card{max-width:420px;margin:0 auto}
+.auth-card label{display:block;margin:10px 0;color:#e6f5ff}
+.auth-card input{width:100%;padding:10px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#e6f5ff}
+
+/* Ensure globe HTML labels layer is clickable only on pills */
+#globe-container .globe-html-elements,
+#globe-container .globeHtmlElements,
+#globe-container .globe-html-overlay { position:absolute; inset:0; z-index:6; pointer-events:none; }
+#globe-container .fixture-tab { pointer-events:auto; }
