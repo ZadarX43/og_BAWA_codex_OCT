@@ -259,18 +259,40 @@ function badgeLabel(name) {
     .split(/\s+/).filter(Boolean)
     .map((p)=>p[0]).join('').slice(0,3).toUpperCase();
 }
+
+function normalizeLogoUrl(url) {
+  if (!url) return '';
+  const trimmed = String(url).trim();
+  if (!trimmed) return '';
+  if (trimmed.startsWith('//')) return `https:${trimmed}`;
+  if (/^https?:\/\//i.test(trimmed)) {
+    if (typeof window !== 'undefined' && window.location?.protocol === 'https:' && /^http:\/\//i.test(trimmed)) {
+      return trimmed.replace(/^http:\/\//i, 'https://');
+    }
+    return trimmed;
+  }
+  if (trimmed.startsWith('data:')) return trimmed;
+  if (/^[./]/.test(trimmed)) return trimmed; // relative path inside docs/
+  return '';
+}
+
 const badgeLoadTokens = new WeakMap();
 function setBadge(el, url, fallbackText) {
   const token = {};
   badgeLoadTokens.set(el, token);
   el.classList.remove('has-logo');
 
-  if (url && /^https?:\/\//i.test(url)) {
+  const normalizedUrl = normalizeLogoUrl(url);
+  if (normalizedUrl) {
     el.innerHTML = '';
     const img = new Image();
     img.decoding = 'async';
     img.alt = '';
     img.loading = 'lazy';
+    if (!normalizedUrl.startsWith('data:')) {
+      img.crossOrigin = 'anonymous';
+      img.referrerPolicy = 'no-referrer';
+    }
     img.onload = () => {
       if (badgeLoadTokens.get(el) !== token) return;
       el.innerHTML = '';
@@ -283,7 +305,7 @@ function setBadge(el, url, fallbackText) {
       el.textContent = fallbackText;
       el.classList.remove('has-logo');
     };
-    img.src = url;
+    img.src = normalizedUrl;
   } else {
     el.innerHTML = '';
     el.textContent = fallbackText;
@@ -317,18 +339,35 @@ function createFixtureCallout(fixture) {
   const wrapper = document.createElement('div');
   wrapper.className = 'fixture-callout';
 
-  const teams = document.createElement('div');
-  teams.className = 'fixture-callout__teams';
-  const home = document.createElement('span');
-  home.className = 'fixture-callout__team';
-  home.textContent = fixture.home_team || 'Home';
-  const vs = document.createElement('span');
-  vs.className = 'fixture-callout__vs';
-  vs.textContent = 'vs';
-  const away = document.createElement('span');
-  away.className = 'fixture-callout__team';
-  away.textContent = fixture.away_team || 'Away';
-  teams.append(home, vs, away);
+  const createSide = (team, logoUrl, modifier) => {
+    const side = document.createElement('div');
+    side.className = `fixture-callout__side fixture-callout__side--${modifier}`;
+
+    const badge = document.createElement('div');
+    badge.className = 'fixture-callout__badge';
+    badge.title = team || (modifier === 'home' ? 'Home team' : 'Away team');
+    setBadge(badge, logoUrl, badgeLabel(team) || '—');
+
+    const name = document.createElement('span');
+    name.className = 'fixture-callout__team';
+    name.textContent = team || (modifier === 'home' ? 'Home' : 'Away');
+    name.title = team || '';
+
+    side.append(badge, name);
+    return side;
+  };
+
+  const header = document.createElement('div');
+  header.className = 'fixture-callout__header';
+  const homeSide = createSide(fixture.home_team, fixture.home_logo_url, 'home');
+  const mid = document.createElement('div');
+  mid.className = 'fixture-callout__header-mid';
+  const vsChip = document.createElement('span');
+  vsChip.className = 'fixture-callout__vs';
+  vsChip.textContent = 'vs';
+  mid.appendChild(vsChip);
+  const awaySide = createSide(fixture.away_team, fixture.away_logo_url, 'away');
+  header.append(homeSide, mid, awaySide);
 
   const meta = document.createElement('div');
   meta.className = 'fixture-callout__meta';
@@ -343,17 +382,27 @@ function createFixtureCallout(fixture) {
     ? `Predicted: ${fixture.predicted_winner}`
     : 'Prediction pending';
 
+  const confidenceValue = Number.isFinite(fixture.confidence_ftr)
+    ? Math.max(0, Math.min(1, fixture.confidence_ftr))
+    : 0;
   const confidence = document.createElement('div');
   confidence.className = 'fixture-callout__confidence';
   const dot = document.createElement('span');
   dot.className = 'fixture-callout__confidence-dot';
   const confidenceText = document.createElement('span');
   confidenceText.textContent = Number.isFinite(fixture.confidence_ftr)
-    ? `${toPercent(fixture.confidence_ftr, 0)} confidence edge`
+    ? `${toPercent(confidenceValue, 0)} confidence edge`
     : 'Confidence pending';
   confidence.append(dot, confidenceText);
 
-  wrapper.append(teams, meta, prediction, confidence);
+  const confidenceBar = document.createElement('div');
+  confidenceBar.className = 'fixture-callout__confidence-bar';
+  const confidenceFill = document.createElement('span');
+  confidenceFill.className = 'fixture-callout__confidence-fill';
+  confidenceFill.style.width = `${Math.max(8, Math.round(confidenceValue * 100))}%`;
+  confidenceBar.appendChild(confidenceFill);
+
+  wrapper.append(header, meta, prediction, confidence, confidenceBar);
   anchor.appendChild(wrapper);
   return anchor;
 }
@@ -374,6 +423,13 @@ function flyTo(lat, lng, altitude = 1.8, ms = 900) {
 
 // ====== CSV helpers ======
 const num = (v) => { const n = Number(v); return Number.isFinite(n) ? n : undefined; };
+const pickFirstString = (obj, keys) => {
+  for (const key of keys) {
+    const val = obj?.[key];
+    if (typeof val === 'string' && val.trim()) return val.trim();
+  }
+  return '';
+};
 const stadiumLookup = {
   "Stadio Olimpico (Roma)": { lat: 41.9339, lng: 12.4545 },
   "Volksparkstadion (Hamburg)": { lat: 53.5870, lng: 9.8980 },
@@ -419,6 +475,13 @@ function hydrateFixtures(rawFixtures) {
       const cf = Number.isFinite(cfRaw) ? cfRaw : undefined;
       const safeCf = Math.max(0, cf ?? 0);
 
+      const homeLogo = normalizeLogoUrl(pickFirstString(f, [
+        'home_logo_url', 'home_badge_url', 'home_logo', 'home_badge', 'homecrest'
+      ]));
+      const awayLogo = normalizeLogoUrl(pickFirstString(f, [
+        'away_logo_url', 'away_badge_url', 'away_logo', 'away_badge', 'awaycrest'
+      ]));
+
       return {
         ...f,
         latitude, longitude,
@@ -436,8 +499,8 @@ function hydrateFixtures(rawFixtures) {
         city:    f.city?.trim?.()    || "",
         country: f.country?.trim?.() || "",
 
-        home_logo_url: (f.home_logo_url || '').trim(),
-        away_logo_url: (f.away_logo_url || '').trim(),
+        home_logo_url: homeLogo,
+        away_logo_url: awayLogo,
 
         key_players_shots:    processPlayerField(f.key_players_shots),
         key_players_bookings: processPlayerField(f.key_players_bookings),
@@ -460,7 +523,7 @@ function hydrateFixtures(rawFixtures) {
 function updateHighlight() {
   fixtures.forEach((d, i) => { d.__active = i === activeIndex; });
   // refresh points so the accessor for radius re-evaluates
-  globe.pointsData(fixtures);
+  globe.pointsData([...fixtures]);
 
   const active = fixtures[activeIndex];
   if (!active) {
@@ -493,7 +556,7 @@ function updateHighlight() {
     {
       lat: active.latitude,
       lng: active.longitude,
-      altitude: altitude + 0.04,
+      altitude: altitude + 0.06,
       fixture: active
     }
   ]);
