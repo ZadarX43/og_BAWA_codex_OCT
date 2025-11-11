@@ -11,6 +11,7 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 
 // PapaParse (UMD) is loaded in index.html
 const Papa = window.Papa;
+if (!Papa) throw new Error('PapaParse missing from window');
 
 // ----------------------------
 // DOM refs
@@ -86,9 +87,8 @@ async function loadThreeGlobe() {
       console.warn('[three-globe] UMD failed:', url, e);
     }
   }
-  const gc = document.getElementById('globe-container');
-  if (gc) {
-    gc.innerHTML = `<div class="globe-error">
+  if (el.globeWrap) {
+    el.globeWrap.innerHTML = `<div class="globe-error">
       <strong>three-globe failed to load.</strong><br/>
       Add a local copy at <code>vendor/three-globe.module.js</code> (ESM)
       or <code>vendor/three-globe.min.js</code> (UMD).
@@ -161,7 +161,7 @@ function initials(name = '') {
   return (words[0][0] || '').toUpperCase() + (words[1]?.[0]?.toUpperCase() || '');
 }
 
-// small helper to pick the first non-empty string among aliases
+// pick first non-empty among aliases
 function pick(row, keys) {
   for (const k of keys) {
     const v = (row[k] ?? '').toString().trim();
@@ -370,7 +370,7 @@ async function loadFixturesCSV(url) {
     globe.onGlobeReady ? globe.onGlobeReady(boot) : setTimeout(boot, 300);
 
   } catch (err) {
-    console.error('[CSV] Failed to fetch/parse:', err);
+    console.error('[CSV] Failed to fetch/parse]:', err);
     showCsvError(`Failed to load CSV: ${err?.message || err}`);
   }
 }
