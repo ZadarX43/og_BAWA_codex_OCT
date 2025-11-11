@@ -125,8 +125,8 @@ const COLORS = {
 };
 
 const SURFACE_EPS   = 0.006;  // marker altitude = SURFACE_EPS × globeRadius
-const RADIUS_BASE   = 0.010;  // marker radius (× globeRadius)
-const RADIUS_ACTIVE = 0.022;  // active marker radius
+const RADIUS_BASE   = 0.008;  // marker radius (× globeRadius) — tighter for many fixtures
+const RADIUS_ACTIVE = 0.020;  // active marker radius — tighter
 const CAMERA_ALT    = 2.0;
 
 const BLOOM = { strength: 0.6, radius: 0.5, threshold: 0.85 };
@@ -357,11 +357,26 @@ async function loadFixturesCSV(url) {
       .pointLng('longitude')
       .pointsData(fixtures);
 
-    // Initial selection
-    selectIndex(0, { fly: true });
+    // --------- BOOT AFTER GLOBE READY (deferred initial selection) ---------
+    const boot = () => {
+      selectIndex(0, { fly: true });
+      createSelectionRing();
 
-    // Build selection ring after first selection
-    createSelectionRing();
+      if (typeof globe.pointLabel === 'function') {
+        globe.pointLabel(d => `${d.city ? d.city + ' • ' : ''}${d.home_team} vs ${d.away_team}`);
+      }
+      if (typeof globe.pointsTransitionDuration === 'function') {
+        globe.pointsTransitionDuration(0);
+      }
+    };
+
+    if (typeof globe.onGlobeReady === 'function') {
+      globe.onGlobeReady(boot);
+    } else {
+      setTimeout(boot, 300);
+    }
+    // ----------------------------------------------------------------------
+
   } catch (err) {
     console.error('[CSV] Failed to fetch/parse:', err);
     showCsvError(`Failed to load CSV: ${err?.message || err}`);
@@ -404,7 +419,7 @@ function flyToFixture(f) {
   if (!f || !globe?.pointOfView) return;
   globe.pointOfView(
     { lat: f.latitude, lng: f.longitude, altitude: CAMERA_ALT },
-    800
+    650 // snappier
   );
 }
 
