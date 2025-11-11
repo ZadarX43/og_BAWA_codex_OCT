@@ -779,4 +779,110 @@ el.upload?.addEventListener('change', (e) => {
 // ----------------------------
 // Start
 // ----------------------------
+// ----------------------------
+// Minimal client-side router + UI chrome
+// ----------------------------
+const ROUTES = {
+  '#/':            'view-home',
+  '#/home':        'view-home',
+  '#/bet-checker': 'view-betchecker',
+  '#/acca-builder':'view-accabuilder',
+  '#/copilot':     'view-copilot',
+  '#/login':       'view-signin',
+  '#/signup':      'view-signup'
+};
+
+function showRoute(hash) {
+  if (!hash) hash = '#/';
+  const id = ROUTES[hash] || 'view-home';
+  document.querySelectorAll('.view').forEach(v => {
+    if (v.id === id) { v.classList.add('is-active'); v.removeAttribute('hidden'); }
+    else { v.classList.remove('is-active'); v.setAttribute('hidden',''); }
+  });
+  // highlight nav/side links
+  document.querySelectorAll('[data-route]').forEach(a=>{
+    a.classList.toggle('is-active', a.getAttribute('href') === hash);
+    if (a.classList.contains('side-link')) a.classList.toggle('active', a.getAttribute('href') === hash);
+  });
+  // close menus on route change
+  closeProfileMenu();
+  closeDrawer();
+}
+
+window.addEventListener('hashchange', ()=> showRoute(location.hash));
+window.addEventListener('DOMContentLoaded', ()=>{
+  if (!location.hash) location.hash = '#/';
+  showRoute(location.hash);
+});
+
+// --- Header profile menu
+const profileBtn  = document.getElementById('btn-profile');
+const profileMenu = document.getElementById('profile-menu');
+function closeProfileMenu(){ profileMenu?.classList.remove('show'); profileBtn?.setAttribute('aria-expanded','false'); }
+profileBtn?.addEventListener('click', (e)=>{
+  e.stopPropagation();
+  const open = profileMenu.classList.contains('show');
+  if (open) { closeProfileMenu(); } else { profileMenu.classList.add('show'); profileBtn.setAttribute('aria-expanded','true'); }
+});
+document.addEventListener('click', (e)=>{
+  if (profileMenu?.classList.contains('show') && !profileMenu.contains(e.target) && e.target !== profileBtn) {
+    closeProfileMenu();
+  }
+});
+
+// --- Mobile sidebar
+const drawer  = document.getElementById('side-drawer');
+const scrim   = document.getElementById('scrim');
+const menuBtn = document.getElementsByClassName('header__menu')[0];
+const closeBtn= document.getElementById('btn-close-drawer');
+
+function openDrawer(){ drawer?.classList.add('show'); scrim?.classList.add('show'); drawer?.setAttribute('aria-hidden','false'); }
+function closeDrawer(){ drawer?.classList.remove('show'); scrim?.classList.remove('show'); drawer?.setAttribute('aria-hidden','true'); }
+menuBtn?.addEventListener('click', ()=> openDrawer());
+closeBtn?.addEventListener('click', ()=> closeDrawer());
+scrim?.addEventListener('click', ()=> closeDrawer());
+document.querySelectorAll('.side-drawer__nav [data-route]').forEach(a=>{
+  a.addEventListener('click', ()=> { closeDrawer(); });
+});
+
+// --- Bet Checker stub actions
+const bcUpload = document.getElementById('bc-upload');
+bcUpload?.addEventListener('change', (e)=>{
+  const f = e.target.files?.[0];
+  if (!f) return;
+  showToast('info', `Parsing ${f.name}…`);
+  const out = document.getElementById('bc-output');
+  if (out) {
+    out.innerHTML = `<div class="muted">✓ File queued. (Hook OCR + parser here.)</div>`;
+  }
+  e.target.value = '';
+});
+
+// --- Acca Builder stub
+document.getElementById('ab-build')?.addEventListener('click', ()=>{
+  const grid = document.getElementById('ab-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  for (let i=0;i<4;i++){
+    const card = document.createElement('div');
+    card.className = 'insight-card';
+    card.innerHTML = `<h2>Leg ${i+1}</h2><div class="muted">Top edge candidate will appear here.</div>`;
+    grid.appendChild(card);
+  }
+});
+
+// --- Co-Pilot stub
+const cpInput = document.getElementById('cp-input');
+const cpSend  = document.getElementById('cp-send');
+const cpThread= document.getElementById('cp-thread');
+cpSend?.addEventListener('click', ()=>{
+  const q = (cpInput?.value || '').trim();
+  if (!q) return;
+  const qNode = document.createElement('div'); qNode.className='user-line'; qNode.textContent = `You: ${q}`;
+  cpThread?.appendChild(qNode);
+  const aNode = document.createElement('div'); aNode.className='bot-line'; aNode.textContent = '🤖 (Stub) I will call OG models and return insights here.';
+  cpThread?.appendChild(aNode);
+  cpInput.value=''; cpThread.scrollTop = cpThread.scrollHeight;
+});
+
 init();
