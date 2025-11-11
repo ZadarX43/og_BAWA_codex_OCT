@@ -142,6 +142,111 @@ canvas{ border-radius:24px; }
   margin-top:18px; font-size:.85rem; color:var(--text-secondary);
   display:flex; justify-content:space-between; align-items:center;
 }
+/* ===== On-globe HTML fixture tabs =====
+   Rendered by three-globe via htmlElementsData()
+   - Always visible for all fixtures
+   - Clickable: select + flyTo
+   - Selected tab is larger/brighter
+*/
+.fixture-tab{
+  /* Layout & placement */
+  position: relative;            /* three-globe handles positioning */
+  transform: translate(-50%, -120%); /* center above the point */
+  will-change: transform, opacity;
+  pointer-events: auto;          /* allow clicks (camera orbit still ok elsewhere) */
+  user-select: none;
+
+  /* Size & shape */
+  min-width: 160px;
+  max-width: 240px;
+  padding: 10px 12px;
+  border-radius: 14px;
+
+  /* Aesthetic */
+  background: linear-gradient(155deg, rgba(10,27,39,.92), rgba(20,53,70,.90));
+  border: 1px solid rgba(125,249,196,.26);
+  box-shadow:
+    0 10px 24px rgba(0,0,0,.45),
+    inset 0 0 0 1px rgba(255,255,255,.04);
+  color: var(--text-primary);
+  backdrop-filter: blur(10px) saturate(110%);
+  z-index: 6;  /* above globe canvas and nav pills */
+}
+
+/* Pointer arrow */
+.fixture-tab::after{
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -8px;
+  width: 12px;
+  height: 12px;
+  transform: translateX(-50%) rotate(45deg);
+  border-radius: 3px;
+  background: linear-gradient(155deg, rgba(10,27,39,.92), rgba(20,53,70,.90));
+  border-left: 1px solid rgba(125,249,196,.26);
+  border-bottom: 1px solid rgba(125,249,196,.26);
+}
+
+/* Text */
+.fixture-tab__title{
+  font-weight: 700;
+  font-size: .92rem;
+  letter-spacing: .01em;
+  line-height: 1.2;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.fixture-tab__meta{
+  margin-top: 2px;
+  font-size: .76rem;
+  color: var(--text-secondary);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* Interactions */
+.fixture-tab:hover{
+  border-color: rgba(125,249,196,.40);
+  box-shadow:
+    0 14px 28px rgba(0,0,0,.45),
+    0 0 0 1px rgba(125,249,196,.14) inset;
+  transform: translate(-50%, -122%);
+}
+.fixture-tab:active{ transform: translate(-50%, -118%); }
+
+/* Selected state: bigger, brighter, clearer */
+.fixture-tab.is-selected{
+  background: linear-gradient(155deg, rgba(12,34,46,.96), rgba(24,64,82,.94));
+  border-color: rgba(125,249,196,.55);
+  box-shadow:
+    0 18px 40px rgba(0,0,0,.55),
+    0 0 0 1px rgba(125,249,196,.20) inset;
+}
+.fixture-tab.is-selected .fixture-tab__title{ font-size: .98rem; }
+.fixture-tab.is-selected::after{
+  border-left-color: rgba(125,249,196,.55);
+  border-bottom-color: rgba(125,249,196,.55);
+}
+
+/* Optional: dim non-selected tabs (enable by adding .is-dim in JS if desired) */
+.fixture-tab.is-dim{
+  opacity: .65;
+  filter: saturate(.85);
+}
+
+/* Make sure tabs don't block camera interactions outside their own bounds */
+#globe-container > * { pointer-events: none; }       /* three-globe injects wrapper divs */
+#globe-container .fixture-tab{ pointer-events: auto; }
+
+/* Responsive tweaks: slightly larger tap targets on mobile */
+@media (max-width: 720px){
+  .fixture-tab{
+    min-width: 170px;
+    padding: 12px 14px;
+    transform: translate(-50%, -118%);
+  }
+  .fixture-tab__title{ font-size: .98rem; }
+  .fixture-tab__meta{ font-size: .8rem; }
+}
 
 /* On-globe prev/next pills */
 #nav-prev,#nav-next{
