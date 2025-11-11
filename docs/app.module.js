@@ -108,21 +108,20 @@ let activeIdx = 0;
 let selectedId = null;
 let pulseRing;
 
-// >>> visibility boost
+// brighter pins by default
 const COLORS = {
-  marker:        '#A7FFF6', // brighter base
+  marker:        '#A7FFF6',
   markerInactive:'#8CEFE5',
-  markerActive:  '#CFFFFA', // very bright when active
+  markerActive:  '#CFFFFA',
   ring:          '#9EE7E3'
 };
 
-const SURFACE_EPS   = 0.009;  // higher off-surface (was ~0.006)
-const RADIUS_BASE   = 0.014;  // larger default pins
-const RADIUS_ACTIVE = 0.040;  // much larger when selected
+const SURFACE_EPS   = 0.009;
+const RADIUS_BASE   = 0.014;
+const RADIUS_ACTIVE = 0.040;
 const CAMERA_ALT    = 2.0;
 
-const BLOOM = { strength: 0.9, radius: 0.6, threshold: 0.75 }; // stronger glow
-// <<< visibility boost
+const BLOOM = { strength: 0.9, radius: 0.6, threshold: 0.75 };
 
 // ----------------------------
 // Utilities
@@ -160,6 +159,15 @@ function initials(name = '') {
   const words = name.split(/\s+/).filter(Boolean);
   if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
   return (words[0][0] || '').toUpperCase() + (words[1]?.[0]?.toUpperCase() || '');
+}
+
+// small helper to pick the first non-empty string among aliases
+function pick(row, keys) {
+  for (const k of keys) {
+    const v = (row[k] ?? '').toString().trim();
+    if (v) return v;
+  }
+  return '';
 }
 
 function getGlobeRadius() {
@@ -226,7 +234,7 @@ async function init() {
   );
   composer.addPass(bloomPass);
 
-  // Globe (with higher-res pins + merge)
+  // Globe
   globe = new ThreeGlobeCtor({ waitForGlobeReady: true })
     .showAtmosphere(true)
     .atmosphereColor('#94f1ea')
@@ -236,20 +244,15 @@ async function init() {
     .pointAltitude(() => SURFACE_EPS)
     .pointRadius(d => (d.__active ? RADIUS_ACTIVE : RADIUS_BASE))
     .pointColor(d => (d.__active ? COLORS.markerActive : COLORS.marker))
-    .pointResolution(12)   // crisper round pins
-    .pointsMerge(true);    // perf for many pins
+    .pointResolution(12)
+    .pointsMerge(true);
 
   scene.add(globe);
 
-  // Hover (guarded)
   if (typeof globe.onPointHover === 'function') {
     globe.onPointHover(handleHover);
-  } else {
-    console.info('[three-globe] onPointHover() not available in this build — hover enhancement disabled.');
   }
-
-  // Click → select (guarded)
-  globe.onPointClick?.((pt) => {
+  globe.onPointClick?.(pt => {
     if (!pt) return;
     const idx = fixtures.findIndex(f => f.fixture_id === pt.fixture_id);
     if (idx >= 0) selectIndex(idx, { fly: true });
@@ -268,7 +271,6 @@ async function init() {
     bloomPass.setSize?.(clientWidth, clientHeight);
   });
 
-  // Keyboard nav
   window.addEventListener('keydown', e => {
     if (e.key === 'ArrowRight') { e.preventDefault(); step(+1); }
     if (e.key === 'ArrowLeft')  { e.preventDefault(); step(-1); }
@@ -277,9 +279,7 @@ async function init() {
   el.prevBtn?.addEventListener('click', () => step(-1));
   el.nextBtn?.addEventListener('click', () => step(+1));
 
-  // Load fixtures
   await loadFixturesCSV('./data/fixtures.csv');
-
   animate();
 }
 
@@ -308,12 +308,21 @@ async function loadFixturesCSV(url) {
       .map(row => {
         const lat = parseFloat(row.latitude || row.lat || row.Latitude || row.lat_deg);
         const lng = parseFloat(row.longitude || row.lon || row.lng || row.Longitude);
+
+        // --- badge URL mapping with graceful fallback ---
+        const home_badge_url = pick(row, [
+          'home_badge_url', 'home_logo_url', 'home_logo', 'home_badge'
+        ]);
+        const away_badge_url = pick(row, [
+          'away_badge_url', 'away_logo_url', 'away_logo', 'away_badge'
+        ]);
+
         return {
           fixture_id: (row.fixture_id || row.id || `${row.home_team}-${row.away_team}-${row.date_utc || ''}`).trim(),
           home_team: (row.home_team || row.Home || '').trim(),
           away_team: (row.away_team || row.Away || '').trim(),
-          home_logo_url: row.home_logo_url || row.home_logo || '',
-          away_logo_url: row.away_logo_url || row.away_logo || '',
+          home_badge_url,
+          away_badge_url,
           date_utc: row.date_utc || row.date || '',
           competition: row.competition || row.league || '',
           stadium: row.stadium || '',
@@ -343,7 +352,7 @@ async function loadFixturesCSV(url) {
     }
 
     const many = fixtures.length > 250;
-    globe.pointsMerge(many).pointResolution(many ? 12 : 12);
+    globe.pointsMerge(many).pointResolution(12);
     globe
       .pointLat('latitude')
       .pointLng('longitude')
@@ -352,20 +361,14 @@ async function loadFixturesCSV(url) {
     const boot = () => {
       selectIndex(0, { fly: true });
       createSelectionRing();
-
       if (typeof globe.pointLabel === 'function') {
         globe.pointLabel(d => `${d.city ? d.city + ' • ' : ''}${d.home_team} vs ${d.away_team}`);
       }
-      if (typeof globe.pointsTransitionDuration === 'function') {
-        globe.pointsTransitionDuration(0);
-      }
+      globe.pointsTransitionDuration?.(0);
     };
 
-    if (typeof globe.onGlobeReady === 'function') {
-      globe.onGlobeReady(boot);
-    } else {
-      setTimeout(boot, 300);
-    }
+    globe.onGlobeReady ? globe.onGlobeReady(boot) : setTimeout(boot, 300);
+
   } catch (err) {
     console.error('[CSV] Failed to fetch/parse:', err);
     showCsvError(`Failed to load CSV: ${err?.message || err}`);
@@ -423,7 +426,7 @@ function createSelectionRing() {
   const ringMat = new THREE.MeshBasicMaterial({
     color: new THREE.Color(COLORS.ring),
     transparent: true,
-    opacity: 0.42,           // stronger halo
+    opacity: 0.42,
     side: THREE.DoubleSide,
     depthWrite: false
   });
@@ -436,19 +439,15 @@ function createSelectionRing() {
 function updateSelectionRing(f) {
   if (!pulseRing || !f) return;
   const R = getGlobeRadius();
-
   const latRad = THREE.MathUtils.degToRad(90 - f.latitude);
   const lonRad = THREE.MathUtils.degToRad(180 - f.longitude);
   const r = R * (1 + SURFACE_EPS + 0.001);
-
   const x = r * Math.sin(latRad) * Math.cos(lonRad);
   const y = r * Math.cos(latRad);
   const z = r * Math.sin(latRad) * Math.sin(lonRad);
-
   pulseRing.position.set(x, y, z);
   const outward = new THREE.Vector3(x, y, z).normalize();
-  const look = outward.clone().multiplyScalar(R * 2);
-  pulseRing.lookAt(look);
+  pulseRing.lookAt(outward.clone().multiplyScalar(R * 2));
   pulseRing.visible = true;
 }
 
@@ -493,8 +492,9 @@ function renderPanel(f) {
   el.fixtureContext.textContent = [f.competition, fmt(f.date_utc), f.stadium && `${f.stadium} (${f.city || ''})`, f.country]
     .filter(Boolean).join(' • ');
 
-  setBadge(el.homeBadge, f.home_logo_url, initials(f.home_team));
-  setBadge(el.awayBadge, f.away_logo_url, initials(f.away_team));
+  // Use new badge fields with fallback to legacy names
+  setBadge(el.homeBadge, f.home_badge_url || f.home_logo_url, initials(f.home_team));
+  setBadge(el.awayBadge, f.away_badge_url || f.away_logo_url, initials(f.away_team));
 
   clearNode(el.matchList);
   const mi = document.createElement('div');
@@ -527,16 +527,14 @@ function renderPanel(f) {
     <div><strong>Both teams to score:</strong> ${pct(f.btts_prob)}</div>
   `;
 
-  if (el.deepBtn) {
-    el.deepBtn.onclick = () => {
-      alert(
-        `Fixture: ${f.home_team} vs ${f.away_team}\n` +
-        `Kick-off: ${fmt(f.date_utc)}\n` +
-        `Prediction: ${f.predicted_winner} (${pct(f.confidence_ftr)})\n` +
-        `Over 2.5: ${pct(f.over25_prob)} • BTTS: ${pct(f.btts_prob)}`
-      );
-    };
-  }
+  el.deepBtn && (el.deepBtn.onclick = () => {
+    alert(
+      `Fixture: ${f.home_team} vs ${f.away_team}\n` +
+      `Kick-off: ${fmt(f.date_utc)}\n` +
+      `Prediction: ${f.predicted_winner} (${pct(f.confidence_ftr)})\n` +
+      `Over 2.5: ${pct(f.over25_prob)} • BTTS: ${pct(f.btts_prob)}`
+    );
+  });
 }
 
 function num(x) {
