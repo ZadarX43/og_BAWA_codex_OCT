@@ -158,18 +158,62 @@ function showToast(type, text, ms=2600){
 function elmEmpty(msg){ const d=document.createElement('div'); d.className='empty'; d.textContent=msg; return d; }
 
 // ==============================
-// Club logo resolver (PROXY-FIRST, cached, multi-source)
+// Local logo setup (no proxy, zero CORS)
 // ==============================
 
-const LOGO_LOCAL_BASE = '/assets/logos';       // optional local pack (png/svg)
-const LOGO_PROXY_BASE = '/api/logo';           // backend proxy (recommended)
-const LOGO_CACHE_KEY  = 'og_logo_cache_v4';    // bump to invalidate old cache
+// Local logos live here (relative path so it works on GitHub Pages)
+const LOGO_LOCAL_BASE = './assets/logos';
 
-// Optional TheSportsDB fallback (public/demo key "3")
+// Force local logos for your exact CSV team names → filenames
+const TEAM_LOGO_OVERRIDES = {
+  'Celtic':                               './assets/logos/Celtic_FC.svg',
+  'Lazio':                                './assets/logos/S.S._Lazio_logo.svg',
+  'Royal Antwerp FC':                     './assets/logos/Royal_Antwerp_Football_Club_logo.svg',
+  'Shakhtar Donetsk':                     './assets/logos/FC_Shakhtar_Donetsk.svg',
+  'Atlético Madrid':                      './assets/logos/Atletico Madrid logo.svg',
+  'Atletico Madrid':                      './assets/logos/Atletico Madrid logo.svg',
+  'Feyenoord':                            './assets/logos/Feyenoord_logo.svg',
+  'Newcastle United':                     './assets/logos/Newcastle_United_Logo.svg',
+  'PSG':                                  './assets/logos/Paris_Saint-Germain_Logo.svg',
+  'Paris Saint-Germain':                  './assets/logos/Paris_Saint-Germain_Logo.svg',
+  'Borussia Dortmund':                    './assets/logos/Borussia_Dortmund_logo.svg',
+  'AC Milan':                             './assets/logos/Logo_of_AC_Milan.svg',
+  'RB Leipzig':                           './assets/logos/VEREINFACHTES_LOGO_-_RB_Leipzig.svg',
+  'Manchester City':                      './assets/logos/Manchester_City_FC_badge.svg',
+  'Red Star Belgrade':                    './assets/logos/Red_Star_Belgrade_crest.svg',
+  'Young Boys':                           './assets/logos/BSC_Young_Boys_logo.svg',
+  'FC Barcelona':                         './assets/logos/FC_Barcelona_(crest).svg',
+  'Barcelona':                            './assets/logos/FC_Barcelona_(crest).svg',
+  'Porto':                                './assets/logos/FC_Porto.svg',
+  'FC Porto':                             './assets/logos/FC_Porto.svg',
+  'Galatasaray':                          './assets/logos/Galatasaray_4_Sterne_Logo.svg',
+  'Manchester United':                    './assets/logos/Manchester_United_FC_crest.svg',
+  'Sevilla FC':                           './assets/logos/sevilla-fc.svg',
+  'PSV':                                  './assets/logos/PSV_Eindhoven.svg',
+  'PSV Eindhoven':                        './assets/logos/PSV_Eindhoven.svg',
+  'København':                            './assets/logos/kobenhavn-logo-svg-vector.svg',
+  'FC Copenhagen':                        './assets/logos/kobenhavn-logo-svg-vector.svg',
+  'Arsenal':                              './assets/logos/Arsenal_FC.svg',
+  'Lens':                                 './assets/logos/lens.svg',
+  'Real Madrid':                          './assets/logos/Real_Madrid_CF.svg',
+  'Napoli':                               './assets/logos/SSC_Napoli_2024_(deep_blue_navy).svg',
+  'SSC Napoli':                           './assets/logos/SSC_Napoli_2024_(deep_blue_navy).svg',
+  'Benfica':                              './assets/logos/SL_Benfica_logo.svg',
+  'Inter Milan':                          './assets/logos/Inter_Milano_2021_logo_with_2_stars.svg',
+  'Inter':                                './assets/logos/Inter_Milano_2021_logo_with_2_stars.svg',
+  'Real Sociedad':                        './assets/logos/Real_Sociedad_logo.svg',
+  'Salzburg':                             './assets/logos/FC_Red_Bull_Salzburg_logo.svg',
+  'Bayern München':                       './assets/logos/Logo_FC_Bayern_München_(2002–2017).svg',
+  'Bayern Munich':                        './assets/logos/Logo_FC_Bayern_München_(2002–2017).svg'
+};
+
+// Optional last-resort (only if you want)
 const USE_SPORTSDB_FALLBACK = true;
 const SPORTSDB_KEY = '3';
 const SPORTSDB_ENDPOINT = `https://www.thesportsdb.com/api/v1/json/${SPORTSDB_KEY}/searchteams.php?t=`;
 
+// small cache to avoid reloading
+const LOGO_CACHE_KEY  = 'og_logo_cache_v_demo';
 let LOGO_CACHE = {};
 try { LOGO_CACHE = JSON.parse(localStorage.getItem(LOGO_CACHE_KEY) || '{}'); } catch {}
 function saveLogoCache(){ try { localStorage.setItem(LOGO_CACHE_KEY, JSON.stringify(LOGO_CACHE)); } catch {} }
@@ -183,8 +227,6 @@ function slugifyTeam(name='') {
     .replace(/^-+|-+$/g,'');
 }
 function isHttpUrl(u){ return /^https?:\/\//i.test(u); }
-function looksSvg(u){ return /\.svg(\?.*)?$/i.test(u); }
-
 function isCommonsFilePath(u){ return /:\/\/commons\.wikimedia\.org\/wiki\/Special:FilePath\//i.test(u); }
 function isCommonsFileTitle(u){ return /:\/\/commons\.wikimedia\.org\/wiki\/File:/i.test(u); }
 
@@ -197,7 +239,6 @@ function normalizeBasicUrl(raw) {
   return u;
 }
 
-// Deterministic Commons thumb (no hashing)
 function commonsToThumbPhp(inputUrl) {
   try {
     const url = new URL(inputUrl);
@@ -207,10 +248,8 @@ function commonsToThumbPhp(inputUrl) {
     } else if (isCommonsFileTitle(inputUrl)) {
       const last = decodeURIComponent(url.pathname.split('/').pop() || '');
       file = last.replace(/^File:/i,'');
-    } else {
-      return null;
-    }
-    file = file.replace(/\s+/g, '_');
+    } else { return null; }
+    file = file.replace(/\s+/g,'_');
     const thumb = new URL('https://commons.wikimedia.org/w/thumb.php');
     thumb.searchParams.set('f', file);
     thumb.searchParams.set('width', '160');
@@ -218,7 +257,6 @@ function commonsToThumbPhp(inputUrl) {
   } catch { return null; }
 }
 
-// MediaWiki API thumb
 async function resolveViaCommonsApi(inputUrl) {
   try {
     const url = new URL(inputUrl);
@@ -266,16 +304,6 @@ function localLogoCandidates(team) {
     `${LOGO_LOCAL_BASE}/${slug}.svg`,
   ];
 }
-function proxyLogoUrl(team, hintUrl='') {
-  const p = new URLSearchParams();
-  if (team) p.set('team', team);
-  if (hintUrl) p.set('hint', hintUrl);
-  return `${LOGO_PROXY_BASE}?${p.toString()}`;
-}
-function cacheOk(team, url) {
-  if (team && url) { LOGO_CACHE[team] = url; saveLogoCache(); }
-  return url;
-}
 
 const badgeTokens = new WeakMap();
 async function tryLoad(src, teamName) {
@@ -293,8 +321,8 @@ async function tryLoad(src, teamName) {
 }
 
 /**
- * PROXY-FIRST setBadge:
- * Order: cache → PROXY(/api/logo?team=...&hint=...) → Commons thumb.php → Commons API → normalized CSV → local → SportsDB → initials
+ * Local-first crest loader (no proxy):
+ * cache → CSV/override URL → local slug files → Commons thumb.php → Commons API → SportsDB → initials
  */
 async function setBadge(elm, urlFromCsv, teamName='') {
   if (!elm) return;
@@ -316,41 +344,16 @@ async function setBadge(elm, urlFromCsv, teamName='') {
     }
   }
 
+  // 1) override or CSV
   const raw = normalizeBasicUrl(urlFromCsv);
   let loaded = null, finalUrl = null;
 
-  // 1) PROXY FIRST — guarantees same-origin + caching on your server
-  if (teamName) {
-    const prox = proxyLogoUrl(teamName, raw || '');
-    loaded = await tryLoad(prox, teamName);
-    if (loaded) finalUrl = prox;
-  }
-
-  // 2) Commons thumb.php (secondary)
-  if (!loaded && raw && (isCommonsFilePath(raw) || isCommonsFileTitle(raw))) {
-    const thumbPhp = commonsToThumbPhp(raw);
-    if (thumbPhp) {
-      loaded = await tryLoad(thumbPhp, teamName);
-      if (loaded) finalUrl = thumbPhp;
-    }
-  }
-
-  // 3) Commons API
-  if (!loaded && raw && (isCommonsFilePath(raw) || isCommonsFileTitle(raw))) {
-    const apiThumb = await resolveViaCommonsApi(raw);
-    if (apiThumb) {
-      loaded = await tryLoad(apiThumb, teamName);
-      if (loaded) finalUrl = apiThumb;
-    }
-  }
-
-  // 4) CSV raw (as-is)
-  if (!loaded && raw) {
+  if (raw) {
     loaded = await tryLoad(raw, teamName);
     if (loaded) finalUrl = raw;
   }
 
-  // 5) Local pack
+  // 2) local slug guesses
   if (!loaded && teamName) {
     for (const loc of localLogoCandidates(teamName)) {
       loaded = await tryLoad(loc, teamName);
@@ -358,7 +361,23 @@ async function setBadge(elm, urlFromCsv, teamName='') {
     }
   }
 
-  // 6) SportsDB
+  // 3) Commons thumb / API from CSV
+  if (!loaded && raw && (isCommonsFilePath(raw) || isCommonsFileTitle(raw))) {
+    const thumbPhp = commonsToThumbPhp(raw);
+    if (thumbPhp) {
+      loaded = await tryLoad(thumbPhp, teamName);
+      if (loaded) finalUrl = thumbPhp;
+    }
+    if (!loaded) {
+      const apiThumb = await resolveViaCommonsApi(raw);
+      if (apiThumb) {
+        loaded = await tryLoad(apiThumb, teamName);
+        if (loaded) finalUrl = apiThumb;
+      }
+    }
+  }
+
+  // 4) SportsDB
   if (!loaded && teamName) {
     const sdb = await resolveViaSportsDb(teamName);
     if (sdb) {
@@ -369,7 +388,7 @@ async function setBadge(elm, urlFromCsv, teamName='') {
 
   if (!loaded) {
     if (!window.__OG_LOGO_FAIL_LOGGED__) {
-      console.warn('[OG] crest failed:', { teamName, urlFromCsv });
+      console.warn('[OG] crest failed (local-first):', { teamName, urlFromCsv });
       window.__OG_LOGO_FAIL_LOGGED__ = true;
     }
     return finishInitials();
@@ -377,7 +396,7 @@ async function setBadge(elm, urlFromCsv, teamName='') {
 
   if (badgeTokens.get(elm) !== token) return;
   elm.innerHTML = ''; elm.appendChild(loaded.img); elm.classList.add('has-logo');
-  cacheOk(teamName, finalUrl);
+  if (teamName && finalUrl) { LOGO_CACHE[teamName] = finalUrl; saveLogoCache(); }
 }
 
 // ----------------------------
@@ -394,19 +413,13 @@ async function init() {
   el.globeWrap.innerHTML = '';
   el.globeWrap.appendChild(renderer.domElement);
 
-  // >>> Brighten output: color space & tone mapping
   if ('outputColorSpace' in renderer) renderer.outputColorSpace = THREE.SRGBColorSpace;
   if ('toneMapping' in renderer) {
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.15;
   }
 
-  camera = new THREE.PerspectiveCamera(
-    45,
-    el.globeWrap.clientWidth / el.globeWrap.clientHeight,
-    0.1,
-    5000
-  );
+  camera = new THREE.PerspectiveCamera(45, el.globeWrap.clientWidth / el.globeWrap.clientHeight, 0.1, 5000);
   camera.position.set(0, 0, 300);
 
   controls = new OrbitControls(camera, renderer.domElement);
@@ -418,12 +431,10 @@ async function init() {
   controls.minDistance = 140;
   controls.maxDistance = 1200;
 
-  // Ambient + Hemisphere to lift the dark side
   scene.add(new THREE.AmbientLight(0xffffff, 0.9));
   const hemi = new THREE.HemisphereLight(0xddeeff, 0x223344, 0.6);
   scene.add(hemi);
 
-  // --- Postprocessing ---
   composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
 
@@ -440,13 +451,10 @@ async function init() {
 
   bloomPass = new UnrealBloomPass(
     new THREE.Vector2(el.globeWrap.clientWidth, el.globeWrap.clientHeight),
-    BLOOM.strength,
-    BLOOM.radius,
-    BLOOM.threshold
+    BLOOM.strength, BLOOM.radius, BLOOM.threshold
   );
   composer.addPass(bloomPass);
 
-  // Globe (lighter texture + brighter atmosphere)
   globe = new ThreeGlobeCtor({ waitForGlobeReady: true })
     .showAtmosphere(true)
     .atmosphereColor('#9ef9e3')
@@ -461,9 +469,7 @@ async function init() {
 
   scene.add(globe);
 
-  if (typeof globe.onPointHover === 'function') {
-    globe.onPointHover(handleHover);
-  }
+  if (typeof globe.onPointHover === 'function') globe.onPointHover(handleHover);
   globe.onPointClick?.(pt => {
     if (!pt) return;
     const idx = fixtures.findIndex(f => f.fixture_id === pt.fixture_id);
@@ -492,7 +498,6 @@ async function init() {
   el.nextBtn?.addEventListener('click', () => step(+1));
 
   wireTabs();
-
   await loadFixturesCSV('./data/fixtures.csv');
   animate();
 }
@@ -524,12 +529,8 @@ async function loadFixturesCSV(url) {
         const lat = parseFloat(row.latitude || row.lat || row.Latitude || row.lat_deg);
         const lng = parseFloat(row.longitude || row.lon || row.lng || row.Longitude);
 
-        const home_badge_url = pick(row, [
-          'home_badge_url', 'home_logo_url', 'home_logo', 'home_badge'
-        ]);
-        const away_badge_url = pick(row, [
-          'away_badge_url', 'away_logo_url', 'away_logo', 'away_badge'
-        ]);
+        const home_badge_url = pick(row, ['home_badge_url','home_logo_url','home_logo','home_badge']);
+        const away_badge_url = pick(row, ['away_badge_url','away_logo_url','away_logo','away_badge']);
 
         return {
           fixture_id: (row.fixture_id || row.id || `${row.home_team}-${row.away_team}-${row.date_utc || ''}`).trim(),
@@ -577,7 +578,6 @@ async function loadFixturesCSV(url) {
 
     buildRail(fixtures);
 
-    // ---- Render overlays after the globe is ready
     const boot = () => {
       selectIndex(0, { fly: true });
       createSelectionRing();
@@ -597,11 +597,8 @@ async function loadFixturesCSV(url) {
       showToast('success', `Loaded ${fixtures.length} fixtures`);
     };
 
-    if (typeof globe.onGlobeReady === 'function') {
-      globe.onGlobeReady(boot);
-    } else {
-      setTimeout(boot, 300);
-    }
+    if (typeof globe.onGlobeReady === 'function') globe.onGlobeReady(boot);
+    else setTimeout(boot, 300);
 
   } catch (err) {
     console.error('[CSV] Failed to fetch/parse]:', err);
@@ -637,7 +634,6 @@ function selectIndex(idx, opts = {}) {
     .pointColor(d => (d.__active ? COLORS.markerActive : COLORS.marker))
     .pointsData(fixtures);
 
-  // brief brighter pulse for the active marker, then reset transition duration
   globe.pointColor(d => d.__active ? '#D7FFF9' : COLORS.marker)
        .pointsTransitionDuration?.(200);
   setTimeout(()=>globe.pointsTransitionDuration?.(0), 220);
@@ -647,14 +643,9 @@ function selectIndex(idx, opts = {}) {
   updateSelectionRing(f);
   syncRail();
 
-  // Update whichever overlay is active
-  if (hasHtmlElementsApi(globe)) {
-    updateHtmlTabsSelection();
-  } else if (typeof globe.labelsData === 'function') {
-    renderLabelSprites(); // refresh sprite styles
-  }
+  if (hasHtmlElementsApi(globe)) updateHtmlTabsSelection();
+  else if (typeof globe.labelsData === 'function') renderLabelSprites();
 
-  // outer glow + tiny pop
   const globeWrap = document.querySelector('.hero__globe');
   globeWrap?.classList.add('glow','glow-pin');
   setTimeout(()=>globeWrap?.classList.remove('glow-pin'), 350);
@@ -662,10 +653,7 @@ function selectIndex(idx, opts = {}) {
 
 function flyToFixture(f) {
   if (!f || !globe?.pointOfView) return;
-  globe.pointOfView(
-    { lat: f.latitude, lng: f.longitude, altitude: CAMERA_ALT },
-    650
-  );
+  globe.pointOfView({ lat: f.latitude, lng: f.longitude, altitude: CAMERA_ALT }, 650);
 }
 
 // ----------------------------
@@ -745,11 +733,13 @@ function renderPanel(f) {
   el.fixtureContext.textContent = [f.competition, fmt(f.date_utc), f.stadium && `${f.stadium} (${f.city || ''})`, f.country]
     .filter(Boolean).join(' • ');
 
-  // Use robust badge loader with team names (not initials)
-  setBadge(el.homeBadge, f.home_badge_url || f.home_logo_url, f.home_team);
-  setBadge(el.awayBadge, f.away_badge_url || f.away_logo_url, f.away_team);
+  // OVERRIDES FIRST → then CSV URL → then resolver fallback
+  const homeUrl = TEAM_LOGO_OVERRIDES[f.home_team] || f.home_badge_url || f.home_logo_url;
+  const awayUrl = TEAM_LOGO_OVERRIDES[f.away_team] || f.away_badge_url || f.away_logo_url;
 
-  // Match Intelligence (xG/PPG etc.)
+  setBadge(el.homeBadge, homeUrl, f.home_team);
+  setBadge(el.awayBadge, awayUrl, f.away_team);
+
   clearNode(el.matchList);
   const mi = document.createElement('div');
   mi.innerHTML = `
@@ -759,7 +749,6 @@ function renderPanel(f) {
   `;
   el.matchList.appendChild(mi);
 
-  // Player Watchlist
   clearNode(el.watchlist);
   const shots = parseKV(f.key_players_shots).slice(0, 6);
   if (shots.length) {
@@ -773,14 +762,12 @@ function renderPanel(f) {
     el.watchlist.appendChild(elmEmpty('No player highlights available.'));
   }
 
-  // Market Snapshot
   clearNode(el.market);
   el.market.innerHTML = `
     <div><strong>Over 2.5 goals:</strong> ${pct(f.over25_prob)}</div>
     <div><strong>Both teams to score:</strong> ${pct(f.btts_prob)}</div>
   `;
 
-  // Mobile bottom sheet (show key cards)
   if (window.innerWidth < 720){
     const wrap = document.createElement('div');
     const miClone = el.matchList.cloneNode(true);
@@ -790,7 +777,6 @@ function renderPanel(f) {
     openSheet(`${f.home_team} vs ${f.away_team}`, wrap);
   }
 
-  // Deep-dive CTA
   el.deepBtn && (el.deepBtn.onclick = () => {
     alert(
       `Fixture: ${f.home_team} vs ${f.away_team}\n` +
@@ -807,13 +793,10 @@ function num(x) {
 }
 
 function parseKV(s='') {
-  return s.split(';')
-    .map(x => x.trim())
-    .filter(Boolean)
-    .map(pair => {
-      const [k, v] = pair.split('|');
-      return { k: (k||'').trim(), v: (v||'').trim() };
-    });
+  return s.split(';').map(x => x.trim()).filter(Boolean).map(pair => {
+    const [k, v] = pair.split('|');
+    return { k: (k||'').trim(), v: (v||'').trim() };
+  });
 }
 
 // ----------------------------
