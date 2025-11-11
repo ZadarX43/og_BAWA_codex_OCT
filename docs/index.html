@@ -30,121 +30,210 @@
     <link rel="modulepreload" href="./vendor/examples/jsm/shaders/FXAAShader.js" />
     <link rel="modulepreload" href="./vendor/examples/jsm/postprocessing/UnrealBloomPass.js" />
     <link rel="modulepreload" href="./app.module.js" />
-
-    <style>
-      /* Minimal inline safety styles (full look is in styles.css) */
-      #globe-container{
-        position:relative;height:70vh;border-radius:14px;overflow:hidden;
-        background:radial-gradient(120% 120% at 50% 50%, #0d0f13 0%, #06070a 100%);
-      }
-      .globe-loading{position:absolute;inset:0;display:grid;place-items:center;color:#a7ffea;font-weight:600}
-      .globe-error{padding:1rem;color:#ffb4a9}
-    </style>
   </head>
 
   <body>
+    <div id="scrim" class="scrim" aria-hidden="true"></div>
+
+    <aside id="side-drawer" class="side-drawer" aria-label="Main menu" aria-hidden="true">
+      <div class="side-drawer__header">
+        <div class="brand">Odds <strong>Genius</strong></div>
+        <button id="btn-close-drawer" class="icon-btn" aria-label="Close menu">✕</button>
+      </div>
+      <nav class="side-drawer__nav">
+        <a class="side-link" href="#/" data-route>Home</a>
+        <a class="side-link" href="#/bet-checker" data-route>Bet Checker</a>
+        <a class="side-link" href="#/acca-builder" data-route>Acca Builder</a>
+        <a class="side-link" href="#/copilot" data-route>GPT-5 OG Co-Pilot</a>
+        <hr/>
+        <a class="side-link" href="#/signup" data-route>Sign up</a>
+        <a class="side-link" href="#/login" data-route>Login</a>
+      </nav>
+    </aside>
+
     <div class="page">
       <!-- ===== Header ===== -->
       <header class="top-bar">
         <div class="brand brand--xl">
+          <button id="btn-menu" class="header__menu" aria-label="Open menu">☰</button>
           <span class="brand__name">Odds Genius</span>
           <span class="brand__tagline">Sports Prediction Super Intelligence Made Easy</span>
         </div>
 
         <nav class="top-nav-pill" aria-label="Primary">
-          <a href="#bet-checker">Bet Checker</a>
-          <a href="#acca-builder">Acca Builder</a>
-          <a href="#og-copilot">GPT 5 – OG Co&nbsp;Pilot</a>
+          <a class="nav-link" href="#/" data-route>Home</a>
+          <a class="nav-link" href="#/bet-checker" data-route>Bet Checker</a>
+          <a class="nav-link" href="#/acca-builder" data-route>Acca Builder</a>
+          <a class="nav-link" href="#/copilot" data-route>GPT 5 – OG Co Pilot</a>
+          <div class="profile">
+            <button id="btn-profile" class="profile-btn" aria-haspopup="menu" aria-expanded="false">
+              <span class="avatar">OG</span>
+              <span class="caret">▾</span>
+            </button>
+            <div id="profile-menu" class="profile-menu" role="menu" aria-hidden="true">
+              <a role="menuitem" class="profile-item" href="#/login" data-route>Login</a>
+              <a role="menuitem" class="profile-item" href="#/signup" data-route>Sign up</a>
+            </div>
+          </div>
         </nav>
       </header>
 
-      <main class="hero">
-        <!-- Globe pane -->
-        <section class="hero__globe" aria-label="Upcoming fixtures globe">
-          <div id="globe-container" tabindex="0" aria-describedby="globe-help">
-            <div class="globe-loading" role="status">Loading globe…</div>
-            <button id="nav-prev" aria-label="Previous fixture" title="Previous (←)" tabindex="0">&#x2039;</button>
-            <button id="nav-next" aria-label="Next fixture"   title="Next (→)" tabindex="0">&#x203A;</button>
-          </div>
-          <p id="globe-help" class="visually-hidden">Use left and right arrow keys or buttons to change fixture.</p>
-        </section>
+      <!-- ======== VIEWS (router toggles .is-active) ======== -->
 
-        <!-- Insights panel -->
-        <aside class="hero__insights" aria-live="polite">
-          <div class="insights__header">
-            <div class="badge badge--home" id="home-badge" aria-label="Home team crest"></div>
-            <div class="fixture-meta">
-              <h1 id="fixture-title">Loading fixtures…</h1>
-              <p id="fixture-context"></p>
+      <!-- HOME VIEW (Globe + Insights + Rail + Footer Upload) -->
+      <section id="view-home" class="view is-active">
+        <main class="hero">
+          <!-- Globe pane -->
+          <section class="hero__globe" aria-label="Upcoming fixtures globe">
+            <div id="globe-container" tabindex="0" aria-describedby="globe-help">
+              <div class="globe-loading" role="status">Loading globe…</div>
+              <button id="nav-prev" aria-label="Previous fixture" title="Previous (←)" tabindex="0">&#x2039;</button>
+              <button id="nav-next" aria-label="Next fixture"   title="Next (→)" tabindex="0">&#x203A;</button>
             </div>
-            <div class="badge badge--away" id="away-badge" aria-label="Away team crest"></div>
-          </div>
+            <p id="globe-help" class="visually-hidden">Use left and right arrow keys or buttons to change fixture.</p>
+          </section>
 
-          <!-- Tabs -->
-          <div class="tabs" role="tablist" aria-label="Insights">
-            <button class="tab is-active" role="tab" aria-selected="true" aria-controls="tab-mi" data-tab="mi" id="tabbtn-mi">Match Intelligence</button>
-            <button class="tab" role="tab" aria-selected="false" aria-controls="tab-players" data-tab="players" id="tabbtn-players">Player Watchlist</button>
-            <button class="tab" role="tab" aria-selected="false" aria-controls="tab-market" data-tab="market" id="tabbtn-market">Market Snapshot</button>
-          </div>
-
-          <!-- Tab panes -->
-          <div class="tabpanes" id="insights-content">
-            <section id="tab-mi" class="tabpane is-active" role="tabpanel" aria-labelledby="tabbtn-mi">
-              <div class="insight-card">
-                <h2>Match Intelligence</h2>
-                <div class="skel" aria-hidden="true"></div>
-                <ul id="match-intelligence"></ul>
+          <!-- Insights panel -->
+          <aside class="hero__insights" aria-live="polite">
+            <div class="insights__header">
+              <div class="badge badge--home" id="home-badge" aria-label="Home team crest"></div>
+              <div class="fixture-meta">
+                <h1 id="fixture-title">Loading fixtures…</h1>
+                <p id="fixture-context"></p>
               </div>
-            </section>
+              <div class="badge badge--away" id="away-badge" aria-label="Away team crest"></div>
+            </div>
 
-            <section id="tab-players" class="tabpane" role="tabpanel" aria-labelledby="tabbtn-players">
-              <div class="insight-card">
-                <h2>Player Watchlist</h2>
-                <div class="skel" aria-hidden="true"></div>
-                <ul id="player-watchlist"></ul>
-              </div>
-            </section>
+            <div class="tabs" role="tablist" aria-label="Insights">
+              <button class="tab is-active" role="tab" aria-selected="true" aria-controls="tab-mi" data-tab="mi" id="tabbtn-mi">Match Intelligence</button>
+              <button class="tab" role="tab" aria-selected="false" aria-controls="tab-players" data-tab="players" id="tabbtn-players">Player Watchlist</button>
+              <button class="tab" role="tab" aria-selected="false" aria-controls="tab-market" data-tab="market" id="tabbtn-market">Market Snapshot</button>
+            </div>
 
-            <section id="tab-market" class="tabpane" role="tabpanel" aria-labelledby="tabbtn-market">
-              <div class="insight-card">
-                <h2>Market Snapshot</h2>
-                <div class="skel" aria-hidden="true"></div>
-                <ul id="market-snapshot"></ul>
-              </div>
-            </section>
+            <div class="tabpanes" id="insights-content">
+              <section id="tab-mi" class="tabpane is-active" role="tabpanel" aria-labelledby="tabbtn-mi">
+                <div class="insight-card">
+                  <h2>Match Intelligence</h2>
+                  <div class="skel" aria-hidden="true"></div>
+                  <ul id="match-intelligence"></ul>
+                </div>
+              </section>
 
-            <button class="cta" id="deep-dive-btn">Open full fixture intelligence</button>
+              <section id="tab-players" class="tabpane" role="tabpanel" aria-labelledby="tabbtn-players">
+                <div class="insight-card">
+                  <h2>Player Watchlist</h2>
+                  <div class="skel" aria-hidden="true"></div>
+                  <ul id="player-watchlist"></ul>
+                </div>
+              </section>
+
+              <section id="tab-market" class="tabpane" role="tabpanel" aria-labelledby="tabbtn-market">
+                <div class="insight-card">
+                  <h2>Market Snapshot</h2>
+                  <div class="skel" aria-hidden="true"></div>
+                  <ul id="market-snapshot"></ul>
+                </div>
+              </section>
+
+              <button class="cta" id="deep-dive-btn">Open full fixture intelligence</button>
+            </div>
+          </aside>
+        </main>
+
+        <!-- Fixture rail (quick selector) -->
+        <div id="fixture-rail" class="fixture-rail" aria-label="Fixtures"></div>
+
+        <!-- Floating upload bar -->
+        <footer class="floating-bar">
+          <div class="floating-bar__content">
+            <div>
+              <h2>BetChecker Upload</h2>
+              <p>Drop a slip screenshot to unlock instant probability audits powered by Odds Genius.</p>
+            </div>
+            <label class="upload-btn" for="bet-upload">
+              <span aria-hidden="true">📤</span> Upload slip
+              <span class="upload-hint">Unlock instant predictions</span>
+              <input type="file" id="bet-upload" accept="image/*,application/pdf" />
+            </label>
           </div>
-        </aside>
-      </main>
+        </footer>
+      </section>
 
-      <!-- Fixture rail (quick selector) -->
-      <div id="fixture-rail" class="fixture-rail" aria-label="Fixtures"></div>
-
-      <!-- Floating upload bar -->
-      <footer class="floating-bar">
-        <div class="floating-bar__content">
-          <div>
-            <h2>BetChecker Upload</h2>
-            <p>Drop a slip screenshot to unlock instant probability audits powered by Odds Genius.</p>
+      <!-- BET CHECKER VIEW -->
+      <section id="view-betchecker" class="view" hidden>
+        <div class="screen">
+          <h1>Bet Checker</h1>
+          <p class="muted">Upload a betting slip (image or PDF). We’ll parse the legs, compute probabilities, and show value vs price.</p>
+          <div class="panel-row">
+            <label class="upload-btn">
+              <span aria-hidden="true">📤</span> Upload slip
+              <input type="file" id="bc-upload" accept="image/*,application/pdf" />
+            </label>
+            <button class="cta" id="bc-history-btn">View recent checks</button>
           </div>
-
-          <label class="upload-btn" for="bet-upload">
-            <span aria-hidden="true">📤</span> Upload slip
-            <span class="upload-hint">Unlock instant predictions</span>
-            <input type="file" id="bet-upload" accept="image/*,application/pdf" />
-          </label>
+          <div id="bc-results" class="insight-card" style="margin-top:16px; min-height:140px;">
+            <h2>Results</h2>
+            <div class="skel" aria-hidden="true"></div>
+            <div id="bc-output" class="mt-2"></div>
+          </div>
         </div>
-      </footer>
-    </div>
+      </section>
 
-    <!-- Mobile bottom-sheet (populated by JS) -->
-    <div id="sheet" class="sheet" aria-hidden="true" aria-label="Fixture details">
-      <div class="sheet__handle" role="button" aria-label="Close"></div>
-      <div class="sheet__content">
-        <h3 id="sheet-title"></h3>
-        <div id="sheet-body"></div>
-      </div>
+      <!-- ACCA BUILDER VIEW -->
+      <section id="view-accabuilder" class="view" hidden>
+        <div class="screen">
+          <h1>Acca Builder</h1>
+          <div class="filters">
+            <select id="ab-league"><option>All Leagues</option></select>
+            <select id="ab-market">
+              <option value="ou25">Over/Under 2.5</option>
+              <option value="btts">Both Teams To Score</option>
+              <option value="ftr">Full Time Result</option>
+            </select>
+            <select id="ab-legs">
+              <option>3 legs</option><option selected>4 legs</option><option>5 legs</option><option>6 legs</option>
+            </select>
+            <button class="cta" id="ab-build">Build acca</button>
+          </div>
+          <div class="grid" id="ab-grid"></div>
+        </div>
+      </section>
+
+      <!-- GPT-5 OG CO-PILOT VIEW -->
+      <section id="view-copilot" class="view" hidden>
+        <div class="screen">
+          <h1>GPT-5 OG Co-Pilot</h1>
+          <div id="cp-thread" class="chat-window">
+            <div class="chat-empty muted">Ask about any fixture, slip, or model insight. Example: “Build a safe 4-fold O2.5 for tonight.”</div>
+          </div>
+          <div class="chat-input">
+            <input id="cp-input" placeholder="Ask Co-Pilot…" />
+            <button id="cp-send" class="cta">Send</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- AUTH: LOGIN -->
+      <section id="view-signin" class="view auth" hidden>
+        <div class="screen auth-card">
+          <h1>Log in</h1>
+          <label>Email <input id="li-email" type="email" placeholder="you@domain.com"></label>
+          <label>Password <input id="li-pass" type="password" placeholder="••••••••"></label>
+          <button class="cta" id="li-submit">Sign in</button>
+          <p class="muted">No account? <a href="#/signup" data-route>Sign up</a></p>
+        </div>
+      </section>
+
+      <!-- AUTH: SIGNUP -->
+      <section id="view-signup" class="view auth" hidden>
+        <div class="screen auth-card">
+          <h1>Create your account</h1>
+          <label>Email <input id="su-email" type="email" placeholder="you@domain.com"></label>
+          <label>Password <input id="su-pass" type="password" placeholder="Choose a strong password"></label>
+          <button class="cta" id="su-submit">Create account</button>
+          <p class="muted">Already have an account? <a href="#/login" data-route>Log in</a></p>
+        </div>
+      </section>
     </div>
 
     <!-- PapaParse (UMD) -->
@@ -153,8 +242,6 @@
     <!-- App entry (ES module) -->
     <script type="module" src="./app.module.js"></script>
 
-    <noscript>
-      <div class="globe-error">JavaScript is required to run this application.</div>
-    </noscript>
+    <noscript><div class="glitched">JavaScript is required to run this application.</div></noscript>
   </body>
 </html>
