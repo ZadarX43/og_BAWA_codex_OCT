@@ -1,26 +1,49 @@
-// ===== Imports (ESM) =====
+// Odds Genius — Globe Fixtures UI (ESM + local vendor imports)
+
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { OrbitControls }   from 'three/examples/jsm/controls/OrbitControls.js';
+import { EffectComposer }  from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass }      from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { ShaderPass }      from 'three/examples/jsm/postprocessing/ShaderPass.js';
+import { FXAAShader }      from 'three/examples/jsm/shaders/FXAAShader.js';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 
-// Postprocessing
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass }     from 'three/examples/jsm/postprocessing/RenderPass.js';
-import { ShaderPass }     from 'three/examples/jsm/postprocessing/ShaderPass.js';
-import { UnrealBloomPass }from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+// PapaParse (UMD) is loaded in index.html
+const Papa = window.Papa;
 
-// Shaders
-import { FXAAShader }               from 'three/examples/jsm/shaders/FXAAShader.js';
-import { CopyShader }               from 'three/examples/jsm/shaders/CopyShader.js';
-import { LuminosityHighPassShader } from 'three/examples/jsm/shaders/LuminosityHighPassShader.js';
+// ----------------------------
+// DOM refs
+// ----------------------------
+const el = {
+  globeWrap:      document.getElementById('globe-container'),
+  insights:       document.getElementById('insights-content'),
+  fixtureTitle:   document.getElementById('fixture-title'),
+  fixtureContext: document.getElementById('fixture-context'),
+  matchList:      document.getElementById('match-intelligence'),
+  watchlist:      document.getElementById('player-watchlist'),
+  market:         document.getElementById('market-snapshot'),
+  deepBtn:        document.getElementById('deep-dive-btn'),
+  homeBadge:      document.getElementById('home-badge'),
+  awayBadge:      document.getElementById('away-badge'),
+  upload:         document.getElementById('bet-upload'),
+  prevBtn:        document.getElementById('nav-prev'),
+  nextBtn:        document.getElementById('nav-next')
+};
 
-// ---------- Robust three-globe loader (ESM preferred, UMD fallback) ----------
+if (!Papa) {
+  throw new Error('PapaParse missing from window');
+}
+
+// ----------------------------
+// three-globe loader (ESM → UMD)
+// ----------------------------
 async function importScriptUMD(src) {
   await new Promise((resolve, reject) => {
     const s = document.createElement('script');
     s.src = src;
     s.async = true;
-    s.onload = () => resolve();
-    s.onerror = (e) => reject(e);
+    s.onload = resolve;
+    s.onerror = reject;
     document.head.appendChild(s);
   });
   if (window.Globe) return window.Globe;
@@ -28,10 +51,10 @@ async function importScriptUMD(src) {
 }
 
 async function loadThreeGlobe() {
-  // 1) Try local ESM copies if you add them to the repo
+  // 1) Local ESM first
   const localEsm = [
-    './vendor/three-globe.module.js', // preferred official filename
-    './vendor/three-globe.mjs'        // alternative if you saved it this way
+    './vendor/three-globe.module.js',
+    './vendor/three-globe.mjs'
   ];
   for (const p of localEsm) {
     try {
@@ -40,10 +63,8 @@ async function loadThreeGlobe() {
       return m.default ?? m;
     } catch {}
   }
-
-  // 2) Try esm.sh (ESM) across a few versions; bundle to avoid deep import churn; externalize three
-  const esmVersions = ['2.30.1', '2.29.3', '2.28.0'];
-  for (const v of esmVersions) {
+  // 2) esm.sh ESM (externalize three)
+  for (const v of ['2.30.1','2.29.3','2.28.0']) {
     const url = `https://esm.sh/three-globe@${v}?bundle&external=three`;
     try {
       const m = await import(url);
@@ -53,14 +74,13 @@ async function loadThreeGlobe() {
       console.warn('[three-globe] esm.sh failed:', url, e);
     }
   }
-
-  // 3) Fall back to UMD (local first, then CDNs)
-  const umdCandidates = [
+  // 3) UMD
+  const umd = [
     './vendor/three-globe.min.js',
     'https://cdn.jsdelivr.net/npm/three-globe@2.29.3/dist/three-globe.min.js',
     'https://unpkg.com/three-globe@2.29.3/dist/three-globe.min.js'
   ];
-  for (const url of umdCandidates) {
+  for (const url of umd) {
     try {
       const ctor = await importScriptUMD(url);
       console.warn('[three-globe] using UMD:', url);
@@ -69,195 +89,49 @@ async function loadThreeGlobe() {
       console.warn('[three-globe] UMD failed:', url, e);
     }
   }
-
-  // If everything failed, show a visible error and abort
-  const gc = document.getElementById('globe-container');
-  if (gc) {
-    gc.innerHTML = `<div class="globe-error">
+  if (el.globeWrap) {
+    el.globeWrap.innerHTML = `<div class="globe-error">
       <strong>three-globe failed to load.</strong><br/>
-      Add a local copy at <code>docs/vendor/three-globe.module.js</code> (ESM)
-      or <code>docs/vendor/three-globe.min.js</code> (UMD).
+      Add a local copy at <code>vendor/three-globe.module.js</code> (ESM)
+      or <code>vendor/three-globe.min.js</code> (UMD).
     </div>`;
   }
   throw new Error('three-globe could not be loaded from any source');
 }
-const ThreeGlobeCtor = await loadThreeGlobe();
 
-// PapaParse is UMD on window
-const Papa = window.Papa;
-
-// ====== DOM refs ======
-const globeContainer = document.getElementById('globe-container');
-const insightsContent = document.getElementById('insights-content');
-const fixtureTitle = document.getElementById('fixture-title');
-const fixtureContext = document.getElementById('fixture-context');
-const matchIntelligenceList = document.getElementById('match-intelligence');
-const playerWatchlist = document.getElementById('player-watchlist');
-const marketSnapshot = document.getElementById('market-snapshot');
-const deepDiveButton = document.getElementById('deep-dive-btn');
-const homeBadge = document.getElementById('home-badge');
-const awayBadge = document.getElementById('away-badge');
-const uploadInput = document.getElementById('bet-upload');
-
-// Quick dependency sanity
-if (!Papa) {
-  globeContainer.innerHTML = `<div class="globe-error">PapaParse failed to load.</div>`;
-  throw new Error('PapaParse missing');
-}
-
-// ====== State ======
+// ----------------------------
+// Globals / tuning
+// ----------------------------
+let ThreeGlobeCtor;
+let globe;
+let renderer, scene, camera, controls, composer, bloomPass;
 let fixtures = [];
-let activeIndex = 0;
+let activeIdx = 0;
+let selectedId = null;
+let pulseRing;
 
-// ====== THREE basics ======
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-renderer.setPixelRatio(window.devicePixelRatio || 1);
-if ('outputColorSpace' in renderer) {
-  renderer.outputColorSpace = THREE.SRGBColorSpace;
-} else if ('outputEncoding' in renderer) {
-  renderer.outputEncoding = THREE.sRGBEncoding;
-}
-renderer.setSize(globeContainer.clientWidth, globeContainer.clientHeight);
+const COLORS = {
+  marker:        '#8CEFE5',
+  markerActive:  '#CFFFFA',
+  ring:          '#9EE7E3'
+};
 
-const scene = new THREE.Scene();
-scene.add(new THREE.AmbientLight(0xffffff, 1.0));
+const SURFACE_EPS   = 0.018;
+const RADIUS_BASE   = 0.22;
+const RADIUS_ACTIVE = 0.65;
+const CAMERA_ALT    = 2.1;
 
-const camera = new THREE.PerspectiveCamera(
-  45,
-  globeContainer.clientWidth / globeContainer.clientHeight,
-  0.1,
-  1000
-);
-camera.position.set(0, 0, 220);
+const BLOOM = { strength: 0.9, radius: 0.6, threshold: 0.75 };
 
-globeContainer.innerHTML = '';
-globeContainer.appendChild(renderer.domElement);
+// ----------------------------
+// Utilities
+// ----------------------------
+const clamp01 = v => Math.max(0, Math.min(1, v));
+const pct = n => `${Math.round(clamp01(n) * 100)}%`;
 
-// Controls
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-controls.dampingFactor = 0.08;
-controls.enablePan = false;
-controls.minDistance = 130;
-controls.maxDistance = 320;
-controls.autoRotate = true;
-controls.autoRotateSpeed = 0.45;
-
-// ====== Globe + atmosphere ======
-const globe = new ThreeGlobeCtor({ waitForGlobeReady: true })
-  .showAtmosphere(true)
-  .atmosphereAltitude(0.22)
-  .atmosphereColor('#66e3d2')
-  .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-dark.jpg')
-  .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
-  .pointLabel((d) => `${d.city || ''} • ${d.home_team} vs ${d.away_team}`) // tooltip
-  .pointRadius((d) => d.__active ? 0.7 : 0.24); // enlarged active marker
-
-scene.add(globe);
-
-globe
-  .pointAltitude((d) => (d.baseAltitude ?? 0.02) + (d.__active ? 0.085 : 0))
-  .pointColor((d) => d.__active ? '#7df9c4' : (d.baseColor ?? '#56cfe1'))
-  .pointsTransitionDuration?.(700);
-
-globe
-  .htmlElementsData([])
-  .htmlElement((d) => createFixtureCallout(d.fixture))
-  .htmlLat((d) => d.lat)
-  .htmlLng((d) => d.lng)
-  .htmlAltitude((d) => d.altitude ?? 0.04);
-
-globe.htmlTransitionDuration?.(320);
-
-// Useful helpers
-function getGlobeRadius() {
-  // find the globe mesh and read its bounding sphere
-  const mesh = globe.children.find(o => o.type === 'Mesh' && o.geometry);
-  if (mesh && mesh.geometry) {
-    mesh.geometry.computeBoundingSphere();
-    return mesh.geometry.boundingSphere.radius || 100;
-  }
-  return 100; // sane default
-}
-
-// Loading overlay until globe textures ready
-const loaderDiv = document.createElement('div');
-loaderDiv.className = 'globe-loading';
-loaderDiv.textContent = 'Loading globe…';
-globeContainer.appendChild(loaderDiv);
-if (typeof globe.onGlobeReady === 'function') {
-  globe.onGlobeReady(() => loaderDiv.remove());
-} else {
-  setTimeout(() => loaderDiv.remove(), 1500);
-}
-
-// ====== Starfield backdrop ======
-const starGeom = new THREE.BufferGeometry();
-const starCount = (window.devicePixelRatio > 2 || window.innerWidth < 480) ? 1200 : 2000;
-const positions = new Float32Array(starCount * 3);
-for (let i = 0; i < starCount; i++) {
-  const r = 520 + Math.random() * 480;
-  const theta = Math.random() * Math.PI * 2;
-  const phi = Math.acos(Math.random() * 2 - 1);
-  positions[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
-  positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-  positions[i * 3 + 2] = r * Math.cos(phi);
-}
-starGeom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-const starMat = new THREE.PointsMaterial({ size: 0.9, transparent: true, opacity: 0.6 });
-const stars = new THREE.Points(starGeom, starMat);
-scene.add(stars);
-
-// ====== Postprocessing: EffectComposer + FXAA + Bloom ======
-const composer = new EffectComposer(renderer);
-const renderPass = new RenderPass(scene, camera);
-composer.addPass(renderPass);
-
-const fxaaPass = new ShaderPass(FXAAShader);
-function updateFXAA() {
-  const d = renderer.domElement;
-  const px = renderer.getPixelRatio?.() ?? (window.devicePixelRatio || 1);
-  fxaaPass.material.uniforms['resolution'].value.set(
-    1 / (d.clientWidth * px),
-    1 / (d.clientHeight * px)
-  );
-}
-updateFXAA();
-composer.addPass(fxaaPass);
-
-// Bloom: lower strength/raise threshold so points/rings don’t square out
-const bloomPass = new UnrealBloomPass(
-  new THREE.Vector2(renderer.domElement.width, renderer.domElement.height),
-  0.35,   // strength
-  0.4,    // radius
-  0.92    // threshold (higher => fewer blown highlights)
-);
-composer.addPass(bloomPass);
-
-// ====== Render loop ======
-function animate() {
-  requestAnimationFrame(animate);
-  controls.update();
-  composer.render();
-}
-animate();
-
-// ====== Helpers ======
-function formatDate(iso) {
-  const date = new Date(iso);
-  return new Intl.DateTimeFormat('en-GB', {
-    weekday: 'short', day: 'numeric', month: 'short',
-    hour: '2-digit', minute: '2-digit', timeZoneName: 'short',
-  }).format(date);
-}
-function toPercent(value, dp = 0) {
-  const v = Number(value);
-  return Number.isFinite(v) ? `${(v * 100).toFixed(dp)}%` : '—';
-}
-function badgeLabel(name) {
-  return (name || '')
-    .split(/\s+/).filter(Boolean)
-    .map((p)=>p[0]).join('').slice(0,3).toUpperCase();
+function clearNode(node) {
+  if (!node) return;
+  while (node.firstChild) node.removeChild(node.firstChild);
 }
 
 function normalizeLogoUrl(url) {
@@ -277,39 +151,113 @@ function normalizeLogoUrl(url) {
 }
 
 const badgeLoadTokens = new WeakMap();
-function setBadge(el, url, fallbackText) {
+function setBadge(elm, url, fallbackText) {
+  if (!elm) return;
   const token = {};
-  badgeLoadTokens.set(el, token);
-  el.classList.remove('has-logo');
+  badgeLoadTokens.set(elm, token);
+  elm.classList.remove('has-logo');
+  elm.innerHTML = '';
 
   const normalizedUrl = normalizeLogoUrl(url);
   if (normalizedUrl) {
-    el.innerHTML = '';
     const img = new Image();
     img.decoding = 'async';
-    img.alt = '';
     img.loading = 'lazy';
+    img.alt = fallbackText || '';
     if (!normalizedUrl.startsWith('data:')) {
       img.crossOrigin = 'anonymous';
       img.referrerPolicy = 'no-referrer';
     }
     img.onload = () => {
-      if (badgeLoadTokens.get(el) !== token) return;
-      el.innerHTML = '';
-      el.appendChild(img);
-      el.classList.add('has-logo');
+      if (badgeLoadTokens.get(elm) !== token) return;
+      elm.innerHTML = '';
+      elm.appendChild(img);
+      elm.classList.add('has-logo');
     };
     img.onerror = () => {
-      if (badgeLoadTokens.get(el) !== token) return;
-      el.innerHTML = '';
-      el.textContent = fallbackText;
-      el.classList.remove('has-logo');
+      if (badgeLoadTokens.get(elm) !== token) return;
+      elm.innerHTML = '';
+      elm.textContent = fallbackText || '';
+      elm.classList.remove('has-logo');
     };
     img.src = normalizedUrl;
   } else {
-    el.innerHTML = '';
-    el.textContent = fallbackText;
+    elm.textContent = fallbackText || '';
   }
+}
+
+function initials(name = '') {
+  const words = name.split(/\s+/).filter(Boolean);
+  if (!words.length) return '';
+  if (words.length === 1) return words[0].slice(0, 3).toUpperCase();
+  return `${(words[0][0] || '').toUpperCase()}${(words[1]?.[0] || '').toUpperCase()}`;
+}
+
+function pick(row, keys) {
+  for (const key of keys) {
+    const val = row?.[key];
+    if (typeof val === 'string' && val.trim()) return val.trim();
+  }
+  return '';
+}
+
+const stadiumLookup = {
+  "Stadio Olimpico (Roma)": { lat: 41.9339, lng: 12.4545 },
+  "Volksparkstadion (Hamburg)": { lat: 53.5870, lng: 9.8980 },
+  "Stadion Feijenoord (Rotterdam)": { lat: 51.8939, lng: 4.5233 },
+  "Parc des Princes (Paris)": { lat: 48.8414, lng: 2.2530 },
+  "Stadio Giuseppe Meazza (Milano)": { lat: 45.4781, lng: 9.1240 },
+  "Etihad Stadium (Manchester)": { lat: 53.4831, lng: -2.2004 },
+  "Stadion Wankdorf (Bern)": { lat: 46.9630, lng: 7.4630 },
+  "Estadi Olímpic Lluís Companys (Barcelona)": { lat: 41.3649, lng: 2.1516 },
+  "Rams Global Stadium (İstanbul)": { lat: 41.1033, lng: 28.9913 },
+  "Estadio Ramón Sánchez Pizjuán (Sevilla)": { lat: 37.3840, lng: -5.9700 },
+  "Allianz Arena (München)": { lat: 48.2188, lng: 11.6247 },
+  "Emirates Stadium (London)": { lat: 51.5550, lng: -0.1080 },
+  "Estadio Santiago Bernabéu (Madrid)": { lat: 40.4531, lng: -3.6883 },
+  "Estádio Municipal de Braga (Braga)": { lat: 41.5610, lng: -8.4270 },
+  "Estádio do Sport Lisboa e Benfica (da Luz) (Lisboa)": { lat: 38.7527, lng: -9.1847 },
+  "Reale Arena (Donostia-San Sebastián)": { lat: 43.3030, lng: -1.9730 }
+};
+
+function processPlayerField(field) {
+  if (!field) return [];
+  return String(field)
+    .split(';')
+    .map(entry => {
+      const [name, detail] = entry.split('|');
+      return { name: (name || '').trim(), detail: (detail || '').trim() };
+    })
+    .filter(p => p.name || p.detail);
+}
+
+function tidyStat(value, dp = 1) {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return '—';
+  return n.toFixed(dp);
+}
+
+function parseNumber(row, keys) {
+  for (const key of keys) {
+    const raw = row?.[key];
+    if (raw === undefined || raw === null || raw === '') continue;
+    const n = Number(raw);
+    if (Number.isFinite(n)) return n;
+  }
+  return undefined;
+}
+
+function formatDate(iso) {
+  if (!iso) return 'Kick-off TBC';
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return 'Kick-off TBC';
+  const date = d.toLocaleDateString(undefined, {
+    weekday: 'short', day: '2-digit', month: 'short'
+  });
+  const time = d.toLocaleTimeString(undefined, {
+    hour: '2-digit', minute: '2-digit', timeZoneName: 'short'
+  });
+  return `${date} · ${time}`;
 }
 
 function formatShortDate(iso) {
@@ -346,7 +294,7 @@ function createFixtureCallout(fixture) {
     const badge = document.createElement('div');
     badge.className = 'fixture-callout__badge';
     badge.title = team || (modifier === 'home' ? 'Home team' : 'Away team');
-    setBadge(badge, logoUrl, badgeLabel(team) || '—');
+    setBadge(badge, logoUrl, initials(team) || '—');
 
     const name = document.createElement('span');
     name.className = 'fixture-callout__team';
@@ -383,7 +331,7 @@ function createFixtureCallout(fixture) {
     : 'Prediction pending';
 
   const confidenceValue = Number.isFinite(fixture.confidence_ftr)
-    ? Math.max(0, Math.min(1, fixture.confidence_ftr))
+    ? clamp01(fixture.confidence_ftr)
     : 0;
   const confidence = document.createElement('div');
   confidence.className = 'fixture-callout__confidence';
@@ -391,7 +339,7 @@ function createFixtureCallout(fixture) {
   dot.className = 'fixture-callout__confidence-dot';
   const confidenceText = document.createElement('span');
   confidenceText.textContent = Number.isFinite(fixture.confidence_ftr)
-    ? `${toPercent(confidenceValue, 0)} confidence edge`
+    ? `${pct(confidenceValue)} confidence edge`
     : 'Confidence pending';
   confidence.append(dot, confidenceText);
 
@@ -406,332 +354,498 @@ function createFixtureCallout(fixture) {
   anchor.appendChild(wrapper);
   return anchor;
 }
-function flyTo(lat, lng, altitude = 1.8, ms = 900) {
-  const pv = globe.pointOfView() || { lat: 0, lng: 0, altitude: 2 };
-  const start = { lat: pv.lat || 0, lng: pv.lng || 0, altitude: pv.altitude || 2 };
-  const end = { lat, lng, altitude };
-  const t0 = performance.now();
-  function tick(now) {
-    const t = Math.min(1, (now - t0) / ms);
-    const ease = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-    const lerp = (a,b)=> a + (b-a)*ease;
-    globe.pointOfView({ lat: lerp(start.lat,end.lat), lng: lerp(start.lng,end.lng), altitude: lerp(start.altitude,end.altitude) });
-    if (t < 1) requestAnimationFrame(tick);
-  }
-  requestAnimationFrame(tick);
-}
 
-// ====== CSV helpers ======
-const num = (v) => { const n = Number(v); return Number.isFinite(n) ? n : undefined; };
-const pickFirstString = (obj, keys) => {
-  for (const key of keys) {
-    const val = obj?.[key];
-    if (typeof val === 'string' && val.trim()) return val.trim();
+// ----------------------------
+// Scene init
+// ----------------------------
+async function init() {
+  ThreeGlobeCtor = await loadThreeGlobe();
+
+  scene = new THREE.Scene();
+
+  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  if ('outputColorSpace' in renderer) {
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+  } else if ('outputEncoding' in renderer) {
+    renderer.outputEncoding = THREE.sRGBEncoding;
   }
-  return '';
-};
-const stadiumLookup = {
-  "Stadio Olimpico (Roma)": { lat: 41.9339, lng: 12.4545 },
-  "Volksparkstadion (Hamburg)": { lat: 53.5870, lng: 9.8980 },
-  "Stadion Feijenoord (Rotterdam)": { lat: 51.8939, lng: 4.5233 },
-  "Parc des Princes (Paris)": { lat: 48.8414, lng: 2.2530 },
-  "Stadio Giuseppe Meazza (Milano)": { lat: 45.4781, lng: 9.1240 },
-  "Etihad Stadium (Manchester)": { lat: 53.4831, lng: -2.2004 },
-  "Stadion Wankdorf (Bern)": { lat: 46.9630, lng: 7.4630 },
-  "Estadi Olímpic Lluís Companys (Barcelona)": { lat: 41.3649, lng: 2.1516 },
-  "Rams Global Stadium (İstanbul)": { lat: 41.1033, lng: 28.9913 },
-  "Estadio Ramón Sánchez Pizjuán (Sevilla)": { lat: 37.3840, lng: -5.9700 },
-  "Allianz Arena (München)": { lat: 48.2188, lng: 11.6247 },
-  "Emirates Stadium (London)": { lat: 51.5550, lng: -0.1080 },
-  "Estadio Santiago Bernabéu (Madrid)": { lat: 40.4531, lng: -3.6883 },
-  "Estádio Municipal de Braga (Braga)": { lat: 41.5610, lng: -8.4270 },
-  "Estádio do Sport Lisboa e Benfica (da Luz) (Lisboa)": { lat: 38.7527, lng: -9.1847 },
-  "Reale Arena (Donostia-San Sebastián)": { lat: 43.3030, lng: -1.9730 }
-};
-function processPlayerField(field) {
-  if (!field) return [];
-  return field.split(';').map((entry) => {
-    const [name, detail] = entry.split('|');
-    return { name: (name || '').trim(), detail: (detail || '').trim() };
+  renderer.setSize(el.globeWrap.clientWidth, el.globeWrap.clientHeight);
+  el.globeWrap.innerHTML = '';
+  el.globeWrap.appendChild(renderer.domElement);
+
+  camera = new THREE.PerspectiveCamera(
+    45,
+    el.globeWrap.clientWidth / el.globeWrap.clientHeight,
+    0.1,
+    5000
+  );
+  camera.position.set(0, 0, 300);
+
+  controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.enablePan = false;
+  controls.enableZoom = true;
+  controls.autoRotate = false;
+  controls.autoRotateSpeed = 0.6;
+  controls.minDistance = 140;
+  controls.maxDistance = 1200;
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+
+  // Starfield backdrop
+  const starGeom = new THREE.BufferGeometry();
+  const starCount = (window.devicePixelRatio > 2 || window.innerWidth < 480) ? 1200 : 2000;
+  const positions = new Float32Array(starCount * 3);
+  for (let i = 0; i < starCount; i++) {
+    const r = 520 + Math.random() * 480;
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(Math.random() * 2 - 1);
+    positions[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
+    positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+    positions[i * 3 + 2] = r * Math.cos(phi);
+  }
+  starGeom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  const starMat = new THREE.PointsMaterial({ size: 0.9, transparent: true, opacity: 0.6 });
+  const stars = new THREE.Points(starGeom, starMat);
+  scene.add(stars);
+
+  // --- Postprocessing ---
+  composer = new EffectComposer(renderer);
+  composer.addPass(new RenderPass(scene, camera));
+
+  const fxaaPass = new ShaderPass(FXAAShader);
+  const setFXAA = () => {
+    const px = renderer.getPixelRatio?.() ?? (window.devicePixelRatio || 1);
+    fxaaPass.material.uniforms['resolution'].value.set(
+      1 / (el.globeWrap.clientWidth  * px),
+      1 / (el.globeWrap.clientHeight * px)
+    );
+  };
+  setFXAA();
+  composer.addPass(fxaaPass);
+
+  bloomPass = new UnrealBloomPass(
+    new THREE.Vector2(el.globeWrap.clientWidth, el.globeWrap.clientHeight),
+    BLOOM.strength,
+    BLOOM.radius,
+    BLOOM.threshold
+  );
+  composer.addPass(bloomPass);
+
+  // Globe
+  globe = new ThreeGlobeCtor({ waitForGlobeReady: true })
+    .showAtmosphere(true)
+    .atmosphereColor('#94f1ea')
+    .atmosphereAltitude(0.2)
+    .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-dark.jpg')
+    .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
+    .pointAltitude(d => (d.baseAltitude ?? SURFACE_EPS) + (d.__active ? 0.08 : 0))
+    .pointRadius(d => (d.__active ? RADIUS_ACTIVE : RADIUS_BASE))
+    .pointColor(d => (d.__active ? COLORS.markerActive : (d.baseColor ?? COLORS.marker)))
+    .pointResolution(12)
+    .pointsMerge(true)
+    .pointLabel(d => `${d.city ? `${d.city} • ` : ''}${d.home_team} vs ${d.away_team}`);
+
+  globe
+    .htmlElementsData([])
+    .htmlElement(d => createFixtureCallout(d.fixture))
+    .htmlLat(d => d.lat)
+    .htmlLng(d => d.lng)
+    .htmlAltitude(d => d.altitude ?? (SURFACE_EPS + 0.08));
+  globe.htmlTransitionDuration?.(320);
+
+  scene.add(globe);
+
+  const loaderDiv = document.createElement('div');
+  loaderDiv.className = 'globe-loading';
+  loaderDiv.textContent = 'Loading globe…';
+  el.globeWrap.appendChild(loaderDiv);
+  if (typeof globe.onGlobeReady === 'function') {
+    globe.onGlobeReady(() => loaderDiv.remove());
+  } else {
+    setTimeout(() => loaderDiv.remove(), 1500);
+  }
+
+  if (typeof globe.onPointHover === 'function') {
+    globe.onPointHover(handleHover);
+  }
+  globe.onPointClick?.(pt => {
+    if (!pt) return;
+    const idx = fixtures.findIndex(f => f.fixture_id === pt.fixture_id);
+    if (idx >= 0) selectIndex(idx, { fly: true });
   });
-}
-function tidyStat(value, dp=1) {
-  const n = Number(value);
-  if (!Number.isFinite(n)) return '—';
-  return n.toFixed(dp);
-}
-function hydrateFixtures(rawFixtures) {
-  return rawFixtures
-    .filter((f) => f.fixture_id) // basic guard
-    .map((f) => {
-      const latCsv = num(f.latitude);
-      const lngCsv = num(f.longitude);
-      const fallback = stadiumLookup[f.stadium?.trim?.() || ""];
-      const latitude  = latCsv ?? fallback?.lat;
-      const longitude = lngCsv ?? fallback?.lng;
 
-      // Normalize strings/numbers
-      const cfRaw = num(f.confidence_ftr);
-      const cf = Number.isFinite(cfRaw) ? cfRaw : undefined;
-      const safeCf = Math.max(0, cf ?? 0);
+  window.addEventListener('resize', () => {
+    const { clientWidth, clientHeight } = el.globeWrap;
+    renderer.setSize(clientWidth, clientHeight);
+    camera.aspect = clientWidth / clientHeight;
+    camera.updateProjectionMatrix();
+    const px = renderer.getPixelRatio?.() ?? (window.devicePixelRatio || 1);
+    fxaaPass.material.uniforms.resolution.value.set(
+      1 / (clientWidth * px),
+      1 / (clientHeight * px)
+    );
+    bloomPass.setSize?.(clientWidth, clientHeight);
+  });
 
-      const homeLogo = normalizeLogoUrl(pickFirstString(f, [
-        'home_logo_url', 'home_badge_url', 'home_logo', 'home_badge', 'homecrest'
-      ]));
-      const awayLogo = normalizeLogoUrl(pickFirstString(f, [
-        'away_logo_url', 'away_badge_url', 'away_logo', 'away_badge', 'awaycrest'
-      ]));
+  window.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') { e.preventDefault(); step(+1); }
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); step(-1); }
+  });
 
-      return {
-        ...f,
-        latitude, longitude,
-        lat: latitude,
-        lng: longitude,
-        xg_home: num(f.xg_home),
-        xg_away: num(f.xg_away),
-        ppg_home: num(f.ppg_home),
-        ppg_away: num(f.ppg_away),
-        confidence_ftr: cf,
-        over25_prob: num(f.over25_prob),
-        btts_prob: num(f.btts_prob),
+  el.prevBtn?.addEventListener('click', () => step(-1));
+  el.nextBtn?.addEventListener('click', () => step(+1));
 
-        stadium: f.stadium?.trim?.() || "",
-        city:    f.city?.trim?.()    || "",
-        country: f.country?.trim?.() || "",
-
-        home_logo_url: homeLogo,
-        away_logo_url: awayLogo,
-
-        key_players_shots:    processPlayerField(f.key_players_shots),
-        key_players_bookings: processPlayerField(f.key_players_bookings),
-        key_players_tackles:  processPlayerField(f.key_players_tackles),
-
-        // keep markers low to the surface; add tiny lift for visibility
-        baseAltitude: 0.018 + safeCf * 0.04,
-        baseColor:
-          safeCf > 0.7 ? '#65e3d3' :
-          safeCf > 0.5 ? '#56cfe1' :
-                     '#ffae8b',
-
-        __active: false // selection state
-      };
-    })
-    .filter((fx) => Number.isFinite(fx.latitude) && Number.isFinite(fx.longitude));
+  await loadFixturesCSV('./data/fixtures.csv');
+  animate();
 }
 
-// ====== Highlight helpers (rings + active marker) ======
-function updateHighlight() {
-  fixtures.forEach((d, i) => { d.__active = i === activeIndex; });
-  // refresh points so the accessor for radius re-evaluates
+function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  composer.render();
+}
+
+// ----------------------------
+// CSV ingest & bind
+// ----------------------------
+async function loadFixturesCSV(url) {
+  try {
+    const response = await fetch(`${url}?v=${Date.now()}`);
+    if (!response.ok) {
+      console.error(`[CSV] HTTP ${response.status} for ${url}`);
+      showCsvError(`Could not load ${url} (HTTP ${response.status}). Make sure the file exists and the path is correct.`);
+      return;
+    }
+    const text = await response.text();
+    const { data, errors } = Papa.parse(text, { header: true, skipEmptyLines: true });
+    if (errors?.length) console.warn('[CSV parse errors]', errors);
+
+    fixtures = (data || [])
+      .map(row => {
+        const lat = parseNumber(row, ['latitude', 'lat', 'Latitude', 'lat_deg']);
+        const lng = parseNumber(row, ['longitude', 'lon', 'lng', 'Longitude', 'long_deg']);
+        const fallback = stadiumLookup[row.stadium?.trim?.() || ''];
+        const latitude = Number.isFinite(lat) ? lat : fallback?.lat;
+        const longitude = Number.isFinite(lng) ? lng : fallback?.lng;
+
+        const confidenceRaw = parseNumber(row, ['confidence_ftr', 'confidence']);
+        const confidence = Number.isFinite(confidenceRaw) ? clamp01(confidenceRaw) : undefined;
+        const safeConfidence = confidence ?? 0;
+
+        const homeLogo = normalizeLogoUrl(pick(row, [
+          'home_badge_url', 'home_logo_url', 'home_logo', 'home_badge', 'homecrest'
+        ]));
+        const awayLogo = normalizeLogoUrl(pick(row, [
+          'away_badge_url', 'away_logo_url', 'away_logo', 'away_badge', 'awaycrest'
+        ]));
+
+        const fixtureId = pick(row, ['fixture_id', 'id'])
+          || `${row.home_team || row.Home || 'home'}-${row.away_team || row.Away || 'away'}-${row.date_utc || row.date || ''}`;
+
+        return {
+          fixture_id: fixtureId,
+          home_team: (row.home_team || row.Home || '').trim(),
+          away_team: (row.away_team || row.Away || '').trim(),
+          home_logo_url: homeLogo,
+          away_logo_url: awayLogo,
+          date_utc: row.date_utc || row.date || '',
+          competition: row.competition || row.league || '',
+          stadium: row.stadium?.trim?.() || '',
+          city: row.city?.trim?.() || '',
+          country: row.country?.trim?.() || row.venue_country?.trim?.() || '',
+          latitude,
+          longitude,
+          lat: latitude,
+          lng: longitude,
+          predicted_winner: row.predicted_winner || '',
+          confidence_ftr: confidence,
+          xg_home: parseNumber(row, ['xg_home']),
+          xg_away: parseNumber(row, ['xg_away']),
+          ppg_home: parseNumber(row, ['ppg_home']),
+          ppg_away: parseNumber(row, ['ppg_away']),
+          over25_prob: parseNumber(row, ['over25_prob']),
+          btts_prob: parseNumber(row, ['btts_prob']),
+          key_players_shots: processPlayerField(row.key_players_shots),
+          key_players_tackles: processPlayerField(row.key_players_tackles),
+          key_players_bookings: processPlayerField(row.key_players_bookings),
+          baseAltitude: SURFACE_EPS + safeConfidence * 0.04,
+          baseColor:
+            safeConfidence > 0.7 ? '#65e3d3' :
+            safeConfidence > 0.5 ? '#56cfe1' :
+            '#ffae8b',
+          __active: false
+        };
+      })
+      .filter(f => Number.isFinite(f.latitude) && Number.isFinite(f.longitude));
+
+    if (!fixtures.length) {
+      showCsvError('No fixtures with valid latitude/longitude found.');
+      return;
+    }
+
+    const many = fixtures.length > 250;
+    globe.pointsMerge?.(many).pointResolution(12);
+    globe
+      .pointLat('latitude')
+      .pointLng('longitude')
+      .pointsData(fixtures);
+
+    createSelectionRing();
+
+    const preferred = fixtures.findIndex(f =>
+      ['England','Scotland','Wales','Northern Ireland','Ireland','Spain','Portugal','France','Germany','Italy','Netherlands','Belgium','Norway','Sweden','Denmark','Switzerland','Austria','Poland','Czech Republic','Slovakia','Slovenia','Croatia','Serbia','Greece','Turkey'].includes(f.country)
+    );
+    activeIdx = preferred !== -1 ? preferred : 0;
+
+    const boot = () => {
+      selectIndex(activeIdx, { fly: true, immediate: true });
+      globe.pointsTransitionDuration?.(650);
+    };
+
+    if (typeof globe.onGlobeReady === 'function') {
+      globe.onGlobeReady(boot);
+    } else {
+      setTimeout(boot, 350);
+    }
+  } catch (err) {
+    console.error('[CSV] Failed to fetch/parse:', err);
+    showCsvError(`Failed to load CSV: ${err?.message || err}`);
+  }
+}
+
+function showCsvError(msg) {
+  el.fixtureTitle.textContent = 'Unable to load fixtures';
+  el.fixtureContext.textContent = msg;
+}
+
+// ----------------------------
+// Selection & nav
+// ----------------------------
+function step(delta) {
+  if (!fixtures.length) return;
+  const next = (activeIdx + delta + fixtures.length) % fixtures.length;
+  selectIndex(next, { fly: true });
+}
+
+function selectIndex(idx, opts = {}) {
+  if (!fixtures.length) return;
+  const { fly = false } = opts;
+  activeIdx = ((idx % fixtures.length) + fixtures.length) % fixtures.length;
+  const fixture = fixtures[activeIdx];
+  selectedId = fixture?.fixture_id || null;
+
+  fixtures.forEach(d => {
+    d.__active = d.fixture_id === selectedId;
+  });
   globe.pointsData([...fixtures]);
 
-  const active = fixtures[activeIndex];
-  if (!active) {
+  if (fixture) {
+    updateHighlight(fixture);
+    renderPanel(fixture);
+    if (fly) flyToFixture(fixture, opts.immediate);
+  } else {
+    updateHighlight(null);
+  }
+}
+
+function flyToFixture(fixture, immediate = false) {
+  if (!fixture || !globe?.pointOfView) return;
+  globe.pointOfView(
+    { lat: fixture.latitude, lng: fixture.longitude, altitude: CAMERA_ALT },
+    immediate ? 0 : 650
+  );
+}
+
+// ----------------------------
+// Selection halo aligned to surface
+// ----------------------------
+function getGlobeRadius() {
+  if (globe?.getGlobeRadius) return globe.getGlobeRadius();
+  try {
+    const m = globe.children?.find(c => c.geometry?.parameters?.radius);
+    return m?.geometry?.parameters?.radius || 100;
+  } catch {
+    return 100;
+  }
+}
+
+function createSelectionRing() {
+  if (pulseRing) return;
+  const R = getGlobeRadius();
+  const inner = R * (1 + SURFACE_EPS + 0.001);
+  const outer = inner + R * 0.007;
+  const ringGeom = new THREE.RingGeometry(inner, outer, 48);
+  const ringMat = new THREE.MeshBasicMaterial({
+    color: new THREE.Color(COLORS.ring),
+    transparent: true,
+    opacity: 0.42,
+    side: THREE.DoubleSide,
+    depthWrite: false
+  });
+  pulseRing = new THREE.Mesh(ringGeom, ringMat);
+  pulseRing.visible = false;
+  scene.add(pulseRing);
+  pulsePulse();
+}
+
+function updateSelectionRing(fixture) {
+  if (!pulseRing) return;
+  if (!fixture) {
+    pulseRing.visible = false;
+    return;
+  }
+  const R = getGlobeRadius();
+  const latRad = THREE.MathUtils.degToRad(90 - fixture.latitude);
+  const lonRad = THREE.MathUtils.degToRad(180 - fixture.longitude);
+  const r = R * (1 + SURFACE_EPS + 0.001);
+  const x = r * Math.sin(latRad) * Math.cos(lonRad);
+  const y = r * Math.cos(latRad);
+  const z = r * Math.sin(latRad) * Math.sin(lonRad);
+  pulseRing.position.set(x, y, z);
+  const outward = new THREE.Vector3(x, y, z).normalize();
+  pulseRing.lookAt(outward.clone().multiplyScalar(R * 2));
+  pulseRing.visible = true;
+}
+
+function pulsePulse() {
+  if (!pulseRing) return;
+  const T = 1800;
+  const t = (performance.now() % T) / T;
+  const intensity = 0.15 + 0.35 * Math.sin(t * Math.PI) ** 2;
+  pulseRing.material.opacity = intensity;
+  requestAnimationFrame(pulsePulse);
+}
+
+function updateHighlight(fixture) {
+  if (!fixture) {
     globe.ringsData([]);
     globe.htmlElementsData([]);
+    updateSelectionRing(null);
     return;
   }
 
-  const altitude = (active.baseAltitude ?? 0.02);
-
-  // a soft pulse ring anchored at ground
+  const altitude = fixture.baseAltitude ?? SURFACE_EPS;
   globe
     .ringsData([
       {
-        lat: active.latitude,
-        lng: active.longitude,
-        maxR: 2.05,           // in degrees
-        propagationSpeed: 1.25, // deg/s
-        repeatPeriod: 1400,  // ms
+        lat: fixture.latitude,
+        lng: fixture.longitude,
+        maxR: 2.05,
+        propagationSpeed: 1.25,
+        repeatPeriod: 1400,
         altitude
       }
     ])
     .ringColor(() => 'rgba(102,227,210,0.85)')
-    .ringAltitude((d) => d.altitude)
-    .ringMaxRadius((d) => d.maxR)
-    .ringPropagationSpeed((d) => d.propagationSpeed)
-    .ringRepeatPeriod((d) => d.repeatPeriod);
+    .ringAltitude(d => d.altitude)
+    .ringMaxRadius(d => d.maxR)
+    .ringPropagationSpeed(d => d.propagationSpeed)
+    .ringRepeatPeriod(d => d.repeatPeriod);
 
   globe.htmlElementsData([
     {
-      lat: active.latitude,
-      lng: active.longitude,
+      lat: fixture.latitude,
+      lng: fixture.longitude,
       altitude: altitude + 0.06,
-      fixture: active
+      fixture
     }
   ]);
+
+  updateSelectionRing(fixture);
 }
 
-// ====== Render a single fixture’s side panel ======
-function renderFixture(index) {
-  const fixture = fixtures[index];
-  if (!fixture) return;
+// ----------------------------
+// Hover feedback (size pop)
+// ----------------------------
+let hoverId = null;
+function handleHover(d) {
+  hoverId = d?.fixture_id || null;
+  globe.pointRadius(pt => {
+    if (pt.fixture_id === selectedId) return RADIUS_ACTIVE;
+    if (hoverId && pt.fixture_id === hoverId) return RADIUS_BASE * 1.6;
+    return RADIUS_BASE;
+  });
+}
 
-  activeIndex = index;
+// ----------------------------
+// Panel
+// ----------------------------
+function renderPanel(f) {
+  if (!f) return;
 
-  // Top name + crests
-  fixtureTitle.innerHTML = `
-    <span class="fixture-title-text">
-      ${fixture.home_team} <span class="vs">vs</span> ${fixture.away_team}
-    </span>`;
+  el.fixtureTitle.textContent = `${f.home_team} vs ${f.away_team}`;
+  const parts = [f.competition, formatDate(f.date_utc), f.stadium && `${f.stadium}${f.city ? ` (${f.city})` : ''}`, f.country]
+    .filter(Boolean);
+  el.fixtureContext.textContent = parts.join(' • ');
 
-  // Club logos (if present)
-  setBadge(homeBadge, fixture.home_logo_url, badgeLabel(fixture.home_team));
-  setBadge(awayBadge, fixture.away_logo_url, badgeLabel(fixture.away_team));
+  setBadge(el.homeBadge, f.home_logo_url, initials(f.home_team));
+  setBadge(el.awayBadge, f.away_logo_url, initials(f.away_team));
 
-  // Context line
-  const parts = [fixture.stadium?.trim?.(), fixture.city?.trim?.(), fixture.country?.trim?.()]
-    .filter(Boolean).join(", ");
-  const ctxTail = parts ? ` • ${parts}` : "";
-  fixtureContext.textContent =
-    `${fixture.competition} • ${formatDate(fixture.date_utc)}${ctxTail}`;
-
-  // Match Intelligence
-  matchIntelligenceList.innerHTML = '';
-  const ft = `${fixture.predicted_winner || '—'} (${toPercent(fixture.confidence_ftr,0)})`;
-  const xg = `${fixture.home_team} ${tidyStat(fixture.xg_home)} vs ${fixture.away_team} ${tidyStat(fixture.xg_away)}`;
-  const pm = `${fixture.home_team} ${tidyStat(fixture.ppg_home)} PPG • ${fixture.away_team} ${tidyStat(fixture.ppg_away)} PPG`;
+  clearNode(el.matchList);
+  const ft = `${f.predicted_winner || '—'}${Number.isFinite(f.confidence_ftr) ? ` (${pct(f.confidence_ftr)})` : ''}`;
+  const xg = `${f.home_team} ${tidyStat(f.xg_home)} vs ${f.away_team} ${tidyStat(f.xg_away)}`;
+  const pm = `${f.home_team} ${tidyStat(f.ppg_home)} PPG • ${f.away_team} ${tidyStat(f.ppg_away)} PPG`;
   [
     { label: 'Full-time prediction', value: ft },
-    { label: 'xG edge',              value: xg },
-    { label: 'Points momentum',      value: pm },
-  ].forEach((item) => {
+    { label: 'xG edge', value: xg },
+    { label: 'Points momentum', value: pm }
+  ].forEach(item => {
     const li = document.createElement('li');
     li.innerHTML = `<strong>${item.label}:</strong> ${item.value}`;
-    matchIntelligenceList.appendChild(li);
+    el.matchList.appendChild(li);
   });
 
-  // Player watchlist
-  playerWatchlist.innerHTML = '';
-  fixture.key_players_shots.forEach((p) => {
+  clearNode(el.watchlist);
+  if (f.key_players_shots.length) {
+    f.key_players_shots.forEach(p => {
+      const li = document.createElement('li');
+      li.innerHTML = `<strong>${p.name}</strong> ${p.detail}`;
+      el.watchlist.appendChild(li);
+    });
+  } else {
     const li = document.createElement('li');
-    li.innerHTML = `<strong>${p.name}</strong> ${p.detail}`;
-    playerWatchlist.appendChild(li);
-  });
+    li.textContent = 'No player shot trends available.';
+    el.watchlist.appendChild(li);
+  }
 
-  // Market snapshot
-  marketSnapshot.innerHTML = '';
+  clearNode(el.market);
   const marketItems = [
-    { label: 'Over 2.5 goals', value: toPercent(fixture.over25_prob,0) },
-    { label: 'Both teams to score', value: toPercent(fixture.btts_prob,0) },
+    { label: 'Over 2.5 goals', value: pct(f.over25_prob ?? 0) },
+    { label: 'Both teams to score', value: pct(f.btts_prob ?? 0) }
   ];
-  fixture.key_players_bookings.forEach((p) => marketItems.push({ label: `${p.name} booking risk`, value: p.detail }));
-  fixture.key_players_tackles.forEach((p) => marketItems.push({ label: `${p.name} tackles`, value: p.detail }));
-  marketItems.forEach((item) => {
+  f.key_players_bookings.forEach(p => marketItems.push({ label: `${p.name} booking risk`, value: p.detail }));
+  f.key_players_tackles.forEach(p => marketItems.push({ label: `${p.name} tackles`, value: p.detail }));
+  marketItems.forEach(item => {
     const li = document.createElement('li');
     li.innerHTML = `<strong>${item.label}:</strong> ${item.value}`;
-    marketSnapshot.appendChild(li);
+    el.market.appendChild(li);
   });
 
-  // Deep dive
-  deepDiveButton.onclick = () => {
-    const summary =
-      `Fixture: ${fixture.home_team} vs ${fixture.away_team}\n` +
-      `Kick-off: ${formatDate(fixture.date_utc)}\n` +
-      `Prediction: ${ft}\n` +
-      `Over 2.5: ${toPercent(fixture.over25_prob)}\n` +
-      `BTTS: ${toPercent(fixture.btts_prob)}`;
-    alert(summary);
-  };
-
-  // Globe camera + highlight
-  updateHighlight();
-  flyTo(fixture.latitude, fixture.longitude, 2.1, 1000);
-}
-
-// ====== Focus fixture with smooth POV (and ensure selection state) ======
-function focusFixture(index) {
-  if (index < 0 || index >= fixtures.length) return;
-  renderFixture(index);
-}
-
-// ====== Load fixtures and boot ======
-const csvUrl = new URL('./data/fixtures.csv', window.location.href);
-csvUrl.searchParams.set('v', Date.now().toString()); // cache-bust
-
-Papa.parse(csvUrl.href, {
-  download: true,
-  header: true,
-  // delimiter: "\t", // uncomment if your snapshot is TSV
-  skipEmptyLines: true,
-  dynamicTyping: false,
-  complete: (results) => {
-    fixtures = hydrateFixtures(results.data || []);
-
-    if (!fixtures.length) {
-      fixtureTitle.textContent = 'No fixtures found';
-      fixtureContext.textContent = 'Check data/fixtures.csv format.';
-      return;
-    }
-
-    // Prefer first EU fixture if present
-    const eu = fixtures.findIndex(f =>
-      ['England','Scotland','Wales','Northern Ireland','Ireland','Spain','Portugal','France','Germany','Italy','Netherlands','Belgium','Norway','Sweden','Denmark','Switzerland','Austria','Poland','Czech Republic','Slovakia','Slovenia','Croatia','Serbia','Greece','Turkey'].includes(f.country)
-    );
-    activeIndex = eu !== -1 ? eu : 0;
-
-    // Bind to globe
-    globe.pointsData(fixtures);
-
-    // Initial panel + focus
-    renderFixture(activeIndex);
-  },
-  error: (error) => {
-    console.error('Failed to load fixtures:', error);
-    fixtureTitle.textContent = 'Unable to load fixtures';
-    fixtureContext.textContent = 'Check the data directory and reload the page.';
-  },
-});
-
-// Click → focus that fixture
-if (typeof globe.onPointClick === 'function') {
-  globe.onPointClick((pt) => {
-    const idx = fixtures.findIndex((f) => f.fixture_id === pt.fixture_id);
-    if (idx !== -1) {
-      focusFixture(idx);
-    }
-  });
-}
-
-// Keyboard: Left/Right to switch fixtures (and keep selection synced)
-window.addEventListener('keydown', (event) => {
-  if (!fixtures.length) return;
-  if (event.key === 'ArrowRight') {
-    activeIndex = (activeIndex + 1) % fixtures.length;
-    focusFixture(activeIndex);
+  if (el.deepBtn) {
+    el.deepBtn.onclick = () => {
+      alert(
+        `Fixture: ${f.home_team} vs ${f.away_team}\n` +
+        `Kick-off: ${formatDate(f.date_utc)}\n` +
+        `Prediction: ${f.predicted_winner || '—'} ${Number.isFinite(f.confidence_ftr) ? `(${pct(f.confidence_ftr)})` : ''}\n` +
+        `Over 2.5: ${pct(f.over25_prob ?? 0)} • BTTS: ${pct(f.btts_prob ?? 0)}`
+      );
+    };
   }
-  if (event.key === 'ArrowLeft') {
-    activeIndex = (activeIndex - 1 + fixtures.length) % fixtures.length;
-    focusFixture(activeIndex);
-  }
-});
+}
 
-// Resize handling
-window.addEventListener('resize', () => {
-  const w = globeContainer.clientWidth, h = globeContainer.clientHeight;
-  camera.aspect = w / h;
-  camera.updateProjectionMatrix();
-  renderer.setSize(w, h);
-  composer.setSize(w, h);
-  updateFXAA();
-});
-
-// Upload placeholder
-uploadInput?.addEventListener('change', (event) => {
-  const file = event.target.files?.[0];
+// ----------------------------
+// Upload (placeholder)
+// ----------------------------
+el.upload?.addEventListener('change', (e) => {
+  const file = e.target.files?.[0];
   if (!file) return;
-  alert(
-    `Bet slip uploaded: ${file.name}\n\nNext steps:\n` +
-    `• OCR the slip to extract selections\n` +
-    `• Run the BetChecker audit pipeline\n` +
-    `• Generate OG Co-Pilot insights`
-  );
-  uploadInput.value = '';
+  alert(`Bet slip uploaded: ${file.name}\n\nNext steps:\n• OCR the slip\n• Run BetChecker\n• Generate OG Co-Pilot insights`);
+  el.upload.value = '';
 });
 
-/* ----------- SMALL CSS hook for crest images ----------- *
-   Add to styles.css (already styled in your theme; included here for clarity)
-
-   .badge img { width: 100%; height: 100%; object-fit: contain; display:block; }
-   .badge.has-logo { background: rgba(255,255,255,.08); }
-*/
+// ----------------------------
+// Boot
+// ----------------------------
+init();
