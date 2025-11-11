@@ -158,16 +158,16 @@ function showToast(type, text, ms=2600){
 function elmEmpty(msg){ const d=document.createElement('div'); d.className='empty'; d.textContent=msg; return d; }
 
 // ==============================
-// Club logo resolver (robust, cached, multi-source)
+// Club logo resolver (ultra-robust, cached, multi-source)
 // ==============================
 
 const LOGO_LOCAL_BASE = '/assets/logos';       // optional local pack (png/svg)
 const LOGO_PROXY_BASE = '/api/logo';           // backend proxy (optional but recommended)
-const LOGO_CACHE_KEY  = 'og_logo_cache_v2';    // bump version to invalidate old cache
+const LOGO_CACHE_KEY  = 'og_logo_cache_v3';    // bump to invalidate old cache
 
 // Optional TheSportsDB fallback (public/demo key "3")
 const USE_SPORTSDB_FALLBACK = true;
-const SPORTSDB_KEY = '3'; // demo key; replace with your key later
+const SPORTSDB_KEY = '3';
 const SPORTSDB_ENDPOINT = `https://www.thesportsdb.com/api/v1/json/${SPORTSDB_KEY}/searchteams.php?t=`;
 
 let LOGO_CACHE = {};
@@ -184,10 +184,10 @@ function slugifyTeam(name='') {
 }
 function isHttpUrl(u){ return /^https?:\/\//i.test(u); }
 function looksSvg(u){ return /\.svg(\?.*)?$/i.test(u); }
+
 function isCommonsFilePath(u){ return /:\/\/commons\.wikimedia\.org\/wiki\/Special:FilePath\//i.test(u); }
 function isCommonsFileTitle(u){ return /:\/\/commons\.wikimedia\.org\/wiki\/File:/i.test(u); }
 
-/** Normalize: trim + protocol upgrades */
 function normalizeBasicUrl(raw) {
   if (!raw) return '';
   let u = String(raw).trim();
@@ -197,34 +197,48 @@ function normalizeBasicUrl(raw) {
   return u;
 }
 
-/** Given a Commons Special:FilePath or File: URL, resolve to a CORS-safe thumbnail URL via the MediaWiki API */
+// --- NEW: Deterministic Commons thumb (no hashing)
+function commonsToThumbPhp(inputUrl) {
+  try {
+    const url = new URL(inputUrl);
+    let file = '';
+    if (isCommonsFilePath(inputUrl)) {
+      // …/wiki/Special:FilePath/Real%20Sociedad%20logo.svg
+      file = decodeURIComponent(url.pathname.split('/').pop() || '');
+    } else if (isCommonsFileTitle(inputUrl)) {
+      // …/wiki/File:Real_Sociedad_logo.svg
+      const last = decodeURIComponent(url.pathname.split('/').pop() || '');
+      file = last.replace(/^File:/i,'');
+    } else {
+      return null;
+    }
+    // Spaces must be underscores for Commons file name
+    file = file.replace(/\s+/g, '_');
+    // thumb.php - width 160, returns PNG for SVG sources
+    const thumb = new URL('https://commons.wikimedia.org/w/thumb.php');
+    thumb.searchParams.set('f', file);
+    thumb.searchParams.set('width', '160');
+    return thumb.toString();
+  } catch { return null; }
+}
+
+// API thumb as secondary (just in case)
 async function resolveViaCommonsApi(inputUrl) {
   try {
     const url = new URL(inputUrl);
     let title = '';
-
     if (isCommonsFilePath(inputUrl)) {
-      // Example: /wiki/Special:FilePath/Real%20Sociedad%20logo.svg
       const last = decodeURIComponent(url.pathname.split('/').pop() || '');
-      // Build a proper File: title
-      title = `File:${last}`;
+      title = `File:${last.replace(/\s+/g,'_')}`;
     } else if (isCommonsFileTitle(inputUrl)) {
-      // Example: /wiki/File:Real_Sociedad_logo.svg
       const last = decodeURIComponent(url.pathname.split('/').pop() || '');
       title = last.startsWith('File:') ? last : `File:${last}`;
-    } else {
-      return null;
-    }
+      title = title.replace(/\s+/g,'_');
+    } else { return null; }
 
-    // MediaWiki API (CORS-friendly with origin=*)
     const params = new URLSearchParams({
-      action: 'query',
-      prop: 'imageinfo',
-      iiprop: 'url',
-      iiurlwidth: '160',      // raster width (png)
-      format: 'json',
-      origin: '*',
-      titles: title
+      action: 'query', prop: 'imageinfo', iiprop: 'url', iiurlwidth: '160',
+      format: 'json', origin: '*', titles: title
     });
     const api = `https://commons.wikimedia.org/w/api.php?${params.toString()}`;
     const r = await fetch(api);
@@ -235,12 +249,9 @@ async function resolveViaCommonsApi(inputUrl) {
     const ii = first?.imageinfo?.[0];
     const thumb = ii?.thumburl || ii?.url;
     return thumb || null;
-  } catch {
-    return null;
-  }
+  } catch { return null; }
 }
 
-/** TheSportsDB fallback: name → crest URL */
 async function resolveViaSportsDb(teamName) {
   if (!USE_SPORTSDB_FALLBACK || !teamName) return null;
   try {
@@ -260,22 +271,18 @@ function localLogoCandidates(team) {
     `${LOGO_LOCAL_BASE}/${slug}.svg`,
   ];
 }
-
 function proxyLogoUrl(team, hintUrl='') {
-  const params = new URLSearchParams();
-  if (team) params.set('team', team);
-  if (hintUrl) params.set('hint', hintUrl);
-  return `${LOGO_PROXY_BASE}?${params.toString()}`;
+  const p = new URLSearchParams();
+  if (team) p.set('team', team);
+  if (hintUrl) p.set('hint', hintUrl);
+  return `${LOGO_PROXY_BASE}?${p.toString()}`;
 }
-
 function cacheOk(team, url) {
   if (team && url) { LOGO_CACHE[team] = url; saveLogoCache(); }
   return url;
 }
 
-// race token so stale loads don't overwrite newer ones
 const badgeTokens = new WeakMap();
-
 async function tryLoad(src, teamName) {
   if (!src) return null;
   return new Promise(resolve => {
@@ -292,8 +299,7 @@ async function tryLoad(src, teamName) {
 
 /**
  * setBadge(el, urlFromCsv, teamName)
- * Robust crest loader:
- * 1) cache → 2) normalize (Commons API if Special:FilePath/File:) → 3) local assets → 4) SportsDB → 5) proxy → 6) initials
+ * Order: cache → Commons thumb.php → Commons API → normalized CSV → local → SportsDB → proxy → initials
  */
 async function setBadge(elm, urlFromCsv, teamName='') {
   if (!elm) return;
@@ -306,7 +312,7 @@ async function setBadge(elm, urlFromCsv, teamName='') {
     elm.classList.remove('has-logo');
   };
 
-  // 1) cache
+  // Cache
   if (teamName && LOGO_CACHE[teamName]) {
     const hit = await tryLoad(LOGO_CACHE[teamName], teamName);
     if (hit && badgeTokens.get(elm) === token) {
@@ -315,51 +321,72 @@ async function setBadge(elm, urlFromCsv, teamName='') {
     }
   }
 
-  // 2) normalize CSV URL
-  let candidate = normalizeBasicUrl(urlFromCsv);
-  let loaded = null;
+  // CSV → normalized
+  const raw = normalizeBasicUrl(urlFromCsv);
+  let loaded = null, finalUrl = null;
 
-  // 2a) Commons API resolution if needed
-  if ((candidate && isCommonsFilePath(candidate)) || (candidate && isCommonsFileTitle(candidate))) {
-    const commonsThumb = await resolveViaCommonsApi(candidate);
-    if (commonsThumb) {
-      loaded = await tryLoad(commonsThumb, teamName);
-      if (loaded) candidate = commonsThumb;
+  // 1) Commons thumb.php, if applicable
+  if (raw && (isCommonsFilePath(raw) || isCommonsFileTitle(raw))) {
+    const thumbPhp = commonsToThumbPhp(raw);
+    if (thumbPhp) {
+      loaded = await tryLoad(thumbPhp, teamName);
+      if (loaded) finalUrl = thumbPhp;
     }
   }
 
-  // 2b) if not Commons or failed, try raw candidate
-  if (!loaded && candidate) loaded = await tryLoad(candidate, teamName);
+  // 2) Commons API (secondary)
+  if (!loaded && raw && (isCommonsFilePath(raw) || isCommonsFileTitle(raw))) {
+    const apiThumb = await resolveViaCommonsApi(raw);
+    if (apiThumb) {
+      loaded = await tryLoad(apiThumb, teamName);
+      if (loaded) finalUrl = apiThumb;
+    }
+  }
 
-  // 3) local assets
+  // 3) Normalized CSV URL straight
+  if (!loaded && raw) {
+    loaded = await tryLoad(raw, teamName);
+    if (loaded) finalUrl = raw;
+  }
+
+  // 4) Local pack
   if (!loaded && teamName) {
     for (const localUrl of localLogoCandidates(teamName)) {
       loaded = await tryLoad(localUrl, teamName);
-      if (loaded) { candidate = localUrl; break; }
+      if (loaded) { finalUrl = localUrl; break; }
     }
   }
 
-  // 4) SportsDB name→badge
+  // 5) TheSportsDB
   if (!loaded && teamName) {
     const sdb = await resolveViaSportsDb(teamName);
-    if (sdb) loaded = await tryLoad(sdb, teamName);
-    if (loaded) candidate = sdb;
+    if (sdb) {
+      loaded = await tryLoad(sdb, teamName);
+      if (loaded) finalUrl = sdb;
+    }
   }
 
-  // 5) proxy
+  // 6) Proxy
   if (!loaded && teamName) {
     const prox = proxyLogoUrl(teamName, urlFromCsv || '');
     loaded = await tryLoad(prox, teamName);
-    if (loaded) candidate = prox;
+    if (loaded) finalUrl = prox;
   }
 
-  // 6) initials fallback
-  if (!loaded) return finishInitials();
+  if (!loaded) {
+    // minimal debug (first failure only)
+    if (!window.__OG_LOGO_FAIL_LOGGED__) {
+      console.warn('[OG] crest failed:', { teamName, urlFromCsv });
+      window.__OG_LOGO_FAIL_LOGGED__ = true;
+    }
+    return finishInitials();
+  }
 
   if (badgeTokens.get(elm) !== token) return;
   elm.innerHTML = ''; elm.appendChild(loaded.img); elm.classList.add('has-logo');
-  cacheOk(teamName, candidate);
+  cacheOk(teamName, finalUrl);
 }
+
 
 
 // ----------------------------
