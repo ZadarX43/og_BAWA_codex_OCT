@@ -134,22 +134,43 @@ function clearNode(node) {
   while (node.firstChild) node.removeChild(node.firstChild);
 }
 
+// Hardened crest loader (http→https, CORS-safe, graceful fallback)
 function setBadge(elm, url, initTxt) {
   if (!elm) return;
   elm.innerHTML = '';
   elm.classList.remove('has-logo');
-  if (url && /^https?:\/\//i.test(url)) {
-    const img = document.createElement('img');
-    img.src = url;
+
+  const normalized = (() => {
+    if (!url) return '';
+    const u = String(url).trim();
+    if (!u) return '';
+    if (u.startsWith('//')) return `https:${u}`;
+    if (/^https?:\/\//i.test(u)) {
+      if (location.protocol === 'https:' && u.startsWith('http://')) return u.replace(/^http:\/\//i, 'https://');
+      return u;
+    }
+    if (u.startsWith('data:') || /^[./]/.test(u)) return u;
+    return '';
+  })();
+
+  if (normalized) {
+    const img = new Image();
     img.alt = initTxt || '';
     img.loading = 'lazy';
     img.decoding = 'async';
+    if (!normalized.startsWith('data:')) {
+      img.crossOrigin = 'anonymous';
+      img.referrerPolicy = 'no-referrer';
+    }
     img.onerror = () => {
       elm.textContent = initTxt || '';
       elm.classList.remove('has-logo');
     };
-    elm.appendChild(img);
-    elm.classList.add('has-logo');
+    img.onload = () => {
+      elm.appendChild(img);
+      elm.classList.add('has-logo');
+    };
+    img.src = normalized;
   } else {
     elm.textContent = initTxt || '';
   }
@@ -177,6 +198,19 @@ function getGlobeRadius() {
     return m?.geometry?.parameters?.radius || 100;
   } catch { return 100; }
 }
+
+// Toasts
+function showToast(type, text, ms=2600){
+  const t = document.createElement('div');
+  t.className = `og-toast ${type}`;
+  t.textContent = text;
+  document.body.appendChild(t);
+  requestAnimationFrame(()=>t.classList.add('show'));
+  setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),250); }, ms);
+}
+
+// Empty helper
+function elmEmpty(msg){ const d=document.createElement('div'); d.className='empty'; d.textContent=msg; return d; }
 
 // ----------------------------
 // Scene init
@@ -279,6 +313,8 @@ async function init() {
   el.prevBtn?.addEventListener('click', () => step(-1));
   el.nextBtn?.addEventListener('click', () => step(+1));
 
+  wireTabs();
+
   await loadFixturesCSV('./data/fixtures.csv');
   animate();
 }
@@ -298,6 +334,7 @@ async function loadFixturesCSV(url) {
     if (!response.ok) {
       console.error(`[CSV] HTTP ${response.status} for ${url}`);
       showCsvError(`Could not load ${url} (HTTP ${response.status}). Make sure the file exists and the path is correct.`);
+      showToast('error', 'Failed to load fixtures');
       return;
     }
     const text = await response.text();
@@ -348,6 +385,9 @@ async function loadFixturesCSV(url) {
 
     if (!fixtures.length) {
       showCsvError('No fixtures with valid latitude/longitude found.');
+      document.querySelector('#match-intelligence')?.replaceChildren(elmEmpty('No fixtures available. Check your CSV headers/path.'));
+      document.querySelector('#player-watchlist')?.replaceChildren(elmEmpty('Player insights will appear here.'));
+      document.querySelector('#market-snapshot')?.replaceChildren(elmEmpty('Market snapshot will appear here.'));
       return;
     }
 
@@ -358,6 +398,8 @@ async function loadFixturesCSV(url) {
       .pointLng('longitude')
       .pointsData(fixtures);
 
+    buildRail(fixtures);
+
     const boot = () => {
       selectIndex(0, { fly: true });
       createSelectionRing();
@@ -365,6 +407,7 @@ async function loadFixturesCSV(url) {
         globe.pointLabel(d => `${d.city ? d.city + ' • ' : ''}${d.home_team} vs ${d.away_team}`);
       }
       globe.pointsTransitionDuration?.(0);
+      showToast('success', `Loaded ${fixtures.length} fixtures`);
     };
 
     globe.onGlobeReady ? globe.onGlobeReady(boot) : setTimeout(boot, 300);
@@ -372,6 +415,7 @@ async function loadFixturesCSV(url) {
   } catch (err) {
     console.error('[CSV] Failed to fetch/parse]:', err);
     showCsvError(`Failed to load CSV: ${err?.message || err}`);
+    showToast('error', 'Failed to load fixtures');
   }
 }
 
@@ -402,9 +446,20 @@ function selectIndex(idx, opts = {}) {
     .pointColor(d => (d.__active ? COLORS.markerActive : COLORS.marker))
     .pointsData(fixtures);
 
+  // brief brighter pulse for the active marker, then reset transition duration
+  globe.pointColor(d => d.__active ? '#D7FFF9' : COLORS.marker)
+       .pointsTransitionDuration?.(200);
+  setTimeout(()=>globe.pointsTransitionDuration?.(0), 220);
+
   if (fly) flyToFixture(f);
   renderPanel(f);
   updateSelectionRing(f);
+  syncRail();
+
+  // outer glow + tiny pop
+  const globeWrap = document.querySelector('.hero__globe');
+  globeWrap?.classList.add('glow','glow-pin');
+  setTimeout(()=>globeWrap?.classList.remove('glow-pin'), 350);
 }
 
 function flyToFixture(f) {
@@ -496,15 +551,17 @@ function renderPanel(f) {
   setBadge(el.homeBadge, f.home_badge_url || f.home_logo_url, initials(f.home_team));
   setBadge(el.awayBadge, f.away_badge_url || f.away_logo_url, initials(f.away_team));
 
+  // Match Intelligence (xG/PPG etc.)
   clearNode(el.matchList);
   const mi = document.createElement('div');
   mi.innerHTML = `
-    <div><strong>Full-time prediction:</strong> ${f.predicted_winner || '–'} ${f.confidence_ftr ? `(${pct(f.confidence_ftr)})` : ''}</div>
-    <div><strong>xG edge:</strong> ${num(f.xg_home)} vs ${num(f.xg_away)}</div>
-    <div><strong>Points momentum:</strong> ${num(f.ppg_home)} PPG • ${num(f.ppg_away)} PPG</div>
+    <div><strong title="Predicted winner">Full-time prediction:</strong> ${f.predicted_winner || '–'} ${f.confidence_ftr ? `(${pct(f.confidence_ftr)})` : ''}</div>
+    <div><strong title="Expected Goals">xG edge:</strong> ${num(f.xg_home)} vs ${num(f.xg_away)}</div>
+    <div><strong title="Points Per Game">Points momentum:</strong> ${num(f.ppg_home)} PPG • ${num(f.ppg_away)} PPG</div>
   `;
   el.matchList.appendChild(mi);
 
+  // Player Watchlist
   clearNode(el.watchlist);
   const shots = parseKV(f.key_players_shots).slice(0, 6);
   if (shots.length) {
@@ -515,18 +572,27 @@ function renderPanel(f) {
       el.watchlist.appendChild(row);
     });
   } else {
-    const empty = document.createElement('div');
-    empty.className = 'row';
-    empty.textContent = 'No player highlights available.';
-    el.watchlist.appendChild(empty);
+    el.watchlist.appendChild(elmEmpty('No player highlights available.'));
   }
 
+  // Market Snapshot
   clearNode(el.market);
   el.market.innerHTML = `
     <div><strong>Over 2.5 goals:</strong> ${pct(f.over25_prob)}</div>
     <div><strong>Both teams to score:</strong> ${pct(f.btts_prob)}</div>
   `;
 
+  // Mobile bottom sheet (show key cards)
+  if (window.innerWidth < 720){
+    const wrap = document.createElement('div');
+    const miClone = el.matchList.cloneNode(true);
+    const mkClone = el.market.cloneNode(true);
+    const plClone = el.watchlist.cloneNode(true);
+    wrap.append(miClone, mkClone, plClone);
+    openSheet(`${f.home_team} vs ${f.away_team}`, wrap);
+  }
+
+  // Deep-dive CTA
   el.deepBtn && (el.deepBtn.onclick = () => {
     alert(
       `Fixture: ${f.home_team} vs ${f.away_team}\n` +
@@ -553,11 +619,62 @@ function parseKV(s='') {
 }
 
 // ----------------------------
+// Fixture rail (quick selector)
+// ----------------------------
+function buildRail(items){
+  const rail = document.getElementById('fixture-rail');
+  if(!rail) return;
+  rail.innerHTML = '';
+  items.forEach((f, i)=>{
+    const it = document.createElement('button');
+    it.className = 'rail-item' + (i===0?' is-active':'');
+    it.innerHTML = `<h4>${f.home_team} vs ${f.away_team}</h4><p>${(f.city||f.country||'')}</p>`;
+    it.addEventListener('click',()=>selectIndex(i,{fly:true}));
+    rail.appendChild(it);
+  });
+}
+function syncRail(){
+  const rail = document.getElementById('fixture-rail'); if(!rail) return;
+  [...rail.children].forEach((c,idx)=>c.classList.toggle('is-active', idx===activeIdx));
+}
+
+// ----------------------------
+// Tabs
+// ----------------------------
+function wireTabs(){
+  document.querySelectorAll('.tab')?.forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.tab').forEach(b=>b.classList.remove('is-active'));
+      document.querySelectorAll('.tabpane').forEach(p=>p.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      const id = btn.dataset.tab;
+      document.getElementById(`tab-${id}`)?.classList.add('is-active');
+    });
+  });
+}
+
+// ----------------------------
+// Bottom sheet (mobile)
+// ----------------------------
+function openSheet(title, node){
+  const s = document.getElementById('sheet'); if(!s) return;
+  const titleEl = s.querySelector('#sheet-title'); if(titleEl) titleEl.textContent = title || '';
+  const body = s.querySelector('#sheet-body'); if(body){ body.innerHTML=''; body.appendChild(node); }
+  s.classList.add('open'); s.setAttribute('aria-hidden','false');
+}
+function closeSheet(){
+  const s = document.getElementById('sheet'); if(!s) return;
+  s.classList.remove('open'); s.setAttribute('aria-hidden','true');
+}
+document.querySelector('.sheet__handle')?.addEventListener('click', closeSheet);
+
+// ----------------------------
 // Upload (placeholder)
 // ----------------------------
 el.upload?.addEventListener('change', (e) => {
   const file = e.target.files?.[0];
   if (!file) return;
+  showToast('info','Uploading slip…');
   alert(`Bet slip uploaded: ${file.name}\n\nNext steps:\n• OCR the slip\n• Run BetChecker\n• Generate OG Co-Pilot insights`);
   el.upload.value = '';
 });
