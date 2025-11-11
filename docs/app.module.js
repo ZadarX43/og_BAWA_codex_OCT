@@ -1,14 +1,5 @@
 // app.module.js
 // Odds Genius — Globe Fixtures UI (ESM + local vendor imports)
-// ------------------------------------------------------------
-// - Correct named imports from three/examples/jsm/* (via import map)
-// - Ground-level geo markers; selected marker halo
-// - Left/right keyboard nav; click-to-select
-// - Robust three-globe loader (local → CDN fallback)
-// - Club logo badges (with initials fallback)
-// - CSV → globe linkage + panel renderer
-// - FXAA/Bloom postprocessing sized to container
-// ------------------------------------------------------------
 
 import * as THREE from 'three';
 import { OrbitControls }   from 'three/examples/jsm/controls/OrbitControls.js';
@@ -36,8 +27,8 @@ const el = {
   homeBadge: document.getElementById('home-badge'),
   awayBadge: document.getElementById('away-badge'),
   upload: document.getElementById('bet-upload'),
-  prevBtn: document.getElementById('nav-prev'), // optional in HTML
-  nextBtn: document.getElementById('nav-next')  // optional in HTML
+  prevBtn: document.getElementById('nav-prev'),
+  nextBtn: document.getElementById('nav-next')
 };
 
 // ----------------------------
@@ -57,7 +48,7 @@ async function importScriptUMD(src) {
 }
 
 async function loadThreeGlobe() {
-  // 1) Local ESM first (place the file in /vendor/)
+  // 1) Local ESM first
   const localEsm = [
     './vendor/three-globe.module.js',
     './vendor/three-globe.mjs'
@@ -69,8 +60,8 @@ async function loadThreeGlobe() {
       return m.default ?? m;
     } catch {}
   }
-  // 2) esm.sh ESM (with three externalized)
-  for (const v of ['2.30.1', '2.29.3', '2.28.0']) {
+  // 2) esm.sh ESM (externalize three)
+  for (const v of ['2.30.1','2.29.3','2.28.0']) {
     const url = `https://esm.sh/three-globe@${v}?bundle&external=three`;
     try {
       const m = await import(url);
@@ -80,7 +71,7 @@ async function loadThreeGlobe() {
       console.warn('[three-globe] esm.sh failed:', url, e);
     }
   }
-  // 3) UMD fallback
+  // 3) UMD
   const umd = [
     './vendor/three-globe.min.js',
     'https://cdn.jsdelivr.net/npm/three-globe@2.29.3/dist/three-globe.min.js',
@@ -117,20 +108,21 @@ let activeIdx = 0;
 let selectedId = null;
 let pulseRing;
 
+// >>> visibility boost
 const COLORS = {
-  marker: '#9DEDE6',
-  markerInactive: '#79E3D7',
-  markerActive: '#BAFFFB',
-  ring: '#9EE7E3'
+  marker:        '#A7FFF6', // brighter base
+  markerInactive:'#8CEFE5',
+  markerActive:  '#CFFFFA', // very bright when active
+  ring:          '#9EE7E3'
 };
 
-// A) Bigger/taller markers (+10%), stronger active
-const SURFACE_EPS   = 0.0066; // was 0.006
-const RADIUS_BASE   = 0.011;  // was 0.008/0.010
-const RADIUS_ACTIVE = 0.030;  // was 0.020/0.022
+const SURFACE_EPS   = 0.009;  // higher off-surface (was ~0.006)
+const RADIUS_BASE   = 0.014;  // larger default pins
+const RADIUS_ACTIVE = 0.040;  // much larger when selected
 const CAMERA_ALT    = 2.0;
 
-const BLOOM = { strength: 0.6, radius: 0.5, threshold: 0.85 };
+const BLOOM = { strength: 0.9, radius: 0.6, threshold: 0.75 }; // stronger glow
+// <<< visibility boost
 
 // ----------------------------
 // Utilities
@@ -170,7 +162,6 @@ function initials(name = '') {
   return (words[0][0] || '').toUpperCase() + (words[1]?.[0]?.toUpperCase() || '');
 }
 
-// Helper: robust globe radius (some builds don’t expose getGlobeRadius)
 function getGlobeRadius() {
   if (globe?.getGlobeRadius) return globe.getGlobeRadius();
   try {
@@ -205,14 +196,14 @@ async function init() {
   controls.enableDamping = true;
   controls.enablePan = false;
   controls.enableZoom = true;
-  controls.autoRotate = false;        // B) stop auto-spin
+  controls.autoRotate = false;  // stop spin
   controls.autoRotateSpeed = 0.6;
   controls.minDistance = 140;
   controls.maxDistance = 1200;
 
   scene.add(new THREE.AmbientLight(0xffffff, 0.9));
 
-  // --- Postprocessing (named imports) ---
+  // --- Postprocessing ---
   composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
 
@@ -235,16 +226,18 @@ async function init() {
   );
   composer.addPass(bloomPass);
 
-  // Globe
+  // Globe (with higher-res pins + merge)
   globe = new ThreeGlobeCtor({ waitForGlobeReady: true })
     .showAtmosphere(true)
     .atmosphereColor('#94f1ea')
     .atmosphereAltitude(0.2)
     .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-dark.jpg')
     .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
-    .pointAltitude(() => SURFACE_EPS) // A) taller ground-level
-    .pointRadius(d => (d.__active ? RADIUS_ACTIVE : RADIUS_BASE)) // A/E
-    .pointColor(d => (d.__active ? COLORS.markerActive : COLORS.marker));
+    .pointAltitude(() => SURFACE_EPS)
+    .pointRadius(d => (d.__active ? RADIUS_ACTIVE : RADIUS_BASE))
+    .pointColor(d => (d.__active ? COLORS.markerActive : COLORS.marker))
+    .pointResolution(12)   // crisper round pins
+    .pointsMerge(true);    // perf for many pins
 
   scene.add(globe);
 
@@ -255,7 +248,7 @@ async function init() {
     console.info('[three-globe] onPointHover() not available in this build — hover enhancement disabled.');
   }
 
-  // D) Click selects a marker/fixture (hard-enable; optional chaining for safety)
+  // Click → select (guarded)
   globe.onPointClick?.((pt) => {
     if (!pt) return;
     const idx = fixtures.findIndex(f => f.fixture_id === pt.fixture_id);
@@ -275,14 +268,14 @@ async function init() {
     bloomPass.setSize?.(clientWidth, clientHeight);
   });
 
-  // keyboard nav
+  // Keyboard nav
   window.addEventListener('keydown', e => {
     if (e.key === 'ArrowRight') { e.preventDefault(); step(+1); }
     if (e.key === 'ArrowLeft')  { e.preventDefault(); step(-1); }
   });
 
-  if (el.prevBtn) el.prevBtn.addEventListener('click', () => step(-1));
-  if (el.nextBtn) el.nextBtn.addEventListener('click', () => step(+1));
+  el.prevBtn?.addEventListener('click', () => step(-1));
+  el.nextBtn?.addEventListener('click', () => step(+1));
 
   // Load fixtures
   await loadFixturesCSV('./data/fixtures.csv');
@@ -304,7 +297,7 @@ async function loadFixturesCSV(url) {
     const response = await fetch(`${url}?v=${Date.now()}`);
     if (!response.ok) {
       console.error(`[CSV] HTTP ${response.status} for ${url}`);
-      showCsvError(`Could not load ${url} (HTTP ${response.status}). Make sure the file exists on GitHub Pages and path is correct.`);
+      showCsvError(`Could not load ${url} (HTTP ${response.status}). Make sure the file exists and the path is correct.`);
       return;
     }
     const text = await response.text();
@@ -344,20 +337,18 @@ async function loadFixturesCSV(url) {
       })
       .filter(f => Number.isFinite(f.latitude) && Number.isFinite(f.longitude));
 
-    console.log(`[CSV] Loaded ${fixtures.length} fixtures`);
     if (!fixtures.length) {
-      showCsvError('No fixtures with valid latitude/longitude found. Check your CSV columns are named "latitude" and "longitude" (or compatible aliases).');
+      showCsvError('No fixtures with valid latitude/longitude found.');
       return;
     }
 
     const many = fixtures.length > 250;
-    globe.pointsMerge(many).pointResolution(many ? 4 : 8);
+    globe.pointsMerge(many).pointResolution(many ? 12 : 12);
     globe
       .pointLat('latitude')
       .pointLng('longitude')
       .pointsData(fixtures);
 
-    // --------- Boot after globe ready (deferred initial selection) ---------
     const boot = () => {
       selectIndex(0, { fly: true });
       createSelectionRing();
@@ -375,8 +366,6 @@ async function loadFixturesCSV(url) {
     } else {
       setTimeout(boot, 300);
     }
-    // ----------------------------------------------------------------------
-
   } catch (err) {
     console.error('[CSV] Failed to fetch/parse:', err);
     showCsvError(`Failed to load CSV: ${err?.message || err}`);
@@ -419,7 +408,7 @@ function flyToFixture(f) {
   if (!f || !globe?.pointOfView) return;
   globe.pointOfView(
     { lat: f.latitude, lng: f.longitude, altitude: CAMERA_ALT },
-    650 // snappier
+    650
   );
 }
 
@@ -434,7 +423,7 @@ function createSelectionRing() {
   const ringMat = new THREE.MeshBasicMaterial({
     color: new THREE.Color(COLORS.ring),
     transparent: true,
-    opacity: 0.42, // E) stronger halo (was 0.3)
+    opacity: 0.42,           // stronger halo
     side: THREE.DoubleSide,
     depthWrite: false
   });
@@ -448,7 +437,6 @@ function updateSelectionRing(f) {
   if (!pulseRing || !f) return;
   const R = getGlobeRadius();
 
-  // Convert lat/lng to Cartesian at the ring altitude
   const latRad = THREE.MathUtils.degToRad(90 - f.latitude);
   const lonRad = THREE.MathUtils.degToRad(180 - f.longitude);
   const r = R * (1 + SURFACE_EPS + 0.001);
@@ -458,7 +446,6 @@ function updateSelectionRing(f) {
   const z = r * Math.sin(latRad) * Math.sin(lonRad);
 
   pulseRing.position.set(x, y, z);
-  // Align ring plane tangent to sphere (normal = radial outward)
   const outward = new THREE.Vector3(x, y, z).normalize();
   const look = outward.clone().multiplyScalar(R * 2);
   pulseRing.lookAt(look);
@@ -467,7 +454,7 @@ function updateSelectionRing(f) {
 
 function pulsePulse() {
   if (!pulseRing) return;
-  const T = 1800; // ms
+  const T = 1800;
   const t = (performance.now() % T) / T;
   const intensity = 0.15 + 0.35 * Math.sin(t * Math.PI) ** 2;
   pulseRing.material.opacity = intensity;
@@ -509,7 +496,6 @@ function renderPanel(f) {
   setBadge(el.homeBadge, f.home_logo_url, initials(f.home_team));
   setBadge(el.awayBadge, f.away_logo_url, initials(f.away_team));
 
-  // Match Intelligence
   clearNode(el.matchList);
   const mi = document.createElement('div');
   mi.innerHTML = `
@@ -519,7 +505,6 @@ function renderPanel(f) {
   `;
   el.matchList.appendChild(mi);
 
-  // Player Watchlist (shots)
   clearNode(el.watchlist);
   const shots = parseKV(f.key_players_shots).slice(0, 6);
   if (shots.length) {
@@ -536,14 +521,12 @@ function renderPanel(f) {
     el.watchlist.appendChild(empty);
   }
 
-  // Market
   clearNode(el.market);
   el.market.innerHTML = `
     <div><strong>Over 2.5 goals:</strong> ${pct(f.over25_prob)}</div>
     <div><strong>Both teams to score:</strong> ${pct(f.btts_prob)}</div>
   `;
 
-  // Deep-dive
   if (el.deepBtn) {
     el.deepBtn.onclick = () => {
       alert(
@@ -562,7 +545,6 @@ function num(x) {
 }
 
 function parseKV(s='') {
-  // "Name|Value;Name2|Value2"
   return s.split(';')
     .map(x => x.trim())
     .filter(Boolean)
