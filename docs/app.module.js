@@ -80,7 +80,7 @@ async function loadThreeGlobe() {
       Check your network or add <code>vendor/three-globe.min.js</code>.
     </div>`;
   }
-  throw new Error('three-globe could not be loaded from any source');
+  return Promise.reject(new Error('three-globe could not be loaded from any source'));
 }
 
 // ----------------------------
@@ -235,13 +235,14 @@ async function init() {
     0.1,
     5000
   );
-  camera.position.set(0, 0, 300);
+  const startRadius = 300;
+  camera.position.set(0, 0, startRadius);
 
   controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
   controls.enablePan = false;
   controls.enableZoom = true;
-  controls.autoRotate = false;  // stop spin
+  controls.autoRotate = false;
   controls.autoRotateSpeed = 0.6;
   controls.minDistance = 140;
   controls.maxDistance = 1200;
@@ -266,7 +267,9 @@ async function init() {
   setFXAA();
   composer.addPass(fxaaPass);
 
-  bloomPass = new UnrealBloomPass(
+  bloomPass = new
+
+  UnrealBloomPass(
     new THREE.Vector2(el.globeWrap.clientWidth, el.globeWrap.clientHeight),
     BLOOM.strength,
     BLOOM.radius,
@@ -457,9 +460,9 @@ function selectIndex(idx, opts = {}) {
   const { fly = false } = opts;
   activeIdx = idx;
   const f = fixtures[activeIdx];
-  selectedId = f?.fixture_id || null;
+  selectedId = f?.re_id || f?.fixture_id || null;
 
-  fixtures.forEach(d => (d.__active = d.fixture_id === selectedId));
+  fixtures.forEach(d => (d.__active = (d.fixture_id || d.re_id) === selectedId));
   globe
     .pointAltitude(() => SURFACE_EPS)
     .pointRadius(d => (d.__active ? RADIUS_ACTIVE : RADIUS_BASE))
@@ -547,10 +550,10 @@ function pulsePulse() {
 // ----------------------------
 let hoverId = null;
 function handleHover(d) {
-  hoverId = d?.fixture_id || null;
+  hoverId = (d && (d.fixture_id || d.re_id)) || null;
   globe.pointRadius(pt => {
-    if (pt.fixture_id === selectedId) return RADIUS_ACTIVE;
-    if (hoverId && pt.fixture_id === hoverId) return RADIUS_BASE * 1.6;
+    if ((pt.fixture_id || pt.re_id) === selectedId) return RADIUS_ACTIVE;
+    if (hoverId && (pt.fixture_id || pt.re_id) === hoverId) return RADIUS_BASE * 1.6;
     return RADIUS_BASE;
   });
 }
@@ -652,7 +655,7 @@ function renderHtmlTabs(){
   htmlTabsData = fixtures.map((f, i) => ({
     lat: f.latitude,
     lng: f.longitude,
-    altitude: SURFACE_EPS + 0.06, // hover above surface & ring
+    altitude: SURFACE_EPS + 0.06,
     idx: i,
     el: null
   }));
@@ -709,9 +712,9 @@ function renderLabelSprites(){
     .labelLng('longitude')
     .labelAltitude(() => SURFACE_EPS + 0.06)
     .labelText(f => `${f.home_team} vs ${f.away_team}`)
-    .labelColor(f => (f.fixture_id === selectedId ? 'rgba(125,249,196,0.95)' : 'rgba(255,255,255,0.85)'))
-    .labelSize(f => (f.fixture_id === selectedId ? 1.4 : 1.0))
-    .labelDotRadius(f => (f.fixture_id === selectedId ? 0.5 : 0.28))
+    .labelColor(f => ((f.fixture_id || f.re_id) === selectedId ? 'rgba(125,249,196,0.95)' : 'rgba(255,255,255,0.85)'))
+    .labelSize(f => ((f.fixture_id || f.re_id) === selectedId ? 1.4 : 1.0))
+    .labelDotRadius(f => ((f.fixture_id || f.re_id) === selectedId ? 0.5 : 0.28))
     .labelResolution(2);
 }
 
@@ -765,20 +768,261 @@ function closeSheet(){
 }
 document.querySelector('.sheet__handle')?.addEventListener('click', closeSheet);
 
-// ----------------------------
-// Upload (placeholder)
-// ----------------------------
-el.upload?.addEventListener('change', (e) => {
-  const file = e.target.files?.[0];
-  if (!file) return;
-  showToast('info','Uploading slip…');
-  alert(`Bet slip uploaded: ${file.name}\n\nNext steps:\n• OCR the slip\n• Run BetChecker\n• Generate OG Co-Pilot insights`);
-  el.upload.value = '';
-});
+// =====================================================
+// API HELPERS + FEATURE PAGES (BetChecker / Acca / Co-Pilot)
+// =====================================================
+const API_BASE = '/api';
 
-// ----------------------------
-// Start
-// ----------------------------
+async function apiJson(url, opts = {}) {
+  const res = await fetch(`${API_BASE}${url}`, {
+    headers: { 'Content-Type': 'application/json', ...(opts.headers||{}) },
+    credentials: 'include',
+    ...opts
+  });
+  if (!res.ok) {
+    const t = await res.text().catch(()=> '');
+    throw new Error(`HTTP ${res.status}: ${t || res.statusText}`);
+  }
+  return res.json();
+}
+
+const API = {
+  scoreSlip: (payload)=> apiJson('/score-slip', { method:'POST', body: JSON.stringify(payload) }),
+  accaSuggest: (q)=>   apiJson(`/acca/suggest?${new URLSearchParams(q)}`),
+  accaOptimise: (p)=>  apiJson('/acca/optimise', { method:'POST', body: JSON.stringify(p) }),
+  copilot: (p)=>       apiJson('/copilot', { method:'POST', body: JSON.stringify(p) })
+};
+
+// ---------- Bet Checker: OCR → parse → score ----------
+async function ocrImageOrPdf(file) {
+  if (!window.Tesseract) throw new Error('OCR engine not loaded');
+  const { data } = await window.Tesseract.recognize(file, 'eng', { logger: () => {} });
+  return (data && data.text) ? data.text : '';
+}
+
+function parseSlipText(text) {
+  const lines = text.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
+  const legs = [];
+  for (let i=0;i<lines.length;i++){
+    const L = lines[i];
+    const m = L.match(/^\s*([A-Za-z0-9 .'\-]+)\s+(?:v|vs\.?|VS)\s+([A-Za-z0-9 .'\-]+)\s*$/i);
+    if (!m) continue;
+    const home = m[1].trim(), away = m[2].trim();
+    for (let j=1;j<=3 && (i+j)<lines.length;j++){
+      const M = lines[i+j];
+      let market=null, pick=null;
+      if (/over\s*2\.?5/i.test(M)) { market='OVER_UNDER_2_5'; pick='OVER'; }
+      else if (/under\s*2\.?5/i.test(M)) { market='OVER_UNDER_2_5'; pick='UNDER'; }
+      else if (/both\s*teams\s*to\s*score|btts/i.test(M)) { market='BTTS'; pick=/no/i.test(M)?'NO':'YES'; }
+      else if (/1x2|home|away|draw|to win|^1$|^2$|^x$/i.test(M)) {
+        market='FTR';
+        if (/draw|x\b/i.test(M)) pick='DRAW';
+        else if (/home|1\b/i.test(M)) pick='HOME';
+        else if (/away|2\b/i.test(M)) pick='AWAY';
+      }
+      if (!market) continue;
+      let price=null;
+      const frac=M.match(/(\d+)\s*\/\s*(\d+)/); const dec=M.match(/(\d+(?:\.\d+)?)/);
+      if (frac) { price = (parseFloat(frac[1])/parseFloat(frac[2]))+1; }
+      else if (dec) { price = parseFloat(dec[1]); }
+      legs.push({ teamHome:home, teamAway:away, market, selection:pick||'—', price, bookmaker:null, kickoffUTC:null });
+      break;
+    }
+  }
+  return { legs, raw: lines.slice(0,60).join('\n') };
+}
+
+async function runBetChecker(file) {
+  const out = document.getElementById('bc-output');
+  if (out) out.innerHTML = '<div class="muted">Reading slip…</div>';
+  try {
+    const text = await ocrImageOrPdf(file);
+    const parsed = parseSlipText(text);
+    if (!parsed.legs.length) {
+      out && (out.innerHTML = `<div class="muted">No legs detected. <br/><pre style="white-space:pre-wrap">${parsed.raw || text.slice(0,400)}…</pre></div>`);
+      return;
+    }
+    out && (out.innerHTML = '<div class="muted">Scoring legs…</div>');
+    const scored = await API.scoreSlip({ legs: parsed.legs });
+    renderBetCheckerResults(scored);
+    showToast('success', `Scored ${scored.legs?.length || parsed.legs.length} leg(s)`);
+  } catch (e) {
+    showToast('error', e.message);
+    out && (out.innerHTML = `<div class="muted">Error: ${e.message}</div>`);
+  }
+}
+
+function renderBetCheckerResults(result) {
+  const container = document.getElementById('bc-results');
+  const out = document.getElementById('bc-output');
+  if (!container || !out) return;
+
+  const legs = result.legs || [];
+  const summary = result.summary || {};
+  const frag = document.createDocumentFragment();
+
+  const sumDiv = document.createElement('div');
+  sumDiv.className = 'insight-card';
+  sumDiv.innerHTML = `
+    <h2>Summary</h2>
+    <div>Implied EV: <strong>${(summary.evPct ?? 0).toFixed(1)}%</strong> &middot; 
+         Prob: <strong>${Math.round((summary.comboProb ?? 0) * 100)}%</strong> &middot; 
+         Est. Payout: <strong>${summary.payout ? '£'+summary.payout.toFixed(2) : '—'}</strong></div>`;
+  frag.appendChild(sumDiv);
+
+  legs.forEach((lg, idx) => {
+    const card = document.createElement('div');
+    card.className = 'insight-card';
+    const edge = lg.edgePct != null ? `${(lg.edgePct).toFixed(1)}%` : '—';
+    const prob = lg.prob != null ? Math.round(lg.prob*100)+'%' : '—';
+    const fair = lg.fair ? lg.fair.toFixed(2) : '—';
+    const price = lg.price ? lg.price.toFixed(2) : '—';
+    card.innerHTML = `
+      <h2>Leg ${idx+1}: ${lg.teamHome} vs ${lg.teamAway}</h2>
+      <ul>
+        <li><strong>Market:</strong> ${lg.market} &middot; <strong>Pick:</strong> ${lg.selection}</li>
+        <li><strong>Model&nbsp;%:</strong> ${prob} &middot; <strong>Fair:</strong> ${fair} &middot; <strong>Book:</strong> ${price} &middot; <strong>Edge:</strong> ${edge}</li>
+        ${lg.warn ? `<li class="muted">⚠ ${lg.warn}</li>` : ''}
+      </ul>`;
+    frag.appendChild(card);
+  });
+
+  out.innerHTML = '';
+  out.appendChild(frag);
+}
+
+// Hook BetChecker page input
+{
+  const bcUpload = document.getElementById('bc-upload');
+  bcUpload?.addEventListener('change', (e)=>{
+    const f = e.target.files?.[0];
+    if (f) runBetChecker(f);
+    e.target.value = '';
+  });
+}
+
+// ---------- Acca Builder: suggest → choose → optimise ----------
+async function runAccaSuggest() {
+  const league = (document.getElementById('ab-league')?.value || 'ALL');
+  const market = (document.getElementById('ab-market')?.value || 'ou25');
+  const legs   = (document.getElementById('ab-legs')?.value || '4').split(' ')[0];
+
+  const grid = document.getElementById('ab-grid');
+  if (!grid) return;
+  grid.innerHTML = '<div class="muted">Loading candidates…</div>';
+
+  try {
+    const data = await API.accaSuggest({
+      market, league, from: new Date().toISOString().slice(0,10), to: '', limit: 50
+    });
+    grid.innerHTML = '';
+    const chosen = [];
+    (data.items || []).slice(0, 30).forEach((m, i)=>{
+      const card = document.createElement('div');
+      card.className = 'insight-card';
+      const prob = Math.round((m.prob||0)*100);
+      const edge = m.edgePct != null ? `${m.edgePct.toFixed(1)}%` : '—';
+      card.innerHTML = `
+        <h2>${m.home} vs ${m.away}</h2>
+        <ul>
+          <li><strong>Market:</strong> ${m.market} &middot; <strong>Pick:</strong> ${m.pick || '—'}</li>
+          <li><strong>%:</strong> ${prob}% &middot; <strong>Fair:</strong> ${m.fair?.toFixed?.(2)??'—'} &middot; <strong>Price:</strong> ${m.price?.toFixed?.(2)??'—'} &middot; <strong>Edge:</strong> ${edge}</li>
+        </ul>
+        <button class="cta" data-add="${i}">Add leg</button>`;
+      grid.appendChild(card);
+    });
+
+    grid.querySelectorAll('button[data-add]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const idx = +btn.getAttribute('data-add');
+        chosen.push(data.items[idx]);
+        btn.textContent = 'Added ✓'; btn.disabled = true;
+        if (chosen.length === Number(legs)) {
+          optimiseAcca(chosen, market);
+        }
+      });
+    });
+  } catch (e) {
+    grid.innerHTML = `<div class="muted">Suggest failed: ${e.message}</div>`;
+  }
+}
+
+async function optimiseAcca(chosen, market) {
+  showToast('info', `Optimising ${chosen.length}-fold…`);
+  const grid = document.getElementById('ab-grid');
+  try {
+    const res = await API.accaOptimise({ market, legs: chosen, strategy: { objective:'max_ev', stake:10 }});
+    grid.innerHTML = '';
+    const sum = document.createElement('div');
+    sum.className = 'insight-card';
+    sum.innerHTML = `<h2>Optimised Acca</h2>
+      <div><strong>EV:</strong> ${(res.evPct??0).toFixed(1)}% &middot; <strong>Prob:</strong> ${Math.round((res.comboProb??0)*100)}% &middot; <strong>Payout:</strong> £${(res.payout??0).toFixed(2)}</div>`;
+    grid.appendChild(sum);
+
+    (res.legs||chosen).forEach((lg, i)=>{
+      const c = document.createElement('div');
+      c.className = 'insight-card';
+      c.innerHTML = `<h2>Leg ${i+1}: ${lg.home} vs ${lg.away}</h2>
+        <div class="muted">${lg.market} • ${lg.pick} • ${Math.round((lg.prob||0)*100)}% @ ${lg.price?.toFixed?.(2)??'—'}</div>`;
+      grid.appendChild(c);
+    });
+    showToast('success', 'Acca ready');
+  } catch (e) {
+    grid.innerHTML = `<div class="muted">Optimiser failed: ${e.message}</div>`;
+  }
+}
+
+document.getElementById('ab-build')?.addEventListener('click', ()=> runAccaSuggest());
+
+// ---------- OG Co-Pilot: chat → /api/copilot ----------
+async function sendCopilotMessage(text) {
+  const payload = { 
+    messages: [
+      { role:'system', content: 'You are OddsGenius Co-Pilot. Be concise, provide bullet reasoning, cite model features where relevant.' },
+      { role:'user', content: text }
+    ],
+    context: (function(){
+      const f = fixtures[active_idx_safe()];
+      if (!f) return null;
+      return { fixture: { home:f.home_team, away:f.away_team, date:f.date_utc, league:f.competition } };
+    })()
+  };
+  return API.copilot(payload);
+}
+
+function active_idx_safe(){ return Math.max(0, Math.min(activeIdx, Math.max(0, fixtures.length-1))); }
+
+function appendChatLine(role, text) {
+  const wrap = document.getElementById('cp-thread');
+  if (!wrap) return;
+  const div = document.createElement('div');
+  div.className = (role === 'user') ? 'user-line' : 'bot-line';
+  div.textContent = (role === 'user' ? 'You: ' : 'OG: ') + text;
+  wrap.appendChild(div);
+  wrap.scrollTop = wrap.scrollHeight;
+}
+
+{
+  const cpInput = document.getElementById('cp-input');
+  const cpSend  = document.getElementById('cp-send');
+  const cpThread= document.getElementById('cp-thread');
+
+  cpSend?.addEventListener('click', async ()=>{
+    const q = (cpInput?.value || '').trim();
+    if (!q) return;
+    appendChatLine('user', q);
+    cpInput.value = '';
+    try {
+      const { messages, error } = await sendCopilotMessage(q);
+      if (error) throw new Error(error);
+      const msg = (messages && messages.find(m=>m.role==='assistant'))?.content || '(no reply)';
+      appendChatLine('assistant', msg);
+    } catch (e) {
+      appendChatLine('assistant', `⚠ ${e.message}`);
+    }
+  });
+}
+
 // ----------------------------
 // Minimal client-side router + UI chrome
 // ----------------------------
@@ -786,7 +1030,7 @@ const ROUTES = {
   '#/':            'view-home',
   '#/home':        'view-home',
   '#/bet-checker': 'view-betchecker',
-  '#/acca-builder':'view-accabuilder',
+  '#/acca-builder':' view-accabuilder',
   '#/copilot':     'view-copilot',
   '#/login':       'view-signin',
   '#/signup':      'view-signup'
@@ -799,14 +1043,11 @@ function showRoute(hash) {
     if (v.id === id) { v.classList.add('is-active'); v.removeAttribute('hidden'); }
     else { v.classList.remove('is-active'); v.setAttribute('hidden',''); }
   });
-  // highlight nav/side links
   document.querySelectorAll('[data-route]').forEach(a=>{
     a.classList.toggle('is-active', a.getAttribute('href') === hash);
     if (a.classList.contains('side-link')) a.classList.toggle('active', a.getAttribute('href') === hash);
   });
-  // close menus on route change
-  closeProfileMenu();
-  closeDrawer();
+  closeProfileMenu(); closeDrawer();
 }
 
 window.addEventListener('hashchange', ()=> showRoute(location.hash));
@@ -843,46 +1084,6 @@ closeBtn?.addEventListener('click', ()=> closeDrawer());
 scrim?.addEventListener('click', ()=> closeDrawer());
 document.querySelectorAll('.side-drawer__nav [data-route]').forEach(a=>{
   a.addEventListener('click', ()=> { closeDrawer(); });
-});
-
-// --- Bet Checker stub actions
-const bcUpload = document.getElementById('bc-upload');
-bcUpload?.addEventListener('change', (e)=>{
-  const f = e.target.files?.[0];
-  if (!f) return;
-  showToast('info', `Parsing ${f.name}…`);
-  const out = document.getElementById('bc-output');
-  if (out) {
-    out.innerHTML = `<div class="muted">✓ File queued. (Hook OCR + parser here.)</div>`;
-  }
-  e.target.value = '';
-});
-
-// --- Acca Builder stub
-document.getElementById('ab-build')?.addEventListener('click', ()=>{
-  const grid = document.getElementById('ab-grid');
-  if (!grid) return;
-  grid.innerHTML = '';
-  for (let i=0;i<4;i++){
-    const card = document.createElement('div');
-    card.className = 'insight-card';
-    card.innerHTML = `<h2>Leg ${i+1}</h2><div class="muted">Top edge candidate will appear here.</div>`;
-    grid.appendChild(card);
-  }
-});
-
-// --- Co-Pilot stub
-const cpInput = document.getElementById('cp-input');
-const cpSend  = document.getElementById('cp-send');
-const cpThread= document.getElementById('cp-thread');
-cpSend?.addEventListener('click', ()=>{
-  const q = (cpInput?.value || '').trim();
-  if (!q) return;
-  const qNode = document.createElement('div'); qNode.className='user-line'; qNode.textContent = `You: ${q}`;
-  cpThread?.appendChild(qNode);
-  const aNode = document.createElement('div'); aNode.className='bot-line'; aNode.textContent = '🤖 (Stub) I will call OG models and return insights here.';
-  cpThread?.appendChild(aNode);
-  cpInput.value=''; cpThread.scrollTop = cpThread.scrollHeight;
 });
 
 init();
