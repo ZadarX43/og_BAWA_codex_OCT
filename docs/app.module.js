@@ -108,6 +108,9 @@ let activeIdx = 0;
 let selectedId = null;
 let pulseRing;
 
+// keep references to HTML tabs for selection toggling
+let htmlTabsData = []; // [{lat,lng,altitude,idx,el}]
+
 // brighter pins by default
 const COLORS = {
   marker:        '#A7FFF6',
@@ -408,6 +411,9 @@ async function loadFixturesCSV(url) {
       .pointLng('longitude')
       .pointsData(fixtures);
 
+    // Build overlay HTML tabs anchored to exact lat/lng
+    renderHtmlTabs();
+
     buildRail(fixtures);
 
     const boot = () => {
@@ -465,6 +471,7 @@ function selectIndex(idx, opts = {}) {
   renderPanel(f);
   updateSelectionRing(f);
   syncRail();
+  updateHtmlTabsSelection();  // << highlight the selected on-globe tab
 
   // outer glow + tiny pop
   const globeWrap = document.querySelector('.hero__globe');
@@ -626,6 +633,63 @@ function parseKV(s='') {
       const [k, v] = pair.split('|');
       return { k: (k||'').trim(), v: (v||'').trim() };
     });
+}
+
+// ----------------------------
+// On-globe HTML fixture tabs
+// ----------------------------
+function renderHtmlTabs(){
+  htmlTabsData = fixtures.map((f, i) => ({
+    lat: f.latitude,
+    lng: f.longitude,
+    altitude: SURFACE_EPS + 0.06, // hover above surface & ring
+    idx: i,
+    el: null
+  }));
+
+  globe
+    .htmlElementsData(htmlTabsData)
+    .htmlLat('lat')
+    .htmlLng('lng')
+    .htmlAltitude('altitude')
+    .htmlElement(d => {
+      // Build a tab node; style via .fixture-tab in CSS
+      const w = document.createElement('div');
+      w.className = 'fixture-tab' + (d.idx === activeIdx ? ' is-selected' : '');
+      w.dataset.idx = String(d.idx);
+      const f = fixtures[d.idx];
+      w.title = `${f.home_team} vs ${f.away_team}${f.city ? ` — ${f.city}` : ''}`;
+      w.style.pointerEvents = 'auto'; // allow clicks without blocking the globe
+
+      const title = document.createElement('div');
+      title.className = 'fixture-tab__title';
+      title.textContent = `${f.home_team} vs ${f.away_team}`;
+
+      const meta = document.createElement('div');
+      meta.className = 'fixture-tab__meta';
+      meta.textContent = f.city || f.country || '';
+
+      w.append(title, meta);
+      w.addEventListener('click', (e) => {
+        e.stopPropagation();
+        selectIndex(d.idx, { fly: true });
+      });
+
+      // keep reference for fast selection toggling
+      d.el = w;
+      return w;
+    });
+
+  globe.htmlTransitionDuration?.(220);
+}
+
+function updateHtmlTabsSelection(){
+  // toggle selected class based on activeIdx
+  if (!htmlTabsData?.length) return;
+  htmlTabsData.forEach(d => {
+    const el = d.el || document.querySelector(`.fixture-tab[data-idx="${d.idx}"]`);
+    if (el) el.classList.toggle('is-selected', d.idx === activeIdx);
+  });
 }
 
 // ----------------------------
