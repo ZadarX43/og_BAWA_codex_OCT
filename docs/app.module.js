@@ -123,55 +123,6 @@ function clearNode(node) {
   while (node.firstChild) node.removeChild(node.firstChild);
 }
 
-// Hardened crest loader (http→https, CORS-safe, graceful fallback)
-function setBadge(elm, url, initTxt) {
-  if (!elm) return;
-  elm.innerHTML = '';
-  elm.classList.remove('has-logo');
-
-  const normalized = (() => {
-    if (!url) return '';
-    const u = String(url).trim();
-    if (!u) return '';
-    if (u.startsWith('//')) return `https:${u}`;
-    if (/^https?:\/\//i.test(u)) {
-      if (location.protocol === 'https:' && u.startsWith('http://')) return u.replace(/^http:\/\//i, 'https://');
-      return u;
-    }
-    if (u.startsWith('data:') || /^[./]/.test(u)) return u;
-    return '';
-  })();
-
-  if (normalized) {
-    const img = new Image();
-    img.alt = initTxt || '';
-    img.loading = 'lazy';
-    img.decoding = 'async';
-    if (!normalized.startsWith('data:')) {
-      img.crossOrigin = 'anonymous';
-      img.referrerPolicy = 'no-referrer';
-    }
-    img.onerror = () => {
-      elm.textContent = initTxt || '';
-      elm.classList.remove('has-logo');
-    };
-    img.onload = () => {
-      elm.appendChild(img);
-      elm.classList.add('has-logo');
-    };
-    img.src = normalized;
-  } else {
-    elm.textContent = initTxt || '';
-  }
-}
-
-function initials(name = '') {
-  const words = name.split(/\s+/).filter(Boolean);
-  if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
-  return (words[0][0] || '').toUpperCase() + (words[1]?.[0]?.toUpperCase() || '');
-}
-
-// pick first non-empty among aliases
 function pick(row, keys) {
   for (const k of keys) {
     const v = (row[k] ?? '').toString().trim();
@@ -188,7 +139,6 @@ function getGlobeRadius() {
   } catch { return 100; }
 }
 
-// Feature detection for HTML label overlay
 function hasHtmlElementsApi(g){
   return g && typeof g.htmlElementsData === 'function' &&
                typeof g.htmlElement      === 'function' &&
@@ -205,8 +155,139 @@ function showToast(type, text, ms=2600){
   setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),250); }, ms);
 }
 
-// Empty helper
 function elmEmpty(msg){ const d=document.createElement('div'); d.className='empty'; d.textContent=msg; return d; }
+
+// ==============================
+// Club logo resolver (robust, cached, multi-source)
+// ==============================
+
+const LOGO_LOCAL_BASE = '/assets/logos';       // optional local pack (png/svg)
+const LOGO_PROXY_BASE = '/api/logo';           // backend proxy (optional but recommended)
+const LOGO_CACHE_KEY  = 'og_logo_cache_v1';
+
+let LOGO_CACHE = {};
+try { LOGO_CACHE = JSON.parse(localStorage.getItem(LOGO_CACHE_KEY) || '{}'); } catch {}
+function saveLogoCache(){ try { localStorage.setItem(LOGO_CACHE_KEY, JSON.stringify(LOGO_CACHE)); } catch {} }
+
+function slugifyTeam(name='') {
+  return String(name)
+    .toLowerCase()
+    .replace(/&/g,'and')
+    .replace(/[\u2019'’]/g,'')
+    .replace(/[^a-z0-9]+/g,'-')
+    .replace(/^-+|-+$/g,'');
+}
+function isHttpUrl(u){ return /^https?:\/\//i.test(u); }
+function looksSvg(u){ return /\.svg(\?.*)?$/i.test(u); }
+function isCommonsFilePath(u){ return /:\/\/commons\.wikimedia\.org\/wiki\/Special:FilePath\//i.test(u); }
+
+/** Normalize URL: trim, fix protocol, and handle Commons FilePath by requesting a 120px raster thumb */
+function normalizeBadgeUrl(raw) {
+  if (!raw) return '';
+  let u = String(raw).trim();
+  if (!u) return '';
+  if (u.startsWith('//')) u = `https:${u}`;
+  if (/^http:\/\//i.test(u) && location.protocol === 'https:') u = u.replace(/^http:\/\//i, 'https://');
+  if (isCommonsFilePath(u)) {
+    if (!/\?/.test(u)) u += '?width=120';
+    else if (!/(\?|&)width=\d+/i.test(u)) u += '&width=120';
+  }
+  return u;
+}
+
+function localLogoCandidates(team) {
+  const slug = slugifyTeam(team);
+  return [
+    `${LOGO_LOCAL_BASE}/${slug}.png`,
+    `${LOGO_LOCAL_BASE}/${slug}.svg`,
+  ];
+}
+
+function proxyLogoUrl(team, hintUrl='') {
+  const params = new URLSearchParams();
+  if (team) params.set('team', team);
+  if (hintUrl) params.set('hint', hintUrl);
+  return `${LOGO_PROXY_BASE}?${params.toString()}`;
+}
+
+function cacheOk(team, url) {
+  if (team && url) { LOGO_CACHE[team] = url; saveLogoCache(); }
+  return url;
+}
+
+// race token so stale loads don't overwrite newer ones
+const badgeTokens = new WeakMap();
+
+/**
+ * setBadge(el, urlFromCsv, teamName)
+ * Robust crest loader with Commons/SVG and CORS fallbacks
+ */
+async function setBadge(elm, urlFromCsv, teamName='') {
+  if (!elm) return;
+  const token = {}; badgeTokens.set(elm, token);
+  elm.classList.remove('has-logo'); elm.innerHTML = '';
+
+  const failToInitials = () => {
+    if (badgeTokens.get(elm) !== token) return;
+    elm.textContent = initials(teamName) || '';
+    elm.classList.remove('has-logo');
+  };
+
+  // 1) cached hit?
+  if (teamName && LOGO_CACHE[teamName]) {
+    const ok = await tryLoad(LOGO_CACHE[teamName]);
+    if (ok) return place(ok, LOGO_CACHE[teamName]);
+  }
+
+  // 2) CSV URL normalized (handles Commons Special:FilePath)
+  let candidate = normalizeBadgeUrl(urlFromCsv);
+  let res = candidate ? await tryLoad(candidate) : null;
+
+  // 3) local assets pack (optional)
+  if (!res) {
+    for (const localUrl of localLogoCandidates(teamName)) {
+      res = await tryLoad(localUrl);
+      if (res) { candidate = localUrl; break; }
+    }
+  }
+
+  // 4) proxy (server-side fetch → serve from same origin)
+  if (!res && teamName) {
+    const prox = proxyLogoUrl(teamName, urlFromCsv || '');
+    res = await tryLoad(prox);
+    if (res) candidate = prox;
+  }
+
+  if (!res) return failToInitials();
+  return place(res, candidate);
+
+  // --- helpers
+  function place(img, finalUrl) {
+    if (badgeTokens.get(elm) !== token) return;
+    elm.innerHTML = ''; elm.appendChild(img); elm.classList.add('has-logo');
+    if (teamName && finalUrl) cacheOk(teamName, finalUrl);
+  }
+
+  function tryLoad(src) {
+    return new Promise(resolve => {
+      const img = new Image();
+      img.alt = teamName || '';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      if (!/^data:/i.test(src)) { img.crossOrigin = 'anonymous'; img.referrerPolicy = 'no-referrer'; }
+      img.onload = () => resolve(img);
+      img.onerror = () => resolve(null);
+      img.src = src;
+    });
+  }
+}
+
+function initials(name = '') {
+  const words = name.split(/\s+/).filter(Boolean);
+  if (!words.length) return '';
+  if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
+  return (words[0][0] || '').toUpperCase() + (words[1]?.[0]?.toUpperCase() || '');
+}
 
 // ----------------------------
 // Scene init
@@ -235,8 +316,7 @@ async function init() {
     0.1,
     5000
   );
-  const startRadius = 300;
-  camera.position.set(0, 0, startRadius);
+  camera.position.set(0, 0, 300);
 
   controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
@@ -267,9 +347,7 @@ async function init() {
   setFXAA();
   composer.addPass(fxaaPass);
 
-  bloomPass = new
-
-  UnrealBloomPass(
+  bloomPass = new UnrealBloomPass(
     new THREE.Vector2(el.globeWrap.clientWidth, el.globeWrap.clientHeight),
     BLOOM.strength,
     BLOOM.radius,
@@ -355,7 +433,6 @@ async function loadFixturesCSV(url) {
         const lat = parseFloat(row.latitude || row.lat || row.Latitude || row.lat_deg);
         const lng = parseFloat(row.longitude || row.lon || row.lng || row.Longitude);
 
-        // --- badge URL mapping with graceful fallback ---
         const home_badge_url = pick(row, [
           'home_badge_url', 'home_logo_url', 'home_logo', 'home_badge'
         ]);
@@ -460,7 +537,7 @@ function selectIndex(idx, opts = {}) {
   const { fly = false } = opts;
   activeIdx = idx;
   const f = fixtures[activeIdx];
-  selectedId = f?.re_id || f?.fixture_id || null;
+  selectedId = f?.fixture_id || f?.re_id || null;
 
   fixtures.forEach(d => (d.__active = (d.fixture_id || d.re_id) === selectedId));
   globe
@@ -577,9 +654,9 @@ function renderPanel(f) {
   el.fixtureContext.textContent = [f.competition, fmt(f.date_utc), f.stadium && `${f.stadium} (${f.city || ''})`, f.country]
     .filter(Boolean).join(' • ');
 
-  // Use new badge fields with fallback to legacy names
-  setBadge(el.homeBadge, f.home_badge_url || f.home_logo_url, initials(f.home_team));
-  setBadge(el.awayBadge, f.away_badge_url || f.away_logo_url, initials(f.away_team));
+  // Use robust badge loader with team names (not initials)
+  setBadge(el.homeBadge, f.home_badge_url || f.home_logo_url, f.home_team);
+  setBadge(el.awayBadge, f.away_badge_url || f.away_logo_url, f.away_team);
 
   // Match Intelligence (xG/PPG etc.)
   clearNode(el.matchList);
@@ -1030,7 +1107,7 @@ const ROUTES = {
   '#/':            'view-home',
   '#/home':        'view-home',
   '#/bet-checker': 'view-betchecker',
-  '#/acca-builder':' view-accabuilder',
+  '#/acca-builder':'view-accabuilder',
   '#/copilot':     'view-copilot',
   '#/login':       'view-signin',
   '#/signup':      'view-signup'
