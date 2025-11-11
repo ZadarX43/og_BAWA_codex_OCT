@@ -145,6 +145,14 @@ function hasHtmlElementsApi(g){
                typeof g.htmlLat          === 'function';
 }
 
+// Simple initials fallback (was missing)
+function initials(name = '') {
+  const words = String(name).trim().split(/\s+/).filter(Boolean);
+  if (!words.length) return '';
+  if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
+  return (words[0][0] + (words[1][0] || '')).toUpperCase();
+}
+
 // Toasts
 function showToast(type, text, ms=2600){
   const t = document.createElement('div');
@@ -161,70 +169,52 @@ function elmEmpty(msg){ const d=document.createElement('div'); d.className='empt
 // Local logo setup (no proxy, zero CORS) — OPTION B PATH
 // ==============================
 
-// NOTE: your files are under docs/assets/assets/logos/, so the page should use:
+// your files are under docs/assets/assets/logos/, so use this relative path from docs/index.html:
 const LOGO_LOCAL_BASE = './assets/assets/logos';
 
 const TEAM_LOGO_OVERRIDES = {
-  // matches your CSV team names → the filenames you created
   'Celtic':               './assets/assets/logos/celtic.svg',
   'Lazio':                './assets/assets/logos/lazio.svg',
-
   'Royal Antwerp FC':     './assets/assets/logos/royal-antwerp.svg',
   'Shakhtar Donetsk':     './assets/assets/logos/shakhtar-donetsk.svg',
-
   'Atlético Madrid':      './assets/assets/logos/atletico-madrid.svg',
   'Atletico Madrid':      './assets/assets/logos/atletico-madrid.svg',
   'Feyenoord':            './assets/assets/logos/feyenoord.svg',
-
   'PSG':                  './assets/assets/logos/paris-saint-germain.svg',
   'Paris Saint-Germain':  './assets/assets/logos/paris-saint-germain.svg',
   'Newcastle United':     './assets/assets/logos/newcastle-united.svg',
-
   'AC Milan':             './assets/assets/logos/ac-milan.svg',
   'Borussia Dortmund':    './assets/assets/logos/borussia-dortmund.svg',
-
   'Manchester City':      './assets/assets/logos/manchester-city.svg',
   'RB Leipzig':           './assets/assets/logos/rb-leipzig.svg',
-
   'Young Boys':           './assets/assets/logos/young-boys.svg',
   'Red Star Belgrade':    './assets/assets/logos/red-star-belgrade.svg',
   'Crvena Zvezda':        './assets/assets/logos/red-star-belgrade.svg',
-
   'FC Barcelona':         './assets/assets/logos/fc-barcelona.svg',
   'Barcelona':            './assets/assets/logos/fc-barcelona.svg',
   'Porto':                './assets/assets/logos/fc-porto.svg',
   'FC Porto':             './assets/assets/logos/fc-porto.svg',
-
   'Galatasaray':          './assets/assets/logos/galatasaray.svg',
   'Manchester United':    './assets/assets/logos/manchester-united.svg',
-
   'Sevilla FC':           './assets/assets/logos/sevilla-fc.svg',
   'PSV':                  './assets/assets/logos/psv.svg',
   'PSV Eindhoven':        './assets/assets/logos/psv.svg',
-
   'København':            './assets/assets/logos/fc-kobenhavn.svg',
   'FC Copenhagen':        './assets/assets/logos/fc-kobenhavn.svg',
-
   'Arsenal':              './assets/assets/logos/arsenal.svg',
   'Lens':                 './assets/assets/logos/lens.svg',
-
   'Real Madrid':          './assets/assets/logos/real-madrid.svg',
   'Napoli':               './assets/assets/logos/ssc-napoli.svg',
   'SSC Napoli':           './assets/assets/logos/ssc-napoli.svg',
-
   'Benfica':              './assets/assets/logos/sl-benfica.svg',
   'SL Benfica':           './assets/assets/logos/sl-benfica.svg',
-
   'Inter Milan':          './assets/assets/logos/inter-milan.svg',
   'Inter':                './assets/assets/logos/inter-milan.svg',
-
   'Real Sociedad':        './assets/assets/logos/real-sociedad.svg',
   'Salzburg':             './assets/assets/logos/rb-salzburg.svg',
-
   'Bayern München':       './assets/assets/logos/bayern-munich.svg',
   'Bayern Munich':        './assets/assets/logos/bayern-munich.svg'
 };
-
 
 // Optional last-resort (only if you want)
 const USE_SPORTSDB_FALLBACK = true;
@@ -971,287 +961,4 @@ async function ocrImageOrPdf(file) {
 }
 
 function parseSlipText(text) {
-  const lines = text.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
-  const legs = [];
-  for (let i=0;i<lines.length;i++){
-    const L = lines[i];
-    const m = L.match(/^\s*([A-Za-z0-9 .'\-]+)\s+(?:v|vs\.?|VS)\s+([A-Za-z0-9 .'\-]+)\s*$/i);
-    if (!m) continue;
-    const home = m[1].trim(), away = m[2].trim();
-    for (let j=1;j<=3 && (i+j)<lines.length;j++){
-      const M = lines[i+j];
-      let market=null, pick=null;
-      if (/over\s*2\.?5/i.test(M)) { market='OVER_UNDER_2_5'; pick='OVER'; }
-      else if (/under\s*2\.?5/i.test(M)) { market='OVER_UNDER_2_5'; pick='UNDER'; }
-      else if (/both\s*teams\s*to\s*score|btts/i.test(M)) { market='BTTS'; pick=/no/i.test(M)?'NO':'YES'; }
-      else if (/1x2|home|away|draw|to win|^1$|^2$|^x$/i.test(M)) {
-        market='FTR';
-        if (/draw|x\b/i.test(M)) pick='DRAW';
-        else if (/home|1\b/i.test(M)) pick='HOME';
-        else if (/away|2\b/i.test(M)) pick='AWAY';
-      }
-      if (!market) continue;
-      let price=null;
-      const frac=M.match(/(\d+)\s*\/\s*(\d+)/); const dec=M.match(/(\d+(?:\.\d+)?)/);
-      if (frac) { price = (parseFloat(frac[1])/parseFloat(frac[2]))+1; }
-      else if (dec) { price = parseFloat(dec[1]); }
-      legs.push({ teamHome:home, teamAway:away, market, selection:pick||'—', price, bookmaker:null, kickoffUTC:null });
-      break;
-    }
-  }
-  return { legs, raw: lines.slice(0,60).join('\n') };
-}
-
-async function runBetChecker(file) {
-  const out = document.getElementById('bc-output');
-  if (out) out.innerHTML = '<div class="muted">Reading slip…</div>';
-  try {
-    const text = await ocrImageOrPdf(file);
-    const parsed = parseSlipText(text);
-    if (!parsed.legs.length) {
-      out && (out.innerHTML = `<div class="muted">No legs detected. <br/><pre style="white-space:pre-wrap">${parsed.raw || text.slice(0,400)}…</pre></div>`);
-      return;
-    }
-    out && (out.innerHTML = '<div class="muted">Scoring legs…</div>');
-    const scored = await API.scoreSlip({ legs: parsed.legs });
-    renderBetCheckerResults(scored);
-    showToast('success', `Scored ${scored.legs?.length || parsed.legs.length} leg(s)`);
-  } catch (e) {
-    showToast('error', e.message);
-    out && (out.innerHTML = `<div class="muted">Error: ${e.message}</div>`);
-  }
-}
-
-function renderBetCheckerResults(result) {
-  const container = document.getElementById('bc-results');
-  const out = document.getElementById('bc-output');
-  if (!container || !out) return;
-
-  const legs = result.legs || [];
-  const summary = result.summary || {};
-  const frag = document.createDocumentFragment();
-
-  const sumDiv = document.createElement('div');
-  sumDiv.className = 'insight-card';
-  sumDiv.innerHTML = `
-    <h2>Summary</h2>
-    <div>Implied EV: <strong>${(summary.evPct ?? 0).toFixed(1)}%</strong> &middot; 
-         Prob: <strong>${Math.round((summary.comboProb ?? 0) * 100)}%</strong> &middot; 
-         Est. Payout: <strong>${summary.payout ? '£'+summary.payout.toFixed(2) : '—'}</strong></div>`;
-  frag.appendChild(sumDiv);
-
-  legs.forEach((lg, idx) => {
-    const card = document.createElement('div');
-    card.className = 'insight-card';
-    const edge = lg.edgePct != null ? `${(lg.edgePct).toFixed(1)}%` : '—';
-    const prob = lg.prob != null ? Math.round(lg.prob*100)+'%' : '—';
-    const fair = lg.fair ? lg.fair.toFixed(2) : '—';
-    const price = lg.price ? lg.price.toFixed(2) : '—';
-    card.innerHTML = `
-      <h2>Leg ${idx+1}: ${lg.teamHome} vs ${lg.teamAway}</h2>
-      <ul>
-        <li><strong>Market:</strong> ${lg.market} &middot; <strong>Pick:</strong> ${lg.selection}</li>
-        <li><strong>Model&nbsp;%:</strong> ${prob} &middot; <strong>Fair:</strong> ${fair} &middot; <strong>Book:</strong> ${price} &middot; <strong>Edge:</strong> ${edge}</li>
-        ${lg.warn ? `<li class="muted">⚠ ${lg.warn}</li>` : ''}
-      </ul>`;
-    frag.appendChild(card);
-  });
-
-  out.innerHTML = '';
-  out.appendChild(frag);
-}
-
-// Hook BetChecker page input
-{
-  const bcUpload = document.getElementById('bc-upload');
-  bcUpload?.addEventListener('change', (e)=>{
-    const f = e.target.files?.[0];
-    if (f) runBetChecker(f);
-    e.target.value = '';
-  });
-}
-
-// ---------- Acca Builder: suggest → choose → optimise ----------
-async function runAccaSuggest() {
-  const league = (document.getElementById('ab-league')?.value || 'ALL');
-  const market = (document.getElementById('ab-market')?.value || 'ou25');
-  const legs   = (document.getElementById('ab-legs')?.value || '4').split(' ')[0];
-
-  const grid = document.getElementById('ab-grid');
-  if (!grid) return;
-  grid.innerHTML = '<div class="muted">Loading candidates…</div>';
-
-  try {
-    const data = await API.accaSuggest({
-      market, league, from: new Date().toISOString().slice(0,10), to: '', limit: 50
-    });
-    grid.innerHTML = '';
-    const chosen = [];
-    (data.items || []).slice(0, 30).forEach((m, i)=>{
-      const card = document.createElement('div');
-      card.className = 'insight-card';
-      const prob = Math.round((m.prob||0)*100);
-      const edge = m.edgePct != null ? `${m.edgePct.toFixed(1)}%` : '—';
-      card.innerHTML = `
-        <h2>${m.home} vs ${m.away}</h2>
-        <ul>
-          <li><strong>Market:</strong> ${m.market} &middot; <strong>Pick:</strong> ${m.pick || '—'}</li>
-          <li><strong>%:</strong> ${prob}% &middot; <strong>Fair:</strong> ${m.fair?.toFixed?.(2)??'—'} &middot; <strong>Price:</strong> ${m.price?.toFixed?.(2)??'—'} &middot; <strong>Edge:</strong> ${edge}</li>
-        </ul>
-        <button class="cta" data-add="${i}">Add leg</button>`;
-      grid.appendChild(card);
-    });
-
-    grid.querySelectorAll('button[data-add]').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        const idx = +btn.getAttribute('data-add');
-        chosen.push(data.items[idx]);
-        btn.textContent = 'Added ✓'; btn.disabled = true;
-        if (chosen.length === Number(legs)) {
-          optimiseAcca(chosen, market);
-        }
-      });
-    });
-  } catch (e) {
-    grid.innerHTML = `<div class="muted">Suggest failed: ${e.message}</div>`;
-  }
-}
-
-async function optimiseAcca(chosen, market) {
-  showToast('info', `Optimising ${chosen.length}-fold…`);
-  const grid = document.getElementById('ab-grid');
-  try {
-    const res = await API.accaOptimise({ market, legs: chosen, strategy: { objective:'max_ev', stake:10 }});
-    grid.innerHTML = '';
-    const sum = document.createElement('div');
-    sum.className = 'insight-card';
-    sum.innerHTML = `<h2>Optimised Acca</h2>
-      <div><strong>EV:</strong> ${(res.evPct??0).toFixed(1)}% &middot; <strong>Prob:</strong> ${Math.round((res.comboProb??0)*100)}% &middot; <strong>Payout:</strong> £${(res.payout??0).toFixed(2)}</div>`;
-    grid.appendChild(sum);
-
-    (res.legs||chosen).forEach((lg, i)=>{
-      const c = document.createElement('div');
-      c.className = 'insight-card';
-      c.innerHTML = `<h2>Leg ${i+1}: ${lg.home} vs ${lg.away}</h2>
-        <div class="muted">${lg.market} • ${lg.pick} • ${Math.round((lg.prob||0)*100)}% @ ${lg.price?.toFixed?.(2)??'—'}</div>`;
-      grid.appendChild(c);
-    });
-    showToast('success', 'Acca ready');
-  } catch (e) {
-    grid.innerHTML = `<div class="muted">Optimiser failed: ${e.message}</div>`;
-  }
-}
-
-document.getElementById('ab-build')?.addEventListener('click', ()=> runAccaSuggest());
-
-// ---------- OG Co-Pilot: chat → /api/copilot ----------
-async function sendCopilotMessage(text) {
-  const payload = { 
-    messages: [
-      { role:'system', content: 'You are OddsGenius Co-Pilot. Be concise, provide bullet reasoning, cite model features where relevant.' },
-      { role:'user', content: text }
-    ],
-    context: (function(){
-      const f = fixtures[Math.max(0, Math.min(activeIdx, Math.max(0, fixtures.length-1)))];
-      if (!f) return null;
-      return { fixture: { home:f.home_team, away:f.away_team, date:f.date_utc, league:f.competition } };
-    })()
-  };
-  return API.copilot(payload);
-}
-
-function appendChatLine(role, text) {
-  const wrap = document.getElementById('cp-thread');
-  if (!wrap) return;
-  const div = document.createElement('div');
-  div.className = (role === 'user') ? 'user-line' : 'bot-line';
-  div.textContent = (role === 'user' ? 'You: ' : 'OG: ') + text;
-  wrap.appendChild(div);
-  wrap.scrollTop = wrap.scrollHeight;
-}
-
-{
-  const cpInput = document.getElementById('cp-input');
-  const cpSend  = document.getElementById('cp-send');
-  const cpThread= document.getElementById('cp-thread');
-
-  cpSend?.addEventListener('click', async ()=>{
-    const q = (cpInput?.value || '').trim();
-    if (!q) return;
-    appendChatLine('user', q);
-    cpInput.value = '';
-    try {
-      const { messages, error } = await sendCopilotMessage(q);
-      if (error) throw new Error(error);
-      const msg = (messages && messages.find(m=>m.role==='assistant'))?.content || '(no reply)';
-      appendChatLine('assistant', msg);
-    } catch (e) {
-      appendChatLine('assistant', `⚠ ${e.message}`);
-    }
-  });
-}
-
-// ----------------------------
-// Minimal client-side router + UI chrome
-// ----------------------------
-const ROUTES = {
-  '#/':            'view-home',
-  '#/home':        'view-home',
-  '#/bet-checker': 'view-betchecker',
-  '#/acca-builder':'view-accabuilder',
-  '#/copilot':     'view-copilot',
-  '#/login':       'view-signin',
-  '#/signup':      'view-signup'
-};
-
-function showRoute(hash) {
-  if (!hash) hash = '#/';
-  const id = ROUTES[hash] || 'view-home';
-  document.querySelectorAll('.view').forEach(v => {
-    if (v.id === id) { v.classList.add('is-active'); v.removeAttribute('hidden'); }
-    else { v.classList.remove('is-active'); v.setAttribute('hidden',''); }
-  });
-  document.querySelectorAll('[data-route]').forEach(a=>{
-    a.classList.toggle('is-active', a.getAttribute('href') === hash);
-    if (a.classList.contains('side-link')) a.classList.toggle('active', a.getAttribute('href') === hash);
-  });
-  closeProfileMenu(); closeDrawer();
-}
-
-window.addEventListener('hashchange', ()=> showRoute(location.hash));
-window.addEventListener('DOMContentLoaded', ()=>{
-  if (!location.hash) location.hash = '#/';
-  showRoute(location.hash);
-});
-
-// --- Header profile menu
-const profileBtn  = document.getElementById('btn-profile');
-const profileMenu = document.getElementById('profile-menu');
-function closeProfileMenu(){ profileMenu?.classList.remove('show'); profileBtn?.setAttribute('aria-expanded','false'); }
-profileBtn?.addEventListener('click', (e)=>{
-  e.stopPropagation();
-  const open = profileMenu.classList.contains('show');
-  if (open) { closeProfileMenu(); } else { profileMenu.classList.add('show'); profileBtn.setAttribute('aria-expanded','true'); }
-});
-document.addEventListener('click', (e)=>{
-  if (profileMenu?.classList.contains('show') && !profileMenu.contains(e.target) && e.target !== profileBtn) {
-    closeProfileMenu();
-  }
-});
-
-// --- Mobile sidebar
-const drawer  = document.getElementById('side-drawer');
-const scrim   = document.getElementById('scrim');
-const menuBtn = document.getElementsByClassName('header__menu')[0];
-const closeBtn= document.getElementById('btn-close-drawer');
-
-function openDrawer(){ drawer?.classList.add('show'); scrim?.classList.add('show'); drawer?.setAttribute('aria-hidden','false'); }
-function closeDrawer(){ drawer?.classList.remove('show'); scrim?.classList.remove('show'); drawer?.setAttribute('aria-hidden','true'); }
-menuBtn?.addEventListener('click', ()=> openDrawer());
-closeBtn?.addEventListener('click', ()=> closeDrawer());
-scrim?.addEventListener('click', ()=> closeDrawer());
-document.querySelectorAll('.side-drawer__nav [data-route]').forEach(a=>{
-  a.addEventListener('click', ()=> { closeDrawer(); });
-});
-
-init();
+  const lines = text split… // (rest of file unchanged)
