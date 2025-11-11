@@ -226,6 +226,13 @@ async function init() {
   el.globeWrap.innerHTML = '';
   el.globeWrap.appendChild(renderer.domElement);
 
+  // >>> Brighten output: color space & tone mapping
+  if ('outputColorSpace' in renderer) renderer.outputColorSpace = THREE.SRGBColorSpace;
+  if ('toneMapping' in renderer) {
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.15;
+  }
+
   camera = new THREE.PerspectiveCamera(
     45,
     el.globeWrap.clientWidth / el.globeWrap.clientHeight,
@@ -243,7 +250,10 @@ async function init() {
   controls.minDistance = 140;
   controls.maxDistance = 1200;
 
+  // Ambient + Hemisphere to lift the dark side
   scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+  const hemi = new THREE.HemisphereLight(0xddeeff, 0x223344, 0.6);
+  scene.add(hemi);
 
   // --- Postprocessing ---
   composer = new EffectComposer(renderer);
@@ -268,12 +278,12 @@ async function init() {
   );
   composer.addPass(bloomPass);
 
-  // Globe
+  // Globe (lighter texture + brighter atmosphere)
   globe = new ThreeGlobeCtor({ waitForGlobeReady: true })
     .showAtmosphere(true)
-    .atmosphereColor('#94f1ea')
-    .atmosphereAltitude(0.2)
-    .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-dark.jpg')
+    .atmosphereColor('#9ef9e3')
+    .atmosphereAltitude(0.28)
+    .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
     .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
     .pointAltitude(() => SURFACE_EPS)
     .pointRadius(d => (d.__active ? RADIUS_ACTIVE : RADIUS_BASE))
