@@ -2,33 +2,40 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Odds Genius</title>
 
+    <!-- Fonts & main stylesheet -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="./styles.css" />
 
-    <!-- Import map: map bare specifiers to vendored modules -->
+    <!-- If you need import-map support on older Safari, host the shim locally and uncomment:
+    <script async src="./vendor/es-module-shims.min.js"></script>
+    -->
+
+    <!-- Import map: map bare specifiers to local vendored modules -->
     <script type="importmap">
-    {
-      "imports": {
-        "three": "./vendor/three.module.js",
-        "three/examples/jsm/": "./vendor/examples/jsm/"
+      {
+        "imports": {
+          "three": "./vendor/three.module.js",
+          "three/examples/jsm/": "./vendor/examples/jsm/"
+        }
       }
-    }
     </script>
 
-    <!-- (Optional) Preload a couple of hot modules for faster start -->
+    <!-- (Optional) Preload modules for faster startup -->
     <link rel="modulepreload" href="./vendor/three.module.js" />
+    <link rel="modulepreload" href="./vendor/examples/jsm/controls/OrbitControls.js" />
+    <link rel="modulepreload" href="./vendor/examples/jsm/postprocessing/EffectComposer.js" />
+    <link rel="modulepreload" href="./vendor/examples/jsm/postprocessing/RenderPass.js" />
+    <link rel="modulepreload" href="./vendor/examples/jsm/postprocessing/ShaderPass.js" />
+    <link rel="modulepreload" href="./vendor/examples/jsm/shaders/FXAAShader.js" />
+    <link rel="modulepreload" href="./vendor/examples/jsm/postprocessing/UnrealBloomPass.js" />
     <link rel="modulepreload" href="./app.module.js" />
 
     <style>
-      /* simple loader so we see progress */
       #globe-container{
         position:relative;height:70vh;border-radius:14px;overflow:hidden;
         background:radial-gradient(120% 120% at 50% 50%, #0d0f13 0%, #06070a 100%);
@@ -37,14 +44,17 @@
       .globe-error{padding:1rem;color:#ffb4a9}
     </style>
   </head>
+
   <body>
     <div class="page">
+      <!-- ===== Header: big brand + floating pill nav ===== -->
       <header class="top-bar">
-        <div class="brand">
+        <div class="brand brand--xl">
           <span class="brand__name">Odds Genius</span>
           <span class="brand__tagline">Sports Prediction Super Intelligence Made Easy</span>
         </div>
-        <nav class="nav-links">
+
+        <nav class="top-nav-pill" aria-label="Primary">
           <a href="#bet-checker">Bet Checker</a>
           <a href="#acca-builder">Acca Builder</a>
           <a href="#og-copilot">GPT 5 – OG Co&nbsp;Pilot</a>
@@ -52,34 +62,43 @@
       </header>
 
       <main class="hero">
+        <!-- Globe pane -->
         <section class="hero__globe" aria-label="Upcoming fixtures globe">
           <div id="globe-container">
             <div class="globe-loading" role="status">Loading globe…</div>
           </div>
+          <!-- On-globe nav pills -->
+          <button id="nav-prev" aria-label="Previous fixture" title="Previous (←)">&#x2039;</button>
+          <button id="nav-next" aria-label="Next fixture"   title="Next (→)">&#x203A;</button>
         </section>
 
+        <!-- Insights panel -->
         <aside class="hero__insights" aria-live="polite">
           <div class="insights__header">
             <div class="badge badge--home" id="home-badge"></div>
-            <div class="fixture-meta">
+            <div class="fixture-title-wrap">
               <h1 id="fixture-title">Loading fixtures…</h1>
               <p id="fixture-context"></p>
             </div>
             <div class="badge badge--away" id="away-badge"></div>
           </div>
+
           <div class="insights__content" id="insights-content">
             <div class="insight-card">
               <h2>Match Intelligence</h2>
               <ul id="match-intelligence"></ul>
             </div>
+
             <div class="insight-card">
               <h2>Player Watchlist</h2>
               <ul id="player-watchlist"></ul>
             </div>
+
             <div class="insight-card">
               <h2>Market Snapshot</h2>
               <ul id="market-snapshot"></ul>
             </div>
+
             <button class="cta" id="deep-dive-btn">Open full fixture intelligence</button>
           </div>
         </aside>
@@ -99,10 +118,14 @@
       </footer>
     </div>
 
-    <!-- PapaParse (UMD) – load locally so it works on GitHub Pages -->
+    <!-- PapaParse (UMD) -->
     <script src="./vendor/papaparse.min.js"></script>
 
     <!-- App entry (ES module) -->
     <script type="module" src="./app.module.js"></script>
+
+    <noscript>
+      <div class="globe-error">JavaScript is required to run this application.</div>
+    </noscript>
   </body>
 </html>
