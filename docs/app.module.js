@@ -124,9 +124,10 @@ const COLORS = {
   ring: '#9EE7E3'
 };
 
-const SURFACE_EPS   = 0.006;  // marker altitude = SURFACE_EPS × globeRadius
-const RADIUS_BASE   = 0.008;  // marker radius (× globeRadius) — tighter for many fixtures
-const RADIUS_ACTIVE = 0.020;  // active marker radius — tighter
+// A) Bigger/taller markers (+10%), stronger active
+const SURFACE_EPS   = 0.0066; // was 0.006
+const RADIUS_BASE   = 0.011;  // was 0.008/0.010
+const RADIUS_ACTIVE = 0.030;  // was 0.020/0.022
 const CAMERA_ALT    = 2.0;
 
 const BLOOM = { strength: 0.6, radius: 0.5, threshold: 0.85 };
@@ -204,7 +205,7 @@ async function init() {
   controls.enableDamping = true;
   controls.enablePan = false;
   controls.enableZoom = true;
-  controls.autoRotate = true;
+  controls.autoRotate = false;        // B) stop auto-spin
   controls.autoRotateSpeed = 0.6;
   controls.minDistance = 140;
   controls.maxDistance = 1200;
@@ -241,26 +242,25 @@ async function init() {
     .atmosphereAltitude(0.2)
     .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-dark.jpg')
     .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
-    .pointAltitude(() => SURFACE_EPS)
-    .pointRadius(d => (d.__active ? RADIUS_ACTIVE : RADIUS_BASE))
+    .pointAltitude(() => SURFACE_EPS) // A) taller ground-level
+    .pointRadius(d => (d.__active ? RADIUS_ACTIVE : RADIUS_BASE)) // A/E
     .pointColor(d => (d.__active ? COLORS.markerActive : COLORS.marker));
 
   scene.add(globe);
 
-  // Hover / click (guarded for builds without these hooks)
+  // Hover (guarded)
   if (typeof globe.onPointHover === 'function') {
     globe.onPointHover(handleHover);
   } else {
     console.info('[three-globe] onPointHover() not available in this build — hover enhancement disabled.');
   }
 
-  if (typeof globe.onPointClick === 'function') {
-    globe.onPointClick(pt => {
-      if (!pt) return;
-      const idx = fixtures.findIndex(f => f.fixture_id === pt.fixture_id);
-      if (idx >= 0) selectIndex(idx, { fly: true });
-    });
-  }
+  // D) Click selects a marker/fixture (hard-enable; optional chaining for safety)
+  globe.onPointClick?.((pt) => {
+    if (!pt) return;
+    const idx = fixtures.findIndex(f => f.fixture_id === pt.fixture_id);
+    if (idx >= 0) selectIndex(idx, { fly: true });
+  });
 
   window.addEventListener('resize', () => {
     const { clientWidth, clientHeight } = el.globeWrap;
@@ -357,7 +357,7 @@ async function loadFixturesCSV(url) {
       .pointLng('longitude')
       .pointsData(fixtures);
 
-    // --------- BOOT AFTER GLOBE READY (deferred initial selection) ---------
+    // --------- Boot after globe ready (deferred initial selection) ---------
     const boot = () => {
       selectIndex(0, { fly: true });
       createSelectionRing();
@@ -434,7 +434,7 @@ function createSelectionRing() {
   const ringMat = new THREE.MeshBasicMaterial({
     color: new THREE.Color(COLORS.ring),
     transparent: true,
-    opacity: 0.3,
+    opacity: 0.42, // E) stronger halo (was 0.3)
     side: THREE.DoubleSide,
     depthWrite: false
   });
