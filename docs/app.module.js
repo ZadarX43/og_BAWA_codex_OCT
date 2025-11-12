@@ -209,7 +209,8 @@ const TEAM_LOGO_OVERRIDES = {
   'Bayern Munich':        `${LOGO_LOCAL_BASE}/bayern-munich.svg`
 };
 
-const USE_SPORTSDB_FALLBACK = true;
+// Disable remote fallbacks on GH Pages (prevents CORS + 429 noise)
+const USE_SPORTSDB_FALLBACK = false;
 const SPORTSDB_KEY = '3';
 const SPORTSDB_ENDPOINT = `https://www.thesportsdb.com/api/v1/json/${SPORTSDB_KEY}/searchteams.php?t=`;
 
@@ -288,6 +289,26 @@ async function resolveViaSportsDb(teamName) {
   } catch { return null; }
 }
 
+function sameOriginRelative(src) {
+  return src && !/^https?:/i.test(src) && !/^data:/i.test(src);
+}
+function cacheBust(src) {
+  if (!sameOriginRelative(src)) return src;
+  const sep = src.includes('?') ? '&' : '?';
+  return `${src}${sep}v=${Date.now()}`;
+}
+async function fetchAndBlob(src) {
+  try {
+    const res = await fetch(src, { cache: 'no-store' });
+    if (!res.ok) return null;
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    return { url, revoke: () => URL.revokeObjectURL(url) };
+  } catch {
+    return null;
+  }
+}
+
 function localLogoCandidates(team) {
   const slug = team
     .toLowerCase()
@@ -303,38 +324,56 @@ function localLogoCandidates(team) {
 
 const badgeTokens = new WeakMap();
 
-// Robust image loader: resolves success/failure with timeout
-async function tryLoad(src, teamName, timeoutMs = 2000) {
+// Robust image loader: timeout + cache-bust + blob fallback
+async function tryLoad(src, teamName, timeoutMs = 12000) {
   if (!src) return null;
-  return new Promise(resolve => {
+
+  const primarySrc = cacheBust(src);
+
+  const attemptImg = (url) => new Promise(resolve => {
     let done = false;
     const img = new Image();
     img.alt = teamName || '';
     img.loading = 'lazy';
     img.decoding = 'async';
-    if (!/^data:/i.test(src)) { img.crossOrigin = 'anonymous'; img.referrerPolicy = 'no-referrer'; }
+    if (!/^data:/i.test(url)) { img.crossOrigin = 'anonymous'; img.referrerPolicy = 'no-referrer'; }
 
-    const finish = (ok) => {
-      if (done) return;
-      done = true;
-      if (ok) resolve({ ok:true, img, src });
-      else resolve(null);
-    };
+    const finish = (ok) => { if (done) return; done = true; resolve(ok ? { ok:true, img, src:url } : null); };
 
     const t = setTimeout(() => {
-      console.warn('[badge] timeout', { teamName, src });
+      console.warn('[badge] timeout', { teamName, src: url });
       finish(false);
     }, timeoutMs);
 
     img.onload  = () => { clearTimeout(t); finish(true);  };
     img.onerror = () => { clearTimeout(t); finish(false); };
-    img.src = src;
+    img.src = url;
   });
+
+  // 1) normal <img> with cache-bust
+  let hit = await attemptImg(primarySrc);
+  if (hit) return hit;
+
+  // 2) blob fallback (same-origin only)
+  if (sameOriginRelative(src)) {
+    const blob = await fetchAndBlob(src);
+    if (blob) {
+      hit = await attemptImg(blob.url);
+      if (hit) {
+        setTimeout(() => blob.revoke(), 2000);
+        return hit;
+      }
+      blob.revoke();
+    }
+  }
+
+  return null;
 }
 
 /**
  * Local-first crest loader (no proxy):
- * PRIORITY: overrides → cache → CSV/local/commons/sportsdb → initials
+ * PRIORITY: overrides → cache → CSV/local/commons → initials
+ * (SportsDB fallback is disabled on GH Pages to avoid CORS/429)
  */
 async function setBadge(elm, urlFromCsv, teamName='') {
   if (!elm) return;
@@ -342,7 +381,7 @@ async function setBadge(elm, urlFromCsv, teamName='') {
   const token = {}; badgeTokens.set(elm, token);
   elm.classList.remove('has-logo'); elm.innerHTML = '';
 
-  // TEMP visual outline while debugging; remove later if you want
+  // TEMP outline while stabilising (safe to remove later)
   elm.style.outline = '1px solid rgba(125,249,196,.35)';
   elm.style.backgroundClip = 'padding-box';
 
@@ -353,14 +392,12 @@ async function setBadge(elm, urlFromCsv, teamName='') {
     console.warn('[badge] fallback to initials', { teamName, urlFromCsv });
   };
 
-  // 0) OVERRIDE FIRST
+  // 0) override first
   const overrideUrl = TEAM_LOGO_OVERRIDES[teamName];
   if (overrideUrl) {
     const hit = await tryLoad(overrideUrl, teamName);
     if (hit && badgeTokens.get(elm) === token) {
-      elm.innerHTML = '';
-      elm.appendChild(hit.img);
-      elm.classList.add('has-logo');
+      elm.innerHTML = ''; elm.appendChild(hit.img); elm.classList.add('has-logo');
       LOGO_CACHE[teamName] = overrideUrl; saveLogoCache();
       console.log('[badge] loaded override', { teamName, finalUrl: overrideUrl });
       return;
@@ -373,9 +410,7 @@ async function setBadge(elm, urlFromCsv, teamName='') {
   if (teamName && LOGO_CACHE[teamName]) {
     const hit = await tryLoad(LOGO_CACHE[teamName], teamName);
     if (hit && badgeTokens.get(elm) === token) {
-      elm.innerHTML = '';
-      elm.appendChild(hit.img);
-      elm.classList.add('has-logo');
+      elm.innerHTML = ''; elm.appendChild(hit.img); elm.classList.add('has-logo');
       console.log('[badge] loaded cache', { teamName, finalUrl: LOGO_CACHE[teamName] });
       return;
     } else {
@@ -383,7 +418,7 @@ async function setBadge(elm, urlFromCsv, teamName='') {
     }
   }
 
-  // 2) CSV or absolute URL
+  // 2) CSV absolute (if any)
   const raw = normalizeBasicUrl(urlFromCsv);
   let loaded = null, finalUrl = null;
 
@@ -416,8 +451,8 @@ async function setBadge(elm, urlFromCsv, teamName='') {
     }
   }
 
-  // 5) SportsDB fallback
-  if (!loaded && teamName) {
+  // 5) (optional) SportsDB fallback – disabled on GH Pages
+  if (!loaded && USE_SPORTSDB_FALLBACK && teamName) {
     const sdb = await resolveViaSportsDb(teamName);
     if (sdb) {
       loaded = await tryLoad(sdb, teamName);
@@ -777,8 +812,8 @@ function renderPanel(f) {
   const homeUrl = TEAM_LOGO_OVERRIDES[f.home_team] || f.home_badge_url || f.home_logo_url;
   const awayUrl = TEAM_LOGO_OVERRIDES[f.away_team] || f.away_badge_url || f.away_logo_url;
 
-  // (3) Sanity log: badge nodes presence
-  console.log('[panel] badge nodes', { home: !!el.homeBadge, away: !!el.awayBadge });
+  // ensure badge nodes exist
+  el.homeBadge && el.awayBadge && console.log('[panel] badge nodes', { home: !!el.homeBadge, away: !!el.awayBadge });
 
   setBadge(el.homeBadge, homeUrl, f.home_team);
   setBadge(el.awayBadge, awayUrl, f.away_team);
@@ -994,7 +1029,7 @@ async function ocrImageOrPdf(file) {
   return (data && data.text) ? data.text : '';
 }
 
-// ---------- Bet Checker OCR parsing (fixed) ----------
+// ---------- Bet Checker OCR parsing ----------
 function parseSlipText(text) {
   const lines = String(text).split(/\r?\n/).map(s => s.trim()).filter(Boolean);
   const legs = [];
