@@ -113,38 +113,6 @@ const BLOOM = { strength: 0.9, radius: 0.6, threshold: 0.75 };
 const clamp01 = v => Math.max(0, Math.min(1, v));
 const pct = n => `${Math.round(clamp01(n) * 100)}%`;
 
-// --- League accuracy (demo values; replace with real data or load JSON) ---
-const ACC = {
-  'UEFA Champions League': { FTR: 0.85, OU25: 0.78, BTTS: 0.74 },
-  'Premier League':        { FTR: 0.82, OU25: 0.76, BTTS: 0.71 },
-  'LaLiga':                { FTR: 0.81, OU25: 0.74, BTTS: 0.68 }
-};
-const tier = p => (p>=0.8?'green' : p>=0.7?'amber' : 'red');
-function leagueAcc(league, market='FTR'){
-  return Math.max(0, Math.min(1, (ACC?.[league]?.[market] ?? 0)));
-}
-function renderCompetitionAccuracy(league){
-  const wrap = document.getElementById('comp-accuracy');
-  if (!wrap || !league) return;
-  const ftr = leagueAcc(league,'FTR');
-  const ou  = leagueAcc(league,'OU25');
-  const btts= leagueAcc(league,'BTTS');
-  const nameEl = document.getElementById('comp-name');
-  const fillEl = wrap.querySelector('.gauge-fill');
-  const valEl  = wrap.querySelector('.gauge-val');
-  const traffic= document.getElementById('comp-traffic');
-  if (nameEl) nameEl.textContent = league;
-  if (fillEl) fillEl.style.width = `${Math.round(ftr*100)}%`;
-  if (valEl)  valEl.textContent  = `${Math.round(ftr*100)}%`;
-  if (traffic){
-    traffic.innerHTML = `
-      <span class="light light--${tier(ftr)}">FTR</span>
-      <span class="light light--${tier(ou)}">O2.5</span>
-      <span class="light light--${tier(btts)}">BTTS</span>
-    `;
-  }
-}
-
 function showToast(type, text, ms=2600){
   const t = document.createElement('div');
   t.className = `og-toast ${type}`;
@@ -207,37 +175,6 @@ function normalizeBasicUrl(raw) {
   if (/^http:\/\//i.test(u) && location.protocol === 'https:') u = u.replace(/^http:\/\//i, 'https://');
   return u;
 }
-// --- League accuracy (demo values; replace with real data or load JSON) ---
-const ACC = {
-  'UEFA Champions League': { FTR: 0.85, OU25: 0.78, BTTS: 0.74 },
-  'Premier League':        { FTR: 0.82, OU25: 0.76, BTTS: 0.71 },
-  'LaLiga':                { FTR: 0.81, OU25: 0.74, BTTS: 0.68 }
-};
-const tier = p => (p>=0.8?'green' : p>=0.7?'amber' : 'red');
-function leagueAcc(league, market='FTR'){
-  return Math.max(0, Math.min(1, (ACC?.[league]?.[market] ?? 0)));
-}
-function renderCompetitionAccuracy(league){
-  const wrap = document.getElementById('comp-accuracy');
-  if (!wrap || !league) return;
-  const ftr = leagueAcc(league,'FTR');
-  const ou  = leagueAcc(league,'OU25');
-  const btts= leagueAcc(league,'BTTS');
-  const nameEl = document.getElementById('comp-name');
-  const fillEl = wrap.querySelector('.gauge-fill');
-  const valEl  = wrap.querySelector('.gauge-val');
-  const traffic= document.getElementById('comp-traffic');
-  if (nameEl) nameEl.textContent = league;
-  if (fillEl) fillEl.style.width = `${Math.round(ftr*100)}%`;
-  if (valEl)  valEl.textContent  = `${Math.round(ftr*100)}%`;
-  if (traffic){
-    traffic.innerHTML = `
-      <span class="light light--${tier(ftr)}">FTR</span>
-      <span class="light light--${tier(ou)}">O2.5</span>
-      <span class="light light--${tier(btts)}">BTTS</span>
-    `;
-  }
-}
 
 // ---------- Logo system (local only; no remote) ----------
 const LOGO_LOCAL_BASE = './assets/assets/logos';
@@ -284,7 +221,7 @@ const TEAM_LOGO_OVERRIDES = {
   'Salzburg':             `${LOGO_LOCAL_BASE}/rb-salzburg.svg`,
   'Bayern München':       `${LOGO_LOCAL_BASE}/bayern-munich.svg`,
   'Bayern Munich':        `${LOGO_LOCAL_BASE}/bayern-munich.svg`,
-  // adhoc extras used by some CSVs
+  // Some CSVs
   'Sporting Braga':       `${LOGO_LOCAL_BASE}/sporting-braga.svg`,
   'Union Berlin':         `${LOGO_LOCAL_BASE}/union-berlin.svg`
 };
@@ -425,6 +362,90 @@ async function setBadge(elm, urlFromCsv, teamName='') {
   elm.classList.add('has-logo');
   LOGO_STORE.set(teamName, { img: hit.img.cloneNode(true), url: hit.src });
   LOGO_CACHE[teamName] = hit.src; saveLogoCache();
+}
+
+// ----------------------------
+// COMPETITION LOGOS + ACCURACY STRIP
+// ----------------------------
+const COMP_LOGO_BASE = './assets/assets/leagues';
+const COMP_LOGO_MAP = {
+  'UEFA Champions League':      `${COMP_LOGO_BASE}/uefa-champions-league.svg`,
+  'UEFA Europa League':         `${COMP_LOGO_BASE}/uefa-europa-league.svg`,
+  'UEFA Europa Conference League': `${COMP_LOGO_BASE}/uefa-europa-conference-league.svg`,
+  'Premier League':             `${COMP_LOGO_BASE}/premier-league.svg`,
+  'LaLiga':                     `${COMP_LOGO_BASE}/la-liga.svg`,
+  'La Liga':                    `${COMP_LOGO_BASE}/la-liga.svg`,
+  'Bundesliga':                 `${COMP_LOGO_BASE}/bundesliga.svg`,
+  'Serie A':                    `${COMP_LOGO_BASE}/serie-a.svg`,
+  'Ligue 1':                    `${COMP_LOGO_BASE}/ligue-1.svg`,
+  'Liga Portugal':              `${COMP_LOGO_BASE}/liga-nos.png`,
+  'Liga NOS':                   `${COMP_LOGO_BASE}/liga-nos.png`,
+  'MLS':                        `${COMP_LOGO_BASE}/usa-mls.svg`,
+  'Major League Soccer':        `${COMP_LOGO_BASE}/usa-mls.svg`,
+};
+function findCompLogoSrc(name = '') {
+  if (!name) return '';
+  if (COMP_LOGO_MAP[name]) return COMP_LOGO_MAP[name];
+  const key = Object.keys(COMP_LOGO_MAP).find(k => name.toLowerCase().includes(k.toLowerCase()));
+  return key ? COMP_LOGO_MAP[key] : '';
+}
+
+// Compute a simple snapshot for the selected competition
+function getCompetitionSnapshot(compName) {
+  const rows = (compName && compName.trim())
+    ? fixtures.filter(r => (r?.competition || '').toLowerCase() === compName.toLowerCase())
+    : [];
+
+  const avg = (arr) => (arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0);
+  const toPct = (x) => Math.round((x || 0) * 100);
+
+  return {
+    n: rows.length,
+    ftr:    toPct( avg(rows.map(r => +r?.confidence_ftr || 0)) ),
+    over25: toPct( avg(rows.map(r => +r?.over25_prob   || 0)) ),
+    btts:   toPct( avg(rows.map(r => +r?.btts_prob     || 0)) )
+  };
+}
+
+// Fill the #comp-accuracy strip
+function renderCompetitionAccuracy(compName) {
+  const wrap   = document.getElementById('comp-accuracy');
+  if (!wrap) return;
+
+  const nameEl = document.getElementById('comp-name');
+  const logoEl = document.getElementById('comp-logo'); // optional img in HTML
+  const fill   = wrap.querySelector('.gauge-fill');
+  const val    = wrap.querySelector('.gauge-val');
+  const chips  = document.getElementById('comp-traffic');
+
+  // Title + logo
+  if (nameEl) nameEl.textContent = compName || '—';
+  if (logoEl) {
+    const logoSrc = findCompLogoSrc(compName);
+    if (logoSrc) { logoEl.src = logoSrc; logoEl.alt = `${compName} logo`; logoEl.style.display = 'inline-block'; }
+    else { logoEl.removeAttribute('src'); logoEl.style.display = 'none'; }
+  }
+
+  // Numbers from average predicted probabilities of fixtures in that competition
+  const stats = getCompetitionSnapshot(compName);
+  const ftrPct = Math.max(0, Math.min(100, stats.ftr || 0));
+  if (fill) fill.style.width = `${ftrPct}%`;
+  if (val)  val.textContent  = stats.ftr ? `${stats.ftr}%` : '—';
+
+  if (chips) {
+    const items = [
+      { cls: 'light--green', label: `FTR ${stats.ftr ? stats.ftr + '%' : '—'}` },
+      { cls: 'light--blue',  label: `O2.5 ${stats.over25 ? stats.over25 + '%' : '—'}` },
+      { cls: 'light--amber', label: `BTTS ${stats.btts ? stats.btts + '%' : '—'}` }
+    ];
+    chips.innerHTML = '';
+    for (const it of items) {
+      const span = document.createElement('span');
+      span.className = `light ${it.cls}`;
+      span.textContent = it.label;
+      chips.appendChild(span);
+    }
+  }
 }
 
 // ----------------------------
@@ -643,6 +664,9 @@ async function loadFixturesCSV(url) {
       selectIndex(0, { fly: true });
       createSelectionRing();
 
+      // show comp strip on boot
+      renderCompetitionAccuracy(fixtures[0]?.competition);
+
       if (hasHtmlElementsApi(globe)) {
         renderHtmlTabs();
         globe.htmlTransitionDuration?.(220);
@@ -656,9 +680,6 @@ async function loadFixturesCSV(url) {
       }
       globe.pointsTransitionDuration?.(0);
       showToast('success', `Loaded ${fixtures.length} fixtures`);
-
-      // show league accuracy for initial fixture
-      renderCompetitionAccuracy(fixtures[0]?.competition);
     };
 
     if (typeof globe.onGlobeReady === 'function') {
@@ -800,12 +821,11 @@ function renderPanel(f) {
   el.fixtureContext.textContent = [f.competition, fmt(f.date_utc), f.stadium && `${f.stadium} (${f.city || ''})`, f.country]
     .filter(Boolean).join(' • ');
 
-  // update competition accuracy for this fixture
+  // 🔹 update the competition accuracy strip
   renderCompetitionAccuracy(f.competition);
 
   const homeUrl = TEAM_LOGO_OVERRIDES[f.home_team] || '';
   const awayUrl = TEAM_LOGO_OVERRIDES[f.away_team] || '';
-
   setBadge(el.homeBadge, homeUrl, f.home_team);
   setBadge(el.awayBadge, awayUrl, f.away_team);
 
