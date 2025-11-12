@@ -94,7 +94,22 @@
               <button id="nav-next" aria-label="Next fixture"   title="Next (→)" tabindex="0">&#x203A;</button>
             </div>
             <p id="globe-help" class="visually-hidden">Use left and right arrow keys or buttons to change fixture.</p>
-          </section>
+            <!-- Competition accuracy card (under the globe) -->
+            <section class="comp-accuracy" id="comp-accuracy" aria-live="polite">
+              <div class="comp-row">
+                <div class="comp-name" id="comp-name">—</div>
+                <div class="gauge">
+                  <span class="gauge-label">FTR</span>
+                  <div class="gauge-bar"><div class="gauge-fill" style="width:0%"></div></div>
+                  <span class="gauge-val">—%</span>
+                </div>
+              </div>
+              <div class="market-traffic" id="comp-traffic">
+                <span class="light light--green">FTR</span>
+                <span class="light light--amber">O2.5</span>
+                <span class="light light--red">BTTS</span>
+              </div>
+            </section>
 
           <!-- Insights panel -->
           <aside class="hero__insights" aria-live="polite">
