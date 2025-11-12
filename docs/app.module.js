@@ -221,7 +221,7 @@ const TEAM_LOGO_OVERRIDES = {
   'Salzburg':             `${LOGO_LOCAL_BASE}/rb-salzburg.svg`,
   'Bayern München':       `${LOGO_LOCAL_BASE}/bayern-munich.svg`,
   'Bayern Munich':        `${LOGO_LOCAL_BASE}/bayern-munich.svg`,
-  // adhoc extras some CSVs use
+  // adhoc extras used by some CSVs
   'Sporting Braga':       `${LOGO_LOCAL_BASE}/sporting-braga.svg`,
   'Union Berlin':         `${LOGO_LOCAL_BASE}/union-berlin.svg`
 };
