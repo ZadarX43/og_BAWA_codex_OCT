@@ -161,10 +161,8 @@ function showToast(type, text, ms=2600){
 function elmEmpty(msg){ const d=document.createElement('div'); d.className='empty'; d.textContent=msg; return d; }
 
 // ==============================
-// Local logo setup (no proxy, zero CORS) — OPTION B PATH
+// Local logo setup (no proxy, zero CORS)
 // ==============================
-
-// your files are under docs/assets/assets/logos/, so use this relative path from docs/index.html:
 const LOGO_LOCAL_BASE = './assets/assets/logos';
 
 const TEAM_LOGO_OVERRIDES = {
@@ -304,32 +302,47 @@ function localLogoCandidates(team) {
 }
 
 const badgeTokens = new WeakMap();
-async function tryLoad(src, teamName) {
+
+// Robust image loader: resolves success/failure with timeout
+async function tryLoad(src, teamName, timeoutMs = 2000) {
   if (!src) return null;
   return new Promise(resolve => {
+    let done = false;
     const img = new Image();
     img.alt = teamName || '';
     img.loading = 'lazy';
     img.decoding = 'async';
     if (!/^data:/i.test(src)) { img.crossOrigin = 'anonymous'; img.referrerPolicy = 'no-referrer'; }
-    img.onload  = () => resolve({ ok:true, img, src });
-    img.onerror = () => resolve(null);
+
+    const finish = (ok) => {
+      if (done) return;
+      done = true;
+      if (ok) resolve({ ok:true, img, src });
+      else resolve(null);
+    };
+
+    const t = setTimeout(() => {
+      console.warn('[badge] timeout', { teamName, src });
+      finish(false);
+    }, timeoutMs);
+
+    img.onload  = () => { clearTimeout(t); finish(true);  };
+    img.onerror = () => { clearTimeout(t); finish(false); };
     img.src = src;
   });
 }
+
 /**
  * Local-first crest loader (no proxy):
  * PRIORITY: overrides → cache → CSV/local/commons/sportsdb → initials
  */
 async function setBadge(elm, urlFromCsv, teamName='') {
   if (!elm) return;
-  const token = {};
-  badgeTokens.set(elm, token);
-  elm.classList.remove('has-logo');
-  elm.innerHTML = '';
+  console.log('[badge] start', {teamName, urlFromCsv, override: TEAM_LOGO_OVERRIDES[teamName]});
+  const token = {}; badgeTokens.set(elm, token);
+  elm.classList.remove('has-logo'); elm.innerHTML = '';
 
-  // TEMP: make badge boxes obvious while we debug
-  // (remove these two lines when you're happy)
+  // TEMP visual outline while debugging; remove later if you want
   elm.style.outline = '1px solid rgba(125,249,196,.35)';
   elm.style.backgroundClip = 'padding-box';
 
@@ -340,7 +353,7 @@ async function setBadge(elm, urlFromCsv, teamName='') {
     console.warn('[badge] fallback to initials', { teamName, urlFromCsv });
   };
 
-  // --- OVERRIDE FIRST (guaranteed local path)
+  // 0) OVERRIDE FIRST
   const overrideUrl = TEAM_LOGO_OVERRIDES[teamName];
   if (overrideUrl) {
     const hit = await tryLoad(overrideUrl, teamName);
@@ -352,11 +365,11 @@ async function setBadge(elm, urlFromCsv, teamName='') {
       console.log('[badge] loaded override', { teamName, finalUrl: overrideUrl });
       return;
     } else {
-      console.warn('[badge] override failed to load', { teamName, overrideUrl });
+      console.warn('[badge] override failed', { teamName, overrideUrl });
     }
   }
 
-  // --- CACHE
+  // 1) cache
   if (teamName && LOGO_CACHE[teamName]) {
     const hit = await tryLoad(LOGO_CACHE[teamName], teamName);
     if (hit && badgeTokens.get(elm) === token) {
@@ -370,7 +383,7 @@ async function setBadge(elm, urlFromCsv, teamName='') {
     }
   }
 
-  // --- CSV or absolute URL
+  // 2) CSV or absolute URL
   const raw = normalizeBasicUrl(urlFromCsv);
   let loaded = null, finalUrl = null;
 
@@ -379,7 +392,7 @@ async function setBadge(elm, urlFromCsv, teamName='') {
     if (loaded) finalUrl = raw;
   }
 
-  // --- local slug guesses
+  // 3) local slug guesses
   if (!loaded && teamName) {
     for (const loc of localLogoCandidates(teamName)) {
       loaded = await tryLoad(loc, teamName);
@@ -387,7 +400,7 @@ async function setBadge(elm, urlFromCsv, teamName='') {
     }
   }
 
-  // --- Commons from CSV if applicable
+  // 4) Commons (thumb/API) if CSV was a Commons link
   if (!loaded && raw && (isCommonsFilePath(raw) || isCommonsFileTitle(raw))) {
     const thumbPhp = commonsToThumbPhp(raw);
     if (thumbPhp) {
@@ -403,7 +416,7 @@ async function setBadge(elm, urlFromCsv, teamName='') {
     }
   }
 
-  // --- SportsDB fallback
+  // 5) SportsDB fallback
   if (!loaded && teamName) {
     const sdb = await resolveViaSportsDb(teamName);
     if (sdb) {
@@ -418,10 +431,9 @@ async function setBadge(elm, urlFromCsv, teamName='') {
   elm.innerHTML = '';
   elm.appendChild(loaded.img);
   elm.classList.add('has-logo');
-  if (teamName && finalUrl) { LOGO_CACHE[teamName] = finalUrl; saveLogoCache(); }
   console.log('[badge] loaded', { teamName, finalUrl });
+  if (teamName && finalUrl) { LOGO_CACHE[teamName] = finalUrl; saveLogoCache(); }
 }
-
 
 // ----------------------------
 // Scene init
@@ -624,7 +636,6 @@ async function loadFixturesCSV(url) {
     if (typeof globe.onGlobeReady === 'function') {
       globe.onGlobeReady(boot);
     } else {
-      // more reliable on GitHub Pages than setTimeout
       requestAnimationFrame(boot);
     }
 
@@ -763,7 +774,6 @@ function renderPanel(f) {
   el.fixtureContext.textContent = [f.competition, fmt(f.date_utc), f.stadium && `${f.stadium} (${f.city || ''})`, f.country]
     .filter(Boolean).join(' • ');
 
-  // OVERRIDES FIRST → then CSV URL → then resolver fallback
   const homeUrl = TEAM_LOGO_OVERRIDES[f.home_team] || f.home_badge_url || f.home_logo_url;
   const awayUrl = TEAM_LOGO_OVERRIDES[f.away_team] || f.away_badge_url || f.away_logo_url;
 
@@ -983,27 +993,18 @@ async function ocrImageOrPdf(file) {
 
 // ---------- Bet Checker OCR parsing (fixed) ----------
 function parseSlipText(text) {
-  // make sure it's a string, split into trimmed non-empty lines
   const lines = String(text).split(/\r?\n/).map(s => s.trim()).filter(Boolean);
   const legs = [];
-
   for (let i = 0; i < lines.length; i++) {
     const L = lines[i];
-
-    // "Home v Away" / "Home vs Away" / "Home VS Away"
     const m = L.match(/^\s*([A-Za-z0-9 .'\-]+)\s+(?:v|vs\.?|VS)\s+([A-Za-z0-9 .'\-]+)\s*$/i);
     if (!m) continue;
-
     const home = m[1].trim();
     const away = m[2].trim();
-
-    // look ahead a few lines for market/price
     for (let j = 1; j <= 3 && (i + j) < lines.length; j++) {
       const M = lines[i + j];
-
       let market = null;
       let pick = null;
-
       if (/over\s*2\.?5/i.test(M)) { market = 'OVER_UNDER_2_5'; pick = 'OVER'; }
       else if (/under\s*2\.?5/i.test(M)) { market = 'OVER_UNDER_2_5'; pick = 'UNDER'; }
       else if (/both\s*teams\s*to\s*score|btts/i.test(M)) { market = 'BTTS'; pick = /\bno\b/i.test(M) ? 'NO' : 'YES'; }
@@ -1013,32 +1014,16 @@ function parseSlipText(text) {
         else if (/\bhome\b|(?:^|\s)1(?:\s|$)/i.test(M)) pick = 'HOME';
         else if (/\baway\b|(?:^|\s)2(?:\s|$)/i.test(M)) pick = 'AWAY';
       }
-
       if (!market) continue;
-
-      // try to extract a price (fractional or decimal)
       let price = null;
-      const frac = M.match(/(\d+)\s*\/\s*(\d+)/);        // e.g. 8/11
-      const dec  = M.match(/(\d+(?:\.\d+)?)/);           // e.g. 1.73
-      if (frac) {
-        price = (parseFloat(frac[1]) / parseFloat(frac[2])) + 1;
-      } else if (dec) {
-        price = parseFloat(dec[1]);
-      }
-
-      legs.push({
-        teamHome: home,
-        teamAway: away,
-        market,
-        selection: pick || '—',
-        price,
-        bookmaker: null,
-        kickoffUTC: null
-      });
-      break; // stop scanning ahead for this leg
+      const frac = M.match(/(\d+)\s*\/\s*(\d+)/);
+      const dec  = M.match(/(\d+(?:\.\d+)?)/);
+      if (frac) price = (parseFloat(frac[1]) / parseFloat(frac[2])) + 1;
+      else if (dec) price = parseFloat(dec[1]);
+      legs.push({ teamHome: home, teamAway: away, market, selection: pick || '—', price, bookmaker: null, kickoffUTC: null });
+      break;
     }
   }
-
   return { legs, raw: lines.slice(0, 60).join('\n') };
 }
 
@@ -1066,11 +1051,9 @@ function renderBetCheckerResults(result) {
   const container = document.getElementById('bc-results');
   const out = document.getElementById('bc-output');
   if (!container || !out) return;
-
   const legs = result.legs || [];
   const summary = result.summary || {};
   const frag = document.createDocumentFragment();
-
   const sumDiv = document.createElement('div');
   sumDiv.className = 'insight-card';
   sumDiv.innerHTML = `
@@ -1079,7 +1062,6 @@ function renderBetCheckerResults(result) {
          Prob: <strong>${Math.round((summary.comboProb ?? 0) * 100)}%</strong> &middot;
          Est. Payout: <strong>${summary.payout ? '£'+summary.payout.toFixed(2) : '—'}</strong></div>`;
   frag.appendChild(sumDiv);
-
   legs.forEach((lg, idx) => {
     const card = document.createElement('div');
     card.className = 'insight-card';
@@ -1096,7 +1078,6 @@ function renderBetCheckerResults(result) {
       </ul>`;
     frag.appendChild(card);
   });
-
   out.innerHTML = '';
   out.appendChild(frag);
 }
@@ -1111,20 +1092,16 @@ function renderBetCheckerResults(result) {
   });
 }
 
-// ---------- Acca Builder: suggest → choose → optimise ----------
+// ---------- Acca Builder ----------
 async function runAccaSuggest() {
   const league = (document.getElementById('ab-league')?.value || 'ALL');
   const market = (document.getElementById('ab-market')?.value || 'ou25');
   const legs   = (document.getElementById('ab-legs')?.value || '4').split(' ')[0];
-
   const grid = document.getElementById('ab-grid');
   if (!grid) return;
   grid.innerHTML = '<div class="muted">Loading candidates…</div>';
-
   try {
-    const data = await API.accaSuggest({
-      market, league, from: new Date().toISOString().slice(0,10), to: '', limit: 50
-    });
+    const data = await API.accaSuggest({ market, league, from: new Date().toISOString().slice(0,10), to: '', limit: 50 });
     grid.innerHTML = '';
     const chosen = [];
     (data.items || []).slice(0, 30).forEach((m, i)=>{
@@ -1141,15 +1118,12 @@ async function runAccaSuggest() {
         <button class="cta" data-add="${i}">Add leg</button>`;
       grid.appendChild(card);
     });
-
     grid.querySelectorAll('button[data-add]').forEach(btn=>{
       btn.addEventListener('click', ()=>{
         const idx = +btn.getAttribute('data-add');
         chosen.push(data.items[idx]);
         btn.textContent = 'Added ✓'; btn.disabled = true;
-        if (chosen.length === Number(legs)) {
-          optimiseAcca(chosen, market);
-        }
+        if (chosen.length === Number(legs)) optimiseAcca(chosen, market);
       });
     });
   } catch (e) {
@@ -1168,7 +1142,6 @@ async function optimiseAcca(chosen, market) {
     sum.innerHTML = `<h2>Optimised Acca</h2>
       <div><strong>EV:</strong> ${(res.evPct??0).toFixed(1)}% &middot; <strong>Prob:</strong> ${Math.round((res.comboProb??0)*100)}% &middot; <strong>Payout:</strong> £${(res.payout??0).toFixed(2)}</div>`;
     grid.appendChild(sum);
-
     (res.legs||chosen).forEach((lg, i)=>{
       const c = document.createElement('div');
       c.className = 'insight-card';
@@ -1181,10 +1154,9 @@ async function optimiseAcca(chosen, market) {
     grid.innerHTML = `<div class="muted">Optimiser failed: ${e.message}</div>`;
   }
 }
-
 document.getElementById('ab-build')?.addEventListener('click', ()=> runAccaSuggest());
 
-// ---------- OG Co-Pilot: chat → /api/copilot ----------
+// ---------- Co-Pilot ----------
 async function sendCopilotMessage(text) {
   const payload = { 
     messages: [
@@ -1209,12 +1181,9 @@ function appendChatLine(role, text) {
   wrap.appendChild(div);
   wrap.scrollTop = wrap.scrollHeight;
 }
-
 {
   const cpInput = document.getElementById('cp-input');
   const cpSend  = document.getElementById('cp-send');
-  const cpThread= document.getElementById('cp-thread');
-
   cpSend?.addEventListener('click', async ()=>{
     const q = (cpInput?.value || '').trim();
     if (!q) return;
@@ -1284,17 +1253,13 @@ const drawer  = document.getElementById('side-drawer');
 const scrim   = document.getElementById('scrim');
 const menuBtn = document.getElementsByClassName('header__menu')[0];
 const closeBtn= document.getElementById('btn-close-drawer');
-
 function openDrawer(){ drawer?.classList.add('show'); scrim?.classList.add('show'); drawer?.setAttribute('aria-hidden','false'); }
 function closeDrawer(){ drawer?.classList.remove('show'); scrim?.classList.remove('show'); drawer?.setAttribute('aria-hidden','true'); }
 menuBtn?.addEventListener('click', ()=> openDrawer());
 closeBtn?.addEventListener('click', ()=> closeDrawer());
 scrim?.addEventListener('click', ()=> closeDrawer());
-document.querySelectorAll('.side-drawer__nav [data-route]').forEach(a=>{
-  a.addEventListener('click', ()=> { closeDrawer(); });
-});
 
-// --- sanity check: should log "[LOGOS] OK" twice if paths are correct
+// quick self-test for two known files
 (function verifyLocalLogoSetup(){
   const tests = [
     './assets/assets/logos/arsenal.svg',
