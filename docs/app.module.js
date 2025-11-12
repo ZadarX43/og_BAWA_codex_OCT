@@ -108,7 +108,7 @@ const CAMERA_ALT    = 2.0;
 const BLOOM = { strength: 0.9, radius: 0.6, threshold: 0.75 };
 
 // ----------------------------
-// Utilities
+// Utilities (declare BEFORE any use)
 // ----------------------------
 const clamp01 = v => Math.max(0, Math.min(1, v));
 const pct = n => `${Math.round(clamp01(n) * 100)}%`;
@@ -140,7 +140,6 @@ function hasHtmlElementsApi(g){
                typeof g.htmlLat          === 'function';
 }
 
-// Simple initials fallback
 function initials(name = '') {
   const words = String(name).trim().split(/\s+/).filter(Boolean);
   if (!words.length) return '';
@@ -148,21 +147,7 @@ function initials(name = '') {
   return (words[0][0] + (words[1][0] || '')).toUpperCase();
 }
 
-// Toasts
-function showToast(type, text, ms=2600){
-  const t = document.createElement('div');
-  t.className = `og-toast ${type}`;
-  t.textContent = text;
-  document.body.appendChild(t);
-  requestAnimationFrame(()=>t.classList.add('show'));
-  setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),250); }, ms);
-}
-
-function elmEmpty(msg){ const d=document.createElement('div'); d.className='empty'; d.textContent=msg; return d; }
-
-// ==============================
-// Local logo setup (no proxy, zero CORS)
-// ==============================
+// ---------- Logo helpers declared UP FRONT ----------
 const LOGO_LOCAL_BASE = './assets/assets/logos';
 
 const TEAM_LOGO_OVERRIDES = {
@@ -209,8 +194,8 @@ const TEAM_LOGO_OVERRIDES = {
   'Bayern Munich':        `${LOGO_LOCAL_BASE}/bayern-munich.svg`
 };
 
-// Optional SportsDB fallback (beware CORS/limits)
-const USE_SPORTSDB_FALLBACK = true;
+// Optional SportsDB fallback (leave true/false as you like; beware CORS/limits)
+const USE_SPORTSDB_FALLBACK = false; // turn off to avoid CORS/429 noise
 const SPORTSDB_KEY = '3';
 const SPORTSDB_ENDPOINT = `https://www.thesportsdb.com/api/v1/json/${SPORTSDB_KEY}/searchteams.php?t=`;
 
@@ -219,33 +204,9 @@ let LOGO_CACHE = {};
 try { LOGO_CACHE = JSON.parse(localStorage.getItem(LOGO_CACHE_KEY) || '{}'); } catch {}
 function saveLogoCache(){ try { localStorage.setItem(LOGO_CACHE_KEY, JSON.stringify(LOGO_CACHE)); } catch {} }
 
-// In-memory preloaded logos
 const LOGO_STORE = new Map(); // teamName -> {img, url}
 const LOGO_URLS  = new Map(); // teamName -> objectURL (to revoke)
 
-// Guess candidate sources for a team
-function localLogoCandidates(team) {
-  const slug = String(team)
-    .toLowerCase()
-    .replace(/&/g,'and')
-    .replace(/[\u2019'’]/g,'')
-    .replace(/[^a-z0-9]+/g,'-')
-    .replace(/^-+|-+$/g,'');
-  return [
-    `${LOGO_LOCAL_BASE}/${slug}.png`,
-    `${LOGO_LOCAL_BASE}/${slug}.svg`,
-  ];
-}
-function guessLogoSources(teamName = '', urlFromCsv = '') {
-  const list = [];
-  if (TEAM_LOGO_OVERRIDES[teamName]) list.push(TEAM_LOGO_OVERRIDES[teamName]);
-  if (urlFromCsv) list.push(urlFromCsv);
-  for (const loc of localLogoCandidates(teamName)) list.push(loc);
-  return [...new Set(list)];
-}
-
-function isCommonsFilePath(u){ return /:\/\/commons\.wikimedia\.org\/wiki\/Special:FilePath\//i.test(u); }
-function isCommonsFileTitle(u){ return /:\/\/commons\.wikimedia\.org\/wiki\/File:/i.test(u); }
 function normalizeBasicUrl(raw) {
   if (!raw) return '';
   let u = String(raw).trim();
@@ -254,6 +215,8 @@ function normalizeBasicUrl(raw) {
   if (/^http:\/\//i.test(u) && location.protocol === 'https:') u = u.replace(/^http:\/\//i, 'https://');
   return u;
 }
+function isCommonsFilePath(u){ return /:\/\/commons\.wikimedia\.org\/wiki\/Special:FilePath\//i.test(u); }
+function isCommonsFileTitle(u){ return /:\/\/commons\.wikimedia\.org\/wiki\/File:/i.test(u); }
 function commonsToThumbPhp(inputUrl) {
   try {
     const url = new URL(inputUrl);
@@ -309,10 +272,38 @@ async function resolveViaSportsDb(teamName) {
     return badge || null;
   } catch { return null; }
 }
+function localLogoCandidates(team) {
+  const slug = String(team)
+    .toLowerCase()
+    .replace(/&/g,'and')
+    .replace(/[\u2019'’]/g,'')
+    .replace(/[^a-z0-9]+/g,'-')
+    .replace(/^-+|-+$/g,'');
+  return [
+    `${LOGO_LOCAL_BASE}/${slug}.png`,
+    `${LOGO_LOCAL_BASE}/${slug}.svg`,
+  ];
+}
+function guessLogoSources(teamName = '', urlFromCsv = '') {
+  const list = [];
+  if (TEAM_LOGO_OVERRIDES[teamName]) list.push(TEAM_LOGO_OVERRIDES[teamName]);
+  if (urlFromCsv) list.push(urlFromCsv);
+  for (const loc of localLogoCandidates(teamName)) list.push(loc);
+  return [...new Set(list.map(normalizeBasicUrl))];
+}
 
 // Robust image loader with longer timeout + 1 retry
 async function tryLoad(src, teamName, timeoutMs = 30000, retries = 1) {
   if (!src) return null;
+
+  function withBust(u){
+    try {
+      const url = new URL(u, location.href);
+      // add v= once per session (keeps GH CDN fresh-ish)
+      if (!url.searchParams.has('v')) url.searchParams.set('v', Date.now().toString(36));
+      return url.toString();
+    } catch { return u; }
+  }
 
   async function attempt(oneSrc) {
     return new Promise(resolve => {
@@ -340,25 +331,11 @@ async function tryLoad(src, teamName, timeoutMs = 30000, retries = 1) {
     });
   }
 
-  // add a tiny cache buster for GH pages eventual consistency
-  const cacheBust = (u) => {
-    if (/^https?:/i.test(u) || u.startsWith('./') || u.startsWith('../') || u.startsWith('/')) {
-      try {
-        const url = new URL(u, location.href);
-        url.searchParams.set('v', Date.now().toString(36));
-        return url.toString();
-      } catch { return u; }
-    }
-    return u;
-  };
-
-  // first try as-is
   let res = await attempt(src);
   if (res) return res;
 
-  // retry once with cache-bust
   if (retries > 0) {
-    res = await attempt(cacheBust(src));
+    res = await attempt(withBust(src));
     if (res) return res;
   }
 
@@ -394,13 +371,77 @@ async function prefetchAllLogos(teamMap) {
   await Promise.all(Array.from({length: CONCURRENCY}, worker));
 }
 
-// Revoke any object URLs on exit (safety)
+// Cleanup any object URLs (not used here but safe)
 window.addEventListener('beforeunload', () => {
   for (const url of LOGO_URLS.values()) {
     try { URL.revokeObjectURL(url); } catch {}
   }
   LOGO_URLS.clear();
 });
+
+// Set a crest into a badge node — never clears a good image
+const badgeTokens = new WeakMap();
+async function setBadge(elm, urlFromCsv, teamName='') {
+  if (!elm) return;
+  const token = {}; badgeTokens.set(elm, token);
+
+  // If an <img> already exists, keep it (avoid flicker/disappearing)
+  const hasImg = !!elm.querySelector('img');
+
+  // Show initials immediately only if empty
+  if (!hasImg && !elm.textContent?.trim()) {
+    elm.textContent = initials(teamName) || '';
+    elm.classList.remove('has-logo');
+  }
+
+  // prefer a preloaded hit
+  let pre = LOGO_STORE.get(teamName);
+  if (pre?.img) {
+    if (badgeTokens.get(elm) !== token) return;
+    elm.innerHTML = '';
+    elm.appendChild(pre.img.cloneNode(true));
+    elm.classList.add('has-logo');
+    LOGO_CACHE[teamName] = pre.url; saveLogoCache();
+    return;
+  }
+
+  // Otherwise try sources in order:
+  const sources = guessLogoSources(teamName, urlFromCsv);
+  let hit = null;
+  for (const src of sources) {
+    hit = await tryLoad(src, teamName, 30000, 1);
+    if (hit) break;
+  }
+
+  // Optional Commons or SportsDB (disabled by default)
+  if (!hit && urlFromCsv) {
+    const raw = normalizeBasicUrl(urlFromCsv);
+    if (isCommonsFilePath(raw) || isCommonsFileTitle(raw)) {
+      const thumbPhp = commonsToThumbPhp(raw);
+      if (thumbPhp) hit = await tryLoad(thumbPhp, teamName, 30000, 1);
+      if (!hit) {
+        const apiThumb = await resolveViaCommonsApi(raw);
+        if (apiThumb) hit = await tryLoad(apiThumb, teamName, 30000, 1);
+      }
+    }
+  }
+  if (!hit && USE_SPORTSDB_FALLBACK) {
+    const sdb = await resolveViaSportsDb(teamName);
+    if (sdb) hit = await tryLoad(sdb, teamName, 30000, 1);
+  }
+
+  if (!hit) {
+    // keep initials (don’t clear)
+    return;
+  }
+
+  if (badgeTokens.get(elm) !== token) return;
+  elm.innerHTML = '';
+  elm.appendChild(hit.img);
+  elm.classList.add('has-logo');
+  LOGO_STORE.set(teamName, { img: hit.img.cloneNode(true), url: hit.src }); // keep in memory
+  LOGO_CACHE[teamName] = hit.src; saveLogoCache();
+}
 
 // ----------------------------
 // Scene init
@@ -745,7 +786,6 @@ function renderPanel(f) {
     } catch { return iso || ''; }
   };
 
-  console.log('[panel] render', f?.home_team, 'vs', f?.away_team);
   el.fixtureTitle.textContent = `${f.home_team} vs ${f.away_team}`;
   el.fixtureContext.textContent = [f.competition, fmt(f.date_utc), f.stadium && `${f.stadium} (${f.city || ''})`, f.country]
     .filter(Boolean).join(' • ');
@@ -753,7 +793,6 @@ function renderPanel(f) {
   const homeUrl = TEAM_LOGO_OVERRIDES[f.home_team] || f.home_badge_url || f.home_logo_url;
   const awayUrl = TEAM_LOGO_OVERRIDES[f.away_team] || f.away_badge_url || f.away_logo_url;
 
-  // Don’t wipe if a good image is already present; set once or swap from initials → logo
   setBadge(el.homeBadge, homeUrl, f.home_team);
   setBadge(el.awayBadge, awayUrl, f.away_team);
 
