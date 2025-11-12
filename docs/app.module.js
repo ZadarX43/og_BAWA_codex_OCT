@@ -207,6 +207,37 @@ function normalizeBasicUrl(raw) {
   if (/^http:\/\//i.test(u) && location.protocol === 'https:') u = u.replace(/^http:\/\//i, 'https://');
   return u;
 }
+// --- League accuracy (demo values; replace with real data or load JSON) ---
+const ACC = {
+  'UEFA Champions League': { FTR: 0.85, OU25: 0.78, BTTS: 0.74 },
+  'Premier League':        { FTR: 0.82, OU25: 0.76, BTTS: 0.71 },
+  'LaLiga':                { FTR: 0.81, OU25: 0.74, BTTS: 0.68 }
+};
+const tier = p => (p>=0.8?'green' : p>=0.7?'amber' : 'red');
+function leagueAcc(league, market='FTR'){
+  return Math.max(0, Math.min(1, (ACC?.[league]?.[market] ?? 0)));
+}
+function renderCompetitionAccuracy(league){
+  const wrap = document.getElementById('comp-accuracy');
+  if (!wrap || !league) return;
+  const ftr = leagueAcc(league,'FTR');
+  const ou  = leagueAcc(league,'OU25');
+  const btts= leagueAcc(league,'BTTS');
+  const nameEl = document.getElementById('comp-name');
+  const fillEl = wrap.querySelector('.gauge-fill');
+  const valEl  = wrap.querySelector('.gauge-val');
+  const traffic= document.getElementById('comp-traffic');
+  if (nameEl) nameEl.textContent = league;
+  if (fillEl) fillEl.style.width = `${Math.round(ftr*100)}%`;
+  if (valEl)  valEl.textContent  = `${Math.round(ftr*100)}%`;
+  if (traffic){
+    traffic.innerHTML = `
+      <span class="light light--${tier(ftr)}">FTR</span>
+      <span class="light light--${tier(ou)}">O2.5</span>
+      <span class="light light--${tier(btts)}">BTTS</span>
+    `;
+  }
+}
 
 // ---------- Logo system (local only; no remote) ----------
 const LOGO_LOCAL_BASE = './assets/assets/logos';
