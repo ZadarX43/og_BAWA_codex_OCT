@@ -209,40 +209,23 @@ const TEAM_LOGO_OVERRIDES = {
   'Bayern Munich':        `${LOGO_LOCAL_BASE}/bayern-munich.svg`
 };
 
-// Disable remote fallbacks on GH Pages (prevents CORS/429 noise)
-const USE_SPORTSDB_FALLBACK = false;
+// Optional SportsDB fallback (beware CORS/limits)
+const USE_SPORTSDB_FALLBACK = true;
 const SPORTSDB_KEY = '3';
 const SPORTSDB_ENDPOINT = `https://www.thesportsdb.com/api/v1/json/${SPORTSDB_KEY}/searchteams.php?t=`;
 
-// Cache
-const LOGO_CACHE_KEY  = 'og_logo_cache_v_demo';
+const LOGO_CACHE_KEY  = 'og_logo_cache_v_preload';
 let LOGO_CACHE = {};
 try { LOGO_CACHE = JSON.parse(localStorage.getItem(LOGO_CACHE_KEY) || '{}'); } catch {}
 function saveLogoCache(){ try { localStorage.setItem(LOGO_CACHE_KEY, JSON.stringify(LOGO_CACHE)); } catch {} }
 
-// --- helpers for robust loading
-function sameOriginRelative(src) {
-  return src && !/^https?:/i.test(src) && !/^data:/i.test(src);
-}
-function cacheBust(src) {
-  if (!sameOriginRelative(src)) return src;
-  const sep = src.includes('?') ? '&' : '?';
-  return `${src}${sep}v=${Date.now()}`;
-}
-async function fetchAndBlob(src) {
-  try {
-    const res = await fetch(src, { cache: 'no-store' });
-    if (!res.ok) return null;
-    const blob = await res.blob();
-    const url = URL.createObjectURL(blob);
-    return { url, revoke: () => URL.revokeObjectURL(url) };
-  } catch {
-    return null;
-  }
-}
+// In-memory preloaded logos
+const LOGO_STORE = new Map(); // teamName -> {img, url}
+const LOGO_URLS  = new Map(); // teamName -> objectURL (to revoke)
 
+// Guess candidate sources for a team
 function localLogoCandidates(team) {
-  const slug = team
+  const slug = String(team)
     .toLowerCase()
     .replace(/&/g,'and')
     .replace(/[\u2019'’]/g,'')
@@ -253,156 +236,171 @@ function localLogoCandidates(team) {
     `${LOGO_LOCAL_BASE}/${slug}.svg`,
   ];
 }
+function guessLogoSources(teamName = '', urlFromCsv = '') {
+  const list = [];
+  if (TEAM_LOGO_OVERRIDES[teamName]) list.push(TEAM_LOGO_OVERRIDES[teamName]);
+  if (urlFromCsv) list.push(urlFromCsv);
+  for (const loc of localLogoCandidates(teamName)) list.push(loc);
+  return [...new Set(list)];
+}
 
-const badgeTokens = new WeakMap();
+function isCommonsFilePath(u){ return /:\/\/commons\.wikimedia\.org\/wiki\/Special:FilePath\//i.test(u); }
+function isCommonsFileTitle(u){ return /:\/\/commons\.wikimedia\.org\/wiki\/File:/i.test(u); }
+function normalizeBasicUrl(raw) {
+  if (!raw) return '';
+  let u = String(raw).trim();
+  if (!u) return '';
+  if (u.startsWith('//')) u = `https:${u}`;
+  if (/^http:\/\//i.test(u) && location.protocol === 'https:') u = u.replace(/^http:\/\//i, 'https://');
+  return u;
+}
+function commonsToThumbPhp(inputUrl) {
+  try {
+    const url = new URL(inputUrl);
+    let file = '';
+    if (isCommonsFilePath(inputUrl)) {
+      file = decodeURIComponent(url.pathname.split('/').pop() || '');
+    } else if (isCommonsFileTitle(inputUrl)) {
+      const last = decodeURIComponent(url.pathname.split('/').pop() || '');
+      file = last.replace(/^File:/i,'');
+    } else { return null; }
+    file = file.replace(/\s+/g,'_');
+    const thumb = new URL('https://commons.wikimedia.org/w/thumb.php');
+    thumb.searchParams.set('f', file);
+    thumb.searchParams.set('width', '160');
+    return thumb.toString();
+  } catch { return null; }
+}
+async function resolveViaCommonsApi(inputUrl) {
+  try {
+    const url = new URL(inputUrl);
+    let title = '';
+    if (isCommonsFilePath(inputUrl)) {
+      const last = decodeURIComponent(url.pathname.split('/').pop() || '');
+      title = `File:${last.replace(/\s+/g,'_')}`;
+    } else if (isCommonsFileTitle(inputUrl)) {
+      const last = decodeURIComponent(url.pathname.split('/').pop() || '');
+      title = (last.startsWith('File:') ? last : `File:${last}`).replace(/\s+/g,'_');
+    } else { return null; }
 
-// Robust image loader: blob-first for same-origin, then <img>, 30s timeout, 2 retries
-async function tryLoad(src, teamName, timeoutMs = 30000, retries = 2) {
+    const params = new URLSearchParams({
+      action: 'query', prop: 'imageinfo', iiprop: 'url', iiurlwidth: '160',
+      format: 'json', origin: '*', titles: title
+    });
+    const api = `https://commons.wikimedia.org/w/api.php?${params.toString()}`;
+    const r = await fetch(api);
+    if (!r.ok) return null;
+    const j = await r.json();
+    const pages = j?.query?.pages || {};
+    const first = Object.values(pages)[0];
+    const ii = first?.imageinfo?.[0];
+    const thumb = ii?.thumburl || ii?.url;
+    return thumb || null;
+  } catch { return null; }
+}
+async function resolveViaSportsDb(teamName) {
+  if (!USE_SPORTSDB_FALLBACK || !teamName) return null;
+  try {
+    const r = await fetch(SPORTSDB_ENDPOINT + encodeURIComponent(teamName));
+    if (!r.ok) return null;
+    const j = await r.json();
+    const team = (j?.teams || [])[0];
+    const badge = team?.strTeamBadge || team?.strTeamLogo || team?.strTeamFanart1;
+    return badge || null;
+  } catch { return null; }
+}
+
+// Robust image loader with longer timeout + 1 retry
+async function tryLoad(src, teamName, timeoutMs = 30000, retries = 1) {
   if (!src) return null;
 
-  const attemptImg = (url) => new Promise(resolve => {
-    let done = false;
-    const img = new Image();
-    img.alt = teamName || '';
-    img.loading = 'lazy';
-    img.decoding = 'async';
-    if (!/^data:/i.test(url)) { img.crossOrigin = 'anonymous'; img.referrerPolicy = 'no-referrer'; }
+  async function attempt(oneSrc) {
+    return new Promise(resolve => {
+      let done = false;
+      const img = new Image();
+      img.alt = teamName || '';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      if (!/^data:/i.test(oneSrc)) { img.crossOrigin = 'anonymous'; img.referrerPolicy = 'no-referrer'; }
 
-    const finish = (ok) => { if (done) return; done = true; resolve(ok ? { ok:true, img, src:url } : null); };
+      const finish = (ok) => {
+        if (done) return;
+        done = true;
+        ok ? resolve({ ok:true, img, src: oneSrc }) : resolve(null);
+      };
 
-    const t = setTimeout(() => {
-      console.warn('[badge] timeout', { teamName, src: url });
-      finish(false);
-    }, timeoutMs);
+      const t = setTimeout(() => {
+        console.warn('[badge] timeout', { teamName, src: oneSrc });
+        finish(false);
+      }, timeoutMs);
 
-    img.onload  = () => { clearTimeout(t); finish(true);  };
-    img.onerror = () => { clearTimeout(t); finish(false); };
-    img.src = url;
-  });
+      img.onload  = () => { clearTimeout(t); finish(true);  };
+      img.onerror = () => { clearTimeout(t); finish(false); };
+      img.src = oneSrc;
+    });
+  }
 
-  const attemptOnce = async () => {
-    // 1) blob-first for same-origin (skips decoder/cache weirdness)
-    if (sameOriginRelative(src)) {
-      const blob = await fetchAndBlob(src);
-      if (blob) {
-        const hit = await attemptImg(blob.url);
-        if (hit) { setTimeout(() => blob.revoke(), 2000); return hit; }
-        blob.revoke();
-      }
-      // 2) plain <img> with cache-bust
-      const hit2 = await attemptImg(cacheBust(src));
-      if (hit2) return hit2;
-    } else {
-      // external: plain <img>
-      const hit = await attemptImg(src);
-      if (hit) return hit;
+  // add a tiny cache buster for GH pages eventual consistency
+  const cacheBust = (u) => {
+    if (/^https?:/i.test(u) || u.startsWith('./') || u.startsWith('../') || u.startsWith('/')) {
+      try {
+        const url = new URL(u, location.href);
+        url.searchParams.set('v', Date.now().toString(36));
+        return url.toString();
+      } catch { return u; }
     }
-    return null;
+    return u;
   };
 
-  let ret = await attemptOnce();
-  if (ret) return ret;
+  // first try as-is
+  let res = await attempt(src);
+  if (res) return res;
 
-  while (retries-- > 0) {
-    await new Promise(r => setTimeout(r, 500)); // tiny backoff
-    ret = await attemptOnce();
-    if (ret) return ret;
+  // retry once with cache-bust
+  if (retries > 0) {
+    res = await attempt(cacheBust(src));
+    if (res) return res;
   }
+
   return null;
 }
 
-/**
- * Local-first crest loader (no proxy):
- * PRIORITY: overrides → cache → CSV/local → Commons → initials
- */
-async function setBadge(elm, urlFromCsv, teamName='') {
-  if (!elm) return;
-  console.log('[badge] start', {teamName, urlFromCsv, override: TEAM_LOGO_OVERRIDES[teamName]});
-  const token = {}; badgeTokens.set(elm, token);
-  elm.classList.remove('has-logo'); elm.innerHTML = '';
+// Preload all teams once (non-blocking)
+async function prefetchAllLogos(teamMap) {
+  const entries = [...teamMap.entries()]; // [teamName, hintUrl]
+  const CONCURRENCY = 6;
+  let i = 0;
 
-  // TEMP outline while stabilising
-  elm.style.outline = '1px solid rgba(125,249,196,.35)';
-  elm.style.backgroundClip = 'padding-box';
+  async function worker() {
+    while (i < entries.length) {
+      const idx = i++;
+      const [teamName, hintUrl] = entries[idx];
+      if (!teamName || LOGO_STORE.has(teamName)) continue;
 
-  const finishInitials = () => {
-    if (badgeTokens.get(elm) !== token) return;
-    elm.textContent = initials(teamName) || '';
-    elm.classList.remove('has-logo');
-    console.warn('[badge] fallback to initials', { teamName, urlFromCsv });
-  };
-
-  // 0) override first
-  const overrideUrl = TEAM_LOGO_OVERRIDES[teamName];
-  if (overrideUrl) {
-    const hit = await tryLoad(overrideUrl, teamName);
-    if (hit && badgeTokens.get(elm) === token) {
-      elm.innerHTML = ''; elm.appendChild(hit.img); elm.classList.add('has-logo');
-      LOGO_CACHE[teamName] = overrideUrl; saveLogoCache();
-      console.log('[badge] loaded override', { teamName, finalUrl: overrideUrl });
-      return;
-    } else {
-      console.warn('[badge] override failed', { teamName, overrideUrl });
-    }
-  }
-
-  // 1) cache
-  if (teamName && LOGO_CACHE[teamName]) {
-    const hit = await tryLoad(LOGO_CACHE[teamName], teamName);
-    if (hit && badgeTokens.get(elm) === token) {
-      elm.innerHTML = ''; elm.appendChild(hit.img); elm.classList.add('has-logo');
-      console.log('[badge] loaded cache', { teamName, finalUrl: LOGO_CACHE[teamName] });
-      return;
-    } else {
-      console.warn('[badge] cache failed', { teamName, cached: LOGO_CACHE[teamName] });
-    }
-  }
-
-  // 2) CSV absolute (if any)
-  const raw = normalizeBasicUrl(urlFromCsv);
-  let loaded = null, finalUrl = null;
-
-  if (raw) {
-    loaded = await tryLoad(raw, teamName);
-    if (loaded) finalUrl = raw;
-  }
-
-  // 3) local slug guesses
-  if (!loaded && teamName) {
-    for (const loc of localLogoCandidates(teamName)) {
-      loaded = await tryLoad(loc, teamName);
-      if (loaded) { finalUrl = loc; break; }
-    }
-  }
-
-  // 4) Commons (thumb/API) if CSV was a Commons link
-  if (!loaded && raw && (isCommonsFilePath(raw) || isCommonsFileTitle(raw))) {
-    const thumbPhp = commonsToThumbPhp(raw);
-    if (thumbPhp) {
-      loaded = await tryLoad(thumbPhp, teamName);
-      if (loaded) finalUrl = thumbPhp;
-    }
-    if (!loaded) {
-      const apiThumb = await resolveViaCommonsApi(raw);
-      if (apiThumb) {
-        loaded = await tryLoad(apiThumb, teamName);
-        if (loaded) finalUrl = apiThumb;
+      const sources = guessLogoSources(teamName, hintUrl);
+      let hit = null;
+      for (const src of sources) {
+        hit = await tryLoad(src, teamName, 30000, 1);
+        if (hit) break;
+      }
+      if (hit) {
+        LOGO_STORE.set(teamName, { img: hit.img, url: hit.src });
+      } else {
+        LOGO_STORE.set(teamName, { img: null, url: null }); // mark attempted
       }
     }
   }
 
-  // 5) SportsDB fallback (disabled on GH Pages)
-  // if (!loaded && USE_SPORTSDB_FALLBACK && teamName) { ... }
-
-  if (!loaded) return finishInitials();
-
-  if (badgeTokens.get(elm) !== token) return;
-  elm.innerHTML = '';
-  elm.appendChild(loaded.img);
-  elm.classList.add('has-logo');
-  console.log('[badge] loaded', { teamName, finalUrl });
-  if (teamName && finalUrl) { LOGO_CACHE[teamName] = finalUrl; saveLogoCache(); }
+  await Promise.all(Array.from({length: CONCURRENCY}, worker));
 }
+
+// Revoke any object URLs on exit (safety)
+window.addEventListener('beforeunload', () => {
+  for (const url of LOGO_URLS.values()) {
+    try { URL.revokeObjectURL(url); } catch {}
+  }
+  LOGO_URLS.clear();
+});
 
 // ----------------------------
 // Scene init
@@ -574,6 +572,16 @@ async function loadFixturesCSV(url) {
       return;
     }
 
+    // Build a unique team map for preloading (best CSV hint per team)
+    const TEAM_SET = new Map(); // teamName -> csvUrlHint
+    for (const f of fixtures) {
+      if (f.home_team) TEAM_SET.set(f.home_team, f.home_badge_url || f.home_logo_url || TEAM_SET.get(f.home_team) || '');
+      if (f.away_team) TEAM_SET.set(f.away_team, f.away_badge_url || f.away_logo_url || TEAM_SET.get(f.away_team) || '');
+    }
+
+    // Fire preloader (non-blocking; UI boots immediately)
+    prefetchAllLogos(TEAM_SET).catch(()=>{});
+
     const many = fixtures.length > 250;
     globe.pointsMerge(many).pointResolution(12);
     globe
@@ -738,7 +746,6 @@ function renderPanel(f) {
   };
 
   console.log('[panel] render', f?.home_team, 'vs', f?.away_team);
-
   el.fixtureTitle.textContent = `${f.home_team} vs ${f.away_team}`;
   el.fixtureContext.textContent = [f.competition, fmt(f.date_utc), f.stadium && `${f.stadium} (${f.city || ''})`, f.country]
     .filter(Boolean).join(' • ');
@@ -746,8 +753,7 @@ function renderPanel(f) {
   const homeUrl = TEAM_LOGO_OVERRIDES[f.home_team] || f.home_badge_url || f.home_logo_url;
   const awayUrl = TEAM_LOGO_OVERRIDES[f.away_team] || f.away_badge_url || f.away_logo_url;
 
-  el.homeBadge && el.awayBadge && console.log('[panel] badge nodes', { home: !!el.homeBadge, away: !!el.awayBadge });
-
+  // Don’t wipe if a good image is already present; set once or swap from initials → logo
   setBadge(el.homeBadge, homeUrl, f.home_team);
   setBadge(el.awayBadge, awayUrl, f.away_team);
 
@@ -955,7 +961,7 @@ const API = {
   copilot: (p)=>       apiJson('/copilot', { method:'POST', body: JSON.stringify(p) })
 };
 
-// ---------- Bet Checker: OCR → parse → score ----------
+// ---------- Bet Checker OCR ----------
 async function ocrImageOrPdf(file) {
   if (!window.Tesseract) throw new Error('OCR engine not loaded');
   const { data } = await window.Tesseract.recognize(file, 'eng', { logger: () => {} });
@@ -1233,8 +1239,8 @@ scrim?.addEventListener('click', ()=> closeDrawer());
 // quick self-test for two known files
 (function verifyLocalLogoSetup(){
   const tests = [
-    './assets/assets/logos/arsenal.svg',
-    './assets/assets/logos/fc-barcelona.svg'
+    `${LOGO_LOCAL_BASE}/arsenal.svg`,
+    `${LOGO_LOCAL_BASE}/fc-barcelona.svg`
   ];
   tests.forEach(src => {
     const img = new Image();
