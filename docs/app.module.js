@@ -156,10 +156,30 @@ function initials(name = '') {
   return (words[0][0] + (words[1][0] || '')).toUpperCase();
 }
 
+function stripDiacritics(s) {
+  try { return s.normalize('NFD').replace(/\p{Diacritic}/gu, ''); }
+  catch { return s; }
+}
+function slugLocal(team) {
+  return stripDiacritics(String(team))
+    .toLowerCase()
+    .replace(/&/g,'and')
+    .replace(/[\u2019'’]/g,'')
+    .replace(/[^a-z0-9]+/g,'-')
+    .replace(/^-+|-+$/g,'');
+}
+function normalizeBasicUrl(raw) {
+  if (!raw) return '';
+  let u = String(raw).trim();
+  if (!u) return '';
+  if (u.startsWith('//')) u = `https:${u}`;
+  if (/^http:\/\//i.test(u) && location.protocol === 'https:') u = u.replace(/^http:\/\//i, 'https://');
+  return u;
+}
+
 // ---------- Logo system (local only; no remote) ----------
 const LOGO_LOCAL_BASE = './assets/assets/logos';
 
-// Add any missing clubs here:
 const TEAM_LOGO_OVERRIDES = {
   'Celtic':               `${LOGO_LOCAL_BASE}/celtic.svg`,
   'Lazio':                `${LOGO_LOCAL_BASE}/lazio.svg`,
@@ -202,31 +222,21 @@ const TEAM_LOGO_OVERRIDES = {
   'Salzburg':             `${LOGO_LOCAL_BASE}/rb-salzburg.svg`,
   'Bayern München':       `${LOGO_LOCAL_BASE}/bayern-munich.svg`,
   'Bayern Munich':        `${LOGO_LOCAL_BASE}/bayern-munich.svg`,
-  // Extra: present in CSVs
+  // Extra clubs present in some CSVs
   'Sporting Braga':       `${LOGO_LOCAL_BASE}/sporting-braga.svg`,
   'Union Berlin':         `${LOGO_LOCAL_BASE}/union-berlin.svg`
 };
 
-// local cache
+// local persistent cache
 const LOGO_CACHE_KEY  = 'og_logo_cache_v_preload';
 let LOGO_CACHE = {};
 try { LOGO_CACHE = JSON.parse(localStorage.getItem(LOGO_CACHE_KEY) || '{}'); } catch {}
 function saveLogoCache(){ try { localStorage.setItem(LOGO_CACHE_KEY, JSON.stringify(LOGO_CACHE)); } catch {} }
 
+// Keep loaded <img> so we can clone later without re-decoding
 const LOGO_STORE = new Map(); // teamName -> {img, url}
 
-function stripDiacritics(s) {
-  try { return s.normalize('NFD').replace(/\p{Diacritic}/gu, ''); }
-  catch { return s; }
-}
-function slugLocal(team) {
-  return stripDiacritics(String(team))
-    .toLowerCase()
-    .replace(/&/g,'and')
-    .replace(/[\u2019'’]/g,'')
-    .replace(/[^a-z0-9]+/g,'-')
-    .replace(/^-+|-+$/g,'');
-}
+// Candidate sources (local only)
 function localLogoCandidates(team) {
   const slug = slugLocal(team);
   return [
@@ -234,25 +244,16 @@ function localLogoCandidates(team) {
     `${LOGO_LOCAL_BASE}/${slug}.svg`,
   ];
 }
-function normalizeBasicUrl(raw) {
-  if (!raw) return '';
-  let u = String(raw).trim();
-  if (!u) return '';
-  if (u.startsWith('//')) u = `https:${u}`;
-  if (/^http:\/\//i.test(u) && location.protocol === 'https:') u = u.replace(/^http:\/\//i, 'https://');
-  return u;
-}
 function guessLogoSources(teamName = '', urlFromCsv = '') {
   const list = [];
   if (TEAM_LOGO_OVERRIDES[teamName]) list.push(TEAM_LOGO_OVERRIDES[teamName]);
-  // We do NOT push remote CSVs by default on GH Pages (CORS/timeouts). Local only:
   for (const loc of localLogoCandidates(teamName)) list.push(loc);
+  // no remote CSV/commons on GH Pages
   return [...new Set(list.map(normalizeBasicUrl))];
 }
 
-// Robust image loader (shorter timeout, no silent hang)
-async function tryLoad(src, teamName, timeoutMs = 12000) {
-  if (!src) return null;
+// Robust loader: try normal <img>, then fetch→blob fallback if it stalls
+async function tryLoadDirect(src, teamName, timeoutMs) {
   return new Promise(resolve => {
     let done = false;
     const img = new Image();
@@ -260,20 +261,44 @@ async function tryLoad(src, teamName, timeoutMs = 12000) {
     img.loading = 'lazy';
     img.decoding = 'async';
     if (!/^data:/i.test(src)) { img.crossOrigin = 'anonymous'; img.referrerPolicy = 'no-referrer'; }
-
-    const finish = ok => { if (!done){ done = true; resolve(ok ? { ok:true, img, src } : null); } };
-    const t = setTimeout(() => {
-      console.warn('[badge] timeout', { teamName, src });
-      finish(false);
-    }, timeoutMs);
-
-    img.onload  = () => { clearTimeout(t); finish(true);  };
-    img.onerror = () => { clearTimeout(t); finish(false); };
-    img.src = src;
+    const t = setTimeout(() => { if (!done){ done = true; resolve(null); } }, timeoutMs);
+    img.onload  = () => { if (!done){ clearTimeout(t); done = true; resolve({ ok:true, img, src }); } };
+    img.onerror = () => { if (!done){ clearTimeout(t); done = true; resolve(null); } };
+    // cache-buster to avoid stale 404s
+    img.src = `${src}${src.includes('?') ? '&' : '?'}v=${Date.now().toString(36)}`;
   });
 }
+async function tryLoadViaBlob(src, teamName, timeoutMs) {
+  try {
+    const ac = new AbortController();
+    const to = setTimeout(() => ac.abort(), timeoutMs);
+    const res = await fetch(`${src}${src.includes('?') ? '&' : '?'}v=${Date.now().toString(36)}`, { cache: 'no-store', signal: ac.signal });
+    clearTimeout(to);
+    if (!res.ok) return null;
+    const blob = await res.blob();
+    return await new Promise(resolve => {
+      let done = false;
+      const url = URL.createObjectURL(blob);
+      const img = new Image();
+      img.alt = teamName || '';
+      img.onload  = () => { if (!done){ done = true; URL.revokeObjectURL(url); resolve({ ok:true, img, src }); } };
+      img.onerror = () => { if (!done){ done = true; URL.revokeObjectURL(url); resolve(null); } };
+      img.src = url;
+    });
+  } catch {
+    return null;
+  }
+}
+async function tryLoad(src, teamName, timeoutMs = 15000) {
+  // first attempt: direct <img>
+  let hit = await tryLoadDirect(src, teamName, Math.min(timeoutMs, 6000));
+  if (hit) return hit;
+  // fallback: fetch→blob
+  hit = await tryLoadViaBlob(src, teamName, timeoutMs);
+  return hit;
+}
 
-// Preload all once (local only)
+// Preload all once
 async function prefetchAllLogos(teamMap) {
   const items = [...teamMap.keys()];
   const CONCURRENCY = 4;
@@ -286,7 +311,7 @@ async function prefetchAllLogos(teamMap) {
       const sources = guessLogoSources(name, '');
       let hit = null;
       for (const src of sources) {
-        hit = await tryLoad(src, name, 12000);
+        hit = await tryLoad(src, name, 15000);
         if (hit) break;
       }
       if (hit) LOGO_STORE.set(name, { img: hit.img, url: hit.src });
@@ -302,10 +327,10 @@ async function setBadge(elm, urlFromCsv, teamName='') {
   if (!elm) return;
   const token = {}; badgeTokens.set(elm, token);
 
-  // If an <img> already exists, keep it
+  // Preserve an already good image across fixture switches
   if (elm.querySelector('img')) return;
 
-  // Show initials placeholder immediately
+  // Show initials placeholder immediately (cheap UI feedback)
   if (!elm.textContent?.trim()) {
     elm.textContent = initials(teamName) || '';
     elm.classList.remove('has-logo');
@@ -326,7 +351,7 @@ async function setBadge(elm, urlFromCsv, teamName='') {
   const sources = guessLogoSources(teamName, urlFromCsv);
   let hit = null;
   for (const src of sources) {
-    hit = await tryLoad(src, teamName, 12000);
+    hit = await tryLoad(src, teamName, 15000);
     if (hit) break;
   }
   if (!hit) return; // keep initials
@@ -422,7 +447,7 @@ async function init() {
     camera.aspect = clientWidth / clientHeight;
     camera.updateProjectionMatrix();
     const px = renderer.getPixelRatio();
-    fxaaPass.material.uniforms.resolution.value.set(
+    fxaaPass.material.uniforms['resolution'].value.set(
       1 / (clientWidth * px),
       1 / (clientHeight * px)
     );
@@ -436,6 +461,33 @@ async function init() {
 
   el.prevBtn?.addEventListener('click', () => step(-1));
   el.nextBtn?.addEventListener('click', () => step(+1));
+
+  // --- Header profile menu + closeProfileMenu (needed by showRoute)
+  const profileBtn  = document.getElementById('btn-profile');
+  const profileMenu = document.getElementById('profile-menu');
+  function closeProfileMenu(){ profileMenu?.classList.remove('show'); profileBtn?.setAttribute('aria-expanded','false'); }
+  profileBtn?.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    const open = profileMenu?.classList.contains('show');
+    if (open) closeProfileMenu();
+    else { profileMenu?.classList.add('show'); profileBtn?.setAttribute('aria-expanded','true'); }
+  });
+  document.addEventListener('click', (e)=>{
+    if (profileMenu?.classList.contains('show') && !profileMenu.contains(e.target) && e.target !== profileBtn) {
+      closeProfileMenu();
+    }
+  });
+
+  // --- Mobile sidebar utilities
+  const drawer  = document.getElementById('side-drawer');
+  const scrim   = document.getElementById('scrim');
+  const menuBtn = document.getElementsByClassName('header__menu')[0];
+  const closeBtn= document.getElementById('btn-close-drawer');
+  function openDrawer(){ drawer?.classList.add('show'); scrim?.classList.add('show'); drawer?.setAttribute('aria-hidden','false'); }
+  function closeDrawer(){ drawer?.classList.remove('show'); scrim?.classList.remove('show'); drawer?.setAttribute('aria-hidden','true'); }
+  menuBtn?.addEventListener('click', ()=> openDrawer());
+  closeBtn?.addEventListener('click', ()=> closeDrawer());
+  scrim?.addEventListener('click', ()=> closeDrawer());
 
   wireTabs();
   await loadFixturesCSV('./data/fixtures.csv');
@@ -1133,7 +1185,16 @@ function showRoute(hash) {
     a.classList.toggle('is-active', a.getAttribute('href') === hash);
     if (a.classList.contains('side-link')) a.classList.toggle('active', a.getAttribute('href') === hash);
   });
-  closeProfileMenu(); closeDrawer();
+  // close menus on route change
+  const profileMenu = document.getElementById('profile-menu');
+  const profileBtn  = document.getElementById('btn-profile');
+  if (profileMenu) profileMenu.classList.remove('show');
+  if (profileBtn)  profileBtn.setAttribute('aria-expanded','false');
+  const drawer  = document.getElementById('side-drawer');
+  const scrim   = document.getElementById('scrim');
+  drawer?.classList.remove('show');
+  scrim?.classList.remove('show');
+  drawer?.setAttribute('aria-hidden','true');
 }
 
 window.addEventListener('hashchange', ()=> showRoute(location.hash));
@@ -1141,17 +1202,6 @@ window.addEventListener('DOMContentLoaded', ()=>{
   if (!location.hash) location.hash = '#/';
   showRoute(location.hash);
 });
-
-// --- Mobile sidebar helpers
-const drawer  = document.getElementById('side-drawer');
-const scrim   = document.getElementById('scrim');
-const menuBtn = document.getElementsByClassName('header__menu')[0];
-const closeBtn= document.getElementById('btn-close-drawer');
-function openDrawer(){ drawer?.classList.add('show'); scrim?.classList.add('show'); drawer?.setAttribute('aria-hidden','false'); }
-function closeDrawer(){ drawer?.classList.remove('show'); scrim?.classList.remove('show'); drawer?.setAttribute('aria-hidden','true'); }
-menuBtn?.addEventListener('click', ()=> openDrawer());
-closeBtn?.addEventListener('click', ()=> closeDrawer());
-scrim?.addEventListener('click', ()=> closeDrawer());
 
 // quick self-test for two known files
 (function verifyLocalLogoSetup(){
