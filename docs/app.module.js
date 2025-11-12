@@ -209,86 +209,18 @@ const TEAM_LOGO_OVERRIDES = {
   'Bayern Munich':        `${LOGO_LOCAL_BASE}/bayern-munich.svg`
 };
 
-// Disable remote fallbacks on GH Pages (prevents CORS + 429 noise)
+// Disable remote fallbacks on GH Pages (prevents CORS/429 noise)
 const USE_SPORTSDB_FALLBACK = false;
 const SPORTSDB_KEY = '3';
 const SPORTSDB_ENDPOINT = `https://www.thesportsdb.com/api/v1/json/${SPORTSDB_KEY}/searchteams.php?t=`;
 
+// Cache
 const LOGO_CACHE_KEY  = 'og_logo_cache_v_demo';
 let LOGO_CACHE = {};
 try { LOGO_CACHE = JSON.parse(localStorage.getItem(LOGO_CACHE_KEY) || '{}'); } catch {}
 function saveLogoCache(){ try { localStorage.setItem(LOGO_CACHE_KEY, JSON.stringify(LOGO_CACHE)); } catch {} }
 
-function isCommonsFilePath(u){ return /:\/\/commons\.wikimedia\.org\/wiki\/Special:FilePath\//i.test(u); }
-function isCommonsFileTitle(u){ return /:\/\/commons\.wikimedia\.org\/wiki\/File:/i.test(u); }
-
-function normalizeBasicUrl(raw) {
-  if (!raw) return '';
-  let u = String(raw).trim();
-  if (!u) return '';
-  if (u.startsWith('//')) u = `https:${u}`;
-  if (/^http:\/\//i.test(u) && location.protocol === 'https:') u = u.replace(/^http:\/\//i, 'https://');
-  return u;
-}
-
-function commonsToThumbPhp(inputUrl) {
-  try {
-    const url = new URL(inputUrl);
-    let file = '';
-    if (isCommonsFilePath(inputUrl)) {
-      file = decodeURIComponent(url.pathname.split('/').pop() || '');
-    } else if (isCommonsFileTitle(inputUrl)) {
-      const last = decodeURIComponent(url.pathname.split('/').pop() || '');
-      file = last.replace(/^File:/i,'');
-    } else { return null; }
-    file = file.replace(/\s+/g,'_');
-    const thumb = new URL('https://commons.wikimedia.org/w/thumb.php');
-    thumb.searchParams.set('f', file);
-    thumb.searchParams.set('width', '160');
-    return thumb.toString();
-  } catch { return null; }
-}
-
-async function resolveViaCommonsApi(inputUrl) {
-  try {
-    const url = new URL(inputUrl);
-    let title = '';
-    if (isCommonsFilePath(inputUrl)) {
-      const last = decodeURIComponent(url.pathname.split('/').pop() || '');
-      title = `File:${last.replace(/\s+/g,'_')}`;
-    } else if (isCommonsFileTitle(inputUrl)) {
-      const last = decodeURIComponent(url.pathname.split('/').pop() || '');
-      title = (last.startsWith('File:') ? last : `File:${last}`).replace(/\s+/g,'_');
-    } else { return null; }
-
-    const params = new URLSearchParams({
-      action: 'query', prop: 'imageinfo', iiprop: 'url', iiurlwidth: '160',
-      format: 'json', origin: '*', titles: title
-    });
-    const api = `https://commons.wikimedia.org/w/api.php?${params.toString()}`;
-    const r = await fetch(api);
-    if (!r.ok) return null;
-    const j = await r.json();
-    const pages = j?.query?.pages || {};
-    const first = Object.values(pages)[0];
-    const ii = first?.imageinfo?.[0];
-    const thumb = ii?.thumburl || ii?.url;
-    return thumb || null;
-  } catch { return null; }
-}
-
-async function resolveViaSportsDb(teamName) {
-  if (!USE_SPORTSDB_FALLBACK || !teamName) return null;
-  try {
-    const r = await fetch(SPORTSDB_ENDPOINT + encodeURIComponent(teamName));
-    if (!r.ok) return null;
-    const j = await r.json();
-    const team = (j?.teams || [])[0];
-    const badge = team?.strTeamBadge || team?.strTeamLogo || team?.strTeamFanart1;
-    return badge || null;
-  } catch { return null; }
-}
-
+// --- helpers for robust loading
 function sameOriginRelative(src) {
   return src && !/^https?:/i.test(src) && !/^data:/i.test(src);
 }
@@ -324,11 +256,9 @@ function localLogoCandidates(team) {
 
 const badgeTokens = new WeakMap();
 
-// Robust image loader: timeout + cache-bust + blob fallback
-async function tryLoad(src, teamName, timeoutMs = 12000) {
+// Robust image loader: blob-first for same-origin, then <img>, 30s timeout, 2 retries
+async function tryLoad(src, teamName, timeoutMs = 30000, retries = 2) {
   if (!src) return null;
-
-  const primarySrc = cacheBust(src);
 
   const attemptImg = (url) => new Promise(resolve => {
     let done = false;
@@ -350,30 +280,40 @@ async function tryLoad(src, teamName, timeoutMs = 12000) {
     img.src = url;
   });
 
-  // 1) normal <img> with cache-bust
-  let hit = await attemptImg(primarySrc);
-  if (hit) return hit;
-
-  // 2) blob fallback (same-origin only)
-  if (sameOriginRelative(src)) {
-    const blob = await fetchAndBlob(src);
-    if (blob) {
-      hit = await attemptImg(blob.url);
-      if (hit) {
-        setTimeout(() => blob.revoke(), 2000);
-        return hit;
+  const attemptOnce = async () => {
+    // 1) blob-first for same-origin (skips decoder/cache weirdness)
+    if (sameOriginRelative(src)) {
+      const blob = await fetchAndBlob(src);
+      if (blob) {
+        const hit = await attemptImg(blob.url);
+        if (hit) { setTimeout(() => blob.revoke(), 2000); return hit; }
+        blob.revoke();
       }
-      blob.revoke();
+      // 2) plain <img> with cache-bust
+      const hit2 = await attemptImg(cacheBust(src));
+      if (hit2) return hit2;
+    } else {
+      // external: plain <img>
+      const hit = await attemptImg(src);
+      if (hit) return hit;
     }
-  }
+    return null;
+  };
 
+  let ret = await attemptOnce();
+  if (ret) return ret;
+
+  while (retries-- > 0) {
+    await new Promise(r => setTimeout(r, 500)); // tiny backoff
+    ret = await attemptOnce();
+    if (ret) return ret;
+  }
   return null;
 }
 
 /**
  * Local-first crest loader (no proxy):
- * PRIORITY: overrides → cache → CSV/local/commons → initials
- * (SportsDB fallback is disabled on GH Pages to avoid CORS/429)
+ * PRIORITY: overrides → cache → CSV/local → Commons → initials
  */
 async function setBadge(elm, urlFromCsv, teamName='') {
   if (!elm) return;
@@ -381,7 +321,7 @@ async function setBadge(elm, urlFromCsv, teamName='') {
   const token = {}; badgeTokens.set(elm, token);
   elm.classList.remove('has-logo'); elm.innerHTML = '';
 
-  // TEMP outline while stabilising (safe to remove later)
+  // TEMP outline while stabilising
   elm.style.outline = '1px solid rgba(125,249,196,.35)';
   elm.style.backgroundClip = 'padding-box';
 
@@ -451,14 +391,8 @@ async function setBadge(elm, urlFromCsv, teamName='') {
     }
   }
 
-  // 5) (optional) SportsDB fallback – disabled on GH Pages
-  if (!loaded && USE_SPORTSDB_FALLBACK && teamName) {
-    const sdb = await resolveViaSportsDb(teamName);
-    if (sdb) {
-      loaded = await tryLoad(sdb, teamName);
-      if (loaded) finalUrl = sdb;
-    }
-  }
+  // 5) SportsDB fallback (disabled on GH Pages)
+  // if (!loaded && USE_SPORTSDB_FALLBACK && teamName) { ... }
 
   if (!loaded) return finishInitials();
 
@@ -812,7 +746,6 @@ function renderPanel(f) {
   const homeUrl = TEAM_LOGO_OVERRIDES[f.home_team] || f.home_badge_url || f.home_logo_url;
   const awayUrl = TEAM_LOGO_OVERRIDES[f.away_team] || f.away_badge_url || f.away_logo_url;
 
-  // ensure badge nodes exist
   el.homeBadge && el.awayBadge && console.log('[panel] badge nodes', { home: !!el.homeBadge, away: !!el.awayBadge });
 
   setBadge(el.homeBadge, homeUrl, f.home_team);
