@@ -317,46 +317,60 @@ async function tryLoad(src, teamName) {
     img.src = src;
   });
 }
-
 /**
  * Local-first crest loader (no proxy):
  * PRIORITY: overrides → cache → CSV/local/commons/sportsdb → initials
  */
 async function setBadge(elm, urlFromCsv, teamName='') {
   if (!elm) return;
-  console.log('[badge] start', { teamName, urlFromCsv, override: TEAM_LOGO_OVERRIDES[teamName] });
-  const token = {}; badgeTokens.set(elm, token);
-  elm.classList.remove('has-logo'); elm.innerHTML = '';
+  const token = {};
+  badgeTokens.set(elm, token);
+  elm.classList.remove('has-logo');
+  elm.innerHTML = '';
+
+  // TEMP: make badge boxes obvious while we debug
+  // (remove these two lines when you're happy)
+  elm.style.outline = '1px solid rgba(125,249,196,.35)';
+  elm.style.backgroundClip = 'padding-box';
 
   const finishInitials = () => {
     if (badgeTokens.get(elm) !== token) return;
     elm.textContent = initials(teamName) || '';
     elm.classList.remove('has-logo');
+    console.warn('[badge] fallback to initials', { teamName, urlFromCsv });
   };
 
-  // 0) OVERRIDE FIRST
+  // --- OVERRIDE FIRST (guaranteed local path)
   const overrideUrl = TEAM_LOGO_OVERRIDES[teamName];
   if (overrideUrl) {
     const hit = await tryLoad(overrideUrl, teamName);
     if (hit && badgeTokens.get(elm) === token) {
-      elm.appendChild(hit.img); elm.classList.add('has-logo');
+      elm.innerHTML = '';
+      elm.appendChild(hit.img);
+      elm.classList.add('has-logo');
       LOGO_CACHE[teamName] = overrideUrl; saveLogoCache();
-      console.log('[badge] loaded override', overrideUrl);
+      console.log('[badge] loaded override', { teamName, finalUrl: overrideUrl });
       return;
+    } else {
+      console.warn('[badge] override failed to load', { teamName, overrideUrl });
     }
   }
 
-  // 1) cache
+  // --- CACHE
   if (teamName && LOGO_CACHE[teamName]) {
     const hit = await tryLoad(LOGO_CACHE[teamName], teamName);
     if (hit && badgeTokens.get(elm) === token) {
-      elm.appendChild(hit.img); elm.classList.add('has-logo');
-      console.log('[badge] loaded cache', LOGO_CACHE[teamName]);
+      elm.innerHTML = '';
+      elm.appendChild(hit.img);
+      elm.classList.add('has-logo');
+      console.log('[badge] loaded cache', { teamName, finalUrl: LOGO_CACHE[teamName] });
       return;
+    } else {
+      console.warn('[badge] cache failed', { teamName, cached: LOGO_CACHE[teamName] });
     }
   }
 
-  // 2) CSV or absolute URL
+  // --- CSV or absolute URL
   const raw = normalizeBasicUrl(urlFromCsv);
   let loaded = null, finalUrl = null;
 
@@ -365,7 +379,7 @@ async function setBadge(elm, urlFromCsv, teamName='') {
     if (loaded) finalUrl = raw;
   }
 
-  // 3) local slug guesses
+  // --- local slug guesses
   if (!loaded && teamName) {
     for (const loc of localLogoCandidates(teamName)) {
       loaded = await tryLoad(loc, teamName);
@@ -373,7 +387,7 @@ async function setBadge(elm, urlFromCsv, teamName='') {
     }
   }
 
-  // 4) Commons (thumb/API) if CSV was a Commons link
+  // --- Commons from CSV if applicable
   if (!loaded && raw && (isCommonsFilePath(raw) || isCommonsFileTitle(raw))) {
     const thumbPhp = commonsToThumbPhp(raw);
     if (thumbPhp) {
@@ -389,7 +403,7 @@ async function setBadge(elm, urlFromCsv, teamName='') {
     }
   }
 
-  // 5) SportsDB fallback
+  // --- SportsDB fallback
   if (!loaded && teamName) {
     const sdb = await resolveViaSportsDb(teamName);
     if (sdb) {
@@ -398,17 +412,16 @@ async function setBadge(elm, urlFromCsv, teamName='') {
     }
   }
 
-  if (!loaded) {
-    console.warn('[badge] fallback to initials', { teamName, urlFromCsv });
-    return finishInitials();
-  }
+  if (!loaded) return finishInitials();
 
   if (badgeTokens.get(elm) !== token) return;
+  elm.innerHTML = '';
   elm.appendChild(loaded.img);
   elm.classList.add('has-logo');
-  console.log('[badge] loaded', { teamName, finalUrl });
   if (teamName && finalUrl) { LOGO_CACHE[teamName] = finalUrl; saveLogoCache(); }
+  console.log('[badge] loaded', { teamName, finalUrl });
 }
+
 
 // ----------------------------
 // Scene init
