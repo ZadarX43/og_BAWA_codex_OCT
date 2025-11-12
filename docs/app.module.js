@@ -777,6 +777,9 @@ function renderPanel(f) {
   const homeUrl = TEAM_LOGO_OVERRIDES[f.home_team] || f.home_badge_url || f.home_logo_url;
   const awayUrl = TEAM_LOGO_OVERRIDES[f.away_team] || f.away_badge_url || f.away_logo_url;
 
+  // (3) Sanity log: badge nodes presence
+  console.log('[panel] badge nodes', { home: !!el.homeBadge, away: !!el.awayBadge });
+
   setBadge(el.homeBadge, homeUrl, f.home_team);
   setBadge(el.awayBadge, awayUrl, f.away_team);
 
