@@ -248,6 +248,41 @@ canvas{ border-radius:24px; }
 }
 #nav-prev:active,#nav-next:active{ transform:translateY(-50%) scale(.98); }
 
+/* ===== Competition accuracy card under globe ===== */
+.comp-accuracy{
+  margin-top:14px;
+  background:rgba(17,28,40,.78);
+  border:1px solid rgba(125,249,196,.16);
+  border-radius:16px;
+  padding:12px 14px;
+  box-shadow:0 16px 36px rgba(0,0,0,.28);
+}
+.comp-accuracy .comp-row{
+  display:grid; grid-template-columns:minmax(120px,1fr) 1.2fr; align-items:center; gap:12px;
+  margin-bottom:10px;
+}
+.comp-accuracy .comp-name{
+  font-weight:700; letter-spacing:.02em; font-size:.98rem; color:#deefff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.gauge{display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:8px}
+.gauge-label{font-weight:700; font-size:.8rem; opacity:.9}
+.gauge-bar{height:8px; border-radius:999px; background:rgba(255,255,255,.12); overflow:hidden}
+.gauge-fill{height:100%; width:0%; background:linear-gradient(90deg, var(--gradient-start), var(--gradient-end)); box-shadow:0 6px 14px rgba(125,249,196,.28)}
+.gauge-val{font-weight:800; font-size:.9rem; letter-spacing:.02em}
+
+.market-traffic{display:flex; gap:8px; flex-wrap:wrap}
+.market-traffic .light{
+  display:inline-block; padding:4px 10px; border-radius:999px; font-weight:800; font-size:.78rem; letter-spacing:.02em;
+  border:1px solid rgba(255,255,255,.08);
+}
+.light--green{background:rgba(67,225,167,.18); color:#a9f7d6; border-color:rgba(67,225,167,.35)}
+.light--amber{background:rgba(255,188,54,.18); color:#ffe0a8; border-color:rgba(255,188,54,.35)}
+.light--red{background:rgba(255,80,80,.18);  color:#ffc0c0; border-color:rgba(255,80,80,.35)}
+
+@media (max-width:720px){
+  .comp-accuracy .comp-row{ grid-template-columns:1fr; gap:8px; }
+}
+
 /* ===== Fixture callout (optional) ===== */
 .fixture-callout-anchor { pointer-events:none; }
 .fixture-callout{
