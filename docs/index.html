@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Odds Genius</title>
 
+    <!-- Silence favicon 404 on GitHub Pages -->
+    <link rel="icon" href="data:,">
+
     <!-- Fonts & main stylesheet -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -234,6 +237,15 @@
           <p class="muted">Already have an account? <a href="#/login" data-route>Log in</a></p>
         </div>
       </section>
+    </div>
+
+    <!-- Mobile bottom-sheet (used by JS on small screens) -->
+    <div id="sheet" class="sheet" aria-hidden="true" aria-label="Fixture details">
+      <div class="sheet__handle" role="button" aria-label="Close"></div>
+      <div class="sheet__content">
+        <h3 id="sheet-title"></h3>
+        <div id="sheet-body"></div>
+      </div>
     </div>
 
     <!-- PapaParse (UMD) -->
