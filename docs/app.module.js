@@ -1261,5 +1261,18 @@ scrim?.addEventListener('click', ()=> closeDrawer());
 document.querySelectorAll('.side-drawer__nav [data-route]').forEach(a=>{
   a.addEventListener('click', ()=> { closeDrawer(); });
 });
+// --- sanity check: should log "[LOGOS] OK" twice if paths are correct
+(function verifyLocalLogoSetup(){
+  const tests = [
+    './assets/assets/logos/arsenal.svg',
+    './assets/assets/logos/fc-barcelona.svg'
+  ];
+  tests.forEach(src => {
+    const img = new Image();
+    img.onload  = () => console.log('%c[LOGOS] OK', 'color:#22c55e', src);
+    img.onerror = () => console.warn('%c[LOGOS] 404', 'color:#f43f5e', src, '→ path or filename mismatch');
+    img.src = src;
+  });
+})();
 
 init();
