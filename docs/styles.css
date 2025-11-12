@@ -143,27 +143,17 @@ canvas{ border-radius:24px; }
   display:flex; justify-content:space-between; align-items:center;
 }
 
-/* ===== On-globe HTML fixture tabs =====
-   Rendered by three-globe via htmlElementsData()
-   - Always visible for all fixtures
-   - Clickable: select + flyTo
-   - Selected tab is larger/brighter
-*/
+/* ===== On-globe HTML fixture tabs ===== */
 .fixture-tab{
-  /* Layout & placement */
-  position: relative;                  /* three-globe handles positioning */
-  transform: translate(-50%, -120%);   /* center above the point */
+  position: relative;
+  transform: translate(-50%, -120%);
   will-change: transform, opacity;
-  pointer-events: auto;                /* allow clicks (camera orbit still ok elsewhere) */
+  pointer-events: auto;
   user-select: none;
-
-  /* Size & shape */
   min-width: 160px;
   max-width: 240px;
   padding: 10px 12px;
   border-radius: 14px;
-
-  /* Aesthetic */
   background: linear-gradient(155deg, rgba(10,27,39,.92), rgba(20,53,70,.90));
   border: 1px solid rgba(125,249,196,.26);
   box-shadow:
@@ -171,10 +161,8 @@ canvas{ border-radius:24px; }
     inset 0 0 0 1px rgba(255,255,255,.04);
   color: var(--text-primary);
   backdrop-filter: blur(10px) saturate(110%);
-  z-index: 6;  /* above globe canvas and nav pills */
+  z-index: 6;
 }
-
-/* Pointer arrow */
 .fixture-tab::after{
   content: "";
   position: absolute;
@@ -188,8 +176,6 @@ canvas{ border-radius:24px; }
   border-left: 1px solid rgba(125,249,196,.26);
   border-bottom: 1px solid rgba(125,249,196,.26);
 }
-
-/* Text */
 .fixture-tab__title{
   font-weight: 700;
   font-size: .92rem;
@@ -203,8 +189,6 @@ canvas{ border-radius:24px; }
   color: var(--text-secondary);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-
-/* Interactions */
 .fixture-tab:hover{
   border-color: rgba(125,249,196,.40);
   box-shadow:
@@ -213,8 +197,6 @@ canvas{ border-radius:24px; }
   transform: translate(-50%, -122%);
 }
 .fixture-tab:active{ transform: translate(-50%, -118%); }
-
-/* Selected state: bigger, brighter, clearer */
 .fixture-tab.is-selected{
   background: linear-gradient(155deg, rgba(12,34,46,.96), rgba(24,64,82,.94));
   border-color: rgba(125,249,196,.55);
@@ -227,25 +209,16 @@ canvas{ border-radius:24px; }
   border-left-color: rgba(125,249,196,.55);
   border-bottom-color: rgba(125,249,196,.55);
 }
+.fixture-tab.is-dim{ opacity:.65; filter:saturate(.85); }
 
-/* Optional: dim non-selected tabs (enable via JS) */
-.fixture-tab.is-dim{
-  opacity: .65;
-  filter: saturate(.85);
-}
-
-/* HTML overlay container safety (different lib versions) */
 #globe-container .globe-html-elements,
 #globe-container .globeHtmlElements,
 #globe-container .globe-html-overlay {
   position:absolute; inset:0; z-index:6; pointer-events:none;
 }
-
-/* Keep overlay click-through except the actual tab */
 #globe-container > * { pointer-events: none; }
 #globe-container .fixture-tab{ pointer-events: auto; }
 
-/* Responsive tweaks: slightly larger tap targets on mobile */
 @media (max-width: 720px){
   .fixture-tab{
     min-width: 170px;
@@ -275,7 +248,7 @@ canvas{ border-radius:24px; }
 }
 #nav-prev:active,#nav-next:active{ transform:translateY(-50%) scale(.98); }
 
-/* ===== Fixture callout anchored to globe (safe if unused) ===== */
+/* ===== Fixture callout (optional) ===== */
 .fixture-callout-anchor { pointer-events:none; }
 .fixture-callout{
   pointer-events:none;
@@ -373,7 +346,7 @@ canvas{ border-radius:24px; }
   background:rgba(255,255,255,.08);
   border:1px solid rgba(255,255,255,.08);
 }
-/* Make initials larger when there is no logo */
+/* Bigger initials when no logo */
 .badge:not(.has-logo){
   font-size:1.25rem; letter-spacing:.09em;
 }
@@ -381,7 +354,7 @@ canvas{ border-radius:24px; }
 .fixture-meta h1{ font-size:1.35rem; font-weight:600; line-height:1.3; letter-spacing:.015em; }
 .fixture-meta p{ margin-top:.35rem; font-size:.9rem; color:var(--text-secondary); opacity:.9; }
 
-/* Tabs & panes (legibility bump) */
+/* Tabs & panes */
 .tabs{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:2px; }
 .tab{
   padding:8px 14px;border-radius:999px;font-weight:600;cursor:pointer;
@@ -431,7 +404,7 @@ canvas{ border-radius:24px; }
 }
 .cta:hover{ transform:translateY(-1px); box-shadow:0 12px 28px rgba(100,216,99,.25); }
 
-/* ===== Fixture rail (clear of footer, more readable) ===== */
+/* ===== Fixture rail ===== */
 .fixture-rail{
   margin-top:14px; margin-bottom:18px;
   padding:10px; border-radius:16px;
@@ -463,23 +436,20 @@ canvas{ border-radius:24px; }
   border-radius:999px; padding:16px 28px;
   border:1px solid rgba(125,249,196,.32);
   backdrop-filter:blur(18px);
-  z-index:10; /* sit above rail */
+  z-index:10;
 }
 .floating-bar__content{ display:flex; justify-content:space-between; align-items:center; gap:18px; }
 .floating-bar h2{ font-size:1rem; font-weight:600; }
 .floating-bar p{ font-size:.85rem; color:var(--text-secondary); }
 
 .upload-btn{
-  display:inline-flex; align-items:center; gap:12px; /* was 10px */
+  display:inline-flex; align-items:center; gap:12px;
   padding:12px 22px; border-radius:999px;
   background:linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
   color:var(--bg-dark); font-weight:600; cursor:pointer; position:relative; overflow:hidden;
 }
 .upload-btn input{ position:absolute; inset:0; opacity:0; cursor:pointer; }
-.upload-hint{
-  font-weight:500; opacity:.8; margin-left:4px;
-  color:#042018; /* dark-on-green still readable */
-}
+.upload-hint{ font-weight:500; opacity:.8; margin-left:4px; color:#042018; }
 
 /* ===== Toasts ===== */
 .og-toast{
@@ -530,13 +500,14 @@ canvas{ border-radius:24px; }
   .top-nav-pill{ align-self:flex-start; padding:8px 10px; }
   .floating-bar{ border-radius:28px; }
   .floating-bar__content{ flex-direction:column; align-items:flex-start; }
-  .page{ padding-bottom:220px; } /* extra space for footer on small screens */
+  .page{ padding-bottom:220px; }
 }
 @media (max-width:520px){
   .page{ padding-top:20px; }
   #globe-container{ min-height:320px; }
   .top-nav-pill a{ padding:8px 12px; }
 }
+
 /* ===== Router views ===== */
 .view{display:none}
 .view.is-active{display:block}
@@ -588,3 +559,68 @@ canvas{ border-radius:24px; }
 #globe-container .globeHtmlElements,
 #globe-container .globe-html-overlay { position:absolute; inset:0; z-index:6; pointer-events:none; }
 #globe-container .fixture-tab { pointer-events:auto; }
+
+/* ===== NEW: Competition accuracy banner & legend ===== */
+.accuracy-banner{
+  margin-top:10px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.accuracy-chip{
+  padding:8px 12px;
+  border-radius:12px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.08);
+  font-weight:700;
+  font-size:.9rem;
+}
+.accuracy-bar{
+  flex:1;
+  height:10px;
+  background:rgba(255,255,255,.08);
+  border-radius:999px;
+  overflow:hidden;
+  position:relative;
+}
+.accuracy-bar__fill{
+  position:absolute; left:0; top:0; bottom:0;
+  width:0%;
+  border-radius:999px;
+  transition:width .35s ease;
+}
+.accuracy--green{ background:linear-gradient(90deg,#23d18b,#8fffd4); }
+.accuracy--amber{ background:linear-gradient(90deg,#f7c948,#ffd36b); }
+.accuracy--red{ background:linear-gradient(90deg,#ff6b6b,#ff8a8a); }
+
+.legend{
+  margin-top:8px;
+  display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+}
+.legend__item{ display:flex; align-items:center; gap:8px; font-size:.85rem; color:var(--text-secondary); }
+.legend__swatch{ width:12px; height:12px; border-radius:3px; }
+.legend__swatch.green{ background:#23d18b; }
+.legend__swatch.amber{ background:#f7c948; }
+.legend__swatch.red{ background:#ff6b6b; }
+
+/* ===== NEW: Optional side date-rail (future) ===== */
+.date-rail{
+  position:sticky; top:18px;
+  display:flex; flex-direction:column; gap:8px;
+  max-height:60vh; overflow:auto;
+}
+.date-pill{
+  padding:10px 12px; border-radius:12px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.08);
+  color:var(--text-secondary);
+  cursor:pointer;
+}
+.date-pill.is-active{
+  color:var(--bg-dark);
+  background:linear-gradient(135deg,var(--gradient-start),var(--gradient-end));
+  font-weight:700;
+}
+
+/* Slightly tighter containment for logo images (prevents overflow glow) */
+.badge img{ max-width:100%; max-height:100%; object-fit:contain; display:block; }
