@@ -49,7 +49,6 @@ async function importScriptUMD(src) {
 }
 
 async function loadThreeGlobe() {
-  // Prefer esm.sh ESM with 2.31.x (has htmlElementsData)
   for (const v of ['2.31.3','2.31.1','2.30.1','2.29.3']) {
     const url = `https://esm.sh/three-globe@${v}?bundle&external=three`;
     try {
@@ -60,7 +59,6 @@ async function loadThreeGlobe() {
       console.warn('[three-globe] esm.sh failed:', url, e);
     }
   }
-  // UMD fallbacks (newest first, then local if provided)
   for (const url of [
     'https://cdn.jsdelivr.net/npm/three-globe@2.31.1/dist/three-globe.min.js',
     'https://unpkg.com/three-globe@2.31.1/dist/three-globe.min.js',
@@ -93,11 +91,8 @@ let fixtures = [];
 let activeIdx = 0;
 let selectedId = null;
 let pulseRing;
-
-// keep references to HTML tabs for selection toggling
 let htmlTabsData = []; // [{lat,lng,altitude,idx,el}]
 
-// brighter pins by default
 const COLORS = {
   marker:        '#A7FFF6',
   markerInactive:'#8CEFE5',
@@ -145,7 +140,7 @@ function hasHtmlElementsApi(g){
                typeof g.htmlLat          === 'function';
 }
 
-// Simple initials fallback (was missing)
+// Simple initials fallback
 function initials(name = '') {
   const words = String(name).trim().split(/\s+/).filter(Boolean);
   if (!words.length) return '';
@@ -173,69 +168,58 @@ function elmEmpty(msg){ const d=document.createElement('div'); d.className='empt
 const LOGO_LOCAL_BASE = './assets/assets/logos';
 
 const TEAM_LOGO_OVERRIDES = {
-  'Celtic':               './assets/assets/logos/celtic.svg',
-  'Lazio':                './assets/assets/logos/lazio.svg',
-  'Royal Antwerp FC':     './assets/assets/logos/royal-antwerp.svg',
-  'Shakhtar Donetsk':     './assets/assets/logos/shakhtar-donetsk.svg',
-  'Atlético Madrid':      './assets/assets/logos/atletico-madrid.svg',
-  'Atletico Madrid':      './assets/assets/logos/atletico-madrid.svg',
-  'Feyenoord':            './assets/assets/logos/feyenoord.svg',
-  'PSG':                  './assets/assets/logos/paris-saint-germain.svg',
-  'Paris Saint-Germain':  './assets/assets/logos/paris-saint-germain.svg',
-  'Newcastle United':     './assets/assets/logos/newcastle-united.svg',
-  'AC Milan':             './assets/assets/logos/ac-milan.svg',
-  'Borussia Dortmund':    './assets/assets/logos/borussia-dortmund.svg',
-  'Manchester City':      './assets/assets/logos/manchester-city.svg',
-  'RB Leipzig':           './assets/assets/logos/rb-leipzig.svg',
-  'Young Boys':           './assets/assets/logos/young-boys.svg',
-  'Red Star Belgrade':    './assets/assets/logos/red-star-belgrade.svg',
-  'Crvena Zvezda':        './assets/assets/logos/red-star-belgrade.svg',
-  'FC Barcelona':         './assets/assets/logos/fc-barcelona.svg',
-  'Barcelona':            './assets/assets/logos/fc-barcelona.svg',
-  'Porto':                './assets/assets/logos/fc-porto.svg',
-  'FC Porto':             './assets/assets/logos/fc-porto.svg',
-  'Galatasaray':          './assets/assets/logos/galatasaray.svg',
-  'Manchester United':    './assets/assets/logos/manchester-united.svg',
-  'Sevilla FC':           './assets/assets/logos/sevilla-fc.svg',
-  'PSV':                  './assets/assets/logos/psv.svg',
-  'PSV Eindhoven':        './assets/assets/logos/psv.svg',
-  'København':            './assets/assets/logos/fc-kobenhavn.svg',
-  'FC Copenhagen':        './assets/assets/logos/fc-kobenhavn.svg',
-  'Arsenal':              './assets/assets/logos/arsenal.svg',
-  'Lens':                 './assets/assets/logos/lens.svg',
-  'Real Madrid':          './assets/assets/logos/real-madrid.svg',
-  'Napoli':               './assets/assets/logos/ssc-napoli.svg',
-  'SSC Napoli':           './assets/assets/logos/ssc-napoli.svg',
-  'Benfica':              './assets/assets/logos/sl-benfica.svg',
-  'SL Benfica':           './assets/assets/logos/sl-benfica.svg',
-  'Inter Milan':          './assets/assets/logos/inter-milan.svg',
-  'Inter':                './assets/assets/logos/inter-milan.svg',
-  'Real Sociedad':        './assets/assets/logos/real-sociedad.svg',
-  'Salzburg':             './assets/assets/logos/rb-salzburg.svg',
-  'Bayern München':       './assets/assets/logos/bayern-munich.svg',
-  'Bayern Munich':        './assets/assets/logos/bayern-munich.svg'
+  'Celtic':               `${LOGO_LOCAL_BASE}/celtic.svg`,
+  'Lazio':                `${LOGO_LOCAL_BASE}/lazio.svg`,
+  'Royal Antwerp FC':     `${LOGO_LOCAL_BASE}/royal-antwerp.svg`,
+  'Shakhtar Donetsk':     `${LOGO_LOCAL_BASE}/shakhtar-donetsk.svg`,
+  'Atlético Madrid':      `${LOGO_LOCAL_BASE}/atletico-madrid.svg`,
+  'Atletico Madrid':      `${LOGO_LOCAL_BASE}/atletico-madrid.svg`,
+  'Feyenoord':            `${LOGO_LOCAL_BASE}/feyenoord.svg`,
+  'PSG':                  `${LOGO_LOCAL_BASE}/paris-saint-germain.svg`,
+  'Paris Saint-Germain':  `${LOGO_LOCAL_BASE}/paris-saint-germain.svg`,
+  'Newcastle United':     `${LOGO_LOCAL_BASE}/newcastle-united.svg`,
+  'AC Milan':             `${LOGO_LOCAL_BASE}/ac-milan.svg`,
+  'Borussia Dortmund':    `${LOGO_LOCAL_BASE}/borussia-dortmund.svg`,
+  'Manchester City':      `${LOGO_LOCAL_BASE}/manchester-city.svg`,
+  'RB Leipzig':           `${LOGO_LOCAL_BASE}/rb-leipzig.svg`,
+  'Young Boys':           `${LOGO_LOCAL_BASE}/young-boys.svg`,
+  'Red Star Belgrade':    `${LOGO_LOCAL_BASE}/red-star-belgrade.svg`,
+  'Crvena Zvezda':        `${LOGO_LOCAL_BASE}/red-star-belgrade.svg`,
+  'FC Barcelona':         `${LOGO_LOCAL_BASE}/fc-barcelona.svg`,
+  'Barcelona':            `${LOGO_LOCAL_BASE}/fc-barcelona.svg`,
+  'Porto':                `${LOGO_LOCAL_BASE}/fc-porto.svg`,
+  'FC Porto':             `${LOGO_LOCAL_BASE}/fc-porto.svg`,
+  'Galatasaray':          `${LOGO_LOCAL_BASE}/galatasaray.svg`,
+  'Manchester United':    `${LOGO_LOCAL_BASE}/manchester-united.svg`,
+  'Sevilla FC':           `${LOGO_LOCAL_BASE}/sevilla-fc.svg`,
+  'PSV':                  `${LOGO_LOCAL_BASE}/psv.svg`,
+  'PSV Eindhoven':        `${LOGO_LOCAL_BASE}/psv.svg`,
+  'København':            `${LOGO_LOCAL_BASE}/fc-kobenhavn.svg`,
+  'FC Copenhagen':        `${LOGO_LOCAL_BASE}/fc-kobenhavn.svg`,
+  'Arsenal':              `${LOGO_LOCAL_BASE}/arsenal.svg`,
+  'Lens':                 `${LOGO_LOCAL_BASE}/lens.svg`,
+  'Real Madrid':          `${LOGO_LOCAL_BASE}/real-madrid.svg`,
+  'Napoli':               `${LOGO_LOCAL_BASE}/ssc-napoli.svg`,
+  'SSC Napoli':           `${LOGO_LOCAL_BASE}/ssc-napoli.svg`,
+  'Benfica':              `${LOGO_LOCAL_BASE}/sl-benfica.svg`,
+  'SL Benfica':           `${LOGO_LOCAL_BASE}/sl-benfica.svg`,
+  'Inter Milan':          `${LOGO_LOCAL_BASE}/inter-milan.svg`,
+  'Inter':                `${LOGO_LOCAL_BASE}/inter-milan.svg`,
+  'Real Sociedad':        `${LOGO_LOCAL_BASE}/real-sociedad.svg`,
+  'Salzburg':             `${LOGO_LOCAL_BASE}/rb-salzburg.svg`,
+  'Bayern München':       `${LOGO_LOCAL_BASE}/bayern-munich.svg`,
+  'Bayern Munich':        `${LOGO_LOCAL_BASE}/bayern-munich.svg`
 };
 
-// Optional last-resort (only if you want)
 const USE_SPORTSDB_FALLBACK = true;
 const SPORTSDB_KEY = '3';
 const SPORTSDB_ENDPOINT = `https://www.thesportsdb.com/api/v1/json/${SPORTSDB_KEY}/searchteams.php?t=`;
 
-// small cache to avoid reloading
 const LOGO_CACHE_KEY  = 'og_logo_cache_v_demo';
 let LOGO_CACHE = {};
 try { LOGO_CACHE = JSON.parse(localStorage.getItem(LOGO_CACHE_KEY) || '{}'); } catch {}
 function saveLogoCache(){ try { localStorage.setItem(LOGO_CACHE_KEY, JSON.stringify(LOGO_CACHE)); } catch {} }
 
-function slugifyTeam(name='') {
-  return String(name)
-    .toLowerCase()
-    .replace(/&/g,'and')
-    .replace(/[\u2019'’]/g,'')
-    .replace(/[^a-z0-9]+/g,'-')
-    .replace(/^-+|-+$/g,'');
-}
-function isHttpUrl(u){ return /^https?:\/\//i.test(u); }
 function isCommonsFilePath(u){ return /:\/\/commons\.wikimedia\.org\/wiki\/Special:FilePath\//i.test(u); }
 function isCommonsFileTitle(u){ return /:\/\/commons\.wikimedia\.org\/wiki\/File:/i.test(u); }
 
@@ -307,7 +291,12 @@ async function resolveViaSportsDb(teamName) {
 }
 
 function localLogoCandidates(team) {
-  const slug = slugifyTeam(team);
+  const slug = team
+    .toLowerCase()
+    .replace(/&/g,'and')
+    .replace(/[\u2019'’]/g,'')
+    .replace(/[^a-z0-9]+/g,'-')
+    .replace(/^-+|-+$/g,'');
   return [
     `${LOGO_LOCAL_BASE}/${slug}.png`,
     `${LOGO_LOCAL_BASE}/${slug}.svg`,
@@ -323,7 +312,7 @@ async function tryLoad(src, teamName) {
     img.loading = 'lazy';
     img.decoding = 'async';
     if (!/^data:/i.test(src)) { img.crossOrigin = 'anonymous'; img.referrerPolicy = 'no-referrer'; }
-    img.onload = () => resolve({ ok:true, img, src });
+    img.onload  = () => resolve({ ok:true, img, src });
     img.onerror = () => resolve(null);
     img.src = src;
   });
@@ -953,6 +942,13 @@ const API = {
   copilot: (p)=>       apiJson('/copilot', { method:'POST', body: JSON.stringify(p) })
 };
 
+// ---------- Bet Checker: OCR → parse → score ----------
+async function ocrImageOrPdf(file) {
+  if (!window.Tesseract) throw new Error('OCR engine not loaded');
+  const { data } = await window.Tesseract.recognize(file, 'eng', { logger: () => {} });
+  return (data && data.text) ? data.text : '';
+}
+
 // ---------- Bet Checker OCR parsing (fixed) ----------
 function parseSlipText(text) {
   // make sure it's a string, split into trimmed non-empty lines
@@ -1013,268 +1009,257 @@ function parseSlipText(text) {
 
   return { legs, raw: lines.slice(0, 60).join('\n') };
 }
-// ==============================
-// Local logo setup (no proxy, zero CORS) — OPTION B PATH
-// ==============================
 
-// Your files are under docs/assets/assets/logos/, so from docs/index.html use:
-const LOGO_LOCAL_BASE = './assets/assets/logos';
-
-// Map CSV team names → your local filenames
-const TEAM_LOGO_OVERRIDES = {
-  'Celtic':               './assets/assets/logos/celtic.svg',
-  'Lazio':                './assets/assets/logos/lazio.svg',
-  'Royal Antwerp FC':     './assets/assets/logos/royal-antwerp.svg',
-  'Shakhtar Donetsk':     './assets/assets/logos/shakhtar-donetsk.svg',
-  'Atlético Madrid':      './assets/assets/logos/atletico-madrid.svg',
-  'Atletico Madrid':      './assets/assets/logos/atletico-madrid.svg',
-  'Feyenoord':            './assets/assets/logos/feyenoord.svg',
-  'PSG':                  './assets/assets/logos/paris-saint-germain.svg',
-  'Paris Saint-Germain':  './assets/assets/logos/paris-saint-germain.svg',
-  'Newcastle United':     './assets/assets/logos/newcastle-united.svg',
-  'AC Milan':             './assets/assets/logos/ac-milan.svg',
-  'Borussia Dortmund':    './assets/assets/logos/borussia-dortmund.svg',
-  'Manchester City':      './assets/assets/logos/manchester-city.svg',
-  'RB Leipzig':           './assets/assets/logos/rb-leipzig.svg',
-  'Young Boys':           './assets/assets/logos/young-boys.svg',
-  'Red Star Belgrade':    './assets/assets/logos/red-star-belgrade.svg',
-  'Crvena Zvezda':        './assets/assets/logos/red-star-belgrade.svg',
-  'FC Barcelona':         './assets/assets/logos/fc-barcelona.svg',
-  'Barcelona':            './assets/assets/logos/fc-barcelona.svg',
-  'Porto':                './assets/assets/logos/fc-porto.svg',
-  'FC Porto':             './assets/assets/logos/fc-porto.svg',
-  'Galatasaray':          './assets/assets/logos/galatasaray.svg',
-  'Manchester United':    './assets/assets/logos/manchester-united.svg',
-  'Sevilla FC':           './assets/assets/logos/sevilla-fc.svg',
-  'PSV':                  './assets/assets/logos/psv.svg',
-  'PSV Eindhoven':        './assets/assets/logos/psv.svg',
-  'København':            './assets/assets/logos/fc-kobenhavn.svg',
-  'FC Copenhagen':        './assets/assets/logos/fc-kobenhavn.svg',
-  'Arsenal':              './assets/assets/logos/arsenal.svg',
-  'Lens':                 './assets/assets/logos/lens.svg',
-  'Real Madrid':          './assets/assets/logos/real-madrid.svg',
-  'Napoli':               './assets/assets/logos/ssc-napoli.svg',
-  'SSC Napoli':           './assets/assets/logos/ssc-napoli.svg',
-  'Benfica':              './assets/assets/logos/sl-benfica.svg',
-  'SL Benfica':           './assets/assets/logos/sl-benfica.svg',
-  'Inter Milan':          './assets/assets/logos/inter-milan.svg',
-  'Inter':                './assets/assets/logos/inter-milan.svg',
-  'Real Sociedad':        './assets/assets/logos/real-sociedad.svg',
-  'Salzburg':             './assets/assets/logos/rb-salzburg.svg',
-  'Bayern München':       './assets/assets/logos/bayern-munich.svg',
-  'Bayern Munich':        './assets/assets/logos/bayern-munich.svg'
-};
-
-// Optional last-resort (only if you want)
-const USE_SPORTSDB_FALLBACK = true;
-const SPORTSDB_KEY = '3';
-const SPORTSDB_ENDPOINT = `https://www.thesportsdb.com/api/v1/json/${SPORTSDB_KEY}/searchteams.php?t=`;
-
-// small cache to avoid reloading
-const LOGO_CACHE_KEY = 'og_logo_cache_v_demo';
-let LOGO_CACHE = {};
-try { LOGO_CACHE = JSON.parse(localStorage.getItem(LOGO_CACHE_KEY) || '{}'); } catch {}
-function saveLogoCache(){ try { localStorage.setItem(LOGO_CACHE_KEY, JSON.stringify(LOGO_CACHE)); } catch {} }
-
-// Helper: initials fallback
-function initials(name='') {
-  const parts = String(name).trim().split(/\s+/).filter(Boolean);
-  if (!parts.length) return '';
-  if (parts.length === 1) return parts[0].slice(0,2).toUpperCase();
-  return (parts[0][0] + parts[1][0]).toUpperCase();
-}
-
-function slugifyTeam(name='') {
-  return String(name)
-    .toLowerCase()
-    .replace(/&/g,'and')
-    .replace(/[\u2019'’]/g,'')
-    .replace(/[^a-z0-9]+/g,'-')
-    .replace(/^-+|-+$/g,'');
-}
-
-function isCommonsFilePath(u){ return /:\/\/commons\.wikimedia\.org\/wiki\/Special:FilePath\//i.test(u); }
-function isCommonsFileTitle(u){ return /:\/\/commons\.wikimedia\.org\/wiki\/File:/i.test(u); }
-
-function normalizeBasicUrl(raw) {
-  if (!raw) return '';
-  let u = String(raw).trim();
-  if (!u) return '';
-  if (u.startsWith('//')) u = `https:${u}`;
-  if (/^http:\/\//i.test(u) && location.protocol === 'https:') u = u.replace(/^http:\/\//i, 'https://');
-  return u;
-}
-
-// Deterministic PNG thumb for Commons links
-function commonsToThumbPhp(inputUrl) {
+async function runBetChecker(file) {
+  const out = document.getElementById('bc-output');
+  if (out) out.innerHTML = '<div class="muted">Reading slip…</div>';
   try {
-    const url = new URL(inputUrl);
-    let file = '';
-    if (isCommonsFilePath(inputUrl)) {
-      file = decodeURIComponent(url.pathname.split('/').pop() || '');
-    } else if (isCommonsFileTitle(inputUrl)) {
-      const last = decodeURIComponent(url.pathname.split('/').pop() || '');
-      file = last.replace(/^File:/i,'');
-    } else { return null; }
-    file = file.replace(/\s+/g,'_');
-    const thumb = new URL('https://commons.wikimedia.org/w/thumb.php');
-    thumb.searchParams.set('f', file);
-    thumb.searchParams.set('width', '160');
-    return thumb.toString();
-  } catch { return null; }
-}
-
-// MediaWiki API thumb (fallback)
-async function resolveViaCommonsApi(inputUrl) {
-  try {
-    const url = new URL(inputUrl);
-    let title = '';
-    if (isCommonsFilePath(inputUrl)) {
-      const last = decodeURIComponent(url.pathname.split('/').pop() || '');
-      title = `File:${last.replace(/\s+/g,'_')}`;
-    } else if (isCommonsFileTitle(inputUrl)) {
-      const last = decodeURIComponent(url.pathname.split('/').pop() || '');
-      title = (last.startsWith('File:') ? last : `File:${last}`).replace(/\s+/g,'_');
-    } else { return null; }
-
-    const params = new URLSearchParams({
-      action: 'query', prop: 'imageinfo', iiprop: 'url', iiurlwidth: '160',
-      format: 'json', origin: '*', titles: title
-    });
-    const api = `https://commons.wikimedia.org/w/api.php?${params.toString()}`;
-    const r = await fetch(api);
-    if (!r.ok) return null;
-    const j = await r.json();
-    const pages = j?.query?.pages || {};
-    const first = Object.values(pages)[0];
-    const ii = first?.imageinfo?.[0];
-    const thumb = ii?.thumburl || ii?.url;
-    return thumb || null;
-  } catch { return null; }
-}
-
-async function resolveViaSportsDb(teamName) {
-  if (!USE_SPORTSDB_FALLBACK || !teamName) return null;
-  try {
-    const r = await fetch(SPORTSDB_ENDPOINT + encodeURIComponent(teamName));
-    if (!r.ok) return null;
-    const j = await r.json();
-    const team = (j?.teams || [])[0];
-    const badge = team?.strTeamBadge || team?.strTeamLogo || team?.strTeamFanart1;
-    return badge || null;
-  } catch { return null; }
-}
-
-function localLogoCandidates(team) {
-  const slug = slugifyTeam(team);
-  return [
-    `${LOGO_LOCAL_BASE}/${slug}.png`,
-    `${LOGO_LOCAL_BASE}/${slug}.svg`,
-  ];
-}
-
-const badgeTokens = new WeakMap();
-async function tryLoad(src, teamName) {
-  if (!src) return null;
-  return new Promise(resolve => {
-    const img = new Image();
-    img.alt = teamName || '';
-    img.loading = 'lazy';
-    img.decoding = 'async';
-    if (!/^data:/i.test(src)) {
-      img.crossOrigin = 'anonymous';
-      img.referrerPolicy = 'no-referrer';
+    const text = await ocrImageOrPdf(file);
+    const parsed = parseSlipText(text);
+    if (!parsed.legs.length) {
+      out && (out.innerHTML = `<div class="muted">No legs detected. <br/><pre style="white-space:pre-wrap">${parsed.raw || text.slice(0,400)}…</pre></div>`);
+      return;
     }
-    img.onload  = () => resolve({ ok: true, img, src });
-    img.onerror = () => resolve(null);
-    img.src = src;
+    out && (out.innerHTML = '<div class="muted">Scoring legs…</div>');
+    const scored = await API.scoreSlip({ legs: parsed.legs });
+    renderBetCheckerResults(scored);
+    showToast('success', `Scored ${scored.legs?.length || parsed.legs.length} leg(s)`);
+  } catch (e) {
+    showToast('error', e.message);
+    out && (out.innerHTML = `<div class="muted">Error: ${e.message}</div>`);
+  }
+}
+
+function renderBetCheckerResults(result) {
+  const container = document.getElementById('bc-results');
+  const out = document.getElementById('bc-output');
+  if (!container || !out) return;
+
+  const legs = result.legs || [];
+  const summary = result.summary || {};
+  const frag = document.createDocumentFragment();
+
+  const sumDiv = document.createElement('div');
+  sumDiv.className = 'insight-card';
+  sumDiv.innerHTML = `
+    <h2>Summary</h2>
+    <div>Implied EV: <strong>${(summary.evPct ?? 0).toFixed(1)}%</strong> &middot;
+         Prob: <strong>${Math.round((summary.comboProb ?? 0) * 100)}%</strong> &middot;
+         Est. Payout: <strong>${summary.payout ? '£'+summary.payout.toFixed(2) : '—'}</strong></div>`;
+  frag.appendChild(sumDiv);
+
+  legs.forEach((lg, idx) => {
+    const card = document.createElement('div');
+    card.className = 'insight-card';
+    const edge = lg.edgePct != null ? `${(lg.edgePct).toFixed(1)}%` : '—';
+    const prob = lg.prob != null ? Math.round(lg.prob*100)+'%' : '—';
+    const fair = lg.fair ? lg.fair.toFixed(2) : '—';
+    const price = lg.price ? lg.price.toFixed(2) : '—';
+    card.innerHTML = `
+      <h2>Leg ${idx+1}: ${lg.teamHome} vs ${lg.teamAway}</h2>
+      <ul>
+        <li><strong>Market:</strong> ${lg.market} &middot; <strong>Pick:</strong> ${lg.selection}</li>
+        <li><strong>Model&nbsp;%:</strong> ${prob} &middot; <strong>Fair:</strong> ${fair} &middot; <strong>Book:</strong> ${price} &middot; <strong>Edge:</strong> ${edge}</li>
+        ${lg.warn ? `<li class="muted">⚠ ${lg.warn}</li>` : ''}
+      </ul>`;
+    frag.appendChild(card);
+  });
+
+  out.innerHTML = '';
+  out.appendChild(frag);
+}
+
+// Hook BetChecker page input
+{
+  const bcUpload = document.getElementById('bc-upload');
+  bcUpload?.addEventListener('change', (e)=>{
+    const f = e.target.files?.[0];
+    if (f) runBetChecker(f);
+    e.target.value = '';
   });
 }
 
-/**
- * Local-first crest loader (no proxy):
- * cache → CSV/override URL → local slug files → Commons thumb.php → Commons API → SportsDB → initials
- */
-async function setBadge(elm, urlFromCsv, teamName='') {
-  if (!elm) return;
-  const token = {}; badgeTokens.set(elm, token);
-  elm.classList.remove('has-logo');
-  elm.innerHTML = '';
+// ---------- Acca Builder: suggest → choose → optimise ----------
+async function runAccaSuggest() {
+  const league = (document.getElementById('ab-league')?.value || 'ALL');
+  const market = (document.getElementById('ab-market')?.value || 'ou25');
+  const legs   = (document.getElementById('ab-legs')?.value || '4').split(' ')[0];
 
-  const finishInitials = () => {
-    if (badgeTokens.get(elm) !== token) return;
-    elm.textContent = initials(teamName) || '';
-    elm.classList.remove('has-logo');
-  };
+  const grid = document.getElementById('ab-grid');
+  if (!grid) return;
+  grid.innerHTML = '<div class="muted">Loading candidates…</div>';
 
-  // 0) cache
-  if (teamName && LOGO_CACHE[teamName]) {
-    const hit = await tryLoad(LOGO_CACHE[teamName], teamName);
-    if (hit && badgeTokens.get(elm) === token) {
-      elm.innerHTML = '';
-      elm.appendChild(hit.img);
-      elm.classList.add('has-logo');
-      return;
-    }
-  }
+  try {
+    const data = await API.accaSuggest({
+      market, league, from: new Date().toISOString().slice(0,10), to: '', limit: 50
+    });
+    grid.innerHTML = '';
+    const chosen = [];
+    (data.items || []).slice(0, 30).forEach((m, i)=>{
+      const card = document.createElement('div');
+      card.className = 'insight-card';
+      const prob = Math.round((m.prob||0)*100);
+      const edge = m.edgePct != null ? `${m.edgePct.toFixed(1)}%` : '—';
+      card.innerHTML = `
+        <h2>${m.home} vs ${m.away}</h2>
+        <ul>
+          <li><strong>Market:</strong> ${m.market} &middot; <strong>Pick:</strong> ${m.pick || '—'}</li>
+          <li><strong>%:</strong> ${prob}% &middot; <strong>Fair:</strong> ${m.fair?.toFixed?.(2)??'—'} &middot; <strong>Price:</strong> ${m.price?.toFixed?.(2)??'—'} &middot; <strong>Edge:</strong> ${edge}</li>
+        </ul>
+        <button class="cta" data-add="${i}">Add leg</button>`;
+      grid.appendChild(card);
+    });
 
-  // 1) override or CSV
-  const raw = normalizeBasicUrl(urlFromCsv);
-  let loaded = null, finalUrl = null;
-
-  if (raw) {
-    loaded = await tryLoad(raw, teamName);
-    if (loaded) finalUrl = raw;
-  }
-
-  // 2) local slug guesses
-  if (!loaded && teamName) {
-    for (const loc of localLogoCandidates(teamName)) {
-      loaded = await tryLoad(loc, teamName);
-      if (loaded) { finalUrl = loc; break; }
-    }
-  }
-
-  // 3) Commons (thumb/API) if CSV was a Commons link
-  if (!loaded && raw && (isCommonsFilePath(raw) || isCommonsFileTitle(raw))) {
-    const thumbPhp = commonsToThumbPhp(raw);
-    if (thumbPhp) {
-      loaded = await tryLoad(thumbPhp, teamName);
-      if (loaded) finalUrl = thumbPhp;
-    }
-    if (!loaded) {
-      const apiThumb = await resolveViaCommonsApi(raw);
-      if (apiThumb) {
-        loaded = await tryLoad(apiThumb, teamName);
-        if (loaded) finalUrl = apiThumb;
-      }
-    }
-  }
-
-  // 4) SportsDB fallback
-  if (!loaded && teamName) {
-    const sdb = await resolveViaSportsDb(teamName);
-    if (sdb) {
-      loaded = await tryLoad(sdb, teamName);
-      if (loaded) finalUrl = sdb;
-    }
-  }
-
-  if (!loaded) {
-    if (!window.__OG_LOGO_FAIL_LOGGED__) {
-      console.warn('[OG] crest failed (local-first):', { teamName, urlFromCsv });
-      window.__OG_LOGO_FAIL_LOGGED__ = true;
-    }
-    return finishInitials();
-  }
-
-  if (badgeTokens.get(elm) !== token) return;
-  elm.innerHTML = '';
-  elm.appendChild(loaded.img);
-  elm.classList.add('has-logo');
-
-  if (teamName && finalUrl) {
-    LOGO_CACHE[teamName] = finalUrl;
-    saveLogoCache();
+    grid.querySelectorAll('button[data-add]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const idx = +btn.getAttribute('data-add');
+        chosen.push(data.items[idx]);
+        btn.textContent = 'Added ✓'; btn.disabled = true;
+        if (chosen.length === Number(legs)) {
+          optimiseAcca(chosen, market);
+        }
+      });
+    });
+  } catch (e) {
+    grid.innerHTML = `<div class="muted">Suggest failed: ${e.message}</div>`;
   }
 }
+
+async function optimiseAcca(chosen, market) {
+  showToast('info', `Optimising ${chosen.length}-fold…`);
+  const grid = document.getElementById('ab-grid');
+  try {
+    const res = await API.accaOptimise({ market, legs: chosen, strategy: { objective:'max_ev', stake:10 }});
+    grid.innerHTML = '';
+    const sum = document.createElement('div');
+    sum.className = 'insight-card';
+    sum.innerHTML = `<h2>Optimised Acca</h2>
+      <div><strong>EV:</strong> ${(res.evPct??0).toFixed(1)}% &middot; <strong>Prob:</strong> ${Math.round((res.comboProb??0)*100)}% &middot; <strong>Payout:</strong> £${(res.payout??0).toFixed(2)}</div>`;
+    grid.appendChild(sum);
+
+    (res.legs||chosen).forEach((lg, i)=>{
+      const c = document.createElement('div');
+      c.className = 'insight-card';
+      c.innerHTML = `<h2>Leg ${i+1}: ${lg.home} vs ${lg.away}</h2>
+        <div class="muted">${lg.market} • ${lg.pick} • ${Math.round((lg.prob||0)*100)}% @ ${lg.price?.toFixed?.(2)??'—'}</div>`;
+      grid.appendChild(c);
+    });
+    showToast('success', 'Acca ready');
+  } catch (e) {
+    grid.innerHTML = `<div class="muted">Optimiser failed: ${e.message}</div>`;
+  }
+}
+
+document.getElementById('ab-build')?.addEventListener('click', ()=> runAccaSuggest());
+
+// ---------- OG Co-Pilot: chat → /api/copilot ----------
+async function sendCopilotMessage(text) {
+  const payload = { 
+    messages: [
+      { role:'system', content: 'You are OddsGenius Co-Pilot. Be concise, provide bullet reasoning, cite model features where relevant.' },
+      { role:'user', content: text }
+    ],
+    context: (function(){
+      const f = fixtures[Math.max(0, Math.min(activeIdx, Math.max(0, fixtures.length-1)))];
+      if (!f) return null;
+      return { fixture: { home:f.home_team, away:f.away_team, date:f.date_utc, league:f.competition } };
+    })()
+  };
+  return API.copilot(payload);
+}
+
+function appendChatLine(role, text) {
+  const wrap = document.getElementById('cp-thread');
+  if (!wrap) return;
+  const div = document.createElement('div');
+  div.className = (role === 'user') ? 'user-line' : 'bot-line';
+  div.textContent = (role === 'user' ? 'You: ' : 'OG: ') + text;
+  wrap.appendChild(div);
+  wrap.scrollTop = wrap.scrollHeight;
+}
+
+{
+  const cpInput = document.getElementById('cp-input');
+  const cpSend  = document.getElementById('cp-send');
+  const cpThread= document.getElementById('cp-thread');
+
+  cpSend?.addEventListener('click', async ()=>{
+    const q = (cpInput?.value || '').trim();
+    if (!q) return;
+    appendChatLine('user', q);
+    cpInput.value = '';
+    try {
+      const { messages, error } = await sendCopilotMessage(q);
+      if (error) throw new Error(error);
+      const msg = (messages && messages.find(m=>m.role==='assistant'))?.content || '(no reply)';
+      appendChatLine('assistant', msg);
+    } catch (e) {
+      appendChatLine('assistant', `⚠ ${e.message}`);
+    }
+  });
+}
+
+// ----------------------------
+// Minimal client-side router + UI chrome
+// ----------------------------
+const ROUTES = {
+  '#/':            'view-home',
+  '#/home':        'view-home',
+  '#/bet-checker': 'view-betchecker',
+  '#/acca-builder':'view-accabuilder',
+  '#/copilot':     'view-copilot',
+  '#/login':       'view-signin',
+  '#/signup':      'view-signup'
+};
+
+function showRoute(hash) {
+  if (!hash) hash = '#/';
+  const id = ROUTES[hash] || 'view-home';
+  document.querySelectorAll('.view').forEach(v => {
+    if (v.id === id) { v.classList.add('is-active'); v.removeAttribute('hidden'); }
+    else { v.classList.remove('is-active'); v.setAttribute('hidden',''); }
+  });
+  document.querySelectorAll('[data-route]').forEach(a=>{
+    a.classList.toggle('is-active', a.getAttribute('href') === hash);
+    if (a.classList.contains('side-link')) a.classList.toggle('active', a.getAttribute('href') === hash);
+  });
+  closeProfileMenu(); closeDrawer();
+}
+
+window.addEventListener('hashchange', ()=> showRoute(location.hash));
+window.addEventListener('DOMContentLoaded', ()=>{
+  if (!location.hash) location.hash = '#/';
+  showRoute(location.hash);
+});
+
+// --- Header profile menu
+const profileBtn  = document.getElementById('btn-profile');
+const profileMenu = document.getElementById('profile-menu');
+function closeProfileMenu(){ profileMenu?.classList.remove('show'); profileBtn?.setAttribute('aria-expanded','false'); }
+profileBtn?.addEventListener('click', (e)=>{
+  e.stopPropagation();
+  const open = profileMenu.classList.contains('show');
+  if (open) { closeProfileMenu(); } else { profileMenu.classList.add('show'); profileBtn.setAttribute('aria-expanded','true'); }
+});
+document.addEventListener('click', (e)=>{
+  if (profileMenu?.classList.contains('show') && !profileMenu.contains(e.target) && e.target !== profileBtn) {
+    closeProfileMenu();
+  }
+});
+
+// --- Mobile sidebar
+const drawer  = document.getElementById('side-drawer');
+const scrim   = document.getElementById('scrim');
+const menuBtn = document.getElementsByClassName('header__menu')[0];
+const closeBtn= document.getElementById('btn-close-drawer');
+
+function openDrawer(){ drawer?.classList.add('show'); scrim?.classList.add('show'); drawer?.setAttribute('aria-hidden','false'); }
+function closeDrawer(){ drawer?.classList.remove('show'); scrim?.classList.remove('show'); drawer?.setAttribute('aria-hidden','true'); }
+menuBtn?.addEventListener('click', ()=> openDrawer());
+closeBtn?.addEventListener('click', ()=> closeDrawer());
+scrim?.addEventListener('click', ()=> closeDrawer());
+document.querySelectorAll('.side-drawer__nav [data-route]').forEach(a=>{
+  a.addEventListener('click', ()=> { closeDrawer(); });
+});
+
+init();
