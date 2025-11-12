@@ -299,7 +299,7 @@ async function tryLoad(src, teamName, timeoutMs = 15000) {
   return hit;
 }
 
-// Preload all crests once
+// Preload all crests once (concurrency limited)
 async function prefetchAllLogos(teamMap) {
   const items = [...teamMap.keys()];
   const CONCURRENCY = 4;
@@ -341,14 +341,13 @@ async function setBadge(elm, urlFromCsv, teamName='') {
   if (pre?.img) {
     if (badgeTokens.get(elm) !== token) return;
     elm.innerHTML = '';
-    // clone works because src is dataURL or real file, not revoked blob
-    elm.appendChild(pre.img.cloneNode(true));
+    elm.appendChild(pre.img.cloneNode(true)); // safe clone
     elm.classList.add('has-logo');
     if (pre.url) { LOGO_CACHE[teamName] = pre.url; saveLogoCache(); }
     return;
   }
 
-  // local sources
+  // local sources fallback
   const sources = guessLogoSources(teamName);
   let hit = null;
   for (const src of sources) {
@@ -945,7 +944,7 @@ const API = {
   copilot: (p)=>       apiJson('/copilot', { method:'POST', body: JSON.stringify(p) })
 };
 
-// OCR + parser + UI stubs (unchanged from last good build)
+// OCR + parser + UI stubs
 async function ocrImageOrPdf(file) {
   if (!window.Tesseract) throw new Error('OCR engine not loaded');
   const { data } = await window.Tesseract.recognize(file, 'eng', { logger: () => {} });
@@ -993,7 +992,7 @@ async function runBetChecker(file) {
     if (!parsed.legs.length) { out && (out.innerHTML = `<div class="muted">No legs detected.</div>`); return; }
     out && (out.innerHTML = '<div class="muted">Scoring legs…</div>');
     const scored = await API.scoreSlip({ legs: parsed.legs });
-    // ... render results (omitted for brevity)
+    // render results… (omitted)
     showToast('success', `Scored ${scored.legs?.length || parsed.legs.length} leg(s)`);
   } catch (e) {
     showToast('error', e.message);
@@ -1001,7 +1000,7 @@ async function runBetChecker(file) {
   }
 }
 
-// Co-Pilot send (unchanged)
+// Co-Pilot send
 async function sendCopilotMessage(text) {
   const payload = { 
     messages: [
