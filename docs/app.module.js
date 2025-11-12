@@ -320,10 +320,11 @@ async function tryLoad(src, teamName) {
 
 /**
  * Local-first crest loader (no proxy):
- * cache → CSV/override URL → local slug files → Commons thumb.php → Commons API → SportsDB → initials
+ * PRIORITY: overrides → cache → CSV/local/commons/sportsdb → initials
  */
 async function setBadge(elm, urlFromCsv, teamName='') {
   if (!elm) return;
+  console.log('[badge] start', { teamName, urlFromCsv, override: TEAM_LOGO_OVERRIDES[teamName] });
   const token = {}; badgeTokens.set(elm, token);
   elm.classList.remove('has-logo'); elm.innerHTML = '';
 
@@ -333,16 +334,29 @@ async function setBadge(elm, urlFromCsv, teamName='') {
     elm.classList.remove('has-logo');
   };
 
-  // 0) cache
-  if (teamName && LOGO_CACHE[teamName]) {
-    const hit = await tryLoad(LOGO_CACHE[teamName], teamName);
+  // 0) OVERRIDE FIRST
+  const overrideUrl = TEAM_LOGO_OVERRIDES[teamName];
+  if (overrideUrl) {
+    const hit = await tryLoad(overrideUrl, teamName);
     if (hit && badgeTokens.get(elm) === token) {
-      elm.innerHTML = ''; elm.appendChild(hit.img); elm.classList.add('has-logo');
+      elm.appendChild(hit.img); elm.classList.add('has-logo');
+      LOGO_CACHE[teamName] = overrideUrl; saveLogoCache();
+      console.log('[badge] loaded override', overrideUrl);
       return;
     }
   }
 
-  // 1) override or CSV
+  // 1) cache
+  if (teamName && LOGO_CACHE[teamName]) {
+    const hit = await tryLoad(LOGO_CACHE[teamName], teamName);
+    if (hit && badgeTokens.get(elm) === token) {
+      elm.appendChild(hit.img); elm.classList.add('has-logo');
+      console.log('[badge] loaded cache', LOGO_CACHE[teamName]);
+      return;
+    }
+  }
+
+  // 2) CSV or absolute URL
   const raw = normalizeBasicUrl(urlFromCsv);
   let loaded = null, finalUrl = null;
 
@@ -351,7 +365,7 @@ async function setBadge(elm, urlFromCsv, teamName='') {
     if (loaded) finalUrl = raw;
   }
 
-  // 2) local slug guesses
+  // 3) local slug guesses
   if (!loaded && teamName) {
     for (const loc of localLogoCandidates(teamName)) {
       loaded = await tryLoad(loc, teamName);
@@ -359,7 +373,7 @@ async function setBadge(elm, urlFromCsv, teamName='') {
     }
   }
 
-  // 3) Commons thumb / API from CSV
+  // 4) Commons (thumb/API) if CSV was a Commons link
   if (!loaded && raw && (isCommonsFilePath(raw) || isCommonsFileTitle(raw))) {
     const thumbPhp = commonsToThumbPhp(raw);
     if (thumbPhp) {
@@ -375,7 +389,7 @@ async function setBadge(elm, urlFromCsv, teamName='') {
     }
   }
 
-  // 4) SportsDB
+  // 5) SportsDB fallback
   if (!loaded && teamName) {
     const sdb = await resolveViaSportsDb(teamName);
     if (sdb) {
@@ -385,15 +399,14 @@ async function setBadge(elm, urlFromCsv, teamName='') {
   }
 
   if (!loaded) {
-    if (!window.__OG_LOGO_FAIL_LOGGED__) {
-      console.warn('[OG] crest failed (local-first):', { teamName, urlFromCsv });
-      window.__OG_LOGO_FAIL_LOGGED__ = true;
-    }
+    console.warn('[badge] fallback to initials', { teamName, urlFromCsv });
     return finishInitials();
   }
 
   if (badgeTokens.get(elm) !== token) return;
-  elm.innerHTML = ''; elm.appendChild(loaded.img); elm.classList.add('has-logo');
+  elm.appendChild(loaded.img);
+  elm.classList.add('has-logo');
+  console.log('[badge] loaded', { teamName, finalUrl });
   if (teamName && finalUrl) { LOGO_CACHE[teamName] = finalUrl; saveLogoCache(); }
 }
 
@@ -595,8 +608,12 @@ async function loadFixturesCSV(url) {
       showToast('success', `Loaded ${fixtures.length} fixtures`);
     };
 
-    if (typeof globe.onGlobeReady === 'function') globe.onGlobeReady(boot);
-    else setTimeout(boot, 300);
+    if (typeof globe.onGlobeReady === 'function') {
+      globe.onGlobeReady(boot);
+    } else {
+      // more reliable on GitHub Pages than setTimeout
+      requestAnimationFrame(boot);
+    }
 
   } catch (err) {
     console.error('[CSV] Failed to fetch/parse]:', err);
@@ -726,6 +743,8 @@ function renderPanel(f) {
       return `${date} · ${time} GMT`;
     } catch { return iso || ''; }
   };
+
+  console.log('[panel] render', f?.home_team, 'vs', f?.away_team);
 
   el.fixtureTitle.textContent = `${f.home_team} vs ${f.away_team}`;
   el.fixtureContext.textContent = [f.competition, fmt(f.date_utc), f.stadium && `${f.stadium} (${f.city || ''})`, f.country]
@@ -1261,6 +1280,7 @@ scrim?.addEventListener('click', ()=> closeDrawer());
 document.querySelectorAll('.side-drawer__nav [data-route]').forEach(a=>{
   a.addEventListener('click', ()=> { closeDrawer(); });
 });
+
 // --- sanity check: should log "[LOGOS] OK" twice if paths are correct
 (function verifyLocalLogoSetup(){
   const tests = [
