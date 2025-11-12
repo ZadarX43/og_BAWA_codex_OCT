@@ -953,12 +953,328 @@ const API = {
   copilot: (p)=>       apiJson('/copilot', { method:'POST', body: JSON.stringify(p) })
 };
 
-// ---------- Bet Checker: OCR → parse → score ----------
-async function ocrImageOrPdf(file) {
-  if (!window.Tesseract) throw new Error('OCR engine not loaded');
-  const { data } = await window.Tesseract.recognize(file, 'eng', { logger: () => {} });
-  return (data && data.text) ? data.text : '';
+// ---------- Bet Checker OCR parsing (fixed) ----------
+function parseSlipText(text) {
+  // make sure it's a string, split into trimmed non-empty lines
+  const lines = String(text).split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+  const legs = [];
+
+  for (let i = 0; i < lines.length; i++) {
+    const L = lines[i];
+
+    // "Home v Away" / "Home vs Away" / "Home VS Away"
+    const m = L.match(/^\s*([A-Za-z0-9 .'\-]+)\s+(?:v|vs\.?|VS)\s+([A-Za-z0-9 .'\-]+)\s*$/i);
+    if (!m) continue;
+
+    const home = m[1].trim();
+    const away = m[2].trim();
+
+    // look ahead a few lines for market/price
+    for (let j = 1; j <= 3 && (i + j) < lines.length; j++) {
+      const M = lines[i + j];
+
+      let market = null;
+      let pick = null;
+
+      if (/over\s*2\.?5/i.test(M)) { market = 'OVER_UNDER_2_5'; pick = 'OVER'; }
+      else if (/under\s*2\.?5/i.test(M)) { market = 'OVER_UNDER_2_5'; pick = 'UNDER'; }
+      else if (/both\s*teams\s*to\s*score|btts/i.test(M)) { market = 'BTTS'; pick = /\bno\b/i.test(M) ? 'NO' : 'YES'; }
+      else if (/(?:^|\s)(?:1x2|home|away|draw|1|2|x)(?:\s|$)/i.test(M)) {
+        market = 'FTR';
+        if (/\bdraw\b|(?:^|\s)x(?:\s|$)/i.test(M)) pick = 'DRAW';
+        else if (/\bhome\b|(?:^|\s)1(?:\s|$)/i.test(M)) pick = 'HOME';
+        else if (/\baway\b|(?:^|\s)2(?:\s|$)/i.test(M)) pick = 'AWAY';
+      }
+
+      if (!market) continue;
+
+      // try to extract a price (fractional or decimal)
+      let price = null;
+      const frac = M.match(/(\d+)\s*\/\s*(\d+)/);        // e.g. 8/11
+      const dec  = M.match(/(\d+(?:\.\d+)?)/);           // e.g. 1.73
+      if (frac) {
+        price = (parseFloat(frac[1]) / parseFloat(frac[2])) + 1;
+      } else if (dec) {
+        price = parseFloat(dec[1]);
+      }
+
+      legs.push({
+        teamHome: home,
+        teamAway: away,
+        market,
+        selection: pick || '—',
+        price,
+        bookmaker: null,
+        kickoffUTC: null
+      });
+      break; // stop scanning ahead for this leg
+    }
+  }
+
+  return { legs, raw: lines.slice(0, 60).join('\n') };
+}
+// ==============================
+// Local logo setup (no proxy, zero CORS) — OPTION B PATH
+// ==============================
+
+// Your files are under docs/assets/assets/logos/, so from docs/index.html use:
+const LOGO_LOCAL_BASE = './assets/assets/logos';
+
+// Map CSV team names → your local filenames
+const TEAM_LOGO_OVERRIDES = {
+  'Celtic':               './assets/assets/logos/celtic.svg',
+  'Lazio':                './assets/assets/logos/lazio.svg',
+  'Royal Antwerp FC':     './assets/assets/logos/royal-antwerp.svg',
+  'Shakhtar Donetsk':     './assets/assets/logos/shakhtar-donetsk.svg',
+  'Atlético Madrid':      './assets/assets/logos/atletico-madrid.svg',
+  'Atletico Madrid':      './assets/assets/logos/atletico-madrid.svg',
+  'Feyenoord':            './assets/assets/logos/feyenoord.svg',
+  'PSG':                  './assets/assets/logos/paris-saint-germain.svg',
+  'Paris Saint-Germain':  './assets/assets/logos/paris-saint-germain.svg',
+  'Newcastle United':     './assets/assets/logos/newcastle-united.svg',
+  'AC Milan':             './assets/assets/logos/ac-milan.svg',
+  'Borussia Dortmund':    './assets/assets/logos/borussia-dortmund.svg',
+  'Manchester City':      './assets/assets/logos/manchester-city.svg',
+  'RB Leipzig':           './assets/assets/logos/rb-leipzig.svg',
+  'Young Boys':           './assets/assets/logos/young-boys.svg',
+  'Red Star Belgrade':    './assets/assets/logos/red-star-belgrade.svg',
+  'Crvena Zvezda':        './assets/assets/logos/red-star-belgrade.svg',
+  'FC Barcelona':         './assets/assets/logos/fc-barcelona.svg',
+  'Barcelona':            './assets/assets/logos/fc-barcelona.svg',
+  'Porto':                './assets/assets/logos/fc-porto.svg',
+  'FC Porto':             './assets/assets/logos/fc-porto.svg',
+  'Galatasaray':          './assets/assets/logos/galatasaray.svg',
+  'Manchester United':    './assets/assets/logos/manchester-united.svg',
+  'Sevilla FC':           './assets/assets/logos/sevilla-fc.svg',
+  'PSV':                  './assets/assets/logos/psv.svg',
+  'PSV Eindhoven':        './assets/assets/logos/psv.svg',
+  'København':            './assets/assets/logos/fc-kobenhavn.svg',
+  'FC Copenhagen':        './assets/assets/logos/fc-kobenhavn.svg',
+  'Arsenal':              './assets/assets/logos/arsenal.svg',
+  'Lens':                 './assets/assets/logos/lens.svg',
+  'Real Madrid':          './assets/assets/logos/real-madrid.svg',
+  'Napoli':               './assets/assets/logos/ssc-napoli.svg',
+  'SSC Napoli':           './assets/assets/logos/ssc-napoli.svg',
+  'Benfica':              './assets/assets/logos/sl-benfica.svg',
+  'SL Benfica':           './assets/assets/logos/sl-benfica.svg',
+  'Inter Milan':          './assets/assets/logos/inter-milan.svg',
+  'Inter':                './assets/assets/logos/inter-milan.svg',
+  'Real Sociedad':        './assets/assets/logos/real-sociedad.svg',
+  'Salzburg':             './assets/assets/logos/rb-salzburg.svg',
+  'Bayern München':       './assets/assets/logos/bayern-munich.svg',
+  'Bayern Munich':        './assets/assets/logos/bayern-munich.svg'
+};
+
+// Optional last-resort (only if you want)
+const USE_SPORTSDB_FALLBACK = true;
+const SPORTSDB_KEY = '3';
+const SPORTSDB_ENDPOINT = `https://www.thesportsdb.com/api/v1/json/${SPORTSDB_KEY}/searchteams.php?t=`;
+
+// small cache to avoid reloading
+const LOGO_CACHE_KEY = 'og_logo_cache_v_demo';
+let LOGO_CACHE = {};
+try { LOGO_CACHE = JSON.parse(localStorage.getItem(LOGO_CACHE_KEY) || '{}'); } catch {}
+function saveLogoCache(){ try { localStorage.setItem(LOGO_CACHE_KEY, JSON.stringify(LOGO_CACHE)); } catch {} }
+
+// Helper: initials fallback
+function initials(name='') {
+  const parts = String(name).trim().split(/\s+/).filter(Boolean);
+  if (!parts.length) return '';
+  if (parts.length === 1) return parts[0].slice(0,2).toUpperCase();
+  return (parts[0][0] + parts[1][0]).toUpperCase();
 }
 
-function parseSlipText(text) {
-  const lines = text split… // (rest of file unchanged)
+function slugifyTeam(name='') {
+  return String(name)
+    .toLowerCase()
+    .replace(/&/g,'and')
+    .replace(/[\u2019'’]/g,'')
+    .replace(/[^a-z0-9]+/g,'-')
+    .replace(/^-+|-+$/g,'');
+}
+
+function isCommonsFilePath(u){ return /:\/\/commons\.wikimedia\.org\/wiki\/Special:FilePath\//i.test(u); }
+function isCommonsFileTitle(u){ return /:\/\/commons\.wikimedia\.org\/wiki\/File:/i.test(u); }
+
+function normalizeBasicUrl(raw) {
+  if (!raw) return '';
+  let u = String(raw).trim();
+  if (!u) return '';
+  if (u.startsWith('//')) u = `https:${u}`;
+  if (/^http:\/\//i.test(u) && location.protocol === 'https:') u = u.replace(/^http:\/\//i, 'https://');
+  return u;
+}
+
+// Deterministic PNG thumb for Commons links
+function commonsToThumbPhp(inputUrl) {
+  try {
+    const url = new URL(inputUrl);
+    let file = '';
+    if (isCommonsFilePath(inputUrl)) {
+      file = decodeURIComponent(url.pathname.split('/').pop() || '');
+    } else if (isCommonsFileTitle(inputUrl)) {
+      const last = decodeURIComponent(url.pathname.split('/').pop() || '');
+      file = last.replace(/^File:/i,'');
+    } else { return null; }
+    file = file.replace(/\s+/g,'_');
+    const thumb = new URL('https://commons.wikimedia.org/w/thumb.php');
+    thumb.searchParams.set('f', file);
+    thumb.searchParams.set('width', '160');
+    return thumb.toString();
+  } catch { return null; }
+}
+
+// MediaWiki API thumb (fallback)
+async function resolveViaCommonsApi(inputUrl) {
+  try {
+    const url = new URL(inputUrl);
+    let title = '';
+    if (isCommonsFilePath(inputUrl)) {
+      const last = decodeURIComponent(url.pathname.split('/').pop() || '');
+      title = `File:${last.replace(/\s+/g,'_')}`;
+    } else if (isCommonsFileTitle(inputUrl)) {
+      const last = decodeURIComponent(url.pathname.split('/').pop() || '');
+      title = (last.startsWith('File:') ? last : `File:${last}`).replace(/\s+/g,'_');
+    } else { return null; }
+
+    const params = new URLSearchParams({
+      action: 'query', prop: 'imageinfo', iiprop: 'url', iiurlwidth: '160',
+      format: 'json', origin: '*', titles: title
+    });
+    const api = `https://commons.wikimedia.org/w/api.php?${params.toString()}`;
+    const r = await fetch(api);
+    if (!r.ok) return null;
+    const j = await r.json();
+    const pages = j?.query?.pages || {};
+    const first = Object.values(pages)[0];
+    const ii = first?.imageinfo?.[0];
+    const thumb = ii?.thumburl || ii?.url;
+    return thumb || null;
+  } catch { return null; }
+}
+
+async function resolveViaSportsDb(teamName) {
+  if (!USE_SPORTSDB_FALLBACK || !teamName) return null;
+  try {
+    const r = await fetch(SPORTSDB_ENDPOINT + encodeURIComponent(teamName));
+    if (!r.ok) return null;
+    const j = await r.json();
+    const team = (j?.teams || [])[0];
+    const badge = team?.strTeamBadge || team?.strTeamLogo || team?.strTeamFanart1;
+    return badge || null;
+  } catch { return null; }
+}
+
+function localLogoCandidates(team) {
+  const slug = slugifyTeam(team);
+  return [
+    `${LOGO_LOCAL_BASE}/${slug}.png`,
+    `${LOGO_LOCAL_BASE}/${slug}.svg`,
+  ];
+}
+
+const badgeTokens = new WeakMap();
+async function tryLoad(src, teamName) {
+  if (!src) return null;
+  return new Promise(resolve => {
+    const img = new Image();
+    img.alt = teamName || '';
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    if (!/^data:/i.test(src)) {
+      img.crossOrigin = 'anonymous';
+      img.referrerPolicy = 'no-referrer';
+    }
+    img.onload  = () => resolve({ ok: true, img, src });
+    img.onerror = () => resolve(null);
+    img.src = src;
+  });
+}
+
+/**
+ * Local-first crest loader (no proxy):
+ * cache → CSV/override URL → local slug files → Commons thumb.php → Commons API → SportsDB → initials
+ */
+async function setBadge(elm, urlFromCsv, teamName='') {
+  if (!elm) return;
+  const token = {}; badgeTokens.set(elm, token);
+  elm.classList.remove('has-logo');
+  elm.innerHTML = '';
+
+  const finishInitials = () => {
+    if (badgeTokens.get(elm) !== token) return;
+    elm.textContent = initials(teamName) || '';
+    elm.classList.remove('has-logo');
+  };
+
+  // 0) cache
+  if (teamName && LOGO_CACHE[teamName]) {
+    const hit = await tryLoad(LOGO_CACHE[teamName], teamName);
+    if (hit && badgeTokens.get(elm) === token) {
+      elm.innerHTML = '';
+      elm.appendChild(hit.img);
+      elm.classList.add('has-logo');
+      return;
+    }
+  }
+
+  // 1) override or CSV
+  const raw = normalizeBasicUrl(urlFromCsv);
+  let loaded = null, finalUrl = null;
+
+  if (raw) {
+    loaded = await tryLoad(raw, teamName);
+    if (loaded) finalUrl = raw;
+  }
+
+  // 2) local slug guesses
+  if (!loaded && teamName) {
+    for (const loc of localLogoCandidates(teamName)) {
+      loaded = await tryLoad(loc, teamName);
+      if (loaded) { finalUrl = loc; break; }
+    }
+  }
+
+  // 3) Commons (thumb/API) if CSV was a Commons link
+  if (!loaded && raw && (isCommonsFilePath(raw) || isCommonsFileTitle(raw))) {
+    const thumbPhp = commonsToThumbPhp(raw);
+    if (thumbPhp) {
+      loaded = await tryLoad(thumbPhp, teamName);
+      if (loaded) finalUrl = thumbPhp;
+    }
+    if (!loaded) {
+      const apiThumb = await resolveViaCommonsApi(raw);
+      if (apiThumb) {
+        loaded = await tryLoad(apiThumb, teamName);
+        if (loaded) finalUrl = apiThumb;
+      }
+    }
+  }
+
+  // 4) SportsDB fallback
+  if (!loaded && teamName) {
+    const sdb = await resolveViaSportsDb(teamName);
+    if (sdb) {
+      loaded = await tryLoad(sdb, teamName);
+      if (loaded) finalUrl = sdb;
+    }
+  }
+
+  if (!loaded) {
+    if (!window.__OG_LOGO_FAIL_LOGGED__) {
+      console.warn('[OG] crest failed (local-first):', { teamName, urlFromCsv });
+      window.__OG_LOGO_FAIL_LOGGED__ = true;
+    }
+    return finishInitials();
+  }
+
+  if (badgeTokens.get(elm) !== token) return;
+  elm.innerHTML = '';
+  elm.appendChild(loaded.img);
+  elm.classList.add('has-logo');
+
+  if (teamName && finalUrl) {
+    LOGO_CACHE[teamName] = finalUrl;
+    saveLogoCache();
+  }
+}
