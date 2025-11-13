@@ -176,22 +176,24 @@ function normalizeBasicUrl(raw) {
   return u;
 }
 
-// ---- Correct lat/lon → world position (matches three-globe’s convention)
+// ---- Correct lat/lon → world position (matches three-globe)
 function latLngToVec3(latDeg, lonDeg, altFrac = 0) {
   const R = getGlobeRadius() * (1 + (altFrac || 0));
-  // three-globe uses: phi = (90 - lat), theta = (180 - lon)
-  const phi   = THREE.MathUtils.degToRad(90 - latDeg);
-  const theta = THREE.MathUtils.degToRad(180 - lonDeg);
 
-  const x = R * Math.sin(phi) * Math.cos(theta);
-  const y = R * Math.cos(phi);
-  const z = R * Math.sin(phi) * Math.sin(theta);
+  // three-globe: phi = (90 - lat), theta = (lon + 180)
+  const phi   = THREE.MathUtils.degToRad(90 - latDeg);
+  const theta = THREE.MathUtils.degToRad(lonDeg + 180);
+
+  const x = -R * Math.sin(phi) * Math.cos(theta);
+  const z =  R * Math.sin(phi) * Math.sin(theta);
+  const y =  R * Math.cos(phi);
   return new THREE.Vector3(x, y, z);
 }
 
 function surfaceNormalAt(latDeg, lonDeg) {
   return latLngToVec3(latDeg, lonDeg, 0).normalize();
 }
+
 
 // ----------------------------
 // Stadium image lookup (PATCH 1)
