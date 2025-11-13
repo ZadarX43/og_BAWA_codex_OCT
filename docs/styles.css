@@ -43,6 +43,71 @@ body{
   gap: var(--rhythm);
   position: relative;
 }
+/* ==== Hero → 3-column layout when rail is present ==== */
+.hero{
+  display:grid;
+  grid-template-columns: 220px minmax(0,55%) minmax(0,45%);
+  gap:32px;
+  align-items:stretch;
+}
+@media (max-width: 1100px){
+  .hero{ grid-template-columns: 1fr; }
+}
+
+/* ==== Left calendar rail ==== */
+.left-rail{
+  position:sticky; top:18px;
+  display:flex; flex-direction:column; gap:12px;
+  max-height:calc(100vh - 120px);
+  padding:14px;
+  border-radius:18px;
+  background:linear-gradient(135deg, rgba(8,20,32,.7), rgba(12,26,38,.6));
+  border:1px solid rgba(125,249,196,.16);
+  box-shadow:0 14px 32px rgba(0,0,0,.28);
+}
+
+.date-quick{ display:flex; gap:8px; flex-wrap:wrap; }
+.pill{
+  padding:6px 10px; border-radius:999px; cursor:pointer;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.10);
+  color:#e6f5ff; font-weight:700; font-size:.85rem;
+}
+.pill.is-active{
+  color:#031015;
+  background:linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  border-color:transparent;
+}
+
+.cal-head{ display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:8px; }
+.cal-title{ text-align:center; font-weight:700; letter-spacing:.02em; }
+.cal-nav{
+  width:28px; height:28px; border-radius:8px; cursor:pointer;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12); color:#e6f5ff;
+}
+
+.mini-cal{
+  display:grid; grid-template-columns: repeat(7, 1fr);
+  gap:6px; margin-top:6px;
+}
+.mini-cal .dow{
+  font-size:.72rem; color:var(--text-secondary); text-align:center; opacity:.9;
+}
+.mini-cal .day{
+  height:28px; display:grid; place-items:center; border-radius:8px;
+  font-weight:700; font-size:.85rem; cursor:pointer;
+  background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08);
+  color:#e6f5ff;
+}
+.mini-cal .day.is-muted{ opacity:.45; }
+.mini-cal .day.has-fixture{ outline:1px solid rgba(125,249,196,.35); }
+.mini-cal .day.is-selected{
+  background:linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  color:#031015; border-color:transparent;
+}
+
+.cal-legend{ font-size:.8rem; margin-top:4px; }
 
 /* ===== Header ===== */
 .top-bar { display:flex; justify-content:space-between; align-items:flex-start; }
