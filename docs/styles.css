@@ -600,3 +600,6 @@ canvas{ border-radius:24px; }
 #globe-container .globeHtmlElements,
 #globe-container .globe-html-overlay { position:absolute; inset:0; z-index:6; pointer-events:none; }
 #globe-container .fixture-tab { pointer-events:auto; }
+
+/* Ensure OrbitControls can receive input on the canvas */
+#globe-container canvas { pointer-events: auto !important; }
