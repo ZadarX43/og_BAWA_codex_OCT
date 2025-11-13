@@ -176,18 +176,24 @@ function normalizeBasicUrl(raw) {
   return u;
 }
 
-// ---- Correct lat/lon → world position (matches three-globe)
+// ---- Correct lat/lon → world position (direct geodesy, matches three-globe view)
+// lon: West negative, East positive; lat: South negative, North positive
+// This mapping makes lon=0° (Greenwich) face the camera (+Z), which matches the Blue Marble.
 function latLngToVec3(latDeg, lonDeg, altFrac = 0) {
-  const R = getGlobeRadius() * (1 + (altFrac || 0));
+  const lat = THREE.MathUtils.degToRad(latDeg);
+  const lon = THREE.MathUtils.degToRad(lonDeg);
+  const R   = getGlobeRadius() * (1 + (altFrac || 0));
 
-  // three-globe: phi = (90 - lat), theta = (lon + 180)
-  const phi   = THREE.MathUtils.degToRad(90 - latDeg);
-  const theta = THREE.MathUtils.degToRad(lonDeg + 180);
-
-  const x = -R * Math.sin(phi) * Math.cos(theta);
-  const z =  R * Math.sin(phi) * Math.sin(theta);
-  const y =  R * Math.cos(phi);
-  return new THREE.Vector3(x, y, z);
+  // Right-handed Y-up sphere:
+  // x = R cos(lat) sin(lon)
+  // y = R sin(lat)
+  // z = R cos(lat) cos(lon)   (so lon=0 lies on +Z, Europe/Africa face camera)
+  const cosLat = Math.cos(lat);
+  return new THREE.Vector3(
+    R * cosLat * Math.sin(lon), // x
+    R * Math.sin(lat),          // y
+    R * cosLat * Math.cos(lon)  // z
+  );
 }
 
 function surfaceNormalAt(latDeg, lonDeg) {
