@@ -609,48 +609,70 @@ canvas{ border-radius:24px; }
 #globe-container .globe-html-overlay { position:absolute; inset:0; z-index:6; pointer-events:none; }
 #globe-container .fixture-tab { pointer-events:auto; }
 
-/* ===== NEW: Competition accuracy banner & legend ===== */
-.accuracy-banner{
-  margin-top:10px;
-  display:flex;
-  align-items:center;
-  gap:12px;
+//* --- Competition strip (tall, teal/green/blue, full-height) --- */
+.comp-accuracy{
+  margin-top: 12px;
+  border: 1px solid rgba(125,249,196,.16);
+  border-radius: 16px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0d2a32 0%, #0f4a40 48%, #0a344a 100%);
+  box-shadow: 0 14px 32px rgba(0,0,0,.28);
+  padding: 0;
 }
-.accuracy-chip{
-  padding:8px 12px;
-  border-radius:12px;
-  background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.08);
-  font-weight:700;
-  font-size:.9rem;
+.comp-accuracy .comp-row{
+  display: grid;
+  grid-template-columns: 84px 1fr;   /* big logo col + everything else */
+  align-items: center;
+  min-height: 78px;                  /* make it fill the card height nicely */
+  gap: 12px;
+  padding: 12px 16px;
 }
-.accuracy-bar{
-  flex:1;
-  height:10px;
-  background:rgba(255,255,255,.08);
-  border-radius:999px;
-  overflow:hidden;
-  position:relative;
-}
-.accuracy-bar__fill{
-  position:absolute; left:0; top:0; bottom:0;
-  width:0%;
-  border-radius:999px;
-  transition:width .35s ease;
-}
-.accuracy--green{ background:linear-gradient(90deg,#23d18b,#8fffd4); }
-.accuracy--amber{ background:linear-gradient(90deg,#f7c948,#ffd36b); }
-.accuracy--red{ background:linear-gradient(90deg,#ff6b6b,#ff8a8a); }
 
-.legend{
-  margin-top:8px;
-  display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+/* Big badge on the left */
+.comp-logo{
+  width: 56px; height: 56px; object-fit: contain;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,.35));
+  display: inline-block;              /* JS hides if missing */
+  justify-self: center;
 }
-.legend__item{ display:flex; align-items:center; gap:8px; font-size:.85rem; color:var(--text-secondary); }
-.legend__swatch{ width:12px; height:12px; border-radius:3px; }
-.legend__swatch.green{ background:#23d18b; }
-.legend__swatch.amber{ background:#f7c948; }
-.legend__swatch.red{ background:#ff6b6b; }
+
+/* Right side: name + chips row */
+.comp-name{
+  font-weight: 800; letter-spacing:.02em; opacity:.98; color:#e8fbf4;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  font-size: 1.12rem;
+  margin-bottom: 6px;
+}
+
+/* Put the chips on the same right column, below the name */
+.market-traffic{ display:flex; gap:12px; flex-wrap:wrap; }
+
+/* Chip styles (match screenshot) */
+.light{
+  display:inline-flex; align-items:center;
+  padding:8px 12px; border-radius:12px; font-weight:800; font-size:.9rem;
+  border:1px solid rgba(255,255,255,.10); box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
+}
+.light--green{ background:rgba(67,225,167,.20); color:#d1ffef; border-color:rgba(67,225,167,.32); }
+.light--blue { background:rgba(70,180,255,.20); color:#d7efff; border-color:rgba(70,180,255,.32); }
+.light--amber{ background:rgba(255,188,54,.22); color:#ffe6b0; border-color:rgba(255,188,54,.35); }
+
+/* If you keep the gauge, make it slim and unobtrusive (optional) */
+.gauge{ display:none; }               /* hide gauge for the chip-only look */
+/* If you prefer to keep it, remove the line above and use this:
+.gauge{display:grid; grid-template-columns:auto 120px auto; align-items:center; gap:8px}
+.gauge-label{font-size:.75rem; color:rgba(233,251,244,.85)}
+.gauge-bar{height:6px; border-radius:999px; background:rgba(255,255,255,.12); overflow:hidden}
+.gauge-fill{height:100%; background:linear-gradient(90deg,var(--gradient-start),var(--gradient-end))}
+.gauge-val{font-size:.78rem; color:#d8f8ee; font-weight:700}
+*/
+
+@media (max-width: 720px){
+  .comp-accuracy .comp-row{ grid-template-columns: 64px 1fr; min-height: 72px; }
+  .comp-logo{ width: 48px; height: 48px; }
+  .comp-name{ font-size: 1rem; }
+  .light{ font-size:.85rem; padding:7px 10px; }
+}
 
 /* ===== NEW: Optional side date-rail (future) ===== */
 .date-rail{
