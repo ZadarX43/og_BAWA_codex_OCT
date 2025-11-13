@@ -176,6 +176,37 @@ function normalizeBasicUrl(raw) {
   return u;
 }
 
+// ------- Globe lat/lng helpers -------
+function latLngToVec3(lat, lng, alt = SURFACE_EPS + 0.02){
+  const R = getGlobeRadius();
+  const phi   = THREE.MathUtils.degToRad(90 - lat);
+  const theta = THREE.MathUtils.degToRad(lng + 180);
+  const r = R * (1 + alt);
+  const x = -r * Math.sin(phi) * Math.cos(theta);
+  const z =  r * Math.sin(phi) * Math.sin(theta);
+  const y =  r * Math.cos(phi);
+  return new THREE.Vector3(x, y, z);
+}
+
+function surfaceNormalAt(lat, lng){
+  const v = latLngToVec3(lat, lng, 0).normalize();
+  return v.clone().normalize();
+}
+
+function stadiumTextureFor(f){
+  // priority: fixture_id.jpg -> home team slug .jpg/.png
+  const id = (f.fixture_id || '').toString().trim();
+  const slug = slugLocal(f.home_team || '');
+  const base = './assets/stadiums';
+  const tries = [
+    id && `${base}/${id}.jpg`,
+    id && `${base}/${id}.png`,
+    slug && `${base}/${slug}.jpg`,
+    slug && `${base}/${slug}.png`
+  ].filter(Boolean);
+  return tries;
+}
+
 // ---------- Logo system (local only; no remote) ----------
 const LOGO_LOCAL_BASE = './assets/assets/logos';
 
@@ -383,7 +414,6 @@ const COMP_LOGO_MAP = {
   'MLS':                        `${COMP_LOGO_BASE}/usa-mls.svg`,
   'Major League Soccer':        `${COMP_LOGO_BASE}/usa-mls.svg`,
 };
-
 function findCompLogoSrc(name = '') {
   if (!name) return '';
   if (COMP_LOGO_MAP[name]) return COMP_LOGO_MAP[name];
@@ -428,8 +458,8 @@ function renderCompetitionAccuracy(compName) {
   // Snapshot from current fixtures of that competition
   const stats = getCompetitionSnapshot(compName);
 
-  // DEMO: force FTR to 87% (remove/comment if you want live averages)
-  const ftrPct = 87; // ← requested “87% accuracy” demo
+  // DEMO: force FTR to 87% (remove for live)
+  const ftrPct = 87;
   if (fill) fill.style.width = `${Math.max(0, Math.min(100, ftrPct))}%`;
   if (val)  val.textContent  = `${ftrPct}%`;
 
@@ -449,7 +479,6 @@ function renderCompetitionAccuracy(compName) {
     );
   }
 }
-
 
 // ----------------------------
 // Scene init
@@ -528,6 +557,60 @@ async function init() {
     if (idx >= 0) selectIndex(idx, { fly: true });
   });
 
+  // ---------- ACTIVE MARKER (radar + beam + billboard) ----------
+  {
+    const markerGroup = new THREE.Group();
+    scene.add(markerGroup);
+
+    // materials
+    const radarMat = new THREE.MeshBasicMaterial({
+      color: new THREE.Color(0x80ffe6),
+      transparent: true,
+      opacity: 0.35,
+      depthWrite: false,
+      side: THREE.DoubleSide
+    });
+    const beamMat = new THREE.MeshBasicMaterial({
+      color: 0x7df9c4,
+      transparent: true,
+      opacity: 0.22,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false
+    });
+
+    // geos
+    const ringGeo = new THREE.RingGeometry(1.0, 1.06, 128);
+    const cylGeo  = new THREE.CylinderGeometry(0.18, 0.28, 30, 32, 1, true);
+
+    // rings
+    const radarGroup = new THREE.Group();
+    const rings = [];
+    for (let i=0;i<3;i++){
+      const m = new THREE.Mesh(ringGeo, radarMat.clone());
+      m.scale.setScalar(1);
+      m.material.opacity = 0;
+      rings.push(m);
+      radarGroup.add(m);
+    }
+    markerGroup.add(radarGroup);
+
+    // beam
+    const beam = new THREE.Mesh(cylGeo, beamMat);
+    beam.visible = false;
+    markerGroup.add(beam);
+
+    // billboard
+    const billboard = new THREE.Sprite(new THREE.SpriteMaterial({ transparent:true, opacity:0 }));
+    billboard.scale.set(14, 8, 1);
+    markerGroup.add(billboard);
+
+    // state
+    const markerState = { lat:0, lng:0, t0:0, active:false };
+
+    // expose
+    window.__OG_MARKER__ = { markerGroup, radarGroup, rings, beam, billboard, markerState };
+  }
+
   window.addEventListener('resize', () => {
     const { clientWidth, clientHeight } = el.globeWrap;
     renderer.setSize(clientWidth, clientHeight);
@@ -583,6 +666,42 @@ async function init() {
 function animate() {
   requestAnimationFrame(animate);
   controls.update();
+
+  // --- marker animations ---
+  {
+    const S = window.__OG_MARKER__;
+    if (S && S.markerState.active){
+      const { rings, radarGroup, beam, markerState } = S;
+      const now = performance.now() * 0.001;
+      const base = getGlobeRadius();
+
+      // orient radar to surface normal
+      const n = surfaceNormalAt(markerState.lat, markerState.lng);
+      radarGroup.position.copy(latLngToVec3(markerState.lat, markerState.lng, SURFACE_EPS + 0.001));
+      const look = n.clone().multiplyScalar(base*2);
+      radarGroup.lookAt(look);
+
+      // expanding rings
+      const dur = 2.6;
+      const t = (now - markerState.t0);
+      rings.forEach((r, i) => {
+        const k = ((t + i*0.6) % dur) / dur; // 0..1
+        const s = 1.0 + k * (base * 0.04);
+        r.scale.setScalar(s);
+        r.material.opacity = (1.0 - k) * 0.35;
+      });
+
+      // beam flicker
+      if (beam.visible) {
+        const flicker = 0.18 + 0.06*Math.sin(now*7.0) + 0.04*Math.sin(now*13.0);
+        beam.material.opacity = flicker;
+      }
+
+      // billboard face camera
+      S.billboard.quaternion.copy(camera.quaternion);
+    }
+  }
+
   composer.render();
 }
 
@@ -718,6 +837,25 @@ function selectIndex(idx, opts = {}) {
   const f = fixtures[activeIdx];
   selectedId = f?.fixture_id || f?.re_id || null;
 
+  // collapse previous beam quickly
+  {
+    const S = window.__OG_MARKER__;
+    if (S && S.beam && S.beam.visible){
+      const start = performance.now();
+      const dur = 200;
+      const startScale = S.beam.scale.y;
+      (function shrink(){
+        const t = (performance.now()-start)/dur;
+        if (t < 1){
+          S.beam.scale.y = Math.max(0.001, startScale*(1-t));
+          requestAnimationFrame(shrink);
+        } else {
+          S.beam.scale.y = 0.001;
+        }
+      })();
+    }
+  }
+
   fixtures.forEach(d => (d.__active = (d.fixture_id || d.re_id) === selectedId));
   globe
     .pointAltitude(() => SURFACE_EPS)
@@ -730,6 +868,10 @@ function selectIndex(idx, opts = {}) {
   setTimeout(()=>globe.pointsTransitionDuration?.(0), 220);
 
   if (fly) flyToFixture(f);
+
+  // move radar/beam/billboard
+  moveMarkerToFixture(f, { fly });
+
   renderPanel(f);
   updateSelectionRing(f);
   syncRail();
@@ -803,6 +945,73 @@ function handleHover(d) {
     if (hoverId && (pt.fixture_id || pt.re_id) === hoverId) return RADIUS_BASE * 1.6;
     return RADIUS_BASE;
   });
+}
+
+// ----------------------------
+// Move marker to fixture (beam + radar + billboard)
+// ----------------------------
+function moveMarkerToFixture(f, { fly=false } = {}){
+  const S = window.__OG_MARKER__; if (!S || !f) return;
+
+  S.markerState.lat = +f.latitude;
+  S.markerState.lng = +f.longitude;
+  S.markerState.t0  = performance.now() * 0.001;
+  S.markerState.active = true;
+
+  const R = getGlobeRadius();
+  const n = surfaceNormalAt(f.latitude, f.longitude);
+  const pos = latLngToVec3(f.latitude, f.longitude, SURFACE_EPS + 0.001);
+
+  // radar placement (animated in loop)
+
+  // beam placement and grow-in
+  const beamBase = latLngToVec3(f.latitude, f.longitude, SURFACE_EPS + 0.002);
+  S.beam.position.copy(beamBase);
+  const up = new THREE.Vector3(0,1,0);
+  S.beam.quaternion.setFromUnitVectors(up, n.clone().normalize());
+  S.beam.scale.set(1, 0.001, 1);
+  S.beam.visible = true;
+
+  const growStart = performance.now();
+  const growDur = 550;
+  (function grow(){
+    const t = (performance.now() - growStart)/growDur;
+    if (t < 1){
+      const e = t*t*(3-2*t);
+      S.beam.scale.y = 0.001 + e;
+      requestAnimationFrame(grow);
+    } else {
+      S.beam.scale.y = 1;
+    }
+  })();
+
+  // billboard above surface
+  const bbPos = pos.clone().add(n.clone().multiplyScalar(R*0.06));
+  S.billboard.position.copy(bbPos);
+
+  // load stadium texture (try fixture id then home-team slug)
+  const tries = stadiumTextureFor(f);
+  (async ()=>{
+    for (const url of tries){
+      try {
+        const tex = await new Promise((resolve,reject)=>{
+          new THREE.TextureLoader().load(url, resolve, undefined, reject);
+        });
+        S.billboard.material.map = tex;
+        S.billboard.material.needsUpdate = true;
+        S.billboard.material.opacity = 0;
+        S.billboard.visible = true;
+        const t0 = performance.now();
+        (function fade(){
+          const k = Math.min(1, (performance.now()-t0)/220);
+          S.billboard.material.opacity = k;
+          if (k<1) requestAnimationFrame(fade);
+        })();
+        return;
+      } catch {}
+    }
+    S.billboard.visible = false;
+  })();
 }
 
 // ----------------------------
