@@ -383,6 +383,7 @@ const COMP_LOGO_MAP = {
   'MLS':                        `${COMP_LOGO_BASE}/usa-mls.svg`,
   'Major League Soccer':        `${COMP_LOGO_BASE}/usa-mls.svg`,
 };
+
 function findCompLogoSrc(name = '') {
   if (!name) return '';
   if (COMP_LOGO_MAP[name]) return COMP_LOGO_MAP[name];
@@ -390,15 +391,13 @@ function findCompLogoSrc(name = '') {
   return key ? COMP_LOGO_MAP[key] : '';
 }
 
-// Compute a simple snapshot for the selected competition
+// Average predicted probabilities for fixtures in this competition
 function getCompetitionSnapshot(compName) {
   const rows = (compName && compName.trim())
     ? fixtures.filter(r => (r?.competition || '').toLowerCase() === compName.toLowerCase())
     : [];
-
   const avg = (arr) => (arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0);
   const toPct = (x) => Math.round((x || 0) * 100);
-
   return {
     n: rows.length,
     ftr:    toPct( avg(rows.map(r => +r?.confidence_ftr || 0)) ),
@@ -407,7 +406,7 @@ function getCompetitionSnapshot(compName) {
   };
 }
 
-// Fill the #comp-accuracy strip
+// Paint the strip under the globe (chips style)
 function renderCompetitionAccuracy(compName) {
   const wrap   = document.getElementById('comp-accuracy');
   if (!wrap) return;
@@ -426,27 +425,31 @@ function renderCompetitionAccuracy(compName) {
     else { logoEl.removeAttribute('src'); logoEl.style.display = 'none'; }
   }
 
-  // Numbers from average predicted probabilities of fixtures in that competition
+  // Snapshot from current fixtures of that competition
   const stats = getCompetitionSnapshot(compName);
-  const ftrPct = Math.max(0, Math.min(100, stats.ftr || 0));
-  if (fill) fill.style.width = `${ftrPct}%`;
-  if (val)  val.textContent  = stats.ftr ? `${stats.ftr}%` : '—';
 
+  // DEMO: force FTR to 87% (remove/comment if you want live averages)
+  const ftrPct = 87; // ← requested “87% accuracy” demo
+  if (fill) fill.style.width = `${Math.max(0, Math.min(100, ftrPct))}%`;
+  if (val)  val.textContent  = `${ftrPct}%`;
+
+  // Chips with percentages
   if (chips) {
-    const items = [
-      { cls: 'light--green', label: `FTR ${stats.ftr ? stats.ftr + '%' : '—'}` },
-      { cls: 'light--blue',  label: `O2.5 ${stats.over25 ? stats.over25 + '%' : '—'}` },
-      { cls: 'light--amber', label: `BTTS ${stats.btts ? stats.btts + '%' : '—'}` }
-    ];
     chips.innerHTML = '';
-    for (const it of items) {
-      const span = document.createElement('span');
-      span.className = `light ${it.cls}`;
-      span.textContent = it.label;
-      chips.appendChild(span);
-    }
+    const add = (cls, label) => {
+      const s = document.createElement('span');
+      s.className = `light ${cls}`;
+      s.textContent = label;
+      return s;
+    };
+    chips.append(
+      add('light--green', `FTR ${ftrPct}%`),
+      add('light--blue',  `O2.5 ${stats.over25 ? stats.over25 + '%' : '—'}`),
+      add('light--amber', `BTTS ${stats.btts ? stats.btts + '%' : '—'}`)
+    );
   }
 }
+
 
 // ----------------------------
 // Scene init
