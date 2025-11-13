@@ -193,24 +193,65 @@ function surfaceNormalAt(latDeg, lonDeg) {
   return latLngToVec3(latDeg, lonDeg, 0).normalize();
 }
 
-// ---- Stadium image candidates (local assets)
+// ----------------------------
+// Stadium image lookup (PATCH 1)
+// ----------------------------
 const STADIUM_BASE = './assets/stadiums';
-function stadiumCandidates(f) {
-  // prefer venue/stadium, then teams, then fixture_id
-  const names = [
-    f.stadium, f.venue, f.stadium_name, f.venue_name,
-    f.home_team, f.away_team,
-    f.fixture_id
-  ].filter(Boolean).map(v => String(v));
+const IMG_EXS = ['jpg','jpeg','png','webp'];
 
-  const slugs = Array.from(new Set(
-    names.map(n => slugLocal(n)).filter(Boolean)
-  ));
+const TEAM_SLUG_OVERRIDES = {
+  'PSG': 'psg',
+  'Paris Saint-Germain': 'psg',
+  'Manchester City': 'man-city',
+  'Real Madrid': 'real-madrid',
+  'AC Milan': 'ac-milan',
+  'Sevilla FC': 'sevilla',
+  'Galatasaray': 'galatasaray',
+  'Lazio': 'lazio',
+  'Arsenal': 'arsenal',
+  'Shakhtar Donetsk': 'shakhtar-donetsk',
+  'Young Boys': 'young-boys'
+};
 
-  const exts = ['.jpg', '.jpeg', '.png', '.webp'];
+function teamSlug(name=''){
+  const n = (name||'').trim();
+  if (!n) return '';
+  if (TEAM_SLUG_OVERRIDES[n]) return TEAM_SLUG_OVERRIDES[n];
+  return slugLocal(n);
+}
+
+/**
+ * Build a robust ordered list of candidate file paths for a fixture.
+ * Priority:
+ *   1) exact stadium name (slug)
+ *   2) stadium + city
+ *   3) home team slug (your current naming)
+ *   4) away team slug
+ *   5) fixture_id
+ * Tries .jpg/.jpeg/.png/.webp; deduped.
+ */
+function stadiumCandidates(f){
+  const stadiumSlug = slugLocal(f?.stadium || f?.venue || f?.stadium_name || f?.venue_name || '');
+  const citySlug    = slugLocal(f?.city || '');
+  const homeSlug    = teamSlug(f?.home_team || '');
+  const awaySlug    = teamSlug(f?.away_team || '');
+  const idSlug      = f?.fixture_id ? slugLocal(String(f.fixture_id)) : '';
+
+  const baseNames = [
+    stadiumSlug,
+    stadiumSlug && citySlug ? `${stadiumSlug}-${citySlug}` : '',
+    homeSlug,
+    awaySlug,
+    idSlug
+  ].filter(Boolean);
+
   const out = [];
-  for (const s of slugs) for (const ext of exts) out.push(`${STADIUM_BASE}/${s}${ext}`);
-  return out;
+  for (const bn of baseNames){
+    for (const ex of IMG_EXS){
+      out.push(`${STADIUM_BASE}/${bn}.${ex}`);
+    }
+  }
+  return [...new Set(out)];
 }
 
 // ---------- Logo system (local only; no remote) ----------
@@ -641,34 +682,45 @@ function animate() {
   requestAnimationFrame(animate);
   controls.update();
 
-  // marker animations
+  // --- marker animations ---
   {
     const S = window.__OG_MARKER__;
     if (S && S.markerState.active){
-      const { rings, radarGroup, beam, markerState } = S;
+      const { rings, radarGroup, beam, billboard, group, markerState } = S;
       const now = performance.now() * 0.001;
-      const base = getGlobeRadius();
+      const R = getGlobeRadius();
 
-      const n = surfaceNormalAt(markerState.lat, markerState.lon);
+      // Surface target (world)
       const pos = latLngToVec3(markerState.lat, markerState.lon, SURFACE_EPS + 0.001);
-      radarGroup.position.copy(pos);
-      radarGroup.lookAt(n.clone().multiplyScalar(base*2));
+      const n   = pos.clone().normalize();
 
+      // Place + orient the whole marker group at the surface (world)
+      group.position.copy(pos);
+      group.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), n);
+
+      // Children use LOCAL space now
+      radarGroup.position.set(0, 0, 0);
+
+      // Expanding rings (local)
       const dur = 2.6;
       const t = (now - markerState.t0);
+      const baseScale = 1.0;             // ring base size in local units
+      const spread    = R * 0.015;       // how far the ring expands
       rings.forEach((r, i) => {
         const k = ((t + i*0.6) % dur) / dur; // 0..1
-        const s = 1.0 + k * (base * 0.04);
+        const s = baseScale + k * spread;
         r.scale.setScalar(s);
         r.material.opacity = (1.0 - k) * 0.35;
       });
 
+      // Beam flicker
       if (beam.visible) {
         const flicker = 0.18 + 0.06*Math.sin(now*7.0) + 0.04*Math.sin(now*13.0);
         beam.material.opacity = flicker;
       }
 
-      S.billboard.quaternion.copy(camera.quaternion);
+      // Billboard faces camera
+      billboard.quaternion.copy(camera.quaternion);
     }
   }
 
@@ -918,7 +970,7 @@ function handleHover(d) {
 }
 
 // ----------------------------
-// Move marker to fixture (beam + radar + billboard)
+// Move marker to fixture (beam + radar + billboard)  (PATCH 2)
 // ----------------------------
 function moveMarkerToFixture(f, { fly=false } = {}){
   const S = window.__OG_MARKER__; if (!S || !f) return;
@@ -931,18 +983,21 @@ function moveMarkerToFixture(f, { fly=false } = {}){
   S.markerState.t0  = performance.now() * 0.001;
   S.markerState.active = true;
 
-  const R = getGlobeRadius();
+  const R   = getGlobeRadius();
   const pos = latLngToVec3(lat, lon, SURFACE_EPS + 0.001);
   const n   = pos.clone().normalize();
 
-  // group at surface, facing normal
+  // Place + orient parent group in WORLD space
   S.group.visible = true;
   S.group.position.copy(pos);
-  S.group.lookAt(n.clone().multiplyScalar(R * 2));
+  S.group.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), n);
 
-  // beam placement & grow-in
-  S.beam.position.copy(pos);
-  S.beam.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), n);
+  // ---- LOCAL placements relative to the group ----
+  S.radarGroup.position.set(0, 0, 0);
+
+  // Beam grows along local +Y
+  S.beam.position.set(0, 0, 0);
+  S.beam.quaternion.identity();
   S.beam.scale.set(1, 0.001, 1);
   S.beam.visible = true;
   const growStart = performance.now();
@@ -953,19 +1008,21 @@ function moveMarkerToFixture(f, { fly=false } = {}){
     if (t < 1) requestAnimationFrame(grow);
   })();
 
-  // billboard ~6% of radius above surface
-  const bbPos = pos.clone().add(n.clone().multiplyScalar(R*0.06));
-  S.billboard.position.copy(bbPos);
+  // Billboard ~6% of radius above surface along local +Y
+  S.billboard.position.set(0, R*0.06, 0);
   S.billboard.material.opacity = 0;
   S.billboard.visible = true;
 
-  // load stadium texture
+  // Load stadium texture with logging
   (async ()=>{
-    for (const url of stadiumCandidates(f)){
+    const tries = stadiumCandidates(f);
+    console.debug('[stadium] candidates for', f.home_team, 'vs', f.away_team, '→', tries);
+    for (const url of tries){
       try {
         const tex = await new Promise((res, rej) =>
           new THREE.TextureLoader().load(url, res, undefined, rej)
         );
+        console.info('[stadium] loaded', url);
         S.billboard.material.map = tex;
         S.billboard.material.needsUpdate = true;
         const t0 = performance.now();
@@ -975,8 +1032,9 @@ function moveMarkerToFixture(f, { fly=false } = {}){
           if (k<1) requestAnimationFrame(fade);
         })();
         return;
-      } catch {}
+      } catch { /* continue */ }
     }
+    console.warn('[stadium] not found for', f.home_team, f.stadium);
     S.billboard.visible = false; // nothing found
   })();
 }
