@@ -557,6 +557,11 @@ async function init() {
   renderer.setSize(el.globeWrap.clientWidth, el.globeWrap.clientHeight);
   el.globeWrap.innerHTML = '';
   el.globeWrap.appendChild(renderer.domElement);
+  
+  // Make sure the canvas actually receives pointer events (your CSS blanket rule was disabling it)
+  renderer.domElement.style.pointerEvents = 'auto';
+  // Optional: improves touch behavior on mobile
+  renderer.domElement.style.touchAction = 'none';
 
   if ('outputColorSpace' in renderer) renderer.outputColorSpace = THREE.SRGBColorSpace;
   if ('toneMapping' in renderer) {
@@ -624,7 +629,8 @@ async function init() {
   // ---------- ACTIVE MARKER (radar + beam + billboard) ----------
   {
     const markerGroup = new THREE.Group();
-    scene.add(markerGroup);
+    // Attach to the globe so we share the exact same coordinate frame as three-globe points
+    globe.add(markerGroup);
 
     // materials
     const radarMat = new THREE.MeshBasicMaterial({
@@ -1024,10 +1030,11 @@ function moveMarkerToFixture(f, { fly=false } = {}){
 
   const R = getGlobeRadius();
   const n = surfaceNormalAt(f.latitude, f.longitude);
+  // sit just above the surface
   const pos = latLngToVec3(f.latitude, f.longitude, SURFACE_EPS + 0.001);
 
-  // beam placement and grow-in
-  const beamBase = latLngToVec3(f.latitude, f.longitude, SURFACE_EPS + 0.002);
+  // beam base right above the surface too
+  const beamBase = latLngToVec3(f.latitude, f.longitude, SURFACE_EPS + 0.0015);
   S.beam.position.copy(beamBase);
   const up = new THREE.Vector3(0,1,0);
   S.beam.quaternion.setFromUnitVectors(up, n.clone().normalize());
@@ -1047,9 +1054,14 @@ function moveMarkerToFixture(f, { fly=false } = {}){
     }
   })();
 
-  // billboard above surface
-  const bbPos = pos.clone().add(n.clone().multiplyScalar(R*0.06));
+  // billboard ~6% of radius above the surface (nice and readable)
+  const bbPos = latLngToVec3(f.latitude, f.longitude, SURFACE_EPS + 0.06);
   S.billboard.position.copy(bbPos);
+  // DEBUG: small dot at the billboard anchor (remove when happy)
+  // const dot = new THREE.Mesh(new THREE.SphereGeometry(0.5, 12, 12), new THREE.MeshBasicMaterial({ color: 0xffcc66 }));
+  // dot.position.copy(bbPos);
+  // S.radarGroup.add(dot);
+
 
   // load stadium texture → circular masked (override first, then slug)
   (async () => {
