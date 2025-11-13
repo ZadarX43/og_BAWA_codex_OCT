@@ -55,9 +55,7 @@ async function loadThreeGlobe() {
       const m = await import(url);
       console.warn('[three-globe] using esm.sh ESM:', url);
       return m.default ?? m;
-    } catch (e) {
-      console.warn('[three-globe] esm.sh failed:', url, e);
-    }
+    } catch (e) { console.warn('[three-globe] esm.sh failed:', url, e); }
   }
   for (const url of [
     'https://cdn.jsdelivr.net/npm/three-globe@2.31.1/dist/three-globe.min.js',
@@ -68,9 +66,7 @@ async function loadThreeGlobe() {
       const ctor = await importScriptUMD(url);
       console.warn('[three-globe] using UMD:', url);
       return ctor;
-    } catch (e) {
-      console.warn('[three-globe] UMD failed:', url, e);
-    }
+    } catch (e) { console.warn('[three-globe] UMD failed:', url, e); }
   }
   if (el.globeWrap) {
     el.globeWrap.innerHTML = `<div class="globe-error">
@@ -122,10 +118,7 @@ function showToast(type, text, ms=2600){
   setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),250); }, ms);
 }
 
-function clearNode(node) {
-  if (!node) return;
-  while (node.firstChild) node.removeChild(node.firstChild);
-}
+function clearNode(node) { if (!node) return; while (node.firstChild) node.removeChild(node.firstChild); }
 
 function pick(row, keys) {
   for (const k of keys) {
@@ -155,17 +148,11 @@ function initials(name = '') {
   if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
   return (words[0][0] + (words[1][0] || '')).toUpperCase();
 }
-function stripDiacritics(s) {
-  try { return s.normalize('NFD').replace(/\p{Diacritic}/gu, ''); }
-  catch { return s; }
-}
+function stripDiacritics(s) { try { return s.normalize('NFD').replace(/\p{Diacritic}/gu, ''); } catch { return s; } }
 function slugLocal(team) {
   return stripDiacritics(String(team))
-    .toLowerCase()
-    .replace(/&/g,'and')
-    .replace(/[\u2019'’]/g,'')
-    .replace(/[^a-z0-9]+/g,'-')
-    .replace(/^-+|-+$/g,'');
+    .toLowerCase().replace(/&/g,'and').replace(/[\u2019'’]/g,'')
+    .replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
 }
 function normalizeBasicUrl(raw) {
   if (!raw) return '';
@@ -176,95 +163,46 @@ function normalizeBasicUrl(raw) {
   return u;
 }
 
-// ---- Correct lat/lon → world position (direct geodesy, matches three-globe view)
-// lon: West negative, East positive; lat: South negative, North positive
-// This mapping makes lon=0° (Greenwich) face the camera (+Z), which matches the Blue Marble.
-function latLngToVec3(latDeg, lonDeg, altFrac = 0) {
-  const lat = THREE.MathUtils.degToRad(latDeg);
-  const lon = THREE.MathUtils.degToRad(lonDeg);
-  const R   = getGlobeRadius() * (1 + (altFrac || 0));
-
-  // Right-handed Y-up sphere:
-  // x = R cos(lat) sin(lon)
-  // y = R sin(lat)
-  // z = R cos(lat) cos(lon)   (so lon=0 lies on +Z, Europe/Africa face camera)
-  const cosLat = Math.cos(lat);
-  return new THREE.Vector3(
-    R * cosLat * Math.sin(lon), // x
-    R * Math.sin(lat),          // y
-    R * cosLat * Math.cos(lon)  // z
-  );
-}
-
-function surfaceNormalAt(latDeg, lonDeg) {
-  return latLngToVec3(latDeg, lonDeg, 0).normalize();
-}
-
-
-// ----------------------------
-// Stadium image lookup (PATCH 1)
-// ----------------------------
-const STADIUM_BASE = './assets/stadiums';
-const IMG_EXS = ['jpg','jpeg','png','webp'];
-
-const TEAM_SLUG_OVERRIDES = {
-  'PSG': 'psg',
-  'Paris Saint-Germain': 'psg',
-  'Manchester City': 'man-city',
-  'Real Madrid': 'real-madrid',
-  'AC Milan': 'ac-milan',
-  'Sevilla FC': 'sevilla',
-  'Galatasaray': 'galatasaray',
-  'Lazio': 'lazio',
-  'Arsenal': 'arsenal',
-  'Shakhtar Donetsk': 'shakhtar-donetsk',
-  'Young Boys': 'young-boys'
+// ===== Date / Filter state =====
+const UI = {
+  monthCursor: null,  // Date at 1st of month (UTC) for mini-cal
+  rangeStart: null,   // inclusive
+  rangeEnd:   null,   // exclusive
+  league: 'ALL'       // 'ALL' or competition name
 };
 
-function teamSlug(name=''){
-  const n = (name||'').trim();
-  if (!n) return '';
-  if (TEAM_SLUG_OVERRIDES[n]) return TEAM_SLUG_OVERRIDES[n];
-  return slugLocal(n);
+function startOfDayUTC(d){ return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate())); }
+function addDaysUTC(d, n){ const x = new Date(d); x.setUTCDate(x.getUTCDate()+n); return x; }
+function parseISODateUTC(s){ const d = new Date(s); return isNaN(d) ? null : d; }
+
+// ---- Correct lat/lon → world position (matches three-globe’s convention)
+function latLngToVec3(latDeg, lonDeg, altFrac = 0) {
+  const R = getGlobeRadius() * (1 + (altFrac || 0));
+  // three-globe: phi = (90 - lat), theta = (180 - lon) with Y-up coordinate system
+  const phi   = THREE.MathUtils.degToRad(90 - latDeg);
+  const theta = THREE.MathUtils.degToRad(180 - lonDeg);
+  const x = R * Math.sin(phi) * Math.cos(theta);
+  const y = R * Math.cos(phi);
+  const z = R * Math.sin(phi) * Math.sin(theta);
+  return new THREE.Vector3(x, y, z);
 }
+function surfaceNormalAt(latDeg, lonDeg) { return latLngToVec3(latDeg, lonDeg, 0).normalize(); }
 
-/**
- * Build a robust ordered list of candidate file paths for a fixture.
- * Priority:
- *   1) exact stadium name (slug)
- *   2) stadium + city
- *   3) home team slug (your current naming)
- *   4) away team slug
- *   5) fixture_id
- * Tries .jpg/.jpeg/.png/.webp; deduped.
- */
-function stadiumCandidates(f){
-  const stadiumSlug = slugLocal(f?.stadium || f?.venue || f?.stadium_name || f?.venue_name || '');
-  const citySlug    = slugLocal(f?.city || '');
-  const homeSlug    = teamSlug(f?.home_team || '');
-  const awaySlug    = teamSlug(f?.away_team || '');
-  const idSlug      = f?.fixture_id ? slugLocal(String(f.fixture_id)) : '';
-
-  const baseNames = [
-    stadiumSlug,
-    stadiumSlug && citySlug ? `${stadiumSlug}-${citySlug}` : '',
-    homeSlug,
-    awaySlug,
-    idSlug
-  ].filter(Boolean);
-
+// ---- Stadium image candidates (local assets)
+const STADIUM_BASE = './assets/stadiums';
+function stadiumCandidates(f) {
+  const names = [
+    f.stadium, f.venue, f.stadium_name, f.venue_name, f.home_team, f.away_team, f.fixture_id
+  ].filter(Boolean).map(v => String(v));
+  const slugs = Array.from(new Set(names.map(n => slugLocal(n)).filter(Boolean)));
+  const exts = ['.jpg', '.jpeg', '.png', '.webp'];
   const out = [];
-  for (const bn of baseNames){
-    for (const ex of IMG_EXS){
-      out.push(`${STADIUM_BASE}/${bn}.${ex}`);
-    }
-  }
-  return [...new Set(out)];
+  for (const s of slugs) for (const ext of exts) out.push(`${STADIUM_BASE}/${s}${ext}`);
+  return out;
 }
 
 // ---------- Logo system (local only; no remote) ----------
 const LOGO_LOCAL_BASE = './assets/assets/logos';
-
 const TEAM_LOGO_OVERRIDES = {
   'Celtic':               `${LOGO_LOCAL_BASE}/celtic.svg`,
   'Lazio':                `${LOGO_LOCAL_BASE}/lazio.svg`,
@@ -311,143 +249,63 @@ const TEAM_LOGO_OVERRIDES = {
   'Sporting Braga':       `${LOGO_LOCAL_BASE}/sporting-braga.svg`,
   'Union Berlin':         `${LOGO_LOCAL_BASE}/union-berlin.svg`
 };
-
-// persistent cache (url strings) + in-memory store of <img>
 const LOGO_CACHE_KEY  = 'og_logo_cache_v_preload';
 let LOGO_CACHE = {};
 try { LOGO_CACHE = JSON.parse(localStorage.getItem(LOGO_CACHE_KEY) || '{}'); } catch {}
 function saveLogoCache(){ try { localStorage.setItem(LOGO_CACHE_KEY, JSON.stringify(LOGO_CACHE)); } catch {} }
 const LOGO_STORE = new Map(); // teamName -> { img, url }
-
-// candidate sources (local only)
-function localLogoCandidates(team) {
-  const slug = slugLocal(team);
-  return [
-    `${LOGO_LOCAL_BASE}/${slug}.png`,
-    `${LOGO_LOCAL_BASE}/${slug}.svg`,
-  ];
-}
-function guessLogoSources(teamName = '') {
-  const list = [];
-  if (TEAM_LOGO_OVERRIDES[teamName]) list.push(TEAM_LOGO_OVERRIDES[teamName]);
-  for (const loc of localLogoCandidates(teamName)) list.push(loc);
-  return [...new Set(list.map(normalizeBasicUrl))];
-}
-
-// Robust loader: try <img> (fast), then fetch→blob→dataURL (clone-safe)
-async function tryLoadDirect(src, teamName, timeoutMs) {
-  return new Promise(resolve => {
-    let done = false;
+function localLogoCandidates(team){ const slug = slugLocal(team); return [`${LOGO_LOCAL_BASE}/${slug}.png`, `${LOGO_LOCAL_BASE}/${slug}.svg`]; }
+function guessLogoSources(teamName=''){ const arr=[]; if(TEAM_LOGO_OVERRIDES[teamName]) arr.push(TEAM_LOGO_OVERRIDES[teamName]); for(const loc of localLogoCandidates(teamName)) arr.push(loc); return [...new Set(arr.map(normalizeBasicUrl))]; }
+async function tryLoadDirect(src, teamName, timeoutMs){
+  return new Promise(resolve=>{
+    let done=false;
     const img = new Image();
-    img.alt = teamName || '';
-    img.loading = 'lazy';
-    img.decoding = 'async';
-    if (!/^data:/i.test(src)) { img.crossOrigin = 'anonymous'; img.referrerPolicy = 'no-referrer'; }
-    const t = setTimeout(() => { if (!done){ done = true; resolve(null); } }, timeoutMs);
-    img.onload  = () => { if (!done){ clearTimeout(t); done = true; resolve({ ok:true, img, src }); } };
-    img.onerror = () => { if (!done){ clearTimeout(t); done = true; resolve(null); } };
-    img.src = `${src}${src.includes('?') ? '&' : '?'}v=${Date.now().toString(36)}`;
+    img.alt = teamName||''; img.loading='lazy'; img.decoding='async';
+    if(!/^data:/i.test(src)){ img.crossOrigin='anonymous'; img.referrerPolicy='no-referrer'; }
+    const t=setTimeout(()=>{ if(!done){ done=true; resolve(null);} }, timeoutMs);
+    img.onload=()=>{ if(!done){ clearTimeout(t); done=true; resolve({ok:true,img,src}); } };
+    img.onerror=()=>{ if(!done){ clearTimeout(t); done=true; resolve(null);} };
+    img.src = `${src}${src.includes('?')?'&':'?'}v=${Date.now().toString(36)}`;
   });
 }
-async function blobToDataURL(blob) {
-  return new Promise((resolve, reject)=>{
-    const fr = new FileReader();
-    fr.onload  = () => resolve(fr.result);
-    fr.onerror = reject;
-    fr.readAsDataURL(blob);
-  });
-}
-async function tryLoadViaDataURL(src, teamName, timeoutMs) {
-  try {
-    const ac = new AbortController();
-    const to = setTimeout(() => ac.abort(), timeoutMs);
-    const res = await fetch(`${src}${src.includes('?') ? '&' : '?'}v=${Date.now().toString(36)}`, { cache: 'no-store', signal: ac.signal });
-    clearTimeout(to);
-    if (!res.ok) return null;
-    const blob = await res.blob();
-    const dataURL = await blobToDataURL(blob);
-    return await new Promise(resolve => {
-      let done = false;
-      const img = new Image();
-      img.alt = teamName || '';
-      img.onload  = () => { if (!done){ done = true; resolve({ ok:true, img, src: dataURL }); } };
-      img.onerror = () => { if (!done){ done = true; resolve(null); } };
-      img.src = dataURL;
+async function blobToDataURL(blob){ return new Promise((res,rej)=>{ const fr=new FileReader(); fr.onload=()=>res(fr.result); fr.onerror=rej; fr.readAsDataURL(blob); }); }
+async function tryLoadViaDataURL(src, teamName, timeoutMs){
+  try{
+    const ac=new AbortController(); const to=setTimeout(()=>ac.abort(),timeoutMs);
+    const r=await fetch(`${src}${src.includes('?')?'&':'?'}v=${Date.now().toString(36)}`,{cache:'no-store',signal:ac.signal});
+    clearTimeout(to); if(!r.ok) return null;
+    const blob=await r.blob(); const dataURL=await blobToDataURL(blob);
+    return await new Promise(resolve=>{
+      let done=false; const img=new Image(); img.alt=teamName||'';
+      img.onload=()=>{ if(!done){ done=true; resolve({ok:true,img,src:dataURL}); } };
+      img.onerror=()=>{ if(!done){ done=true; resolve(null);} };
+      img.src=dataURL;
     });
-  } catch {
-    return null;
-  }
+  }catch{ return null; }
 }
-async function tryLoad(src, teamName, timeoutMs = 15000) {
-  let hit = await tryLoadDirect(src, teamName, Math.min(timeoutMs, 7000));
-  if (hit) return hit;
-  hit = await tryLoadViaDataURL(src, teamName, timeoutMs);
-  return hit;
+async function tryLoad(src, teamName, timeoutMs=15000){ let hit=await tryLoadDirect(src, teamName, Math.min(timeoutMs,7000)); if(hit) return hit; return await tryLoadViaDataURL(src, teamName, timeoutMs); }
+async function prefetchAllLogos(teamMap){
+  const items=[...teamMap.keys()]; const CONCURRENCY=4; let idx=0;
+  async function worker(){ while(idx<items.length){ const i=idx++; const name=items[i]; if(!name||LOGO_STORE.has(name)) continue;
+      const sources=guessLogoSources(name); let hit=null; for(const src of sources){ hit=await tryLoad(src,name,15000); if(hit) break; }
+      if(hit) LOGO_STORE.set(name,{img:hit.img,url:hit.src}); else LOGO_STORE.set(name,{img:null,url:null}); } }
+  await Promise.all(Array.from({length:CONCURRENCY}, worker));
 }
-
-// Preload all crests once (concurrency limited)
-async function prefetchAllLogos(teamMap) {
-  const items = [...teamMap.keys()];
-  const CONCURRENCY = 4;
-  let idx = 0;
-  async function worker() {
-    while (idx < items.length) {
-      const i = idx++;
-      const name = items[i];
-      if (!name || LOGO_STORE.has(name)) continue;
-      const sources = guessLogoSources(name);
-      let hit = null;
-      for (const src of sources) {
-        hit = await tryLoad(src, name, 15000);
-        if (hit) break;
-      }
-      if (hit) LOGO_STORE.set(name, { img: hit.img, url: hit.src });
-      else LOGO_STORE.set(name, { img: null, url: null });
-    }
-  }
-  await Promise.all(Array.from({length: CONCURRENCY}, worker));
-}
-
-// Place crest into node; update only when team changes
 const badgeTokens = new WeakMap();
-async function setBadge(elm, urlFromCsv, teamName='') {
-  if (!elm) return;
-  const prevTeam = elm.dataset.teamName || '';
-  if (prevTeam === teamName && elm.querySelector('img')) return; // already correct
+async function setBadge(elm, urlFromCsv, teamName=''){
+  if(!elm) return; const prevTeam = elm.dataset.teamName || '';
+  if(prevTeam===teamName && elm.querySelector('img')) return;
+  const token={}; badgeTokens.set(elm, token); elm.dataset.teamName=teamName;
+  elm.textContent=initials(teamName)||''; elm.classList.remove('has-logo');
 
-  const token = {}; badgeTokens.set(elm, token);
-  elm.dataset.teamName = teamName;
+  const pre=LOGO_STORE.get(teamName);
+  if(pre?.img){ if(badgeTokens.get(elm)!==token) return; elm.innerHTML=''; elm.appendChild(pre.img.cloneNode(true)); elm.classList.add('has-logo'); if(pre.url){ LOGO_CACHE[teamName]=pre.url; saveLogoCache(); } return; }
 
-  // show initials while fetching
-  elm.textContent = initials(teamName) || '';
-  elm.classList.remove('has-logo');
-
-  // prefer preloaded
-  const pre = LOGO_STORE.get(teamName);
-  if (pre?.img) {
-    if (badgeTokens.get(elm) !== token) return;
-    elm.innerHTML = '';
-    elm.appendChild(pre.img.cloneNode(true)); // safe clone
-    elm.classList.add('has-logo');
-    if (pre.url) { LOGO_CACHE[teamName] = pre.url; saveLogoCache(); }
-    return;
-  }
-
-  // local sources fallback
-  const sources = guessLogoSources(teamName);
-  let hit = null;
-  for (const src of sources) {
-    hit = await tryLoad(src, teamName, 15000);
-    if (hit) break;
-  }
-  if (!hit) return; // keep initials
-
-  if (badgeTokens.get(elm) !== token) return;
-  elm.innerHTML = '';
-  elm.appendChild(hit.img);
-  elm.classList.add('has-logo');
-  LOGO_STORE.set(teamName, { img: hit.img.cloneNode(true), url: hit.src });
-  LOGO_CACHE[teamName] = hit.src; saveLogoCache();
+  const sources=guessLogoSources(teamName); let hit=null;
+  for(const src of sources){ hit=await tryLoad(src,teamName,15000); if(hit) break; }
+  if(!hit) return;
+  if(badgeTokens.get(elm)!==token) return;
+  elm.innerHTML=''; elm.appendChild(hit.img); elm.classList.add('has-logo'); LOGO_STORE.set(teamName,{img:hit.img.cloneNode(true),url:hit.src}); LOGO_CACHE[teamName]=hit.src; saveLogoCache();
 }
 
 // ----------------------------
@@ -469,9 +327,9 @@ const COMP_LOGO_MAP = {
   'MLS':                        `${COMP_LOGO_BASE}/usa-mls.svg`,
   'Major League Soccer':        `${COMP_LOGO_BASE}/usa-mls.svg`,
 };
-function findCompLogoSrc(name = '') {
-  if (!name) return '';
-  if (COMP_LOGO_MAP[name]) return COMP_LOGO_MAP[name];
+function findCompLogoSrc(name=''){
+  if(!name) return '';
+  if(COMP_LOGO_MAP[name]) return COMP_LOGO_MAP[name];
   const key = Object.keys(COMP_LOGO_MAP).find(k => name.toLowerCase().includes(k.toLowerCase()));
   return key ? COMP_LOGO_MAP[key] : '';
 }
@@ -481,57 +339,34 @@ function getCompetitionSnapshot(compName) {
   const rows = (compName && compName.trim())
     ? fixtures.filter(r => (r?.competition || '').toLowerCase() === compName.toLowerCase())
     : [];
-  const avg = (arr) => (arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0);
-  const toPct = (x) => Math.round((x || 0) * 100);
-  return {
-    n: rows.length,
-    ftr:    toPct( avg(rows.map(r => +r?.confidence_ftr || 0)) ),
-    over25: toPct( avg(rows.map(r => +r?.over25_prob   || 0)) ),
-    btts:   toPct( avg(rows.map(r => +r?.btts_prob     || 0)) )
-  };
+  const avg = arr => (arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0);
+  const toPct = x => Math.round((x||0)*100);
+  return { n: rows.length, ftr: toPct(avg(rows.map(r => +r?.confidence_ftr||0))), over25: toPct(avg(rows.map(r => +r?.over25_prob||0))), btts: toPct(avg(rows.map(r => +r?.btts_prob||0))) };
 }
-
-// Paint the strip under the globe (chips style)
 function renderCompetitionAccuracy(compName) {
-  const wrap   = document.getElementById('comp-accuracy');
-  if (!wrap) return;
-
+  const wrap = document.getElementById('comp-accuracy'); if (!wrap) return;
   const nameEl = document.getElementById('comp-name');
-  const logoEl = document.getElementById('comp-logo'); // optional img in HTML
+  const logoEl = document.getElementById('comp-logo');
   const fill   = wrap.querySelector('.gauge-fill');
   const val    = wrap.querySelector('.gauge-val');
   const chips  = document.getElementById('comp-traffic');
 
-  // Title + logo
   if (nameEl) nameEl.textContent = compName || '—';
   if (logoEl) {
-    const logoSrc = findCompLogoSrc(compName);
-    if (logoSrc) { logoEl.src = logoSrc; logoEl.alt = `${compName} logo`; logoEl.style.display = 'inline-block'; }
+    const src = findCompLogoSrc(compName);
+    if (src) { logoEl.src = src; logoEl.alt = `${compName} logo`; logoEl.style.display = 'inline-block'; }
     else { logoEl.removeAttribute('src'); logoEl.style.display = 'none'; }
   }
 
-  // Snapshot from current fixtures of that competition
   const stats = getCompetitionSnapshot(compName);
-
-  // DEMO: force FTR to 87% (remove for live)
-  const ftrPct = 87;
+  const ftrPct = 87; // demo value; replace with stats.ftr for live
   if (fill) fill.style.width = `${Math.max(0, Math.min(100, ftrPct))}%`;
   if (val)  val.textContent  = `${ftrPct}%`;
 
-  // Chips with percentages
   if (chips) {
     chips.innerHTML = '';
-    const add = (cls, label) => {
-      const s = document.createElement('span');
-      s.className = `light ${cls}`;
-      s.textContent = label;
-      return s;
-    };
-    chips.append(
-      add('light--green', `FTR ${ftrPct}%`),
-      add('light--blue',  `O2.5 ${stats.over25 ? stats.over25 + '%' : '—'}`),
-      add('light--amber', `BTTS ${stats.btts ? stats.btts + '%' : '—'}`)
-    );
+    const mk = (cls, label)=>{ const s=document.createElement('span'); s.className=`light ${cls}`; s.textContent=label; return s; };
+    chips.append(mk('light--green', `FTR ${ftrPct}%`), mk('light--blue', `O2.5 ${stats.over25?stats.over25+'%':'—'}`), mk('light--amber', `BTTS ${stats.btts?stats.btts+'%':'—'}`));
   }
 }
 
@@ -544,7 +379,6 @@ async function init() {
   scene = new THREE.Scene();
 
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-  // ensure OrbitControls receive events even with overlay CSS
   renderer.domElement.style.pointerEvents = 'auto';
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.setSize(el.globeWrap.clientWidth, el.globeWrap.clientHeight);
@@ -552,26 +386,18 @@ async function init() {
   el.globeWrap.appendChild(renderer.domElement);
 
   if ('outputColorSpace' in renderer) renderer.outputColorSpace = THREE.SRGBColorSpace;
-  if ('toneMapping' in renderer) {
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.15;
-  }
+  if ('toneMapping' in renderer) { renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.15; }
 
   camera = new THREE.PerspectiveCamera(45, el.globeWrap.clientWidth / el.globeWrap.clientHeight, 0.1, 5000);
   camera.position.set(0, 0, 300);
 
   controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true;
-  controls.enablePan = false;
-  controls.enableZoom = true;
-  controls.autoRotate = false;
-  controls.autoRotateSpeed = 0.6;
-  controls.minDistance = 140;
-  controls.maxDistance = 1200;
+  controls.enableDamping = true; controls.enablePan = false; controls.enableZoom = true;
+  controls.autoRotate = false; controls.autoRotateSpeed = 0.6;
+  controls.minDistance = 140; controls.maxDistance = 1200;
 
   scene.add(new THREE.AmbientLight(0xffffff, 0.9));
-  const hemi = new THREE.HemisphereLight(0xddeeff, 0x223344, 0.6);
-  scene.add(hemi);
+  scene.add(new THREE.HemisphereLight(0xddeeff, 0x223344, 0.6));
 
   composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
@@ -579,18 +405,11 @@ async function init() {
   const fxaaPass = new ShaderPass(FXAAShader);
   const setFXAA = () => {
     const px = renderer.getPixelRatio();
-    fxaaPass.material.uniforms['resolution'].value.set(
-      1 / (el.globeWrap.clientWidth  * px),
-      1 / (el.globeWrap.clientHeight * px)
-    );
+    fxaaPass.material.uniforms['resolution'].value.set(1/(el.globeWrap.clientWidth*px), 1/(el.globeWrap.clientHeight*px));
   };
-  setFXAA();
-  composer.addPass(fxaaPass);
+  setFXAA(); composer.addPass(fxaaPass);
 
-  bloomPass = new UnrealBloomPass(
-    new THREE.Vector2(el.globeWrap.clientWidth, el.globeWrap.clientHeight),
-    BLOOM.strength, BLOOM.radius, BLOOM.threshold
-  );
+  bloomPass = new UnrealBloomPass(new THREE.Vector2(el.globeWrap.clientWidth, el.globeWrap.clientHeight), BLOOM.strength, BLOOM.radius, BLOOM.threshold);
   composer.addPass(bloomPass);
 
   globe = new ThreeGlobeCtor({ waitForGlobeReady: true })
@@ -616,45 +435,21 @@ async function init() {
 
   // ---------- ACTIVE MARKER (radar + beam + billboard) ----------
   {
-    const group = new THREE.Group();
-    scene.add(group);
-
-    const radarMat = new THREE.MeshBasicMaterial({
-      color: new THREE.Color(0x80ffe6),
-      transparent: true,
-      opacity: 0.35,
-      depthWrite: false,
-      side: THREE.DoubleSide
-    });
-    const beamMat = new THREE.MeshBasicMaterial({
-      color: 0x7df9c4,
-      transparent: true,
-      opacity: 0.22,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false
-    });
+    const group = new THREE.Group(); scene.add(group);
+    const radarMat = new THREE.MeshBasicMaterial({ color:0x80ffe6, transparent:true, opacity:0.35, depthWrite:false, side:THREE.DoubleSide });
+    const beamMat  = new THREE.MeshBasicMaterial({ color:0x7df9c4, transparent:true, opacity:0.22, blending:THREE.AdditiveBlending, depthWrite:false });
 
     const ringGeo = new THREE.RingGeometry(1.0, 1.06, 128);
     const cylGeo  = new THREE.CylinderGeometry(0.18, 0.28, 30, 32, 1, true);
 
     const radarGroup = new THREE.Group();
     const rings = [];
-    for (let i=0;i<3;i++){
-      const m = new THREE.Mesh(ringGeo, radarMat.clone());
-      m.scale.setScalar(1);
-      m.material.opacity = 0;
-      rings.push(m);
-      radarGroup.add(m);
-    }
+    for (let i=0;i<3;i++){ const m=new THREE.Mesh(ringGeo, radarMat.clone()); m.scale.setScalar(1); m.material.opacity=0; rings.push(m); radarGroup.add(m); }
     group.add(radarGroup);
 
-    const beam = new THREE.Mesh(cylGeo, beamMat);
-    beam.visible = false;
-    group.add(beam);
+    const beam = new THREE.Mesh(cylGeo, beamMat); beam.visible=false; group.add(beam);
 
-    const billboard = new THREE.Sprite(new THREE.SpriteMaterial({ transparent:true, opacity:0 }));
-    billboard.scale.set(14, 8, 1);
-    group.add(billboard);
+    const billboard = new THREE.Sprite(new THREE.SpriteMaterial({ transparent:true, opacity:0 })); billboard.scale.set(14,8,1); group.add(billboard);
 
     const markerState = { lat:0, lon:0, t0:0, active:false };
     window.__OG_MARKER__ = { group, radarGroup, rings, beam, billboard, markerState };
@@ -663,21 +458,12 @@ async function init() {
   window.addEventListener('resize', () => {
     const { clientWidth, clientHeight } = el.globeWrap;
     renderer.setSize(clientWidth, clientHeight);
-    camera.aspect = clientWidth / clientHeight;
-    camera.updateProjectionMatrix();
-    const px = renderer.getPixelRatio();
-    fxaaPass.material.uniforms['resolution'].value.set(
-      1 / (clientWidth * px),
-      1 / (clientHeight * px)
-    );
+    camera.aspect = clientWidth / clientHeight; camera.updateProjectionMatrix();
+    const px = renderer.getPixelRatio(); fxaaPass.material.uniforms['resolution'].value.set(1/(clientWidth*px), 1/(clientHeight*px));
     bloomPass.setSize?.(clientWidth, clientHeight);
   });
 
-  window.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight') { e.preventDefault(); step(+1); }
-    if (e.key === 'ArrowLeft')  { e.preventDefault(); step(-1); }
-  });
-
+  window.addEventListener('keydown', e => { if (e.key==='ArrowRight'){e.preventDefault();step(+1);} if (e.key==='ArrowLeft'){e.preventDefault();step(-1);} });
   el.prevBtn?.addEventListener('click', () => step(-1));
   el.nextBtn?.addEventListener('click', () => step(+1));
 
@@ -690,49 +476,163 @@ function animate() {
   requestAnimationFrame(animate);
   controls.update();
 
-  // --- marker animations ---
-  {
-    const S = window.__OG_MARKER__;
-    if (S && S.markerState.active){
-      const { rings, radarGroup, beam, billboard, group, markerState } = S;
-      const now = performance.now() * 0.001;
-      const R = getGlobeRadius();
+  // marker animations
+  const S = window.__OG_MARKER__;
+  if (S && S.markerState.active){
+    const { rings, radarGroup, beam, billboard, group, markerState } = S;
+    const now = performance.now() * 0.001;
+    const R = getGlobeRadius();
 
-      // Surface target (world)
-      const pos = latLngToVec3(markerState.lat, markerState.lon, SURFACE_EPS + 0.001);
-      const n   = pos.clone().normalize();
+    const pos = latLngToVec3(markerState.lat, markerState.lon, SURFACE_EPS + 0.001);
+    const n   = pos.clone().normalize();
 
-      // Place + orient the whole marker group at the surface (world)
-      group.position.copy(pos);
-      group.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), n);
+    group.position.copy(pos);
+    group.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), n);
+    radarGroup.position.set(0,0,0);
 
-      // Children use LOCAL space now
-      radarGroup.position.set(0, 0, 0);
+    const dur = 2.6; const t = (now - markerState.t0);
+    const baseScale = 1.0; const spread = R*0.015;
+    rings.forEach((r, i)=>{ const k=((t+i*0.6)%dur)/dur; const s=baseScale + k*spread; r.scale.setScalar(s); r.material.opacity=(1-k)*0.35; });
 
-      // Expanding rings (local)
-      const dur = 2.6;
-      const t = (now - markerState.t0);
-      const baseScale = 1.0;             // ring base size in local units
-      const spread    = R * 0.015;       // how far the ring expands
-      rings.forEach((r, i) => {
-        const k = ((t + i*0.6) % dur) / dur; // 0..1
-        const s = baseScale + k * spread;
-        r.scale.setScalar(s);
-        r.material.opacity = (1.0 - k) * 0.35;
-      });
-
-      // Beam flicker
-      if (beam.visible) {
-        const flicker = 0.18 + 0.06*Math.sin(now*7.0) + 0.04*Math.sin(now*13.0);
-        beam.material.opacity = flicker;
-      }
-
-      // Billboard faces camera
-      billboard.quaternion.copy(camera.quaternion);
+    if (beam.visible){
+      const flicker = 0.18 + 0.06*Math.sin(now*7.0) + 0.04*Math.sin(now*13.0);
+      beam.material.opacity = flicker;
     }
+    billboard.quaternion.copy(camera.quaternion);
   }
 
   composer.render();
+}
+
+// ----------------------------
+// Mini calendar + league chips
+// ----------------------------
+function buildMiniCalendar(fixt){
+  const elCal = document.getElementById('cal-mini'); const title = document.getElementById('cal-title');
+  const prev = document.getElementById('cal-prev'); const next = document.getElementById('cal-next');
+  if(!elCal||!title) return;
+
+  const firstDate = fixt.map(f=>parseISODateUTC(f.date_utc)).filter(Boolean).sort((a,b)=>a-b)[0] || new Date();
+  if(!UI.monthCursor) UI.monthCursor = new Date(Date.UTC(firstDate.getUTCFullYear(), firstDate.getUTCMonth(), 1));
+
+  function render(){
+    const y=UI.monthCursor.getUTCFullYear(), m=UI.monthCursor.getUTCMonth();
+    title.textContent = new Date(Date.UTC(y,m,1)).toLocaleString(undefined,{month:'long',year:'numeric'});
+
+    const fixtureDays = new Set(fixt.map(f=>{ const d=parseISODateUTC(f.date_utc); if(!d) return null; return (d.getUTCFullYear()===y && d.getUTCMonth()===m) ? d.getUTCDate():null; }).filter(Boolean));
+
+    elCal.innerHTML='';
+    ['Su','Mo','Tu','We','Th','Fr','Sa'].forEach(d=>{ const s=document.createElement('div'); s.className='dow'; s.textContent=d; elCal.appendChild(s); });
+
+    const firstDow = new Date(Date.UTC(y,m,1)).getUTCDay();
+    const daysInMonth = new Date(Date.UTC(y,m+1,0)).getUTCDate();
+
+    for(let i=0;i<firstDow;i++){ const b=document.createElement('div'); b.className='day is-muted'; elCal.appendChild(b); }
+    for(let dd=1; dd<=daysInMonth; dd++){
+      const b=document.createElement('button'); const has=fixtureDays.has(dd);
+      b.className='day'+(has?' has-fixture':''); b.textContent=dd;
+      b.addEventListener('click', ()=>{
+        const sel = startOfDayUTC(new Date(Date.UTC(y,m,dd)));
+        setDateRange(sel, addDaysUTC(sel,1));
+        document.querySelectorAll('.mini-cal .day').forEach(n=>n.classList.remove('is-selected'));
+        b.classList.add('is-selected');
+      });
+      elCal.appendChild(b);
+    }
+  }
+  prev?.addEventListener('click',()=>{ UI.monthCursor=new Date(Date.UTC(UI.monthCursor.getUTCFullYear(), UI.monthCursor.getUTCMonth()-1,1)); render(); });
+  next?.addEventListener('click',()=>{ UI.monthCursor=new Date(Date.UTC(UI.monthCursor.getUTCFullYear(), UI.monthCursor.getUTCMonth()+1,1)); render(); });
+
+  render();
+}
+
+function wireQuickPills(){
+  document.querySelectorAll('.pill[data-range]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.pill[data-range]').forEach(b=>b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+
+      const now=new Date(); const today=startOfDayUTC(now); const tomorrow=addDaysUTC(today,1);
+      switch(btn.dataset.range){
+        case 'today': setDateRange(today, addDaysUTC(today,1)); break;
+        case 'tomorrow': setDateRange(tomorrow, addDaysUTC(tomorrow,1)); break;
+        case 'weekend': {
+          const dow=today.getUTCDay(); const toSat=(6-dow+7)%7;
+          const sat=addDaysUTC(today,toSat); const mon=addDaysUTC(sat,2);
+          setDateRange(sat, mon); break;
+        }
+      }
+    });
+  });
+}
+
+function setDateRange(startUTC, endUTC){ UI.rangeStart=startOfDayUTC(startUTC); UI.rangeEnd=startOfDayUTC(endUTC); applyFixtureFilters(); }
+
+// ---- League chips (dynamic)
+function leagueDisplayName(name){
+  const map = {
+    'UEFA Champions League':'UCL','UEFA Europa League':'UEL','UEFA Europa Conference League':'UECL',
+    'Premier League':'EPL','LaLiga':'LaLiga','La Liga':'LaLiga','Bundesliga':'Bundesliga','Serie A':'Serie A',
+    'Ligue 1':'Ligue 1','Liga Portugal':'Liga Portugal','Liga NOS':'Liga Portugal',
+    'MLS':'MLS','Major League Soccer':'MLS'
+  };
+  return map[name] || name;
+}
+function buildLeagueChips(fixt){
+  // ensure container exists
+  let host = document.querySelector('.left-rail'); if(!host) return;
+  let row = document.getElementById('league-chips');
+  if(!row){ row = document.createElement('div'); row.id='league-chips'; row.className='league-chips'; host.appendChild(row); }
+
+  // collect unique competitions (stable sort by occurrences)
+  const counts = new Map();
+  fixt.forEach(f=>{ const k=(f.competition||'').trim(); if(!k) return; counts.set(k, (counts.get(k)||0)+1); });
+  const leagues = [...counts.keys()].sort((a,b)=>counts.get(b)-counts.get(a));
+
+  row.innerHTML='';
+  const addChip = (label, value, active=false)=>{
+    const b=document.createElement('button'); b.className='chip'+(active?' is-active':''); b.dataset.league=value; b.textContent=label; row.appendChild(b);
+    b.addEventListener('click',()=>{
+      document.querySelectorAll('#league-chips .chip').forEach(x=>x.classList.remove('is-active'));
+      b.classList.add('is-active');
+      UI.league = value;
+      applyFixtureFilters();
+    });
+  };
+  addChip('All','ALL',true);
+  leagues.forEach(l => addChip(leagueDisplayName(l), l, false));
+}
+
+// ----------------------------
+// Filter apply — date + league → globe + rail
+// ----------------------------
+function applyFixtureFilters(){
+  if(!fixtures.length) return;
+  let vis = fixtures.slice();
+
+  if (UI.rangeStart && UI.rangeEnd){
+    vis = vis.filter(f=>{ const d=parseISODateUTC(f.date_utc); return d && d>=UI.rangeStart && d<UI.rangeEnd; });
+  }
+  if (UI.league && UI.league!=='ALL'){
+    vis = vis.filter(f => (f.competition||'').toLowerCase() === UI.league.toLowerCase());
+  }
+
+  const many = vis.length > 250;
+  globe.pointsMerge(many).pointResolution(12);
+  globe.pointsData(vis);
+
+  buildRail(vis);
+
+  if (vis.length){
+    const current = fixtures[activeIdx]?.fixture_id;
+    const visIdx  = Math.max(0, vis.findIndex(x=>x.fixture_id===current));
+    const pick    = vis[Math.max(0, visIdx)];
+    const globalIdx = fixtures.findIndex(x=>x.fixture_id===pick.fixture_id);
+    selectIndex(globalIdx>=0?globalIdx:0, { fly:true });
+  } else {
+    el.fixtureTitle.textContent='No fixtures in selected range';
+    el.fixtureContext.textContent='';
+  }
 }
 
 // ----------------------------
@@ -741,51 +641,37 @@ function animate() {
 async function loadFixturesCSV(url) {
   try {
     const response = await fetch(`${url}?v=${Date.now()}`);
-    if (!response.ok) {
-      console.error(`[CSV] HTTP ${response.status} for ${url}`);
-      showToast('error', `Could not load ${url} (HTTP ${response.status}).`);
-      return;
-    }
+    if (!response.ok) { console.error(`[CSV] HTTP ${response.status} for ${url}`); showToast('error', `Could not load ${url} (HTTP ${response.status}).`); return; }
     const text = await response.text();
     const { data, errors } = Papa.parse(text, { header: true, skipEmptyLines: true });
     if (errors?.length) console.warn('[CSV parse errors]', errors);
 
-    fixtures = (data || [])
-      .map(row => {
-        const lat = Number(row.latitude ?? row.lat ?? row.Latitude ?? row.lat_deg);
-        const lon = Number(row.longitude ?? row.lon ?? row.lng ?? row.Longitude);
-
-        const home_badge_url = pick(row, ['home_badge_url','home_logo_url','home_logo','home_badge']);
-        const away_badge_url = pick(row, ['away_badge_url','away_logo_url','away_logo','away_badge']);
-
-        return {
-          fixture_id: (row.fixture_id || row.id || `${row.home_team}-${row.away_team}-${row.date_utc || ''}`).trim(),
-          home_team: (row.home_team || row.Home || '').trim(),
-          away_team: (row.away_team || row.Away || '').trim(),
-          home_badge_url,
-          away_badge_url,
-          date_utc: row.date_utc || row.date || '',
-          competition: row.competition || row.league || '',
-          stadium: row.stadium || '',
-          city: row.city || '',
-          country: row.country || row.venue_country || '',
-          latitude: Number.isFinite(lat) ? lat : undefined,
-          longitude: Number.isFinite(lon) ? lon : undefined,
-          predicted_winner: row.predicted_winner || '',
-          confidence_ftr: +row.confidence_ftr || +row.confidence || 0,
-          xg_home: +row.xg_home || 0,
-          xg_away: +row.xg_away || 0,
-          ppg_home: +row.ppg_home || 0,
-          ppg_away: +row.ppg_away || 0,
-          over25_prob: +row.over25_prob || 0,
-          btts_prob: +row.btts_prob || 0,
-          key_players_shots: (row.key_players_shots || '').trim(),
-          key_players_tackles: (row.key_players_tackles || '').trim(),
-          key_players_bookings: (row.key_players_bookings || '').trim(),
-          __active: false
-        };
-      })
-      .filter(f => Number.isFinite(f.latitude) && Number.isFinite(f.longitude));
+    fixtures = (data || []).map(row => {
+      const lat = Number(row.latitude ?? row.lat ?? row.Latitude ?? row.lat_deg);
+      const lon = Number(row.longitude ?? row.lon ?? row.lng ?? row.Longitude);
+      const home_badge_url = pick(row, ['home_badge_url','home_logo_url','home_logo','home_badge']);
+      const away_badge_url = pick(row, ['away_badge_url','away_logo_url','away_logo','away_badge']);
+      return {
+        fixture_id: (row.fixture_id || row.id || `${row.home_team}-${row.away_team}-${row.date_utc || ''}`).trim(),
+        home_team: (row.home_team || row.Home || '').trim(),
+        away_team: (row.away_team || row.Away || '').trim(),
+        home_badge_url, away_badge_url,
+        date_utc: row.date_utc || row.date || '',
+        competition: row.competition || row.league || '',
+        stadium: row.stadium || '', city: row.city || '', country: row.country || row.venue_country || '',
+        latitude: Number.isFinite(lat) ? lat : undefined,
+        longitude: Number.isFinite(lon) ? lon : undefined,
+        predicted_winner: row.predicted_winner || '',
+        confidence_ftr: +row.confidence_ftr || +row.confidence || 0,
+        xg_home: +row.xg_home || 0, xg_away: +row.xg_away || 0,
+        ppg_home: +row.ppg_home || 0, ppg_away: +row.ppg_away || 0,
+        over25_prob: +row.over25_prob || 0, btts_prob: +row.btts_prob || 0,
+        key_players_shots: (row.key_players_shots || '').trim(),
+        key_players_tackles: (row.key_players_tackles || '').trim(),
+        key_players_bookings: (row.key_players_bookings || '').trim(),
+        __active: false
+      };
+    }).filter(f => Number.isFinite(f.latitude) && Number.isFinite(f.longitude));
 
     if (!fixtures.length) {
       showCsvError('No fixtures with valid latitude/longitude found.');
@@ -795,7 +681,6 @@ async function loadFixturesCSV(url) {
       return;
     }
 
-    // Preload all team crests (local only)
     const TEAM_MAP = new Map();
     for (const f of fixtures) {
       if (f.home_team) TEAM_MAP.set(f.home_team, f.home_badge_url || f.home_logo_url || '');
@@ -805,10 +690,7 @@ async function loadFixturesCSV(url) {
 
     const many = fixtures.length > 250;
     globe.pointsMerge(many).pointResolution(12);
-    globe
-      .pointLat('latitude')
-      .pointLng('longitude')
-      .pointsData(fixtures);
+    globe.pointLat('latitude').pointLng('longitude').pointsData(fixtures);
 
     buildRail(fixtures);
 
@@ -816,29 +698,28 @@ async function loadFixturesCSV(url) {
       selectIndex(0, { fly: true });
       createSelectionRing();
 
-      // show comp strip on boot
+      // Comp strip on boot
       renderCompetitionAccuracy(fixtures[0]?.competition);
 
-      if (hasHtmlElementsApi(globe)) {
-        renderHtmlTabs();
-        globe.htmlTransitionDuration?.(220);
-      } else if (typeof globe.labelsData === 'function') {
-        console.warn('[globe] htmlElementsData not available; using label sprites fallback');
-        renderLabelSprites();
-      }
+      if (hasHtmlElementsApi(globe)) { renderHtmlTabs(); globe.htmlTransitionDuration?.(220); }
+      else if (typeof globe.labelsData === 'function') { console.warn('[globe] htmlElementsData not available; using label sprites fallback'); renderLabelSprites(); }
 
-      if (typeof globe.pointLabel === 'function') {
-        globe.pointLabel(d => `${d.city ? d.city + ' • ' : ''}${d.home_team} vs ${d.away_team}`);
-      }
+      if (typeof globe.pointLabel === 'function') globe.pointLabel(d => `${d.city ? d.city + ' • ' : ''}${d.home_team} vs ${d.away_team}`);
       globe.pointsTransitionDuration?.(0);
+
+      // --- build rail UI (calendar + league) & default filter
+      buildMiniCalendar(fixtures);
+      wireQuickPills();
+      buildLeagueChips(fixtures);
+
+      const today = startOfDayUTC(new Date());
+      setDateRange(today, addDaysUTC(today,1)); // also calls applyFixtureFilters()
+
       showToast('success', `Loaded ${fixtures.length} fixtures`);
     };
 
-    if (typeof globe.onGlobeReady === 'function') {
-      globe.onGlobeReady(boot);
-    } else {
-      requestAnimationFrame(boot);
-    }
+    if (typeof globe.onGlobeReady === 'function') globe.onGlobeReady(boot);
+    else requestAnimationFrame(boot);
 
   } catch (err) {
     console.error('[CSV] Failed to fetch/parse]:', err);
@@ -847,10 +728,7 @@ async function loadFixturesCSV(url) {
   }
 }
 
-function showCsvError(msg) {
-  el.fixtureTitle.textContent = 'Unable to load fixtures';
-  el.fixtureContext.textContent = msg;
-}
+function showCsvError(msg) { el.fixtureTitle.textContent = 'Unable to load fixtures'; el.fixtureContext.textContent = msg; }
 
 // ----------------------------
 // Selection & nav
@@ -867,39 +745,23 @@ function selectIndex(idx, opts = {}) {
   const f = fixtures[activeIdx];
   selectedId = f?.fixture_id || f?.re_id || null;
 
-  // collapse previous beam quickly
-  {
-    const S = window.__OG_MARKER__;
-    if (S && S.beam && S.beam.visible){
-      const start = performance.now();
-      const dur = 200;
-      const startScale = S.beam.scale.y;
-      (function shrink(){
-        const t = (performance.now()-start)/dur;
-        if (t < 1){
-          S.beam.scale.y = Math.max(0.001, startScale*(1-t));
-          requestAnimationFrame(shrink);
-        } else {
-          S.beam.scale.y = 0.001;
-        }
-      })();
-    }
+  // collapse previous beam fast
+  const S = window.__OG_MARKER__;
+  if (S && S.beam && S.beam.visible){
+    const start=performance.now(), dur=200, startScale=S.beam.scale.y;
+    (function shrink(){
+      const t=(performance.now()-start)/dur;
+      if(t<1){ S.beam.scale.y=Math.max(0.001,startScale*(1-t)); requestAnimationFrame(shrink); }
+      else { S.beam.scale.y=0.001; }
+    })();
   }
 
   fixtures.forEach(d => (d.__active = (d.fixture_id || d.re_id) === selectedId));
-  globe
-    .pointAltitude(() => SURFACE_EPS)
-    .pointRadius(d => (d.__active ? RADIUS_ACTIVE : RADIUS_BASE))
-    .pointColor(d => (d.__active ? COLORS.markerActive : COLORS.marker))
-    .pointsData(fixtures);
-
-  globe.pointColor(d => d.__active ? '#D7FFF9' : COLORS.marker)
-       .pointsTransitionDuration?.(200);
+  globe.pointAltitude(() => SURFACE_EPS).pointRadius(d => (d.__active ? RADIUS_ACTIVE : RADIUS_BASE)).pointColor(d => (d.__active ? COLORS.markerActive : COLORS.marker)).pointsData(fixtures);
+  globe.pointColor(d => d.__active ? '#D7FFF9' : COLORS.marker).pointsTransitionDuration?.(200);
   setTimeout(()=>globe.pointsTransitionDuration?.(0), 220);
 
   if (fly) flyToFixture(f);
-
-  // move radar/beam/billboard
   moveMarkerToFixture(f, { fly });
 
   renderPanel(f);
@@ -914,10 +776,7 @@ function selectIndex(idx, opts = {}) {
   setTimeout(()=>globeWrap?.classList.remove('glow-pin'), 350);
 }
 
-function flyToFixture(f) {
-  if (!f || !globe?.pointOfView) return;
-  globe.pointOfView({ lat: f.latitude, lng: f.longitude, altitude: CAMERA_ALT }, 650);
-}
+function flyToFixture(f) { if (!f || !globe?.pointOfView) return; globe.pointOfView({ lat: f.latitude, lng: f.longitude, altitude: CAMERA_ALT }, 650); }
 
 // ----------------------------
 // Selection halo aligned to surface
@@ -927,19 +786,9 @@ function createSelectionRing() {
   const inner = R * (1 + SURFACE_EPS + 0.001);
   const outer = inner + R * 0.007;
   const ringGeom = new THREE.RingGeometry(inner, outer, 48);
-  const ringMat = new THREE.MeshBasicMaterial({
-    color: new THREE.Color(COLORS.ring),
-    transparent: true,
-    opacity: 0.42,
-    side: THREE.DoubleSide,
-    depthWrite: false
-  });
-  pulseRing = new THREE.Mesh(ringGeom, ringMat);
-  pulseRing.visible = false;
-  scene.add(pulseRing);
-  pulsePulse();
+  const ringMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(COLORS.ring), transparent: true, opacity: 0.42, side: THREE.DoubleSide, depthWrite: false });
+  pulseRing = new THREE.Mesh(ringGeom, ringMat); pulseRing.visible = false; scene.add(pulseRing); pulsePulse();
 }
-
 function updateSelectionRing(f) {
   if (!pulseRing || !f) return;
   const R = getGlobeRadius();
@@ -954,18 +803,16 @@ function updateSelectionRing(f) {
   pulseRing.lookAt(outward.clone().multiplyScalar(R * 2));
   pulseRing.visible = true;
 }
-
 function pulsePulse() {
   if (!pulseRing) return;
-  const T = 1800;
-  const t = (performance.now() % T) / T;
+  const T = 1800; const t = (performance.now() % T) / T;
   const intensity = 0.15 + 0.35 * Math.sin(t * Math.PI) ** 2;
   pulseRing.material.opacity = intensity;
   requestAnimationFrame(pulsePulse);
 }
 
 // ----------------------------
-// Hover feedback (size pop)
+// Hover feedback
 // ----------------------------
 let hoverId = null;
 function handleHover(d) {
@@ -978,7 +825,7 @@ function handleHover(d) {
 }
 
 // ----------------------------
-// Move marker to fixture (beam + radar + billboard)  (PATCH 2)
+// Move marker to fixture (beam + radar + billboard)
 // ----------------------------
 function moveMarkerToFixture(f, { fly=false } = {}){
   const S = window.__OG_MARKER__; if (!S || !f) return;
@@ -986,64 +833,35 @@ function moveMarkerToFixture(f, { fly=false } = {}){
   const lat = Number(f.latitude), lon = Number(f.longitude);
   if (!Number.isFinite(lat) || !Number.isFinite(lon)) { S.group.visible = false; return; }
 
-  S.markerState.lat = lat;
-  S.markerState.lon = lon;
-  S.markerState.t0  = performance.now() * 0.001;
-  S.markerState.active = true;
+  S.markerState.lat = lat; S.markerState.lon = lon; S.markerState.t0 = performance.now()*0.001; S.markerState.active = true;
 
-  const R   = getGlobeRadius();
+  const R = getGlobeRadius();
   const pos = latLngToVec3(lat, lon, SURFACE_EPS + 0.001);
   const n   = pos.clone().normalize();
 
-  // Place + orient parent group in WORLD space
   S.group.visible = true;
   S.group.position.copy(pos);
   S.group.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), n);
 
-  // ---- LOCAL placements relative to the group ----
-  S.radarGroup.position.set(0, 0, 0);
+  S.radarGroup.position.set(0,0,0);
 
-  // Beam grows along local +Y
-  S.beam.position.set(0, 0, 0);
-  S.beam.quaternion.identity();
-  S.beam.scale.set(1, 0.001, 1);
-  S.beam.visible = true;
-  const growStart = performance.now();
-  (function grow(){
-    const t = Math.min(1, (performance.now() - growStart)/550);
-    const e = t*t*(3-2*t);
-    S.beam.scale.y = 0.001 + e;
-    if (t < 1) requestAnimationFrame(grow);
-  })();
+  S.beam.position.set(0,0,0); S.beam.quaternion.identity(); S.beam.scale.set(1,0.001,1); S.beam.visible=true;
+  const growStart=performance.now();
+  (function grow(){ const t=Math.min(1,(performance.now()-growStart)/550); const e=t*t*(3-2*t); S.beam.scale.y=0.001+e; if(t<1) requestAnimationFrame(grow); })();
 
-  // Billboard ~6% of radius above surface along local +Y
   S.billboard.position.set(0, R*0.06, 0);
-  S.billboard.material.opacity = 0;
-  S.billboard.visible = true;
+  S.billboard.material.opacity=0; S.billboard.visible=true;
 
-  // Load stadium texture with logging
   (async ()=>{
-    const tries = stadiumCandidates(f);
-    console.debug('[stadium] candidates for', f.home_team, 'vs', f.away_team, '→', tries);
-    for (const url of tries){
-      try {
-        const tex = await new Promise((res, rej) =>
-          new THREE.TextureLoader().load(url, res, undefined, rej)
-        );
-        console.info('[stadium] loaded', url);
-        S.billboard.material.map = tex;
-        S.billboard.material.needsUpdate = true;
-        const t0 = performance.now();
-        (function fade(){
-          const k = Math.min(1, (performance.now()-t0)/220);
-          S.billboard.material.opacity = k;
-          if (k<1) requestAnimationFrame(fade);
-        })();
+    for (const url of stadiumCandidates(f)){
+      try{
+        const tex = await new Promise((res,rej)=>new THREE.TextureLoader().load(url,res,undefined,rej));
+        S.billboard.material.map=tex; S.billboard.material.needsUpdate=true;
+        const t0=performance.now(); (function fade(){ const k=Math.min(1,(performance.now()-t0)/220); S.billboard.material.opacity=k; if(k<1) requestAnimationFrame(fade); })();
         return;
-      } catch { /* continue */ }
+      }catch{}
     }
-    console.warn('[stadium] not found for', f.home_team, f.stadium);
-    S.billboard.visible = false; // nothing found
+    S.billboard.visible=false;
   })();
 }
 
@@ -1063,10 +881,8 @@ function renderPanel(f) {
   };
 
   el.fixtureTitle.textContent = `${f.home_team} vs ${f.away_team}`;
-  el.fixtureContext.textContent = [f.competition, fmt(f.date_utc), f.stadium && `${f.stadium} (${f.city || ''})`, f.country]
-    .filter(Boolean).join(' • ');
+  el.fixtureContext.textContent = [f.competition, fmt(f.date_utc), f.stadium && `${f.stadium} (${f.city || ''})`, f.country].filter(Boolean).join(' • ');
 
-  // update competition strip
   renderCompetitionAccuracy(f.competition);
 
   const homeUrl = TEAM_LOGO_OVERRIDES[f.home_team] || '';
@@ -1086,15 +902,8 @@ function renderPanel(f) {
   clearNode(el.watchlist);
   const shots = parseKV(f.key_players_shots).slice(0, 6);
   if (shots.length) {
-    shots.forEach(s => {
-      const row = document.createElement('div');
-      row.className = 'row';
-      row.textContent = `${s.k} ${s.v}`;
-      el.watchlist.appendChild(row);
-    });
-  } else {
-    el.watchlist.appendChild(elmEmpty('No player highlights available.'));
-  }
+    shots.forEach(s => { const row=document.createElement('div'); row.className='row'; row.textContent = `${s.k} ${s.v}`; el.watchlist.appendChild(row); });
+  } else { el.watchlist.appendChild(elmEmpty('No player highlights available.')); }
 
   clearNode(el.market);
   el.market.innerHTML = `
@@ -1103,125 +912,54 @@ function renderPanel(f) {
   `;
 
   if (window.innerWidth < 720){
-    const wrap = document.createElement('div');
-    const miClone = el.matchList.cloneNode(true);
-    const mkClone = el.market.cloneNode(true);
-    const plClone = el.watchlist.cloneNode(true);
-    wrap.append(miClone, mkClone, plClone);
-    openSheet(`${f.home_team} vs ${f.away_team}`, wrap);
+    const wrap=document.createElement('div'); const miClone=el.matchList.cloneNode(true); const mkClone=el.market.cloneNode(true); const plClone=el.watchlist.cloneNode(true);
+    wrap.append(miClone, mkClone, plClone); openSheet(`${f.home_team} vs ${f.away_team}`, wrap);
   }
 
   el.deepBtn && (el.deepBtn.onclick = () => {
-    alert(
-      `Fixture: ${f.home_team} vs ${f.away_team}\n` +
-      `Kick-off: ${fmt(f.date_utc)}\n` +
-      `Prediction: ${f.predicted_winner} (${pct(f.confidence_ftr)})\n` +
-      `Over 2.5: ${pct(f.over25_prob)} • BTTS: ${pct(f.btts_prob)}`
-    );
+    alert(`Fixture: ${f.home_team} vs ${f.away_team}\n` +
+          `Kick-off: ${fmt(f.date_utc)}\n` +
+          `Prediction: ${f.predicted_winner} (${pct(f.confidence_ftr)})\n` +
+          `Over 2.5: ${pct(f.over25_prob)} • BTTS: ${pct(f.btts_prob)}`);
   });
 }
 
-function num(x) {
-  const n = Number(x);
-  return Number.isFinite(n) ? n.toFixed(1) : '–';
-}
-
-function parseKV(s='') {
-  return s.split(';').map(x => x.trim()).filter(Boolean).map(pair => {
-    const [k, v] = pair.split('|');
-    return { k: (k||'').trim(), v: (v||'').trim() };
-  });
-}
+function num(x){ const n=Number(x); return Number.isFinite(n) ? n.toFixed(1) : '–'; }
+function parseKV(s=''){ return s.split(';').map(x=>x.trim()).filter(Boolean).map(pair=>{ const [k,v]=pair.split('|'); return { k:(k||'').trim(), v:(v||'').trim() }; }); }
 
 // ----------------------------
 // On-globe HTML fixture tabs (preferred)
 // ----------------------------
 function renderHtmlTabs(){
-  htmlTabsData = fixtures.map((f, i) => ({
-    lat: f.latitude,
-    lng: f.longitude,
-    altitude: SURFACE_EPS + 0.06,
-    idx: i,
-    el: null
-  }));
-
-  globe
-    .htmlElementsData(htmlTabsData)
-    .htmlLat('lat')
-    .htmlLng('lng')
-    .htmlAltitude('altitude')
-    .htmlElement(d => {
-      const w = document.createElement('div');
-      w.className = 'fixture-tab' + (d.idx === activeIdx ? ' is-selected' : '');
-      w.dataset.idx = String(d.idx);
-      const f = fixtures[d.idx];
-      w.title = `${f.home_team} vs ${f.away_team}${f.city ? ` — ${f.city}` : ''}`;
-      w.style.pointerEvents = 'auto';
-
-      const title = document.createElement('div');
-      title.className = 'fixture-tab__title';
-      title.textContent = `${f.home_team} vs ${f.away_team}`;
-
-      const meta = document.createElement('div');
-      meta.className = 'fixture-tab__meta';
-      meta.textContent = f.city || f.country || '';
-
-      w.append(title, meta);
-      w.addEventListener('click', (e) => {
-        e.stopPropagation();
-        selectIndex(d.idx, { fly: true });
-      });
-
-      d.el = w;
-      return w;
-    });
-
+  htmlTabsData = fixtures.map((f, i)=>({ lat:f.latitude, lng:f.longitude, altitude:SURFACE_EPS+0.06, idx:i, el:null }));
+  globe.htmlElementsData(htmlTabsData).htmlLat('lat').htmlLng('lng').htmlAltitude('altitude').htmlElement(d=>{
+    const w=document.createElement('div'); w.className='fixture-tab'+(d.idx===activeIdx?' is-selected':''); w.dataset.idx=String(d.idx);
+    const f=fixtures[d.idx]; w.title=`${f.home_team} vs ${f.away_team}${f.city?` — ${f.city}`:''}`; w.style.pointerEvents='auto';
+    const title=document.createElement('div'); title.className='fixture-tab__title'; title.textContent=`${f.home_team} vs ${f.away_team}`;
+    const meta=document.createElement('div'); meta.className='fixture-tab__meta'; meta.textContent=f.city||f.country||'';
+    w.append(title, meta); w.addEventListener('click',e=>{e.stopPropagation(); selectIndex(d.idx,{fly:true});}); d.el=w; return w;
+  });
   globe.htmlTransitionDuration?.(220);
 }
-
-function updateHtmlTabsSelection(){
-  if (!htmlTabsData?.length) return;
-  htmlTabsData.forEach(d => {
-    const el = d.el || document.querySelector(`.fixture-tab[data-idx="${d.idx}"]`);
-    if (el) el.classList.toggle('is-selected', d.idx === activeIdx);
-  });
-}
+function updateHtmlTabsSelection(){ if(!htmlTabsData?.length) return; htmlTabsData.forEach(d=>{ const n=d.el||document.querySelector(`.fixture-tab[data-idx="${d.idx}"]`); if(n) n.classList.toggle('is-selected', d.idx===activeIdx); }); }
 
 // ----------------------------
 // Fallback: sprite labels if HTML overlay not available
 // ----------------------------
 function renderLabelSprites(){
-  globe
-    .labelsData(fixtures)
-    .labelLat('latitude')
-    .labelLng('longitude')
-    .labelAltitude(() => SURFACE_EPS + 0.06)
-    .labelText(f => `${f.home_team} vs ${f.away_team}`)
-    .labelColor(f => ((f.fixture_id || f.re_id) === selectedId ? 'rgba(125,249,196,0.95)' : 'rgba(255,255,255,0.85)'))
-    .labelSize(f => ((f.fixture_id || f.re_id) === selectedId ? 1.4 : 1.0))
-    .labelDotRadius(f => ((f.fixture_id || f.re_id) === selectedId ? 0.5 : 0.28))
-    .labelResolution(2);
+  globe.labelsData(fixtures).labelLat('latitude').labelLng('longitude').labelAltitude(()=>SURFACE_EPS+0.06).labelText(f=>`${f.home_team} vs ${f.away_team}`)
+    .labelColor(f=>((f.fixture_id||f.re_id)===selectedId?'rgba(125,249,196,0.95)':'rgba(255,255,255,0.85)')).labelSize(f=>((f.fixture_id||f.re_id)===selectedId?1.4:1.0)).labelDotRadius(f=>((f.fixture_id||f.re_id)===selectedId?0.5:0.28)).labelResolution(2);
 }
 
 // ----------------------------
 // Fixture rail (quick selector)
 // ----------------------------
 function buildRail(items){
-  const rail = document.getElementById('fixture-rail');
-  if(!rail) return;
-  rail.innerHTML = '';
-  items.forEach((f, i)=>{
-    const it = document.createElement('button');
-    it.className = 'rail-item' + (i===0?' is-active':'');
-    it.innerHTML = `<h4>${f.home_team} vs ${f.away_team}</h4><p>${(f.city||f.country||'')}</p>`;
-    it.addEventListener('click',()=>selectIndex(i,{fly:true}));
-    rail.appendChild(it);
-  });
+  const rail=document.getElementById('fixture-rail'); if(!rail) return;
+  rail.innerHTML='';
+  items.forEach((f,i)=>{ const it=document.createElement('button'); it.className='rail-item'+(i===0?' is-active':''); it.innerHTML=`<h4>${f.home_team} vs ${f.away_team}</h4><p>${(f.city||f.country||'')}</p>`; it.addEventListener('click',()=>selectIndex(fixtures.findIndex(x=>x.fixture_id===f.fixture_id),{fly:true})); rail.appendChild(it); });
 }
-function syncRail(){
-  const rail = document.getElementById('fixture-rail'); if(!rail) return;
-  [...rail.children].forEach((c,idx)=>c.classList.toggle('is-active', idx===activeIdx));
-}
+function syncRail(){ const rail=document.getElementById('fixture-rail'); if(!rail) return; [...rail.children].forEach((c,idx)=>c.classList.toggle('is-active', fixtures[idx]?.fixture_id===fixtures[activeIdx]?.fixture_id)); }
 
 // ----------------------------
 // Tabs
@@ -1232,8 +970,7 @@ function wireTabs(){
       document.querySelectorAll('.tab').forEach(b=>b.classList.remove('is-active'));
       document.querySelectorAll('.tabpane').forEach(p=>p.classList.remove('is-active'));
       btn.classList.add('is-active');
-      const id = btn.dataset.tab;
-      document.getElementById(`tab-${id}`)?.classList.add('is-active');
+      const id=btn.dataset.tab; document.getElementById(`tab-${id}`)?.classList.add('is-active');
     });
   });
 }
@@ -1242,193 +979,37 @@ function wireTabs(){
 // Bottom sheet (mobile)
 // ----------------------------
 function openSheet(title, node){
-  const s = document.getElementById('sheet'); if(!s) return;
-  const titleEl = s.querySelector('#sheet-title'); if(titleEl) titleEl.textContent = title || '';
-  const body = s.querySelector('#sheet-body'); if(body){ body.innerHTML=''; body.appendChild(node); }
-  s.classList.add('open'); s.setAttribute('aria-hidden','false');
+  const s=document.getElementById('sheet'); if(!s) return; const titleEl=s.querySelector('#sheet-title'); if(titleEl) titleEl.textContent=title||''; const body=s.querySelector('#sheet-body'); if(body){ body.innerHTML=''; body.appendChild(node);} s.classList.add('open'); s.setAttribute('aria-hidden','false');
 }
-function closeSheet(){
-  const s = document.getElementById('sheet'); if(!s) return;
-  s.classList.remove('open'); s.setAttribute('aria-hidden','true');
-}
+function closeSheet(){ const s=document.getElementById('sheet'); if(!s) return; s.classList.remove('open'); s.setAttribute('aria-hidden','true'); }
 document.querySelector('.sheet__handle')?.addEventListener('click', closeSheet);
 
 // =====================================================
-// API HELPERS + FEATURE PAGES
+// API HELPERS + FEATURE PAGES (stubs as before)
 // =====================================================
 const API_BASE = '/api';
+async function apiJson(url,opts={}){ const res=await fetch(`${API_BASE}${url}`,{headers:{'Content-Type':'application/json',...(opts.headers||{})},credentials:'include',...opts}); if(!res.ok){ const t=await res.text().catch(()=> ''); throw new Error(`HTTP ${res.status}: ${t||res.statusText}`);} return res.json(); }
+const API = { scoreSlip:(payload)=>apiJson('/score-slip',{method:'POST',body:JSON.stringify(payload)}), accaSuggest:(q)=>apiJson(`/acca/suggest?${new URLSearchParams(q)}`), accaOptimise:(p)=>apiJson('/acca/optimise',{method:'POST',body:JSON.stringify(p)}), copilot:(p)=>apiJson('/copilot',{method:'POST',body:JSON.stringify(p)}) };
 
-async function apiJson(url, opts = {}) {
-  const res = await fetch(`${API_BASE}${url}`, {
-    headers: { 'Content-Type': 'application/json', ...(opts.headers||{}) },
-    credentials: 'include',
-    ...opts
-  });
-  if (!res.ok) {
-    const t = await res.text().catch(()=> '');
-    throw new Error(`HTTP ${res.status}: ${t || res.statusText}`);
-  }
-  return res.json();
-}
-
-const API = {
-  scoreSlip: (payload)=> apiJson('/score-slip', { method:'POST', body: JSON.stringify(payload) }),
-  accaSuggest: (q)=>   apiJson(`/acca/suggest?${new URLSearchParams(q)}`),
-  accaOptimise: (p)=>  apiJson('/acca/optimise', { method:'POST', body: JSON.stringify(p) }),
-  copilot: (p)=>       apiJson('/copilot', { method:'POST', body: JSON.stringify(p) })
-};
-
-// OCR + parser + UI stubs
-async function ocrImageOrPdf(file) {
-  if (!window.Tesseract) throw new Error('OCR engine not loaded');
-  const { data } = await window.Tesseract.recognize(file, 'eng', { logger: () => {} });
-  return (data && data.text) ? data.text : '';
-}
-function parseSlipText(text) {
-  const lines = String(text).split(/\r?\n/).map(s => s.trim()).filter(Boolean);
-  const legs = [];
-  for (let i = 0; i < lines.length; i++) {
-    const L = lines[i];
-    const m = L.match(/^\s*([A-Za-z0-9 .'\-]+)\s+(?:v|vs\.?|VS)\s+([A-Za-z0-9 .'\-]+)\s*$/i);
-    if (!m) continue;
-    const home = m[1].trim();
-    const away = m[2].trim();
-    for (let j = 1; j <= 3 && (i + j) < lines.length; j++) {
-      const M = lines[i + j];
-      let market = null, pick = null;
-      if (/over\s*2\.?5/i.test(M)) { market='OVER_UNDER_2_5'; pick='OVER'; }
-      else if (/under\s*2\.?5/i.test(M)) { market='OVER_UNDER_2_5'; pick='UNDER'; }
-      else if (/both\s*teams\s*to\s*score|btts/i.test(M)) { market='BTTS'; pick=/\bno\b/i.test(M)?'NO':'YES'; }
-      else if (/(?:^|\s)(?:1x2|home|away|draw|1|2|x)(?:\s|$)/i.test(M)) {
-        market='FTR';
-        if (/\bdraw\b|(?:^|\s)x(?:\s|$)/i.test(M)) pick='DRAW';
-        else if (/\bhome\b|(?:^|\s)1(?:\s|$)/i.test(M)) pick='HOME';
-        else if (/\baway\b|(?:^|\s)2(?:\s|$)/i.test(M)) pick='AWAY';
-      }
-      if (!market) continue;
-      let price = null;
-      const f = M.match(/(\d+)\s*\/\s*(\d+)/);
-      const d = M.match(/(\d+(?:\.\d+)?)/);
-      if (f) price = (parseFloat(f[1]) / parseFloat(f[2])) + 1;
-      else if (d) price = parseFloat(d[1]);
-      legs.push({ teamHome:home, teamAway:away, market, selection:pick||'—', price, bookmaker:null, kickoffUTC:null });
-      break;
-    }
-  }
-  return { legs, raw: lines.slice(0,60).join('\n') };
-}
-async function runBetChecker(file) {
-  const out = document.getElementById('bc-output');
-  if (out) out.innerHTML = '<div class="muted">Reading slip…</div>';
-  try {
-    const text = await ocrImageOrPdf(file);
-    const parsed = parseSlipText(text);
-    if (!parsed.legs.length) { out && (out.innerHTML = `<div class="muted">No legs detected.</div>`); return; }
-    out && (out.innerHTML = '<div class="muted">Scoring legs…</div>');
-    const scored = await API.scoreSlip({ legs: parsed.legs });
-    // render results… (omitted)
-    showToast('success', `Scored ${scored.legs?.length || parsed.legs.length} leg(s)`);
-  } catch (e) {
-    showToast('error', e.message);
-    out && (out.innerHTML = `<div class="muted">Error: ${e.message}</div>`);
-  }
-}
-
-// Co-Pilot send
-async function sendCopilotMessage(text) {
-  const payload = { 
-    messages: [
-      { role:'system', content: 'You are OddsGenius Co-Pilot. Be concise, provide bullet reasoning, cite model features where relevant.' },
-      { role:'user', content: text }
-    ],
-    context: (function(){
-      const f = fixtures[Math.max(0, Math.min(activeIdx, Math.max(0, fixtures.length-1)))];
-      if (!f) return null;
-      return { fixture: { home:f.home_team, away:f.away_team, date:f.date_utc, league:f.competition } };
-    })()
-  };
-  return API.copilot(payload);
-}
-function appendChatLine(role, text) {
-  const wrap = document.getElementById('cp-thread');
-  if (!wrap) return;
-  const div = document.createElement('div');
-  div.className = (role === 'user') ? 'user-line' : 'bot-line';
-  div.textContent = (role === 'user' ? 'You: ' : 'OG: ') + text;
-  wrap.appendChild(div);
-  wrap.scrollTop = wrap.scrollHeight;
-}
-{
-  const cpInput = document.getElementById('cp-input');
-  const cpSend  = document.getElementById('cp-send');
-  cpSend?.addEventListener('click', async ()=>{
-    const q = (cpInput?.value || '').trim();
-    if (!q) return;
-    appendChatLine('user', q);
-    cpInput.value = '';
-    try {
-      const { messages, error } = await sendCopilotMessage(q);
-      if (error) throw new Error(error);
-      const msg = (messages && messages.find(m=>m.role==='assistant'))?.content || '(no reply)';
-      appendChatLine('assistant', msg);
-    } catch (e) {
-      appendChatLine('assistant', `⚠ ${e.message}`);
-    }
-  });
-}
+async function ocrImageOrPdf(file){ if(!window.Tesseract) throw new Error('OCR engine not loaded'); const {data}=await window.Tesseract.recognize(file,'eng',{logger:()=>{}}); return (data&&data.text)?data.text:''; }
+function parseSlipText(text){ const lines=String(text).split(/\r?\n/).map(s=>s.trim()).filter(Boolean); const legs=[]; for(let i=0;i<lines.length;i++){ const L=lines[i]; const m=L.match(/^\s*([A-Za-z0-9 .'\-]+)\s+(?:v|vs\.?|VS)\s+([A-Za-z0-9 .'\-]+)\s*$/i); if(!m) continue; const home=m[1].trim(), away=m[2].trim(); for(let j=1;j<=3&&(i+j)<lines.length;j++){ const M=lines[i+j]; let market=null,pick=null; if(/over\s*2\.?5/i.test(M)){market='OVER_UNDER_2_5';pick='OVER';} else if(/under\s*2\.?5/i.test(M)){market='OVER_UNDER_2_5';pick='UNDER';} else if(/both\s*teams\s*to\s*score|btts/i.test(M)){market='BTTS';pick=/\bno\b/i.test(M)?'NO':'YES';} else if(/(?:^|\s)(?:1x2|home|away|draw|1|2|x)(?:\s|$)/i.test(M)){ market='FTR'; if(/\bdraw\b|(?:^|\s)x(?:\s|$)/i.test(M)) pick='DRAW'; else if(/\bhome\b|(?:^|\s)1(?:\s|$)/i.test(M)) pick='HOME'; else if(/\baway\b|(?:^|\s)2(?:\s|$)/i.test(M)) pick='AWAY'; } if(!market) continue; let price=null; const f=M.match(/(\d+)\s*\/\s*(\d+)/), d=M.match(/(\d+(?:\.\d+)?)/); if(f) price=(parseFloat(f[1])/parseFloat(f[2]))+1; else if(d) price=parseFloat(d[1]); legs.push({teamHome:home,teamAway:away,market,selection:pick||'—',price,bookmaker:null,kickoffUTC:null}); break; } } return {legs, raw: lines.slice(0,60).join('\n')}; }
+async function runBetChecker(file){ const out=document.getElementById('bc-output'); if(out) out.innerHTML='<div class="muted">Reading slip…</div>'; try{ const text=await ocrImageOrPdf(file); const parsed=parseSlipText(text); if(!parsed.legs.length){ out&&(out.innerHTML=`<div class="muted">No legs detected.</div>`); return; } out&&(out.innerHTML='<div class="muted">Scoring legs…</div>'); const scored=await API.scoreSlip({legs:parsed.legs}); showToast('success',`Scored ${scored.legs?.length||parsed.legs.length} leg(s)`);}catch(e){ showToast('error',e.message); out&&(out.innerHTML=`<div class="muted">Error: ${e.message}</div>`);} }
+async function sendCopilotMessage(text){ const payload={messages:[{role:'system',content:'You are OddsGenius Co-Pilot. Be concise, provide bullet reasoning, cite model features where relevant.'},{role:'user',content:text}], context:(function(){ const f=fixtures[Math.max(0,Math.min(activeIdx,Math.max(0,fixtures.length-1)))]; if(!f) return null; return {fixture:{home:f.home_team,away:f.away_team,date:f.date_utc,league:f.competition}}; })()}; return API.copilot(payload); }
+function appendChatLine(role,text){ const wrap=document.getElementById('cp-thread'); if(!wrap) return; const div=document.createElement('div'); div.className=(role==='user')?'user-line':'bot-line'; div.textContent=(role==='user'?'You: ':'OG: ')+text; wrap.appendChild(div); wrap.scrollTop=wrap.scrollHeight; }
+{ const cpInput=document.getElementById('cp-input'); const cpSend=document.getElementById('cp-send'); cpSend?.addEventListener('click', async ()=>{ const q=(cpInput?.value||'').trim(); if(!q) return; appendChatLine('user',q); cpInput.value=''; try{ const {messages,error}=await sendCopilotMessage(q); if(error) throw new Error(error); const msg=(messages&&messages.find(m=>m.role==='assistant'))?.content||'(no reply)'; appendChatLine('assistant',msg);}catch(e){ appendChatLine('assistant',`⚠ ${e.message}`);} }); }
 
 // ----------------------------
 // Router
 // ----------------------------
-const ROUTES = {
-  '#/':            'view-home',
-  '#/home':        'view-home',
-  '#/bet-checker': 'view-betchecker',
-  '#/acca-builder':'view-accabuilder',
-  '#/copilot':     'view-copilot',
-  '#/login':       'view-signin',
-  '#/signup':      'view-signup'
-};
-function showRoute(hash) {
-  if (!hash) hash = '#/';
-  const id = ROUTES[hash] || 'view-home';
-  document.querySelectorAll('.view').forEach(v => {
-    if (v.id === id) { v.classList.add('is-active'); v.removeAttribute('hidden'); }
-    else { v.classList.remove('is-active'); v.setAttribute('hidden',''); }
-  });
-  document.querySelectorAll('[data-route]').forEach(a=>{
-    a.classList.toggle('is-active', a.getAttribute('href') === hash);
-    if (a.classList.contains('side-link')) a.classList.toggle('active', a.getAttribute('href') === hash);
-  });
-  // close menus on route change
-  const profileMenu = document.getElementById('profile-menu');
-  const profileBtn  = document.getElementById('btn-profile');
-  profileMenu?.classList.remove('show');
-  profileBtn?.setAttribute('aria-expanded','false');
-  const drawer  = document.getElementById('side-drawer');
-  const scrim   = document.getElementById('scrim');
-  drawer?.classList.remove('show');
-  scrim?.classList.remove('show');
-  drawer?.setAttribute('aria-hidden','true');
-}
-window.addEventListener('hashchange', ()=> showRoute(location.hash));
-window.addEventListener('DOMContentLoaded', ()=>{
-  if (!location.hash) location.hash = '#/';
-  showRoute(location.hash);
-});
+const ROUTES = { '#/':'view-home', '#/home':'view-home', '#/bet-checker':'view-betchecker', '#/acca-builder':'view-accabuilder', '#/copilot':'view-copilot', '#/login':'view-signin', '#/signup':'view-signup' };
+function showRoute(hash){ if(!hash) hash='#/'; const id=ROUTES[hash]||'view-home'; document.querySelectorAll('.view').forEach(v=>{ if(v.id===id){ v.classList.add('is-active'); v.removeAttribute('hidden'); } else { v.classList.remove('is-active'); v.setAttribute('hidden',''); } }); document.querySelectorAll('[data-route]').forEach(a=>{ a.classList.toggle('is-active', a.getAttribute('href')===hash); if(a.classList.contains('side-link')) a.classList.toggle('active', a.getAttribute('href')===hash); }); const profileMenu=document.getElementById('profile-menu'); const profileBtn=document.getElementById('btn-profile'); profileMenu?.classList.remove('show'); profileBtn?.setAttribute('aria-expanded','false'); const drawer=document.getElementById('side-drawer'); const scrim=document.getElementById('scrim'); drawer?.classList.remove('show'); scrim?.classList.remove('show'); drawer?.setAttribute('aria-hidden','true'); }
+window.addEventListener('hashchange', ()=>showRoute(location.hash));
+window.addEventListener('DOMContentLoaded', ()=>{ if(!location.hash) location.hash='#/'; showRoute(location.hash); });
 
 // quick self-test for two known files
 (function verifyLocalLogoSetup(){
-  const tests = [
-    `${LOGO_LOCAL_BASE}/arsenal.svg`,
-    `${LOGO_LOCAL_BASE}/fc-barcelona.svg`
-  ];
-  tests.forEach(src => {
-    const img = new Image();
-    img.onload  = () => console.log('%c[LOGOS] OK', 'color:#22c55e', src);
-    img.onerror = () => console.warn('%c[LOGOS] 404', 'color:#f43f5e', src, '→ path or filename mismatch');
-    img.src = src;
-  });
+  const tests=[`${LOGO_LOCAL_BASE}/arsenal.svg`, `${LOGO_LOCAL_BASE}/fc-barcelona.svg`];
+  tests.forEach(src=>{ const img=new Image(); img.onload=()=>console.log('%c[LOGOS] OK','color:#22c55e',src); img.onerror=()=>console.warn('%c[LOGOS] 404','color:#f43f5e',src,'→ path or filename mismatch'); img.src=src; });
 })();
 
 init();
