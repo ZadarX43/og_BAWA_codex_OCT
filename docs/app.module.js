@@ -193,18 +193,82 @@ function surfaceNormalAt(lat, lng){
   return v.clone().normalize();
 }
 
-function stadiumTextureFor(f){
-  // priority: fixture_id.jpg -> home team slug .jpg/.png
-  const id = (f.fixture_id || '').toString().trim();
+// ---- Stadium images (local) ----
+const STADIUM_BASE = './assets/stadiums';
+
+// Map home team → the actual filename in /assets/stadiums
+const STADIUM_OVERRIDES = {
+  'AC Milan':               'ac-milan.jpg',
+  'Arsenal':                'arsenal.jpg',
+  'Galatasaray':            'galatasaray.jpg',
+  'Lazio':                  'lazio.jpg',
+  'Manchester City':        'man-city.jpg',
+  'PSG':                    'psg.jpg',
+  'Paris Saint-Germain':    'psg.jpg',
+  'Real Madrid':            'real-madrid.jpg',
+  'Sevilla FC':             'sevilla.jpg',
+  'Shakhtar Donetsk':       'shakhtar-donetsk.jpg',
+  'Young Boys':             'young-boys.jpg',
+  // add more as you drop files
+  'Feyenoord':              'feyenoord.jpg'
+};
+
+// Build ordered local candidates for a fixture (override first, then slug guess)
+function stadiumPathCandidates(f) {
+  const out = [];
+  const over = STADIUM_OVERRIDES[f.home_team];
+  if (over) out.push(`${STADIUM_BASE}/${over}`);
+
   const slug = slugLocal(f.home_team || '');
-  const base = './assets/stadiums';
-  const tries = [
-    id && `${base}/${id}.jpg`,
-    id && `${base}/${id}.png`,
-    slug && `${base}/${slug}.jpg`,
-    slug && `${base}/${slug}.png`
-  ].filter(Boolean);
-  return tries;
+  if (slug) {
+    out.push(`${STADIUM_BASE}/${slug}.jpg`);
+    out.push(`${STADIUM_BASE}/${slug}.png`);
+  }
+  return [...new Set(out)];
+}
+
+// Load an image and render it into a circular masked canvas → THREE.Texture
+async function loadStadiumCircleTexture(url) {
+  const img = await new Promise((res, rej) => {
+    const im = new Image();
+    im.crossOrigin = 'anonymous';
+    im.onload  = () => res(im);
+    im.onerror = () => rej(new Error('img load failed'));
+    im.src = url + (url.includes('?') ? '&' : '?') + 'v=' + Date.now().toString(36);
+  });
+
+  const S = 512;                 // output size
+  const c = document.createElement('canvas');
+  c.width = c.height = S;
+  const g = c.getContext('2d');
+  g.clearRect(0,0,S,S);
+
+  // circular clip mask
+  g.save();
+  g.beginPath();
+  g.arc(S/2, S/2, S/2 - 4, 0, Math.PI*2);
+  g.closePath();
+  g.clip();
+
+  // cover-fit image inside the square, centred
+  const ir = img.width / img.height;
+  let dw = S, dh = S, dx = 0, dy = 0;
+  if (ir > 1) { dh = S; dw = S*ir; dx = -(dw-S)/2; }
+  else        { dw = S; dh = S/ir; dy = -(dh-S)/2; }
+  g.drawImage(img, dx, dy, dw, dh);
+  g.restore();
+
+  // soft border ring
+  g.strokeStyle = 'rgba(255,255,255,.25)';
+  g.lineWidth = 6;
+  g.beginPath();
+  g.arc(S/2, S/2, S/2 - 4, 0, Math.PI*2);
+  g.stroke();
+
+  const tex = new THREE.Texture(c);
+  tex.needsUpdate = true;
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
 }
 
 // ---------- Logo system (local only; no remote) ----------
@@ -601,13 +665,13 @@ async function init() {
 
     // billboard
     const billboard = new THREE.Sprite(new THREE.SpriteMaterial({ transparent:true, opacity:0 }));
-    billboard.scale.set(14, 8, 1);
+    billboard.scale.set(12, 12, 1);
     markerGroup.add(billboard);
 
     // state
     const markerState = { lat:0, lng:0, t0:0, active:false };
 
-    // expose
+    // expose for animate loop
     window.__OG_MARKER__ = { markerGroup, radarGroup, rings, beam, billboard, markerState };
   }
 
@@ -962,8 +1026,6 @@ function moveMarkerToFixture(f, { fly=false } = {}){
   const n = surfaceNormalAt(f.latitude, f.longitude);
   const pos = latLngToVec3(f.latitude, f.longitude, SURFACE_EPS + 0.001);
 
-  // radar placement (animated in loop)
-
   // beam placement and grow-in
   const beamBase = latLngToVec3(f.latitude, f.longitude, SURFACE_EPS + 0.002);
   S.beam.position.copy(beamBase);
@@ -989,27 +1051,34 @@ function moveMarkerToFixture(f, { fly=false } = {}){
   const bbPos = pos.clone().add(n.clone().multiplyScalar(R*0.06));
   S.billboard.position.copy(bbPos);
 
-  // load stadium texture (try fixture id then home-team slug)
-  const tries = stadiumTextureFor(f);
-  (async ()=>{
-    for (const url of tries){
+  // load stadium texture → circular masked (override first, then slug)
+  (async () => {
+    const candidates = stadiumPathCandidates(f);
+    for (const url of candidates) {
       try {
-        const tex = await new Promise((resolve,reject)=>{
-          new THREE.TextureLoader().load(url, resolve, undefined, reject);
-        });
+        const tex = await loadStadiumCircleTexture(url);
         S.billboard.material.map = tex;
+        S.billboard.material.color = new THREE.Color(0xffffff);
+        S.billboard.material.transparent = true;
+        S.billboard.material.depthWrite = false;
         S.billboard.material.needsUpdate = true;
+
+        // square sprite & fade in
+        S.billboard.scale.set(12, 12, 1);
         S.billboard.material.opacity = 0;
         S.billboard.visible = true;
         const t0 = performance.now();
         (function fade(){
-          const k = Math.min(1, (performance.now()-t0)/220);
+          const k = Math.min(1, (performance.now()-t0)/260);
           S.billboard.material.opacity = k;
           if (k<1) requestAnimationFrame(fade);
         })();
         return;
-      } catch {}
+      } catch {
+        // try next candidate
+      }
     }
+    // none loaded — hide billboard
     S.billboard.visible = false;
   })();
 }
