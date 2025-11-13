@@ -86,6 +86,24 @@
       <!-- HOME VIEW (Globe + Insights + Rail + Footer Upload) -->
       <section id="view-home" class="view is-active">
         <main class="hero">
+                <!-- Left calendar rail -->
+                <aside class="left-rail" aria-label="Date filters">
+                  <div class="date-quick">
+                    <button class="pill is-active" data-range="today">Today</button>
+                    <button class="pill" data-range="tomorrow">Tomorrow</button>
+                    <button class="pill" data-range="weekend">Weekend</button>
+                  </div>
+          
+                  <div class="cal-head">
+                    <button class="cal-nav" id="cal-prev" aria-label="Previous month">‹</button>
+                    <div id="cal-title" class="cal-title">—</div>
+                    <button class="cal-nav" id="cal-next" aria-label="Next month">›</button>
+                  </div>
+          
+                  <div id="cal-mini" class="mini-cal" aria-label="Mini calendar"></div>
+                  <div class="cal-legend muted">Click a date to filter fixtures</div>
+                </aside>
+
           <!-- Globe pane -->
           <section class="hero__globe" aria-label="Upcoming fixtures globe">
             <div id="globe-container" tabindex="0" aria-describedby="globe-help">
