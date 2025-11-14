@@ -798,35 +798,33 @@ function createMarker(){
   const R = getGlobeRadius();
 
 
-  // --- Radar: 4 concentric rings that we can pulse ---
-  const baseInner = R * 0.015;     // inner radius of innermost ring
-  const baseWidth = R * 0.006;     // thickness of innermost ring
-  const ringGeom  = new THREE.RingGeometry(baseInner, baseInner + baseWidth, 64);
-
+  // --- Radar: 4 concentric static rings (inner thickest, outer faintest) ---
   const radarRings = [];
+  const baseInner = R * 0.02;   // start a bit chunkier so it reads clearly
+  const baseWidth = R * 0.008;
+
   for (let i = 0; i < 4; i++) {
-    const mat = new THREE.MeshBasicMaterial({
+    const inner = baseInner + i * (baseWidth * 0.9);      // push each ring out
+    const outer = inner + baseWidth * (1 - i * 0.2);      // shrink thickness ~20% each step
+
+    const ringGeom = new THREE.RingGeometry(inner, outer, 64);
+    const ringMat  = new THREE.MeshBasicMaterial({
       color: new THREE.Color(COLORS.ring),
       transparent: true,
-      opacity: 0.0,              // we'll animate opacity
+      opacity: 0.35 * (1 - i * 0.18),   // inner brightest, outer faintest
       side: THREE.DoubleSide,
       depthWrite: false,
-      depthTest: false           // always draw on top of globe
+      depthTest: false                  // always on top of globe
     });
-    const ring = new THREE.Mesh(ringGeom, mat);
 
+    const ring = new THREE.Mesh(ringGeom, ringMat);
     // Lie flat in local XZ (normal +Y)
     ring.rotation.x = Math.PI / 2;
-
-    // Make each outer ring a bit thinner + initially a bit larger
-    const thicknessScale = 1 - i * 0.2;         // inner thickest, outer thinnest
-    ring.scale.setScalar(1 + i * 0.25);         // spread rings outwards
-    ring.material.opacity = 0.0;                // animated later
-
     ring.renderOrder = 998;
     group.add(ring);
     radarRings.push(ring);
   }
+
 
   // Beam straight "up" from the radar (local +Y)
   const beamGeom = new THREE.CylinderGeometry(0.18, 0.28, 30, 24, 1, true);
@@ -966,39 +964,6 @@ function moveMarkerToFixture(f, { fly=false } = {}){
         S.beam.scale.y          = 0.001 + e;
         S.beam.material.opacity = 0.5 * e;   // brighter flicker
         if (tb >= 1) S.raf.beam.cancel();
-      });
-
-      // --- Radar pulse animation (4 concentric rings radiating out) ---
-      const rings = Array.isArray(S.radar) ? S.radar : (S.radar ? [S.radar] : []);
-      const radarStart = performance.now();
-      const period = 1600; // ms for a full cycle
-
-      rings.forEach(r => { if (r) { r.visible = true; r.material.opacity = 0; } });
-
-      S.raf.radar.run(() => {
-        if (S.state.reqId !== myReq) {
-          S.raf.radar.cancel();
-          return;
-        }
-        const now   = performance.now();
-        const baseT = (now - radarStart) / period;
-
-        rings.forEach((ring, idx) => {
-          if (!ring) return;
-
-          // 0..1 with per-ring phase offset
-          const tRing = (baseT + idx / rings.length) % 1;
-
-          // Scale: rings radiate outwards from small to large
-          const minScale = 0.7;
-          const maxScale = 1.6;
-          const scale    = minScale + (maxScale - minScale) * tRing;
-          ring.scale.setScalar(scale);
-
-          // Opacity: strongest near centre, fade as they travel out
-          const alpha = 0.3 * (1 - tRing);
-          ring.material.opacity = alpha;
-        });
       });
 
       // Billboard “info pill” – a bit above the radar and pushed out from the globe
