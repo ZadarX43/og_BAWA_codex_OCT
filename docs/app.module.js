@@ -201,19 +201,55 @@ function extractFixtureDays(list){
   });
   return [...map.values()].sort((a,b)=>a-b);
 }
+// ----- Shared texture loader + cache for stadium images
+const STADIUM_TEX_CACHE = new Map();
+const STADIUM_TEX_LOADER = new THREE.TextureLoader();
+function loadStadiumTex(url) {
+  // Promise that resolves a THREE.Texture, cached by url
+  if (STADIUM_TEX_CACHE.has(url)) return Promise.resolve(STADIUM_TEX_CACHE.get(url));
+  return new Promise((resolve, reject) => {
+    STADIUM_TEX_LOADER.load(
+      url,
+      tex => { STADIUM_TEX_CACHE.set(url, tex); resolve(tex); },
+      undefined,
+      reject
+    );
+  });
+}
 
-// ------- Globe lat/lon helpers (corrected mapping)
+// Easing (smoothstep-like)
+const easeInOut = t => t*t*(3 - 2*t);
+
+// Cancel-safe RAF wrapper
+function makeRafController() {
+  let id = null;
+  return {
+    run(fn) { this.cancel(); id = requestAnimationFrame(function loop(ts){ id=requestAnimationFrame(loop); fn(ts); }); },
+    once(fn) {
+      this.cancel();
+      id = requestAnimationFrame(ts => { id = null; fn(ts); });
+    },
+    cancel(){ if (id != null) { cancelAnimationFrame(id); id = null; } }
+  };
+}
+
+// ---- Correct lat/lon → world position (matches three-globe’s convention)
 function latLngToVec3(latDeg, lonDeg, altFrac = 0) {
+  // three-globe internally uses: phi = (90 - lat), theta = (180 - lon)
+  // and maps to THREE.SphereGeometry that is Y-up.
   const R = getGlobeRadius() * (1 + (altFrac || 0));
-  // three-globe uses: phi = (90 - lat), theta = (180 - lon)
   const phi   = THREE.MathUtils.degToRad(90 - latDeg);
   const theta = THREE.MathUtils.degToRad(180 - lonDeg);
+
   const x = R * Math.sin(phi) * Math.cos(theta);
   const y = R * Math.cos(phi);
   const z = R * Math.sin(phi) * Math.sin(theta);
   return new THREE.Vector3(x, y, z);
 }
-function surfaceNormalAt(latDeg, lonDeg) { return latLngToVec3(latDeg, lonDeg, 0).normalize(); }
+
+function surfaceNormalAt(latDeg, lonDeg) {
+  return latLngToVec3(latDeg, lonDeg, 0).normalize();
+}
 
 // ---- Stadium image candidates (local assets only)
 const STADIUM_BASE = './assets/stadiums';
@@ -901,55 +937,152 @@ function handleHover(d) {
 }
 
 // ----------------------------
-// Move marker to fixture (beam + radar + billboard)
+// Move marker to fixture (beam + radar + billboard) — improved
 // ----------------------------
-function moveMarkerToFixture(f, { fly=false } = {}){
-  const S = window.__OG_MARKER__; if (!S || !f) return;
+function moveMarkerToFixture(f, { fly=false } = {}) {
+  const S = window.__OG_MARKER__; 
+  if (!S || !f) return;
+
   const lat = Number(f.latitude), lon = Number(f.longitude);
   if (!Number.isFinite(lat) || !Number.isFinite(lon)) { S.group.visible = false; return; }
 
-  S.markerState.lat = lat; S.markerState.lon = lon; S.markerState.t0 = performance.now()*0.001; S.markerState.active = true;
+  // Bump request token to prevent stale texture loads replacing the current one
+  S.markerState.reqId = (S.markerState.reqId || 0) + 1;
+  const myReq = S.markerState.reqId;
 
-  const R   = getGlobeRadius();
-  const pos = latLngToVec3(lat, lon, SURFACE_EPS + 0.001);
-  const n   = pos.clone().normalize();
+  // Keep state
+  S.markerState.lat = lat;
+  S.markerState.lon = lon;
+  S.markerState.t0  = performance.now() * 0.001;
+  S.markerState.active = true;
 
+  // Prepare controllers for beam grow + billboard fade (cancel previous)
+  S.__raf = S.__raf || {};
+  S.__raf.beamGrow = S.__raf.beamGrow || makeRafController();
+  S.__raf.fadeCard = S.__raf.fadeCard || makeRafController();
+  S.__raf.travel   = S.__raf.travel   || makeRafController();
+
+  S.__raf.beamGrow.cancel();
+  S.__raf.fadeCard.cancel();
+  S.__raf.travel.cancel();
+
+  const R = getGlobeRadius();
+  const altitude = SURFACE_EPS + 0.001;
+
+  // Start/end surface vectors (unit normals) for travel tween
+  const startPos = S.group.position.lengthSq() ? S.group.position.clone().normalize() : latLngToVec3(lat, lon, 0).normalize();
+  const endPos   = latLngToVec3(lat, lon, 0).normalize();
+
+  // If the marker hasn't been shown yet, snap instantly
+  const isFirst = !S.group.visible;
+
+  // Visibility on
   S.group.visible = true;
-  S.group.position.copy(pos);
-  S.group.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), n);
 
-  S.radarGroup.position.set(0,0,0);
+  // Travel tween along great-circle (quaternion slerp between normals)
+  const travelDur = (fly && !isFirst) ? 700 : 0; // ms
+  const startQuat = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,1,0), startPos);
+  const endQuat   = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,1,0), endPos);
 
-  // collapse previous beam quickly is handled in selectIndex before we call here
-  S.beam.position.set(0,0,0);
-  S.beam.quaternion.identity();
-  S.beam.scale.set(1, 0.001, 1);
-  S.beam.visible = true;
-  const growStart = performance.now();
-  (function grow(){
-    const t = Math.min(1, (performance.now()-growStart)/550);
-    const e = t*t*(3-2*t);
-    S.beam.scale.y = 0.001 + e;
-    if (t < 1) requestAnimationFrame(grow);
-  })();
+  const travelStart = performance.now();
+  const doTravel = () => {
+    const t = travelDur ? Math.min(1, (performance.now() - travelStart)/travelDur) : 1;
+    const k = easeInOut(t);
 
-  S.billboard.position.set(0, R*0.06, 0);
-  S.billboard.material.opacity = 0;
-  S.billboard.visible = true;
+    // Slerp normal
+    const cur = startPos.clone().lerp(endPos, k).normalize();
+    const worldPos = cur.clone().multiplyScalar(R * (1 + altitude));
+    S.group.position.copy(worldPos);
 
-  (async ()=>{
-    for (const url of stadiumCandidates(f)){
-      try {
-        const tex = await new Promise((res, rej)=> new THREE.TextureLoader().load(url, res, undefined, rej));
-        S.billboard.material.map = tex;
-        S.billboard.material.needsUpdate = true;
-        const t0 = performance.now();
-        (function fade(){ const k = Math.min(1, (performance.now()-t0)/220); S.billboard.material.opacity = k; if (k<1) requestAnimationFrame(fade); })();
-        return;
-      } catch {}
+    // Orient group so its +Y matches surface normal
+    THREE.Quaternion.slerp(startQuat, endQuat, S.group.quaternion, k);
+
+    if (t < 1) {
+      // billboard face camera happens in animate(); back-side cull handled below
+      // keep flying
+    } else {
+      // Travel complete — trigger beam grow now (so it grows at the destination)
+      growBeamAtDestination();
+      // Kick billboard fade & image load
+      paintBillboard();
+      S.__raf.travel.cancel();
+      return;
     }
-    S.billboard.visible = false;
-  })();
+  };
+
+  if (travelDur) {
+    S.__raf.travel.run(doTravel);
+  } else {
+    // Snap: place & orient immediately
+    const cur = endPos;
+    const worldPos = cur.clone().multiplyScalar(R * (1 + altitude));
+    S.group.position.copy(worldPos);
+    S.group.quaternion.copy(endQuat);
+    growBeamAtDestination();
+    paintBillboard();
+  }
+
+  // Local placements (relative to the group)
+  S.radarGroup.position.set(0, 0, 0);
+
+  function growBeamAtDestination() {
+    S.beam.position.set(0, 0, 0);            // local origin
+    S.beam.quaternion.identity();            // already aligned with group's +Y
+    S.beam.scale.set(1, 0.001, 1);
+    S.beam.visible = true;
+
+    const start = performance.now();
+    const dur   = 550;
+    S.__raf.beamGrow.run(() => {
+      const t = Math.min(1, (performance.now() - start)/dur);
+      S.beam.scale.y = 0.001 + easeInOut(t);
+      if (t >= 1) S.__raf.beamGrow.cancel();
+    });
+  }
+
+  function paintBillboard() {
+    // Position the stadium card slightly above the surface in local +Y
+    S.billboard.position.set(0, R * 0.06, 0);
+
+    // Back-side cull (hide when stadium is behind the globe relative to camera)
+    const cameraDir = camera.position.clone().normalize();
+    const normalNow = S.group.position.clone().normalize();
+    const facing = normalNow.dot(cameraDir);
+    // If facing is strongly negative, skip showing the card (it’s on the far side).
+    if (facing < -0.05) { S.billboard.visible = false; return; }
+
+    // Fade in once the texture arrives
+    S.billboard.material.opacity = 0;
+    S.billboard.visible = true;
+
+    // Resolve candidate images in priority order
+    (async () => {
+      for (const url of stadiumCandidates(f)) {
+        try {
+          const tex = await loadStadiumTex(url);
+          // If a newer request fired, abort applying this texture
+          if (S.markerState.reqId !== myReq) return;
+
+          S.billboard.material.map = tex;
+          S.billboard.material.needsUpdate = true;
+
+          // Fade in cleanly
+          const start = performance.now();
+          const dur   = 220;
+          S.__raf.fadeCard.run(() => {
+            const t = Math.min(1, (performance.now() - start)/dur);
+            S.billboard.material.opacity = t;
+            if (t >= 1) S.__raf.fadeCard.cancel();
+          });
+          return; // done
+        } catch { /* try next */ }
+      }
+      // No image found
+      if (S.markerState.reqId === myReq) {
+        S.billboard.visible = false;
+      }
+    })();
+  }
 }
 
 // ----------------------------
