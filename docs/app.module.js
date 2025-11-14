@@ -154,6 +154,83 @@ function makeFallbackCanvasTexture(label='STADIUM'){
   tex.anisotropy = maxAniso;
   return tex;
 }
+function makeStadiumPillTextureFromImage(img) {
+  if (!img) return null;
+
+  const w = 512;
+  const h = 256;
+  const c = document.createElement('canvas');
+  c.width = w;
+  c.height = h;
+  const g = c.getContext('2d');
+
+  g.clearRect(0, 0, w, h);
+
+  // ---- Pill background (rounded rect, teal/green/blue gradient) ----
+  const radius = 56;
+  const x = 16;
+  const y = 16;
+  const width = w - 32;
+  const height = h - 32;
+
+  const grd = g.createLinearGradient(x, y, x + width, y + height);
+  grd.addColorStop(0, '#0d2a32');
+  grd.addColorStop(0.5, '#0f4a40');
+  grd.addColorStop(1, '#0a344a');
+
+  g.fillStyle = grd;
+
+  g.beginPath();
+  g.moveTo(x + radius, y);
+  g.lineTo(x + width - radius, y);
+  g.quadraticCurveTo(x + width, y, x + width, y + radius);
+  g.lineTo(x + width, y + height - radius);
+  g.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  g.lineTo(x + radius, y + height);
+  g.quadraticCurveTo(x, y + height, x, y + height - radius);
+  g.lineTo(x, y + radius);
+  g.quadraticCurveTo(x, y, x + radius, y);
+  g.closePath();
+  g.fill();
+
+  // ---- Stadium circle ----
+  const cx = x + 110;          // circle centre x
+  const cy = y + height / 2;   // circle centre y
+  const cr = 80;
+
+  // Clip to circle and draw image "cover" style
+  g.save();
+  g.beginPath();
+  g.arc(cx, cy, cr, 0, Math.PI * 2);
+  g.closePath();
+  g.clip();
+
+  // Fit image into the circle (cover)
+  const iw = img.width;
+  const ih = img.height;
+  if (iw && ih) {
+    const scale = Math.max((cr * 2) / iw, (cr * 2) / ih);
+    const drawW = iw * scale;
+    const drawH = ih * scale;
+    const dx = cx - drawW / 2;
+    const dy = cy - drawH / 2;
+    g.drawImage(img, dx, dy, drawW, drawH);
+  }
+  g.restore();
+
+  // Outer circle border
+  g.strokeStyle = 'rgba(255,255,255,0.85)';
+  g.lineWidth = 6;
+  g.beginPath();
+  g.arc(cx, cy, cr, 0, Math.PI * 2);
+  g.stroke();
+
+  const tex = new THREE.CanvasTexture(c);
+  if ('colorSpace' in tex) tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = renderer?.capabilities?.getMaxAnisotropy?.() || 1;
+
+  return tex;
+}
 
 // -----------------------------------------
 // Logos (local-only) — club crests
@@ -1025,9 +1102,14 @@ function moveMarkerToFixture(f, { fly=false } = {}){
           try {
             const tex = await loadTextureQueued(url);
             if (S.state.reqId !== myReq) return;
-            S.billboard.material.map = tex;
+
+            // Build pill texture from the stadium image
+            const pillTex = makeStadiumPillTextureFromImage(tex.image);
+            const finalTex = pillTex || tex;
+
+            S.billboard.material.map = finalTex;
             S.billboard.material.needsUpdate = true;
-      
+
             const fa0 = performance.now(), fad = 220;
             S.raf.fade.run(()=>{
               if (S.state.reqId !== myReq) { S.raf.fade.cancel(); return; }
@@ -1049,6 +1131,7 @@ function moveMarkerToFixture(f, { fly=false } = {}){
           S.billboard.visible = true;
         }
       })();
+
     }
   }); // <-- end S.raf.travel.run loop
 } // <-- end moveMarkerToFixture
