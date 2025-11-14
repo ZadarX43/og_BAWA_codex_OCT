@@ -6,7 +6,6 @@ import { OrbitControls }   from 'three/examples/jsm/controls/OrbitControls.js';
 import { EffectComposer }  from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass }      from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass }      from 'three/examples/jsm/postprocessing/ShaderPass.js';
-import { FXAAShader }      from 'three/examples/jsm/shaders/FXAAShader.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 
 // PapaParse (UMD) is loaded in index.html
@@ -17,69 +16,33 @@ if (!Papa) throw new Error('PapaParse missing from window');
 // DOM refs
 // ----------------------------
 const el = {
-  globeWrap: document.getElementById('globe-container'),
-  insights: document.getElementById('insights-content'),
-  fixtureTitle: document.getElementById('fixture-title'),
-  fixtureContext: document.getElementById('fixture-context'),
-  matchList: document.getElementById('match-intelligence'),
-  watchlist: document.getElementById('player-watchlist'),
-  market: document.getElementById('market-snapshot'),
-  deepBtn: document.getElementById('deep-dive-btn'),
-  homeBadge: document.getElementById('home-badge'),
-  awayBadge: document.getElementById('away-badge'),
-  upload: document.getElementById('bet-upload'),
-  prevBtn: document.getElementById('nav-prev'),
-  nextBtn: document.getElementById('nav-next')
+  globeWrap:     document.getElementById('globe-container'),
+  insights:      document.getElementById('insights-content'),
+  fixtureTitle:  document.getElementById('fixture-title'),
+  fixtureContext:document.getElementById('fixture-context'),
+  matchList:     document.getElementById('match-intelligence'),
+  watchlist:     document.getElementById('player-watchlist'),
+  market:        document.getElementById('market-snapshot'),
+  deepBtn:       document.getElementById('deep-dive-btn'),
+  homeBadge:     document.getElementById('home-badge'),
+  awayBadge:     document.getElementById('away-badge'),
+
+  // Date/league filter UI
+  dateToday:     document.getElementById('date-pill-today'),
+  dateTomorrow:  document.getElementById('date-pill-tomorrow'),
+  dateWeekend:   document.getElementById('date-pill-weekend'),
+  datePrev:      document.getElementById('date-prev'),
+  dateNext:      document.getElementById('date-next'),
+  dateA:         document.getElementById('date-day-a'),
+  dateB:         document.getElementById('date-day-b'),
+  leagueChips:   document.getElementById('league-chips'),
+
+  // Competition strip
+  compWrap:   document.getElementById('comp-accuracy'),
+  compName:   document.getElementById('comp-name'),
+  compLogo:   document.getElementById('comp-logo'),
+  compTraffic:document.getElementById('comp-traffic')
 };
-
-// ----------------------------
-// three-globe loader (CDN-first; ESM → UMD)
-// ----------------------------
-async function importScriptUMD(src) {
-  await new Promise((resolve, reject) => {
-    const s = document.createElement('script');
-    s.src = src;
-    s.async = true;
-    s.onload = resolve;
-    s.onerror = reject;
-    document.head.appendChild(s);
-  });
-  if (window.Globe) return window.Globe;
-  throw new Error('UMD three-globe loaded but window.Globe was not defined');
-}
-
-async function loadThreeGlobe() {
-  for (const v of ['2.31.3','2.31.1','2.30.1','2.29.3']) {
-    const url = `https://esm.sh/three-globe@${v}?bundle&external=three`;
-    try {
-      const m = await import(url);
-      console.warn('[three-globe] using esm.sh ESM:', url);
-      return m.default ?? m;
-    } catch (e) {
-      console.warn('[three-globe] esm.sh failed:', url, e);
-    }
-  }
-  for (const url of [
-    'https://cdn.jsdelivr.net/npm/three-globe@2.31.1/dist/three-globe.min.js',
-    'https://unpkg.com/three-globe@2.31.1/dist/three-globe.min.js',
-    './vendor/three-globe.min.js'
-  ]) {
-    try {
-      const ctor = await importScriptUMD(url);
-      console.warn('[three-globe] using UMD:', url);
-      return ctor;
-    } catch (e) {
-      console.warn('[three-globe] UMD failed:', url, e);
-    }
-  }
-  if (el.globeWrap) {
-    el.globeWrap.innerHTML = `<div class="globe-error">
-      <strong>three-globe failed to load.</strong><br/>
-      Check your network or add <code>vendor/three-globe.min.js</code>.
-    </div>`;
-  }
-  return Promise.reject(new Error('three-globe could not be loaded from any source'));
-}
 
 // ----------------------------
 // Globals / tuning
@@ -87,42 +50,60 @@ async function loadThreeGlobe() {
 let ThreeGlobeCtor;
 let globe;
 let renderer, scene, camera, controls, composer, bloomPass;
-let fixtures = [];
-let filtered = [];       // <- current filtered list (date/league)
-let activeIdx = 0;
-let selectedId = null;
-let pulseRing;
-let htmlTabsData = []; // [{lat,lng,altitude,idx,el}]
+let fixtures = [];          // all fixtures from CSV
+let visibleFixtures = [];   // filtered subset for current UI
+let htmlTabsData = [];      // on-globe UI tabs
+let marker;                 // custom marker object
 
-// Central UI state (A)
-const UI = {
-  date: null,       // start date (00:00)
-  rangeDays: 1,     // number of days
-  league: 'ALL'     // league selector
-};
-
-// Color/tuning
 const COLORS = {
-  marker:        '#A7FFF6',
-  markerInactive:'#8CEFE5',
-  markerActive:  '#CFFFFA',
-  ring:          '#9EE7E3'
+  marker:         '#A7FFF6',
+  markerInactive: '#8CEFE5',
+  markerActive:   '#CFFFFA',
+  ring:           '#9EE7E3'
 };
 
-const SURFACE_EPS   = 0.009;
+const SURFACE_EPS   = 0.009;  // a tiny lift off the sphere
 const RADIUS_BASE   = 0.014;
 const RADIUS_ACTIVE = 0.040;
 const CAMERA_ALT    = 2.0;
-const BLOOM = { strength: 0.9, radius: 0.6, threshold: 0.75 };
+const BLO_STR       = 0.9;
+const BLO_RAD       = 0.6;
+const BLO_THRESH    = 0.75;
+
+// ---- UI State (date/league)
+// For demo, pin “today” to 2023-11-28 to match your screenshot
+const UI = {
+  anchorISO: '2023-11-28',        // “today”
+  offsetDays: 0,                  // ± days from anchor
+  rangeDays: 1,                   // 1 (today) or >1 (e.g., weekend)
+  league: 'ALL',
+  leagues: []                     // filled from CSV (unique competitions)
+};
+
+// Helpers to compute base date range
+const MS_DAY = 24*60*60*1000;
+function baseDate() {
+  const d = new Date(`${UI.anchorISO}T00:00:00Z`);
+  return new Date(d.getTime() + UI.offsetDays*MS_DAY);
+}
+function datePlusDays(base, n) {
+  const t = new Date(base);
+  t.setUTCDate(t.getUTCDate() + n);
+  return t;
+}
+function fmtDay(d) {
+  // show just day-of-month number -> "28"
+  return String(d.getUTCDate()).padStart(2,'0');
+}
+function isoDay(d) {
+  return d.toISOString().slice(0,10);
+}
 
 // ----------------------------
 // Utilities
 // ----------------------------
 const clamp01 = v => Math.max(0, Math.min(1, v));
-const pct = n => `${Math.round(clamp01(n) * 100)}%`;
-
-// Demo "today" (Patch 1)
-const DEMO_TODAY = new Date('2023-11-28T00:00:00Z');
+const easeInOut = t => t*t*(3-2*t);
 
 function showToast(type, text, ms=2600){
   const t = document.createElement('div');
@@ -133,7 +114,10 @@ function showToast(type, text, ms=2600){
   setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),250); }, ms);
 }
 
-function clearNode(node) { if (!node) return; while (node.firstChild) node.removeChild(node.firstChild); }
+function clearNode(node) {
+  if (!node) return;
+  while (node.firstChild) node.removeChild(node.firstChild);
+}
 
 function pick(row, keys) {
   for (const k of keys) {
@@ -145,1083 +129,924 @@ function pick(row, keys) {
 
 function getGlobeRadius() {
   if (globe?.getGlobeRadius) return globe.getGlobeRadius();
-  try {
-    const m = globe.children?.find(c => c.geometry?.parameters?.radius);
-    return m?.geometry?.parameters?.radius || 100;
-  } catch { return 100; }
+  const m = globe?.children?.find?.(c => c.geometry?.parameters?.radius);
+  return m?.geometry?.parameters?.radius || 100;
 }
 
-function hasHtmlElementsApi(g){
-  return g && typeof g.htmlElementsData === 'function' &&
-               typeof g.htmlElement      === 'function' &&
-               typeof g.htmlLat          === 'function';
+// Geographic math
+function latLngToVec3(lat, lon, alt = 0) {
+  const R = getGlobe().R;
+  const phi = THREE.MathUtils.degToRad(90 - lat);
+  const theta = THREE.rd || THREE.MathUtils.degToRad(lon);
+  const n = new THREE.Vector3(
+    Math.sin(phi)*Math.cos(theta),
+    Math.cos(phi),
+    Math.sin(phi)*Math.sin(theta)
+  );
+  return n.clone().multiplyScalar(R * (1 + alt));
+}
+function latLngToUnit(lat, lon) {
+  const phi = THREE.MathUtils.degToRad(90 - lat);
+  const theta = THREE.MathUtils.degToRad(lon);
+  return new THREE.Vector3(
+    Math.sin( phi ) * Math.cos( theta ),
+    Math.cos( phi ),
+    Math.sin( phi ) * Math.sin( theta )
+  ).normalize();
+}
+function getGlobe() {
+  return { R: getGlobeRadius() };
 }
 
-function initials(name = '') {
-  const words = String(name).trim().split(/\s+/).filter(Boolean);
-  if (!words.length) return '';
-  if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
-  return (words[0][0] + (words[1][0] || '')).toUpperCase();
+// ----- Shared texture cache/loader
+const STADIUM_TEX_CACHE = new Map();
+const TEXLOADER = new THREE.TextureLoader();
+function loadStadiumTex(url) {
+  if (STADIUM_TEX_CACHE.has(url)) return Promise.resolve(STADIUM_TEX_CACHE.get(url));
+  return new Promise((res, rej) => {
+    TEXLOADER.load(
+      url,
+      tex => { STADiUM_TEX_CACHE.set(url, tex); res(tex); },
+      undefined,
+      err => rej(err)
+    );
+  });
 }
-function stripDiacritics(s) { try { return s.normalize('NFD').replace(/\p{Diacritic}/gu, ''); } catch { return s; } }
+
+// ----------------------------
+// Logo system (local only; no remote)
+// ----------------------------
+const LOGO_LOCAL_BASE = './assets/assets/logos';
+
+const TEAM_LOGO_OVERRIDES = {
+  'Celtic':              `${LOGO_LOCAL_BASE}/celtic.svg`,
+  'Lazio':               `${LOGO_LOCAL_BASE}/lazio.svg`,
+  'Royal Antwerp FC':    `${LOGO_LOCAL_BASE}/royal-antwerp.svg`,
+  'Shakhtar Donetsk':    `${LOGO_LOCAL_BASE}/shakhtar-donetsk.svg`,
+  'Atlético Madrid':     `${LOGO_LOCAL_BASE}/atletico-madrid.svg`,
+  'Atletico Madrid':     `${LOGO_LOCAL_BASE}/atletico-madrid.svg`,
+  'Feyenoord':           `${LOGO_LOCAL_BASE}/feyenoord.svg`,
+  'PSG':                 `${LOGO_LOCAL_BASE}/paris-saint-germain.svg`,
+  'Paris Saint-Germain': `${LOGO_LOCAL_BASE}/paris-saint-germain.svg`,
+  'Newcastle United':    `${LOGO_LOCAL_BASE}/newcastle-united.svg`,
+  'AC Milan':            `${LOGO_LOCAL_BASE}/ac-milan.svg`,
+  'Borussia Dortmund':   `${LOGO_LOCAL_BASE}/borovski...` // placeholder if not present
+};
+
 function slugLocal(team) {
-  return stripDiacritics(String(team))
+  return String(team || '')
     .toLowerCase()
     .replace(/&/g,'and')
     .replace(/[\u2019'’]/g,'')
     .replace(/[^a-z0-9]+/g,'-')
     .replace(/^-+|-+$/g,'');
 }
-function normalizeBasicUrl(raw) {
-  if (!raw) return '';
-  let u = String(raw).trim();
-  if (!u) return '';
-  if (u.startsWith('//')) u = `https:${u}`;
-  if (/^http:\/\//i.test(u) && location.protocol === 'https:') u = u.replace(/^http:\/\//i, 'https://');
-  return u;
-}
 
-// ---- Date helpers (E)
-const startOfDay = d => new Date(d.getFullYear(), d.getMonth(), d.getDate());
-const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate()+n); return x; };
-const dayKey = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-const fromISOtoLocalDay = iso => startOfDay(new Date(iso));
-const inDayRange = (iso, sDay, nDays) => {
-  if (!iso || !sDay || !Number.isFinite(nDays)) return false;
-  const d = new Date(iso);
-  const s = startOfDay(sDay);
-  const e = addDays(s, nDays); // exclusive
-  return d >= s && d < e;
-};
-function extractFixtureDays(list){
-  const map = new Map();
-  (list||[]).forEach(r=>{
-    const d = fromISOtoLocalDay(r.date_utc);
-    map.set(dayKey(d), d);
-  });
-  return [...map.values()].sort((a,b)=>a-b);
-}
-// ----- Shared texture loader + cache for stadium images
-const STADIUM_TEX_CACHE = new Map();
-const STADIUM_TEX_LOADER = new THREE.TextureLoader();
-function loadStadiumTex(url) {
-  // Promise that resolves a THREE.Texture, cached by url
-  if (STADIUM_TEX_CACHE.has(url)) return Promise.resolve(STADIUM_TEX_CACHE.get(url));
-  return new Promise((resolve, reject) => {
-    STADIUM_TEX_LOADER.load(
-      url,
-      tex => { STADIUM_TEX_CACHE.set(url, tex); resolve(tex); },
-      undefined,
-      reject
-    );
-  });
-}
-
-// Easing (smoothstep-like)
-const easeInOut = t => t*t*(3 - 2*t);
-
-// Cancel-safe RAF wrapper
-function makeRafController() {
-  let id = null;
-  return {
-    run(fn) { this.cancel(); id = requestAnimationFrame(function loop(ts){ id=requestAnimationFrame(loop); fn(ts); }); },
-    once(fn) {
-      this.cancel();
-      id = requestAnimationFrame(ts => { id = null; fn(ts); });
-    },
-    cancel(){ if (id != null) { cancelAnimationFrame(id); id = null; } }
-  };
-}
-
-// ---- Correct lat/lon → world position (matches three-globe’s convention)
-function latLngToVec3(latDeg, lonDeg, altFrac = 0) {
-  // three-globe internally uses: phi = (90 - lat), theta = (180 - lon)
-  // and maps to THREE.SphereGeometry that is Y-up.
-  const R = getGlobeRadius() * (1 + (altFrac || 0));
-  const phi   = THREE.MathUtils.degToRad(90 - latDeg);
-  const theta = THREE.MathUtils.degToRad(180 - lonDeg);
-
-  const x = R * Math.sin(phi) * Math.cos(theta);
-  const y = R * Math.cos(phi);
-  const z = R * Math.sin(phi) * Math.sin(theta);
-  return new THREE.Vector3(x, y, z);
-}
-
-function surfaceNormalAt(latDeg, lonDeg) {
-  return latLngToVec3(latDeg, lonDeg, 0).normalize();
-}
-
-// ---- Stadium image candidates (local assets only)
-const STADIUM_BASE = './assets/stadiums';
-function stadiumCandidates(f) {
-  const names = [
-    f.stadium, f.venue, f.stadium_name, f.venue_name,
-    `${f.home_team} ${f.city||''}`, f.home_team, f.away_team,
-    f.fixture_id
-  ].filter(Boolean).map(v => String(v));
-  const slugs = Array.from(new Set(names.map(n => slugLocal(n)).filter(Boolean)));
-  const exts = ['.jpg','.jpeg','.png','.webp'];
-  const out = [];
-  for (const s of slugs) for (const ext of exts) out.push(`${STADIUM_BASE}/${s}${ext}`);
-  return out;
-}
-
-// ---------- Logo system (local only; no remote)
-const LOGO_LOCAL_BASE = './assets/assets/logos';
-const TEAM_LOGO_OVERRIDES = {
-  'Celtic': `${LOGO_LOCAL_BASE}/celtic.svg`,
-  'Lazio': `${LOGO_LOCAL_BASE}/lazio.svg`,
-  'Royal Antwerp FC': `${LOGO_LOCAL_BASE}/royal-antwerp.svg`,
-  'Shakhtar Donetsk': `${LOGO_LOCAL_BASE}/shakhtar-donetsk.svg`,
-  'Atlético Madrid': `${LOGO_LOCAL_BASE}/atletico-madrid.svg`,
-  'Atletico Madrid': `${LOGO_LOCAL_BASE}/atletico-madrid.svg`,
-  'Feyenoord': `${LOGO_LOCAL_BASE}/feyenoord.svg`,
-  'PSG': `${LOGO_LOCAL_BASE}/paris-saint-germain.svg`,
-  'Paris Saint-Germain': `${LOGO_LOCAL_BASE}/paris-saint-germain.svg`,
-  'Newcastle United': `${LOGO_LOCAL_BASE}/newcastle-united.svg`,
-  'AC Milan': `${LOGO_LOCAL_BASE}/ac-milan.svg`,
-  'Borussia Dortmund': `${LOGO_LOCAL_BASE}/borussia-dortmund.svg`,
-  'Manchester City': `${LOGO_LOCAL_BASE}/manchester-city.svg`,
-  'RB Leipzig': `${LOGO_LOCAL_BASE}/rb-leipzig.svg`,
-  'Young Boys': `${LOGO_LOCAL_BASE}/young-boys.svg`,
-  'Red Star Belgrade': `${LOGO_LOCAL_BASE}/red-star-belgrade.svg`,
-  'Crvena Zvezda': `${LOGO_LOCAL_BASE}/red-star-belgrade.svg`,
-  'FC Barcelona': `${LOGO_LOCAL_BASE}/fc-barcelona.svg`,
-  'Barcelona': `${LOGO_LOCAL_BASE}/fc-barcelona.svg`,
-  'Porto': `${LOGO_LOCAL_BASE}/fc-porto.svg`,
-  'FC Porto': `${LOGO_LOCAL_BASE}/fc-porto.svg`,
-  'Galatasaray': `${LOGO_LOCAL_BASE}/galatasaray.svg`,
-  'Manchester United': `${LOGO_LOCAL_BASE}/manchester-united.svg`,
-  'Sevilla FC': `${LOGO_LOCAL_BASE}/sevilla-fc.svg`,
-  'PSV': `${LOGO_LOCAL_BASE}/psv.svg`,
-  'PSV Eindhoven': `${LOGO_LOCAL_BASE}/psv.svg`,
-  'København': `${LOGO_LOCAL_BASE}/fc-kobenhavn.svg`,
-  'FC Copenhagen': `${LOGO_LOCAL_BASE}/fc-kobenhavn.svg`,
-  'Arsenal': `${LOGO_LOCAL_BASE}/arsenal.svg`,
-  'Lens': `${LOGO_LOCAL_BASE}/lens.svg`,
-  'Real Madrid': `${LOGO_LOCAL_BASE}/real-madrid.svg`,
-  'Napoli': `${LOGO_LOCAL_BASE}/ssc-napoli.svg`,
-  'SSC Napoli': `${LOGO_LOCAL_BASE}/ssc-napoli.svg`,
-  'Benfica': `${LOGO_LOCAL_BASE}/sl-benfica.svg`,
-  'SL Benfica': `${LOGO_LOCAL_BASE}/sl-benfica.svg`,
-  'Inter Milan': `${LOGO_LOCAL_BASE}/inter-milan.svg`,
-  'Inter': `${LOGO_LOCAL_BASE}/inter-milan.svg`,
-  'Real Sociedad': `${LOGO_LOCAL_BASE}/real-sociedad.svg`,
-  'Salzburg': `${LOGO_LOCAL_BASE}/rb-salzburg.svg`,
-  'Bayern München': `${LOGO_LOCAL_BASE}/bayern-munich.svg`,
-  'Bayern Munich': `${LOGO_LOCAL_BASE}/bayern-munich.svg`,
-  'Sporting Braga': `${LOGO_LOCAL_BASE}/sporting-braga.svg`,
-  'Union Berlin': `${LOGO_LOCAL_BASE}/union-berlin.svg`
-};
-const LOGO_CACHE_KEY  = 'og_logo_cache_v_preload';
-let LOGO_CACHE = {};
-try { LOGO_CACHE = JSON.parse(localStorage.getItem(LOGO_CACHE_KEY) || '{}'); } catch {}
-function saveLogoCache(){ try { localStorage.setItem(LOGO_CACHE_KEY, JSON.stringify(LOGO_CACHE)); } catch {} }
-const LOGO_STORE = new Map(); // teamName -> { img, url }
 function localLogoCandidates(team) {
   const slug = slugLocal(team);
-  return [`${LOGO_LOCAL_BASE}/${slug}.png`, `${LOGO_LOCAL_BASE}/${slug}.svg`];
+  return [
+    `${LOGO_LOCAL_BASE}/${slug}.png`,
+    `${LOGO_LOCAL_BASE}/${slug}.svg`,
+  ];
 }
+
 function guessLogoSources(teamName = '') {
   const list = [];
-  if (TEAM_LOGO_OVERRIDES[teamName]) list.push(TEAM_LOGO_OVERRIDES[teamName]);
-  for (const loc of localLogoCandidates(teamName)) list.push(loc);
-  return [...new Set(list.map(normalizeBasicUrl))];
+  if (TEAM_LOGO_OVERRIDES[teamName]) list.push( TEAM_LOGO_OVERRIDES[teamName] );
+  for (const url of localLogoCandidates(teamName)) list.push( url );
+  return [...new Set( list )];
 }
-async function tryLoadDirect(src, teamName, timeoutMs) {
-  return new Promise(resolve => {
-    let done = false;
-    const img = new Image();
-    img.alt = teamName || '';
-    img.loading = 'lazy';
-    img.decoding = 'async';
-    if (!/^data:/i.test(src)) { img.crossOrigin = 'anonymous'; img.referrerPolicy = 'no-referrer'; }
-    const t = setTimeout(() => { if (!done){ done = true; resolve(null); } }, timeoutMs);
-    img.onload  = () => { if (!done){ clearTimeout(t); done = true; resolve({ ok:true, img, src }); } };
-    img.onerror = () => { if (!done){ clearTimeout(t); done = true; resolve(null); } };
-    img.src = `${src}${src.includes('?') ? '&' : '?'}v=${Date.now().toString(36)}`;
-  });
-}
-async function blobToDataURL(blob) {
-  return new Promise((resolve, reject)=>{
-    const fr = new FileReader();
-    fr.onload  = () => resolve(fr.result);
-    fr.onerror = reject;
-    fr.readAsDataURL(blob);
-  });
-}
-async function tryLoadViaDataURL(src, teamName, timeoutMs) {
-  try {
-    const ac = new AbortController();
-    const to = setTimeout(() => ac.abort(), timeoutMs);
-    const res = await fetch(`${src}${src.includes('?') ? '&' : '?'}v=${Date.now().toString(36)}`, { cache: 'no-store', signal: ac.signal });
-    clearTimeout(to);
-    if (!res.ok) return null;
-    const blob = await res.blob();
-    const dataURL = await blobToDataURL(blob);
-    return await new Promise(resolve => {
-      let done = false;
-      const img = new Image();
-      img.alt = teamName || '';
-      img.onload  = () => { if (!done){ done = true; resolve({ ok:true, img, src: dataURL }); } };
-      img.onerror = () => { if (!done){ done = true; resolve(null); } };
-      img.src = dataURL;
-    });
-  } catch { return null; }
-}
-async function tryLoad(src, teamName, timeoutMs = 15000) {
-  let hit = await tryLoadDirect(src, teamName, Math.min(timeoutMs, 7000));
-  if (hit) return hit;
-  hit = await tryLoadViaDataURL(src, teamName, timeoutMs);
-  return hit;
-}
-async function prefetchAllLogos(teamMap) {
-  const items = [...teamMap.keys()];
-  const CONCURRENCY = 4;
-  let idx = 0;
-  async function worker() {
-    while (idx < items.length) {
-      const i = idx++;
-      const name = items[i];
-      if (!name || LOGO_STORE.has(name)) continue;
-      const sources = guessLogoSources(name);
-      let hit = null;
-      for (const src of sources) { hit = await tryLoad(src, name, 15000); if (hit) break; }
-      if (hit) LOGO_STORE.set(name, { img: hit.img, url: hit.src });
-      else LOGO_STORE.set(name, { img: null, url: null });
-    }
-  }
-  await Promise.all(Array.from({length: CONCURRENCY}, worker));
-}
-const badgeTokens = new WeakMap();
-async function setBadge(elm, urlFromCsv, teamName='') {
+
+// Async safety for per–badge loads
+const BADGE_CACHE = new Map();
+const BADGE_LOADER = new THREE.TextureLoader();
+
+function setBadge(elm, urlFromCsv, teamName='') {
   if (!elm) return;
-  const prevTeam = elm.dataset.teamName || '';
-  if (prevTeam === teamName && elm.querySelector('img')) return;
-  const token = {}; badgeTokens.set(elm, token);
-  elm.dataset.teamName = teamName;
-  elm.textContent = initials(teamName) || '';
+  const reqId = ( elm.__reqId = (elm.__reqId || 0) + 1 );
+
+  // Show initials immediately
   elm.classList.remove('has-logo');
-  const pre = LOGO_STORE.get(teamName);
-  if (pre?.img) {
-    if (badgeTokens.get(elm) !== token) return;
-    elm.innerHTML = ''; elm.appendChild(pre.img.cloneNode(true)); elm.classList.add('has-logo');
-    if (pre.url) { LOGO_CACHE[teamName] = pre.url; saveLogoCache(); }
-    return;
-  }
-  const sources = guessLogoSources(teamName);
-  let hit = null;
-  for (const src of sources) { hit = await tryLoad(src, teamName, 15000); if (hit) break; }
-  if (!hit) return;
-  if (badgeTokens.get(elm) !== token) return;
-  elm.innerHTML = ''; elm.appendChild(hit.img); elm.classList.add('has-logo');
-  LOGO_STORE.set(teamName, { img: hit.img.cloneNode(true), url: hit.src });
-  LOGO_CACHE[teamName] = hit.src; saveLogoCache();
+  elm.textContent = teamName ? initials(teamName) : '';
+
+  // Set size and visibility from CSS only; let img replace content later
+  const srcs = [ urlFromCsv, ...guessLogoSources(teamName) ].filter(Boolean);
+
+  (async () => {
+    for (const src of srcs) {
+      // Use the browser to load the image; fallback chain
+      try {
+        const img = await new Promise((resolve, reject) => {
+          const i = new Image();
+          i.crossOrigin = 'anonymous';
+          i.onload = () => resolve(i);
+          i.onerror = reject;
+          i.src = src.includes('?') ? `${src}&v=${Date.now().toString(36)}` : `${src}?v=${Date.now().toString(36)}`;
+        });
+        // If a newer request was started, abandon this result
+        if (elm.__reqId !== reqId) return;
+
+        clearNode( elm );
+        elm.appendChild( img );
+        elm.classList.add( 'has-logo' );
+        BADGE_CACHE.set( teamName, img );
+        return;
+      } catch {
+        // try next fallback
+      }
+    }
+    // No luck → keep initials only
+    if (elm.__reqId === reqId) {
+      elm.classList.remove('has-logo');
+    }
+  })();
+}
+
+function initials( name = '' ) {
+  const parts = name.trim().split(/\s+/);
+  if (!parts.length) return '';
+  if (parts.length === 1) return parts[0].slice(0,2).toUpperCase();
+  return (parts[0][0] + (parts[1]?.[0]||'')).toUpperCase();
 }
 
 // ----------------------------
-// COMPETITION LOGOS + ACCURACY STRIP
+// Stadium image URL candidates (local only)
 // ----------------------------
-const COMP_LOGO_BASE = './assets/assets/leagues';
-const COMP_LOGO_MAP = {
-  'UEFA Champions League':      `${COMP_LOGO_BASE}/uefa-champions-league.svg`,
-  'UEFA Europa League':         `${COMP_LOGO_BASE}/uefa-europa-league.svg`,
-  'UEFA Europa Conference League': `${COMP_LOGO_BASE}/uefa-europa-conference-league.svg`,
-  'Premier League':             `${COMP_LOGO_BASE}/premier-league.svg`,
-  'LaLiga':                     `${COMP_LOGO_BASE}/la-liga.svg`,
-  'La Liga':                    `${COMP_LOGO_BASE}/la-liga.svg`,
-  'Bundesliga':                 `${COMP_LOGO_BASE}/bundesliga.svg`,
-  'Serie A':                    `${COMP_LOGO_BASE}/serie-a.svg`,
-  'Ligue 1':                    `${COMP_LOGO_BASE}/ligue-1.svg`,
-  'Liga Portugal':              `${COMP_LOGO_BASE}/liga-nos.png`,
-  'Liga NOS':                   `${COMP_LOGO_BASE}/liga-nos.png`,
-  'MLS':                        `${COMP_LOGO_BASE}/usa-mls.svg`,
-  'Major League Soccer':        `${COMP_LOGO_BASE}/usa-mls.svg`,
+const STADIUM_BASE = './assets/assets/leagues'; // (league logos) — for comp strip
+const TEAM_STADIUM_BASE = './assets/assets/logos'; // your team crests (used in panel)
+function stadiumCandidates( f ) {
+  const slug = slugLocal( f.home_team || '' );
+  const explicit = ( f.home_badge_url || f.away_badge_url || '' ).trim(); // keep interface; may be empty
+  const guesses = [
+    explicit || '',
+    `${TEAM_STADIUM_BASE}/${slug}.png`,
+    `${TEAM_STADIUM_BASE}/${slug}.svg`
+  ].filter(Boolean);
+  return guesses;
+}
+
+// ----------------------------
+// Competition stats & strip
+// ----------------------------
+
+// Demo baseline FTR accuracy
+const DEMO_FIXED_FTR = 0.87; // 87%
+const ACC = {
+  'UEFA Champions League': { FTR: 0.85, OU25: 0.78, BTTS: 0.74 },
+  'Premier League':        { FTR: 0.82, OU25: 0.76, BTTS: 0.71 },
+  'LaLiga':                { FTR: 0.81, OU25: 0.74, BTTS: 0.68 }
 };
-function findCompLogoSrc(name = '') {
-  if (!name) return '';
-  if (COMP_LOGO_MAP[name]) return COMP_LOGO_MAP[name];
-  const key = Object.keys(COMP_LOGO_MAP).find(k => name.toLowerCase().includes(k.toLowerCase()));
-  return key ? COMP_LOGO_MAP[key] : '';
+
+function leagueAcc( league, key = 'FTR' ) {
+  const row = ACC[ league ];
+  if (!row) return 0;
+  return Math.max(0, Math.min(1, row[key] ?? 0));
 }
-function getCompetitionSnapshot(compName) {
-  const rows = (compName && compName.trim())
-    ? filtered.filter(r => (r?.competition || '').toLowerCase() === compName.toLowerCase())
-    : [];
-  const avg = (arr) => (arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0);
-  const toPct = x => Math.round((x || 0) * 100);
-  return {
-    n: rows.length,
-    ftr:    toPct(avg(rows.map(r => +r?.confidence_ftr || 0))),
-    over25: toPct(avg(rows.map(r => +r?.over25_prob   || 0))),
-    btts:   toPct(avg(rows.map(r => +r?.btts_prob     || 0)))
-  };
+
+function getCompetitionSnapshot( league ) {
+  const rows = (league && league !== 'ALL')
+    ? fixtures.filter(f => (f.competition || '').toLowerCase() === league.toLowerCase())
+    : fixtures.slice();
+
+  if (!rows.length) return { n: 0, ftr: 0, over25: 0, btts: 0 };
+
+  const avg = arr => arr.reduce((a,b)=>a+b,0) / arr.length;
+  const toPct = x => Math.round( x * 100 );
+  const fx = rows.map( r => +r.confidence_ftr || 0 );
+  const o25 = rows.map( r => +r.over25_prob   || 0 );
+  const btt = rows.map( r => +r.btts_prob     || 0 );
+  return { n: rows.length, ftr: toPct(avg(fx)), over25: toPct(avg(o25)), btts: toPct(avg(btt)) };
 }
-function renderCompetitionAccuracy(compName) {
-  const wrap = document.getElementById('comp-accuracy'); if (!wrap) return;
-  const nameEl = document.getElementById('comp-name');
-  const logoEl = document.getElementById('comp-logo');
-  const fill   = wrap.querySelector('.gauge-fill');
-  const val    = wrap.querySelector('.gauge-val');
-  const chips  = document.getElementById('comp-traffic');
-  if (nameEl) nameEl.textContent = compName || '—';
-  if (logoEl) {
-    const logoSrc = findCompLogoSrc(compName);
-    if (logoSrc) { logoEl.src = logoSrc; logoEl.alt = `${compName} logo`; logoEl.style.display = 'inline-block'; }
-    else { logoEl.removeAttribute('src'); logoEl.style.display = 'none'; }
+
+function renderCompetitionAccuracy( league ) {
+  if (!el.compWrap) return;
+  const name = league || '—';
+  const ftr = Math.round( DEMO_FIXED_FTR * 100 ); // fixed per your request
+  const stats = getCompetitionSnapshot( league );
+
+  if (el.compName) el.compName.textContent = name || '—';
+
+  // logo
+  if (el.compLogo) {
+    const compSlugMap = {
+      'UEFA Champions League': 'uefa-champions-league',
+      'Premier League':        'premier-league',
+      'LaLiga':                'la-liga',
+      'Bundesliga':            'bundesliga',
+      'Serie A':               'serie-a',
+      'Ligue 1':               'ligue-1',
+      'Liga Portugal':         'liga-portugal',
+      'MLS':                   'usa-mls'
+    };
+    const slug = compSlugMap[ league ] || '';
+    if (slug) {
+      el.compLogo.src = `${STADIUM_BASE}/${slug}.svg`;
+      el.compLogo.style.display = 'inline-block';
+      el.compLogo.alt = `${league} logo`;
+    } else {
+      el.compLogo.removeAttribute('src');
+      el.compLogo.style.display = 'none';
+    }
   }
-  const stats = getCompetitionSnapshot(compName);
-  const ftrPct = 87; // demo
-  if (fill) fill.style.width = `${Math.max(0, Math.min(100, ftrPct))}%`;
-  if (val)  val.textContent  = `${ftrPct}%`;
-  if (chips) {
-    chips.innerHTML = '';
-    const add = (cls, label) => { const s = document.createElement('span'); s.className = `light ${cls}`; s.textContent = label; return s; };
-    chips.append(
-      add('light--green', `FTR ${ftrPct}%`),
-      add('light--blue',  `O2.5 ${stats.over25||'—'}%`),
-      add('light--amber', `BTTS ${stats.btts||'—'}%`)
-    );
+
+  // The three chips
+  if (el.compTraffic) {
+    el.compTraffic.innerHTML = `
+      <span class="light light--green">FTR ${ftr}%</span>
+      <span class="light light--blue">O2.5 ${stats.over25 || 0}%</span>
+      <span class="light light--amber">BTTS ${stats.btts || 0}%</span>
+    `;
+  }
+}
+
+// ----------------------------
+// Build / render filters (dates + leagues)
+// ----------------------------
+function buildDateStrip() {
+  if (!el.dateToday || !el.dateA || !el.dateB) return;
+  const base = baseDate();
+  const dayA = base;
+  const dayB = datePlusDays( base, 1 );
+
+  el.dateA.textContent = fmtDay( dayA );
+  el.dateA.dataset.iso = isoDay( dayA );
+
+  el.dateB.textContent = fmtDay( dayB );
+  el.dateB.dataset.iso = isoDay( dayB );
+
+  // Reset pill styles
+  for (const p of [el.dateToday, el.dateTomorrow, el.dateWeekend]) {
+    if (!p) continue;
+    p.classList.remove('is-active');
+  }
+
+  // Apply active style for the current preset
+  if (UI.rangeDays === 1 && UI.offsetDays === 0 && el.dateToday) el.dateToday.classList.add('is-active');
+  else if (UI.rangeDays === 1 && UI.offsetDays === 1 && el.dateTomorrow) el.dateTomorrow.classList.add('is-active');
+  else if (UI.rangeDays >= 2 && el.dateWeekend) el.dateWeekend.classList.add('is-active');
+}
+
+function bindDateControls() {
+  if (!el.dateToday) return;
+
+  el.dateToday.addEventListener('click', () => {
+    UI.offsetDays = 0;
+    UI.rangeDays = 1;
+    buildDateStrip();
+    applyFiltersAndRender();
+  });
+
+  el.dateTomorrow.addEventListener('click', () => {
+    UI.offsetDays = 1;
+    UI.rangeDays = 1;
+    buildDateStrip();
+    applyFiltersAndRender();
+  });
+
+  el.dateWeekend.addEventListener('click', () => {
+    // weekend = Saturday + Sunday around anchor
+    const base = baseDate();
+    const dow  = base.getUTCDay(); // 0..6 (Sun=0)
+    const deltaToSat = (6 - dow + 7) % 7; // days to Saturday
+    UI.offsetDays = deltaToSat;
+    UI.rangeDays  = 2;
+    buildDateStrip();
+    applyFiltersAndRender();
+  });
+
+  el.datePrev?.addEventListener('click', () => {
+    UI.offsetDays -= UI.rangeDays;
+    buildDateStrip();
+    applyFiltersAndRender();
+  });
+
+  el.dateNext?.addEventListener('click', () => {
+    UI.offsetDays += UI.rangeDays;
+    buildDateStrip();
+    applyFiltersAndRender();
+  });
+
+  // Clicking day cells sets base day explicitly (single-day view)
+  el.dateA?.addEventListener('click', () => {
+    const iso = el.dateA.dataset.iso;
+    if (iso) {
+      UI.offsetDays = Math.floor((new Date(iso) - new Date(`${UI.anchorISO}T00:00:00Z`)) / MS_DAY);
+      UI.rangeDays  = 1;
+      buildDateStrip();
+      applyFiltersAndRender();
+    }
+  });
+  el.dateB?.addEventListener('click', () => {
+    const iso = el.dateB.dataset.iso;
+    if (iso) {
+      UI.offsetDays = Math.floor((new Date(iso) - new Date(`${UI.anchorISO}T00:00:00Z`)) / MS_DAY);
+      UI.rangeDays  = 1;
+      buildDateStrip();
+      applyFiltersAndRender();
+    }
+  });
+}
+
+function buildLeagueChips() {
+  if (!el.leagueChips) return;
+  const uniques = Array.from( new Set( fixtures.map( f => f.competition ).filter(Boolean) ) ).sort();
+  UI.leagues = [ 'ALL', ...uniques ];
+  el.leagueChips.innerHTML = '';
+  UI.leagues.forEach( name => {
+    const b = document.createElement( 'button' );
+    b.className = `chip${ name === UI.league ? ' is-active' : '' }`;
+    b.dataset.league = name;
+    b.textContent = name;
+    b.addEventListener( 'click', () => {
+      document.querySelectorAll('#league-chips .chip').forEach( c => c.classList.remove('is-active') );
+      b.classList.add( 'is-active' );
+      UI.league = name;
+      applyFiltersAndRender();
+    } );
+    el.leagueChips.appendChild( b );
+  } );
+}
+
+// ----------------------------
+// Filtering + render wiring
+// ----------------------------
+function applyFiltersAndRender() {
+  if (!fixtures.length) return;
+
+  const start = baseDate();
+  const end   = datePlusDays( start, UI.rangeDays ); // half-open [start, end)
+
+  // filter by date window + league
+  visible = fixtures.filter( f => {
+    const d = new Date( f.date_utc );
+    if (isNaN( d )) return false;
+    if (!(d >= start && d < end)) return false;
+    if (UI.age) { /* reserved */ }
+    if (UI.league && UI.league !== 'ALL') {
+      if ((f.competition || '').toLowerCase() !== UI.league.toLowerCase()) return false;
+    }
+    return true;
+  } );
+
+  visibleFixtures = visible.length ? visible : [];
+
+  // Update globe points
+  const many = visibleFixtures.length > 250;
+  globe.pointsMerge( many ).pointResolution( 12 );
+  globe.pointLat( 'latitude' )
+       .pointLng( 'longitude' )
+       .pointsData( visibleFixtures );
+
+  // Rebuild rail for visible fixtures
+  buildRail( visibleFixtures );
+
+  // Select the first visible fixture if available
+  if ( visibleFixtures.length ) {
+    selectIndex( 0, { fly: true } );
+  } else {
+    // Clear panel & strip
+    if (el.compName) el.compName.textContent = '—';
+    if (el.compTraffic) el.compTraffic.innerHTML = '';
+    if (el.matchList) clearNode( el.matchList );
+    if (el.watchlist) clearNode( el.watchlist );
+    if (el.market)    clearNode( el.market );
   }
 }
 
 // ----------------------------
 // Scene init
 // ----------------------------
+async function loadThreeGlobe() {
+  for ( const v of [ '2.31.3', '2.31.1', '2.30.1', '2.29.3' ] ) {
+    const url = `https://esm.sh/three-globe@${v}?bundle&external=three`;
+    try {
+      const m = await import( url );
+      console.warn( '[three-globe] using esm.sh ESM:', url );
+      return m.default ?? m;
+    } catch {}
+  }
+  for ( const url of [
+    'https://cdn.jsdelivr.net/npm/three-globe@2.31.1/dist/three-globe.min.js',
+    'https://unpkg.com/three-globe@2.31.1/dist/three-globe.min.js',
+    './vendor/three-globe.min.js'
+  ] ) {
+    try {
+      const ctor = await import( url );
+      console.warn( '[three-globe] using UMD:', url );
+      return ctor;
+    } catch {}
+  }
+  throw new Error( 'Failed to load three-globe' );
+}
+
 async function init() {
   ThreeGlobeCtor = await loadThreeGlobe();
+
   scene = new THREE.Scene();
-
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-  renderer.domElement.style.pointerEvents = 'auto'; // ensure controls work
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-  renderer.setSize(el.globeWrap.clientWidth, el.globeWrap.clientHeight);
+  renderer.setPixelRatio( Math.min( window.devicePixelRatio || 1, 2 ) );
+  renderer.setSize( el.globeWrap.clientWidth, el.globeWrap.clientHeight );
   el.globeWrap.innerHTML = '';
-  el.globeWrap.appendChild(renderer.domElement);
+  el.globeWrap.appendChild( renderer.domElement );
 
-  if ('outputColorSpace' in renderer) renderer.outputColorSpace = THREE.SRGBColorSpace;
-  if ('toneMapping' in renderer) { renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.15; }
+  camera = new THREE.PerspectiveCamera( 45, el.globeWrap.clientWidth / el.globeWrap.clientHeight, 0.1, 5000 );
+  camera.position.set( 0, 0, getGlobe().R * 3.0 );
 
-  camera = new THREE.PerspectiveCamera(45, el.globeWrap.clientWidth / el.globeWrap.clientHeight, 0.1, 5000);
-  camera.position.set(0, 0, 300);
-
-  controls = new OrbitControls(camera, renderer.domElement);
+  controls = new OrbitControls( camera, renderer.domElement );
   controls.enableDamping = true;
-  controls.enablePan = true;
-  controls.enableZoom = true;
-  controls.autoRotate = false;
-  controls.minDistance = 140;
-  controls.maxDistance = 1200;
+  controls.enablePan     = false;
+  controls.enableZoom    = true;
+  controls.autoRotate    = false;
+  controls.autoRotateSpeed = 0.6;
+  controls.minDistance   = getGlobe().R * 1.2;
+  controls.maxDistance   = getGlobe().R * 6;
 
-  scene.add(new THREE.AmbientLight(0xffffff, 0.9));
-  scene.add(new THREE.HemisphereLight(0xddeeff, 0x223344, 0.6));
+  scene.add( new THREE.AmbientLight( 0xffffff, 0.9 ) );
+  const hemi = new THREE.HemisphereLight( 0xddeeff, 0x223344, 0.6 );
+  scene.add( hemi );
 
-  composer = new EffectComposer(renderer);
-  composer.addPass(new RenderPass(scene, camera));
-
-  const fxaaPass = new ShaderPass(FXAAShader);
-  const setFXAA = () => {
-    const px = renderer.getPixelRatio();
-    fxaaPass.material.uniforms['resolution'].value.set(1/(el.globeWrap.clientWidth*px), 1/(el.globeWrap.clientHeight*px));
-  };
-  setFXAA();
-  composer.addPass(fxaaPass);
-
-  bloomPass = new UnrealBloomPass(new THREE.Vector2(el.globeWrap.clientWidth, el.globeWrap.clientHeight), BLOOM.strength, BLOOM.radius, BLOOM.threshold);
-  composer.addPass(bloomPass);
+  composer = new EffectComposer( renderer );
+  composer.addPass( new RenderPass( scene, camera ) );
+  bloomPass = new  (UnrealBloomFan || UnrealBloomPass)(
+    new THREE.Vector3( el.globeWrap.clientWidth, el.globeWrap.clientHeight ),
+    BLO_STR, BLO_RAD, BLO_THRESH
+  );
+  composer.addPass( bloomPass );
 
   globe = new ThreeGlobeCtor({ waitForGlobeReady: true })
-    .showAtmosphere(true)
-    .atmosphereColor('#9ef9e3')
-    .atmosphereAltitude(0.28)
-    .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
-    .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
-    .pointAltitude(() => SURFACE_EPS)
-    .pointRadius(d => (d.__active ? RADIUS_ACTIVE : RADIUS_BASE))
-    .pointColor(d => (d.__active ? COLORS.markerActive : COLORS.marker))
-    .pointResolution(12)
-    .pointsMerge(true);
+    .showAtmosphere( true )
+    .atmosphereColor( '#9ef9e3' )
+    .atmosphereAltitude( 0.28 )
+    .globeImageUrl( 'https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg' )
+    .bumpImageUrl( 'https://unpkg.com/three-globe/example/img/earth-topology.png' )
+    .pointAltitude( () => SURFACE_EPS )
+    .pointRadius( d => ( d.__active ? RADIUS_ACTIVE : RADIUS_BASE ) )
+    .pointColor( d => ( d.__active ? COLORS.markerActive : COLORS.marker ) )
+    .pointsMerge( true );
 
-  scene.add(globe);
+  scene.add( globe );
 
-  if (typeof globe.onPointHover === 'function') globe.onPointHover(handleHover);
-  globe.onPointClick?.(pt => { if (!pt) return; const idx = filtered.findIndex(f => f.fixture_id === pt.fixture_id); if (idx >= 0) selectIndex(idx, { fly: true }); });
-
-  // ---------- ACTIVE MARKER (radar + beam + billboard)
-  {
-    const group = new THREE.Group();
-    scene.add(group);
-
-    const radarMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(0x80ffe6), transparent: true, opacity: 0.35, depthWrite: false, side: THREE.DoubleSide });
-    const beamMat  = new THREE.MeshBasicMaterial({ color: 0x7df9c4, transparent: true, opacity: 0.22, blending: THREE.AdditiveBlending, depthWrite: false });
-
-    const ringGeo = new THREE.RingGeometry(1.0, 1.06, 128);
-    const cylGeo  = new THREE.CylinderGeometry(0.18, 0.28, 30, 32, 1, true);
-
-    const radarGroup = new THREE.Group();
-    const rings = [];
-    for (let i=0;i<3;i++){ const m = new THREE.Mesh(ringGeo, radarMat.clone()); m.scale.setScalar(1); m.material.opacity = 0; rings.push(m); radarGroup.add(m); }
-    group.add(radarGroup);
-
-    const beam = new THREE.Mesh(cylGeo, beamMat); beam.visible = false; group.add(beam);
-
-    const billboard = new THREE.Sprite(new THREE.SpriteMaterial({ transparent:true, opacity:0 }));
-    billboard.scale.set(14, 8, 1);
-    group.add(billboard);
-
-    const markerState = { lat:0, lon:0, t0:0, active:false };
-    window.__OG_MARKER__ = { group, radarGroup, rings, beam, billboard, markerState };
+  if ( typeof globe.onPointHover === 'function' ) {
+    globe.onPointHover( handleHover );
   }
 
-  window.addEventListener('resize', () => {
+  if ( typeof globe.pointOfView === 'function' ) {
+    globe.onPointClick?.( pt => {
+      if ( !pt ) return;
+      const i = visibleFixtures.findIndex( f => f && ( f.latitude === pt.latitude && f.longitude === pt.longitude ) );
+      if ( i >= 0 ) selectIndex( i, { fly: true } );
+    } );
+  }
+
+  window.addEventListener( 'resize', () => {
     const { clientWidth, clientHeight } = el.globeWrap;
-    renderer.setSize(clientWidth, clientHeight);
+    renderer.setSize( clientWidth, clientHeight );
     camera.aspect = clientWidth / clientHeight;
     camera.updateProjectionMatrix();
-    const px = renderer.getPixelRatio();
-    fxaaPass.material.uniforms['resolution'].value.set(1/(clientWidth*px), 1/(clientHeight*px));
-    bloomPass.setSize?.(clientWidth, clientHeight);
-  });
+    bloomPass.setSize?.( clientWidth, clientHeight );
+  } );
 
-  window.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight') { e.preventDefault(); step(+1); }
-    if (e.key === 'ArrowLeft')  { e.preventDefault(); step(-1); }
-  });
+  // Build marker (group + beam + billboard), store as window.__OG_MARKER
+  const group = new THREE.Group(); scene.add( group );
+  const radarGroup = new THREE.Group(); group.add( radarGroup );
 
-  el.prevBtn?.addEventListener('click', () => step(-1));
-  el.nextBtn?.addEventListener('click', () => step(+1));
+  const ringGeom = new THREE.RingGeometry( getGlobe().R * ( 1 + SURFACE_EPS + 0.001 ), getGlobe().R * ( 1 + SURFACE_EPS + 0.008 ), 48 );
+  const ringMat  = new THREE.MeshBasicMaterial({ color: new THREE.Color( COLORS.ring ), side: THREE.DoubleSide, transparent: true, opacity: 0.42 });
+  const ringMesh = new THREE.Mesh( ringGeom, ringMat );
+  radarGroup.add( ringMesh );
 
-  // Build initial calendar + league UI from data later (after CSV)
-  await loadFixturesCSV('./data/fixtures.csv');
-  animate();
-}
+  const beamGeom = new THREE.CylinderGeometry( 1, 1, 1, 24, 1, true );
+  const beamMat  = new THREE.MeshBasicMaterial({ color: new THREE.Color( COLORS.ring ), transparent: true, opacity: 0.0 });
+  const beam     = new THREE.Mesh( beamGeom, beamMat );
+  beam.renderOrder = 10;
+  beam.visible = false;
+  group.add( beam );
 
-function animate() {
-  requestAnimationFrame(animate);
-  controls.update();
+  const billboard = new THREE.Sprite( new THREE.SpriteMaterial({ transparent: true, opacity: 0 }) );
+  billboard.scale.set( 14, 8, 1 );
+  group.add( billboard );
 
-  // marker anims
-  const S = window.__OG_MARKER__;
-  if (S && S.markerState.active){
-    const { rings, radarGroup, beam, billboard, group, markerState } = S;
-    const now = performance.now() * 0.001;
-    const R = getGlobeRadius();
+  marker = window.__OG_MARKER = {
+    group, radarGroup, beam, billboard,
+    markerState: { lat: 0, lon: 0, t0: 0, active: false, reqId: 0 },
+    __raf: { travel: null, beam: null, fade: null }
+  };
 
-    // world position + normal
-    const pos = latLngToVec3(markerState.lat, markerState.lon, SURFACE_EPS + 0.001);
-    const n   = pos.clone().normalize();
+  // Wire tabs
+  bindTabs();
+  // Wire filter controls
+  bindDateControls();
 
-    group.position.copy(pos);
-    group.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), n);
+  // Load CSV
+  await loadFixturesCSV( './data/fixtures.csv' );
 
-    radarGroup.position.set(0,0,0);
+  // Build league chips from data
+  buildLeagueChips();
 
-    // rings
-    const dur = 2.6;
-    const t = (now - markerState.t0);
-    const baseScale = 1.0;
-    const spread    = R * 0.015;
-    rings.forEach((r, i) => {
-      const k = ((t + i*0.6) % dur) / dur;
-      const s = baseScale + k * spread;
-      r.scale.setScalar(s);
-      r.material.opacity = (1.0 - k) * 0.35;
-    });
+  // Initial date strip + filter
+  buildDateStrip();
 
-    if (beam.visible) {
-      const flicker = 0.18 + 0.06*Math.sin(now*7.0) + 0.04*Math.sin(now*13.0);
-      beam.material.opacity = flicker;
-    }
-    billboard.quaternion.copy(camera.quaternion);
-  }
+  // Apply initial filter + render
+  applyFiltersAndRender();
 
-  composer.render();
-}
-
-// ----------------------------
-// Calendar rail + League chips (B, C, D) + Patches 2/3
-// ----------------------------
-function buildLeagueChips() {
-  const host = document.getElementById('league-chips'); if (!host) return;
-  const leagues = ['ALL','UEFA Champions League','Premier League','LaLiga','Bundesliga','Serie A','Ligue 1','Liga Portugal','MLS'];
-  host.innerHTML = '';
-  leagues.forEach(name=>{
-    const b = document.createElement('button');
-    b.className = `chip${name==='ALL'?' is-active':''}`;
-    b.dataset.league = name;
-    b.textContent = name==='ALL' ? 'All' : name.replace('UEFA ','').replace('Premier ','EPL ');
-    b.addEventListener('click', ()=>{
-      host.querySelectorAll('.chip').forEach(x=>x.classList.remove('is-active'));
-      b.classList.add('is-active');
-      UI.league = name;
-      refillVisibleFixtures();
-    });
-    host.appendChild(b);
-  });
-}
-
-function buildCalendarRail(fixtureDays, baseDay = DEMO_TODAY) {
-  const rail = document.getElementById('date-rail'); if (!rail) return;
-
-  // Pills
-  const pills = rail.querySelectorAll('[data-range]');
-  pills.forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      pills.forEach(x=>x.classList.remove('is-active'));
-      btn.classList.add('is-active');
-
-      const today = startOfDay(new Date(baseDay));
-      const key = btn.getAttribute('data-range');
-      if (key === 'today') {
-        UI.date = today; UI.rangeDays = 1;
-      } else if (key === 'tomorrow') {
-        UI.date = addDays(today, 1); UI.rangeDays = 1;
-      } else { // weekend
-        const dow = today.getDay();
-        const toSat = (6 - dow + 7) % 7;
-        UI.date = addDays(today, toSat); UI.rangeDays = 2;
-      }
-      rail.querySelectorAll('.date-pill').forEach(b=>b.classList.remove('is-active'));
-      refillVisibleFixtures();
-    });
-  });
-
-  // Mini calendar from actual fixture days
-  const grid = rail.querySelector('#date-grid');
-  if (grid) {
-    grid.innerHTML = '';
-    if (!fixtureDays || !fixtureDays.length) {
-      const msg = document.createElement('div'); msg.className='muted'; msg.textContent='No fixture days'; grid.appendChild(msg);
-    } else {
-      fixtureDays.forEach(d=>{
-        const btn = document.createElement('button');
-        btn.className = 'date-pill';
-        btn.textContent = d.getDate();
-        btn.title = d.toDateString();
-        btn.addEventListener('click', ()=>{
-          rail.querySelectorAll('.date-pill').forEach(b=>b.classList.remove('is-active'));
-          btn.classList.add('is-active');
-          pills.forEach(b=>b.classList.remove('is-active'));
-          UI.date = d; UI.rangeDays = 1;
-          refillVisibleFixtures();
-        });
-        grid.appendChild(btn);
-      });
-    }
-  }
-}
-
-// Core filter + rebind (E)
-function refillVisibleFixtures(){
-  if (!fixtures.length) return;
-
-  // date filter
-  const start = UI.date ? startOfDay(UI.date) : startOfDay(new Date(DEMO_TODAY));
-  const range = UI.rangeDays || 1;
-  const byDate = f => inDayRange(f.date_utc, start, range);
-
-  // league filter
-  const byLeague = f => UI.league==='ALL' || (f.competition||'').toLowerCase() === UI.league.toLowerCase();
-
-  filtered = fixtures.filter(byDate).filter(byLeague);
-
-  // Bind globe
-  globe
-    .pointsData(filtered)
-    .pointLat('latitude')
-    .pointLng('longitude');
-
-  // Build fixture rail list
-  buildRail(filtered);
-
-  // Tabs on-globe
-  if (hasHtmlElementsApi(globe)) { renderHtmlTabsFrom(filtered); } else if (typeof globe.labelsData === 'function') { renderLabelsFrom(filtered); }
-
-  // Select first
-  if (filtered.length) selectIndex(0, { fly:true });
-
-  // Competition banner
-  if (filtered.length) renderCompetitionAccuracy(filtered[0].competition);
-}
-
-// lightweight wrappers for filtered set
-function renderHtmlTabsFrom(list){
-  htmlTabsData = list.map((f,i)=>({ lat:f.latitude, lng:f.longitude, altitude:SURFACE_EPS+0.06, idx:i, el:null }));
-  globe.htmlElementsData(htmlTabsData).htmlLat('lat').htmlLng('lng').htmlAltitude('altitude').htmlElement(d=>{
-    const w = document.createElement('div');
-    w.className = 'fixture-tab' + (d.idx===activeIdx?' is-selected':'');
-    w.dataset.idx = String(d.idx);
-    const f = filtered[d.idx];
-    w.title = `${f.home_team} vs ${f.away_team}${f.city?` — ${f.city}`:''}`;
-    w.style.pointerEvents = 'auto';
-    const title = document.createElement('div'); title.className='fixture-tab__title'; title.textContent = `${f.home_team} vs ${f.away_team}`;
-    const meta  = document.createElement('div'); meta.className='fixture-tab__meta'; meta.textContent = f.city || f.country || '';
-    w.append(title, meta);
-    w.addEventListener('click', (e)=>{ e.stopPropagation(); selectIndex(d.idx, {fly:true}); });
-    d.el = w;
-    return w;
-  });
-  globe.htmlTransitionDuration?.(220);
-}
-function renderLabelsFrom(list){
-  globe.labelsData(list).labelLat('latitude').labelLng('longitude')
-    .labelAltitude(()=>SURFACE_EPS+0.06).labelText(f=>`${f.home_team} vs ${f.away_team}`)
-    .labelColor(f=>((f.fixture_id||f.re_id)===selectedId ? 'rgba(125,249,196,0.95)':'rgba(255,255,255,0.85)'))
-    .labelSize(f=>((f.fixture_id||f.re_id)===selectedId ? 1.4:1.0))
-    .labelDotRadius(f=>((f.fixture_id||f.re_id)===selectedId?0.5:0.28))
-    .labelResolution(2);
+  // Render loop
+  ( function loop() {
+    requestAnimationFrame( loop );
+    controls.update();
+    composer.render();
+  } )();
 }
 
 // ----------------------------
 // CSV ingest & bind
 // ----------------------------
-async function loadFixturesCSV(url) {
-  try {
-    const response = await fetch(`${url}?v=${Date.now()}`);
-    if (!response.ok) { console.error(`[CSV] HTTP ${response.status} for ${url}`); showToast('error', `Could not load ${url} (HTTP ${response.status}).`); return; }
-    const text = await response.text();
-    const { data, errors } = Papa.parse(text, { header: true, skipEmptyLines: true });
-    if (errors?.length) console.warn('[CSV parse errors]', errors);
-
-    fixtures = (data || []).map(row => {
-      const lat = Number(row.latitude ?? row.lat ?? row.Latitude ?? row.lat_deg);
-      const lon = Number(row.longitude ?? row.lon ?? row.lng ?? row.Longitude);
-      const home_badge_url = pick(row, ['home_badge_url','home_logo_url','home_logo','home_badge']);
-      const away_badge_url = pick(row, ['away_badge_url','away_logo_url','away_logo','away_badge']);
-      return {
-        fixture_id: (row.fixture_id || row.id || `${row.home_team}-${row.away_team}-${row.date_utc || ''}`).trim(),
-        home_team: (row.home_team || row.Home || '').trim(),
-        away_team: (row.away_team || row.Away || '').trim(),
-        home_badge_url, away_badge_url,
-        date_utc: row.date_utc || row.date || '',
-        competition: row.competition || row.league || '',
-        stadium: row.stadium || '',
-        city: row.city || '',
-        country: row.country || row.venue_country || '',
-        latitude: Number.isFinite(lat) ? lat : undefined,
-        longitude: Number.isFinite(lon) ? lon : undefined,
-        predicted_winner: row.predicted_winner || '',
-        confidence_ftr: +row.confidence_ftr || +row.confidence || 0,
-        xg_home: +row.xg_home || 0, xg_away: +row.xg_away || 0,
-        ppg_home: +row.ppg_home || 0, ppg_away: +row.ppg_away || 0,
-        over25_prob: +row.over25_prob || 0, btts_prob: +row.btts_prob || 0,
-        key_players_shots: (row.key_players_shots || '').trim(),
-        key_players_tackles: (row.key_players_tackles || '').trim(),
-        key_players_bookings: (row.key_players_bookings || '').trim(),
-        __active: false
-      };
-    }).filter(f => Number.isFinite(f.latitude) && Number.isFinite(f.longitude));
-
-    if (!fixtures.length) {
-      showCsvError('No fixtures with valid latitude/longitude found.');
-      document.querySelector('#match-intelligence')?.replaceChildren(elmEmpty('No fixtures available.'));
-      document.querySelector('#player-watchlist')?.replaceChildren(elmEmpty('Player insights will appear here.'));
-      document.querySelector('#market-snapshot')?.replaceChildren(elmEmpty('Market snapshot will appear here.'));
-      return;
-    }
-
-    // Prefetch team crests
-    const TEAM_MAP = new Map();
-    for (const f of fixtures) {
-      if (f.home_team) TEAM_MAP.set(f.home_team, f.home_badge_url || f.home_logo_url || '');
-      if (f.away_team) TEAM_MAP.set(f.away_team, f.away_badge_url || f.away_logo_url || '');
-    }
-    prefetchAllLogos(TEAM_MAP).catch(()=>{});
-
-    // Build left rail + league chips (Patch 2/3)
-    buildLeagueChips();
-    const days = extractFixtureDays(fixtures);
-    buildCalendarRail(days, DEMO_TODAY);
-
-    // Default demo filter
-    UI.date = startOfDay(new Date(DEMO_TODAY));
-    UI.rangeDays = 1;
-    UI.league = 'ALL';
-
-    // Fill everything from filter once
-    refillVisibleFixtures();
-
-  } catch (err) {
-    console.error('[CSV] Failed to fetch/parse]:', err);
-    showCsvError(`Failed to load CSV: ${err?.message || err}`);
-    showToast('error', 'Failed to load fixtures');
+async function loadFixturesCSV( url ) {
+  const response = await fetch( `${url}?v=${Date.now()}` );
+  if ( !response.ok ) {
+    showToast( 'error', `Could not load ${url} (HTTP ${response.status}).` );
+    return;
   }
-}
+  const text = await response.text();
+  const { data, errors } = Papa.parse( text, { header: true, skipEmptyLines: true } );
+  if ( errors?.length ) console.warn( '[CSV parse errors]', errors );
 
-function showCsvError(msg) { el.fixtureTitle.textContent = 'Unable to load fixtures'; el.fixtureContext.textContent = msg; }
+  fixtures = ( data || [] )
+    .map( row => {
+      const lat = parseFloat( row.latitude  ?? row.lat ?? row.Latitude ?? row.lat_deg );
+      const lon = parseFloat( row.longitude ?? row.lng ?? row.Longitude );
+      return {
+        fixture_id:       ( row.fixture_id || row.id || `${row.home_team}-${row.away_team}-${ row.date_utc || '' }` ).trim(),
+        home_team:        ( row.home_team  || row.Home || '' ).trim(),
+        away_team:        ( row.away_team  || row.Away || '' ).trim(),
+        home_badge_url:   pick( row, [ 'home_badge_url', 'home_logo_url', 'home_logo', 'home_badge' ] ),
+        away_badge_url:   pick( row, [ 'away_badge_url', 'away_logo_url', 'away_logo', 'away_badge' ] ),
+        date_utc:         row.date_utc || row.date || '',
+        competition:      row.competition || row.league || '',
+        stadium:          row.stadium || '',
+        city:             row.city || '',
+        country:          row.country || row.venue_country || '',
+        latitude:         Number.isFinite( lat ) ? lat : undefined,
+        longitude:        Number.isFinite( lon ) ? lon : undefined,
+        confidence_ftr:   + ( row.confidence_ftr || row.confidence || 0 ),
+        xg_home:          + ( row.xg_home || 0 ),
+        xg_away:          + ( row.xg_away || 0 ),
+        ppg_home:         + ( row.ppg_home || 0 ),
+        ppg_away:         + ( row.ppg_away || 0 ),
+        over25_prob:      + ( row.over25_prob || 0 ),
+        btts_prob:        + ( row.btts_prob || 0 )
+      };
+    } )
+    .filter( f => Number.isFinite( f.latitude ) && Number.isFinite( f.longitude ) );
 
-// ----------------------------
-// Selection & nav
-// ----------------------------
-function step(delta) {
-  if (!filtered.length) return;
-  const next = (activeIdx + delta + filtered.length) % filtered.length;
-  selectIndex(next, { fly: true });
-}
-
-function selectIndex(idx, opts = {}) {
-  const { fly = false } = opts;
-  if (!filtered.length) return;
-  activeIdx = Math.max(0, Math.min(idx, filtered.length-1));
-  const f = filtered[activeIdx];
-  selectedId = f?.fixture_id || f?.re_id || null;
-
-  filtered.forEach(d => (d.__active = (d.fixture_id || d.re_id) === selectedId));
-  globe.pointAltitude(()=>SURFACE_EPS).pointRadius(d=>d.__active?RADIUS_ACTIVE:RADIUS_BASE).pointColor(d=>d.__active?COLORS.markerActive:COLORS.marker).pointsData(filtered);
-  globe.pointColor(d => d.__active ? '#D7FFF9' : COLORS.marker).pointsTransitionDuration?.(200);
-  setTimeout(()=>globe.pointsTransitionDuration?.(0), 220);
-
-  if (fly) flyToFixture(f);
-  moveMarkerToFixture(f, { fly });
-
-  renderPanel(f);
-  updateSelectionRing(f);
-  syncRail();
-  if (hasHtmlElementsApi(globe)) updateHtmlTabsSelection(); else if (typeof globe.labelsData === 'function') renderLabelsFrom(filtered);
-
-  const wrap = document.querySelector('.hero__globe'); wrap?.classList.add('glow','glow-pin'); setTimeout(()=>wrap?.classList.remove('glow-pin'), 350);
-}
-
-function flyToFixture(f) { if (!f || !globe?.pointOfView) return; globe.pointOfView({ lat:f.latitude, lng:f.longitude, altitude: CAMERA_ALT }, 650); }
-
-// ----------------------------
-// Selection halo aligned to surface
-// ----------------------------
-function createSelectionRing() {
-  const R = getGlobeRadius();
-  const inner = R * (1 + SURFACE_EPS + 0.001);
-  const outer = inner + R * 0.007;
-  const ringGeom = new THREE.RingGeometry(inner, outer, 48);
-  const ringMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(COLORS.ring), transparent:true, opacity:0.42, side:THREE.DoubleSide, depthWrite:false });
-  pulseRing = new THREE.Mesh(ringGeom, ringMat);
-  pulseRing.visible = false;
-  scene.add(pulseRing);
-  pulsePulse();
-}
-
-function updateSelectionRing(f) {
-  if (!pulseRing || !f) return;
-  const R = getGlobeRadius();
-  const latRad = THREE.MathUtils.degToRad(90 - f.latitude);
-  const lonRad = THREE.MathUtils.degToRad(180 - f.longitude);
-  const r = R * (1 + SURFACE_EPS + 0.001);
-  const x = r * Math.sin(latRad) * Math.cos(lonRad);
-  const y = r * Math.cos(latRad);
-  const z = r * Math.sin(latRad) * Math.sin(lonRad);
-  pulseRing.position.set(x,y,z);
-  const outward = new THREE.Vector3(x,y,z).normalize();
-  pulseRing.lookAt(outward.clone().multiplyScalar(R*2));
-  pulseRing.visible = true;
-}
-
-function pulsePulse() {
-  if (!pulseRing) return;
-  const T = 1800;
-  const t = (performance.now() % T) / T;
-  const intensity = 0.15 + 0.35 * Math.sin(t * Math.PI) ** 2;
-  pulseRing.material.opacity = intensity;
-  requestAnimationFrame(pulsePulse);
+  showToast( 'success', `Loaded ${ fixtures.length } fixtures` );
 }
 
 // ----------------------------
-// Hover feedback (size pop)
+// Selection + panel + tabs
 // ----------------------------
-let hoverId = null;
-function handleHover(d) {
-  hoverId = (d && (d.fixture_id || d.re_id)) || null;
-  globe.pointRadius(pt => {
-    if ((pt.fixture_id || pt.re_id) === selectedId) return RADIUS_ACTIVE;
-    if (hoverId && (pt.fixture_id || pt.re_id) === hoverId) return RADIUS_BASE * 1.6;
-    return RADIUS_BASE;
-  });
+function handleHover( pt ) {
+  const selId = marker?.markerState?.selId;
+  const id = visibleFixtures.find( f => f.latitude === pt?.latitude && f.longitude === pt?.longitude )?.fixture_id;
+  globe.pointRadius( p => {
+    const active = ( p.fixture_id === selId );
+    const hover  = ( pt && p.latitude === pt?.latitude && p.longitude === pt?.longitude );
+    if (active) return RADIUS_ACTIVE;
+    return hover ? RHP( RADIUS_BASE ) : RADIUS_BASE;
+  } );
+}
+function RHP( r ) { return r * 1.6; }
+
+function selectIndex( idx, { fly=false } = {} ) {
+  if ( !visibleFixtures.length ) return;
+  const f = visibleFixtures[ idx ];
+  if ( !f ) return;
+
+  const selId = f.fixture_id;
+  marker.markerState.selId = selId;
+
+  // flip active flags for point sizes/colors
+  visibleFixtures.forEach( it => { it.__active = ( it.fixture_id === selId ); } );
+  globe.pointColor( p => ( p.__active ? COLORS.markerActive : COLORS.marker ) )
+       .pointRadius( p => ( p.__active ? RADIUS_ACTIVE : RADIUS_BASE ) )
+       .pointsTransitionDuration?.( 200 );
+
+  // Move marker & update panel
+  moveMarkerToFixture( f, { fly } );
+  renderPanel( f );
+
+  const gw = document.querySelector( '.hero__globe' );
+  gw?.classList.add( 'glow', 'glow-pin' );
+  setTimeout( () => gw?.classList.remove( 'glow-pin' ), 350 );
 }
 
-// ----------------------------
-// Move marker to fixture (beam + radar + billboard) — improved
-// ----------------------------
-function moveMarkerToFixture(f, { fly=false } = {}) {
-  const S = window.__OG_MARKER__; 
-  if (!S || !f) return;
+function renderPanel( f ) {
+  if (!f) return;
 
-  const lat = Number(f.latitude), lon = Number(f.longitude);
-  if (!Number.isFinite(lat) || !Number.isFinite(lon)) { S.group.visible = false; return; }
-
-  // Bump request token to prevent stale texture loads replacing the current one
-  S.markerState.reqId = (S.markerState.reqId || 0) + 1;
-  const myReq = S.markerState.reqId;
-
-  // Keep state
-  S.markerState.lat = lat;
-  S.markerState.lon = lon;
-  S.markerState.t0  = performance.now() * 0.001;
-  S.markerState.active = true;
-
-  // Prepare controllers for beam grow + billboard fade (cancel previous)
-  S.__raf = S.__raf || {};
-  S.__raf.beamGrow = S.__raf.beamGrow || makeRafController();
-  S.__raf.fadeCard = S.__raf.fadeCard || makeRafController();
-  S.__raf.travel   = S.__raf.travel   || makeRafController();
-
-  S.__raf.beamGrow.cancel();
-  S.__raf.fadeCard.cancel();
-  S.__raf.travel.cancel();
-
-  const R = getGlobeRadius();
-  const altitude = SURFACE_EPS + 0.001;
-
-  // Start/end surface vectors (unit normals) for travel tween
-  const startPos = S.group.position.lengthSq() ? S.group.position.clone().normalize() : latLngToVec3(lat, lon, 0).normalize();
-  const endPos   = latLngToVec3(lat, lon, 0).normalize();
-
-  // If the marker hasn't been shown yet, snap instantly
-  const isFirst = !S.group.visible;
-
-  // Visibility on
-  S.group.visible = true;
-
-  // Travel tween along great-circle (quaternion slerp between normals)
-  const travelDur = (fly && !isFirst) ? 700 : 0; // ms
-  const startQuat = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,1,0), startPos);
-  const endQuat   = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,1,0), endPos);
-
-  const travelStart = performance.now();
-  const doTravel = () => {
-    const t = travelDur ? Math.min(1, (performance.now() - travelStart)/travelDur) : 1;
-    const k = easeInOut(t);
-
-    // Slerp normal
-    const cur = startPos.clone().lerp(endPos, k).normalize();
-    const worldPos = cur.clone().multiplyScalar(R * (1 + altitude));
-    S.group.position.copy(worldPos);
-
-    // Orient group so its +Y matches surface normal
-    THREE.Quaternion.slerp(startQuat, endQuat, S.group.quaternion, k);
-
-    if (t < 1) {
-      // billboard face camera happens in animate(); back-side cull handled below
-      // keep flying
-    } else {
-      // Travel complete — trigger beam grow now (so it grows at the destination)
-      growBeamAtDestination();
-      // Kick billboard fade & image load
-      paintBillboard();
-      S.__raf.travel.cancel();
-      return;
-    }
+  const fmt = iso => {
+    try {
+      const d = new Date( iso );
+      const date = d.toLocaleDateString( undefined, { weekday:'short', day:'2-digit', month:'short' } );
+      const time = d.toLocaleTimeString( undefined, { hour:'2-digit', minute:'2-digit' } );
+      return `${ date }  ·  ${ time } GMT`;
+    } catch { return iso || ''; }
   };
 
-  if (travelDur) {
-    S.__raf.travel.run(doTravel);
-  } else {
-    // Snap: place & orient immediately
-    const cur = endPos;
-    const worldPos = cur.clone().multiplyScalar(R * (1 + altitude));
-    S.group.position.copy(worldPos);
-    S.group.quaternion.copy(endQuat);
-    growBeamAtDestination();
-    paintBillboard();
+  if ( el.fixtureTitle ) el.fixtureTitle.textContent = `${ f.home_team } vs ${ f.away_team }`;
+  if ( el.fixtureContext ) {
+    el.fixtureContext.textContent = [
+      f.competition,
+      fmt( f.date_utc ),
+      f.stadium && `${ f.stadium } (${ f.city || '' })`,
+      f.country
+    ].filter(Boolean).join('  •  ');
   }
 
-  // Local placements (relative to the group)
-  S.radarGroup.position.set(0, 0, 0);
+  setBadge( el.homeBadge, f.home_badge_url, f.home_team );
+  setBadge( el.awayBadge, f.away_badge_url, f.away_team );
 
-  function growBeamAtDestination() {
-    S.beam.position.set(0, 0, 0);            // local origin
-    S.beam.quaternion.identity();            // already aligned with group's +Y
-    S.beam.scale.set(1, 0.001, 1);
+  // Match Intelligence
+  if ( el.matchList ) {
+    clearNode( el.matchList );
+    const div = document.createElement( 'div' );
+    div.innerHTML = `
+      <div><strong title="Predicted winner">Full-time prediction:</strong> ${ f.predicted_winner || '–' } ${ f.confidence_ftr ? `(${ Math.round( f.confidence_ftr * 100 ) }%)` : '' }</div>
+      <div><strong title="Expected Goals">xG edge:</strong> ${ ( f.xg_home ?? 0 ).toFixed( 1 ) } vs ${ ( f.xg_away ?? 0 ).toFixed( 1 ) }</div>
+      <div><strong title="Points Per Game">Points momentum:</strong> ${ ( f.ppg_home ?? 0 ).toFixed( 1 ) } PPG · ${ ( f.ppg_away ?? 0 ).toFixed( 1 ) } PPG</div>
+    `;
+    el.matchList.appendChild( div );
+  }
+
+  // Player Watchlist (shots)
+  if ( el.watchlist ) {
+    clearNode( el.watchlist );
+    const shots = ( f.key_players_shipment || f.key_players_shots || '' )
+      .split( ';' )
+      .map( s => s.trim() )
+      .filter( Boolean )
+      .slice( 0, 6 );
+    if ( shots.length ) {
+      for ( const s of shots ) {
+        const row = document.createElement( 'div' );
+        row.className = 'row';
+        row.textContent = s;
+        el.watchlist.appendChild( row );
+      }
+    } else {
+      el.watchlist.appendChild( elmEmpty( 'No player highlights available.' ) );
+    }
+  }
+
+  // Market snapshot
+  if ( el.market ) {
+    el.market.innerHTML = `
+      <div><strong>Over 2.5 goals:</strong> ${ Math.round( ( f.over25_prob || 0 ) * 100 ) }%</div>
+      <div><strong>Both teams to score:</strong> ${ Math.round( ( f.btts_prob  || 0 ) * 100 ) }%</div>
+    `;
+  }
+
+  // Update the competition strip based on this fixture
+  renderCompetitionAccuracy( f.competition );
+}
+
+function elmEmpty( msg ) {
+  const d = document.createElement( 'div' );
+  d.className = 'empty';
+  d.textContent = msg;
+  return d;
+}
+
+function bindTabs() {
+  document.querySelectorAll( '.tab' )?.forEach( btn => {
+    btn.addEventListener( 'click', () => {
+      document.querySelectorAll( '.tab' ).forEach( b => b.classList.remove( 'is-active' ) );
+      document.querySelectorAll( '.tabpane' ).forEach( p => p.classList.remove( 'is-active' ) );
+      btn.classList.add( 'is-active' );
+      document.getElementById( `tab-${ btn.dataset.tab }` )?.classList.add( 'is-active' );
+    } );
+  } );
+}
+
+// ----------------------------
+// Build / sync fixture rail
+// ----------------------------
+function buildRail( items ) {
+  const rail = document.getElementById( 'fixture-rail' );
+  if ( !rail ) return;
+  rail.innerHTML = '';
+
+  items.forEach( ( f, i ) => {
+    const it = document.createElement( 'button' );
+    it.className = `rail-item${ i === 0 ? ' is-active' : '' }`;
+    it.innerHTML = `<h4>${ f.home_team } vs ${ f.away_team }</h4><p>${ f.city || f.country || '' }</p>`;
+    it.addEventListener( 'click', () => selectIndex( i, { fly: true } ) );
+    rail.appendChild( it );
+  } );
+}
+function syncRail() {
+    const rail = document.getElementById('fixture-rail'); if (!rail) return;
+    [...rail.children].forEach( (el, i) => {
+      el.classList.toggle( 'is-active', i === ( visibleFixtures.indexOf( visibleFixtures.find( f => f.fixture_id === marker?.markerState?.selId ) ) ) );
+    } );
+}
+
+// ----------------------------
+// Marker creation + movement (no THREE.Quaternion.slerp, precise placement)
+// ----------------------------
+function moveMarkerToFixture( f, { fly = false } = {} ) {
+  const S = marker; if ( !S || !f ) return;
+
+  const lat = Number( f.latitude ), lon = Number( f.longitude );
+  if ( !Number.isFinite( lat ) || !Number.isFinite( lon ) ) { S.group.visible = false; return; }
+
+  // Token for race-free async updates
+  S.markerState.reqId = ( S.markerState.reqId || 0 ) + 1;
+  const myReq = S.markerState.reqId;
+
+  // update state
+  S.markerState.lat = lat;
+  S.markerState.lon = lon;
+  S.markerState.t0  = performance.now() * 1e-3;
+  S.markerState.active = true;
+
+  // Setup RAF controllers
+  S.__raf = S.__raf || { travel: null, beam: null, fade: null };
+  S.__raf.travel  = S.__raf.travel  || makeTrader();
+  S.__raf.beam    = S.__raf.beam    || makeTrader();
+  S.__raf.fade    = S.__raf.fade    || makeTrader();
+  S.__raf.travel.cancel();
+  S.__raf.beam.cancel();
+  S.__raf.fade.cancel();
+
+  const R = getGlobeRadius();
+
+  // Normals for great-circle interpolation
+  const fromN = S.group.position.lengthSq() > 0
+    ? S.group.position.clone().normalize()
+    : latLngToUnit( lat, lon ); // first placement uses target as start
+  const toN   = latLngToUnit( lat, lon );
+
+  const isFirst   = ( S.group.visible !== true );
+  const travelDur = ( fly && !isFirst ) ? 700 : 0;
+
+  S.group.visible = true;
+
+  // Travel tween
+  const t0 = performance.now();
+  function stepTravel() {
+    const t = travelDur ? Math.min( 1, ( performance.now() - t0 ) / travelDur ) : 1;
+    const k = easeInOut( t );
+
+    const curN = fromN.clone().lerp( toN, k ).normalize();
+    const worldPos = curN.clone().multiplyScalar( R * ( 1 + SURFACE_EPS ) );
+    S.group.position.copy( worldPos );
+
+    // Orient +Y along world “up” (surface normal)
+    const up = new THREE.Vector3( 0, 1, 0 );
+    const lookMatrix = new THREE.Matrix4().lookAt( new THREE.Vector3().copy( worldPos ), new THREE.Vector3( 0, 0, 0 ), up );
+    S.group.quaternion.setFromRotationMatrix( lookMatrix );
+
+    if ( t >= 1 ) {
+      S.__raf.travel.cancel();
+      startBeamAndCard();
+    }
+  }
+  S.__raf.travel.run( stepTravel );
+
+  function startBeamAndCard() {
+    // Beam grow from surface
+    S.beam.position.set( 0, 0, 0 );
+    S.beam.quaternion.identity();
+    S.beam.scale.set( 1, 0.001, 1 );
+    S.beam.material.opacity = 0.0;
     S.beam.visible = true;
 
-    const start = performance.now();
-    const dur   = 550;
-    S.__raf.beamGrow.run(() => {
-      const t = Math.min(1, (performance.now() - start)/dur);
-      S.beam.scale.y = 0.001 + easeInOut(t);
-      if (t >= 1) S.__raf.beamGrow.cancel();
-    });
-  }
+    const b0 = performance.now();
+    const bd = 550;
+    function stepBeam() {
+      const tb = Math.min( 1, ( performance.now() - b0 ) / bd );
+      const e  = tb * tb * ( 3 - 2 * tb );
+      S.beam.scale.y = 0.001 + e;
+      S.beam.material.opacity = 0.4 * e;
+      if ( tb >= 1 ) S.__raf.beam.cancel();
+    }
+    S.__raf.beam.run( stepBeam );
 
-  function paintBillboard() {
-    // Position the stadium card slightly above the surface in local +Y
-    S.billboard.position.set(0, R * 0.06, 0);
-
-    // Back-side cull (hide when stadium is behind the globe relative to camera)
-    const cameraDir = camera.position.clone().normalize();
-    const normalNow = S.group.position.clone().normalize();
-    const facing = normalNow.dot(cameraDir);
-    // If facing is strongly negative, skip showing the card (it’s on the far side).
-    if (facing < -0.05) { S.billboard.visible = false; return; }
-
-    // Fade in once the texture arrives
-    S.billboard.material.opacity = 0;
+    // Place billboard a bit above local +Y
+    S.billboard.position.set( 0, R * 0.06, 0 );
+    S.billboard.material.opacity = 0.0;
     S.billboard.visible = true;
 
-    // Resolve candidate images in priority order
-    (async () => {
-      for (const url of stadiumCandidates(f)) {
-        try {
-          const tex = await loadStadiumTex(url);
-          // If a newer request fired, abort applying this texture
-          if (S.markerState.reqId !== myReq) return;
+    // Hide if behind globe relative to camera
+    const camDir = camera.position.clone().normalize();
+    const n = S.group.position.clone().normalize();
+    if ( n.dot( camDir ) < -0.05 ) {
+      S.billboard.visible = false;
+    }
 
+    // Load stadium texture safely
+    ( async () => {
+      for ( const url of stadiumCandidates( f ) ) {
+        try {
+          const tex = await new Promise( ( res, rej ) => {
+            TEXLOADER.load(
+              url.includes('?') ? `${url}&v=${Date.now().toString(36)}` : `${url}?v=${Date.now().toString(36)}`,
+              t => res( t ),
+              undefined,
+              rej
+            );
+          } );
+          if ( S.markerState.reqId !== myReq ) return;
           S.billboard.material.map = tex;
           S.billboard.material.needsUpdate = true;
 
-          // Fade in cleanly
-          const start = performance.now();
-          const dur   = 220;
-          S.__raf.fadeCard.run(() => {
-            const t = Math.min(1, (performance.now() - start)/dur);
-            S.billboard.material.opacity = t;
-            if (t >= 1) S.__raf.fadeCard.cancel();
-          });
-          return; // done
-        } catch { /* try next */ }
+          const fa0 = performance.now();
+          const fad = 220;
+          function stepFade() {
+            const ft = Math.min( 1, ( performance.now() - fa0 ) / fad );
+            S.billboard.material.opacity = ft;
+            if ( ft >= 1 ) S.__raf.fade.cancel();
+          }
+          S.__raf.fade.run( stepFade );
+
+          return;
+        } catch {}
       }
-      // No image found
-      if (S.markerState.reqId === myReq) {
+      if ( S.markerState.reqId === myReq ) {
         S.billboard.visible = false;
       }
-    })();
+    } )();
   }
 }
 
 // ----------------------------
-// Panel
+// Tabs + Misc
 // ----------------------------
-function renderPanel(f) {
-  if (!f) return;
-  const fmt = iso => { try {
-    const d = new Date(iso);
-    const date = d.toLocaleDateString(undefined, { weekday: 'short', day: '2-digit', month: 'short' });
-    const time = d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
-    return `${date} · ${time} GMT`; } catch { return iso || ''; } };
-
-  el.fixtureTitle.textContent = `${f.home_team} vs ${f.away_team}`;
-  el.fixtureContext.textContent = [f.competition, fmt(f.date_utc), f.stadium && `${f.stadium} (${f.city || ''})`, f.country].filter(Boolean).join(' • ');
-  renderCompetitionAccuracy(f.competition);
-
-  const homeUrl = TEAM_LOGO_OVERRIDES[f.home_team] || '';
-  const awayUrl = TEAM_LOGO_OVERRIDES[f.away_team] || '';
-  setBadge(el.homeBadge, homeUrl, f.home_team);
-  setBadge(el.awayBadge, awayUrl, f.away_team);
-
-  clearNode(el.matchList);
-  const mi = document.createElement('div');
-  mi.innerHTML = `
-    <div><strong title="Predicted winner">Full-time prediction:</strong> ${f.predicted_winner || '–'} ${f.confidence_ftr ? `(${pct(f.confidence_ftr)})` : ''}</div>
-    <div><strong title="Expected Goals">xG edge:</strong> ${num(f.xg_home)} vs ${num(f.xg_away)}</div>
-    <div><strong title="Points Per Game">Points momentum:</strong> ${num(f.ppg_home)} PPG • ${num(f.ppg_away)} PPG</div>`;
-  el.matchList.appendChild(mi);
-
-  clearNode(el.watchlist);
-  const shots = parseKV(f.key_players_shots).slice(0, 6);
-  if (shots.length) { shots.forEach(s=>{ const row=document.createElement('div'); row.className='row'; row.textContent=`${s.k} ${s.v}`; el.watchlist.appendChild(row); }); }
-  else { el.watchlist.appendChild(elmEmpty('No player highlights available.')); }
-
-  clearNode(el.market);
-  el.market.innerHTML = `<div><strong>Over 2.5 goals:</strong> ${pct(f.over25_prob)}</div><div><strong>Both teams to score:</strong> ${pct(f.btts_prob)}</div>`;
-
-  if (window.innerWidth < 720){
-    const wrap = document.createElement('div');
-    wrap.append(el.matchList.cloneNode(true), el.market.cloneNode(true), el.watchlist.cloneNode(true));
-    openSheet(`${f.home_team} vs ${f.away_team}`, wrap);
-  }
-  el.deepBtn && (el.deepBtn.onclick = () => {
-    alert(`Fixture: ${f.home_team} vs ${f.away_team}\nKick-off: ${fmt(f.date_utc)}\nPrediction: ${f.predicted_winner} (${pct(f.confidence_ftr)})\nOver 2.5: ${pct(f.over25_prob)} • BTTS: ${pct(f.btts_prob)}`);
-  });
+function elmEmpty( msg ) {
+  const d = document.createElement( 'div' );
+  d.className = 'empty';
+  d.textContent = msg;
+  return d;
 }
 
-function num(x) { const n = Number(x); return Number.isFinite(n) ? n.toFixed(1) : '–'; }
-function parseKV(s='') { return s.split(';').map(x=>x.trim()).filter(Boolean).map(pair=>{ const [k,v]=pair.split('|'); return {k:(k||'').trim(), v:(v||'').trim()}; }); }
-
-// ----------------------------
-// On-globe HTML fixture tabs (preferred)
-// ----------------------------
-function renderHtmlTabs(){ renderHtmlTabsFrom(filtered); }
-function updateHtmlTabsSelection(){
-  if (!htmlTabsData?.length) return;
-  htmlTabsData.forEach(d => { const el = d.el || document.querySelector(`.fixture-tab[data-idx="${d.idx}"]`); if (el) el.classList.toggle('is-selected', d.idx === activeIdx); });
-}
-
-// ----------------------------
-// Fallback: sprite labels if HTML overlay not available
-// ----------------------------
-function renderLabelSprites(){ renderLabelsFrom(filtered); }
-
-// ----------------------------
-// Fixture rail (quick selector)
-// ----------------------------
-function buildRail(items){
-  const rail = document.getElementById('fixture-rail');
-  if(!rail) return;
-  rail.innerHTML = '';
-  items.forEach((f, i)=>{
-    const it = document.createElement('button');
-    it.className = 'rail-item' + (i===0?' is-active':'');
-    it.innerHTML = `<h4>${f.home_team} vs ${f.away_team}</h4><p>${(f.city||f.country||'')}</p>`;
-    it.addEventListener('click',()=>selectIndex(i,{fly:true}));
-    rail.appendChild(it);
-  });
-}
-function syncRail(){
-  const rail = document.getElementById('fixture-rail'); if(!rail) return;
-  [...rail.children].forEach((c,idx)=>c.classList.toggle('is-active', idx===activeIdx));
-}
-
-// ----------------------------
-// Tabs
-// ----------------------------
-function wireTabs(){
-  document.querySelectorAll('.tab')?.forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      document.querySelectorAll('.tab').forEach(b=>b.classList.remove('is-active'));
-      document.querySelectorAll('.tabpane').forEach(p=>p.classList.remove('is-active'));
-      btn.classList.add('is-active');
+function bindTabs() {
+  document.querySelectorAll( '.tab' )?.forEach( btn => {
+    btn.addEventListener( 'click', () => {
+      document.querySelectorAll( '.tab' ).forEach( x => x.classList.remove( 'is-active' ) );
+      document.querySelectorAll( '.tabpane' ).forEach( x => x.classList.remove( 'is-active' ) );
+      btn.classList.add( 'is-active' );
       const id = btn.dataset.tab;
-      document.getElementById(`tab-${id}`)?.classList.add('is-active');
-    });
-  });
+      document.getElementById( `tab-${ id }` )?.classList.add( 'is-active' );
+    } );
+  } );
 }
 
 // ----------------------------
-// Bottom sheet (mobile)
-// ----------------------------
-function openSheet(title, node){
-  const s = document.getElementById('sheet'); if(!s) return;
-  const titleEl = s.querySelector('#sheet-title'); if(titleEl) titleEl.textContent = title || '';
-  const body = s.querySelector('#sheet-body'); if(body){ body.innerHTML=''; body.appendChild(node); }
-  s.classList.add('open'); s.setAttribute('aria-hidden','false');
-}
-function closeSheet(){
-  const s = document.getElementById('sheet'); if(!s) return;
-  s.classList.remove('open'); s.setAttribute('aria-hidden','true');
-}
-document.querySelector('.sheet__handle')?.addEventListener('click', closeSheet);
-
-// ----------------------------
-// Router
+// Minimal client-side router (unchanged)
 // ----------------------------
 const ROUTES = {
-  '#/': 'view-home', '#/home':'view-home', '#/bet-checker':'view-betchecker',
-  '#/acca-builder':'view-accabuilder', '#/copilot':'view-copilot', '#/login':'view-signin', '#/signup':'view-signup'
+  '#/':            'view-home',
+  '#/home':        'view-home',
+  '#/bet-checker': 'view-betchecker',
+  '#/acca-builder':'view-accabuilder',
+  '#/copilot':     'view-copilot',
+  '#/login':       'view-signin',
+  '#/signup':      'view-signup'
 };
-function showRoute(hash) {
-  if (!hash) hash = '#/';
-  const id = ROUTES[hash] || 'view-home';
-  document.querySelectorAll('.view').forEach(v => { if (v.id === id) { v.classList.add('is-active'); v.removeAttribute('hidden'); } else { v.classList.remove('is-active'); v.setAttribute('hidden',''); } });
-  document.querySelectorAll('[data-route]').forEach(a=>{ a.classList.toggle('is-active', a.getAttribute('href') === hash); if (a.classList.contains('side-link')) a.classList.toggle('active', a.getAttribute('href') === hash); });
-  const profileMenu = document.getElementById('profile-menu'); const profileBtn  = document.getElementById('btn-profile');
-  profileMenu?.classList.remove('show'); profileBtn?.setAttribute('aria-expanded','false');
-  const drawer  = document.getElementById('side-drawer'); const scrim   = document.getElementById('scrim');
-  drawer?.classList.remove('show'); scrim?.classList.remove('show'); drawer?.setAttribute('aria-hidden','true');
+
+function showRoute( hash ) {
+  if ( !hash ) hash = '#/';
+  const id = ROUTES[ hash ] || 'view-home';
+  document.querySelectorAll( '.view' ).forEach( v => {
+    if ( v.id === id ) { v.classList.add( 'is-active' ); v.removeAttribute( 'hidden' ); }
+    else              { v.classList.remove( 'is-active' ); v.setAttribute( 'hidden', '' ); }
+  } );
+  document.querySelectorAll( '[data-route]' ).forEach( a => {
+    a.classList.toggle( 'is-active', a.getAttribute( 'href' ) === hash );
+    if ( a.classList.contains( 'side-link' ) ) a.classList.toggle( 'active', a.getAttribute( 'href' ) === hash );
+  } );
+  // close menus on navigation
+  const profileMenu = document.getElementById('profile-menu');
+  const profileBtn  = document.getElementById('btn-profile');
+  profileMenu?.classList.remove('show');
+  profileBtn?.setAttribute('aria-expanded','false');
+  const drawer  = document.getElementById('side-drawer');
+  const scrim   = document.getElementById('scrim');
+  drawer?.classList.remove('show');
+  scrim?.classList.remove('show');
 }
-window.addEventListener('hashchange', ()=> showRoute(location.hash));
-window.addEventListener('DOMContentLoaded', ()=>{ if (!location.hash) location.hash = '#/'; showRoute(location.hash); });
 
-// quick self-test for two logo files
-(function verifyLocalLogoSetup(){
-  const tests = [`${LOGO_LOCAL_BASE}/arsenal.svg`, `${LOGO_LOCAL_BASE}/fc-barcelona.svg`];
-  tests.forEach(src => { const img = new Image(); img.onload = ()=>console.log('%c[LOGOS] OK','color:#22c55e',src); img.onerror=()=>console.warn('%c[LOGOS] 404','color:#f43f5e',src); img.src=src; });
-})();
+window.addEventListener( 'hashchange', () => showRoute( location.hash ) );
+window.addEventListener( 'DOMContentLoaded', () => {
+  if (!location.hash) location.hash = '#/';
+  showRoute( location.hash );
+  init().catch( err => { console.error( err ); showToast( 'error', String( err ) ); } );
+} );
 
-init();
+// ----------------------------
+// Helper to retrieve globe radius consistently
+// ----------------------------
+function getGlobeRadius() {
+  if ( globe?.getGlobeRadius ) return globe.getGlobeRadius();
+  const m = globe?.children?.find?.( c => c.geometry?.parameters?.radius );
+  return m?.geometry?.parameters?.radius || 100;
+}
