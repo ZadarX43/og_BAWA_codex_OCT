@@ -29,16 +29,14 @@ const el = {
   awayBadge:     document.getElementById('away-badge'),
 
   // Date & league filters
-  // (bind by data attributes and real IDs from index.html)
   dateToday:    document.querySelector('[data-range="today"]'),
   dateTomorrow: document.querySelector('[data-range="tomorrow"]'),
   dateWeekend:  document.querySelector('[data-range="weekend"]'),
   datePrev:     document.getElementById('cal-prev'),
   dateNext:     document.getElementById('cal-next'),
-  dateA:        document.getElementById('date-day-a'), // may be null (optional)
-  dateB:        document.getElementById('date-day-b'), // may be null (optional)
+  dateA:        document.getElementById('date-day-a'),
+  dateB:        document.getElementById('date-day-b'),
   leagueChips:  document.getElementById('league-chips'),
-
 
   // Competition strip
   compWrap:      document.getElementById('comp-accuracy'),
@@ -104,7 +102,7 @@ function pick(row, keys) {
 
 // ---- Dates
 const MS_DAY = 24*60*60*1000;
-function baseDate(){ return new Date(`${UI.anchorISO}T00:00:00Z`).addDays?.(UI.offsetDays) ?? new Date(Date.parse(`${UI.anchorISO}T00:00:00Z`) + UI.offsetDays*MS_DAY); }
+function baseDate(){ return new Date(Date.parse(`${UI.anchorISO}T00:00:00Z`) + UI.offsetDays*MS_DAY); }
 function datePlusDays(base, n){ return new Date(base.getTime() + n*MS_DAY); }
 function fmtDay(d){ return String(d.getUTCDate()).padStart(2,'0'); }
 function isoDay(d){ return d.toISOString().slice(0,10); }
@@ -115,6 +113,7 @@ function getGlobeRadius(){
   const m = globe?.children?.find?.(c => c.geometry?.parameters?.radius);
   return m?.geometry?.parameters?.radius || 100;
 }
+
 // three-globe: phi = (90 - lat), theta = (180 - lon)
 function latLngToUnit(latDeg, lonDeg){
   const phi   = THREE.MathUtils.degToRad(90 - latDeg);
@@ -125,7 +124,6 @@ function latLngToUnit(latDeg, lonDeg){
     Math.sin(phi) * Math.sin(theta)
   ).normalize();
 }
-
 function latLngToVec3(lat, lon, alt=0){
   const R = getGlobeRadius();
   const n = latLngToUnit(lat, lon);
@@ -133,7 +131,7 @@ function latLngToVec3(lat, lon, alt=0){
 }
 
 // -----------------------------------------
-// Logos (local-first)
+// Logos (local-first)  [PATCH C]
 // -----------------------------------------
 const LOGO_LOCAL_BASE = './assets/assets/logos';
 function slugLocal(name=''){
@@ -145,34 +143,29 @@ function localLogoCandidates(team){
   const s = slugLocal(team);
   return [`${LOGO_LOCAL_BASE}/${s}.png`, `${LOGO_LOCAL_BASE}/${s}.svg`];
 }
-function guessLogoSources(team){
-  const list = [];
-  for (const url of localLogoCandidates(team)) list.push(url);
-  return [...new Set(list)];
-}
 function initials(name=''){
   const parts = name.trim().split(/\s+/);
   if (!parts.length) return '';
   if (parts.length === 1) return parts[0].slice(0,2).toUpperCase();
   return (parts[0][0] + (parts[1]?.[0]||'')).toUpperCase();
 }
-function setBadge(elm, urlFromCsv, teamName=''){
+function setBadge(elm, _urlFromCsv, teamName=''){
   if (!elm) return;
   const reqId = (elm.__reqId = (elm.__reqId||0)+1);
   elm.classList.remove('has-logo');
   elm.textContent = initials(teamName);
 
-  const candidates = [urlFromCsv, ...guessLogoSources(teamName)].filter(Boolean);
+  // LOCAL ONLY (no CORS errors)
+  const candidates = localLogoCandidates(teamName);
 
   (async ()=>{
     for (const src of candidates){
       try{
         const img = await new Promise((resolve,reject)=>{
           const i = new Image();
-          i.crossOrigin='anonymous';
           i.onload = ()=>resolve(i);
           i.onerror = reject;
-          i.src = src.includes('?') ? `${src}&v=${Date.now().toString(36)}` : `${src}?v=${Date.now().toString(36)}`;
+          i.src = src; // local file, no cache-buster needed
         });
         if (elm.__reqId !== reqId) return;
         clearNode(elm);
@@ -186,12 +179,9 @@ function setBadge(elm, urlFromCsv, teamName=''){
 }
 
 // -----------------------------------------
-// Stadium billboard candidates (local-only names)
+// Stadium billboard candidates (local-only)  [PATCH D]
 // -----------------------------------------
-// ---- Stadium image candidates (local-only; tidy list) ----
 const STADIUM_BASE = './assets/stadiums';
-
-// Override map for known files you’ve uploaded
 const STADIUM_OVERRIDES = {
   'AC Milan':           'ac-milan.jpg',
   'Arsenal':            'arsenal.jpg',
@@ -207,16 +197,13 @@ const STADIUM_OVERRIDES = {
 };
 
 function stadiumCandidates(f) {
-  // 1) exact override by home team
   const byTeam = STADIUM_OVERRIDES[f.home_team];
   if (byTeam) return [`${STADIUM_BASE}/${byTeam}`];
-
-  // 2) fallback: try slug(home_team)
   const s = slugLocal(f.home_team||'');
   return [`${STADIUM_BASE}/${s}.jpg`, `${STADIUM_BASE}/${s}.png`, `${STADIUM_BASE}/${s}.webp`];
 }
 
-// Texture queue/cache so we don't hammer the loader or re-download
+// Queued / cached texture loader (polite)
 const __TEX_CACHE = new Map();
 const __TEX_WAIT  = new Map();
 function loadTextureQueued(url){
@@ -225,7 +212,6 @@ function loadTextureQueued(url){
 
   const p = new Promise((resolve, reject)=>{
     const loader = new THREE.TextureLoader();
-    // NO cache busters here; files are static in /assets/stadiums
     loader.load(url, tex => {
       __TEX_CACHE.set(url, tex);
       __TEX_WAIT.delete(url);
@@ -261,18 +247,16 @@ function renderCompetitionAccuracy(league){
   if (!el.compWrap) return;
   const stats = getCompetitionSnapshot(league);
   if (el.compName) el.compName.textContent = league || '—';
-  // chips
   if (el.compTraffic){
     el.compTraffic.innerHTML = `
       <span class="light light--green">FTR ${Math.round(DEMO_FTR*100)}%</span>
       <span class="light light--blue">O2.5 ${stats.over25||0}%</span>
       <span class="light light--amber">BTTS ${stats.btts||0}%</span>`;
   }
-  // logo optional (leave as-is; you already set logos in /assets/assets/leagues/)
 }
 
 // -----------------------------------------
-// Date & League filter UI
+// Date & League filter UI  [A: prev/next restored here]
 // -----------------------------------------
 function buildDateStrip(){
   const base = baseDate();
@@ -289,7 +273,6 @@ function buildDateStrip(){
   if (UI.rangeDays===1 && UI.offsetDays===1 && el.dateTomorrow) el.dateTomorrow.classList.add('is-active');
   if (UI.rangeDays>=2 && el.dateWeekend)                         el.dateWeekend.classList.add('is-active');
 
-  // also update the mini calendar title if present
   const t = document.getElementById('cal-title');
   if (t) {
     const mo = base.toLocaleString(undefined, { month: 'long', year: 'numeric', timeZone: 'UTC' });
@@ -307,7 +290,6 @@ function bindDateControls(){
     buildDateStrip(); applyFiltersAndRender();
   });
   el.dateWeekend?.addEventListener('click', ()=>{
-    // Weekend relative to anchor: next Sat+Sun
     const b = baseDate(); const dow = b.getUTCDay(); const toSat = (6 - dow + 7) % 7;
     UI.offsetDays = toSat; UI.rangeDays = 2;
     buildDateStrip(); applyFiltersAndRender();
@@ -320,7 +302,20 @@ function bindDateControls(){
     UI.offsetDays += UI.rangeDays; buildDateStrip(); applyFiltersAndRender();
   });
 
-  // Optional day A/B (only if present in DOM)
+  // Prev/Next fixture (restored)
+  document.getElementById('nav-prev')?.addEventListener('click', ()=>{
+    if (!visibleFixtures.length) return;
+    const cur = visibleFixtures.findIndex(f=>f.__active);
+    const idx = (cur - 1 + visibleFixtures.length) % visibleFixtures.length;
+    selectIndex(idx, { fly:true });
+  });
+  document.getElementById('nav-next')?.addEventListener('click', ()=>{
+    if (!visibleFixtures.length) return;
+    const cur = visibleFixtures.findIndex(f=>f.__active);
+    const idx = (cur + 1) % visibleFixtures.length;
+    selectIndex(idx, { fly:true });
+  });
+
   el.dateA?.addEventListener('click', ()=>{
     const iso = el.dateA.dataset.iso; if (!iso) return;
     UI.offsetDays = Math.round((Date.parse(`${iso}T00:00:00Z`) - Date.parse(`${UI.anchorISO}T00:00:00Z`))/MS_DAY);
@@ -460,12 +455,11 @@ async function init(){
     controls.update(); composer.render();
   })();
 }
-
 // -----------------------------------------
 // CSV ingest
 // -----------------------------------------
 async function loadFixturesCSV(url){
-  const res = await fetch(`${url}?v=${Date.now()}`);
+  const res = await fetch(`${url}?v=${Date.now()}`); // cache-bust CSV only
   if (!res.ok){ showToast('error',`Could not load ${url} (HTTP ${res.status}).`); return; }
   const text = await res.text();
   const { data, errors } = Papa.parse(text, { header:true, skipEmptyLines:true });
@@ -503,6 +497,7 @@ async function loadFixturesCSV(url){
 
   showToast('success', `Loaded ${fixtures.length} fixtures`);
 }
+
 // ----------------------------
 // Selection, hover, rail, panel
 // ----------------------------
@@ -541,6 +536,8 @@ function selectIndex(idx,{fly=false}={}){
   renderPanel(f);
   syncRail(idx);
 }
+
+function elmEmpty(msg){ const d=document.createElement('div'); d.className='empty'; d.textContent=msg; return d; }
 
 function renderPanel(f){
   if (!f) return;
@@ -587,7 +584,6 @@ function renderPanel(f){
   renderCompetitionAccuracy(f.competition);
 }
 
-function elmEmpty(msg){ const d=document.createElement('div'); d.className='empty'; d.textContent=msg; return d; }
 function bindTabs(){
   document.querySelectorAll('.tab')?.forEach(btn=>{
     btn.addEventListener('click',()=>{
@@ -600,44 +596,12 @@ function bindTabs(){
 }
 
 // ----------------------------
-// Marker creation & movement (revised)
+// Marker creation & movement  [PATCH B]
 // ----------------------------
-
-// Use existing easeInOut if it exists; otherwise use a local alias
-const EASE = (typeof easeInOut === 'function')
-  ? easeInOut
-  : (t) => t * t * (3 - 2 * t);
-
-// Great-circle slerp for unit vectors (no Quaternion.slerp needed)
-function slerpUnitVec(fromN, toN, t) {
-  const v0 = fromN.clone().normalize();
-  const v1 = toN.clone().normalize();
-  let dot = THREE.MathUtils.clamp(v0.dot(v1), -1, 1);
-
-  // If almost the same direction, lerp+normalize avoids NaN axis
-  if (dot > 0.9995) {
-    return v0.lerp(v1, t).normalize();
-  }
-  // If opposite, pick a stable orthogonal axis
-  if (dot < -0.9995) {
-    // find an orthogonal vector
-    const ortho = Math.abs(v0.x) < 0.9 ? new THREE.Vector3(1,0,0) : new THREE.Vector3(0,1,0);
-    const axis = new THREE.Vector3().crossVectors(v0, ortho).normalize();
-    const q    = new THREE.Quaternion().setFromAxisAngle(axis, Math.PI * t);
-    return v0.clone().applyQuaternion(q).normalize();
-  }
-
-  const angle = Math.acos(dot);                 // total great-circle angle
-  const axis  = new THREE.Vector3().crossVectors(v0, v1).normalize();
-  const q     = new THREE.Quaternion().setFromAxisAngle(axis, angle * t);
-  return v0.clone().applyQuaternion(q).normalize();
-}
-
 function createMarker(){
   const group = new THREE.Group();
   group.visible = false;
 
-  // radar ring (world-sized, flush to surface)
   const R         = getGlobeRadius();
   const ringInner = R * (1 + SURFACE_EPS + 0.001);
   const ringOuter = R * (1 + SURFACE_EPS + 0.008);
@@ -650,7 +614,6 @@ function createMarker(){
   const radar = new THREE.Mesh(ringGeom, ringMat);
   group.add(radar);
 
-  // beam (local +Y)
   const beamGeom = new THREE.CylinderGeometry(0.18, 0.28, 30, 24, 1, true);
   const beamMat  = new THREE.MeshBasicMaterial({
     color: 0x7df9c4,
@@ -663,7 +626,6 @@ function createMarker(){
   beam.visible = false;
   group.add(beam);
 
-  // billboard sprite (stadium)
   const billboard = new THREE.Sprite(new THREE.SpriteMaterial({ transparent: true, opacity: 0 }));
   billboard.scale.set(14, 8, 1);
   group.add(billboard);
@@ -690,6 +652,26 @@ function makeRAF(){
   };
 }
 
+// Great-circle slerp for unit vectors
+function slerpUnitVec(fromN, toN, t) {
+  const v0 = fromN.clone().normalize();
+  const v1 = toN.clone().normalize();
+  let dot = THREE.MathUtils.clamp(v0.dot(v1), -1, 1);
+
+  if (dot > 0.9995) return v0.lerp(v1, t).normalize();
+  if (dot < -0.9995) {
+    const ortho = Math.abs(v0.x) < 0.9 ? new THREE.Vector3(1,0,0) : new THREE.Vector3(0,1,0);
+    const axis  = new THREE.Vector3().crossVectors(v0, ortho).normalize();
+    const q     = new THREE.Quaternion().setFromAxisAngle(axis, Math.PI * t);
+    return v0.clone().applyQuaternion(q).normalize();
+  }
+
+  const angle = Math.acos(dot);
+  const axis  = new THREE.Vector3().crossVectors(v0, v1).normalize();
+  const q     = new THREE.Quaternion().setFromAxisAngle(axis, angle * t);
+  return v0.clone().applyQuaternion(q).normalize();
+}
+
 function moveMarkerToFixture(f, { fly=false } = {}){
   if (!MARKER || !f) return;
 
@@ -701,17 +683,14 @@ function moveMarkerToFixture(f, { fly=false } = {}){
   const myReq = S.state.reqId;
   const R     = getGlobeRadius();
 
-  // From/to unit normals on sphere
   const toN   = latLngToUnit(lat, lon);
   const fromN = S.group.visible ? S.group.position.clone().normalize() : toN.clone();
 
-  // Travel duration based on angular distance
-  const angle = Math.acos(THREE.MathUtils.clamp(fromN.dot(toN), -1, 1)); // radians
-  const distK = angle * R;                               // scalar distance-ish
+  const angle = Math.acos(THREE.MathUtils.clamp(fromN.dot(toN), -1, 1));
+  const distK = angle * R;
   const dur   = (fly && S.group.visible) ? THREE.MathUtils.clamp(distK * 2.0, 300, 900) : 0;
   const t0    = performance.now();
 
-  // Ensure RAF helpers exist; cancel previous loops
   S.raf.travel = S.raf.travel || makeRAF();
   S.raf.beam   = S.raf.beam   || makeRAF();
   S.raf.fade   = S.raf.fade   || makeRAF();
@@ -719,18 +698,16 @@ function moveMarkerToFixture(f, { fly=false } = {}){
 
   S.group.visible = true;
 
-  // Travel along great circle
   S.raf.travel.run(()=>{
     if (S.state.reqId !== myReq) { S.raf.travel.cancel(); return; }
     const t = dur ? Math.min(1, (performance.now() - t0) / dur) : 1;
-    const k = EASE(t);
+    const k = easeInOut(t);
 
-
-    const curN    = slerpUnitVec(fromN, toN, k);                   // unit normal on sphere
+    const curN    = slerpUnitVec(fromN, toN, k);
     const worldPos= curN.clone().multiplyScalar(R * (1 + SURFACE_EPS));
     S.group.position.copy(worldPos);
 
-    // Orient local +Y to surface normal (stable)
+    // Orient local +Y to surface normal
     const q = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,1,0), curN);
     S.group.quaternion.copy(q);
 
@@ -748,26 +725,27 @@ function moveMarkerToFixture(f, { fly=false } = {}){
       S.raf.beam.run(()=>{
         if (S.state.reqId !== myReq) { S.raf.beam.cancel(); return; }
         const tb = Math.min(1, (performance.now() - b0) / bd);
-        const e  = EASE(tb);
+        const e  = easeInOut(tb);
         S.beam.scale.y          = 0.001 + e;
-        S.beam.material.opacity = 0.4 * e;
+        S.beam.material.opacity = 0.5 * e;   // brighter flicker
         if (tb >= 1) S.raf.beam.cancel();
       });
 
-      // Billboard sits along local +Y (~6% of radius above surface)
-      S.billboard.position.set(0, R * 0.06, 0);
+      // Billboard just above surface
+      S.billboard.position.set(0, R * 0.04, 0); // was 0.06
       S.billboard.material.opacity = 0;
       S.billboard.visible = true;
 
-      // Hide billboard if on far side relative to camera
-      const camN = camera.position.clone().normalize();
-      if (curN.dot(camN) < -0.05) S.billboard.visible = false;
+      // Only hide if really far side
+      if (curN.dot(camera.position.clone().normalize()) < -0.25) {
+        S.billboard.visible = false;
+      }
 
-      // Load stadium texture (polite queue, cached; NO timestamps)
+      // Load stadium texture (queued, cached)
       (async ()=>{
         for (const url of stadiumCandidates(f)) {
           try {
-            const tex = await loadTextureQueued(url); // from Patch A
+            const tex = await loadTextureQueued(url);
             if (S.state.reqId !== myReq) return;
             S.billboard.material.map = tex;
             S.billboard.material.needsUpdate = true;
@@ -779,16 +757,14 @@ function moveMarkerToFixture(f, { fly=false } = {}){
               S.billboard.material.opacity = ft;
               if (ft >= 1) S.raf.fade.cancel();
             });
-            return; // done
+            return;
           } catch { /* try next */ }
         }
-        // Not found
         if (S.state.reqId === myReq) S.billboard.visible = false;
       })();
     }
   });
 }
-
 // =====================================================
 // API HELPERS + FEATURE PAGES (BetChecker / Acca / Co-Pilot)
 // =====================================================
@@ -811,7 +787,7 @@ const API = {
   copilot: (p)=>       apiJson('/copilot', { method:'POST', body: JSON.stringify(p) })
 };
 
-// ---------- Bet Checker: OCR → parse → score ----------
+// ---------- Bet Checker ----------
 async function ocrImageOrPdf(file) {
   if (!window.Tesseract) throw new Error('OCR engine not loaded');
   const { data } = await window.Tesseract.recognize(file, 'eng', { logger: () => {} });
@@ -860,7 +836,7 @@ async function runBetChecker(file) {
     }
     out && (out.innerHTML = '<div class="muted">Scoring legs…</div>');
     const scored = await API.scoreSlip({ legs: parsed.legs });
-    // Render minimal scored result
+
     const container = document.createElement('div');
     const sum = scored.summary || {};
     container.innerHTML = `
@@ -1028,7 +1004,6 @@ function showRoute(hash) {
     a.classList.toggle('is-active', a.getAttribute('href') === hash);
     if (a.classList.contains('side-link')) a.classList.toggle('active', a.getAttribute('href') === hash);
   });
-  // close menus / drawer
   const profileMenu = document.getElementById('profile-menu');
   const profileBtn  = document.getElementById('btn-profile');
   profileMenu?.classList.remove('show'); profileBtn?.setAttribute('aria-expanded','false');
