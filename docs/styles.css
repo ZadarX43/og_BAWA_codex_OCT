@@ -668,3 +668,69 @@ canvas{ border-radius:24px; }
 
 /* Ensure OrbitControls can receive input on the canvas */
 #globe-container canvas { pointer-events: auto !important; }
+
+/* ========== LEFT RAIL POLISH ========== */
+.left-rail{
+  background: linear-gradient(135deg, rgba(8,20,32,.55), rgba(8,30,45,.48));
+  border: 1px solid rgba(125,249,196,.14);
+  border-radius: 18px;
+  padding: 14px;
+  box-shadow: 0 12px 28px rgba(0,0,0,.28);
+  display:flex; flex-direction:column; gap:10px;
+}
+
+.date-quick{ display:flex; gap:8px; flex-wrap:wrap; }
+.pill{
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+  color:#E9F4FF; font-weight:700; letter-spacing:.01em;
+  padding:8px 12px; border-radius:999px; cursor:pointer;
+  transition: background .2s ease, transform .12s ease, border-color .2s ease;
+}
+.pill:hover{ background:rgba(255,255,255,.08); transform:translateY(-1px); }
+.pill.is-active{
+  color:#041418;
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  border-color: rgba(125,249,196,.42);
+}
+
+/* Mini calendar */
+.cal-head{ display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.cal-title{ font-weight:700; letter-spacing:.02em; color:#def2ff; }
+.cal-nav{
+  width:28px; height:28px; border-radius:8px; border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.06); color:#e8f6ff; cursor:pointer;
+}
+.mini-cal{
+  display:grid; grid-template-columns: repeat(7, 1fr); gap:8px;
+  padding-top:6px;
+}
+.date-cell{
+  display:grid; place-items:center;
+  height:32px; border-radius:10px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.10);
+  color:#dfefff; font-weight:700; cursor:pointer;
+  transition: transform .12s ease, background .2s ease, border-color .2s ease;
+}
+.date-cell:hover{ transform:translateY(-1px); background:rgba(255,255,255,.08); }
+.date-cell.is-active{
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  color:#041418; border-color: rgba(125,249,196,.42);
+}
+
+/* League chips */
+.league-chips{ display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
+.chip{
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.06);
+  color:#e8f6ff; font-weight:700; letter-spacing:.01em;
+  padding:6px 10px; border-radius:999px; cursor:pointer;
+  transition: background .2s ease, transform .12s ease, border-color .2s ease;
+}
+.chip:hover{ background:rgba(255,255,255,.08); transform:translateY(-1px); }
+.chip.is-active{ outline:2px solid var(--accent); }
+
+/* Headline geometry stays tight (Montserrat looks best slightly negative tracked) */
+.brand__name{ letter-spacing:.06em; }
+
