@@ -184,18 +184,34 @@ function setBadge(elm, urlFromCsv, teamName=''){
 // -----------------------------------------
 // Stadium billboard candidates (local-only names)
 // -----------------------------------------
-const TEAM_STADIUM_BASE = './assets/stadiums';
-function stadiumCandidates(f){
-  const names = [
-    f.stadium, f.venue, f.stadium_name, f.venue_name,
-    f.home_team, f.away_team
-  ].filter(Boolean).map(String);
-  const slugs = Array.from(new Set(names.map(slugLocal)));
-  const exts = ['.jpg','.jpeg','.png','.webp'];
-  const out = [];
-  for (const s of slugs) for (const ext of exts) out.push(`${TEAM_STADIUM_BASE}/${s}${ext}`);
-  return out;
+// ---- Stadium image candidates (local-only; tidy list) ----
+const STADIUM_BASE = './assets/stadiums';
+
+// Override map for known files you’ve uploaded
+const STADIUM_OVERRIDES = {
+  'AC Milan':           'ac-milan.jpg',
+  'Arsenal':            'arsenal.jpg',
+  'Galatasaray':        'galatasaray.jpg',
+  'Lazio':              'lazio.jpg',
+  'Manchester City':    'man-city.jpg',
+  'PSG':                'psg.jpg',
+  'Paris Saint-Germain':'psg.jpg',
+  'Real Madrid':        'real-madrid.jpg',
+  'Sevilla FC':         'sevilla.jpg',
+  'Shakhtar Donetsk':   'shakhtar-donetsk.jpg',
+  'Young Boys':         'young-boys.jpg',
+};
+
+function stadiumCandidates(f) {
+  // 1) exact override by home team
+  const byTeam = STADIUM_OVERRIDES[f.home_team];
+  if (byTeam) return [`${STADIUM_BASE}/${byTeam}`];
+
+  // 2) fallback: try slug(home_team)
+  const s = slugLocal(f.home_team||'');
+  return [`${STADIUM_BASE}/${s}.jpg`, `${STADIUM_BASE}/${s}.png`, `${STADIUM_BASE}/${s}.webp`];
 }
+
 
 // -----------------------------------------
 // Competition accuracy strip
@@ -537,54 +553,129 @@ function bindTabs(){
 }
 
 // ----------------------------
-// Marker creation & movement
+// Marker creation & movement (revised)
 // ----------------------------
-function createMarker(){
-  const group = new THREE.Group(); group.visible=false;
 
-  // radar ring (quad-like ring flush to surface)
-  const ringInner = getGlobeRadius()*(1+SURFACE_EPS+0.001);
-  const ringOuter = getGlobeRadius()*(1+SURFACE_EPS+0.008);
+// Fallback if easeInOut isn't defined above
+const easeInOut = typeof easeInOut === "function"
+  ? easeInOut
+  : (t) => t * t * (3 - 2 * t);
+
+// Unit vector on globe using three-globe convention
+function latLngToUnit(latDeg, lonDeg) {
+  // three-globe: phi=(90-lat), theta=(180-lon)
+  const phi   = THREE.MathUtils.degToRad(90 - latDeg);
+  const theta = THREE.MathUtils.degToRad(180 - lonDeg);
+  const x = Math.sin(phi) * Math.cos(theta);
+  const y = Math.cos(phi);
+  const z = Math.sin(phi) * Math.sin(theta);
+  return new THREE.Vector3(x, y, z).normalize();
+}
+
+// Great-circle slerp for unit vectors (no Quaternion.slerp needed)
+function slerpUnitVec(fromN, toN, t) {
+  const v0 = fromN.clone().normalize();
+  const v1 = toN.clone().normalize();
+  let dot = THREE.MathUtils.clamp(v0.dot(v1), -1, 1);
+
+  // If almost the same direction, lerp+normalize avoids NaN axis
+  if (dot > 0.9995) {
+    return v0.lerp(v1, t).normalize();
+  }
+  // If opposite, pick a stable orthogonal axis
+  if (dot < -0.9995) {
+    // find an orthogonal vector
+    const ortho = Math.abs(v0.x) < 0.9 ? new THREE.Vector3(1,0,0) : new THREE.Vector3(0,1,0);
+    const axis = new THREE.Vector3().crossVectors(v0, ortho).normalize();
+    const q    = new THREE.Quaternion().setFromAxisAngle(axis, Math.PI * t);
+    return v0.clone().applyQuaternion(q).normalize();
+  }
+
+  const angle = Math.acos(dot);                 // total great-circle angle
+  const axis  = new THREE.Vector3().crossVectors(v0, v1).normalize();
+  const q     = new THREE.Quaternion().setFromAxisAngle(axis, angle * t);
+  return v0.clone().applyQuaternion(q).normalize();
+}
+
+function createMarker(){
+  const group = new THREE.Group();
+  group.visible = false;
+
+  // radar ring (world-sized, flush to surface)
+  const R         = getGlobeRadius();
+  const ringInner = R * (1 + SURFACE_EPS + 0.001);
+  const ringOuter = R * (1 + SURFACE_EPS + 0.008);
   const ringGeom  = new THREE.RingGeometry(ringInner, ringOuter, 64);
-  const ringMat   = new THREE.MeshBasicMaterial({ color:new THREE.Color(COLORS.ring), transparent:true, opacity:0.42, side:THREE.DoubleSide, depthWrite:false });
-  const radar     = new THREE.Mesh(ringGeom, ringMat);
+  const ringMat   = new THREE.MeshBasicMaterial({
+    color: new THREE.Color(COLORS.ring),
+    transparent: true, opacity: 0.42,
+    side: THREE.DoubleSide, depthWrite: false
+  });
+  const radar = new THREE.Mesh(ringGeom, ringMat);
   group.add(radar);
 
-  // beam
-  const beamGeom  = new THREE.CylinderGeometry(0.18, 0.28, 30, 24, 1, true);
-  const beamMat   = new THREE.MeshBasicMaterial({ color:0x7df9c4, transparent:true, opacity:0.0, blending:THREE.AdditiveBlending, depthWrite:false });
-  const beam      = new THREE.Mesh(beamGeom, beamMat);
-  beam.visible=false; group.add(beam);
+  // beam (local +Y)
+  const beamGeom = new THREE.CylinderGeometry(0.18, 0.28, 30, 24, 1, true);
+  const beamMat  = new THREE.MeshBasicMaterial({
+    color: 0x7df9c4,
+    transparent: true,
+    opacity: 0.0,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false
+  });
+  const beam = new THREE.Mesh(beamGeom, beamMat);
+  beam.visible = false;
+  group.add(beam);
 
-  // billboard
-  const billboard = new THREE.Sprite(new THREE.SpriteMaterial({ transparent:true, opacity:0 }));
-  billboard.scale.set(14,8,1); group.add(billboard);
+  // billboard sprite (stadium)
+  const billboard = new THREE.Sprite(new THREE.SpriteMaterial({ transparent: true, opacity: 0 }));
+  billboard.scale.set(14, 8, 1);
+  group.add(billboard);
 
   return {
     group, radar, beam, billboard,
-    state: { lat:0, lon:0, reqId:0 },
-    raf: { travel:null, beam:null, fade:null }
+    state: { lat: 0, lon: 0, reqId: 0 },
+    raf:   { travel: null, beam: null, fade: null }
   };
 }
 
-function cancelRAF(handle){ if (handle && handle.id) cancelAnimationFrame(handle.id); }
-function makeRAF(){ return { id: null, run(fn){ cancelRAF(this); const loop=()=>{fn(); this.id=requestAnimationFrame(loop);}; this.id=requestAnimationFrame(loop); }, cancel(){ cancelRAF(this); this.id=null; } }; }
+function cancelRAF(handle){
+  if (handle && handle.id) cancelAnimationFrame(handle.id);
+}
+function makeRAF(){
+  return {
+    id: null,
+    run(fn){
+      cancelRAF(this);
+      const loop = () => { fn(); this.id = requestAnimationFrame(loop); };
+      this.id = requestAnimationFrame(loop);
+    },
+    cancel(){ cancelRAF(this); this.id = null; }
+  };
+}
 
 function moveMarkerToFixture(f, { fly=false } = {}){
   if (!MARKER || !f) return;
-  const S = MARKER;
-  const lat = +f.latitude, lon = +f.longitude;
-  if (!Number.isFinite(lat)||!Number.isFinite(lon)){ S.group.visible=false; return; }
 
-  S.state.reqId++; const myReq = S.state.reqId;
-  const R = getGlobeRadius();
+  const S   = MARKER;
+  const lat = Number(f.latitude), lon = Number(f.longitude);
+  if (!Number.isFinite(lat) || !Number.isFinite(lon)) { S.group.visible = false; return; }
 
-  const fromN = S.group.visible ? S.group.position.clone().normalize() : latLngToUnit(lat,lon);
-  const toN   = latLngToUnit(lat,lon);
-  const dur   = (fly && S.group.visible) ? 700 : 0;
+  S.state.reqId++;
+  const myReq = S.state.reqId;
+  const R     = getGlobeRadius();
+
+  // From/to unit normals on sphere
+  const toN   = latLngToUnit(lat, lon);
+  const fromN = S.group.visible ? S.group.position.clone().normalize() : toN.clone();
+
+  // Travel duration based on angular distance
+  const angle = Math.acos(THREE.MathUtils.clamp(fromN.dot(toN), -1, 1)); // radians
+  const distK = angle * R;                               // scalar distance-ish
+  const dur   = (fly && S.group.visible) ? THREE.MathUtils.clamp(distK * 2.0, 300, 900) : 0;
   const t0    = performance.now();
 
-  // Start travel RAF
+  // Ensure RAF helpers exist; cancel previous loops
   S.raf.travel = S.raf.travel || makeRAF();
   S.raf.beam   = S.raf.beam   || makeRAF();
   S.raf.fade   = S.raf.fade   || makeRAF();
@@ -592,74 +683,75 @@ function moveMarkerToFixture(f, { fly=false } = {}){
 
   S.group.visible = true;
 
+  // Travel along great circle
   S.raf.travel.run(()=>{
     if (S.state.reqId !== myReq) { S.raf.travel.cancel(); return; }
-    const t = dur ? Math.min(1,(performance.now()-t0)/dur) : 1;
+    const t = dur ? Math.min(1, (performance.now() - t0) / dur) : 1;
     const k = easeInOut(t);
-    const curN = fromN.clone().lerp(toN,k).normalize();
 
-    const worldPos = curN.clone().multiplyScalar(R*(1+SURFACE_EPS));
+    const curN    = slerpUnitVec(fromN, toN, k);                   // unit normal on sphere
+    const worldPos= curN.clone().multiplyScalar(R * (1 + SURFACE_EPS));
     S.group.position.copy(worldPos);
 
-    // orient +Y along surface normal via lookAt
-    const up = new THREE.Vector3(0,1,0);
-    const m  = new THREE.Matrix4().lookAt(new THREE.Vector3().copy(worldPos), new THREE.Vector3(0,0,0), up);
-    S.group.quaternion.setFromRotationMatrix(m);
+    // Orient local +Y to surface normal (stable)
+    const q = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,1,0), curN);
+    S.group.quaternion.copy(q);
 
-    if (t>=1){
+    if (t >= 1) {
       S.raf.travel.cancel();
-      // Beam grow
+
+      // Beam grow along local +Y
       S.beam.position.set(0,0,0);
       S.beam.quaternion.identity();
-      S.beam.scale.set(1,0.001,1);
+      S.beam.scale.set(1, 0.001, 1);
       S.beam.material.opacity = 0.0;
       S.beam.visible = true;
 
-      const b0=performance.now(), bd=550;
+      const b0 = performance.now(), bd = 550;
       S.raf.beam.run(()=>{
-        if (S.state.reqId!==myReq){ S.raf.beam.cancel(); return; }
-        const tb=Math.min(1,(performance.now()-b0)/bd);
-        const e=tb*tb*(3-2*tb);
-        S.beam.scale.y=0.001+e;
-        S.beam.material.opacity=0.4*e;
-        if (tb>=1) S.raf.beam.cancel();
+        if (S.state.reqId !== myReq) { S.raf.beam.cancel(); return; }
+        const tb = Math.min(1, (performance.now() - b0) / bd);
+        const e  = easeInOut(tb);
+        S.beam.scale.y          = 0.001 + e;
+        S.beam.material.opacity = 0.4 * e;
+        if (tb >= 1) S.raf.beam.cancel();
       });
 
-      // billboard above +Y (local)
-      S.billboard.position.set(0, R*0.06, 0);
-      S.billboard.material.opacity=0;
-      S.billboard.visible=true;
+      // Billboard sits along local +Y (~6% of radius above surface)
+      S.billboard.position.set(0, R * 0.06, 0);
+      S.billboard.material.opacity = 0;
+      S.billboard.visible = true;
 
       // Hide billboard if on far side relative to camera
-      const camN=camera.position.clone().normalize();
-      const n  =S.group.position.clone().normalize();
-      if (n.dot(camN) < -0.05) S.billboard.visible=false;
+      const camN = camera.position.clone().normalize();
+      if (curN.dot(camN) < -0.05) S.billboard.visible = false;
 
-      // Load stadium texture
+      // Load stadium texture (polite queue, cached; NO timestamps)
       (async ()=>{
-        for (const url of stadiumCandidates(f)){
-          try{
-            const tex = await new Promise((res,rej)=> new THREE.TextureLoader().load(
-              url.includes('?')?`${url}&v=${Date.now().toString(36)}`:`${url}?v=${Date.now().toString(36)}`, res, undefined, rej
-            ));
-            if (S.state.reqId!==myReq) return;
-            S.billboard.material.map=tex; S.billboard.material.needsUpdate=true;
+        for (const url of stadiumCandidates(f)) {
+          try {
+            const tex = await loadTextureQueued(url); // from Patch A
+            if (S.state.reqId !== myReq) return;
+            S.billboard.material.map = tex;
+            S.billboard.material.needsUpdate = true;
 
-            const fa0=performance.now(), fad=220;
+            const fa0 = performance.now(), fad = 220;
             S.raf.fade.run(()=>{
-              if (S.state.reqId!==myReq){ S.raf.fade.cancel(); return; }
-              const ft=Math.min(1,(performance.now()-fa0)/fad);
-              S.billboard.material.opacity=ft;
-              if (ft>=1) S.raf.fade.cancel();
+              if (S.state.reqId !== myReq) { S.raf.fade.cancel(); return; }
+              const ft = Math.min(1, (performance.now() - fa0) / fad);
+              S.billboard.material.opacity = ft;
+              if (ft >= 1) S.raf.fade.cancel();
             });
-            return;
-          }catch{}
+            return; // done
+          } catch { /* try next */ }
         }
-        if (S.state.reqId===myReq) S.billboard.visible=false;
+        // Not found
+        if (S.state.reqId === myReq) S.billboard.visible = false;
       })();
     }
   });
 }
+
 // =====================================================
 // API HELPERS + FEATURE PAGES (BetChecker / Acca / Co-Pilot)
 // =====================================================
