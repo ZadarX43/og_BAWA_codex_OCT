@@ -156,22 +156,29 @@ function makeFallbackCanvasTexture(label='STADIUM'){
 }
 
 // -----------------------------------------
-// Logos (local-only) — all badges in docs/assets/assets/logs/*.svg
-// ---------------------------------
+// Logos (local-only)
+// -----------------------------------------
 const LOGO_LOCAL_BASE = './assets/assets/logos';
 
-// strip accents & punctuation for slugging (“København” -> “kobenhavn”)
-function stripDiacritics(s=''){ try{ return s.normalize('NFD').replace(/\p{Diacritic}/gu,''); }catch{ return s.replace(/[\u0300-\u036f]/g,''); } }
-function slugLocal(name=''){
-  return stripDiacritics(String(name))
-    .toLowerCase()
-    .replace(/&/g,'and')
-    .replace(/[\u2019'’]/g,'')
-    .replace(/[^a-z0-9]+/g,'-')
-    .replace(/^-+|-+$/g,'');
+// Strip accents & punctuation for slugging (“København” -> “kobenhavn”)
+function stripDiacritics(s = '') {
+  try {
+    return s.normalize('NFD').replace(/\p{Diacritic}/gu, '');
+  } catch {
+    return s.replace(/[\u0300-\u036f]/g, '');
+  }
 }
 
-// explicit alias map for names that don’t match simple slug
+function slugLocal(name = '') {
+  return stripDiacritics(String(name))
+    .toLowerCase()
+    .replace(/&/g, 'and')
+    .replace(/[\u2019'’]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+// Explicit alias map for names that don’t match a simple slug
 const TEAM_LOGO_OVERRIDES = {
   'PSG'                : `${LOGO_LOCAL_BASE}/paris-saint-germain.svg`,
   'Paris Saint-Germain': `${LOGO_LOCAL_BASE}/paris-saint-germain.svg`,
@@ -183,7 +190,6 @@ const TEAM_LOGO_OVERRIDES = {
   'Red Star Belgrade'  : `${LOGO_LOCAL_BASE}/red-star-belgrade.svg`,
   'Bayern München'     : `${LOGO_LOCAL_BASE}/bayern-munich.svg`,
   'Bayern Munich'      : `${LOGO_LOCAL_BASE}/bayern-munich.svg`,
-  // “nice to have” explicit forms (keeps slug logic simple)
   'AC Milan'           : `${LOGO_LOCAL_BASE}/ac-milan.svg`,
   'Manchester City'    : `${LOGO_LOCAL_BASE}/manchester-city.svg`,
   'Lazio'              : `${LOGO_LOCAL_BASE}/lazio.svg`,
@@ -191,35 +197,37 @@ const TEAM_LOGO_OVERRIDES = {
   'Young Boys'         : `${LOGO_LOCAL_BASE}/young-boys.svg`,
   'Real Madrid'        : `${LOGO_LOCAL_BASE}/real-madrid.svg`,
   'Real Sociedad'      : `${LOGO_LOCAL_BASE}/real-sociedad.svg`,
-  'SSC Napoli'         : `${ LOGO_LOCAL_BASE }/ssc-napoli.svg`,
-  'Napoli'             : `${ LOGO_LOCAL_BASE }/ssc-napoli.svg`,
-  'PSV'                : `${ LOGO_LOCAL_BASE }/psv.svg`,
-  'Sevilla FC'         : `${ LOGO_LOCAL_BASE }/sevilla-fc.svg`,
-  'RB Leipzig'         : `${ LOGO_LOCAL_BASE }/rb-leipzig.svg`,
+  'SSC Napoli'         : `${LOGO_LOCAL_BASE}/ssc-napoli.svg`,
+  'Napoli'             : `${LOGO_LOCAL_BASE}/ssc-napoli.svg`,
+  'PSV'                : `${LOGO_LOCAL_BASE}/psv.svg`,
+  'Sevilla FC'         : `${LOGO_LOCAL_BASE}/sevilla-fc.svg`,
+  'RB Leipzig'         : `${LOGO_LOCAL_BASE}/rb-leipzig.svg`,
 };
 
-// generate candidate .svg paths (no .png, no cache buster)
+// Generate candidate .svg paths based on the team name
 function localLogoCandidates(teamName = '') {
-  // 1) explicit override first (PSG, Bayern, etc.)
-  const override = TEAM_LOGO_OVERRIDES[teamName];
+  const name = String(teamName || '').trim();
+  if (!name) return [];
+
+  // 1) Exact override first
+  const override = TEAM_LOGO_OVERRIDES[name];
   if (override) return [override];
 
-  // 2) slugged guesses
-  const s = slugLocal(teamName);   // e.g. "FC Barcelona" -> "fc-barcelona"
+  // 2) Slug-based guesses
+  const s = slugLocal(name);  // e.g. "FC Barcelona" -> "fc-barcelona"
   if (!s) return [];
 
   const b = LOGO_LOCAL_BASE;
   return Array.from(new Set([
     `${b}/${s}.svg`,
-    `${b}/${s.replace(/^fc-/, '')}.svg`,   // "fc-barcelona" → "barcelona.svg"
-    `${b}/${s.replace(/-fc$/, '')}.svg`,   // "barcelona-fc" → "barcelona.svg"
+    `${b}/${s.replace(/^fc-/, '')}.svg`,   // "fc-barcelona" -> "barcelona.svg"
+    `${b}/${s.replace(/-fc$/, '')}.svg`,   // "barcelona-fc" -> "barcelona.svg"
   ]));
 }
 
-
-function initialsFor(name=''){
+function initialsFor(name = '') {
   const p = String(name).trim().split(/\s+/);
-  return p.length ? (p[0][0] + (p[1]?.[0]||'')).toUpperCase() : '';
+  return p.length ? (p[0][0] + (p[1]?.[0] || '')).toUpperCase() : '';
 }
 
 // *** The ONLY badge loader to use ***
@@ -227,43 +235,52 @@ async function setBadgeLocal(elm, _urlFromCsv, teamName = '') {
   if (!elm) return;
 
   const reqId = (elm.__reqId = (elm.__reqId || 0) + 1);
+
+  // Default: show initials
   elm.classList.remove('has-logo');
+  elm.innerHTML = '';
   elm.textContent = initialsFor(teamName);
 
   const candidates = localLogoCandidates(teamName);
-  console.debug('[badge] trying', teamName, '→', candidates);
+  console.debug('[badge] load', { teamName, candidates, reqId });
+
+  if (!candidates.length) return; // no guesses, just keep initials
 
   for (const src of candidates) {
     try {
       await new Promise((res, rej) => {
-        const i = new Image();
-        i.decoding = 'async';
-        i.loading  = 'lazy';
-        i.onload   = () => {
-          // only apply if this is still the latest request for this element
+        const img = new Image();
+        img.decoding = 'async';
+        img.loading  = 'lazy';
+        img.onload   = () => {
+          // Only attach if this is still the latest request for this element
           if (elm.__reqId === reqId) {
             elm.innerHTML = '';
-            elm.appendChild(i);
+            elm.appendChild(img);
             elm.classList.add('has-logo');
           }
           res();
         };
-        i.onerror = () => rej(new Error(`badge 404: ${src}`));
-        i.src     = src; // same-origin, no cache-buster
+        img.onerror = () => rej(new Error(`badge 404: ${src}`));
+        img.src     = src;
       });
 
-      // if no newer request started while we were loading, we’re done
-      if (elm.__reqId === reqId) return;
+      if (elm.__reqId === reqId) {
+        console.debug('[badge] success', teamName);
+        return; // done
+      }
     } catch (err) {
-      console.warn('[badge] failed', src, err);
+      console.warn('[badge] failed', teamName, '→', src, err?.message || err);
     }
   }
 
-  // nothing worked → stick with initials
+  // If we tried everything and still failed, leave initials
   if (elm.__reqId === reqId) {
     elm.classList.remove('has-logo');
+    console.warn('[badge] all candidates failed, keeping initials for', teamName);
   }
 }
+
 
 // -----------------------------------------
 // Stadium billboard (local-only)
