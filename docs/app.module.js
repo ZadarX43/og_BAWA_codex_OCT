@@ -242,7 +242,8 @@ async function setBadgeLocal(elm, _urlFromCsv, teamName = '') {
   elm.textContent = initialsFor(teamName);
 
   const candidates = localLogoCandidates(teamName);
-  console.debug('[badge] load', { teamName, candidates, reqId });
+  console.log('[badge] load', { teamName, candidates, reqId });
+
 
   if (!candidates.length) return; // no guesses, just keep initials
 
@@ -285,7 +286,7 @@ async function setBadgeLocal(elm, _urlFromCsv, teamName = '') {
 // -----------------------------------------
 // Stadium billboard (local-only)
 // -----------------------------------------
-const STADIUM_BASE = './assets/assets/stadiums';
+const STADIUM_BASE = './assets/stadiums';
 
 // Only the files you said you uploaded:
 const STADIUM_OVERRIDES = {
