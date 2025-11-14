@@ -129,6 +129,31 @@ function latLngToVec3(lat, lon, alt=0){
   const n = latLngToUnit(lat, lon);
   return n.clone().multiplyScalar(R*(1+alt));
 }
+function makeFallbackCanvasTexture(label='STADIUM'){
+  const c = document.createElement('canvas');
+  c.width = 512; c.height = 512;
+  const g = c.getContext('2d');
+
+  // soft gradient disc
+  const r = 220, cx = 256, cy = 256;
+  const grd = g.createRadialGradient(cx, cy, r*0.25, cx, cy, r);
+  grd.addColorStop(0, 'rgba(255,255,255,0.95)');
+  grd.addColorStop(1, 'rgba(125,249,196,0.20)');
+  g.fillStyle = grd;
+  g.beginPath(); g.arc(cx, cy, r, 0, Math.PI*2); g.fill();
+
+  // label
+  g.fillStyle = '#0b1f29';
+  g.font = 'bold 46px Montserrat, system-ui, sans-serif';
+  g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.fillText(label, cx, cy);
+
+  const tex = new THREE.CanvasTexture(c);
+  if ('colorSpace' in tex) tex.colorSpace = THREE.SRGBColorSpace;
+  const maxAniso = renderer?.capabilities?.getMaxAnisotropy?.() || 1;
+  tex.anisotropy = maxAniso;
+  return tex;
+}
 
 // -----------------------------------------
 // Logos (local-first)  [PATCH C]
@@ -213,6 +238,11 @@ function loadTextureQueued(url){
   const p = new Promise((resolve, reject)=>{
     const loader = new THREE.TextureLoader();
     loader.load(url, tex => {
+      // nicer output in sRGB pipelines
+      if ('colorSpace' in tex) tex.colorSpace = THREE.SRGBColorSpace;
+      const maxAniso = renderer?.capabilities?.getMaxAnisotropy?.() || 1;
+      tex.anisotropy = maxAniso;
+
       __TEX_CACHE.set(url, tex);
       __TEX_WAIT.delete(url);
       resolve(tex);
@@ -224,6 +254,7 @@ function loadTextureQueued(url){
   __TEX_WAIT.set(url, p);
   return p;
 }
+
 
 // -----------------------------------------
 // Competition accuracy strip
@@ -608,8 +639,10 @@ function createMarker(){
   const ringGeom  = new THREE.RingGeometry(ringInner, ringOuter, 64);
   const ringMat   = new THREE.MeshBasicMaterial({
     color: new THREE.Color(COLORS.ring),
-    transparent: true, opacity: 0.42,
-    side: THREE.DoubleSide, depthWrite: false
+    transparent: true,
+    opacity: 0.42,
+    side: THREE.DoubleSide,
+    depthWrite: false
   });
   const radar = new THREE.Mesh(ringGeom, ringMat);
   group.add(radar);
@@ -626,8 +659,16 @@ function createMarker(){
   beam.visible = false;
   group.add(beam);
 
-  const billboard = new THREE.Sprite(new THREE.SpriteMaterial({ transparent: true, opacity: 0 }));
-  billboard.scale.set(14, 8, 1);
+  // ⬇️ billboard draws on top of the globe and is a bit larger
+  const billboardMat = new THREE.SpriteMaterial({
+    transparent: true,
+    opacity: 0,
+    depthTest: false,   // critical: don’t test against depth buffer
+    depthWrite: false
+  });
+  const billboard = new THREE.Sprite(billboardMat);
+  billboard.scale.set(24, 14, 1);   // bump size for visibility
+  billboard.renderOrder = 999;      // draw late
   group.add(billboard);
 
   return {
@@ -636,6 +677,7 @@ function createMarker(){
     raf:   { travel: null, beam: null, fade: null }
   };
 }
+
 
 function cancelRAF(handle){
   if (handle && handle.id) cancelAnimationFrame(handle.id);
@@ -749,7 +791,7 @@ function moveMarkerToFixture(f, { fly=false } = {}){
             if (S.state.reqId !== myReq) return;
             S.billboard.material.map = tex;
             S.billboard.material.needsUpdate = true;
-
+      
             const fa0 = performance.now(), fad = 220;
             S.raf.fade.run(()=>{
               if (S.state.reqId !== myReq) { S.raf.fade.cancel(); return; }
@@ -760,9 +802,17 @@ function moveMarkerToFixture(f, { fly=false } = {}){
             return;
           } catch { /* try next */ }
         }
-        if (S.state.reqId === myReq) S.billboard.visible = false;
+      
+        // No file matched -> show a fallback disc with team / city
+        if (S.state.reqId === myReq) {
+          const name = (f.city || f.home_team || 'STADIUM').toUpperCase();
+          const tex  = makeFallbackCanvasTexture(name);
+          S.billboard.material.map = tex;
+          S.billboard.material.needsUpdate = true;
+          S.billboard.material.opacity = 1.0;
+          S.billboard.visible = true;
+        }
       })();
-    }
   });
 }
 // =====================================================
