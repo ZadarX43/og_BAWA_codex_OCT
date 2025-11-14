@@ -29,14 +29,16 @@ const el = {
   awayBadge:     document.getElementById('away-badge'),
 
   // Date & league filters
-  dateToday:     document.getElementById('date-pill-today'),
-  dateTomorrow:  document.getElementById('date-pill-tomorrow'),
-  dateWeekend:   document.getElementById('date-pill-weekend'),
-  datePrev:      document.getElementById('date-prev'),
-  dateNext:      document.getElementById('date-next'),
-  dateA:         document.getElementById('date-day-a'),
-  dateB:         document.getElementById('date-day-b'),
-  leagueChips:   document.getElementById('league-chips'),
+  // (bind by data attributes and real IDs from index.html)
+  dateToday:    document.querySelector('[data-range="today"]'),
+  dateTomorrow: document.querySelector('[data-range="tomorrow"]'),
+  dateWeekend:  document.querySelector('[data-range="weekend"]'),
+  datePrev:     document.getElementById('cal-prev'),
+  dateNext:     document.getElementById('cal-next'),
+  dateA:        document.getElementById('date-day-a'), // may be null (optional)
+  dateB:        document.getElementById('date-day-b'), // may be null (optional)
+  leagueChips:  document.getElementById('league-chips'),
+
 
   // Competition strip
   compWrap:      document.getElementById('comp-accuracy'),
@@ -113,15 +115,17 @@ function getGlobeRadius(){
   const m = globe?.children?.find?.(c => c.geometry?.parameters?.radius);
   return m?.geometry?.parameters?.radius || 100;
 }
+// three-globe: phi = (90 - lat), theta = (180 - lon)
 function latLngToUnit(latDeg, lonDeg){
-  const phi = THREE.MathUtils.degToRad(90 - latDeg);
-  const theta = THREE.MathUtils.degToRad(lonDeg);
+  const phi   = THREE.MathUtils.degToRad(90 - latDeg);
+  const theta = THREE.MathUtils.degToRad(180 - lonDeg);
   return new THREE.Vector3(
-    Math.sin(phi)*Math.cos(theta),
+    Math.sin(phi) * Math.cos(theta),
     Math.cos(phi),
-    Math.sin(phi)*Math.sin(theta)
+    Math.sin(phi) * Math.sin(theta)
   ).normalize();
 }
+
 function latLngToVec3(lat, lon, alt=0){
   const R = getGlobeRadius();
   const n = latLngToUnit(lat, lon);
@@ -212,6 +216,28 @@ function stadiumCandidates(f) {
   return [`${STADIUM_BASE}/${s}.jpg`, `${STADIUM_BASE}/${s}.png`, `${STADIUM_BASE}/${s}.webp`];
 }
 
+// Texture queue/cache so we don't hammer the loader or re-download
+const __TEX_CACHE = new Map();
+const __TEX_WAIT  = new Map();
+function loadTextureQueued(url){
+  if (__TEX_CACHE.has(url)) return Promise.resolve(__TEX_CACHE.get(url));
+  if (__TEX_WAIT.has(url))  return __TEX_WAIT.get(url);
+
+  const p = new Promise((resolve, reject)=>{
+    const loader = new THREE.TextureLoader();
+    // NO cache busters here; files are static in /assets/stadiums
+    loader.load(url, tex => {
+      __TEX_CACHE.set(url, tex);
+      __TEX_WAIT.delete(url);
+      resolve(tex);
+    }, undefined, err => {
+      __TEX_WAIT.delete(url);
+      reject(err);
+    });
+  });
+  __TEX_WAIT.set(url, p);
+  return p;
+}
 
 // -----------------------------------------
 // Competition accuracy strip
@@ -249,32 +275,52 @@ function renderCompetitionAccuracy(league){
 // Date & League filter UI
 // -----------------------------------------
 function buildDateStrip(){
-  if (!el.dateA || !el.dateB) return;
   const base = baseDate();
   const dayA = base;
   const dayB = datePlusDays(base,1);
-  el.dateA.textContent = fmtDay(dayA);
-  el.dateA.dataset.iso = isoDay(dayA);
-  el.dateB.textContent = fmtDay(dayB);
-  el.dateB.dataset.iso = isoDay(dayB);
+
+  if (el.dateA) { el.dateA.textContent = fmtDay(dayA); el.dateA.dataset.iso = isoDay(dayA); }
+  if (el.dateB) { el.dateB.textContent = fmtDay(dayB); el.dateB.dataset.iso = isoDay(dayB); }
 
   [el.dateToday, el.dateTomorrow, el.dateWeekend]
     .filter(Boolean).forEach(b => b.classList.remove('is-active'));
+
   if (UI.rangeDays===1 && UI.offsetDays===0 && el.dateToday)    el.dateToday.classList.add('is-active');
   if (UI.rangeDays===1 && UI.offsetDays===1 && el.dateTomorrow) el.dateTomorrow.classList.add('is-active');
   if (UI.rangeDays>=2 && el.dateWeekend)                         el.dateWeekend.classList.add('is-active');
+
+  // also update the mini calendar title if present
+  const t = document.getElementById('cal-title');
+  if (t) {
+    const mo = base.toLocaleString(undefined, { month: 'long', year: 'numeric', timeZone: 'UTC' });
+    t.textContent = mo;
+  }
 }
+
 function bindDateControls(){
-  el.dateToday?.addEventListener('click', ()=>{ UI.offsetDays=0; UI.rangeDays=1; buildDateStrip(); applyFiltersAndRender(); });
-  el.dateTomorrow?.addEventListener('click', ()=>{ UI.offsetDays=1; UI.rangeDays=1; buildDateStrip(); applyFiltersAndRender(); });
-  el.dateWeekend?.addEventListener('click', ()=>{
-    // weekend relative to anchor: Saturday+Sunday
-    const b = baseDate(); const dow=b.getUTCDay(); const toSat=(6-dow+7)%7;
-    UI.offsetDays = toSat; UI.rangeDays=2;
+  el.dateToday?.addEventListener('click', ()=>{
+    UI.offsetDays = 0; UI.rangeDays = 1;
     buildDateStrip(); applyFiltersAndRender();
   });
-  el.datePrev?.addEventListener('click', ()=>{ UI.offsetDays -= UI.rangeDays; buildDateStrip(); applyFiltersAndRender(); });
-  el.dateNext?.addEventListener('click', ()=>{ UI.offsetDays += UI.rangeDays; buildDateStrip(); applyFiltersAndRender(); });
+  el.dateTomorrow?.addEventListener('click', ()=>{
+    UI.offsetDays = 1; UI.rangeDays = 1;
+    buildDateStrip(); applyFiltersAndRender();
+  });
+  el.dateWeekend?.addEventListener('click', ()=>{
+    // Weekend relative to anchor: next Sat+Sun
+    const b = baseDate(); const dow = b.getUTCDay(); const toSat = (6 - dow + 7) % 7;
+    UI.offsetDays = toSat; UI.rangeDays = 2;
+    buildDateStrip(); applyFiltersAndRender();
+  });
+
+  el.datePrev?.addEventListener('click', ()=>{
+    UI.offsetDays -= UI.rangeDays; buildDateStrip(); applyFiltersAndRender();
+  });
+  el.dateNext?.addEventListener('click', ()=>{
+    UI.offsetDays += UI.rangeDays; buildDateStrip(); applyFiltersAndRender();
+  });
+
+  // Optional day A/B (only if present in DOM)
   el.dateA?.addEventListener('click', ()=>{
     const iso = el.dateA.dataset.iso; if (!iso) return;
     UI.offsetDays = Math.round((Date.parse(`${iso}T00:00:00Z`) - Date.parse(`${UI.anchorISO}T00:00:00Z`))/MS_DAY);
@@ -286,6 +332,7 @@ function bindDateControls(){
     UI.rangeDays = 1; buildDateStrip(); applyFiltersAndRender();
   });
 }
+
 function buildLeagueChips(){
   if (!el.leagueChips) return;
   const uniq = Array.from(new Set(fixtures.map(f => f.competition).filter(Boolean))).sort();
@@ -560,18 +607,6 @@ function bindTabs(){
 const EASE = (typeof easeInOut === 'function')
   ? easeInOut
   : (t) => t * t * (3 - 2 * t);
-
-
-// Unit vector on globe using three-globe convention
-function latLngToUnit(latDeg, lonDeg) {
-  // three-globe: phi=(90-lat), theta=(180-lon)
-  const phi   = THREE.MathUtils.degToRad(90 - latDeg);
-  const theta = THREE.MathUtils.degToRad(180 - lonDeg);
-  const x = Math.sin(phi) * Math.cos(theta);
-  const y = Math.cos(phi);
-  const z = Math.sin(phi) * Math.sin(theta);
-  return new THREE.Vector3(x, y, z).normalize();
-}
 
 // Great-circle slerp for unit vectors (no Quaternion.slerp needed)
 function slerpUnitVec(fromN, toN, t) {
@@ -933,7 +968,7 @@ async function sendCopilotMessage(text) {
       { role:'user', content: text }
     ],
     context: (function(){
-      const f = visibleFixtures[Math.max(0, Math.min(0, Math.max(0, visibleFixtures.length-1)))];
+      const f = visibleFixtures[0];
       if (!f) return null;
       return { fixture: { home:f.home_team, away:f.away_team, date:f.date_utc, league:f.competition } };
     })()
