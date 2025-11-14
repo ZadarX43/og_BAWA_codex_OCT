@@ -807,11 +807,13 @@ function createMarker(){
     const inner = baseInner + i * (baseWidth * 0.9);      // push each ring out
     const outer = inner + baseWidth * (1 - i * 0.2);      // shrink thickness ~20% each step
 
+    const baseAlpha = 0.35 * (1 - i * 0.18);              // inner brightest, outer faintest
+
     const ringGeom = new THREE.RingGeometry(inner, outer, 64);
     const ringMat  = new THREE.MeshBasicMaterial({
       color: new THREE.Color(COLORS.ring),
       transparent: true,
-      opacity: 0.35 * (1 - i * 0.18),   // inner brightest, outer faintest
+      opacity: baseAlpha,
       side: THREE.DoubleSide,
       depthWrite: false,
       depthTest: false                  // always on top of globe
@@ -821,6 +823,10 @@ function createMarker(){
     // Lie flat in local XZ (normal +Y)
     ring.rotation.x = Math.PI / 2;
     ring.renderOrder = 998;
+
+    // store base alpha for animation later
+    ring.userData.baseAlpha = baseAlpha;
+
     group.add(ring);
     radarRings.push(ring);
   }
@@ -946,7 +952,7 @@ function moveMarkerToFixture(f, { fly=false } = {}){
     const q = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,1,0), curN);
     S.group.quaternion.copy(q);
 
-    if (t >= 1) {
+        if (t >= 1) {
       S.raf.travel.cancel();
 
       // Beam grow along local +Y
@@ -966,20 +972,43 @@ function moveMarkerToFixture(f, { fly=false } = {}){
         if (tb >= 1) S.raf.beam.cancel();
       });
 
+      // --- Radar "breathing" pulse (brightness only) ---
+      const rings = Array.isArray(S.radar) ? S.radar : (S.radar ? [S.radar] : []);
+      const radarStart = performance.now();
+
+      rings.forEach(r => { if (r) r.visible = true; });
+
+      S.raf.radar.run(() => {
+        if (S.state.reqId !== myReq) {
+          S.raf.radar.cancel();
+          return;
+        }
+        const now   = performance.now();
+        const tWave = (now - radarStart) / 800;
+
+        rings.forEach((ring, idx) => {
+          if (!ring) return;
+          const base  = ring.userData?.baseAlpha ?? 0.2;
+          const phase = tWave + idx * 0.6;
+          const wave  = 0.7 + 0.3 * Math.sin(phase); // 0.7–1.0
+          ring.material.opacity = base * wave;
+        });
+      });
+
       // Billboard “info pill” – a bit above the radar and pushed out from the globe
-      const PILL_ALT = R * 0.04;  // how far above the radar centre
-      const PILL_OUT = R * 0.08;  // how far out away from the globe along local Z
+      const PILL_ALT = R * 0.04;
+      const PILL_OUT = R * 0.08;
       S.billboard.position.set(0, PILL_ALT, PILL_OUT);
       S.billboard.material.opacity = 0;
       S.billboard.visible = true;
 
-      // Tilt panel ~25° so it’s not perfectly face-on (matches your 45° sketch feel)
       S.billboard.rotation.set(THREE.MathUtils.degToRad(-25), 0, 0);
 
-      // Only hide if really far side of the globe
       if (curN.dot(camera.position.clone().normalize()) < -0.25) {
         S.billboard.visible = false;
       }
+
+      // ... existing stadium texture async block ...
 
 
       // Load stadium texture (queued, cached)
