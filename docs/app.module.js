@@ -155,13 +155,23 @@ function makeFallbackCanvasTexture(label='STADIUM'){
   return tex;
 }
 
-// -----------------------------------------
-// Logos (local-only)  — local SVGs in ./assets/assets/logos
+/// -----------------------------------------
+// Logos (local-only) — local SVGs in ./assets/assets/logos
 // -----------------------------------------
 const LOGO_LOCAL_BASE = './assets/assets/logos';
 
+// strip diacritics so “Atlético” -> “Atletico”, “København” -> “Kobenhavn”
+function stripDiacritics(s = '') {
+  try {
+    return s.normalize('NFD').replace(/\p{Diacritic}/gu, '');
+  } catch {
+    // fallback for older engines
+    return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  }
+}
+
 function slugLocal(name = '') {
-  return String(name)
+  return stripDiacritics(String(name))
     .toLowerCase()
     .replace(/&/g, 'and')
     .replace(/[\u2019'’]/g, '')
@@ -169,13 +179,35 @@ function slugLocal(name = '') {
     .replace(/^-+|-+$/g, '');
 }
 
-// Optional: exact-name overrides when the CSV team name doesn't match your filename
+// Exact-name overrides for odd labels/abbreviations in CSV
 const TEAM_LOGO_OVERRIDES = {
-  'Paris Saint-Germain': `${LOGO_LOCAL_BASE}/paris-saint-germain.svg`,
-  'Atlético Madrid':     `${LOGO_LOCAL_BASE}/atletico-madrid.svg`,
-  'Atletico Madrid':     `${LOGO_LOCAL_BASE}/atletico-madrid.svg`,
-  // Add any other odd spellings or diacritics you keep locally
+  'PSG':                    `${LOGO_LOCAL_BASE}/paris-saint-germain.svg`,
+  'Paris Saint-Germain':    `${LOGO_LOCAL_BASE}/paris-saint-germain.svg`,
+  'Atlético Madrid':        `${LOGO_LOCAL_BASE}/atletico-madrid.svg`,
+  'Atletico Madrid':        `${LOGO_LOCAL_BASE}/atletico-madrid.svg`,
+  'København':              `${LOGO_LOCAL_BASE}/fc-kobenhavn.svg`,
+  'FC København':           `${LOGO_LOCAL_BASE}/fc-kobenhavn.svg`,
+  'Crvena Zvezda':          `${LOGO_LOCAL_BASE}/red-star-belgrade.svg`,
+  'Red Star Belgrade':      `${LOGO_LOCAL_BASE}/red-star-belgrade.svg`,
 };
+
+// Build a small set of **local** filename guesses (svg only)
+function localLogoCandidates(teamName = '') {
+  // override wins
+  if (TEAM_LOGO_OVERRIDES[teamName]) return [TEAM_LOGO_OVERRIDES[teamName]];
+
+  const s = slugLocal(teamName); // e.g. “Sevilla FC” -> “sevilla-fc”
+  const base = LOGO_LOCAL_BASE;
+
+  // Try exact slug, then a couple of simple variants to catch “fc-” prefixes/suffixes
+  const variants = new Set([
+    `${base}/${s}.svg`,
+    `${base}/${s.replace(/^fc-/, '')}.svg`,  // drop leading fc-
+    `${base}/${s.replace(/-fc$/, '')}.svg`, // drop trailing -fc
+  ]);
+
+  return [...variants];
+}
 
 function initials(name = '') {
   const parts = name.trim().split(/\s+/);
@@ -186,44 +218,49 @@ function initials(name = '') {
 
 /**
  * Local-only badge loader.
- * - Ignores any remote/CSV URLs (no CORS).
- * - Tries exact TEAM_LOGO_OVERRIDES first, then <slug>.svg
- * - Shows initials while loading; keeps initials if not found.
+ * - Uses ONLY files in ./assets/assets/logos (no remote URLs → no CORS).
+ * - Shows initials while loading.
+ * - Tries override, then a few filename variants.
  */
 function setBadge(elm, _urlFromCsv, teamName = '') {
   if (!elm) return;
-  const reqId = (elm.__reqId = (elm.__reqId || 0) + 1);
 
-  // Show initials while we resolve the local asset
+  const reqId = (elm.__reqId = (elm.__reqId || 0) + 1);
   elm.classList.remove('has-logo');
   elm.textContent = initials(teamName);
 
-  const slug = slugLocal(teamName);
-  const src = TEAM_LOGO_OVERRIDES[teamName] || `${LOGO_LOCAL_BASE}/${slug}.svg`;
+  const candidates = localLogoCandidates(teamName);
 
   (async () => {
-    try {
-      const img = await new Promise((resolve, reject) => {
-        const i = new Image();
-        i.decoding = 'async';
-        i.loading = 'lazy';
-        i.onload = () => resolve(i);
-        i.onerror = reject;
-        i.src = src; // local file only
-      });
-      // Guard against race with newer calls
-      if (elm.__reqId !== reqId) return;
+    for (const src of candidates) {
+      try {
+        const img = await new Promise((resolve, reject) => {
+          const i = new Image();
+          i.decoding = 'async';
+          i.loading = 'lazy';
+          i.onload = () => resolve(i);
+          i.onerror = reject;
+          i.src = src; // local path only
+        });
 
-      // Swap in the image
-      while (elm.firstChild) elm.removeChild(elm.firstChild);
-      elm.appendChild(img);
-      elm.classList.add('has-logo');
-    } catch {
-      // Keep initials if not found
-      if (elm.__reqId === reqId) elm.classList.remove('has-logo');
+        // If another call has superseded this one, abort swapping
+        if (elm.__reqId !== reqId) return;
+
+        // Swap in the logo
+        while (elm.firstChild) elm.removeChild(elm.firstChild);
+        elm.appendChild(img);
+        elm.classList.add('has-logo');
+        return;
+      } catch {
+        // try next candidate
+      }
     }
+
+    // Nothing found: keep initials
+    if (elm.__reqId === reqId) elm.classList.remove('has-logo');
   })();
 }
+
 
 
 // -----------------------------------------
