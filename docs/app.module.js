@@ -287,6 +287,83 @@ function setBadgeLocal(elm, _urlFromCsv, teamName = '') {
   img.src = src;
 }
 // -----------------------------------------
+// Competition badges (for comp strip under globe)
+// -----------------------------------------
+
+// If you later add real SVGs, map them here:
+const COMP_LOGO_OVERRIDES = {
+  // Example if you add these files:
+  // 'UEFA Champions League': './assets/assets/logos/ucl.svg',
+  // 'UEFA Europa League'   : './assets/assets/logos/uel.svg',
+};
+
+const COMP_BADGE_CACHE = new Map();
+
+function makeCompetitionBadgeDataUrl(label = 'LEAGUE') {
+  const c = document.createElement('canvas');
+  const size = 256;
+  c.width = size;
+  c.height = size;
+  const g = c.getContext('2d');
+
+  g.clearRect(0, 0, size, size);
+
+  // circular gradient badge
+  const grd = g.createLinearGradient(0, 0, size, size);
+  grd.addColorStop(0, '#0f766e');
+  grd.addColorStop(1, '#22c55e');
+  g.fillStyle = grd;
+
+  const r = size * 0.42;
+  g.beginPath();
+  g.arc(size / 2, size / 2, r, 0, Math.PI * 2);
+  g.fill();
+
+  // league initials
+  const parts = String(label || '').split(/\s+/).filter(Boolean);
+  const initials = (
+    (parts[0]?.[0] || 'L') +
+    (parts[1]?.[0] || 'G')
+  ).toUpperCase();
+
+  g.fillStyle = '#e5f9ff';
+  g.font = 'bold 72px Montserrat, system-ui, sans-serif';
+  g.textAlign = 'center';
+  g.textBaseline = 'middle';
+  g.fillText(initials, size / 2, size / 2);
+
+  return c.toDataURL('image/png');
+}
+
+function setCompetitionLogo(leagueName) {
+  if (!el.compLogo) return;
+
+  const name = String(leagueName || '').trim();
+  if (!name) {
+    el.compLogo.removeAttribute('src');
+    el.compLogo.style.visibility = 'hidden';
+    return;
+  }
+
+  // 1) If we have a real logo mapped, use it
+  const override = COMP_LOGO_OVERRIDES[name];
+  if (override) {
+    el.compLogo.src = override;
+    el.compLogo.style.visibility = 'visible';
+    return;
+  }
+
+  // 2) Otherwise generate/cache a fallback badge with initials
+  let url = COMP_BADGE_CACHE.get(name);
+  if (!url) {
+    url = makeCompetitionBadgeDataUrl(name);
+    COMP_BADGE_CACHE.set(name, url);
+  }
+  el.compLogo.src = url;
+  el.compLogo.style.visibility = 'visible';
+}
+
+// -----------------------------------------
 // Stadium billboard (local-only)
 // -----------------------------------------
 const STADIUM_BASE = './assets/stadiums';
@@ -355,7 +432,13 @@ function getCompetitionSnapshot(league){
 function renderCompetitionAccuracy(league){
   if (!el.compWrap) return;
   const stats = getCompetitionSnapshot(league);
-  if (el.compName) el.compName.textContent = league || '—';
+
+  const name = league || '—';
+  if (el.compName) el.compName.textContent = name;
+
+  // NEW: set competition badge logo
+  setCompetitionLogo(name);
+
   if (el.compTraffic){
     el.compTraffic.innerHTML = `
       <span class="light light--green">FTR ${Math.round(DEMO_FTR*100)}%</span>
@@ -363,6 +446,7 @@ function renderCompetitionAccuracy(league){
       <span class="light light--amber">BTTS ${stats.btts||0}%</span>`;
   }
 }
+
 
 // -----------------------------------------
 // Date & League filter UI  [A: prev/next restored here]
@@ -739,17 +823,18 @@ function createMarker(){
   beam.visible = false;
   group.add(beam);
 
-  // ⬇️ billboard draws on top of the globe and is a bit larger
-  const billboardMat = new THREE.SpriteMaterial({
+  /  // ⬇️ stadium pill panel – we use a Plane so we can tilt it (Sprite is always face-on)
+  const billboardGeom = new THREE.PlaneGeometry(24, 14);
+  const billboardMat  = new THREE.MeshBasicMaterial({
     transparent: true,
     opacity: 0,
-    depthTest: false,   // critical: don’t test against depth buffer
+    depthTest: false,   // draw on top of globe
     depthWrite: false
   });
-  const billboard = new THREE.Sprite(billboardMat);
-  billboard.scale.set(24, 14, 1);   // bump size for visibility
+  const billboard = new THREE.Mesh(billboardGeom, billboardMat);
   billboard.renderOrder = 999;      // draw late
   group.add(billboard);
+
 
   return {
     group, radar, beam, billboard,
@@ -853,15 +938,21 @@ function moveMarkerToFixture(f, { fly=false } = {}){
         if (tb >= 1) S.raf.beam.cancel();
       });
 
-      // Billboard just above surface
-      S.billboard.position.set(0, R * 0.04, 0); // was 0.06
+      // Billboard “info pill” – a bit above the radar and pushed out from the globe
+      const PILL_ALT = R * 0.04;  // how far above the radar centre
+      const PILL_OUT = R * 0.08;  // how far out away from the globe along local Z
+      S.billboard.position.set(0, PILL_ALT, PILL_OUT);
       S.billboard.material.opacity = 0;
       S.billboard.visible = true;
 
-      // Only hide if really far side
+      // Tilt panel ~25° so it’s not perfectly face-on (matches your 45° sketch feel)
+      S.billboard.rotation.set(THREE.MathUtils.degToRad(-25), 0, 0);
+
+      // Only hide if really far side of the globe
       if (curN.dot(camera.position.clone().normalize()) < -0.25) {
         S.billboard.visible = false;
       }
+
 
       // Load stadium texture (queued, cached)
       (async ()=>{
