@@ -795,33 +795,40 @@ function createMarker(){
   const group = new THREE.Group();
   group.visible = false;
 
-  const R         = getGlobeRadius();
-  const ringInner = R * (1 + SURFACE_EPS + 0.001);
-  const ringOuter = R * (1 + SURFACE_EPS + 0.008);
+  const R = getGlobeRadius();
+
+  // Radar ring: small, local disc around the marker, not globe-sized
+  const ringInner = R * 0.02;   // 2% of globe radius
+  const ringOuter = R * 0.035;  // slightly larger ring
   const ringGeom  = new THREE.RingGeometry(ringInner, ringOuter, 64);
   const ringMat   = new THREE.MeshBasicMaterial({
     color: new THREE.Color(COLORS.ring),
     transparent: true,
     opacity: 0.42,
     side: THREE.DoubleSide,
-    depthWrite: false
+    depthWrite: false,
+    depthTest: false            // always draw on top of globe
   });
   const radar = new THREE.Mesh(ringGeom, ringMat);
+  radar.renderOrder = 998;
   group.add(radar);
 
+  // Beam straight "up" from the radar (local +Y)
   const beamGeom = new THREE.CylinderGeometry(0.18, 0.28, 30, 24, 1, true);
   const beamMat  = new THREE.MeshBasicMaterial({
     color: 0x7df9c4,
     transparent: true,
     opacity: 0.0,
     blending: THREE.AdditiveBlending,
-    depthWrite: false
+    depthWrite: false,
+    depthTest: false
   });
   const beam = new THREE.Mesh(beamGeom, beamMat);
   beam.visible = false;
+  beam.renderOrder = 998;
   group.add(beam);
 
-   // ⬇️ stadium pill panel – we use a Plane so we can tilt it (Sprite is always face-on)
+  // Stadium pill panel – Plane so we can tilt it (Sprite is always face-on)
   const billboardGeom = new THREE.PlaneGeometry(24, 14);
   const billboardMat  = new THREE.MeshBasicMaterial({
     transparent: true,
@@ -830,16 +837,19 @@ function createMarker(){
     depthWrite: false
   });
   const billboard = new THREE.Mesh(billboardGeom, billboardMat);
-  billboard.renderOrder = 999;      // draw late
+  billboard.renderOrder = 999;      // draw last
   group.add(billboard);
 
-
   return {
-    group, radar, beam, billboard,
+    group,
+    radar,
+    beam,
+    billboard,
     state: { lat: 0, lon: 0, reqId: 0 },
     raf:   { travel: null, beam: null, fade: null }
   };
 }
+
 
 
 function cancelRAF(handle){
@@ -880,6 +890,7 @@ function slerpUnitVec(fromN, toN, t) {
 function moveMarkerToFixture(f, { fly=false } = {}){
   if (!MARKER || !f) return;
 
+  console.log('[marker] move to', f.home_team, f.city || f.country, f.latitude, f.longitude);
   const S   = MARKER;
   const lat = Number(f.latitude), lon = Number(f.longitude);
   if (!Number.isFinite(lat) || !Number.isFinite(lon)) { S.group.visible = false; return; }
