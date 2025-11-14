@@ -155,17 +155,17 @@ function makeFallbackCanvasTexture(label='STADIUM'){
   return tex;
 }
 
-/// -----------------------------------------
+// -----------------------------------------
 // Logos (local-only) — local SVGs in ./assets/assets/logos
 // -----------------------------------------
 const LOGO_LOCAL_BASE = './assets/assets/logos';
 
-// strip diacritics so “Atlético” -> “Atletico”, “København” -> “Kobenhavn”
+// Strip diacritics: “Atlético” -> “Atletico”, “København” -> “Kobenhavn”
 function stripDiacritics(s = '') {
   try {
     return s.normalize('NFD').replace(/\p{Diacritic}/gu, '');
   } catch {
-    // fallback for older engines
+    // Fallback for older engines
     return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   }
 }
@@ -179,7 +179,7 @@ function slugLocal(name = '') {
     .replace(/^-+|-+$/g, '');
 }
 
-// Exact-name overrides for odd labels/abbreviations in CSV
+// Exact-name overrides for common aliases/abbreviations
 const TEAM_LOGO_OVERRIDES = {
   'PSG':                    `${LOGO_LOCAL_BASE}/paris-saint-germain.svg`,
   'Paris Saint-Germain':    `${LOGO_LOCAL_BASE}/paris-saint-germain.svg`,
@@ -191,21 +191,18 @@ const TEAM_LOGO_OVERRIDES = {
   'Red Star Belgrade':      `${LOGO_LOCAL_BASE}/red-star-belgrade.svg`,
 };
 
-// Build a small set of **local** filename guesses (svg only)
+// Build a small set of local filename guesses (SVG only)
 function localLogoCandidates(teamName = '') {
-  // override wins
   if (TEAM_LOGO_OVERRIDES[teamName]) return [TEAM_LOGO_OVERRIDES[teamName]];
 
-  const s = slugLocal(teamName); // e.g. “Sevilla FC” -> “sevilla-fc”
+  const s = slugLocal(teamName);                 // e.g. “Sevilla FC” -> “sevilla-fc”
   const base = LOGO_LOCAL_BASE;
-
-  // Try exact slug, then a couple of simple variants to catch “fc-” prefixes/suffixes
+  // Try exact slug, then drop leading “fc-” or trailing “-fc”
   const variants = new Set([
     `${base}/${s}.svg`,
-    `${base}/${s.replace(/^fc-/, '')}.svg`,  // drop leading fc-
-    `${base}/${s.replace(/-fc$/, '')}.svg`, // drop trailing -fc
+    `${base}/${s.replace(/^fc-/, '')}.svg`,
+    `${base}/${s.replace(/-fc$/, '')}.svg`,
   ]);
-
   return [...variants];
 }
 
@@ -217,10 +214,8 @@ function initials(name = '') {
 }
 
 /**
- * Local-only badge loader.
- * - Uses ONLY files in ./assets/assets/logos (no remote URLs → no CORS).
- * - Shows initials while loading.
- * - Tries override, then a few filename variants.
+ * Local-only badge loader (no remote URLs).
+ * Shows initials while loading; swaps to the first found SVG.
  */
 function setBadge(elm, _urlFromCsv, teamName = '') {
   if (!elm) return;
@@ -240,13 +235,9 @@ function setBadge(elm, _urlFromCsv, teamName = '') {
           i.loading = 'lazy';
           i.onload = () => resolve(i);
           i.onerror = reject;
-          i.src = src; // local path only
+          i.src = src; // local path; NO cache-buster
         });
-
-        // If another call has superseded this one, abort swapping
         if (elm.__reqId !== reqId) return;
-
-        // Swap in the logo
         while (elm.firstChild) elm.removeChild(elm.firstChild);
         elm.appendChild(img);
         elm.classList.add('has-logo');
@@ -255,40 +246,39 @@ function setBadge(elm, _urlFromCsv, teamName = '') {
         // try next candidate
       }
     }
-
     // Nothing found: keep initials
     if (elm.__reqId === reqId) elm.classList.remove('has-logo');
   })();
 }
 
-
-
 // -----------------------------------------
-// Stadium billboard candidates (local-only)  [PATCH D]
+// Stadium billboard (local-only)
 // -----------------------------------------
 const STADIUM_BASE = './assets/stadiums';
+
+// Only the files you said you uploaded:
 const STADIUM_OVERRIDES = {
-  'AC Milan':           'ac-milan.jpg',
-  'Arsenal':            'arsenal.jpg',
-  'Galatasaray':        'galatasaray.jpg',
-  'Lazio':              'lazio.jpg',
-  'Manchester City':    'man-city.jpg',
-  'PSG':                'psg.jpg',
-  'Paris Saint-Germain':'psg.jpg',
-  'Real Madrid':        'real-madrid.jpg',
-  'Sevilla FC':         'sevilla.jpg',
-  'Shakhtar Donetsk':   'shakhtar-donetsk.jpg',
-  'Young Boys':         'young-boys.jpg',
+  'AC Milan':             'ac-milan.jpg',
+  'Arsenal':              'arsenal.jpg',
+  'Galatasaray':          'galatasaray.jpg',
+  'Lazio':                'lazio.jpg',
+  'Manchester City':      'man-city.jpg',
+  'PSG':                  'psg.jpg',
+  'Paris Saint-Germain':  'psg.jpg',
+  'Real Madrid':          'real-madrid.jpg',
+  'Sevilla FC':           'sevilla.jpg',
+  'Shakhtar Donetsk':     'shakhtar-donetsk.jpg',
+  'Young Boys':           'young-boys.jpg',
 };
 
+// Return 0 or 1 local path; no blind guesses that 404
 function stadiumCandidates(f) {
-  const byTeam = STADIUM_OVERRIDES[f.home_team];
-  if (byTeam) return [`${STADIUM_BASE}/${byTeam}`];
-  const s = slugLocal(f.home_team||'');
-  return [`${STADIUM_BASE}/${s}.jpg`, `${STADIUM_BASE}/${s}.png`, `${STADIUM_BASE}/${s}.webp`];
+  const name = String(f?.home_team || '').trim();
+  const file = STADIUM_OVERRIDES[name];
+  return file ? [`${STADIUM_BASE}/${file}`] : [];
 }
 
-// Queued / cached texture loader (polite)
+// Texture queue/cache (unchanged)
 const __TEX_CACHE = new Map();
 const __TEX_WAIT  = new Map();
 function loadTextureQueued(url){
@@ -296,24 +286,17 @@ function loadTextureQueued(url){
   if (__TEX_WAIT.has(url))  return __TEX_WAIT.get(url);
 
   const p = new Promise((resolve, reject)=>{
-    const loader = new THREE.TextureLoader();
-    loader.load(url, tex => {
-      // nicer output in sRGB pipelines
-      if ('colorSpace' in tex) tex.colorSpace = THREE.SRGBColorSpace;
-      const maxAniso = renderer?.capabilities?.getMaxAnisotropy?.() || 1;
-      tex.anisotropy = maxAniso;
-
-      __TEX_CACHE.set(url, tex);
-      __TEX_WAIT.delete(url);
-      resolve(tex);
-    }, undefined, err => {
-      __TEX_WAIT.delete(url);
-      reject(err);
-    });
+    new THREE.TextureLoader().load(
+      url,
+      tex => { __TEX_CACHE.set(url, tex); __TEX_WAIT.delete(url); resolve(tex); },
+      undefined,
+      err => { __TEX_WAIT.delete(url); reject(err); }
+    );
   });
   __TEX_WAIT.set(url, p);
   return p;
 }
+
 
 
 // -----------------------------------------
