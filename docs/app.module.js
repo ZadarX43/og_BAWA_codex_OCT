@@ -409,8 +409,6 @@ function loadTextureQueued(url){
   return p;
 }
 
-
-
 // -----------------------------------------
 // Competition accuracy strip
 // -----------------------------------------
@@ -823,7 +821,7 @@ function createMarker(){
   beam.visible = false;
   group.add(beam);
 
-  /  // ⬇️ stadium pill panel – we use a Plane so we can tilt it (Sprite is always face-on)
+   // ⬇️ stadium pill panel – we use a Plane so we can tilt it (Sprite is always face-on)
   const billboardGeom = new THREE.PlaneGeometry(24, 14);
   const billboardMat  = new THREE.MeshBasicMaterial({
     transparent: true,
