@@ -801,6 +801,11 @@ function createMarker(){
   const ringInner = R * 0.02;   // 2% of globe radius
   const ringOuter = R * 0.035;  // slightly larger ring
   const ringGeom  = new THREE.RingGeometry(ringInner, ringOuter, 64);
+
+  // Make the ring lie in the XZ plane with normal +Y,
+  // so after we orient the group, it sits flat on the globe like a radar disc.
+  ringGeom.rotateX(Math.PI / 2);
+
   const ringMat   = new THREE.MeshBasicMaterial({
     color: new THREE.Color(COLORS.ring),
     transparent: true,
@@ -812,6 +817,7 @@ function createMarker(){
   const radar = new THREE.Mesh(ringGeom, ringMat);
   radar.renderOrder = 998;
   group.add(radar);
+
 
   // Beam straight "up" from the radar (local +Y)
   const beamGeom = new THREE.CylinderGeometry(0.18, 0.28, 30, 24, 1, true);
