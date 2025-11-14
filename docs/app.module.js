@@ -556,10 +556,11 @@ function bindTabs(){
 // Marker creation & movement (revised)
 // ----------------------------
 
-// Fallback if easeInOut isn't defined above
-const easeInOut = typeof easeInOut === "function"
+// Use existing easeInOut if it exists; otherwise use a local alias
+const EASE = (typeof easeInOut === 'function')
   ? easeInOut
   : (t) => t * t * (3 - 2 * t);
+
 
 // Unit vector on globe using three-globe convention
 function latLngToUnit(latDeg, lonDeg) {
@@ -687,7 +688,8 @@ function moveMarkerToFixture(f, { fly=false } = {}){
   S.raf.travel.run(()=>{
     if (S.state.reqId !== myReq) { S.raf.travel.cancel(); return; }
     const t = dur ? Math.min(1, (performance.now() - t0) / dur) : 1;
-    const k = easeInOut(t);
+    const k = EASE(t);
+
 
     const curN    = slerpUnitVec(fromN, toN, k);                   // unit normal on sphere
     const worldPos= curN.clone().multiplyScalar(R * (1 + SURFACE_EPS));
@@ -711,7 +713,7 @@ function moveMarkerToFixture(f, { fly=false } = {}){
       S.raf.beam.run(()=>{
         if (S.state.reqId !== myReq) { S.raf.beam.cancel(); return; }
         const tb = Math.min(1, (performance.now() - b0) / bd);
-        const e  = easeInOut(tb);
+        const e  = EASE(tb);
         S.beam.scale.y          = 0.001 + e;
         S.beam.material.opacity = 0.4 * e;
         if (tb >= 1) S.raf.beam.cancel();
