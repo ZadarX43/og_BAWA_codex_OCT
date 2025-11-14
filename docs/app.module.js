@@ -984,16 +984,24 @@ function moveMarkerToFixture(f, { fly=false } = {}){
           return;
         }
         const now   = performance.now();
-        const tWave = (now - radarStart) / 800;
+        const tWave = (now - radarStart) / 800;  // smaller = slower pulse
 
         rings.forEach((ring, idx) => {
           if (!ring) return;
-          const base  = ring.userData?.baseAlpha ?? 0.2;
-          const phase = tWave + idx * 0.6;
-          const wave  = 0.7 + 0.3 * Math.sin(phase); // 0.7–1.0
+
+          const base  = ring.userData?.baseAlpha ?? 0.25;
+
+          // phase offset so rings don't pulse in perfect sync
+          const phase = tWave + idx * 0.8;
+
+          // wave goes 0 → 1 → 0 → 1 ... but never hits exactly 0
+          const sinVal = Math.sin(phase);
+          const wave   = 0.2 + 0.8 * Math.max(0, sinVal);   // 0.2–1.0
+
           ring.material.opacity = base * wave;
         });
       });
+
 
       // Billboard “info pill” – a bit above the radar and pushed out from the globe
       const PILL_ALT = R * 0.04;
