@@ -156,7 +156,7 @@ function makeFallbackCanvasTexture(label='STADIUM'){
 }
 
 // -----------------------------------------
-// Logos (local-only)
+// Logos (local-only) — club crests
 // -----------------------------------------
 const LOGO_LOCAL_BASE = './assets/assets/logos';
 
@@ -178,8 +178,9 @@ function slugLocal(name = '') {
     .replace(/^-+|-+$/g, '');
 }
 
+// Explicit overrides mapped to your actual SVG filenames
 const TEAM_LOGO_OVERRIDES = {
-  // Accented / short forms
+  // Accented / alt forms
   'Atlético Madrid'       : `${LOGO_LOCAL_BASE}/atletico-madrid.svg`,
   'Atletico Madrid'       : `${LOGO_LOCAL_BASE}/atletico-madrid.svg`,
   'Bayern München'        : `${LOGO_LOCAL_BASE}/bayern-munich.svg`,
@@ -189,7 +190,7 @@ const TEAM_LOGO_OVERRIDES = {
   'København'             : `${LOGO_LOCAL_BASE}/fc-kobenhavn.svg`,
   'FC København'          : `${LOGO_LOCAL_BASE}/fc-kobenhavn.svg`,
 
-  // Exact file-backed clubs you have
+  // Clubs exactly matching your files
   'AC Milan'              : `${LOGO_LOCAL_BASE}/ac-milan.svg`,
   'Arsenal'               : `${LOGO_LOCAL_BASE}/arsenal.svg`,
   'Barcelona'             : `${LOGO_LOCAL_BASE}/fc-barcelona.svg`,
@@ -227,8 +228,6 @@ const TEAM_LOGO_OVERRIDES = {
   'Young Boys'            : `${LOGO_LOCAL_BASE}/young-boys.svg`,
 };
 
-
-
 // Generate candidate .svg paths based on the team name
 function localLogoCandidates(teamName = '') {
   const name = String(teamName || '').trim();
@@ -238,7 +237,7 @@ function localLogoCandidates(teamName = '') {
   const override = TEAM_LOGO_OVERRIDES[name];
   if (override) return [override];
 
-  // 2) Slug-based guesses
+  // 2) Slug-based guesses (for anything not in overrides)
   const s = slugLocal(name);  // e.g. "FC Barcelona" -> "fc-barcelona"
   if (!s) return [];
 
@@ -255,50 +254,38 @@ function initialsFor(name = '') {
   return p.length ? (p[0][0] + (p[1]?.[0] || '')).toUpperCase() : '';
 }
 
-// *** The ONLY badge loader to use ***
-async function setBadgeLocal(elm, _urlFromCsv, teamName = '') {
+// *** Simple badge loader – no races, loud logging ***
+function setBadgeLocal(elm, _urlFromCsv, teamName = '') {
   if (!elm) return;
 
-  const reqId = (elm.__reqId = (elm.__reqId || 0) + 1);
-
-  // Default: show initials
+  // show initials while loading
   elm.classList.remove('has-logo');
   elm.innerHTML = '';
   elm.textContent = initialsFor(teamName);
 
   const candidates = localLogoCandidates(teamName);
-  console.log('[badge] load', { teamName, candidates, reqId });
+  console.log('[badge] candidates', { teamName, candidates });
 
+  if (!candidates.length) return;
 
-  if (!candidates.length) return; // no guesses, just keep initials
+  const src = candidates[0]; // for your known clubs, this should be the correct SVG
+  const img = new Image();
+  img.alt = teamName;
 
-  for (const src of candidates) {
-    try {
-      await new Promise((res, rej) => {
-        const img = new Image();
-        img.decoding = 'async';
-        img.loading  = 'lazy';
-        img.onload   = () => {
-          // Only attach if this is still the latest request for this element
-          if (elm.__reqId === reqId) {
-            elm.innerHTML = '';
-            elm.appendChild(img);
-            elm.classList.add('has-logo');
-          }
-          res();
-        };
-        img.onerror = () => rej(new Error(`badge 404: ${src}`));
-        img.src     = src;
-      });
+  img.onload = () => {
+    console.log('[badge] success', teamName, '→', src);
+    elm.innerHTML = '';
+    elm.appendChild(img);
+    elm.classList.add('has-logo');
+  };
 
-      if (elm.__reqId === reqId) {
-        console.debug('[badge] success', teamName);
-        return; // done
-      }
-    } catch (err) {
-      console.warn('[badge] failed', teamName, '→', src, err?.message || err);
-    }
-  }
+  img.onerror = () => {
+    console.log('[badge] error', teamName, '→', src);
+    // keep initials fallback
+  };
+
+  img.src = src;
+}
 
   // If we tried everything and still failed, leave initials
   if (elm.__reqId === reqId) {
@@ -306,7 +293,6 @@ async function setBadgeLocal(elm, _urlFromCsv, teamName = '') {
     console.warn('[badge] all candidates failed, keeping initials for', teamName);
   }
 }
-
 
 // -----------------------------------------
 // Stadium billboard (local-only)
