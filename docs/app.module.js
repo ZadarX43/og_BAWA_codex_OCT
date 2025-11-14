@@ -199,17 +199,23 @@ const TEAM_LOGO_OVERRIDES = {
 };
 
 // generate candidate .svg paths (no .png, no cache buster)
-function localLogoCandidates(teamName=''){
-  const override = TEAM_LOGO_MAP[teamName];
+function localLogoCandidates(teamName = '') {
+  // 1) explicit override first (PSG, Bayern, etc.)
+  const override = TEAM_LOGO_OVERRIDES[teamName];
   if (override) return [override];
-  const s = slugged(teamName);           // e.g. "fc barcelona" -> "fc-barcelona"
-  const b = LOGO_DIR;
+
+  // 2) slugged guesses
+  const s = slugLocal(teamName);   // e.g. "FC Barcelona" -> "fc-barcelona"
+  if (!s) return [];
+
+  const b = LOGO_LOCAL_BASE;
   return Array.from(new Set([
     `${b}/${s}.svg`,
-    `${b}/${s.replace(/^fc-/, '')}.svg`,  // tolerate “FC X” files without prefix
-    `${b}/${s.replace(/-fc$/, '')}.svg`,  // tolerate “…-fc.svg”
+    `${b}/${s.replace(/^fc-/, '')}.svg`,   // "fc-barcelona" → "barcelona.svg"
+    `${b}/${s.replace(/-fc$/, '')}.svg`,   // "barcelona-fc" → "barcelona.svg"
   ]));
 }
+
 
 function initialsFor(name=''){
   const p = String(name).trim().split(/\s+/);
@@ -217,9 +223,10 @@ function initialsFor(name=''){
 }
 
 // *** The ONLY badge loader to use ***
-async function setBadgeLocal(elm, _urlFromCsv, teamName='') {
+async function setBadgeLocal(elm, _urlFromCsv, teamName = '') {
   if (!elm) return;
-  const reqId = (elm.__reqId = (elm.__reqId||0) + 1);
+
+  const reqId = (elm.__reqId = (elm.__reqId || 0) + 1);
   elm.classList.remove('has-logo');
   elm.textContent = initialsFor(teamName);
 
@@ -232,24 +239,36 @@ async function setBadgeLocal(elm, _urlFromCsv, teamName='') {
         const i = new Image();
         i.decoding = 'async';
         i.loading  = 'lazy';
-        i.onload   = () => { if (elm.__uuid === reqId) { elm.innerHTML = ''; elm.appendChild(i); elm.classList.add('has-logo'); } res(); };
-        i.onerror  = rej;
-        i.src      = src; // same-origin, no cache-buster
+        i.onload   = () => {
+          // only apply if this is still the latest request for this element
+          if (elm.__reqId === reqId) {
+            elm.innerHTML = '';
+            elm.appendChild(i);
+            elm.classList.add('has-logo');
+          }
+          res();
+        };
+        i.onerror = () => rej(new Error(`badge 404: ${src}`));
+        i.src     = src; // same-origin, no cache-buster
       });
-      if (elm.__reqId === reqId) return; // success
-    } catch { /* try next candidate */ }
+
+      // if no newer request started while we were loading, we’re done
+      if (elm.__reqId === reqId) return;
+    } catch (err) {
+      console.warn('[badge] failed', src, err);
+    }
   }
-  // nothing found → keep initials
+
+  // nothing worked → stick with initials
   if (elm.__reqId === reqId) {
     elm.classList.remove('has-logo');
   }
 }
 
-
 // -----------------------------------------
 // Stadium billboard (local-only)
 // -----------------------------------------
-const STADIUM_BASE = './assets/stadiums';
+const STADIUM_BASE = './assets/assets/stadiums';
 
 // Only the files you said you uploaded:
 const STADIUM_OVERRIDES = {
@@ -623,8 +642,10 @@ function renderPanel(f){
     f.competition, fmt(f.date_utc), f.stadium && `${f.stadium} (${f.city||''})`, f.country
   ].filter(Boolean).join(' • '));
 
-  setBadgeLocal(el.homeBadge, homeUrl, f.home_team);
-  setBadgeLocal(el.awayBadge, awayUrl, f.away_team);
+    // We’re local-only now; keep CSV URLs as optional future input
+    setBadgeLocal(el.homeBadge,  f.home_badge_url || null, f.home_team);
+    setBadgeLocal(el.awayBadge,  f.away_badge_url || null, f.away_team);
+
 
   if (el.matchList){
     clearNode(el.matchList);
