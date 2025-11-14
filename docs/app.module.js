@@ -189,12 +189,11 @@ const TEAM_LOGO_OVERRIDES = {
   'København'             : `${LOGO_LOCAL_BASE}/fc-kobenhavn.svg`,
   'FC København'          : `${LOGO_LOCAL_BASE}/fc-kobenhavn.svg`,
 
-  // Clubs where we know the exact file name
+  // Exact file-backed clubs you have
   'AC Milan'              : `${LOGO_LOCAL_BASE}/ac-milan.svg`,
   'Arsenal'               : `${LOGO_LOCAL_BASE}/arsenal.svg`,
   'Barcelona'             : `${LOGO_LOCAL_BASE}/fc-barcelona.svg`,
   'FC Barcelona'          : `${LOGO_LOCAL_BASE}/fc-barcelona.svg`,
-  'Bayern'                : `${LOGO_LOCAL_BASE}/bayern-munich.svg`,
   'Borussia Dortmund'     : `${LOGO_LOCAL_BASE}/borussia-dortmund.svg`,
   'Celtic'                : `${LOGO_LOCAL_BASE}/celtic.svg`,
   'FC Porto'              : `${LOGO_LOCAL_BASE}/fc-porto.svg`,
@@ -227,6 +226,7 @@ const TEAM_LOGO_OVERRIDES = {
   'Union Berlin'          : `${LOGO_LOCAL_BASE}/union-berlin.svg`,
   'Young Boys'            : `${LOGO_LOCAL_BASE}/young-boys.svg`,
 };
+
 
 
 // Generate candidate .svg paths based on the team name
