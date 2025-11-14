@@ -803,7 +803,7 @@ function moveMarkerToFixture(f, { fly=false } = {}){
           } catch { /* try next */ }
         }
       
-        // No file matched -> show a fallback disc with team / city
+        // No file matched -> fallback disc with team/city
         if (S.state.reqId === myReq) {
           const name = (f.city || f.home_team || 'STADIUM').toUpperCase();
           const tex  = makeFallbackCanvasTexture(name);
@@ -813,8 +813,10 @@ function moveMarkerToFixture(f, { fly=false } = {}){
           S.billboard.visible = true;
         }
       })();
-  });
-}
+    }
+  }); // <-- end S.raf.travel.run loop
+} // <-- end moveMarkerToFixture
+
 // =====================================================
 // API HELPERS + FEATURE PAGES (BetChecker / Acca / Co-Pilot)
 // =====================================================
