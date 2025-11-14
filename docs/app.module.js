@@ -286,14 +286,6 @@ function setBadgeLocal(elm, _urlFromCsv, teamName = '') {
 
   img.src = src;
 }
-
-  // If we tried everything and still failed, leave initials
-  if (elm.__reqId === reqId) {
-    elm.classList.remove('has-logo');
-    console.warn('[badge] all candidates failed, keeping initials for', teamName);
-  }
-}
-
 // -----------------------------------------
 // Stadium billboard (local-only)
 // -----------------------------------------
