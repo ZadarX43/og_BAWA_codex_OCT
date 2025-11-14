@@ -83,26 +83,29 @@
 
       <!-- ======== VIEWS (router toggles .is-active) ======== -->
 
-      <!-- HOME VIEW (Globe + Insights + Rail + Footer Upload) -->
+      <!-- HOME VIEW (Calendar + Globe + Insights + Rail + Upload) -->
       <section id="view-home" class="view is-active">
         <main class="hero">
-                <!-- Left calendar rail -->
-                <aside class="left-rail" aria-label="Date filters">
-                  <div class="date-quick">
-                    <button class="pill is-active" data-range="today">Today</button>
-                    <button class="pill" data-range="tomorrow">Tomorrow</button>
-                    <button class="pill" data-range="weekend">Weekend</button>
-                  </div>
-          
-                  <div class="cal-head">
-                    <button class="cal-nav" id="cal-prev" aria-label="Previous month">‹</button>
-                    <div id="cal-title" class="cal-title">—</div>
-                    <button class="cal-nav" id="cal-next" aria-label="Next month">›</button>
-                  </div>
-          
-                  <div id="cal-mini" class="mini-cal" aria-label="Mini calendar"></div>
-                  <div class="cal-legend muted">Click a date to filter fixtures</div>
-                </aside>
+          <!-- Left calendar rail (date + league filters) -->
+          <aside id="date-rail" class="left-rail" aria-label="Date filters">
+            <div class="date-quick">
+              <button class="pill is-active" data-range="today">Today</button>
+              <button class="pill" data-range="tomorrow">Tomorrow</button>
+              <button class="pill" data-range="weekend">Weekend</button>
+            </div>
+
+            <div class="cal-head">
+              <button class="cal-nav" id="cal-prev" aria-label="Previous month">‹</button>
+              <div id="cal-title" class="cal-title">—</div>
+              <button class="cal-nav" id="cal-next" aria-label="Next month">›</button>
+            </div>
+
+            <div id="date-grid" class="mini-cal" aria-label="Mini calendar"></div>
+            <div class="cal-legend muted">Click a date to filter fixtures</div>
+
+            <!-- League chips host (JS will populate) -->
+            <div class="league-chips" id="league-chips" aria-label="League filters"></div>
+          </aside>
 
           <!-- Globe pane -->
           <section class="hero__globe" aria-label="Upcoming fixtures globe">
@@ -112,25 +115,23 @@
               <button id="nav-next" aria-label="Next fixture"   title="Next (→)" tabindex="0">&#x203A;</button>
             </div>
             <p id="globe-help" class="visually-hidden">Use left and right arrow keys or buttons to change fixture.</p>
-          
+
             <!-- Competition Accuracy (pretty) -->
             <section class="comp-accuracy" id="comp-accuracy" aria-label="Competition accuracy">
-            <div class="comp-row">
-              <img id="comp-logo" class="comp-logo" alt="" />
-              <div class="comp-name" id="comp-name">—</div>
-              <div class="gauge">
-                <span class="gauge-label">FTR</span>
-                <div class="gauge-bar"><div class="gauge-fill" style="width:0%"></div></div>
-                <span class="gauge-val">—%</span>
+              <div class="comp-row">
+                <img id="comp-logo" class="comp-logo" alt="" />
+                <div class="comp-name" id="comp-name">—</div>
+                <div class="gauge">
+                  <span class="gauge-label">FTR</span>
+                  <div class="gauge-bar"><div class="gauge-fill" style="width:0%"></div></div>
+                  <span class="gauge-val">—%</span>
+                </div>
               </div>
-            </div>
-            <div class="market-traffic" id="comp-traffic">
-              <!-- JS will inject light chips (FTR / O2.5 / BTTS) -->
-            </div>
+              <div class="market-traffic" id="comp-traffic">
+                <!-- JS will inject light chips (FTR / O2.5 / BTTS) -->
+              </div>
+            </section>
           </section>
-
-          </section>
-
 
           <!-- Insights panel -->
           <aside class="hero__insights" aria-live="polite">
