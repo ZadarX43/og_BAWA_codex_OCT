@@ -156,100 +156,95 @@ function makeFallbackCanvasTexture(label='STADIUM'){
 }
 
 // -----------------------------------------
-// Logos (local-only) — local SVGs in ./assets/assets/logos
-// -----------------------------------------
+// Logos (local-only) — all badges in docs/assets/assets/logs/*.svg
+// ---------------------------------
 const LOGO_LOCAL_BASE = './assets/assets/logos';
 
-// Strip diacritics: “Atlético” -> “Atletico”, “København” -> “Kobenhavn”
-function stripDiacritics(s = '') {
-  try {
-    return s.normalize('NFD').replace(/\p{Diacritic}/gu, '');
-  } catch {
-    // Fallback for older engines
-    return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+// strip accents & punctuation for slugging (“København” -> “kobenhavn”)
+function stripDiacritics(s=''){ try{ return s.normalize('NFD').replace(/\p{Diacritic}/gu,''); }catch{ return s.replace(/[\u0300-\u036f]/g,''); } }
+function slugLocal(name=''){
+  return stripDiacritics(String(name))
+    .toLowerCase()
+    .replace(/&/g,'and')
+    .replace(/[\u2019'’]/g,'')
+    .replace(/[^a-z0-9]+/g,'-')
+    .replace(/^-+|-+$/g,'');
+}
+
+// explicit alias map for names that don’t match simple slug
+const TEAM_LOGO_OVERRIDES = {
+  'PSG'                : `${LOGO_LOCAL_BASE}/paris-saint-germain.svg`,
+  'Paris Saint-Germain': `${LOGO_LOCAL_BASE}/paris-saint-germain.svg`,
+  'Atlético Madrid'    : `${LOGO_LOCAL_BASE}/atletico-madrid.svg`,
+  'Atletico Madrid'    : `${LOGO_LOCAL_BASE}/atletico-madrid.svg`,
+  'København'          : `${LOGO_LOCAL_BASE}/fc-kobenhavn.svg`,
+  'FC København'       : `${LOGO_LOCAL_BASE}/fc-kobenhavn.svg`,
+  'Crvena Zvezda'      : `${LOGO_LOCAL_BASE}/red-star-belgrade.svg`,
+  'Red Star Belgrade'  : `${LOGO_LOCAL_BASE}/red-star-belgrade.svg`,
+  'Bayern München'     : `${LOGO_LOCAL_BASE}/bayern-munich.svg`,
+  'Bayern Munich'      : `${LOGO_LOCAL_BASE}/bayern-munich.svg`,
+  // “nice to have” explicit forms (keeps slug logic simple)
+  'AC Milan'           : `${LOGO_LOCAL_BASE}/ac-milan.svg`,
+  'Manchester City'    : `${LOGO_LOCAL_BASE}/manchester-city.svg`,
+  'Lazio'              : `${LOGO_LOCAL_BASE}/lazio.svg`,
+  'Feyenoord'          : `${LOGO_LOCAL_BASE}/feyenoord.svg`,
+  'Young Boys'         : `${LOGO_LOCAL_BASE}/young-boys.svg`,
+  'Real Madrid'        : `${LOGO_LOCAL_BASE}/real-madrid.svg`,
+  'Real Sociedad'      : `${LOGO_LOCAL_BASE}/real-sociedad.svg`,
+  'SSC Napoli'         : `${ LOGO_LOCAL_BASE }/ssc-napoli.svg`,
+  'Napoli'             : `${ LOGO_LOCAL_BASE }/ssc-napoli.svg`,
+  'PSV'                : `${ LOGO_LOCAL_BASE }/psv.svg`,
+  'Sevilla FC'         : `${ LOGO_LOCAL_BASE }/sevilla-fc.svg`,
+  'RB Leipzig'         : `${ LOGO_LOCAL_BASE }/rb-leipzig.svg`,
+};
+
+// generate candidate .svg paths (no .png, no cache buster)
+function localLogoCandidates(teamName=''){
+  const override = TEAM_LOGO_MAP[teamName];
+  if (override) return [override];
+  const s = slugged(teamName);           // e.g. "fc barcelona" -> "fc-barcelona"
+  const b = LOGO_DIR;
+  return Array.from(new Set([
+    `${b}/${s}.svg`,
+    `${b}/${s.replace(/^fc-/, '')}.svg`,  // tolerate “FC X” files without prefix
+    `${b}/${s.replace(/-fc$/, '')}.svg`,  // tolerate “…-fc.svg”
+  ]));
+}
+
+function initialsFor(name=''){
+  const p = String(name).trim().split(/\s+/);
+  return p.length ? (p[0][0] + (p[1]?.[0]||'')).toUpperCase() : '';
+}
+
+// *** The ONLY badge loader to use ***
+async function setBadgeLocal(elm, _urlFromCsv, teamName='') {
+  if (!elm) return;
+  const reqId = (elm.__reqId = (elm.__reqId||0) + 1);
+  elm.classList.remove('has-logo');
+  elm.textContent = initialsFor(teamName);
+
+  const candidates = localLogoCandidates(teamName);
+  console.debug('[badge] trying', teamName, '→', candidates);
+
+  for (const src of candidates) {
+    try {
+      await new Promise((res, rej) => {
+        const i = new Image();
+        i.decoding = 'async';
+        i.loading  = 'lazy';
+        i.onload   = () => { if (elm.__uuid === reqId) { elm.innerHTML = ''; elm.appendChild(i); elm.classList.add('has-logo'); } res(); };
+        i.onerror  = rej;
+        i.src      = src; // same-origin, no cache-buster
+      });
+      if (elm.__reqId === reqId) return; // success
+    } catch { /* try next candidate */ }
+  }
+  // nothing found → keep initials
+  if (elm.__reqId === reqId) {
+    elm.classList.remove('has-logo');
   }
 }
 
-function slugLocal(name = '') {
-  return stripDiacritics(String(name))
-    .toLowerCase()
-    .replace(/&/g, 'and')
-    .replace(/[\u2019'’]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-}
-
-// Exact-name overrides for common aliases/abbreviations
-const TEAM_LOGO_OVERRIDES = {
-  'PSG':                    `${LOGO_LOCAL_BASE}/paris-saint-germain.svg`,
-  'Paris Saint-Germain':    `${LOGO_LOCAL_BASE}/paris-saint-germain.svg`,
-  'Atlético Madrid':        `${LOGO_LOCAL_BASE}/atletico-madrid.svg`,
-  'Atletico Madrid':        `${LOGO_LOCAL_BASE}/atletico-madrid.svg`,
-  'København':              `${LOGO_LOCAL_BASE}/fc-kobenhavn.svg`,
-  'FC København':           `${LOGO_LOCAL_BASE}/fc-kobenhavn.svg`,
-  'Crvena Zvezda':          `${LOGO_LOCAL_BASE}/red-star-belgrade.svg`,
-  'Red Star Belgrade':      `${LOGO_LOCAL_BASE}/red-star-belgrade.svg`,
-};
-
-// Build a small set of local filename guesses (SVG only)
-function localLogoCandidates(teamName = '') {
-  if (TEAM_LOGO_OVERRIDES[teamName]) return [TEAM_LOGO_OVERRIDES[teamName]];
-
-  const s = slugLocal(teamName);                 // e.g. “Sevilla FC” -> “sevilla-fc”
-  const base = LOGO_LOCAL_BASE;
-  // Try exact slug, then drop leading “fc-” or trailing “-fc”
-  const variants = new Set([
-    `${base}/${s}.svg`,
-    `${base}/${s.replace(/^fc-/, '')}.svg`,
-    `${base}/${s.replace(/-fc$/, '')}.svg`,
-  ]);
-  return [...variants];
-}
-
-function initials(name = '') {
-  const parts = name.trim().split(/\s+/);
-  if (!parts.length) return '';
-  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
-  return (parts[0][0] + (parts[1]?.[0] || '')).toUpperCase();
-}
-
-/**
- * Local-only badge loader (no remote URLs).
- * Shows initials while loading; swaps to the first found SVG.
- */
-function setBadge(elm, _urlFromCsv, teamName = '') {
-  if (!elm) return;
-
-  const reqId = (elm.__reqId = (elm.__reqId || 0) + 1);
-  elm.classList.remove('has-logo');
-  elm.textContent = initials(teamName);
-
-  const candidates = localLogoCandidates(teamName);
-
-  (async () => {
-    for (const src of candidates) {
-      try {
-        const img = await new Promise((resolve, reject) => {
-          const i = new Image();
-          i.decoding = 'async';
-          i.loading = 'lazy';
-          i.onload = () => resolve(i);
-          i.onerror = reject;
-          i.src = src; // local path; NO cache-buster
-        });
-        if (elm.__reqId !== reqId) return;
-        while (elm.firstChild) elm.removeChild(elm.firstChild);
-        elm.appendChild(img);
-        elm.classList.add('has-logo');
-        return;
-      } catch {
-        // try next candidate
-      }
-    }
-    // Nothing found: keep initials
-    if (elm.__reqId === reqId) elm.classList.remove('has-logo');
-  })();
-}
 
 // -----------------------------------------
 // Stadium billboard (local-only)
@@ -628,8 +623,8 @@ function renderPanel(f){
     f.competition, fmt(f.date_utc), f.stadium && `${f.stadium} (${f.city||''})`, f.country
   ].filter(Boolean).join(' • '));
 
-  setBadge(el.homeBadge, f.home_badge_url, f.home_team);
-  setBadge(el.awayBadge, f.away_badge_url, f.away_team);
+  setBadgeLocal(el.homeBadge, homeUrl, f.home_team);
+  setBadgeLocal(el.awayBadge, awayUrl, f.away_team);
 
   if (el.matchList){
     clearNode(el.matchList);
