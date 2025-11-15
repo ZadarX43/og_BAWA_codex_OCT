@@ -1218,22 +1218,22 @@ function moveMarkerToFixture(f, { fly=false } = {}){
           ring.material.opacity = base * wave;
         });
       });
-      // Pill sits just above the radar and slightly towards the camera
-      const PILL_ALT = R * 0.05;   // vertical above radar centre
-      const PILL_OUT = R * 0.03;   // small push towards camera
+      // Billboard “info pill” – a bit above the radar and pushed out from the globe
+      const PILL_ALT = R * 0.05;
+      const PILL_OUT = R * 0.03;
       S.billboard.position.set(0, PILL_ALT, PILL_OUT);
 
-
-      // Rotate around Z so the pill's long edge is horizontal in the local tangent plane,
-      // then give it a slight pitch so it feels 3D.
-      const pitchDeg = -12;   // how much to lean towards camera
-      const rollDeg  = 90;    // rotate 90° so text runs left→right instead of up→down
+      // First, lay the pill horizontally around the beam (rotate around Z),
+      // then give it a slight pitch so it leans towards the camera.
+      const rollDeg  = 90;   // rotate around +Z to go from vertical to horizontal
+      const pitchDeg = -10;  // small lean towards camera
 
       S.billboard.rotation.set(
-        THREE.MathUtils.degToRad(pitchDeg),
-        0,
-        THREE.MathUtils.degToRad(rollDeg)
+        THREE.MathUtils.degToRad(pitchDeg), // x
+        0,                                   // y
+        THREE.MathUtils.degToRad(rollDeg)   // z
       );
+
 
 
       // Always build a pill texture from the fixture data (no async yet)
