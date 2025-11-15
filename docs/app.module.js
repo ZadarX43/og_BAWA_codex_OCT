@@ -950,27 +950,36 @@ function refreshAccaPicks(){
   summaryEl.textContent = `Showing ${picks.length} picks for ${marketLabelFromKey(abCurrentMarket)}.`;
 
 
-  picks.forEach(pick=>{
+    picks.forEach(pick => {
+    // Work out which market this pick belongs to
+    const marketKey = pick.marketKey || abCurrentMarket;
+    const key       = accaLegKey(currentFixture.fixture_id, marketKey, pick.id);
+    const isInCart  = abCartLegs.some(l => l.key === key);
+  
     const card = document.createElement('article');
     card.className = 'pick-card';
     card.dataset.pickId = pick.id;
-
+  
     const main = document.createElement('div');
     main.className = 'pick-main';
+  
     const h3 = document.createElement('h3');
     h3.className = 'pick-title';
     h3.textContent = pick.label;
+  
     const sub = document.createElement('p');
     sub.className = 'pick-subtitle';
-    const probPct = Math.round(pick.prob * 100);
+    const probPct   = Math.round(pick.prob * 100);
     const fairText  = pick.fair  != null ? pick.fair.toFixed(2)  : '–';
     const priceText = pick.price != null ? pick.price.toFixed(2) : '–';
     sub.textContent = `Model ${probPct}% • Fair ${fairText} • Price ${priceText}`;
+  
     main.appendChild(h3);
     main.appendChild(sub);
-
+  
     const meta = document.createElement('div');
     meta.className = 'pick-meta';
+  
     const badge = document.createElement('div');
     badge.className = 'pick-badge' + (pick.edge != null && pick.edge >= 0 ? ' pick-badge--positive' : '');
     if (pick.edge != null){
@@ -979,20 +988,22 @@ function refreshAccaPicks(){
     } else {
       badge.textContent = 'Model pick';
     }
+  
     const btn = document.createElement('button');
     btn.className = 'pick-add-btn';
-    if (isInCart){
+  
+    if (isInCart) {
       btn.classList.add('pick-add-btn--active');
       btn.textContent = 'Remove';
     } else {
       btn.textContent = '+ Add';
     }
-    btn.addEventListener('click', ()=> addLegToAcca(pick));
-
-
+  
+    btn.addEventListener('click', () => addLegToAcca(pick));
+  
     meta.appendChild(badge);
     meta.appendChild(btn);
-
+  
     card.appendChild(main);
     card.appendChild(meta);
     listEl.appendChild(card);
