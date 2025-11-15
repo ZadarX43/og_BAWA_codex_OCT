@@ -1138,13 +1138,36 @@ function moveMarkerToFixture(f, { fly=false } = {}){
     const t = dur ? Math.min(1, (performance.now() - t0) / dur) : 1;
     const k = easeInOut(t);
 
-    const curN    = slerpUnitVec(fromN, toN, k);
-    const worldPos= curN.clone().multiplyScalar(R * (1 + SURFACE_EPS));
+    const curN     = slerpUnitVec(fromN, toN, k);  // surface normal
+    const worldPos = curN.clone().multiplyScalar(R * (1 + SURFACE_EPS));
     S.group.position.copy(worldPos);
 
-    // Orient local +Y to surface normal
-    const q = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,1,0), curN);
-    S.group.quaternion.copy(q);
+    // Build a stable local basis:
+    //  - up (+Y) = surface normal
+    //  - forward (+Z) = towards camera, projected onto tangent plane
+    //  - right (+X) = cross(forward, up)
+    const up = curN.clone().normalize();
+
+    // direction from marker to camera
+    const toCam = camera.position.clone().sub(worldPos).normalize();
+    // project onto tangent plane
+    let forward = toCam.clone().sub(up.clone().multiplyScalar(toCam.dot(up)));
+    if (forward.lengthSq() < 1e-6) {
+      // fallback if camera is exactly above the point
+      forward = new THREE.Vector3(0, 0, 1);
+    } else {
+      forward.normalize();
+    }
+
+    const right = new THREE.Vector3().crossVectors(forward, up).normalize();
+    // re-orthogonalise forward just in case
+    forward.crossVectors(up, right).normalize();
+
+    const basis = new THREE.Matrix4();
+    // makeBasis(x, y, z) → columns are right, up, forward
+    basis.makeBasis(right, up, forward);
+    S.group.quaternion.setFromRotationMatrix(basis);
+
 
         if (t >= 1) {
       S.raf.travel.cancel();
