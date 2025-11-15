@@ -219,23 +219,162 @@
         </div>
       </section>
 
-      <!-- ACCA BUILDER VIEW -->
+            <!-- ACCA BUILDER VIEW -->
       <section id="view-accabuilder" class="view" hidden>
-        <div class="screen">
-          <h1>Acca Builder</h1>
-          <div class="filters">
-            <select id="ab-league"><option>All Leagues</option></select>
-            <select id="ab-market">
-              <option value="ou25">Over/Under 2.5</option>
-              <option value="btts">Both Teams To Score</option>
-              <option value="ftr">Full Time Result</option>
-            </select>
-            <select id="ab-legs">
-              <option>3 legs</option><option selected>4 legs</option><option>5 legs</option><option>6 legs</option>
-            </select>
-            <button class="cta" id="ab-build">Build acca</button>
+        <div class="screen acca-screen">
+          <!-- Fixture header / hero -->
+          <header class="acca-hero">
+            <div class="acca-hero-main">
+              <div class="acca-hero-crests">
+                <div class="acca-crest acca-crest--home" id="ab-crest-home" aria-hidden="true"></div>
+                <div class="acca-vs">vs</div>
+                <div class="acca-crest acca-crest--away" id="ab-crest-away" aria-hidden="true"></div>
+              </div>
+              <div class="acca-hero-text">
+                <h1 id="ab-fixture-title">Select a fixture</h1>
+                <p id="ab-fixture-meta" class="muted">
+                  <!-- e.g. UEFA Champions League • Tue 28 Nov · 20:00 GMT • Parc des Princes, Paris -->
+                </p>
+              </div>
+            </div>
+            <div class="acca-hero-controls">
+              <label class="control">
+                <span class="control-label">Fixture</span>
+                <select id="ab-fixture-select">
+                  <option value="">Choose from upcoming matches…</option>
+                </select>
+              </label>
+              <label class="control">
+                <span class="control-label">League</span>
+                <select id="ab-league">
+                  <option value="ALL">All Leagues</option>
+                </select>
+              </label>
+            </div>
+          </header>
+
+          <!-- 3-column layout: markets | picks | cart -->
+          <div class="acca-layout">
+            <!-- LEFT: Market categories -->
+            <aside class="acca-sidebar" aria-label="Market categories">
+              <h2 class="acca-sidebar-title">Markets</h2>
+              <nav id="ab-market-nav" class="acca-market-nav">
+                <!-- Core match result -->
+                <button class="market-chip is-active" data-market="ftr">Full Time Result</button>
+
+                <!-- Goals & team goals -->
+                <button class="market-chip" data-market="goals_main">Match Goals (Over/Under)</button>
+                <button class="market-chip" data-market="btts">Both Teams To Score</button>
+                <button class="market-chip" data-market="btts_halves">BTTS 1st / 2nd Half</button>
+                <button class="market-chip" data-market="team_goals">Team Goals (1.5 / 2.5)</button>
+                <button class="market-chip" data-market="total_goals">Total Goals (Home / Away / Combined)</button>
+
+                <!-- Corners & cards -->
+                <button class="market-chip" data-market="corners">Corners</button>
+                <button class="market-chip" data-market="cards_totals">Cards (Totals)</button>
+                <button class="market-chip" data-market="cards_both">Both Teams to Receive a Card</button>
+
+                <!-- Player shooting & scoring -->
+                <button class="market-chip" data-market="player_goals_assists">Player to Score or Assist</button>
+                <button class="market-chip" data-market="player_shots_on_target">Player Shots on Target</button>
+                <button class="market-chip" data-market="player_shots">Player Shots</button>
+
+                <!-- Player defensive events -->
+                <button class="market-chip" data-market="player_tackles">Player Tackles</button>
+                <button class="market-chip" data-market="player_fouls">Player Fouls Committed</button>
+                <button class="market-chip" data-market="player_fouled">Player To Be Fouled</button>
+              </nav>
+
+              <p class="muted acca-sidebar-hint">
+                Choose a market to see our best value picks for this match.
+              </p>
+            </aside>
+
+            <!-- MIDDLE: Candidate picks list -->
+            <section class="acca-picks" aria-label="Available picks">
+              <div class="acca-picks-toolbar">
+                <div class="muted" id="ab-picks-summary">
+                  <!-- e.g. “Showing 6 best value picks for Over/Under Goals” -->
+                </div>
+                <div class="acca-picks-filters">
+                  <label class="control control--compact">
+                    <span class="control-label">Sort by</span>
+                    <select id="ab-sort">
+                      <option value="edge_desc">Highest EV</option>
+                      <option value="prob_desc">Highest probability</option>
+                      <option value="odds_asc">Lowest odds</option>
+                      <option value="odds_desc">Highest odds</option>
+                    </select>
+                  </label>
+                </div>
+              </div>
+
+              <div id="ab-picks-list" class="acca-picks-list">
+                <!-- JS will inject pick cards here -->
+
+                <!-- Example structure (for reference only; JS will create these):
+                <article class="pick-card" data-pick-id="...">
+                  <div class="pick-main">
+                    <h3 class="pick-title">Over 2.5 Goals</h3>
+                    <p class="pick-subtitle">Model 71% • Fair 1.41 • Book 1.65</p>
+                  </div>
+                  <div class="pick-meta">
+                    <div class="pick-badge pick-badge--positive">EV +6.4%</div>
+                    <button class="pick-add-btn" data-add-pick>+ Add</button>
+                  </div>
+                </article>
+                -->
+              </div>
+
+              <div id="ab-picks-empty" class="muted" hidden>
+                No picks available for this market yet. Choose another market or fixture.
+              </div>
+            </section>
+
+            <!-- RIGHT: Acca cart -->
+            <aside class="acca-cart" aria-label="Your accumulator">
+              <h2>Your Acca</h2>
+              <div id="ab-cart-empty" class="muted">
+                No legs added yet. Browse markets on the left and use “+ Add” to build your slip.
+              </div>
+
+              <ul id="ab-cart-legs" class="acca-cart-list">
+                <!-- JS will inject leg items here -->
+
+                <!-- Example structure:
+                <li class="acca-leg">
+                  <div class="acca-leg-main">
+                    <div class="acca-leg-label">PSG vs Newcastle – Over 2.5 Goals</div>
+                    <div class="acca-leg-sub muted">Model 71% • Fair 1.41 • Price 1.65 • EV +6.4%</div>
+                  </div>
+                  <button class="acca-leg-remove" data-remove-leg aria-label="Remove leg">✕</button>
+                </li>
+                -->
+              </ul>
+
+              <div id="ab-cart-summary" class="acca-cart-summary" hidden>
+                <div class="acca-cart-row">
+                  <span>Combined price</span>
+                  <strong id="ab-cart-price">–</strong>
+                </div>
+                <div class="acca-cart-row">
+                  <span>Model probability</span>
+                  <strong id="ab-cart-prob">–</strong>
+                </div>
+                <div class="acca-cart-row">
+                  <span>Expected value (EV)</span>
+                  <strong id="ab-cart-ev">–</strong>
+                </div>
+              </div>
+
+              <div class="acca-cart-actions">
+                <button class="cta" id="ab-copy-slip" disabled>Copy acca to clipboard</button>
+                <button class="cta cta--secondary" id="ab-send-to-checker" disabled>
+                  Score this acca with Bet Checker
+                </button>
+              </div>
+            </aside>
           </div>
-          <div class="grid" id="ab-grid"></div>
         </div>
       </section>
 
