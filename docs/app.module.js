@@ -1171,12 +1171,13 @@ function slerpUnitVec(fromN, toN, t) {
   return v0.clone().applyQuaternion(q).normalize();
 }
 
-function moveMarkerToFixture(f, { fly=false } = {}){
+function moveMarkerToFixture(f, { fly = false } = {}) {
   if (!MARKER || !f) return;
 
   console.log('[marker] move to', f.home_team, f.city || f.country, f.latitude, f.longitude);
   const S   = MARKER;
-  const lat = Number(f.latitude), lon = Number(f.longitude);
+  const lat = Number(f.latitude);
+  const lon = Number(f.longitude);
   if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
     S.group.visible = false;
     return;
@@ -1196,7 +1197,7 @@ function moveMarkerToFixture(f, { fly=false } = {}){
     : 0;
   const t0    = performance.now();
 
-   S.raf.travel = S.raf.travel || makeRAF();
+  S.raf.travel = S.raf.travel || makeRAF();
   S.raf.beam   = S.raf.beam   || makeRAF();
   S.raf.fade   = S.raf.fade   || makeRAF();
   S.raf.radar  = S.raf.radar  || makeRAF();
@@ -1210,7 +1211,9 @@ function moveMarkerToFixture(f, { fly=false } = {}){
 
   S.group.visible = true;
 
+  S.raf.travel.run(() => {
     if (S.state.reqId !== myReq) { S.raf.travel.cancel(); return; }
+
     const t = dur ? Math.min(1, (performance.now() - t0) / dur) : 1;
     const k = easeInOut(t);
 
@@ -1242,14 +1245,15 @@ function moveMarkerToFixture(f, { fly=false } = {}){
     if (t >= 1) {
       S.raf.travel.cancel();
 
-      // Beam grow along local +Y
+      // === Beam animation ===
       S.beam.position.set(0, 0, 0);
       S.beam.quaternion.identity();
       S.beam.scale.set(1, 0.001, 1);
       S.beam.material.opacity = 0.0;
       S.beam.visible = true;
 
-      const b0 = performance.now(), bd = 550;
+      const b0 = performance.now();
+      const bd = 550;
       S.raf.beam.run(() => {
         if (S.state.reqId !== myReq) { S.raf.beam.cancel(); return; }
         const tb = Math.min(1, (performance.now() - b0) / bd);
@@ -1259,8 +1263,8 @@ function moveMarkerToFixture(f, { fly=false } = {}){
         if (tb >= 1) S.raf.beam.cancel();
       });
 
-      // --- Radar "breathing" pulse (brightness only) ---
-      const rings = Array.isArray(S.radar) ? S.radar : (S.radar ? [S.radar] : []);
+      // === Radar breathing ===
+      const rings      = Array.isArray(S.radar) ? S.radar : (S.radar ? [S.radar] : []);
       const radarStart = performance.now();
 
       rings.forEach(r => { if (r) r.visible = true; });
@@ -1275,25 +1279,20 @@ function moveMarkerToFixture(f, { fly=false } = {}){
 
         rings.forEach((ring, idx) => {
           if (!ring) return;
-
           const base  = ring.userData?.baseAlpha ?? 0.25;
           const phase = tWave + idx * 0.8;
           const sinVal = Math.sin(phase);
           const wave   = 0.2 + 0.8 * Math.max(0, sinVal);   // 0.2–1.0
-
           ring.material.opacity = base * wave;
         });
       });
 
-      // Billboard “info pill” – just above the radar and slightly towards the camera
+      // === Pill positioning & base texture ===
       const PILL_ALT = R * 0.05;
       const PILL_OUT = R * 0.03;
       S.billboard.position.set(0, PILL_ALT, PILL_OUT);
-
-      // Sprite always faces the camera; no 3D rotation needed
       S.billboard.material.rotation = 0;
 
-      // 1) Always show a base pill immediately (no image)
       const basePillTex = makeStadiumPillTexture(f, null);
       S.billboard.material.map = basePillTex;
       S.billboard.material.needsUpdate = true;
@@ -1304,13 +1303,13 @@ function moveMarkerToFixture(f, { fly=false } = {}){
       if (curN.dot(camera.position.clone().normalize()) < -0.25) {
         S.billboard.visible = false;
       }
-      // --- Teleport IN: grow pill from 0 → big → base at new location ---
+
+      // === Teleport IN: grow pill from 0 → big → base at new location ===
       const baseScale = S.billboard.userData.baseScale || {
         x: S.billboard.scale.x || 15,
         y: S.billboard.scale.y || 7.5
       };
 
-      // Make sure we’re starting from zero at the new spot
       S.raf.pill.cancel();
       S.billboard.scale.set(0, 0, 1);
 
@@ -1344,8 +1343,8 @@ function moveMarkerToFixture(f, { fly=false } = {}){
           S.raf.pill.cancel();
         }
       });
-      
-      // 2) Try to upgrade with real stadium image (no opacity changes)
+
+      // === Upgrade pill with stadium image (no opacity changes) ===
       (async () => {
         if (S.state.reqId !== myReq) return;
 
@@ -1367,11 +1366,11 @@ function moveMarkerToFixture(f, { fly=false } = {}){
         S.billboard.material.map = pillTex;
         S.billboard.material.needsUpdate = true;
         S.billboard.visible = true;
-        // we keep opacity as-is (1.0), no extra fade here
       })();
     }
   });
 }
+
 
 function onCanvasClick(event) {
   if (!MARKER || !MARKER.billboard || !currentFixture || !renderer || !camera) return;
