@@ -1195,59 +1195,25 @@ function moveMarkerToFixture(f, { fly=false } = {}){
           ring.material.opacity = base * wave;
         });
       });
-
-
       // Billboard “info pill” – a bit above the radar and pushed out from the globe
-      const PILL_ALT = R * 0.04;
-      const PILL_OUT = R * 0.08;
+      const PILL_ALT = R * 0.06;   // slightly higher so it sits clearly above the radar
+      const PILL_OUT = R * 0.10;   // pushed out a touch more towards camera
       S.billboard.position.set(0, PILL_ALT, PILL_OUT);
-      S.billboard.material.opacity = 0;
-      S.billboard.visible = true;
 
+      // Tilt panel ~25° so it’s not perfectly face-on (matches your 45° sketch feel)
       S.billboard.rotation.set(THREE.MathUtils.degToRad(-25), 0, 0);
 
+      // Always build a pill texture from the fixture data (no async yet)
+      const pillTex = makeStadiumPillTexture(f, null); // no JPG for now
+      S.billboard.material.map = pillTex;
+      S.billboard.material.needsUpdate = true;
+      S.billboard.material.opacity = 1.0;
+      S.billboard.visible = true;
+
+      // Only hide if really far side of the globe
       if (curN.dot(camera.position.clone().normalize()) < -0.25) {
         S.billboard.visible = false;
       }
-
-      // ... existing stadium texture async block ...
-
-
-      // Load stadium texture (queued, cached)
-      
-      (async () => {
-        let stadiumImage = null;
-
-        // Try to load a stadium JPG for this fixture
-        for (const url of stadiumCandidates(f)) {
-          try {
-            const tex = await loadTextureQueued(url);
-            if (S.state.reqId !== myReq) return;
-            stadiumImage = tex.image || null;
-            break;
-          } catch {
-            // try next candidate
-          }
-        }
-
-        // Build pill texture from fixture + optional image
-        if (S.state.reqId !== myReq) return;
-        const pillTex = makeStadiumPillTexture(f, stadiumImage);
-
-        S.billboard.material.map = pillTex;
-        S.billboard.material.needsUpdate = true;
-        S.billboard.visible = true;
-
-        // Fade-in animation
-        const fa0 = performance.now(), fad = 220;
-        S.billboard.material.opacity = 0;
-        S.raf.fade.run(() => {
-          if (S.state.reqId !== myReq) { S.raf.fade.cancel(); return; }
-          const ft = Math.min(1, (performance.now() - fa0) / fad);
-          S.billboard.material.opacity = ft;
-          if (ft >= 1) S.raf.fade.cancel();
-        });
-      })();
     }
   }); // <-- end S.raf.travel.run loop
 } // <-- end moveMarkerToFixture
