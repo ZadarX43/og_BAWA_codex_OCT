@@ -154,6 +154,123 @@ function makeFallbackCanvasTexture(label='STADIUM'){
   tex.anisotropy = maxAniso;
   return tex;
 }
+function makeStadiumPillTexture(f, img) {
+  const w = 1024;
+  const h = 512;
+  const c = document.createElement('canvas');
+  c.width = w;
+  c.height = h;
+  const g = c.getContext('2d');
+
+  g.clearRect(0, 0, w, h);
+
+  // --------------------------
+  // Background pill (teal gradient)
+  // --------------------------
+  const padX = 32;
+  const padY = 32;
+  const pillX = padX;
+  const pillY = padY;
+  const pillW = w - padX * 2;
+  const pillH = h - padY * 2;
+  const radius = 80;
+
+  const grd = g.createLinearGradient(pillX, pillY, pillX + pillW, pillY + pillH);
+  grd.addColorStop(0, '#0d2a32');
+  grd.addColorStop(0.5, '#0f4a40');
+  grd.addColorStop(1, '#0a344a');
+
+  g.fillStyle = grd;
+
+  g.beginPath();
+  g.moveTo(pillX + radius, pillY);
+  g.lineTo(pillX + pillW - radius, pillY);
+  g.quadraticCurveTo(pillX + pillW, pillY, pillX + pillW, pillY + radius);
+  g.lineTo(pillX + pillW, pillY + pillH - radius);
+  g.quadraticCurveTo(pillX + pillW, pillY + pillH, pillX + pillW - radius, pillY + pillH);
+  g.lineTo(pillX + radius, pillY + pillH);
+  g.quadraticCurveTo(pillX, pillY + pillH, pillX, pillY + pillH - radius);
+  g.lineTo(pillX, pillY + radius);
+  g.quadraticCurveTo(pillX, pillY, pillX + radius, pillY);
+  g.closePath();
+  g.fill();
+
+  // --------------------------
+  // Stadium circle on the left
+  // --------------------------
+  const cx = pillX + 170;           // centre x of circle
+  const cy = pillY + pillH / 2;     // centre y of circle
+  const cr = 110;
+
+  if (img && img.width && img.height) {
+    g.save();
+    g.beginPath();
+    g.arc(cx, cy, cr, 0, Math.PI * 2);
+    g.closePath();
+    g.clip();
+
+    const iw = img.width;
+    const ih = img.height;
+    const scale = Math.max((cr * 2) / iw, (cr * 2) / ih);
+    const drawW = iw * scale;
+    const drawH = ih * scale;
+    const dx = cx - drawW / 2;
+    const dy = cy - drawH / 2;
+
+    g.drawImage(img, dx, dy, drawW, drawH);
+    g.restore();
+  }
+
+  // White circle border
+  g.strokeStyle = 'rgba(255,255,255,0.9)';
+  g.lineWidth = 8;
+  g.beginPath();
+  g.arc(cx, cy, cr, 0, Math.PI * 2);
+  g.stroke();
+
+  // --------------------------
+  // Text: fixture + time + city/country
+  // --------------------------
+  const home = f?.home_team || 'Home';
+  const away = f?.away_team || 'Away';
+  const line1 = `${home} vs ${away}`;
+
+  let timeStr = '';
+  try {
+    if (f?.date_utc) {
+      const d = new Date(f.date_utc);
+      timeStr = d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+    }
+  } catch {}
+
+  const placeParts = [];
+  if (f?.city) placeParts.push(f.city);
+  if (f?.country) placeParts.push(f.country);
+  const place = placeParts.join(', ');
+  const line2 = [timeStr, place].filter(Boolean).join(' – ');
+
+  const textX = cx + cr + 60;
+  const textY = cy - 18;
+
+  g.fillStyle = 'rgba(229,246,255,0.96)';
+  g.font = 'bold 48px Montserrat, system-ui, sans-serif';
+  g.textAlign = 'left';
+  g.textBaseline = 'middle';
+  g.fillText(line1, textX, textY);
+
+  g.fillStyle = 'rgba(198,221,239,0.96)';
+  g.font = '32px Montserrat, system-ui, sans-serif';
+  g.fillText(line2, textX, textY + 52);
+
+  // --------------------------
+  // Turn into THREE texture
+  // --------------------------
+  const tex = new THREE.CanvasTexture(c);
+  if ('colorSpace' in tex) tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = renderer?.capabilities?.getMaxAnisotropy?.() || 1;
+  return tex;
+}
+
 function makeStadiumPillTextureFromImage(img) {
   if (!img) return null;
 
@@ -925,7 +1042,7 @@ function createMarker(){
   group.add(beam);
 
   // Stadium pill panel – Plane so we can tilt it (Sprite is always face-on)
-  const billboardGeom = new THREE.PlaneGeometry(24, 14);
+  const billboardGeom = new THREE.PlaneGeometry(28, 14);
   const billboardMat  = new THREE.MeshBasicMaterial({
     transparent: true,
     opacity: 0,
@@ -1097,41 +1214,40 @@ function moveMarkerToFixture(f, { fly=false } = {}){
 
 
       // Load stadium texture (queued, cached)
-      (async ()=>{
+      
+      (async () => {
+        let stadiumImage = null;
+
+        // Try to load a stadium JPG for this fixture
         for (const url of stadiumCandidates(f)) {
           try {
             const tex = await loadTextureQueued(url);
             if (S.state.reqId !== myReq) return;
-
-            // Build pill texture from the stadium image
-            const pillTex = makeStadiumPillTextureFromImage(tex.image);
-            const finalTex = pillTex || tex;
-
-            S.billboard.material.map = finalTex;
-            S.billboard.material.needsUpdate = true;
-
-            const fa0 = performance.now(), fad = 220;
-            S.raf.fade.run(()=>{
-              if (S.state.reqId !== myReq) { S.raf.fade.cancel(); return; }
-              const ft = Math.min(1, (performance.now() - fa0) / fad);
-              S.billboard.material.opacity = ft;
-              if (ft >= 1) S.raf.fade.cancel();
-            });
-            return;
-          } catch { /* try next */ }
+            stadiumImage = tex.image || null;
+            break;
+          } catch {
+            // try next candidate
+          }
         }
-      
-        // No file matched -> fallback disc with team/city
-        if (S.state.reqId === myReq) {
-          const name = (f.city || f.home_team || 'STADIUM').toUpperCase();
-          const tex  = makeFallbackCanvasTexture(name);
-          S.billboard.material.map = tex;
-          S.billboard.material.needsUpdate = true;
-          S.billboard.material.opacity = 1.0;
-          S.billboard.visible = true;
-        }
+
+        // Build pill texture from fixture + optional image
+        if (S.state.reqId !== myReq) return;
+        const pillTex = makeStadiumPillTexture(f, stadiumImage);
+
+        S.billboard.material.map = pillTex;
+        S.billboard.material.needsUpdate = true;
+        S.billboard.visible = true;
+
+        // Fade-in animation
+        const fa0 = performance.now(), fad = 220;
+        S.billboard.material.opacity = 0;
+        S.raf.fade.run(() => {
+          if (S.state.reqId !== myReq) { S.raf.fade.cancel(); return; }
+          const ft = Math.min(1, (performance.now() - fa0) / fad);
+          S.billboard.material.opacity = ft;
+          if (ft >= 1) S.raf.fade.cancel();
+        });
       })();
-
     }
   }); // <-- end S.raf.travel.run loop
 } // <-- end moveMarkerToFixture
