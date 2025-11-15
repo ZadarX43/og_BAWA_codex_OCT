@@ -57,6 +57,13 @@ let htmlTabsData = [];
 let MARKER = null;             // custom marker group object
 let currentFixture = null;
 let isHomeActive = true;       // controls whether globe render loop runs
+let currentUser = null;  // simple demo auth user { email, role }
+let savedAccas = [];     // array of saved acca objects
+
+const STORAGE_KEYS = {
+  user: 'og_user',
+  accas: 'og_saved_accas'
+};
 
 // Acca Builder state
 let abCurrentMarket = 'all';   // default: show all markets
@@ -111,6 +118,71 @@ function clearNode(node) { if (!node) return; while (node.firstChild) node.remov
 function pick(row, keys) {
   for (const k of keys) { const v = (row[k] ?? '').toString().trim(); if (v) return v; }
   return '';
+}
+// ---- Session & portfolio persistence (demo: localStorage) ----
+function loadSessionFromStorage() {
+  try {
+    const rawUser  = window.localStorage.getItem(STORAGE_KEYS.user);
+    const rawAccas = window.localStorage.getItem(STORAGE_KEYS.accas);
+    currentUser = rawUser ? JSON.parse(rawUser) : null;
+    savedAccas  = rawAccas ? JSON.parse(rawAccas) : [];
+  } catch (e) {
+    console.warn('Failed to parse stored session', e);
+    currentUser = null;
+    savedAccas = [];
+  }
+}
+
+function persistSession() {
+  try {
+    if (currentUser) {
+      window.localStorage.setItem(STORAGE_KEYS.user, JSON.stringify(currentUser));
+    } else {
+      window.localStorage.removeItem(STORAGE_KEYS.user);
+    }
+    window.localStorage.setItem(STORAGE_KEYS.accas, JSON.stringify(savedAccas || []));
+  } catch (e) {
+      console.warn('Failed to persist session', e);
+  }
+}
+
+function updateAuthUI() {
+  const profileBtn = document.getElementById('btn-profile');
+  const profileMenu = document.getElementById('profile-menu');
+
+  if (!profileBtn) return;
+
+  const avatar = profileBtn.querySelector('.avatar');
+  const items  = profileMenu?.querySelectorAll('.profile-item') || [];
+
+  if (currentUser) {
+    // Show user initials in avatar, change menu items
+    if (avatar) {
+      const initials = (currentUser.email || '?')
+        .split('@')[0]
+        .slice(0, 2)
+        .toUpperCase();
+      avatar.textContent = initials;
+    }
+    items.forEach(el => {
+      const href = el.getAttribute('href');
+      if (href === '#/login' || href === '#/signup') {
+        el.style.display = 'none';
+      }
+      if (el.dataset.action === 'logout') {
+        el.style.display = 'block';
+      }
+    });
+  } else {
+    if (avatar) avatar.textContent = 'OG';
+    items.for each(el => {
+      if (el.dataset.action === 'logout') {
+        el.style.display = 'none';
+      } else {
+        el.style.display = '';
+      }
+    });
+  }
 }
 
 // ---- Dates
@@ -1170,6 +1242,8 @@ async function loadThreeGlobe(){
 }
 
 async function init(){
+  loadSessionFromStorage();
+  updateAuthUI();
   ThreeGlobeCtor = await loadThreeGlobe();
 
   scene = new THREE.Scene();
@@ -1806,6 +1880,7 @@ function parseSlipText(text) {
   }
   return { legs, raw: lines.slice(0,60).join('\n') };
 }
+
 async function runBetChecker(file) {
   const out = document.getElementById('bc-output');
   if (out) out.innerHTML = '<div class="muted">Reading slip…</div>';
@@ -1961,6 +2036,86 @@ function appendChatLine(role, text) {
       appendChatLine('assistant', `⚠ ${e.message}`);
     }
   });
+}
+// Hook up auth forms (demo)
+{
+  const suBtn = document.getElementById('su-submit');
+  const liBtn = document.getElementById('li-submit');
+  const logoutBtn = document.getElementById('logout-btn');
+
+  if (suBtn)    suBtn.addEventListener('click', (e) => { e.preventDefault(); handleSignup(); });
+  if (liBtn)    addEventListener('click', (e) => { e.preventDefault(); handleLogin(); });
+  if (logoutBtn) logoutBtn.addEventListener('click', (e) => { e.preventDefault(); handleLogout(); });
+}
+
+// ----------------------------
+// Demo Auth: Sign up / Sign in / Sign out
+// ----------------------------
+
+function handleSignup() {
+  const emailInput = document.getElementById('su-email');
+  const passInput  = document.getElementById('su-pass');
+  if (!emailInput || !passInput) return;
+
+  const email = (emailInput.value || '').trim();
+  const password = (passInput.value || '').trim();
+
+  if (!email || !password) {
+    showToast('error', 'Please enter email and password');
+    return;
+  }
+
+  // Demo: just store in localStorage, mark user as "admin" if email matches
+  currentUser = {
+    email,
+    role: email.toLowerCase().startsWith('admin') ? 'admin' : 'user'
+  };
+  persistSession();
+  updateAuthUI();
+
+  showToast('success', `Welcome, ${email}`);
+  // redirect to home or portfolio
+    window.location.hash = '#/';
+}
+
+function handleLogin() {
+  const emailInput = document.getElementById('li-email');
+  const passInput  = document.getElementById('li-pass');
+  if (!emailInput || !passInput) return;
+
+  const email = (emailInput.value || '').trim();
+  const password = (passInput.value || '').trim();
+
+  if (!email || !password) {
+    showToast('error', 'Enter email & password');
+    return;
+  }
+
+  // Demo: accept any credentials, but if there is a saved user with same email, load it
+  const stored = window.localStorage.getItem(STORAGE_KEYS.user);
+  if (stored) {
+    const u = JSON.parse(stored);
+    if (u.email && u.email.toLowerCase() === email.toLowerCase()) {
+      currentUser = u;
+    } else {
+      currentUser = { email, role: email.toLowerCase().startsWith('admin') ? 'admin' : 'user' };
+    }
+  } else {
+    currentUser = { email, role: email.toLowerCase().startsWith('admin') ? 'admin' : 'user' };
+  }
+
+  persistSession();
+  updateAuthUI();
+  showToast('success', `Signed in as ${email}`);
+  window.location.hash = '#/';
+}
+
+function handleLogout() {
+  currentUser = null;
+  persistSession();
+  updateAuthUI();
+  showToast('info', 'Signed out');
+  window.location.hash = '#/';
 }
 
 // ----------------------------
