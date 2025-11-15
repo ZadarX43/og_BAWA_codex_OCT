@@ -1134,51 +1134,6 @@ function createMarker(){
   };
 }
 
-
-  // Beam straight "up" from the radar (local +Y)
-  const beamGeom = new THREE.CylinderGeometry(0.18, 0.28, 30, 24, 1, true);
-  const beamMat  = new THREE.MeshBasicMaterial({
-    color: 0x7df9c4,
-    transparent: true,
-    opacity: 0.0,
-    blending: THREE.AdditiveBlending,
-    depthWrite: false,
-    depthTest: false
-  });
-  const beam = new THREE.Mesh(beamGeom, beamMat);
-  beam.visible = false;
-  beam.renderOrder = 998;
-  group.add(beam);
-
-  // Stadium pill panel – Sprite so it always faces the camera
-    const billboardMat = new THREE.SpriteMaterial({
-    transparent: true,
-    opacity: 0,
-    depthTest: false,
-    depthWrite: false
-  });
-  const billboard = new THREE.Sprite(billboardMat);
-
-  // Base size for the pill (a bit tighter than before)
-  const baseScaleX = 15;
-  const baseScaleY = 7.5;
-  billboard.scale.set(baseScaleX, baseScaleY, 1);
-  billboard.userData.baseScale = { x: baseScaleX, y: baseScaleY };
-
-  billboard.renderOrder = 999;
-  group.add(billboard);
-
-
-  return {
-    group,
-    radar: radarRings,
-    beam,
-    billboard,
-    state: { lat: 0, lon: 0, reqId: 0 },
-    raf:   { travel: null, beam: null, fade: null, radar: null, pill: null }
-  };
-}
-
 function cancelRAF(handle){
   if (handle && handle.id) cancelAnimationFrame(handle.id);
 }
