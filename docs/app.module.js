@@ -58,6 +58,11 @@ let MARKER = null;             // custom marker group object
 let currentFixture = null;
 let isHomeActive = true;       // controls whether globe render loop runs
 
+// Acca Builder state
+let abCurrentMarket = 'ftr';   // current selected market key
+let abCartLegs = [];           // legs in the acca cart
+const abFixtureById = new Map();
+
 const SURFACE_EPS   = 0.009;
 const RADIUS_BASE   = 0.014;
 const RADIUS_ACTIVE = 0.040;
@@ -757,6 +762,347 @@ function applyFiltersAndRender(){
   if (visibleFixtures.length) selectIndex(0, { fly:true });
   renderCompetitionAccuracy(UI.league==='ALL' ? (visibleFixtures[0]?.competition||'—') : UI.league);
 }
+// -----------------------------------------
+// Acca Builder helpers
+// -----------------------------------------
+function initAccaFromFixtures(){
+  const fixtureSelect = document.getElementById('ab-fixture-select');
+  const leagueSelect  = document.getElementById('ab-league');
+  const marketNav     = document.getElementById('ab-market-nav');
+  if (!fixtureSelect || !leagueSelect || !marketNav) return;
+
+  abFixtureById.clear();
+
+  // Build league options
+  const leagues = Array.from(new Set(fixtures.map(f => f.competition).filter(Boolean))).sort();
+  leagueSelect.innerHTML = '<option value="ALL">All Leagues</option>';
+  leagues.forEach(name=>{
+    const opt = document.createElement('option');
+    opt.value = name;
+    opt.textContent = name;
+    leagueSelect.appendChild(opt);
+  });
+
+  // Helper to populate fixtures for current league filter
+  function refreshFixtureOptions(){
+    const leagueFilter = leagueSelect.value || 'ALL';
+    fixtureSelect.innerHTML = '';
+    const placeholder = document.createElement('option');
+    placeholder.value = '';
+    placeholder.textContent = 'Choose from upcoming matches…';
+    fixtureSelect.appendChild(placeholder);
+
+    const filtered = fixtures
+      .filter(f => leagueFilter === 'ALL' || (f.competition || '') === leagueFilter)
+      .slice()
+      .sort((a,b) => new Date(a.date_utc) - new Date(b.date_utc));
+
+    filtered.forEach(f=>{
+      const opt = document.createElement('option');
+      opt.value = f.fixture_id;
+      const d = f.date_utc ? new Date(f.date_utc) : null;
+      const timeStr = d && !isNaN(d) ? d.toLocaleTimeString(undefined,{hour:'2-digit', minute:'2-digit'}) : '';
+      opt.textContent = `${f.home_team} vs ${f.away_team}${timeStr ? ' • ' + timeStr : ''}`;
+      fixtureSelect.appendChild(opt);
+      abFixtureById.set(f.fixture_id, f);
+    });
+  }
+
+  refreshFixtureOptions();
+
+  // League filter change
+  leagueSelect.addEventListener('change', ()=>{
+    refreshFixtureOptions();
+    setAccaFixture(null);
+  });
+
+  // Fixture selection change
+  fixtureSelect.addEventListener('change', ()=>{
+    const id = fixtureSelect.value;
+    const f  = abFixtureById.get(id) || null;
+    setAccaFixture(f);
+  });
+
+  // Market chip clicks
+  marketNav.querySelectorAll('.market-chip').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      marketNav.querySelectorAll('.market-chip').forEach(b=>b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      abCurrentMarket = btn.dataset.market || 'ftr';
+      refreshAccaPicks();
+    });
+  });
+
+  // Initial state: nothing selected
+  setAccaFixture(null);
+  refreshAccaPicks();
+}
+
+function setAccaFixture(f){
+  currentFixture = f || null;
+
+  const titleEl   = document.getElementById('ab-fixture-title');
+  const metaEl    = document.getElementById('ab-fixture-meta');
+  const crestHome = document.getElementById('ab-crest-home');
+  const crestAway = document.getElementById('ab-crest-away');
+
+  if (!f){
+    if (titleEl) titleEl.textContent = 'Select a fixture';
+    if (metaEl)  metaEl.textContent  = '';
+    if (crestHome){ crestHome.innerHTML = ''; crestHome.textContent = ''; }
+    if (crestAway){ crestAway.innerHTML = ''; crestAway.textContent = ''; }
+    refreshAccaPicks();
+    return;
+  }
+
+  // Hero title/meta
+  if (titleEl) titleEl.textContent = `${f.home_team} vs ${f.away_team}`;
+  if (metaEl){
+    const parts = [];
+    if (f.competition) parts.push(f.competition);
+    if (f.date_utc){
+      try{
+        const d = new Date(f.date_utc);
+        const date = d.toLocaleDateString(undefined,{weekday:'short', day:'2-digit', month:'short'});
+        const time = d.toLocaleTimeString(undefined,{hour:'2-digit', minute:'2-digit'});
+        parts.push(`${date} · ${time} GMT`);
+      }catch{}
+    }
+    if (f.stadium) parts.push(f.stadium + (f.city ? `, ${f.city}` : ''));
+    metaEl.textContent = parts.join(' • ');
+  }
+
+  // Reuse badge loader for crests
+  if (crestHome) setBadgeLocal(crestHome, null, f.home_team);
+  if (crestAway) setBadgeLocal(crestAway, null, f.away_team);
+
+  refreshAccaPicks();
+}
+
+function marketLabelFromKey(key){
+  switch(key){
+    case 'ftr':        return 'Full Time Result';
+    case 'goals_main': return 'Match Goals (Over/Under)';
+    case 'btts':       return 'Both Teams To Score';
+    default:           return 'Selected market';
+  }
+}
+
+function refreshAccaPicks(){
+  const listEl    = document.getElementById('ab-picks-list');
+  const emptyEl   = document.getElementById('ab-picks-empty');
+  const summaryEl = document.getElementById('ab-picks-summary');
+  if (!listEl || !emptyEl || !summaryEl) return;
+
+  listEl.innerHTML = '';
+
+  if (!currentFixture){
+    emptyEl.hidden = false;
+    emptyEl.textContent = 'Select a fixture to see model picks.';
+    summaryEl.textContent = '';
+    return;
+  }
+
+  const f = currentFixture;
+  const picks = [];
+
+  // ---- STUB PICKS: replace with real model data later ----
+  if (abCurrentMarket === 'ftr'){
+    picks.push(
+      { id: 'HOME', label: `${f.home_team} to Win`, prob: 0.62, fair: 1.61, price: 1.80, edge: 6.5 },
+      { id: 'DRAW', label: 'Draw',                   prob: 0.22, fair: 4.55, price: 4.75, edge: 1.8 },
+      { id: 'AWAY', label: `${f.away_team} to Win`,  prob: 0.16, fair: 6.25, price: 6.50, edge: 1.2 }
+    );
+  } else if (abCurrentMarket === 'goals_main'){
+    picks.push(
+      { id: 'O25', label: 'Over 2.5 Goals',  prob: 0.71, fair: 1.41, price: 1.65, edge: 6.4 },
+      { id: 'U25', label: 'Under 2.5 Goals', prob: 0.29, fair: 3.45, price: 3.60, edge: 1.3 }
+    );
+  } else if (abCurrentMarket === 'btts'){
+    picks.push(
+      { id: 'BTTS_Y', label: 'Both Teams To Score – Yes', prob: 0.65, fair: 1.54, price: 1.75, edge: 4.5 },
+      { id: 'BTTS_N', label: 'Both Teams To Score – No',  prob: 0.35, fair: 2.85, price: 3.10, edge: 3.2 }
+    );
+  } else {
+    emptyEl.hidden = false;
+    emptyEl.textContent = 'This market is not wired yet. Try Full Time Result or Match Goals.';
+    summaryEl.textContent = '';
+    return;
+  }
+
+  emptyEl.hidden = true;
+  summaryEl.textContent = `Showing ${picks.length} picks for ${marketLabelFromKey(abCurrentMarket)}.`;
+
+  picks.forEach(pick=>{
+    const card = document.createElement('article');
+    card.className = 'pick-card';
+    card.dataset.pickId = pick.id;
+
+    const main = document.createElement('div');
+    main.className = 'pick-main';
+    const h3 = document.createElement('h3');
+    h3.className = 'pick-title';
+    h3.textContent = pick.label;
+    const sub = document.createElement('p');
+    sub.className = 'pick-subtitle';
+    const probPct = Math.round(pick.prob * 100);
+    const fairText  = pick.fair  != null ? pick.fair.toFixed(2)  : '–';
+    const priceText = pick.price != null ? pick.price.toFixed(2) : '–';
+    sub.textContent = `Model ${probPct}% • Fair ${fairText} • Price ${priceText}`;
+    main.appendChild(h3);
+    main.appendChild(sub);
+
+    const meta = document.createElement('div');
+    meta.className = 'pick-meta';
+    const badge = document.createElement('div');
+    badge.className = 'pick-badge' + (pick.edge != null && pick.edge >= 0 ? ' pick-badge--positive' : '');
+    if (pick.edge != null){
+      const edgeTxt = pick.edge.toFixed(1);
+      badge.textContent = `EV ${pick.edge >= 0 ? '+' : ''}${edgeTxt}%`;
+    } else {
+      badge.textContent = 'Model pick';
+    }
+    const btn = document.createElement('button');
+    btn.className = 'pick-add-btn';
+    btn.textContent = '+ Add';
+    btn.addEventListener('click', ()=> addLegToAcca(pick));
+
+    meta.appendChild(badge);
+    meta.appendChild(btn);
+
+    card.appendChild(main);
+    card.appendChild(meta);
+    listEl.appendChild(card);
+  });
+}
+
+function addLegToAcca(pick){
+  if (!currentFixture) return;
+  abCartLegs.push({
+    fixture_id: currentFixture.fixture_id,
+    fixture_label: `${currentFixture.home_team} vs ${currentFixture.away_team}`,
+    market: abCurrentMarket,
+    label: pick.label,
+    prob: pick.prob,
+    fair: pick.fair,
+    price: pick.price,
+    edge: pick.edge
+  });
+  renderAccaCart();
+}
+
+function removeLegFromAcca(index){
+  abCartLegs.splice(index, 1);
+  renderAccaCart();
+}
+
+function renderAccaCart(){
+  const listEl   = document.getElementById('ab-cart-legs');
+  const emptyEl  = document.getElementById('ab-cart-empty');
+  const sumEl    = document.getElementById('ab-cart-summary');
+  const priceEl  = document.getElementById('ab-cart-price');
+  const probEl   = document.getElementById('ab-cart-prob');
+  const evEl     = document.getElementById('ab-cart-ev');
+  const btnCopy  = document.getElementById('ab-copy-slip');
+  const btnCheck = document.getElementById('ab-send-to-checker');
+  if (!listEl || !emptyEl || !sumEl) return;
+
+  listEl.innerHTML = '';
+
+  if (!abCartLegs.length){
+    emptyEl.hidden = false;
+    sumEl.hidden   = true;
+    if (priceEl) priceEl.textContent = '–';
+    if (probEl)  probEl.textContent  = '–';
+    if (evEl)    evEl.textContent    = '–';
+    if (btnCopy)  btnCopy.disabled  = true;
+    if (btnCheck) btnCheck.disabled = true;
+    return;
+  }
+
+  emptyEl.hidden = true;
+  sumEl.hidden   = false;
+
+  abCartLegs.forEach((leg, idx)=>{
+    const li = document.createElement('li');
+    li.className = 'acca-leg';
+
+    const main = document.createElement('div');
+    main.className = 'acca-leg-main';
+    const label = document.createElement('div');
+    label.className = 'acca-leg-label';
+    label.textContent = `${leg.fixture_label} – ${leg.label}`;
+    const sub = document.createElement('div');
+    sub.className = 'acca-leg-sub muted';
+    const probPct = leg.prob != null ? Math.round(leg.prob*100) + '%' : '–';
+    const fairTxt  = leg.fair  != null ? leg.fair.toFixed(2)  : '–';
+    const priceTxt = leg.price != null ? leg.price.toFixed(2) : '–';
+    const edgeTxt  = leg.edge  != null ? (leg.edge >=0 ? '+' : '') + leg.edge.toFixed(1) + '%' : '–';
+    sub.textContent = `Model ${probPct} • Fair ${fairTxt} • Price ${priceTxt} • EV ${edgeTxt}`;
+    main.appendChild(label);
+    main.appendChild(sub);
+
+    const btn = document.createElement('button');
+    btn.className = 'acca-leg-remove';
+    btn.textContent = '✕';
+    btn.addEventListener('click', ()=> removeLegFromAcca(idx));
+
+    li.appendChild(main);
+    li.appendChild(btn);
+    listEl.appendChild(li);
+  });
+
+  // Rough combined stats (demo)
+  let comboProb = 1;
+  let avgEdge   = 0;
+  let comboPrice = 1;
+  let countWithEdge = 0;
+  abCartLegs.forEach(leg=>{
+    if (leg.prob  != null) comboProb  *= leg.prob;
+    if (leg.price != null) comboPrice *= leg.price;
+    if (leg.edge  != null){ avgEdge += leg.edge; countWithEdge++; }
+  });
+  if (countWithEdge) avgEdge /= countWithEdge;
+
+  if (priceEl) priceEl.textContent = comboPrice && isFinite(comboPrice) ? comboPrice.toFixed(2) : '–';
+  if (probEl)  probEl.textContent  = comboProb && isFinite(comboProb) ? Math.round(comboProb*100) + '%' : '–';
+  if (evEl)    evEl.textContent    = countWithEdge ? (avgEdge >=0 ? '+' : '') + avgEdge.toFixed(1) + '%' : '–';
+
+  if (btnCopy){
+    btnCopy.disabled = false;
+    btnCopy.onclick = ()=> copyAccaToClipboard();
+  }
+  if (btnCheck){
+    btnCheck.disabled = false;
+    btnCheck.onclick = ()=> {
+      showToast('info','Bet Checker integration coming soon.');
+    };
+  }
+}
+
+function copyAccaToClipboard(){
+  if (!abCartLegs.length) return;
+  const lines = abCartLegs.map(leg=>{
+    const priceTxt = leg.price != null ? '@ ' + leg.price.toFixed(2) : '';
+    return `${leg.fixture_label} – ${leg.label} ${priceTxt}`;
+  });
+  const text = lines.join('\n');
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(()=>{
+      showToast('success','Acca copied to clipboard');
+    }).catch(()=>{
+      showToast('error','Could not copy acca');
+    });
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); showToast('success','Acca copied to clipboard'); }
+    catch { showToast('error','Could not copy acca'); }
+    ta.remove();
+  }
+}
 
 // -----------------------------------------
 // Three-Globe loader & scene init
@@ -851,6 +1197,7 @@ async function init(){
   buildLeagueChips();
   buildDateStrip();
   applyFiltersAndRender();
+  initAccaFromFixtures();           // <-- new
 
   // loop
   (function loop(){
