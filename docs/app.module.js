@@ -51,25 +51,31 @@ const el = {
 let ThreeGlobeCtor;
 let globe;
 let renderer, scene, camera, controls, composer;
-let fixtures = [];             // all
-let visibleFixtures = [];      // filtered
+let fixtures = [];             // all fixtures
+let visibleFixtures = [];      // filtered for current date/league
 let htmlTabsData = [];
 let MARKER = null;             // custom marker group object
 let currentFixture = null;
 let isHomeActive = true;       // controls whether globe render loop runs
-let currentUser = null;  // simple demo auth user { email, role }
-let savedAccas = [];     // array of saved acca objects
+
+// Demo auth + portfolio
+let currentUser = null;        // { email, role }
+let savedAccas  = [];          // saved acca snapshots
 
 const STORAGE_KEYS = {
-  user: 'og_user',
+  user:  'og_user',
   accas: 'og_saved_accas'
 };
 
 // Acca Builder state
 let abCurrentMarket = 'all';   // default: show all markets
-let abCartLegs = [];           // legs in the acca cart
+let abCartLegs      = [];      // legs in the acca cart
+let currentAccaLegs = [];      // snapshot of cart, used for portfolio save
 const abFixtureById = new Map();
 
+// Raycaster for clickable pill sprite
+const raycaster = new THREE.Raycaster();
+const pointer   = new THREE.Vector2();
 
 const SURFACE_EPS   = 0.009;
 const RADIUS_BASE   = 0.014;
@@ -83,11 +89,6 @@ const COLORS = {
   markerActive:   '#CFFFFA',
   ring:           '#9EE7E3'
 };
-
-// Raycaster for clickable pill sprite
-const raycaster = new THREE.Raycaster();
-const pointer   = new THREE.Vector2();
-
 
 // ---- UI demo “today”
 const UI = {
@@ -113,12 +114,19 @@ function showToast(type, text, ms=2600){
   setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),250); }, ms);
 }
 
-function clearNode(node) { if (!node) return; while (node.firstChild) node.removeChild(node.firstChild); }
+function clearNode(node) {
+  if (!node) return;
+  while (node.firstChild) node.removeChild(node.firstChild);
+}
 
 function pick(row, keys) {
-  for (const k of keys) { const v = (row[k] ?? '').toString().trim(); if (v) return v; }
+  for (const k of keys) {
+    const v = (row[k] ?? '').toString().trim();
+    if (v) return v;
+  }
   return '';
 }
+
 // ---- Session & portfolio persistence (demo: localStorage) ----
 function loadSessionFromStorage() {
   try {
@@ -129,7 +137,7 @@ function loadSessionFromStorage() {
   } catch (e) {
     console.warn('Failed to parse stored session', e);
     currentUser = null;
-    savedAccas = [];
+    savedAccas  = [];
   }
 }
 
@@ -142,18 +150,17 @@ function persistSession() {
     }
     window.localStorage.setItem(STORAGE_KEYS.accas, JSON.stringify(savedAccas || []));
   } catch (e) {
-      console.warn('Failed to persist session', e);
+    console.warn('Failed to persist session', e);
   }
 }
 
 function updateAuthUI() {
-  const profileBtn = document.getElementById('btn-profile');
+  const profileBtn  = document.getElementById('btn-profile');
   const profileMenu = document.getElementById('profile-menu');
-
-  if (!profileBtn) return;
+  if (!profileBtn || !profileMenu) return;
 
   const avatar = profileBtn.querySelector('.avatar');
-  const items  = profileMenu?.querySelectorAll('.profile-item') || [];
+  const items  = profileMenu.querySelectorAll('.profile-item');
 
   if (currentUser) {
     // Show user initials in avatar, change menu items
@@ -175,7 +182,7 @@ function updateAuthUI() {
     });
   } else {
     if (avatar) avatar.textContent = 'OG';
-    items.for each(el => {
+    items.forEach(el => {
       if (el.dataset.action === 'logout') {
         el.style.display = 'none';
       } else {
@@ -214,12 +221,15 @@ function latLngToVec3(lat, lon, alt=0){
   const n = latLngToUnit(lat, lon);
   return n.clone().multiplyScalar(R*(1+alt));
 }
+
+// -----------------------------------------
+// Stadium pill textures
+// -----------------------------------------
 function makeFallbackCanvasTexture(label='STADIUM'){
   const c = document.createElement('canvas');
   c.width = 512; c.height = 512;
   const g = c.getContext('2d');
 
-  // soft gradient disc
   const r = 220, cx = 256, cy = 256;
   const grd = g.createRadialGradient(cx, cy, r*0.25, cx, cy, r);
   grd.addColorStop(0, 'rgba(255,255,255,0.95)');
@@ -227,7 +237,6 @@ function makeFallbackCanvasTexture(label='STADIUM'){
   g.fillStyle = grd;
   g.beginPath(); g.arc(cx, cy, r, 0, Math.PI*2); g.fill();
 
-  // label
   g.fillStyle = '#0b1f29';
   g.font = 'bold 46px Montserrat, system-ui, sans-serif';
   g.textAlign = 'center'; g.textBaseline = 'middle';
@@ -239,6 +248,7 @@ function makeFallbackCanvasTexture(label='STADIUM'){
   tex.anisotropy = maxAniso;
   return tex;
 }
+
 function makeStadiumPillTexture(f, img) {
   const w = 1024;
   const h = 512;
@@ -249,9 +259,6 @@ function makeStadiumPillTexture(f, img) {
 
   g.clearRect(0, 0, w, h);
 
-  // --------------------------
-  // Background pill (teal gradient)
-  // --------------------------
   const padX = 32;
   const padY = 32;
   const pillX = padX;
@@ -280,11 +287,8 @@ function makeStadiumPillTexture(f, img) {
   g.closePath();
   g.fill();
 
-  // --------------------------
-  // Stadium circle on the left
-  // --------------------------
-  const cx = pillX + 170;           // centre x of circle
-  const cy = pillY + pillH / 2;     // centre y of circle
+  const cx = pillX + 170;
+  const cy = pillY + pillH / 2;
   const cr = 110;
 
   if (img && img.width && img.height) {
@@ -306,16 +310,12 @@ function makeStadiumPillTexture(f, img) {
     g.restore();
   }
 
-  // White circle border
   g.strokeStyle = 'rgba(255,255,255,0.9)';
   g.lineWidth = 8;
   g.beginPath();
   g.arc(cx, cy, cr, 0, Math.PI * 2);
   g.stroke();
 
-  // --------------------------
-  // Text: fixture + time + city/country
-  // --------------------------
   const home = f?.home_team || 'Home';
   const away = f?.away_team || 'Away';
   const line1 = `${home} vs ${away}`;
@@ -347,90 +347,9 @@ function makeStadiumPillTexture(f, img) {
   g.font = '32px Montserrat, system-ui, sans-serif';
   g.fillText(line2, textX, textY + 52);
 
-  // --------------------------
-  // Turn into THREE texture
-  // --------------------------
   const tex = new THREE.CanvasTexture(c);
   if ('colorSpace' in tex) tex.colorSpace = THREE.SRGBColorSpace;
   tex.anisotropy = renderer?.capabilities?.getMaxAnisotropy?.() || 1;
-  return tex;
-}
-
-function makeStadiumPillTextureFromImage(img) {
-  if (!img) return null;
-
-  const w = 512;
-  const h = 256;
-  const c = document.createElement('canvas');
-  c.width = w;
-  c.height = h;
-  const g = c.getContext('2d');
-
-  g.clearRect(0, 0, w, h);
-
-  // ---- Pill background (rounded rect, teal/green/blue gradient) ----
-  const radius = 56;
-  const x = 16;
-  const y = 16;
-  const width = w - 32;
-  const height = h - 32;
-
-  const grd = g.createLinearGradient(x, y, x + width, y + height);
-  grd.addColorStop(0, '#0d2a32');
-  grd.addColorStop(0.5, '#0f4a40');
-  grd.addColorStop(1, '#0a344a');
-
-  g.fillStyle = grd;
-
-  g.beginPath();
-  g.moveTo(x + radius, y);
-  g.lineTo(x + width - radius, y);
-  g.quadraticCurveTo(x + width, y, x + width, y + radius);
-  g.lineTo(x + width, y + height - radius);
-  g.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-  g.lineTo(x + radius, y + height);
-  g.quadraticCurveTo(x, y + height, x, y + height - radius);
-  g.lineTo(x, y + radius);
-  g.quadraticCurveTo(x, y, x + radius, y);
-  g.closePath();
-  g.fill();
-
-  // ---- Stadium circle ----
-  const cx = x + 110;          // circle centre x
-  const cy = y + height / 2;   // circle centre y
-  const cr = 80;
-
-  // Clip to circle and draw image "cover" style
-  g.save();
-  g.beginPath();
-  g.arc(cx, cy, cr, 0, Math.PI * 2);
-  g.closePath();
-  g.clip();
-
-  // Fit image into the circle (cover)
-  const iw = img.width;
-  const ih = img.height;
-  if (iw && ih) {
-    const scale = Math.max((cr * 2) / iw, (cr * 2) / ih);
-    const drawW = iw * scale;
-    const drawH = ih * scale;
-    const dx = cx - drawW / 2;
-    const dy = cy - drawH / 2;
-    g.drawImage(img, dx, dy, drawW, drawH);
-  }
-  g.restore();
-
-  // Outer circle border
-  g.strokeStyle = 'rgba(255,255,255,0.85)';
-  g.lineWidth = 6;
-  g.beginPath();
-  g.arc(cx, cy, cr, 0, Math.PI * 2);
-  g.stroke();
-
-  const tex = new THREE.CanvasTexture(c);
-  if ('colorSpace' in tex) tex.colorSpace = THREE.SRGBColorSpace;
-  tex.anisotropy = renderer?.capabilities?.getMaxAnisotropy?.() || 1;
-
   return tex;
 }
 
@@ -439,7 +358,6 @@ function makeStadiumPillTextureFromImage(img) {
 // -----------------------------------------
 const LOGO_LOCAL_BASE = './assets/assets/logos';
 
-// Strip accents & punctuation for slugging (“København” -> “kobenhavn”)
 function stripDiacritics(s = '') {
   try {
     return s.normalize('NFD').replace(/\p{Diacritic}/gu, '');
@@ -457,9 +375,7 @@ function slugLocal(name = '') {
     .replace(/^-+|-+$/g, '');
 }
 
-// Explicit overrides mapped to your actual SVG filenames
 const TEAM_LOGO_OVERRIDES = {
-  // Accented / alt forms
   'Atlético Madrid'       : `${LOGO_LOCAL_BASE}/atletico-madrid.svg`,
   'Atletico Madrid'       : `${LOGO_LOCAL_BASE}/atletico-madrid.svg`,
   'Bayern München'        : `${LOGO_LOCAL_BASE}/bayern-munich.svg`,
@@ -468,8 +384,6 @@ const TEAM_LOGO_OVERRIDES = {
   'Red Star Belgrade'     : `${LOGO_LOCAL_BASE}/red-star-belgrade.svg`,
   'København'             : `${LOGO_LOCAL_BASE}/fc-kobenhavn.svg`,
   'FC København'          : `${LOGO_LOCAL_BASE}/fc-kobenhavn.svg`,
-
-  // Clubs exactly matching your files
   'AC Milan'              : `${LOGO_LOCAL_BASE}/ac-milan.svg`,
   'Arsenal'               : `${LOGO_LOCAL_BASE}/arsenal.svg`,
   'Barcelona'             : `${LOGO_LOCAL_BASE}/fc-barcelona.svg`,
@@ -507,24 +421,19 @@ const TEAM_LOGO_OVERRIDES = {
   'Young Boys'            : `${LOGO_LOCAL_BASE}/young-boys.svg`,
 };
 
-// Generate candidate .svg paths based on the team name
 function localLogoCandidates(teamName = '') {
   const name = String(teamName || '').trim();
   if (!name) return [];
-
-  // 1) Exact override first
   const override = TEAM_LOGO_OVERRIDES[name];
   if (override) return [override];
 
-  // 2) Slug-based guesses (for anything not in overrides)
-  const s = slugLocal(name);  // e.g. "FC Barcelona" -> "fc-barcelona"
+  const s = slugLocal(name);
   if (!s) return [];
-
   const b = LOGO_LOCAL_BASE;
   return Array.from(new Set([
     `${b}/${s}.svg`,
-    `${b}/${s.replace(/^fc-/, '')}.svg`,   // "fc-barcelona" -> "barcelona.svg"
-    `${b}/${s.replace(/-fc$/, '')}.svg`,   // "barcelona-fc" -> "barcelona.svg"
+    `${b}/${s.replace(/^fc-/, '')}.svg`,
+    `${b}/${s.replace(/-fc$/, '')}.svg`,
   ]));
 }
 
@@ -533,49 +442,38 @@ function initialsFor(name = '') {
   return p.length ? (p[0][0] + (p[1]?.[0] || '')).toUpperCase() : '';
 }
 
-// *** Simple badge loader – no races, loud logging ***
 function setBadgeLocal(elm, _urlFromCsv, teamName = '') {
   if (!elm) return;
 
-  // show initials while loading
   elm.classList.remove('has-logo');
   elm.innerHTML = '';
   elm.textContent = initialsFor(teamName);
 
   const candidates = localLogoCandidates(teamName);
   console.log('[badge] candidates', { teamName, candidates });
-
   if (!candidates.length) return;
 
-  const src = candidates[0]; // for your known clubs, this should be the correct SVG
+  const src = candidates[0];
   const img = new Image();
   img.alt = teamName;
 
   img.onload = () => {
+    if (!elm) return;
     console.log('[badge] success', teamName, '→', src);
     elm.innerHTML = '';
     elm.appendChild(img);
     elm.classList.add('has-logo');
   };
-
   img.onerror = () => {
     console.log('[badge] error', teamName, '→', src);
-    // keep initials fallback
   };
-
   img.src = src;
 }
-// -----------------------------------------
-// Competition badges (for comp strip under globe)
-// -----------------------------------------
 
-// If you later add real SVGs, map them here:
-const COMP_LOGO_OVERRIDES = {
-  // Example if you add these files:
-  // 'UEFA Champions League': './assets/assets/logos/ucl.svg',
-  // 'UEFA Europa League'   : './assets/assets/logos/uel.svg',
-};
-
+// -----------------------------------------
+// Competition badges (comp strip under globe)
+// -----------------------------------------
+const COMP_LOGO_OVERRIDES = {};
 const COMP_BADGE_CACHE = new Map();
 
 function makeCompetitionBadgeDataUrl(label = 'LEAGUE') {
@@ -587,7 +485,6 @@ function makeCompetitionBadgeDataUrl(label = 'LEAGUE') {
 
   g.clearRect(0, 0, size, size);
 
-  // circular gradient badge
   const grd = g.createLinearGradient(0, 0, size, size);
   grd.addColorStop(0, '#0f766e');
   grd.addColorStop(1, '#22c55e');
@@ -598,7 +495,6 @@ function makeCompetitionBadgeDataUrl(label = 'LEAGUE') {
   g.arc(size / 2, size / 2, r, 0, Math.PI * 2);
   g.fill();
 
-  // league initials
   const parts = String(label || '').split(/\s+/).filter(Boolean);
   const initials = (
     (parts[0]?.[0] || 'L') +
@@ -624,7 +520,6 @@ function setCompetitionLogo(leagueName) {
     return;
   }
 
-  // 1) If we have a real logo mapped, use it
   const override = COMP_LOGO_OVERRIDES[name];
   if (override) {
     el.compLogo.src = override;
@@ -632,7 +527,6 @@ function setCompetitionLogo(leagueName) {
     return;
   }
 
-  // 2) Otherwise generate/cache a fallback badge with initials
   let url = COMP_BADGE_CACHE.get(name);
   if (!url) {
     url = makeCompetitionBadgeDataUrl(name);
@@ -647,7 +541,6 @@ function setCompetitionLogo(leagueName) {
 // -----------------------------------------
 const STADIUM_BASE = './assets/stadiums';
 
-// Only the files you said you uploaded:
 const STADIUM_OVERRIDES = {
   'AC Milan':             'ac-milan.jpg',
   'Arsenal':              'arsenal.jpg',
@@ -662,14 +555,12 @@ const STADIUM_OVERRIDES = {
   'Young Boys':           'young-boys.jpg',
 };
 
-// Return 0 or 1 local path; no blind guesses that 404
 function stadiumCandidates(f) {
   const name = String(f?.home_team || '').trim();
   const file = STADIUM_OVERRIDES[name];
   return file ? [`${STADIUM_BASE}/${file}`] : [];
 }
 
-// Texture queue/cache (unchanged)
 const __TEX_CACHE = new Map();
 const __TEX_WAIT  = new Map();
 function loadTextureQueued(url){
@@ -691,7 +582,7 @@ function loadTextureQueued(url){
 // -----------------------------------------
 // Competition accuracy strip
 // -----------------------------------------
-const DEMO_FTR = 0.87; // fixed 87% per request
+const DEMO_FTR = 0.87;
 function getCompetitionSnapshot(league){
   const rows = league && league!=='ALL'
     ? fixtures.filter(f => (f.competition||'').toLowerCase() === league.toLowerCase())
@@ -713,7 +604,6 @@ function renderCompetitionAccuracy(league){
   const name = league || '—';
   if (el.compName) el.compName.textContent = name;
 
-  // NEW: set competition badge logo
   setCompetitionLogo(name);
 
   if (el.compTraffic){
@@ -724,9 +614,8 @@ function renderCompetitionAccuracy(league){
   }
 }
 
-
 // -----------------------------------------
-// Date & League filter UI  [A: prev/next restored here]
+// Date & League filter UI
 // -----------------------------------------
 function buildDateStrip(){
   const base = baseDate();
@@ -741,7 +630,7 @@ function buildDateStrip(){
 
   if (UI.rangeDays===1 && UI.offsetDays===0 && el.dateToday)    el.dateToday.classList.add('is-active');
   if (UI.rangeDays===1 && UI.offsetDays===1 && el.dateTomorrow) el.dateTomorrow.classList.add('is-active');
-  if (UI.rangeDays>=2 && el.dateWeekend)                         el.dateWeekend.classList.add('is-active');
+  if (UI.rangeDays>=2 && el.dateWeekend)                        el.dateWeekend.classList.add('is-active');
 
   const t = document.getElementById('cal-title');
   if (t) {
@@ -772,7 +661,6 @@ function bindDateControls(){
     UI.offsetDays += UI.rangeDays; buildDateStrip(); applyFiltersAndRender();
   });
 
-  // Prev/Next fixture (restored)
   document.getElementById('nav-prev')?.addEventListener('click', ()=>{
     if (!visibleFixtures.length) return;
     const cur = visibleFixtures.findIndex(f=>f.__active);
@@ -816,10 +704,11 @@ function buildLeagueChips(){
     el.leagueChips.appendChild(b);
   }
 }
+
 function applyFiltersAndRender(){
   if (!fixtures.length) return;
   const start = baseDate();
-  const end = datePlusDays(start, UI.rangeDays);
+  const end   = datePlusDays(start, UI.rangeDays);
   visibleFixtures = fixtures.filter(f=>{
     const d = new Date(f.date_utc); if (isNaN(d)) return false;
     if (!(d>=start && d<end)) return false;
@@ -835,6 +724,7 @@ function applyFiltersAndRender(){
   if (visibleFixtures.length) selectIndex(0, { fly:true });
   renderCompetitionAccuracy(UI.league==='ALL' ? (visibleFixtures[0]?.competition||'—') : UI.league);
 }
+
 // -----------------------------------------
 // Acca Builder helpers
 // -----------------------------------------
@@ -850,7 +740,6 @@ function initAccaFromFixtures(){
 
   abFixtureById.clear();
 
-  // Build league options
   const leagues = Array.from(new Set(fixtures.map(f => f.competition).filter(Boolean))).sort();
   leagueSelect.innerHTML = '<option value="ALL">All Leagues</option>';
   leagues.forEach(name=>{
@@ -860,7 +749,6 @@ function initAccaFromFixtures(){
     leagueSelect.appendChild(opt);
   });
 
-  // Helper to populate fixtures for current league filter
   function refreshFixtureOptions(){
     const leagueFilter = leagueSelect.value || 'ALL';
     fixtureSelect.innerHTML = '';
@@ -887,20 +775,17 @@ function initAccaFromFixtures(){
 
   refreshFixtureOptions();
 
-  // League filter change
   leagueSelect.addEventListener('change', ()=>{
     refreshFixtureOptions();
     setAccaFixture(null);
   });
 
-  // Fixture selection change
   fixtureSelect.addEventListener('change', ()=>{
     const id = fixtureSelect.value;
     const f  = abFixtureById.get(id) || null;
     setAccaFixture(f);
   });
 
-  // Market chip clicks
   marketNav.querySelectorAll('.market-chip').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       marketNav.querySelectorAll('.market-chip').forEach(b=>b.classList.remove('is-active'));
@@ -910,7 +795,6 @@ function initAccaFromFixtures(){
     });
   });
 
-  // Initial state: nothing selected
   setAccaFixture(null);
   refreshAccaPicks();
 }
@@ -932,7 +816,6 @@ function setAccaFixture(f){
     return;
   }
 
-  // Hero title/meta
   if (titleEl) titleEl.textContent = `${f.home_team} vs ${f.away_team}`;
   if (metaEl){
     const parts = [];
@@ -949,7 +832,6 @@ function setAccaFixture(f){
     metaEl.textContent = parts.join(' • ');
   }
 
-  // Reuse badge loader for crests
   if (crestHome) setBadgeLocal(crestHome, null, f.home_team);
   if (crestAway) setBadgeLocal(crestAway, null, f.away_team);
 
@@ -965,7 +847,6 @@ function marketLabelFromKey(key){
     default:           return 'Selected market';
   }
 }
-
 
 function refreshAccaPicks(){
   const listEl    = document.getElementById('ab-picks-list');
@@ -985,7 +866,6 @@ function refreshAccaPicks(){
   const f = currentFixture;
   const picks = [];
 
-  // ---- STUB PICKS: replace with real model data later ----
   const wantAll  = (abCurrentMarket === 'all');
   const wantFTR  = (abCurrentMarket === 'ftr'        || wantAll);
   const wantGOAL = (abCurrentMarket === 'goals_main' || wantAll);
@@ -1021,37 +901,35 @@ function refreshAccaPicks(){
   emptyEl.hidden = true;
   summaryEl.textContent = `Showing ${picks.length} picks for ${marketLabelFromKey(abCurrentMarket)}.`;
 
-
-    picks.forEach(pick => {
-    // Work out which market this pick belongs to
+  picks.forEach(pick => {
     const marketKey = pick.marketKey || abCurrentMarket;
     const key       = accaLegKey(currentFixture.fixture_id, marketKey, pick.id);
     const isInCart  = abCartLegs.some(l => l.key === key);
-  
+
     const card = document.createElement('article');
     card.className = 'pick-card';
     card.dataset.pickId = pick.id;
-  
+
     const main = document.createElement('div');
     main.className = 'pick-main';
-  
+
     const h3 = document.createElement('h3');
     h3.className = 'pick-title';
     h3.textContent = pick.label;
-  
+
     const sub = document.createElement('p');
     sub.className = 'pick-subtitle';
     const probPct   = Math.round(pick.prob * 100);
     const fairText  = pick.fair  != null ? pick.fair.toFixed(2)  : '–';
     const priceText = pick.price != null ? pick.price.toFixed(2) : '–';
     sub.textContent = `Model ${probPct}% • Fair ${fairText} • Price ${priceText}`;
-  
+
     main.appendChild(h3);
     main.appendChild(sub);
-  
+
     const meta = document.createElement('div');
     meta.className = 'pick-meta';
-  
+
     const badge = document.createElement('div');
     badge.className = 'pick-badge' + (pick.edge != null && pick.edge >= 0 ? ' pick-badge--positive' : '');
     if (pick.edge != null){
@@ -1060,33 +938,32 @@ function refreshAccaPicks(){
     } else {
       badge.textContent = 'Model pick';
     }
-  
+
     const btn = document.createElement('button');
     btn.className = 'pick-add-btn';
-  
+
     if (isInCart) {
       btn.classList.add('pick-add-btn--active');
       btn.textContent = 'Remove';
     } else {
       btn.textContent = '+ Add';
     }
-  
+
     btn.addEventListener('click', () => addLegToAcca(pick));
-  
+
     meta.appendChild(badge);
     meta.appendChild(btn);
-  
+
     card.appendChild(main);
     card.appendChild(meta);
     listEl.appendChild(card);
   });
 }
-
 function addLegToAcca(pick){
   if (!currentFixture) return;
 
   const marketKey = pick.marketKey || abCurrentMarket;
-  const key = accaLegKey(currentFixture.fixture_id, marketKey, pick.id);
+  const key       = accaLegKey(currentFixture.fixture_id, marketKey, pick.id);
 
   const existingIdx = abCartLegs.findIndex(l => l.key === key);
   if (existingIdx >= 0){
@@ -1110,7 +987,6 @@ function addLegToAcca(pick){
   refreshAccaPicks(); // re-render pick buttons to show Add/Remove state
 }
 
-
 function removeLegFromAcca(index){
   abCartLegs.splice(index, 1);
   renderAccaCart();
@@ -1126,6 +1002,9 @@ function renderAccaCart(){
   const evEl     = document.getElementById('ab-cart-ev');
   const btnCopy  = document.getElementById('ab-copy-slip');
   const btnCheck = document.getElementById('ab-send-to-checker');
+  const btnSave  = document.getElementById('acc-save');
+  const saveHint = document.getElementById('acc-save-hint');
+
   if (!listEl || !emptyEl || !sumEl) return;
 
   listEl.innerHTML = '';
@@ -1133,16 +1012,23 @@ function renderAccaCart(){
   if (!abCartLegs.length){
     emptyEl.hidden = false;
     sumEl.hidden   = true;
+    currentAccaLegs = [];
+
     if (priceEl) priceEl.textContent = '–';
     if (probEl)  probEl.textContent  = '–';
     if (evEl)    evEl.textContent    = '–';
     if (btnCopy)  btnCopy.disabled  = true;
     if (btnCheck) btnCheck.disabled = true;
+    if (btnSave)  btnSave.disabled  = true;
+    if (saveHint) saveHint.textContent = '';
     return;
   }
 
   emptyEl.hidden = true;
   sumEl.hidden   = false;
+
+  // Keep a clean snapshot for portfolio saving
+  currentAccaLegs = abCartLegs.map(l => ({ ...l }));
 
   abCartLegs.forEach((leg, idx)=>{
     const li = document.createElement('li');
@@ -1174,10 +1060,11 @@ function renderAccaCart(){
   });
 
   // Rough combined stats (demo)
-  let comboProb = 1;
-  let avgEdge   = 0;
+  let comboProb  = 1;
+  let avgEdge    = 0;
   let comboPrice = 1;
   let countWithEdge = 0;
+
   abCartLegs.forEach(leg=>{
     if (leg.prob  != null) comboProb  *= leg.prob;
     if (leg.price != null) comboPrice *= leg.price;
@@ -1198,6 +1085,13 @@ function renderAccaCart(){
     btnCheck.onclick = ()=> {
       showToast('info','Bet Checker integration coming soon.');
     };
+  }
+  if (btnSave){
+    btnSave.disabled = false;
+  }
+  if (saveHint){
+    // cleared on render; save function will set a message
+    saveHint.textContent = '';
   }
 }
 
@@ -1225,116 +1119,102 @@ function copyAccaToClipboard(){
   }
 }
 
-// -----------------------------------------
-// Three-Globe loader & scene init
-// -----------------------------------------
-async function loadThreeGlobe(){
-  for (const v of ['2.31.3','2.31.1','2.30.1','2.29.3']){
-    try { const m = await import(`https://esm.sh/three-globe@${v}?bundle&external=three`);
-          console.warn('[three-globe] using esm.sh ESM:', v); return m.default ?? m; } catch {}
-  }
-  for (const url of [
-    'https://cdn.jsdelivr.net/npm/three-globe@2.31.1/dist/three-globe.min.js',
-    'https://unpkg.com/three-globe@2.31.1/dist/three-globe.min.js',
-    './vendor/three-globe.min.js'
-  ]){ try { const ctor = await import(url); console.warn('[three-globe] using UMD:', url); return ctor; } catch {} }
-  throw new Error('three-globe failed to load');
+// ----------------------------
+// Portfolio (saved accas)
+// ----------------------------
+function getCurrentAccaSnapshot() {
+  if (!currentFixture || !currentAccaLegs || !currentAccaLegs.length) return null;
+
+  return {
+    id: `acc_${Date.now()}`,
+    userEmail: currentUser?.email || null,
+    name: `${currentFixture.home_team} vs ${currentFixture.away_team} (${new Date().toLocaleTimeString()})`,
+    createdAt: new Date().toISOString(),
+    fixture: {
+      home_team:   currentFixture.home_team,
+      away_team:   currentFixture.away_team,
+      date_utc:    currentFixture.date_utc,
+      competition: currentFixture.competition,
+      stadium:     currentFixture.stadium,
+      city:        currentFixture.city,
+      country:     currentFixture.country
+    },
+    legs: currentAccaLegs.map(l => ({ ...l }))
+  };
 }
 
-async function init(){
-  loadSessionFromStorage();
-  updateAuthUI();
-  ThreeGlobeCtor = await loadThreeGlobe();
+function saveCurrentAccaToPortfolio() {
+  if (!currentUser) {
+    showToast('error', 'Sign in to save your acca');
+    return;
+  }
+  const snapshot = getCurrentAccaSnapshot();
+  if (!snapshot) {
+    showToast('error', 'No acca to save yet');
+    return;
+  }
+  savedAccas.push(snapshot);
+  persistSession();
+  showToast('success', 'Acca saved to your portfolio');
+  renderPortfolio();
 
-  scene = new THREE.Scene();
-  renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
-  renderer.setSize(el.globeWrap.clientWidth, el.globeWrap.clientHeight);
-  el.globeWrap.innerHTML = '';
-  el.globeWrap.appendChild(renderer.domElement);
-  if ('outputColorSpace' in renderer) renderer.outputColorSpace = THREE.SRGBColorSpace;
+  const hint = document.getElementById('acc-save-hint');
+  if (hint) {
+    const when = new Date(snapshot.createdAt).toLocaleTimeString();
+    hint.textContent = `Saved at ${when}`;
+  }
+}
 
-  camera = new THREE.PerspectiveCamera(45, el.globeWrap.clientWidth/el.globeWrap.clientHeight, 0.1, 5000);
-  camera.position.set(0, 0, getGlobeRadius()*3);
+function renderPortfolio() {
+  const container = document.getElementById('portfolio-list');
+  if (!container) return;
+  container.innerHTML = '';
 
-  controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true; controls.enablePan = false; controls.enableZoom = true;
-  controls.autoRotate = false; controls.minDistance = getGlobeRadius()*1.2; controls.maxDistance = getGlobeRadius()*6;
+  const userAccas = savedAccas.filter(a => !currentUser || !a.userEmail || a.userEmail === currentUser?.email);
 
-  composer = new EffectComposer(renderer);
-  composer.addPass(new RenderPass(scene, camera));
-  const fxaa = new ShaderPass(FXAAShader);
-  const setFXAA = ()=>{ const px=renderer.getPixelRatio();
-    fxaa.material.uniforms['resolution'].value.set( 1/(el.globeWrap.clientWidth*px), 1/(el.globeWrap.clientHeight*px) ); };
-  setFXAA(); composer.addPass(fxaa);
-  const bloom = new UnrealBloomPass(new THREE.Vector2(el.globeWrap.clientWidth, el.globeWrap.clientHeight), BLOOM.strength, BLOOM.radius, BLOOM.threshold);
-  composer.addPass(bloom);
-
-  scene.add(new THREE.AmbientLight(0xffffff,0.9));
-  const hemi = new THREE.HemisphereLight(0xddeeff, 0x223344, 0.6); scene.add(hemi);
-
-  globe = new ThreeGlobeCtor({ waitForGlobeReady:true })
-    .showAtmosphere(true).atmosphereColor('#9ef9e3').atmosphereAltitude(0.28)
-    .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
-    .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
-    .pointAltitude(()=>SURFACE_EPS)
-    .pointRadius(d=>d.__active?RADIUS_ACTIVE:RADIUS_BASE)
-    .pointColor(d=>d.__active?COLORS.markerActive:COLORS.marker)
-    .pointsMerge(true);
-
-  scene.add(globe);
-
-  // custom marker group
-  MARKER = createMarker();
-  scene.add(MARKER.group);
-
-  // click handler for pill sprite
-  renderer.domElement.addEventListener('click', onCanvasClick);
-
-  // hover & click on globe points
-  if (typeof globe.onPointHover === 'function') globe.onPointHover(handleHover);
-  globe.onPointClick?.(pt=>{
-    if (!pt) return;
-    const idx = visibleFixtures.findIndex(f=>f.latitude===pt.latitude && f.longitude===pt.longitude);
-    if (idx>=0) selectIndex(idx, { fly:true });
-  });
-
-  // Resize
-  window.addEventListener('resize', ()=>{
-    const {clientWidth:w, clientHeight:h} = el.globeWrap;
-    renderer.setSize(w,h); camera.aspect=w/h; camera.updateProjectionMatrix(); setFXAA();
-  });
-
-  bindTabs();
-  bindDateControls();
-  bindSheet();
-
-  // deep-dive button opens sheet for current fixture
-  el.deepBtn?.addEventListener('click', () => {
-    if (currentFixture) {
-      openSheetForFixture(currentFixture);
-    }
-  });
-  
-  function accaLegKey(fixtureId, marketKey, pickId) {
-    return `${fixtureId}__${marketKey}__${pickId}`;
+  if (!userAccas.length) {
+    container.innerHTML = `<p class="muted">No saved accas yet. Build one in the Acca Builder and click “Save to portfolio”.</p>`;
+    return;
   }
 
+  userAccas
+    .slice()
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    .forEach(acc => {
+      const card = document.createElement('div');
+      card.className = 'insight-card';
+      const when = new Date(acc.createdAt).toLocaleString();
+      card.innerHTML = `
+        <h2>${acc.name}</h2>
+        <p class="muted">${when} • ${acc.fixture.competition || ''} • ${acc.fixture.city || ''}, ${acc.fixture.country || ''}</p>
+        <p class="muted">${acc.legs?.length || 0} leg(s)</p>
+        <button class="cta" data-load-acca="${acc.id}">Open in builder</button>
+      `;
+      container.appendChild(card);
+    });
 
-  await loadFixturesCSV('./data/fixtures.csv');
-  buildLeagueChips();
-  buildDateStrip();
-  applyFiltersAndRender();
-  initAccaFromFixtures();           // <-- new
+  container.querySelectorAll('button[data-load-acca]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-load-acca');
+      const acc = userAccas.find(a => a.id === id);
+      if (!acc) return;
 
-  // loop
-  (function loop(){
-    requestAnimationFrame(loop);
-    if (!isHomeActive) return;
-    controls.update();
-    composer.render();
-  })();
+      const match = fixtures.find(
+        f =>
+          f.home_team === acc.fixture.home_team &&
+          f.away_team === acc.fixture.away_team &&
+          f.date_utc === acc.fixture.date_utc
+      );
+      if (!match) {
+        showToast('error', 'Original fixture not found in current data set');
+        return;
+      }
 
+      currentFixture = match;
+      window.location.hash = '#/acca-builder';
+      showToast('info', 'Fixture loaded in Acca Builder. Leg restoration coming next.');
+    });
+  });
 }
 
 // -----------------------------------------
@@ -1410,7 +1290,7 @@ function syncRail(activeIdx){
 function selectIndex(idx,{fly=false}={}){
   if (!visibleFixtures.length) return;
   const f = visibleFixtures[idx]; if (!f) return;
-  currentFixture = f;                       // track active fixture
+  currentFixture = f;
   visibleFixtures.forEach(it=>it.__active = (it===f));
   globe.pointColor(d=>d.__active?COLORS.markerActive:COLORS.marker)
        .pointRadius(d=>d.__active?RADIUS_ACTIVE:RADIUS_BASE)
@@ -1419,7 +1299,6 @@ function selectIndex(idx,{fly=false}={}){
   renderPanel(f);
   syncRail(idx);
 }
-
 
 function elmEmpty(msg){ const d=document.createElement('div'); d.className='empty'; d.textContent=msg; return d; }
 
@@ -1438,10 +1317,8 @@ function renderPanel(f){
     f.competition, fmt(f.date_utc), f.stadium && `${f.stadium} (${f.city||''})`, f.country
   ].filter(Boolean).join(' • '));
 
-    // We’re local-only now; keep CSV URLs as optional future input
-    setBadgeLocal(el.homeBadge,  f.home_badge_url || null, f.home_team);
-    setBadgeLocal(el.awayBadge,  f.away_badge_url || null, f.away_team);
-
+  setBadgeLocal(el.homeBadge,  f.home_badge_url || null, f.home_team);
+  setBadgeLocal(el.awayBadge,  f.away_badge_url || null, f.away_team);
 
   if (el.matchList){
     clearNode(el.matchList);
@@ -1481,6 +1358,9 @@ function bindTabs(){
   });
 }
 
+// ----------------------------
+// Bottom sheet (fixture details)
+// ----------------------------
 function openSheetForFixture(f) {
   const sheet = document.getElementById('sheet');
   if (!sheet || !f) return;
@@ -1530,7 +1410,6 @@ function bindSheet() {
   handle?.addEventListener('click', closeSheet);
 }
 
-
 // ----------------------------
 // Marker creation & movement
 // ----------------------------
@@ -1540,7 +1419,6 @@ function createMarker(){
 
   const R = getGlobeRadius();
 
-  // --- Radar: 4 concentric static rings (inner thickest, outer faintest) ---
   const radarRings = [];
   const baseInner = R * 0.02;
   const baseWidth = R * 0.008;
@@ -1562,7 +1440,7 @@ function createMarker(){
     });
 
     const ring = new THREE.Mesh(ringGeom, ringMat);
-    ring.rotation.x = Math.PI / 2;  // lie flat
+    ring.rotation.x = Math.PI / 2;
     ring.renderOrder = 998;
     ring.userData.baseAlpha = baseAlpha;
 
@@ -1570,7 +1448,6 @@ function createMarker(){
     radarRings.push(ring);
   }
 
-  // Beam straight "up" from the radar (local +Y)
   const beamGeom = new THREE.CylinderGeometry(0.18, 0.28, 30, 24, 1, true);
   const beamMat  = new THREE.MeshBasicMaterial({
     color: 0x7df9c4,
@@ -1585,7 +1462,6 @@ function createMarker(){
   beam.renderOrder = 998;
   group.add(beam);
 
-  // Stadium pill panel – Sprite so it always faces the camera
   const billboardMat = new THREE.SpriteMaterial({
     transparent: true,
     opacity: 0,
@@ -1594,7 +1470,6 @@ function createMarker(){
   });
   const billboard = new THREE.Sprite(billboardMat);
 
-  // Base size for the pill
   const baseScaleX = 15;
   const baseScaleY = 7.5;
   billboard.scale.set(baseScaleX, baseScaleY, 1);
@@ -1609,7 +1484,7 @@ function createMarker(){
     beam,
     billboard,
     state: { lat: 0, lon: 0, reqId: 0 },
-    raf:   { travel: null, beam: null, fade: null, radar: null } // no pill RAF for now
+    raf:   { travel: null, beam: null, fade: null, radar: null }
   };
 }
 
@@ -1628,7 +1503,6 @@ function makeRAF(){
   };
 }
 
-// Great-circle slerp for unit vectors
 function slerpUnitVec(fromN, toN, t) {
   const v0 = fromN.clone().normalize();
   const v1 = toN.clone().normalize();
@@ -1692,14 +1566,10 @@ function moveMarkerToFixture(f, { fly = false } = {}) {
     const t = dur ? Math.min(1, (performance.now() - t0) / dur) : 1;
     const k = easeInOut(t);
 
-    const curN     = slerpUnitVec(fromN, toN, k);  // surface normal
+    const curN     = slerpUnitVec(fromN, toN, k);
     const worldPos = curN.clone().multiplyScalar(R * (1 + SURFACE_EPS));
     S.group.position.copy(worldPos);
 
-    // Stable local basis:
-    //  - up (+Y) = surface normal
-    //  - forward (+Z) = towards camera, projected onto tangent plane
-    //  - right (+X) = cross(forward, up)
     const up = curN.clone().normalize();
 
     const toCam = camera.position.clone().sub(worldPos).normalize();
@@ -1720,7 +1590,6 @@ function moveMarkerToFixture(f, { fly = false } = {}) {
     if (t >= 1) {
       S.raf.travel.cancel();
 
-      // === Beam animation ===
       S.beam.position.set(0, 0, 0);
       S.beam.quaternion.identity();
       S.beam.scale.set(1, 0.001, 1);
@@ -1738,7 +1607,6 @@ function moveMarkerToFixture(f, { fly = false } = {}) {
         if (tb >= 1) S.raf.beam.cancel();
       });
 
-      // === Radar breathing ===
       const rings      = Array.isArray(S.radar) ? S.radar : (S.radar ? [S.radar] : []);
       const radarStart = performance.now();
 
@@ -1757,12 +1625,11 @@ function moveMarkerToFixture(f, { fly = false } = {}) {
           const base  = ring.userData?.baseAlpha ?? 0.25;
           const phase = tWave + idx * 0.8;
           const sinVal = Math.sin(phase);
-          const wave   = 0.2 + 0.8 * Math.max(0, sinVal);   // 0.2–1.0
+          const wave   = 0.2 + 0.8 * Math.max(0, sinVal);
           ring.material.opacity = base * wave;
         });
       });
 
-      // === Pill positioning & base texture ===
       const PILL_ALT = R * 0.05;
       const PILL_OUT = R * 0.03;
       S.billboard.position.set(0, PILL_ALT, PILL_OUT);
@@ -1774,12 +1641,10 @@ function moveMarkerToFixture(f, { fly = false } = {}) {
       S.billboard.material.opacity = 1.0;
       S.billboard.visible = true;
 
-      // Optional: hide if on far side of globe
       if (curN.dot(camera.position.clone().normalize()) < -0.25) {
         S.billboard.visible = false;
       }
 
-      // === Upgrade pill with stadium image (no opacity/scale changes) ===
       (async () => {
         if (S.state.reqId !== myReq) return;
 
@@ -1806,7 +1671,6 @@ function moveMarkerToFixture(f, { fly = false } = {}) {
   });
 }
 
-
 function onCanvasClick(event) {
   if (!MARKER || !MARKER.billboard || !currentFixture || !renderer || !camera) return;
 
@@ -1820,7 +1684,6 @@ function onCanvasClick(event) {
     openSheetForFixture(currentFixture);
   }
 }
-
 // =====================================================
 // API HELPERS + FEATURE PAGES (BetChecker / Acca / Co-Pilot)
 // =====================================================
@@ -1832,7 +1695,10 @@ async function apiJson(url, opts = {}) {
     credentials: 'include',
     ...opts
   });
-  if (!res.ok) { const t = await res.text().catch(()=> ''); throw new Error(`HTTP ${res.status}: ${t || res.statusText}`); }
+  if (!res.ok) {
+    const t = await res.text().catch(()=> '');
+    throw new Error(`HTTP ${res.status}: ${t || res.statusText}`);
+  }
   return res.json();
 }
 
@@ -1922,7 +1788,7 @@ async function runBetChecker(file) {
   });
 }
 
-// ---------- Acca Builder ----------
+// ---------- Acca Builder (API-driven, separate from globe view) ----------
 async function runAccaSuggest() {
   const league = (document.getElementById('ab-league')?.value || 'ALL');
   const market = (document.getElementById('ab-market')?.value || 'ou25');
@@ -2020,7 +1886,6 @@ function appendChatLine(role, text) {
 {
   const cpInput = document.getElementById('cp-input');
   const cpSend  = document.getElementById('cp-send');
-  const cpThread= document.getElementById('cp-thread');
 
   cpSend?.addEventListener('click', async ()=>{
     const q = (cpInput?.value || '').trim();
@@ -2037,21 +1902,10 @@ function appendChatLine(role, text) {
     }
   });
 }
-// Hook up auth forms (demo)
-{
-  const suBtn = document.getElementById('su-submit');
-  const liBtn = document.getElementById('li-submit');
-  const logoutBtn = document.getElementById('logout-btn');
-
-  if (suBtn)    suBtn.addEventListener('click', (e) => { e.preventDefault(); handleSignup(); });
-  if (liBtn)    addEventListener('click', (e) => { e.preventDefault(); handleLogin(); });
-  if (logoutBtn) logoutBtn.addEventListener('click', (e) => { e.preventDefault(); handleLogout(); });
-}
 
 // ----------------------------
 // Demo Auth: Sign up / Sign in / Sign out
 // ----------------------------
-
 function handleSignup() {
   const emailInput = document.getElementById('su-email');
   const passInput  = document.getElementById('su-pass');
@@ -2065,7 +1919,6 @@ function handleSignup() {
     return;
   }
 
-  // Demo: just store in localStorage, mark user as "admin" if email matches
   currentUser = {
     email,
     role: email.toLowerCase().startsWith('admin') ? 'admin' : 'user'
@@ -2074,8 +1927,7 @@ function handleSignup() {
   updateAuthUI();
 
   showToast('success', `Welcome, ${email}`);
-  // redirect to home or portfolio
-    window.location.hash = '#/';
+  window.location.hash = '#/';
 }
 
 function handleLogin() {
@@ -2091,7 +1943,6 @@ function handleLogin() {
     return;
   }
 
-  // Demo: accept any credentials, but if there is a saved user with same email, load it
   const stored = window.localStorage.getItem(STORAGE_KEYS.user);
   if (stored) {
     const u = JSON.parse(stored);
@@ -2118,6 +1969,17 @@ function handleLogout() {
   window.location.hash = '#/';
 }
 
+// Hook up auth forms (demo)
+{
+  const suBtn    = document.getElementById('su-submit');
+  const liBtn    = document.getElementById('li-submit');
+  const logoutBtn= document.getElementById('logout-btn');
+
+  if (suBtn)    suBtn.addEventListener('click', (e) => { e.preventDefault(); handleSignup(); });
+  if (liBtn)    liBtn.addEventListener('click', (e) => { e.preventDefault(); handleLogin(); });
+  if (logoutBtn) logoutBtn.addEventListener('click', (e) => { e.preventDefault(); handleLogout(); });
+}
+
 // ----------------------------
 // Router + Boot
 // ----------------------------
@@ -2126,26 +1988,22 @@ const ROUTES = {
   '#/home':        'view-home',
   '#/bet-checker': 'view-betchecker',
   '#/acca-builder':'view-accabuilder',
+  '#/portfolio':   'view-portfolio',
   '#/copilot':     'view-copilot',
   '#/login':       'view-signin',
   '#/signup':      'view-signup'
 };
+
 function showRoute(hash) {
   if (!hash) hash = '#/';
   const id = ROUTES[hash] || 'view-home';
 
-  // Toggle view visibility
   document.querySelectorAll('.view').forEach(v => {
-    if (v.id === id) {
-      v.classList.add('is-active');
-      v.removeAttribute('hidden');
-    } else {
-      v.classList.remove('is-active');
-      v.setAttribute('hidden','');
-    }
+    const active = (v.id === id);
+    v.classList.toggle('is-active', active);
+    if (active) v.removeAttribute('hidden'); else v.setAttribute('hidden','');
   });
 
-  // Update nav state
   document.querySelectorAll('[data-route]').forEach(a=>{
     a.classList.toggle('is-active', a.getAttribute('href') === hash);
     if (a.classList.contains('side-link')) {
@@ -2153,7 +2011,6 @@ function showRoute(hash) {
     }
   });
 
-  // Close menus/drawers
   const profileMenu = document.getElementById('profile-menu');
   const profileBtn  = document.getElementById('btn-profile');
   profileMenu?.classList.remove('show');
@@ -2164,18 +2021,140 @@ function showRoute(hash) {
   scrim?.classList.remove('show');
   drawer?.setAttribute('aria-hidden','true');
 
-  // Control globe render loop
   isHomeActive = (id === 'view-home');
+
+  if (id === 'view-portfolio') {
+    renderPortfolio();
+  }
+}
+
+// -----------------------------------------
+// Three-Globe loader & scene init
+// -----------------------------------------
+async function loadThreeGlobe(){
+  for (const v of ['2.31.3','2.31.1','2.30.1','2.29.3']){
+    try {
+      const m = await import(`https://esm.sh/three-globe@${v}?bundle&external=three`);
+      console.warn('[three-globe] using esm.sh ESM:', v);
+      return m.default ?? m;
+    } catch {}
+  }
+  for (const url of [
+    'https://cdn.jsdelivr.net/npm/three-globe@2.31.1/dist/three-globe.min.js',
+    'https://unpkg.com/three-globe@2.31.1/dist/three-globe.min.js',
+    './vendor/three-globe.min.js'
+  ]){
+    try {
+      const ctor = await import(url);
+      console.warn('[three-globe] using UMD:', url);
+      return ctor;
+    } catch {}
+  }
+  throw new Error('three-globe failed to load');
+}
+
+async function init(){
+  loadSessionFromStorage();
+  updateAuthUI();
+
+  ThreeGlobeCtor = await loadThreeGlobe();
+
+  scene = new THREE.Scene();
+  renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+  renderer.setSize(el.globeWrap.clientWidth, el.globeWrap.clientHeight);
+  el.globeWrap.innerHTML = '';
+  el.globeWrap.appendChild(renderer.domElement);
+  if ('outputColorSpace' in renderer) renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+  camera = new THREE.PerspectiveCamera(45, el.globeWrap.clientWidth/el.globeWrap.clientHeight, 0.1, 5000);
+  camera.position.set(0, 0, getGlobeRadius()*3);
+
+  controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true; controls.enablePan = false; controls.enableZoom = true;
+  controls.autoRotate = false; controls.minDistance = getGlobeRadius()*1.2; controls.maxDistance = getGlobeRadius()*6;
+
+  composer = new EffectComposer(renderer);
+  composer.addPass(new RenderPass(scene, camera));
+  const fxaa = new ShaderPass(FXAAShader);
+  const setFXAA = ()=>{ const px=renderer.getPixelRatio();
+    fxaa.material.uniforms['resolution'].value.set( 1/(el.globeWrap.clientWidth*px), 1/(el.globeWrap.clientHeight*px) ); };
+  setFXAA(); composer.addPass(fxaa);
+  const bloom = new UnrealBloomPass(new THREE.Vector2(el.globeWrap.clientWidth, el.globeWrap.clientHeight), BLOOM.strength, BLOOM.radius, BLOOM.threshold);
+  composer.addPass(bloom);
+
+  scene.add(new THREE.AmbientLight(0xffffff,0.9));
+  const hemi = new THREE.HemisphereLight(0xddeeff, 0x223344, 0.6); scene.add(hemi);
+
+  globe = new ThreeGlobeCtor({ waitForGlobeReady:true })
+    .showAtmosphere(true).atmosphereColor('#9ef9e3').atmosphereAltitude(0.28)
+    .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
+    .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
+    .pointAltitude(()=>SURFACE_EPS)
+    .pointRadius(d=>d.__active?RADIUS_ACTIVE:RADIUS_BASE)
+    .pointColor(d=>d.__active?COLORS.markerActive:COLORS.marker)
+    .pointsMerge(true);
+
+  scene.add(globe);
+
+  MARKER = createMarker();
+  scene.add(MARKER.group);
+
+  renderer.domElement.addEventListener('click', onCanvasClick);
+
+  if (typeof globe.onPointHover === 'function') globe.onPointHover(handleHover);
+  globe.onPointClick?.(pt=>{
+    if (!pt) return;
+    const idx = visibleFixtures.findIndex(f=>f.latitude===pt.latitude && f.longitude===pt.longitude);
+    if (idx>=0) selectIndex(idx, { fly:true });
+  });
+
+  window.addEventListener('resize', ()=>{
+    const {clientWidth:w, clientHeight:h} = el.globeWrap;
+    renderer.setSize(w,h); camera.aspect=w/h; camera.updateProjectionMatrix(); setFXAA();
+  });
+
+  bindTabs();
+  bindDateControls();
+  bindSheet();
+
+  el.deepBtn?.addEventListener('click', () => {
+    if (currentFixture) {
+      openSheetForFixture(currentFixture);
+    }
+  });
+
+  await loadFixturesCSV('./data/fixtures.csv');
+  buildLeagueChips();
+  buildDateStrip();
+  applyFiltersAndRender();
+  initAccaFromFixtures();
+
+  const saveBtn = document.getElementById('acc-save');
+  if (saveBtn) {
+    saveBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      saveCurrentAccaToPortfolio();
+    });
+  }
+
+  (function loop(){
+    requestAnimationFrame(loop);
+    if (!isHomeActive) return;
+    controls.update();
+    composer.render();
+  })();
 }
 
 window.addEventListener('hashchange', ()=> showRoute(location.hash));
 window.addEventListener('DOMContentLoaded', ()=>{
-  if (!location.hash) location.hash = '#/'; showRoute(location.hash);
+  if (!location.hash) location.hash = '#/'; 
+  showRoute(location.hash);
   init().catch(err=>{ console.error(err); showToast('error', String(err)); });
 });
 
 // ----------------------------
-// Quick self-test for two known files
+// Quick self-test for logos
 // ----------------------------
 (function verifyLocalLogoSetup(){
   const tests = [
