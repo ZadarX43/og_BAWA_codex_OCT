@@ -1196,7 +1196,7 @@ function moveMarkerToFixture(f, { fly=false } = {}){
     : 0;
   const t0    = performance.now();
 
-  S.raf.travel = S.raf.travel || makeRAF();
+   S.raf.travel = S.raf.travel || makeRAF();
   S.raf.beam   = S.raf.beam   || makeRAF();
   S.raf.fade   = S.raf.fade   || makeRAF();
   S.raf.radar  = S.raf.radar  || makeRAF();
@@ -1208,8 +1208,38 @@ function moveMarkerToFixture(f, { fly=false } = {}){
   S.raf.radar.cancel();
   S.raf.pill.cancel();
 
-
   S.group.visible = true;
+
+  // === Teleport OUT: shrink current pill into radar centre ===
+  const baseScaleForShrink = S.billboard.userData.baseScale || {
+    x: S.billboard.scale.x || 15,
+    y: S.billboard.scale.y || 7.5
+  };
+
+  const shrinkStart    = performance.now();
+  const shrinkDuration = 140; // ms
+
+  S.raf.pill.run(() => {
+    if (S.state.reqId !== myReq) {
+      S.raf.pill.cancel();
+      return;
+    }
+    const elapsed = performance.now() - shrinkStart;
+    const tNorm   = Math.min(1, elapsed / shrinkDuration);
+
+    const s = 1 - tNorm; // 1 → 0
+    S.billboard.scale.set(
+      baseScaleForShrink.x * s,
+      baseScaleForShrink.y * s,
+      1
+    );
+
+    if (tNorm >= 1) {
+      // fully shrunk
+      S.billboard.scale.set(0, 0, 1);
+      S.raf.pill.cancel();
+    }
+  });
 
   S.raf.travel.run(()=>{
     if (S.state.reqId !== myReq) { S.raf.travel.cancel(); return; }
@@ -1306,17 +1336,18 @@ function moveMarkerToFixture(f, { fly=false } = {}){
       if (curN.dot(camera.position.clone().normalize()) < -0.25) {
         S.billboard.visible = false;
       }
-      // --- Tiny "pop" scale animation for the pill (more visible) ---
+      // --- Teleport IN: grow pill from 0 → big → base at new location ---
       const baseScale = S.billboard.userData.baseScale || {
-        x: S.billboard.scale.x,
-        y: S.billboard.scale.y
+        x: S.billboard.scale.x || 15,
+        y: S.billboard.scale.y || 7.5
       };
+
+      // Make sure we’re starting from zero at the new spot
+      S.raf.pill.cancel();
+      S.billboard.scale.set(0, 0, 1);
 
       const popStart    = performance.now();
       const popDuration = 220; // ms
-
-      // Start noticeably smaller so the pop reads clearly
-      S.billboard.scale.set(baseScale.x * 0.8, baseScale.y * 0.8, 1);
 
       S.raf.pill.run(() => {
         if (S.state.reqId !== myReq) {
@@ -1329,11 +1360,11 @@ function moveMarkerToFixture(f, { fly=false } = {}){
 
         let s;
         if (tNorm < 0.5) {
-          // 0.8 -> 1.15 in first half
+          // 0 → 1.15 in first half
           const tt = tNorm / 0.5;
-          s = 0.8 + 0.35 * tt;
+          s = 0 + 1.15 * tt;
         } else {
-          // 1.15 -> 1.0 in second half
+          // 1.15 → 1.0 in second half
           const tt = (tNorm - 0.5) / 0.5;
           s = 1.15 - 0.15 * tt;
         }
@@ -1341,12 +1372,11 @@ function moveMarkerToFixture(f, { fly=false } = {}){
         S.billboard.scale.set(baseScale.x * s, baseScale.y * s, 1);
 
         if (tNorm >= 1) {
-          // snap back to base size and stop animating
           S.billboard.scale.set(baseScale.x, baseScale.y, 1);
           S.raf.pill.cancel();
         }
       });
-
+      
       // 2) Try to upgrade with real stadium image (no opacity changes)
       (async () => {
         if (S.state.reqId !== myReq) return;
