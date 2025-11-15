@@ -1210,38 +1210,6 @@ function moveMarkerToFixture(f, { fly=false } = {}){
 
   S.group.visible = true;
 
-  // === Teleport OUT: shrink current pill into radar centre ===
-  const baseScaleForShrink = S.billboard.userData.baseScale || {
-    x: S.billboard.scale.x || 15,
-    y: S.billboard.scale.y || 7.5
-  };
-
-  const shrinkStart    = performance.now();
-  const shrinkDuration = 140; // ms
-
-  S.raf.pill.run(() => {
-    if (S.state.reqId !== myReq) {
-      S.raf.pill.cancel();
-      return;
-    }
-    const elapsed = performance.now() - shrinkStart;
-    const tNorm   = Math.min(1, elapsed / shrinkDuration);
-
-    const s = 1 - tNorm; // 1 → 0
-    S.billboard.scale.set(
-      baseScaleForShrink.x * s,
-      baseScaleForShrink.y * s,
-      1
-    );
-
-    if (tNorm >= 1) {
-      // fully shrunk
-      S.billboard.scale.set(0, 0, 1);
-      S.raf.pill.cancel();
-    }
-  });
-
-  S.raf.travel.run(()=>{
     if (S.state.reqId !== myReq) { S.raf.travel.cancel(); return; }
     const t = dur ? Math.min(1, (performance.now() - t0) / dur) : 1;
     const k = easeInOut(t);
