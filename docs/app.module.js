@@ -1218,13 +1218,23 @@ function moveMarkerToFixture(f, { fly=false } = {}){
           ring.material.opacity = base * wave;
         });
       });
-      // Billboard “info pill” – a bit above the radar and pushed out from the globe
-      const PILL_ALT = R * 0.06;   // slightly higher so it sits clearly above the radar
-      const PILL_OUT = R * 0.10;   // pushed out a touch more towards camera
+      // Pill sits just above the radar and slightly towards the camera
+      const PILL_ALT = R * 0.05;   // vertical above radar centre
+      const PILL_OUT = R * 0.03;   // small push towards camera
       S.billboard.position.set(0, PILL_ALT, PILL_OUT);
 
-      // Tilt panel ~25° so it’s not perfectly face-on (matches your 45° sketch feel)
-      S.billboard.rotation.set(THREE.MathUtils.degToRad(-25), 0, 0);
+
+      // Rotate around Z so the pill's long edge is horizontal in the local tangent plane,
+      // then give it a slight pitch so it feels 3D.
+      const pitchDeg = -12;   // how much to lean towards camera
+      const rollDeg  = 90;    // rotate 90° so text runs left→right instead of up→down
+
+      S.billboard.rotation.set(
+        THREE.MathUtils.degToRad(pitchDeg),
+        0,
+        THREE.MathUtils.degToRad(rollDeg)
+      );
+
 
       // Always build a pill texture from the fixture data (no async yet)
       const pillTex = makeStadiumPillTexture(f, null); // no JPG for now
