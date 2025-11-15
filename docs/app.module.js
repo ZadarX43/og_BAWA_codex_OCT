@@ -1220,7 +1220,7 @@ function moveMarkerToFixture(f, { fly=false } = {}){
           ring.material.opacity = base * wave;
         });
       });
-            // Billboard “info pill” – just above the radar and slightly towards the camera
+      // Billboard “info pill” – just above the radar and slightly towards the camera
       const PILL_ALT = R * 0.05;
       const PILL_OUT = R * 0.03;
       S.billboard.position.set(0, PILL_ALT, PILL_OUT);
@@ -1228,8 +1228,11 @@ function moveMarkerToFixture(f, { fly=false } = {}){
       // Sprite always faces the camera; no 3D rotation needed
       S.billboard.material.rotation = 0;
 
-      // Start invisible; we'll fade in once the texture is ready
-      S.billboard.material.opacity = 0;
+      // === 1) Always show a base pill immediately (no image) ===
+      const basePillTex = makeStadiumPillTexture(f, null);
+      S.billboard.material.map = basePillTex;
+      S.billboard.material.needsUpdate = true;
+      S.billboard.material.opacity = 1.0;
       S.billboard.visible = true;
 
       // Hide if on the far side of the globe
@@ -1237,9 +1240,8 @@ function moveMarkerToFixture(f, { fly=false } = {}){
         S.billboard.visible = false;
       }
 
-      // -------- Stadium image → pill texture + fade-in --------
+      // === 2) Then try to upgrade with real stadium image + mini fade ===
       (async () => {
-        // Do nothing if this marker has been superseded
         if (S.state.reqId !== myReq) return;
 
         let stadiumImage = null;
@@ -1252,20 +1254,23 @@ function moveMarkerToFixture(f, { fly=false } = {}){
             stadiumImage = tex.image || null;
             break;
           } catch {
-            // try next URL if load failed
+            // ignore and try next url
           }
         }
 
-        // Build pill texture from fixture data + optional stadium image
-        if (S.state.reqId !== myReq) return;
+        // If no image or marker changed, keep the base pill
+        if (!stadiumImage || S.state.reqId !== myReq) return;
+
+        // Build a new pill texture using the stadium image
         const pillTex = makeStadiumPillTexture(f, stadiumImage);
         S.billboard.material.map = pillTex;
         S.billboard.material.needsUpdate = true;
         S.billboard.visible = true;
 
-        // Gentle fade-in (≈220ms)
+        // Soft re-fade (220ms) from 0 → 1 so the image "pops" in nicely
         const fa0 = performance.now();
         const fad = 220;
+        S.billboard.material.opacity = 0;
         S.raf.fade.run(() => {
           if (S.state.reqId !== myReq) {
             S.raf.fade.cancel();
@@ -1274,7 +1279,6 @@ function moveMarkerToFixture(f, { fly=false } = {}){
           const ft = Math.min(1, (performance.now() - fa0) / fad);
           S.billboard.material.opacity = ft;
 
-          // If it drifts to back side of globe mid-fade, hide it
           const camDot = curN.dot(camera.position.clone().normalize());
           if (camDot < -0.25) {
             S.billboard.visible = false;
@@ -1283,7 +1287,6 @@ function moveMarkerToFixture(f, { fly=false } = {}){
           if (ft >= 1) S.raf.fade.cancel();
         });
       })();
-    }
   }); // <-- end S.raf.travel.run loop
 } // <-- end moveMarkerToFixture
 
