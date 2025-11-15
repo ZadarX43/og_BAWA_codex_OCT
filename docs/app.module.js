@@ -1083,14 +1083,57 @@ function createMarker(){
     });
 
     const ring = new THREE.Mesh(ringGeom, ringMat);
-    // Lie flat in local XZ (normal +Y)
-    ring.rotation.x = Math.PI / 2;
+    ring.rotation.x = Math.PI / 2;  // lie flat
     ring.renderOrder = 998;
     ring.userData.baseAlpha = baseAlpha;
 
     group.add(ring);
     radarRings.push(ring);
   }
+
+  // Beam straight "up" from the radar (local +Y)
+  const beamGeom = new THREE.CylinderGeometry(0.18, 0.28, 30, 24, 1, true);
+  const beamMat  = new THREE.MeshBasicMaterial({
+    color: 0x7df9c4,
+    transparent: true,
+    opacity: 0.0,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+    depthTest: false
+  });
+  const beam = new THREE.Mesh(beamGeom, beamMat);
+  beam.visible = false;
+  beam.renderOrder = 998;
+  group.add(beam);
+
+  // Stadium pill panel – Sprite so it always faces the camera
+  const billboardMat = new THREE.SpriteMaterial({
+    transparent: true,
+    opacity: 0,
+    depthTest: false,
+    depthWrite: false
+  });
+  const billboard = new THREE.Sprite(billboardMat);
+
+  // Base size for the pill
+  const baseScaleX = 15;
+  const baseScaleY = 7.5;
+  billboard.scale.set(baseScaleX, baseScaleY, 1);
+  billboard.userData.baseScale = { x: baseScaleX, y: baseScaleY };
+
+  billboard.renderOrder = 999;
+  group.add(billboard);
+
+  return {
+    group,
+    radar: radarRings,
+    beam,
+    billboard,
+    state: { lat: 0, lon: 0, reqId: 0 },
+    raf:   { travel: null, beam: null, fade: null, radar: null } // no pill RAF for now
+  };
+}
+
 
   // Beam straight "up" from the radar (local +Y)
   const beamGeom = new THREE.CylinderGeometry(0.18, 0.28, 30, 24, 1, true);
@@ -1201,13 +1244,11 @@ function moveMarkerToFixture(f, { fly = false } = {}) {
   S.raf.beam   = S.raf.beam   || makeRAF();
   S.raf.fade   = S.raf.fade   || makeRAF();
   S.raf.radar  = S.raf.radar  || makeRAF();
-  S.raf.pill   = S.raf.pill   || makeRAF();
 
   S.raf.travel.cancel();
   S.raf.beam.cancel();
   S.raf.fade.cancel();
   S.raf.radar.cancel();
-  S.raf.pill.cancel();
 
   S.group.visible = true;
 
@@ -1221,7 +1262,7 @@ function moveMarkerToFixture(f, { fly = false } = {}) {
     const worldPos = curN.clone().multiplyScalar(R * (1 + SURFACE_EPS));
     S.group.position.copy(worldPos);
 
-    // Build a stable local basis:
+    // Stable local basis:
     //  - up (+Y) = surface normal
     //  - forward (+Z) = towards camera, projected onto tangent plane
     //  - right (+X) = cross(forward, up)
@@ -1304,47 +1345,7 @@ function moveMarkerToFixture(f, { fly = false } = {}) {
         S.billboard.visible = false;
       }
 
-      // === Teleport IN: grow pill from 0 → big → base at new location ===
-      const baseScale = S.billboard.userData.baseScale || {
-        x: S.billboard.scale.x || 15,
-        y: S.billboard.scale.y || 7.5
-      };
-
-      S.raf.pill.cancel();
-      S.billboard.scale.set(0, 0, 1);
-
-      const popStart    = performance.now();
-      const popDuration = 220; // ms
-
-      S.raf.pill.run(() => {
-        if (S.state.reqId !== myReq) {
-          S.raf.pill.cancel();
-          return;
-        }
-
-        const elapsed = performance.now() - popStart;
-        const tNorm   = Math.min(1, elapsed / popDuration);
-
-        let s;
-        if (tNorm < 0.5) {
-          // 0 → 1.15 in first half
-          const tt = tNorm / 0.5;
-          s = 0 + 1.15 * tt;
-        } else {
-          // 1.15 → 1.0 in second half
-          const tt = (tNorm - 0.5) / 0.5;
-          s = 1.15 - 0.15 * tt;
-        }
-
-        S.billboard.scale.set(baseScale.x * s, baseScale.y * s, 1);
-
-        if (tNorm >= 1) {
-          S.billboard.scale.set(baseScale.x, baseScale.y, 1);
-          S.raf.pill.cancel();
-        }
-      });
-
-      // === Upgrade pill with stadium image (no opacity changes) ===
+      // === Upgrade pill with stadium image (no opacity/scale changes) ===
       (async () => {
         if (S.state.reqId !== myReq) return;
 
