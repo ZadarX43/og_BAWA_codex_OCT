@@ -1041,17 +1041,19 @@ function createMarker(){
   beam.renderOrder = 998;
   group.add(beam);
 
-  // Stadium pill panel – Plane so we can tilt it (Sprite is always face-on)
-  const billboardGeom = new THREE.PlaneGeometry(28, 14);
-  const billboardMat  = new THREE.MeshBasicMaterial({
+  // Stadium pill panel – Sprite so it always faces the camera
+  const billboardMat = new THREE.SpriteMaterial({
     transparent: true,
     opacity: 0,
-    depthTest: false,   // draw on top of globe
+    depthTest: false,
     depthWrite: false
   });
-  const billboard = new THREE.Mesh(billboardGeom, billboardMat);
-  billboard.renderOrder = 999;      // draw last
+  const billboard = new THREE.Sprite(billboardMat);
+  // Scale controls how big the pill appears on screen
+  billboard.scale.set(18, 9, 1);    // tweak these as needed
+  billboard.renderOrder = 999;
   group.add(billboard);
+
 
     return {
       group,
@@ -1218,23 +1220,13 @@ function moveMarkerToFixture(f, { fly=false } = {}){
           ring.material.opacity = base * wave;
         });
       });
-      // Billboard “info pill” – a bit above the radar and pushed out from the globe
+      // Position sprite just above the radar and slightly towards the camera
       const PILL_ALT = R * 0.05;
-      const PILL_OUT = R * 0.03;
+      const PILL_OUT = R * 0.02;
       S.billboard.position.set(0, PILL_ALT, PILL_OUT);
 
-      // First, lay the pill horizontally around the beam (rotate around Z),
-      // then give it a slight pitch so it leans towards the camera.
-      const rollDeg  = 90;   // rotate around +Z to go from vertical to horizontal
-      const pitchDeg = -10;  // small lean towards camera
-
-      S.billboard.rotation.set(
-        THREE.MathUtils.degToRad(pitchDeg), // x
-        0,                                   // y
-        THREE.MathUtils.degToRad(rollDeg)   // z
-      );
-
-
+      // Sprite always faces the camera; optional small in-plane rotation
+      S.billboard.material.rotation = 0; // or THREE.MathUtils.degToRad(-5) if you want a tiny tilt
 
       // Always build a pill texture from the fixture data (no async yet)
       const pillTex = makeStadiumPillTexture(f, null); // no JPG for now
