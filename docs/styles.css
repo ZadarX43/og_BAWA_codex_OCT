@@ -734,3 +734,318 @@ canvas{ border-radius:24px; }
 /* Headline geometry stays tight (Montserrat looks best slightly negative tracked) */
 .brand__name{ letter-spacing:.06em; }
 
+/* =========================
+   Acca Builder — Uber Eats style layout
+   ========================= */
+
+.acca-screen {
+  padding: 24px;
+}
+
+.acca-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.acca-hero-main {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.acca-hero-crests {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.acca-crest {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.06);
+  display: grid;
+  place-items: center;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border: 1px solid rgba(255,255,255,.12);
+  overflow: hidden;
+}
+.acca-crest img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.acca-vs {
+  font-weight: 700;
+  font-size: .9rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.acca-hero-text h1 {
+  font-size: 1.6rem;
+  margin-bottom: 4px;
+}
+.acca-hero-text p {
+  font-size: .9rem;
+}
+
+.acca-hero-controls {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+.control {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.control-label {
+  font-size: .8rem;
+  color: var(--text-secondary);
+}
+.control select {
+  background: rgba(255,255,255,.06);
+  color: var(--text-primary);
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,.12);
+  padding: 6px 10px;
+}
+.control--compact select {
+  padding: 4px 8px;
+  font-size: .85rem;
+}
+
+/* Layout: markets | picks | cart */
+.acca-layout {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr) 320px;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+@media (max-width: 1040px) {
+  .acca-layout {
+    grid-template-columns: 220px minmax(0, 1fr);
+  }
+  .acca-cart {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 720px) {
+  .acca-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Left sidebar */
+.acca-sidebar {
+  background: var(--bg-panel);
+  border-radius: 18px;
+  padding: 14px 14px 12px;
+  border: 1px solid rgba(108,229,177,.18);
+}
+.acca-sidebar-title {
+  font-size: .95rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.acca-market-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.market-chip {
+  width: 100%;
+  text-align: left;
+  padding: 7px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.03);
+  color: var(--text-secondary);
+  font-size: .82rem;
+  cursor: pointer;
+  transition: background .2s ease, color .2s ease, border-color .2s ease, transform .1s ease;
+}
+.market-chip:hover {
+  background: rgba(255,255,255,.06);
+  transform: translateY(-1px);
+}
+.market-chip.is-active {
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  color: #012018;
+  border-color: transparent;
+}
+
+.acca-sidebar-hint {
+  font-size: .8rem;
+}
+
+/* Middle picks list */
+.acca-picks {
+  background: var(--bg-panel);
+  border-radius: 18px;
+  padding: 14px 16px 16px;
+  border: 1px solid rgba(108,229,177,.18);
+  min-height: 220px;
+}
+.acca-picks-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.acca-picks-filters {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.acca-picks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pick-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+}
+.pick-title {
+  font-size: .95rem;
+  font-weight: 600;
+}
+.pick-subtitle {
+  font-size: .8rem;
+  color: var(--text-secondary);
+}
+.pick-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.pick-badge {
+  font-size: .78rem;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.12);
+}
+.pick-badge--positive {
+  background: rgba(67,225,167,.18);
+  color: #d4fff3;
+  border-color: rgba(67,225,167,.42);
+}
+.pick-add-btn {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: none;
+  font-size: .82rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  color: var(--bg-dark);
+}
+.pick-add-btn:hover {
+  transform: translateY(-1px);
+}
+
+/* Cart */
+.acca-cart {
+  background: var(--bg-panel);
+  border-radius: 18px;
+  padding: 14px 16px 16px;
+  border: 1px solid rgba(108,229,177,.18);
+}
+.acca-cart h2 {
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+.acca-cart-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.acca-leg {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+}
+.acca-leg-main {
+  font-size: .82rem;
+}
+.acca-leg-label {
+  font-weight: 600;
+}
+.acca-leg-sub {
+  font-size: .78rem;
+}
+.acca-leg-remove {
+  border: none;
+  background: transparent;
+  color: rgba(255,255,255,.6);
+  font-size: .9rem;
+  cursor: pointer;
+}
+.acca-leg-remove:hover {
+  color: #ff8a8a;
+}
+
+.acca-cart-summary {
+  border-top: 1px solid rgba(255,255,255,.09);
+  padding-top: 8px;
+  margin-top: 4px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.acca-cart-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: .82rem;
+}
+.acca-cart-row strong {
+  font-weight: 600;
+}
+
+.acca-cart-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.acca-cart-actions .cta--secondary {
+  background: rgba(255,255,255,.05);
+  color: var(--text-primary);
+}
+.acca-cart-actions .cta:disabled {
+  opacity: .5;
+  cursor: default;
+  transform: none;
+}
+
+/* Smaller tweaks */
+.acca-screen h1 {
+  font-size: 1.6rem;
+}
