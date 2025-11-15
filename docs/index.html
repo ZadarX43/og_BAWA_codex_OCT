@@ -47,6 +47,7 @@
         <a class="side-link" href="#/" data-route>Home</a>
         <a class="side-link" href="#/bet-checker" data-route>Bet Checker</a>
         <a class="side-link" href="#/acca-builder" data-route>Acca Builder</a>
+        <a class="side-link" href="#/portfolio" data-route>Portfolio</a>
         <a class="side-link" href="#/copilot" data-route>GPT-5 OG Co-Pilot</a>
         <hr/>
         <a class="side-link" href="#/signup" data-route>Sign up</a>
@@ -67,6 +68,7 @@
           <a class="nav-link" href="#/" data-route>Home</a>
           <a class="nav-link" href="#/bet-checker" data-route>Bet Checker</a>
           <a class="nav-link" href="#/acca-builder" data-route>Acca Builder</a>
+          <a class="nav-link" href="#/portfolio" data-route>Portfolio</a>
           <a class="nav-link" href="#/copilot" data-route>GPT 5 – OG Co Pilot</a>
           <div class="profile">
             <button id="btn-profile" class="profile-btn" aria-haspopup="menu" aria-expanded="false">
@@ -76,6 +78,9 @@
             <div id="profile-menu" class="profile-menu" role="menu" aria-hidden="true">
               <a role="menuitem" class="profile-item" href="#/login" data-route>Login</a>
               <a role="menuitem" class="profile-item" href="#/signup" data-route>Sign up</a>
+              <button type="button" class="profile-item" id="logout-btn" data-action="logout" style="display:none">
+                Log out
+              </button>
             </div>
           </div>
         </nav>
@@ -219,7 +224,7 @@
         </div>
       </section>
 
-            <!-- ACCA BUILDER VIEW -->
+      <!-- ACCA BUILDER VIEW -->
       <section id="view-accabuilder" class="view" hidden>
         <div class="screen acca-screen">
           <!-- Fixture header / hero -->
@@ -261,7 +266,7 @@
               <nav id="ab-market-nav" class="acca-market-nav">
                 <!-- All markets view -->
                 <button class="market-chip is-active" data-market="all">Show All</button>
-              
+
                 <!-- Core match result -->
                 <button class="market-chip" data-market="ftr">Full Time Result</button>
 
@@ -314,19 +319,6 @@
 
               <div id="ab-picks-list" class="acca-picks-list">
                 <!-- JS will inject pick cards here -->
-
-                <!-- Example structure (for reference only; JS will create these):
-                <article class="pick-card" data-pick-id="...">
-                  <div class="pick-main">
-                    <h3 class="pick-title">Over 2.5 Goals</h3>
-                    <p class="pick-subtitle">Model 71% • Fair 1.41 • Book 1.65</p>
-                  </div>
-                  <div class="pick-meta">
-                    <div class="pick-badge pick-badge--positive">EV +6.4%</div>
-                    <button class="pick-add-btn" data-add-pick>+ Add</button>
-                  </div>
-                </article>
-                -->
               </div>
 
               <div id="ab-picks-empty" class="muted" hidden>
@@ -343,16 +335,6 @@
 
               <ul id="ab-cart-legs" class="acca-cart-list">
                 <!-- JS will inject leg items here -->
-
-                <!-- Example structure:
-                <li class="acca-leg">
-                  <div class="acca-leg-main">
-                    <div class="acca-leg-label">PSG vs Newcastle – Over 2.5 Goals</div>
-                    <div class="acca-leg-sub muted">Model 71% • Fair 1.41 • Price 1.65 • EV +6.4%</div>
-                  </div>
-                  <button class="acca-leg-remove" data-remove-leg aria-label="Remove leg">✕</button>
-                </li>
-                -->
               </ul>
 
               <div id="ab-cart-summary" class="acca-cart-summary" hidden>
@@ -371,6 +353,9 @@
               </div>
 
               <div class="acca-cart-actions">
+                <button class="cta" id="acc-save" disabled>Save to portfolio</button>
+                <p class="muted" id="acc-save-hint" style="font-size: 0.8rem;"></p>
+
                 <button class="cta" id="ab-copy-slip" disabled>Copy acca to clipboard</button>
                 <button class="cta cta--secondary" id="ab-send-to-checker" disabled>
                   Score this acca with Bet Checker
@@ -378,6 +363,15 @@
               </div>
             </aside>
           </div>
+        </div>
+      </section>
+
+      <!-- PORTFOLIO VIEW -->
+      <section id="view-portfolio" class="view" hidden>
+        <div class="screen">
+          <h1>My Portfolio</h1>
+          <p class="muted">Saved acca builds. Click one to reopen its fixture in the builder.</p>
+          <div id="portfolio-list" class="grid"></div>
         </div>
       </section>
 
