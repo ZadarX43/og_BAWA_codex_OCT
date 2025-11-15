@@ -1038,16 +1038,23 @@ function createMarker(){
   group.add(beam);
 
   // Stadium pill panel – Sprite so it always faces the camera
-  const billboardMat = new THREE.SpriteMaterial({
+    const billboardMat = new THREE.SpriteMaterial({
     transparent: true,
     opacity: 0,
     depthTest: false,
     depthWrite: false
   });
   const billboard = new THREE.Sprite(billboardMat);
-  billboard.scale.set(18, 9, 1);
+
+  // Base size for the pill (a bit tighter than before)
+  const baseScaleX = 15;
+  const baseScaleY = 7.5;
+  billboard.scale.set(baseScaleX, baseScaleY, 1);
+  billboard.userData.baseScale = { x: baseScaleX, y: baseScaleY };
+
   billboard.renderOrder = 999;
   group.add(billboard);
+
 
   return {
     group,
@@ -1055,7 +1062,7 @@ function createMarker(){
     beam,
     billboard,
     state: { lat: 0, lon: 0, reqId: 0 },
-    raf:   { travel: null, beam: null, fade: null, radar: null }
+    raf:   { travel: null, beam: null, fade: null, radar: null, pill: null }
   };
 }
 
@@ -1123,11 +1130,14 @@ function moveMarkerToFixture(f, { fly=false } = {}){
   S.raf.beam   = S.raf.beam   || makeRAF();
   S.raf.fade   = S.raf.fade   || makeRAF();
   S.raf.radar  = S.raf.radar  || makeRAF();
+  S.raf.pill   = S.raf.pill   || makeRAF();
 
   S.raf.travel.cancel();
   S.raf.beam.cancel();
   S.raf.fade.cancel();
   S.raf.radar.cancel();
+  S.raf.pill.cancel();
+
 
   S.group.visible = true;
 
@@ -1226,7 +1236,43 @@ function moveMarkerToFixture(f, { fly=false } = {}){
       if (curN.dot(camera.position.clone().normalize()) < -0.25) {
         S.billboard.visible = false;
       }
+            // --- Tiny "pop" scale animation for the pill ---
+      const baseScale = S.billboard.userData.baseScale || {
+        x: S.billboard.scale.x,
+        y: S.billboard.scale.y
+      };
 
+      const popStart = performance.now();
+      const popDuration = 160; // ms
+      // Start slightly smaller
+      S.billboard.scale.set(baseScale.x * 0.95, baseScale.y * 0.95, 1);
+
+      S.raf.pill.run(() => {
+        if (S.state.reqId !== myReq) {
+          S.raf.pill.cancel();
+          return;
+        }
+        const elapsed = performance.now() - popStart;
+        const tNorm = Math.min(1, elapsed / popDuration);
+
+        let s;
+        if (tNorm < 0.5) {
+          // 0.95 -> 1.05
+          const tt = tNorm / 0.5;
+          s = 0.95 + 0.10 * tt;
+        } else {
+          // 1.05 -> 1.0
+          const tt = (tNorm - 0.5) / 0.5;
+          s = 1.05 - 0.05 * tt;
+        }
+
+        S.billboard.scale.set(baseScale.x * s, baseScale.y * s, 1);
+
+        if (tNorm >= 1) {
+          S.billboard.scale.set(baseScale.x, baseScale.y, 1);
+          S.raf.pill.cancel();
+        }
+      });
       // 2) Try to upgrade with real stadium image (no opacity changes)
       (async () => {
         if (S.state.reqId !== myReq) return;
