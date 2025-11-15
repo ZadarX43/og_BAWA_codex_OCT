@@ -983,7 +983,7 @@ function bindTabs(){
 }
 
 // ----------------------------
-// Marker creation & movement  [PATCH B]
+// Marker creation & movement
 // ----------------------------
 function createMarker(){
   const group = new THREE.Group();
@@ -991,17 +991,16 @@ function createMarker(){
 
   const R = getGlobeRadius();
 
-
   // --- Radar: 4 concentric static rings (inner thickest, outer faintest) ---
   const radarRings = [];
-  const baseInner = R * 0.02;   // start a bit chunkier so it reads clearly
+  const baseInner = R * 0.02;
   const baseWidth = R * 0.008;
 
   for (let i = 0; i < 4; i++) {
-    const inner = baseInner + i * (baseWidth * 0.9);      // push each ring out
-    const outer = inner + baseWidth * (1 - i * 0.2);      // shrink thickness ~20% each step
+    const inner = baseInner + i * (baseWidth * 0.9);
+    const outer = inner + baseWidth * (1 - i * 0.2);
 
-    const baseAlpha = 0.35 * (1 - i * 0.18);              // inner brightest, outer faintest
+    const baseAlpha = 0.35 * (1 - i * 0.18);
 
     const ringGeom = new THREE.RingGeometry(inner, outer, 64);
     const ringMat  = new THREE.MeshBasicMaterial({
@@ -1010,21 +1009,18 @@ function createMarker(){
       opacity: baseAlpha,
       side: THREE.DoubleSide,
       depthWrite: false,
-      depthTest: false                  // always on top of globe
+      depthTest: false
     });
 
     const ring = new THREE.Mesh(ringGeom, ringMat);
     // Lie flat in local XZ (normal +Y)
     ring.rotation.x = Math.PI / 2;
     ring.renderOrder = 998;
-
-    // store base alpha for animation later
     ring.userData.baseAlpha = baseAlpha;
 
     group.add(ring);
     radarRings.push(ring);
   }
-
 
   // Beam straight "up" from the radar (local +Y)
   const beamGeom = new THREE.CylinderGeometry(0.18, 0.28, 30, 24, 1, true);
@@ -1049,23 +1045,19 @@ function createMarker(){
     depthWrite: false
   });
   const billboard = new THREE.Sprite(billboardMat);
-  // Scale controls how big the pill appears on screen
-  billboard.scale.set(18, 9, 1);    // tweak these as needed
+  billboard.scale.set(18, 9, 1);
   billboard.renderOrder = 999;
   group.add(billboard);
 
-
-    return {
-      group,
-      radar: radarRings,            // array of rings now
-      beam,
-      billboard,
-      state: { lat: 0, lon: 0, reqId: 0 },
-      raf:   { travel: null, beam: null, fade: null, radar: null }
-    };
-  }
-
-
+  return {
+    group,
+    radar: radarRings,
+    beam,
+    billboard,
+    state: { lat: 0, lon: 0, reqId: 0 },
+    raf:   { travel: null, beam: null, fade: null, radar: null }
+  };
+}
 
 function cancelRAF(handle){
   if (handle && handle.id) cancelAnimationFrame(handle.id);
@@ -1108,7 +1100,10 @@ function moveMarkerToFixture(f, { fly=false } = {}){
   console.log('[marker] move to', f.home_team, f.city || f.country, f.latitude, f.longitude);
   const S   = MARKER;
   const lat = Number(f.latitude), lon = Number(f.longitude);
-  if (!Number.isFinite(lat) || !Number.isFinite(lon)) { S.group.visible = false; return; }
+  if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+    S.group.visible = false;
+    return;
+  }
 
   S.state.reqId++;
   const myReq = S.state.reqId;
@@ -1119,7 +1114,9 @@ function moveMarkerToFixture(f, { fly=false } = {}){
 
   const angle = Math.acos(THREE.MathUtils.clamp(fromN.dot(toN), -1, 1));
   const distK = angle * R;
-  const dur   = (fly && S.group.visible) ? THREE.MathUtils.clamp(distK * 2.0, 300, 900) : 0;
+  const dur   = (fly && S.group.visible)
+    ? THREE.MathUtils.clamp(distK * 2.0, 300, 900)
+    : 0;
   const t0    = performance.now();
 
   S.raf.travel = S.raf.travel || makeRAF();
@@ -1131,7 +1128,6 @@ function moveMarkerToFixture(f, { fly=false } = {}){
   S.raf.beam.cancel();
   S.raf.fade.cancel();
   S.raf.radar.cancel();
-
 
   S.group.visible = true;
 
@@ -1150,28 +1146,22 @@ function moveMarkerToFixture(f, { fly=false } = {}){
     //  - right (+X) = cross(forward, up)
     const up = curN.clone().normalize();
 
-    // direction from marker to camera
     const toCam = camera.position.clone().sub(worldPos).normalize();
-    // project onto tangent plane
     let forward = toCam.clone().sub(up.clone().multiplyScalar(toCam.dot(up)));
     if (forward.lengthSq() < 1e-6) {
-      // fallback if camera is exactly above the point
       forward = new THREE.Vector3(0, 0, 1);
     } else {
       forward.normalize();
     }
 
     const right = new THREE.Vector3().crossVectors(forward, up).normalize();
-    // re-orthogonalise forward just in case
     forward.crossVectors(up, right).normalize();
 
     const basis = new THREE.Matrix4();
-    // makeBasis(x, y, z) → columns are right, up, forward
     basis.makeBasis(right, up, forward);
     S.group.quaternion.setFromRotationMatrix(basis);
 
-
-        if (t >= 1) {
+    if (t >= 1) {
       S.raf.travel.cancel();
 
       // Beam grow along local +Y
@@ -1187,7 +1177,7 @@ function moveMarkerToFixture(f, { fly=false } = {}){
         const tb = Math.min(1, (performance.now() - b0) / bd);
         const e  = easeInOut(tb);
         S.beam.scale.y          = 0.001 + e;
-        S.beam.material.opacity = 0.5 * e;   // brighter flicker
+        S.beam.material.opacity = 0.5 * e;
         if (tb >= 1) S.raf.beam.cancel();
       });
 
@@ -1203,23 +1193,20 @@ function moveMarkerToFixture(f, { fly=false } = {}){
           return;
         }
         const now   = performance.now();
-        const tWave = (now - radarStart) / 800;  // smaller = slower pulse
+        const tWave = (now - radarStart) / 800;
 
         rings.forEach((ring, idx) => {
           if (!ring) return;
 
           const base  = ring.userData?.baseAlpha ?? 0.25;
-
-          // phase offset so rings don't pulse in perfect sync
           const phase = tWave + idx * 0.8;
-
-          // wave goes 0 → 1 → 0 → 1 ... but never hits exactly 0
           const sinVal = Math.sin(phase);
           const wave   = 0.2 + 0.8 * Math.max(0, sinVal);   // 0.2–1.0
 
           ring.material.opacity = base * wave;
         });
       });
+
       // Billboard “info pill” – just above the radar and slightly towards the camera
       const PILL_ALT = R * 0.05;
       const PILL_OUT = R * 0.03;
@@ -1228,25 +1215,23 @@ function moveMarkerToFixture(f, { fly=false } = {}){
       // Sprite always faces the camera; no 3D rotation needed
       S.billboard.material.rotation = 0;
 
-      // === 1) Always show a base pill immediately (no image) ===
+      // 1) Always show a base pill immediately (no image)
       const basePillTex = makeStadiumPillTexture(f, null);
       S.billboard.material.map = basePillTex;
       S.billboard.material.needsUpdate = true;
       S.billboard.material.opacity = 1.0;
       S.billboard.visible = true;
 
-      // Hide if on the far side of the globe
+      // Optional: hide if on far side of globe
       if (curN.dot(camera.position.clone().normalize()) < -0.25) {
         S.billboard.visible = false;
       }
 
-      // === 2) Then try to upgrade with real stadium image + mini fade ===
+      // 2) Try to upgrade with real stadium image (no opacity changes)
       (async () => {
         if (S.state.reqId !== myReq) return;
 
         let stadiumImage = null;
-
-        // Try to load a stadium JPG for this fixture (if we have an override)
         for (const url of stadiumCandidates(f)) {
           try {
             const tex = await loadTextureQueued(url);
@@ -1254,42 +1239,21 @@ function moveMarkerToFixture(f, { fly=false } = {}){
             stadiumImage = tex.image || null;
             break;
           } catch {
-            // ignore and try next url
+            // ignore and try next
           }
         }
 
-        // If no image or marker changed, keep the base pill
         if (!stadiumImage || S.state.reqId !== myReq) return;
 
-        // Build a new pill texture using the stadium image
         const pillTex = makeStadiumPillTexture(f, stadiumImage);
         S.billboard.material.map = pillTex;
         S.billboard.material.needsUpdate = true;
         S.billboard.visible = true;
-
-        // Soft re-fade (220ms) from 0 → 1 so the image "pops" in nicely
-        const fa0 = performance.now();
-        const fad = 220;
-        S.billboard.material.opacity = 0;
-        S.raf.fade.run(() => {
-          if (S.state.reqId !== myReq) {
-            S.raf.fade.cancel();
-            return;
-          }
-          const ft = Math.min(1, (performance.now() - fa0) / fad);
-          S.billboard.material.opacity = ft;
-
-          const camDot = curN.dot(camera.position.clone().normalize());
-          if (camDot < -0.25) {
-            S.billboard.visible = false;
-          }
-
-          if (ft >= 1) S.raf.fade.cancel();
-        });
+        // we keep opacity as-is (1.0), no extra fade here
       })();
-    } // <-- close if (t >= 1)
-  }); // <-- end S.raf.travel.run loop
-} // <-- end moveMarkerToFixture
+    }
+  });
+}
 
 // =====================================================
 // API HELPERS + FEATURE PAGES (BetChecker / Acca / Co-Pilot)
