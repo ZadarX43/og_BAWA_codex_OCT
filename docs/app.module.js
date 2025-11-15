@@ -56,6 +56,7 @@ let visibleFixtures = [];      // filtered
 let htmlTabsData = [];
 let MARKER = null;             // custom marker group object
 let currentFixture = null;
+let isHomeActive = true;       // controls whether globe render loop runs
 
 const SURFACE_EPS   = 0.009;
 const RADIUS_BASE   = 0.014;
@@ -854,8 +855,11 @@ async function init(){
   // loop
   (function loop(){
     requestAnimationFrame(loop);
-    controls.update(); composer.render();
+    if (!isHomeActive) return;
+    controls.update();
+    composer.render();
   })();
+
 }
 
 // -----------------------------------------
@@ -1573,21 +1577,41 @@ const ROUTES = {
 function showRoute(hash) {
   if (!hash) hash = '#/';
   const id = ROUTES[hash] || 'view-home';
+
+  // Toggle view visibility
   document.querySelectorAll('.view').forEach(v => {
-    if (v.id === id) { v.classList.add('is-active'); v.removeAttribute('hidden'); }
-    else { v.classList.remove('is-active'); v.setAttribute('hidden',''); }
+    if (v.id === id) {
+      v.classList.add('is-active');
+      v.removeAttribute('hidden');
+    } else {
+      v.classList.remove('is-active');
+      v.setAttribute('hidden','');
+    }
   });
+
+  // Update nav state
   document.querySelectorAll('[data-route]').forEach(a=>{
     a.classList.toggle('is-active', a.getAttribute('href') === hash);
-    if (a.classList.contains('side-link')) a.classList.toggle('active', a.getAttribute('href') === hash);
+    if (a.classList.contains('side-link')) {
+      a.classList.toggle('active', a.getAttribute('href') === hash);
+    }
   });
+
+  // Close menus/drawers
   const profileMenu = document.getElementById('profile-menu');
   const profileBtn  = document.getElementById('btn-profile');
-  profileMenu?.classList.remove('show'); profileBtn?.setAttribute('aria-expanded','false');
+  profileMenu?.classList.remove('show');
+  profileBtn?.setAttribute('aria-expanded','false');
   const drawer  = document.getElementById('side-drawer');
   const scrim   = document.getElementById('scrim');
-  drawer?.classList.remove('show'); scrim?.classList.remove('show'); drawer?.setAttribute('aria-hidden','true');
+  drawer?.classList.remove('show');
+  scrim?.classList.remove('show');
+  drawer?.setAttribute('aria-hidden','true');
+
+  // Control globe render loop
+  isHomeActive = (id === 'view-home');
 }
+
 window.addEventListener('hashchange', ()=> showRoute(location.hash));
 window.addEventListener('DOMContentLoaded', ()=>{
   if (!location.hash) location.hash = '#/'; showRoute(location.hash);
