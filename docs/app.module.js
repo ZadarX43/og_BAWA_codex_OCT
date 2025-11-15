@@ -55,6 +55,7 @@ let fixtures = [];             // all
 let visibleFixtures = [];      // filtered
 let htmlTabsData = [];
 let MARKER = null;             // custom marker group object
+let currentFixture = null;
 
 const SURFACE_EPS   = 0.009;
 const RADIUS_BASE   = 0.014;
@@ -68,6 +69,11 @@ const COLORS = {
   markerActive:   '#CFFFFA',
   ring:           '#9EE7E3'
 };
+
+// Raycaster for clickable pill sprite
+const raycaster = new THREE.Raycaster();
+const pointer   = new THREE.Vector2();
+
 
 // ---- UI demo “today”
 const UI = {
@@ -812,7 +818,10 @@ async function init(){
   MARKER = createMarker();
   scene.add(MARKER.group);
 
-  // hover & click
+  // click handler for pill sprite
+  renderer.domElement.addEventListener('click', onCanvasClick);
+
+  // hover & click on globe points
   if (typeof globe.onPointHover === 'function') globe.onPointHover(handleHover);
   globe.onPointClick?.(pt=>{
     if (!pt) return;
@@ -828,6 +837,14 @@ async function init(){
 
   bindTabs();
   bindDateControls();
+  bindSheet();
+
+  // deep-dive button opens sheet for current fixture
+  el.deepBtn?.addEventListener('click', () => {
+    if (currentFixture) {
+      openSheetForFixture(currentFixture);
+    }
+  });
 
   await loadFixturesCSV('./data/fixtures.csv');
   buildLeagueChips();
@@ -840,6 +857,7 @@ async function init(){
     controls.update(); composer.render();
   })();
 }
+
 // -----------------------------------------
 // CSV ingest
 // -----------------------------------------
@@ -913,6 +931,7 @@ function syncRail(activeIdx){
 function selectIndex(idx,{fly=false}={}){
   if (!visibleFixtures.length) return;
   const f = visibleFixtures[idx]; if (!f) return;
+  currentFixture = f;                       // track active fixture
   visibleFixtures.forEach(it=>it.__active = (it===f));
   globe.pointColor(d=>d.__active?COLORS.markerActive:COLORS.marker)
        .pointRadius(d=>d.__active?RADIUS_ACTIVE:RADIUS_BASE)
@@ -921,6 +940,7 @@ function selectIndex(idx,{fly=false}={}){
   renderPanel(f);
   syncRail(idx);
 }
+
 
 function elmEmpty(msg){ const d=document.createElement('div'); d.className='empty'; d.textContent=msg; return d; }
 
@@ -981,6 +1001,56 @@ function bindTabs(){
     });
   });
 }
+
+function openSheetForFixture(f) {
+  const sheet = document.getElementById('sheet');
+  if (!sheet || !f) return;
+
+  sheet.classList.add('open');
+  sheet.setAttribute('aria-hidden', 'false');
+
+  const titleEl = document.getElementById('sheet-title');
+  const bodyEl  = document.getElementById('sheet-body');
+
+  if (titleEl) {
+    titleEl.textContent = `${f.home_team} vs ${f.away_team}`;
+  }
+  if (bodyEl) {
+    const fmtTime = (iso) => {
+      try {
+        const d = new Date(iso);
+        const date = d.toLocaleDateString(undefined,{weekday:'short', day:'2-digit', month:'short'});
+        const time = d.toLocaleTimeString(undefined,{hour:'2-digit', minute:'2-digit'});
+        return `${date} · ${time}`;
+      } catch { return iso || ''; }
+    };
+
+    bodyEl.innerHTML = `
+      <p><strong>Competition:</strong> ${f.competition || '—'}</p>
+      <p><strong>Kick-off:</strong> ${fmtTime(f.date_utc)}</p>
+      <p><strong>Stadium:</strong> ${f.stadium || '—'}</p>
+      <p><strong>City:</strong> ${f.city || '—'}</p>
+      <p><strong>Country:</strong> ${f.country || '—'}</p>
+      <p><strong>Prediction:</strong> ${f.predicted_winner || '—'} ${f.confidence_ftr ? `(${Math.round(f.confidence_ftr*100)}%)` : ''}</p>
+      <p><strong>xG:</strong> ${(f.xg_home||0).toFixed(1)} vs ${(f.xg_away||0).toFixed(1)}</p>
+      <p><strong>PPG:</strong> ${(f.ppg_home||0).toFixed(1)} vs ${(f.ppg_away||0).toFixed(1)}</p>
+    `;
+  }
+}
+
+function closeSheet() {
+  const sheet = document.getElementById('sheet');
+  if (!sheet) return;
+  sheet.classList.remove('open');
+  sheet.setAttribute('aria-hidden', 'true');
+}
+
+function bindSheet() {
+  const sheet  = document.getElementById('sheet');
+  const handle = sheet?.querySelector('.sheet__handle');
+  handle?.addEventListener('click', closeSheet);
+}
+
 
 // ----------------------------
 // Marker creation & movement
@@ -1299,6 +1369,20 @@ function moveMarkerToFixture(f, { fly=false } = {}){
       })();
     }
   });
+}
+
+function onCanvasClick(event) {
+  if (!MARKER || !MARKER.billboard || !currentFixture || !renderer || !camera) return;
+
+  const rect = renderer.domElement.getBoundingClientRect();
+  pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+  pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+  raycaster.setFromCamera(pointer, camera);
+  const hits = raycaster.intersectObject(MARKER.billboard, false);
+  if (hits.length > 0) {
+    openSheetForFixture(currentFixture);
+  }
 }
 
 // =====================================================
