@@ -1306,43 +1306,47 @@ function moveMarkerToFixture(f, { fly=false } = {}){
       if (curN.dot(camera.position.clone().normalize()) < -0.25) {
         S.billboard.visible = false;
       }
-            // --- Tiny "pop" scale animation for the pill ---
+      // --- Tiny "pop" scale animation for the pill (more visible) ---
       const baseScale = S.billboard.userData.baseScale || {
         x: S.billboard.scale.x,
         y: S.billboard.scale.y
       };
 
-      const popStart = performance.now();
-      const popDuration = 160; // ms
-      // Start slightly smaller
-      S.billboard.scale.set(baseScale.x * 0.95, baseScale.y * 0.95, 1);
+      const popStart    = performance.now();
+      const popDuration = 220; // ms
+
+      // Start noticeably smaller so the pop reads clearly
+      S.billboard.scale.set(baseScale.x * 0.8, baseScale.y * 0.8, 1);
 
       S.raf.pill.run(() => {
         if (S.state.reqId !== myReq) {
           S.raf.pill.cancel();
           return;
         }
+
         const elapsed = performance.now() - popStart;
-        const tNorm = Math.min(1, elapsed / popDuration);
+        const tNorm   = Math.min(1, elapsed / popDuration);
 
         let s;
         if (tNorm < 0.5) {
-          // 0.95 -> 1.05
+          // 0.8 -> 1.15 in first half
           const tt = tNorm / 0.5;
-          s = 0.95 + 0.10 * tt;
+          s = 0.8 + 0.35 * tt;
         } else {
-          // 1.05 -> 1.0
+          // 1.15 -> 1.0 in second half
           const tt = (tNorm - 0.5) / 0.5;
-          s = 1.05 - 0.05 * tt;
+          s = 1.15 - 0.15 * tt;
         }
 
         S.billboard.scale.set(baseScale.x * s, baseScale.y * s, 1);
 
         if (tNorm >= 1) {
+          // snap back to base size and stop animating
           S.billboard.scale.set(baseScale.x, baseScale.y, 1);
           S.raf.pill.cancel();
         }
       });
+
       // 2) Try to upgrade with real stadium image (no opacity changes)
       (async () => {
         if (S.state.reqId !== myReq) return;
