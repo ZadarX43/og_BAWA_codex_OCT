@@ -59,9 +59,10 @@ let currentFixture = null;
 let isHomeActive = true;       // controls whether globe render loop runs
 
 // Acca Builder state
-let abCurrentMarket = 'ftr';   // current selected market key
+let abCurrentMarket = 'all';   // default: show all markets
 let abCartLegs = [];           // legs in the acca cart
 const abFixtureById = new Map();
+
 
 const SURFACE_EPS   = 0.009;
 const RADIUS_BASE   = 0.014;
@@ -765,6 +766,10 @@ function applyFiltersAndRender(){
 // -----------------------------------------
 // Acca Builder helpers
 // -----------------------------------------
+function accaLegKey(fixtureId, marketKey, pickId) {
+  return `${fixtureId}__${marketKey}__${pickId}`;
+}
+
 function initAccaFromFixtures(){
   const fixtureSelect = document.getElementById('ab-fixture-select');
   const leagueSelect  = document.getElementById('ab-league');
@@ -881,12 +886,14 @@ function setAccaFixture(f){
 
 function marketLabelFromKey(key){
   switch(key){
+    case 'all':        return 'All markets';
     case 'ftr':        return 'Full Time Result';
     case 'goals_main': return 'Match Goals (Over/Under)';
     case 'btts':       return 'Both Teams To Score';
     default:           return 'Selected market';
   }
 }
+
 
 function refreshAccaPicks(){
   const listEl    = document.getElementById('ab-picks-list');
@@ -907,23 +914,32 @@ function refreshAccaPicks(){
   const picks = [];
 
   // ---- STUB PICKS: replace with real model data later ----
-  if (abCurrentMarket === 'ftr'){
+  const wantAll  = (abCurrentMarket === 'all');
+  const wantFTR  = (abCurrentMarket === 'ftr'        || wantAll);
+  const wantGOAL = (abCurrentMarket === 'goals_main' || wantAll);
+  const wantBTTS = (abCurrentMarket === 'btts'       || wantAll);
+
+  if (wantFTR){
     picks.push(
-      { id: 'HOME', label: `${f.home_team} to Win`, prob: 0.62, fair: 1.61, price: 1.80, edge: 6.5 },
-      { id: 'DRAW', label: 'Draw',                   prob: 0.22, fair: 4.55, price: 4.75, edge: 1.8 },
-      { id: 'AWAY', label: `${f.away_team} to Win`,  prob: 0.16, fair: 6.25, price: 6.50, edge: 1.2 }
+      { id: 'HOME', marketKey: 'ftr', label: `${f.home_team} to Win`, prob: 0.62, fair: 1.61, price: 1.80, edge: 6.5 },
+      { id: 'DRAW', marketKey: 'ftr', label: 'Draw',                   prob: 0.22, fair: 4.55, price: 4.75, edge: 1.8 },
+      { id: 'AWAY', marketKey: 'ftr', label: `${f.away_team} to Win`,  prob: 0.16, fair: 6.25, price: 6.50, edge: 1.2 }
     );
-  } else if (abCurrentMarket === 'goals_main'){
+  }
+  if (wantGOAL){
     picks.push(
-      { id: 'O25', label: 'Over 2.5 Goals',  prob: 0.71, fair: 1.41, price: 1.65, edge: 6.4 },
-      { id: 'U25', label: 'Under 2.5 Goals', prob: 0.29, fair: 3.45, price: 3.60, edge: 1.3 }
+      { id: 'O25', marketKey: 'goals_main', label: 'Over 2.5 Goals',  prob: 0.71, fair: 1.41, price: 1.65, edge: 6.4 },
+      { id: 'U25', marketKey: 'goals_main', label: 'Under 2.5 Goals', prob: 0.29, fair: 3.45, price: 3.60, edge: 1.3 }
     );
-  } else if (abCurrentMarket === 'btts'){
+  }
+  if (wantBTTS){
     picks.push(
-      { id: 'BTTS_Y', label: 'Both Teams To Score – Yes', prob: 0.65, fair: 1.54, price: 1.75, edge: 4.5 },
-      { id: 'BTTS_N', label: 'Both Teams To Score – No',  prob: 0.35, fair: 2.85, price: 3.10, edge: 3.2 }
+      { id: 'BTTS_Y', marketKey: 'btts', label: 'Both Teams To Score – Yes', prob: 0.65, fair: 1.54, price: 1.75, edge: 4.5 },
+      { id: 'BTTS_N', marketKey: 'btts', label: 'Both Teams To Score – No',  prob: 0.35, fair: 2.85, price: 3.10, edge: 3.2 }
     );
-  } else {
+  }
+
+  if (!picks.length){
     emptyEl.hidden = false;
     emptyEl.textContent = 'This market is not wired yet. Try Full Time Result or Match Goals.';
     summaryEl.textContent = '';
@@ -932,6 +948,7 @@ function refreshAccaPicks(){
 
   emptyEl.hidden = true;
   summaryEl.textContent = `Showing ${picks.length} picks for ${marketLabelFromKey(abCurrentMarket)}.`;
+
 
   picks.forEach(pick=>{
     const card = document.createElement('article');
@@ -964,8 +981,14 @@ function refreshAccaPicks(){
     }
     const btn = document.createElement('button');
     btn.className = 'pick-add-btn';
-    btn.textContent = '+ Add';
+    if (isInCart){
+      btn.classList.add('pick-add-btn--active');
+      btn.textContent = 'Remove';
+    } else {
+      btn.textContent = '+ Add';
+    }
     btn.addEventListener('click', ()=> addLegToAcca(pick));
+
 
     meta.appendChild(badge);
     meta.appendChild(btn);
@@ -978,22 +1001,37 @@ function refreshAccaPicks(){
 
 function addLegToAcca(pick){
   if (!currentFixture) return;
-  abCartLegs.push({
-    fixture_id: currentFixture.fixture_id,
-    fixture_label: `${currentFixture.home_team} vs ${currentFixture.away_team}`,
-    market: abCurrentMarket,
-    label: pick.label,
-    prob: pick.prob,
-    fair: pick.fair,
-    price: pick.price,
-    edge: pick.edge
-  });
+
+  const marketKey = pick.marketKey || abCurrentMarket;
+  const key = accaLegKey(currentFixture.fixture_id, marketKey, pick.id);
+
+  const existingIdx = abCartLegs.findIndex(l => l.key === key);
+  if (existingIdx >= 0){
+    // Already in cart → remove (toggle off)
+    abCartLegs.splice(existingIdx, 1);
+  } else {
+    // Not in cart → add
+    abCartLegs.push({
+      key,
+      fixture_id: currentFixture.fixture_id,
+      fixture_label: `${currentFixture.home_team} vs ${currentFixture.away_team}`,
+      market: marketKey,
+      label: pick.label,
+      prob: pick.prob,
+      fair: pick.fair,
+      price: pick.price,
+      edge: pick.edge
+    });
+  }
   renderAccaCart();
+  refreshAccaPicks(); // re-render pick buttons to show Add/Remove state
 }
+
 
 function removeLegFromAcca(index){
   abCartLegs.splice(index, 1);
   renderAccaCart();
+  refreshAccaPicks();
 }
 
 function renderAccaCart(){
@@ -1192,6 +1230,11 @@ async function init(){
       openSheetForFixture(currentFixture);
     }
   });
+  
+  function accaLegKey(fixtureId, marketKey, pickId) {
+    return `${fixtureId}__${marketKey}__${pickId}`;
+  }
+
 
   await loadFixturesCSV('./data/fixtures.csv');
   buildLeagueChips();
