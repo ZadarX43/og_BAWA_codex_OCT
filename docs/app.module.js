@@ -1287,6 +1287,7 @@ function moveMarkerToFixture(f, { fly=false } = {}){
           if (ft >= 1) S.raf.fade.cancel();
         });
       })();
+    } // <-- close if (t >= 1)
   }); // <-- end S.raf.travel.run loop
 } // <-- end moveMarkerToFixture
 
