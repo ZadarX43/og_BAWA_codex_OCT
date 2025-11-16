@@ -51,8 +51,8 @@ const el = {
 let ThreeGlobeCtor;
 let globe;
 let renderer, scene, camera, controls, composer;
-let fixtures = [];             // all fixtures
-let visibleFixtures = [];      // filtered for current date/league
+let fixtures = [];             // all
+let visibleFixtures = [];      // filtered
 let htmlTabsData = [];
 let MARKER = null;             // custom marker group object
 let currentFixture = null;
@@ -60,7 +60,7 @@ let isHomeActive = true;       // controls whether globe render loop runs
 
 // Demo auth + portfolio
 let currentUser = null;        // { email, role }
-let savedAccas  = [];          // saved acca snapshots
+let savedAccas  = [];          // [{ id, userEmail, name, status, stake, legs, ... }]
 
 const STORAGE_KEYS = {
   user:  'og_user',
@@ -68,14 +68,10 @@ const STORAGE_KEYS = {
 };
 
 // Acca Builder state
-let abCurrentMarket = 'all';   // default: show all markets
-let abCartLegs      = [];      // legs in the acca cart
-let currentAccaLegs = [];      // snapshot of cart, used for portfolio save
-const abFixtureById = new Map();
-
-// Raycaster for clickable pill sprite
-const raycaster = new THREE.Raycaster();
-const pointer   = new THREE.Vector2();
+let abCurrentMarket  = 'all';  // default: show all markets in middle column
+let abCartLegs       = [];     // legs currently in the "Your Acca" cart
+let currentAccaLegs  = [];     // snapshot of last rendered cart (for saving)
+const abFixtureById  = new Map();
 
 const SURFACE_EPS   = 0.009;
 const RADIUS_BASE   = 0.014;
@@ -90,6 +86,10 @@ const COLORS = {
   ring:           '#9EE7E3'
 };
 
+// Raycaster for clickable pill sprite
+const raycaster = new THREE.Raycaster();
+const pointer   = new THREE.Vector2();
+
 // ---- UI demo “today”
 const UI = {
   anchorISO: '2023-11-28', // fixed demo “today”
@@ -102,7 +102,7 @@ const UI = {
 // -----------------------------------------
 // Utilities
 // -----------------------------------------
-const clamp01 = v => Math.max(0, Math.min(1, v));
+const clamp01   = v => Math.max(0, Math.min(1, v));
 const easeInOut = t => t*t*(3-2*t);
 
 function showToast(type, text, ms=2600){
@@ -111,7 +111,10 @@ function showToast(type, text, ms=2600){
   t.textContent = text;
   document.body.appendChild(t);
   requestAnimationFrame(()=>t.classList.add('show'));
-  setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),250); }, ms);
+  setTimeout(()=>{
+    t.classList.remove('show');
+    setTimeout(()=>t.remove(),250);
+  }, ms);
 }
 
 function clearNode(node) {
@@ -132,12 +135,12 @@ function loadSessionFromStorage() {
   try {
     const rawUser  = window.localStorage.getItem(STORAGE_KEYS.user);
     const rawAccas = window.localStorage.getItem(STORAGE_KEYS.accas);
-    currentUser = rawUser ? JSON.parse(rawUser) : null;
+    currentUser = rawUser  ? JSON.parse(rawUser)  : null;
     savedAccas  = rawAccas ? JSON.parse(rawAccas) : [];
   } catch (e) {
     console.warn('Failed to parse stored session', e);
     currentUser = null;
-    savedAccas  = [];
+    savedAccas = [];
   }
 }
 
@@ -157,13 +160,12 @@ function persistSession() {
 function updateAuthUI() {
   const profileBtn  = document.getElementById('btn-profile');
   const profileMenu = document.getElementById('profile-menu');
-  if (!profileBtn || !profileMenu) return;
+  if (!profileBtn) return;
 
   const avatar = profileBtn.querySelector('.avatar');
-  const items  = profileMenu.querySelectorAll('.profile-item');
+  const items  = profileMenu?.querySelectorAll('.profile-item') || [];
 
   if (currentUser) {
-    // Show user initials in avatar, change menu items
     if (avatar) {
       const initials = (currentUser.email || '?')
         .split('@')[0]
@@ -172,18 +174,19 @@ function updateAuthUI() {
       avatar.textContent = initials;
     }
     items.forEach(el => {
-      const href = el.getAttribute('href');
-      if (href === '#/login' || href === '#/signup') {
-        el.style.display = 'none';
-      }
-      if (el.dataset.action === 'logout') {
+      const action = el.dataset.action;
+      const href   = el.getAttribute('href');
+      if (action === 'logout') {
         el.style.display = 'block';
+      } else if (href === '#/login' || href === '#/signup') {
+        el.style.display = 'none';
       }
     });
   } else {
     if (avatar) avatar.textContent = 'OG';
     items.forEach(el => {
-      if (el.dataset.action === 'logout') {
+      const action = el.dataset.action;
+      if (action === 'logout') {
         el.style.display = 'none';
       } else {
         el.style.display = '';
@@ -222,9 +225,6 @@ function latLngToVec3(lat, lon, alt=0){
   return n.clone().multiplyScalar(R*(1+alt));
 }
 
-// -----------------------------------------
-// Stadium pill textures
-// -----------------------------------------
 function makeFallbackCanvasTexture(label='STADIUM'){
   const c = document.createElement('canvas');
   c.width = 512; c.height = 512;
@@ -259,6 +259,7 @@ function makeStadiumPillTexture(f, img) {
 
   g.clearRect(0, 0, w, h);
 
+  // Background pill
   const padX = 32;
   const padY = 32;
   const pillX = padX;
@@ -273,7 +274,6 @@ function makeStadiumPillTexture(f, img) {
   grd.addColorStop(1, '#0a344a');
 
   g.fillStyle = grd;
-
   g.beginPath();
   g.moveTo(pillX + radius, pillY);
   g.lineTo(pillX + pillW - radius, pillY);
@@ -287,6 +287,7 @@ function makeStadiumPillTexture(f, img) {
   g.closePath();
   g.fill();
 
+  // Stadium circle on the left
   const cx = pillX + 170;
   const cy = pillY + pillH / 2;
   const cr = 110;
@@ -305,17 +306,18 @@ function makeStadiumPillTexture(f, img) {
     const drawH = ih * scale;
     const dx = cx - drawW / 2;
     const dy = cy - drawH / 2;
-
     g.drawImage(img, dx, dy, drawW, drawH);
     g.restore();
   }
 
+  // White circle border
   g.strokeStyle = 'rgba(255,255,255,0.9)';
   g.lineWidth = 8;
   g.beginPath();
   g.arc(cx, cy, cr, 0, Math.PI * 2);
   g.stroke();
 
+  // Text: fixture + time + city/country
   const home = f?.home_team || 'Home';
   const away = f?.away_team || 'Away';
   const line1 = `${home} vs ${away}`;
@@ -329,7 +331,7 @@ function makeStadiumPillTexture(f, img) {
   } catch {}
 
   const placeParts = [];
-  if (f?.city) placeParts.push(f.city);
+  if (f?.city)    placeParts.push(f.city);
   if (f?.country) placeParts.push(f.country);
   const place = placeParts.join(', ');
   const line2 = [timeStr, place].filter(Boolean).join(' – ');
@@ -353,17 +355,85 @@ function makeStadiumPillTexture(f, img) {
   return tex;
 }
 
+function makeStadiumPillTextureFromImage(img) {
+  if (!img) return null;
+
+  const w = 512;
+  const h = 256;
+  const c = document.createElement('canvas');
+  c.width = w;
+  c.height = h;
+  const g = c.getContext('2d');
+
+  g.clearRect(0, 0, w, h);
+
+  const radius = 56;
+  const x = 16;
+  const y = 16;
+  const width = w - 32;
+  const height = h - 32;
+
+  const grd = g.createLinearGradient(x, y, x + width, y + height);
+  grd.addColorStop(0, '#0d2a32');
+  grd.addColorStop(0.5, '#0f4a40');
+  grd.addColorStop(1, '#0a344a');
+
+  g.fillStyle = grd;
+  g.beginPath();
+  g.moveTo(x + radius, y);
+  g.lineTo(x + width - radius, y);
+  g.quadraticCurveTo(x + width, y, x + width, y + radius);
+  g.lineTo(x + width, y + height - radius);
+  g.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  g.lineTo(x + radius, y + height);
+  g.quadraticCurveTo(x, y + height, x, y + height - radius);
+  g.lineTo(x, y + radius);
+  g.quadraticCurveTo(x, y, x + radius, y);
+  g.closePath();
+  g.fill();
+
+  const cx = x + 110;
+  const cy = y + height / 2;
+  const cr = 80;
+
+  g.save();
+  g.beginPath();
+  g.arc(cx, cy, cr, 0, Math.PI * 2);
+  g.closePath();
+  g.clip();
+
+  const iw = img.width;
+  const ih = img.height;
+  if (iw && ih) {
+    const scale = Math.max((cr * 2) / iw, (cr * 2) / ih);
+    const drawW = iw * scale;
+    const drawH = ih * scale;
+    const dx = cx - drawW / 2;
+    const dy = cy - drawH / 2;
+    g.drawImage(img, dx, dy, drawW, drawH);
+  }
+  g.restore();
+
+  g.strokeStyle = 'rgba(255,255,255,0.85)';
+  g.lineWidth = 6;
+  g.beginPath();
+  g.arc(cx, cy, cr, 0, Math.PI * 2);
+  g.stroke();
+
+  const tex = new THREE.CanvasTexture(c);
+  if ('colorSpace' in tex) tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = renderer?.capabilities?.getMaxAnisotropy?.() || 1;
+  return tex;
+}
+
 // -----------------------------------------
 // Logos (local-only) — club crests
 // -----------------------------------------
 const LOGO_LOCAL_BASE = './assets/assets/logos';
 
 function stripDiacritics(s = '') {
-  try {
-    return s.normalize('NFD').replace(/\p{Diacritic}/gu, '');
-  } catch {
-    return s.replace(/[\u0300-\u036f]/g, '');
-  }
+  try { return s.normalize('NFD').replace(/\p{Diacritic}/gu, ''); }
+  catch { return s.replace(/[\u0300-\u036f]/g, ''); }
 }
 
 function slugLocal(name = '') {
@@ -375,6 +445,7 @@ function slugLocal(name = '') {
     .replace(/^-+|-+$/g, '');
 }
 
+// explicit overrides mapped to actual filenames
 const TEAM_LOGO_OVERRIDES = {
   'Atlético Madrid'       : `${LOGO_LOCAL_BASE}/atletico-madrid.svg`,
   'Atletico Madrid'       : `${LOGO_LOCAL_BASE}/atletico-madrid.svg`,
@@ -442,6 +513,7 @@ function initialsFor(name = '') {
   return p.length ? (p[0][0] + (p[1]?.[0] || '')).toUpperCase() : '';
 }
 
+// *** Simple badge loader – no races, loud logging ***
 function setBadgeLocal(elm, _urlFromCsv, teamName = '') {
   if (!elm) return;
 
@@ -451,6 +523,7 @@ function setBadgeLocal(elm, _urlFromCsv, teamName = '') {
 
   const candidates = localLogoCandidates(teamName);
   console.log('[badge] candidates', { teamName, candidates });
+
   if (!candidates.length) return;
 
   const src = candidates[0];
@@ -458,7 +531,6 @@ function setBadgeLocal(elm, _urlFromCsv, teamName = '') {
   img.alt = teamName;
 
   img.onload = () => {
-    if (!elm) return;
     console.log('[badge] success', teamName, '→', src);
     elm.innerHTML = '';
     elm.appendChild(img);
@@ -471,10 +543,10 @@ function setBadgeLocal(elm, _urlFromCsv, teamName = '') {
 }
 
 // -----------------------------------------
-// Competition badges (comp strip under globe)
+// Competition badges (for comp strip under globe)
 // -----------------------------------------
 const COMP_LOGO_OVERRIDES = {};
-const COMP_BADGE_CACHE = new Map();
+const COMP_BADGE_CACHE    = new Map();
 
 function makeCompetitionBadgeDataUrl(label = 'LEAGUE') {
   const c = document.createElement('canvas');
@@ -484,7 +556,6 @@ function makeCompetitionBadgeDataUrl(label = 'LEAGUE') {
   const g = c.getContext('2d');
 
   g.clearRect(0, 0, size, size);
-
   const grd = g.createLinearGradient(0, 0, size, size);
   grd.addColorStop(0, '#0f766e');
   grd.addColorStop(1, '#22c55e');
@@ -492,7 +563,7 @@ function makeCompetitionBadgeDataUrl(label = 'LEAGUE') {
 
   const r = size * 0.42;
   g.beginPath();
-  g.arc(size / 2, size / 2, r, 0, Math.PI * 2);
+  g.arc(size/2, size/2, r, 0, Math.PI * 2);
   g.fill();
 
   const parts = String(label || '').split(/\s+/).filter(Boolean);
@@ -505,28 +576,25 @@ function makeCompetitionBadgeDataUrl(label = 'LEAGUE') {
   g.font = 'bold 72px Montserrat, system-ui, sans-serif';
   g.textAlign = 'center';
   g.textBaseline = 'middle';
-  g.fillText(initials, size / 2, size / 2);
+  g.fillText(initials, size/2, size/2);
 
   return c.toDataURL('image/png');
 }
 
 function setCompetitionLogo(leagueName) {
   if (!el.compLogo) return;
-
   const name = String(leagueName || '').trim();
   if (!name) {
     el.compLogo.removeAttribute('src');
     el.compLogo.style.visibility = 'hidden';
     return;
   }
-
   const override = COMP_LOGO_OVERRIDES[name];
   if (override) {
     el.compLogo.src = override;
     el.compLogo.style.visibility = 'visible';
     return;
   }
-
   let url = COMP_BADGE_CACHE.get(name);
   if (!url) {
     url = makeCompetitionBadgeDataUrl(name);
@@ -587,25 +655,21 @@ function getCompetitionSnapshot(league){
   const rows = league && league!=='ALL'
     ? fixtures.filter(f => (f.competition||'').toLowerCase() === league.toLowerCase())
     : fixtures.slice();
-
   const avg = a => a.length ? a.reduce((x,y)=>x+y,0)/a.length : 0;
   const pct = x => Math.round(x*100);
   return {
     n: rows.length,
-    ftr:   pct(avg(rows.map(r => +r.confidence_ftr||0))),
-    over25:pct(avg(rows.map(r => +r.over25_prob ||0))),
-    btts:  pct(avg(rows.map(r => +r.btts_prob   ||0)))
+    ftr:    pct(avg(rows.map(r => +r.confidence_ftr||0))),
+    over25: pct(avg(rows.map(r => +r.over25_prob   ||0))),
+    btts:   pct(avg(rows.map(r => +r.btts_prob     ||0)))
   };
 }
 function renderCompetitionAccuracy(league){
   if (!el.compWrap) return;
   const stats = getCompetitionSnapshot(league);
-
   const name = league || '—';
   if (el.compName) el.compName.textContent = name;
-
   setCompetitionLogo(name);
-
   if (el.compTraffic){
     el.compTraffic.innerHTML = `
       <span class="light light--green">FTR ${Math.round(DEMO_FTR*100)}%</span>
@@ -726,7 +790,7 @@ function applyFiltersAndRender(){
 }
 
 // -----------------------------------------
-// Acca Builder helpers
+// Acca Builder helpers (UI acca builder, not API acca)
 // -----------------------------------------
 function accaLegKey(fixtureId, marketKey, pickId) {
   return `${fixtureId}__${marketKey}__${pickId}`;
@@ -959,6 +1023,7 @@ function refreshAccaPicks(){
     listEl.appendChild(card);
   });
 }
+
 function addLegToAcca(pick){
   if (!currentFixture) return;
 
@@ -967,10 +1032,8 @@ function addLegToAcca(pick){
 
   const existingIdx = abCartLegs.findIndex(l => l.key === key);
   if (existingIdx >= 0){
-    // Already in cart → remove (toggle off)
     abCartLegs.splice(existingIdx, 1);
   } else {
-    // Not in cart → add
     abCartLegs.push({
       key,
       fixture_id: currentFixture.fixture_id,
@@ -984,7 +1047,7 @@ function addLegToAcca(pick){
     });
   }
   renderAccaCart();
-  refreshAccaPicks(); // re-render pick buttons to show Add/Remove state
+  refreshAccaPicks();
 }
 
 function removeLegFromAcca(index){
@@ -1002,7 +1065,7 @@ function renderAccaCart(){
   const evEl     = document.getElementById('ab-cart-ev');
   const btnCopy  = document.getElementById('ab-copy-slip');
   const btnCheck = document.getElementById('ab-send-to-checker');
-  const btnSave  = document.getElementById('acc-save');
+  const saveBtn  = document.getElementById('acc-save');
   const saveHint = document.getElementById('acc-save-hint');
 
   if (!listEl || !emptyEl || !sumEl) return;
@@ -1012,23 +1075,23 @@ function renderAccaCart(){
   if (!abCartLegs.length){
     emptyEl.hidden = false;
     sumEl.hidden   = true;
-    currentAccaLegs = [];
-
     if (priceEl) priceEl.textContent = '–';
     if (probEl)  probEl.textContent  = '–';
     if (evEl)    evEl.textContent    = '–';
     if (btnCopy)  btnCopy.disabled  = true;
     if (btnCheck) btnCheck.disabled = true;
-    if (btnSave)  btnSave.disabled  = true;
-    if (saveHint) saveHint.textContent = '';
+    if (saveBtn)  saveBtn.disabled  = true;
+    if (saveHint) saveHint.textContent = 'Build an acca to save it to your portfolio.';
+    currentAccaLegs = [];
     return;
   }
 
   emptyEl.hidden = true;
   sumEl.hidden   = false;
-
-  // Keep a clean snapshot for portfolio saving
-  currentAccaLegs = abCartLegs.map(l => ({ ...l }));
+  if (saveBtn)  saveBtn.disabled  = false;
+  if (saveHint) saveHint.textContent = currentUser
+    ? 'Click “Save to portfolio” to store this acca.'
+    : 'Sign in to save this acca to your portfolio.';
 
   abCartLegs.forEach((leg, idx)=>{
     const li = document.createElement('li');
@@ -1059,12 +1122,11 @@ function renderAccaCart(){
     listEl.appendChild(li);
   });
 
-  // Rough combined stats (demo)
-  let comboProb  = 1;
-  let avgEdge    = 0;
+  // Combined stats (demo)
+  let comboProb = 1;
+  let avgEdge   = 0;
   let comboPrice = 1;
   let countWithEdge = 0;
-
   abCartLegs.forEach(leg=>{
     if (leg.prob  != null) comboProb  *= leg.prob;
     if (leg.price != null) comboPrice *= leg.price;
@@ -1086,13 +1148,9 @@ function renderAccaCart(){
       showToast('info','Bet Checker integration coming soon.');
     };
   }
-  if (btnSave){
-    btnSave.disabled = false;
-  }
-  if (saveHint){
-    // cleared on render; save function will set a message
-    saveHint.textContent = '';
-  }
+
+  // keep snapshot for portfolio save
+  currentAccaLegs = abCartLegs.map(l => ({ ...l }));
 }
 
 function copyAccaToClipboard(){
@@ -1118,26 +1176,38 @@ function copyAccaToClipboard(){
     ta.remove();
   }
 }
-
 // ----------------------------
 // Portfolio (saved accas)
 // ----------------------------
 function getCurrentAccaSnapshot() {
-  if (!currentFixture || !currentAccaLegs || !currentAccaLegs.length) return null;
+  if (!currentFixture || !currentAccaLegs.length) return null;
+
+  const createdAt = new Date().toISOString();
+  const whenLabel = (() => {
+    try {
+      const d = currentFixture.date_utc ? new Date(currentFixture.date_utc) : new Date();
+      return d.toLocaleString();
+    } catch {
+      return new Date().toLocaleString();
+    }
+  })();
 
   return {
-    id: `acc_${Date.now()}`,
+    id: `acc_${createdAt}_${Math.random().toString(36).slice(2,8)}`,
     userEmail: currentUser?.email || null,
-    name: `${currentFixture.home_team} vs ${currentFixture.away_team} (${new Date().toLocaleTimeString()})`,
-    createdAt: new Date().toISOString(),
+    name: `${currentFixture.home_team} vs ${currentFixture.away_team} (${whenLabel})`,
+    createdAt,
+    status: 'pending',
+    stake: 0,
     fixture: {
-      home_team:   currentFixture.home_team,
-      away_team:   currentFixture.away_team,
-      date_utc:    currentFixture.date_utc,
-      competition: currentFixture.competition,
-      stadium:     currentFixture.stadium,
-      city:        currentFixture.city,
-      country:     currentFixture.country
+      fixture_id: currentFixture.fixture_id,
+      home_team:  currentFixture.home_team,
+      away_team:  currentFixture.away_team,
+      date_utc:   currentFixture.date_utc,
+      competition:currentFixture.competition,
+      stadium:    currentFixture.stadium,
+      city:       currentFixture.city,
+      country:    currentFixture.country
     },
     legs: currentAccaLegs.map(l => ({ ...l }))
   };
@@ -1157,12 +1227,6 @@ function saveCurrentAccaToPortfolio() {
   persistSession();
   showToast('success', 'Acca saved to your portfolio');
   renderPortfolio();
-
-  const hint = document.getElementById('acc-save-hint');
-  if (hint) {
-    const when = new Date(snapshot.createdAt).toLocaleTimeString();
-    hint.textContent = `Saved at ${when}`;
-  }
 }
 
 function renderPortfolio() {
@@ -1170,7 +1234,9 @@ function renderPortfolio() {
   if (!container) return;
   container.innerHTML = '';
 
-  const userAccas = savedAccas.filter(a => !currentUser || !a.userEmail || a.userEmail === currentUser?.email);
+  const userAccas = savedAccas.filter(a =>
+    !currentUser || !a.userEmail || a.userEmail === currentUser?.email
+  );
 
   if (!userAccas.length) {
     container.innerHTML = `<p class="muted">No saved accas yet. Build one in the Acca Builder and click “Save to portfolio”.</p>`;
@@ -1184,37 +1250,232 @@ function renderPortfolio() {
       const card = document.createElement('div');
       card.className = 'insight-card';
       const when = new Date(acc.createdAt).toLocaleString();
+      const legCount = acc.legs?.length || 0;
+      const status   = acc.status || 'pending';
+      const stake    = acc.stake ?? '';
+
       card.innerHTML = `
         <h2>${acc.name}</h2>
-        <p class="muted">${when} • ${acc.fixture.competition || ''} • ${acc.fixture.city || ''}, ${acc.fixture.country || ''}</p>
-        <p class="muted">${acc.legs?.length || 0} leg(s)</p>
-        <button class="cta" data-load-acca="${acc.id}">Open in builder</button>
+        <p class="muted">${when} • ${acc.fixture.competition || ''} • ${acc.fixture.city || ''}${acc.fixture.country ? ', ' + acc.fixture.country : ''}</p>
+        <p class="muted">${legCount} leg(s)</p>
+        <p class="muted">
+          Status:
+          <strong>${status}</strong>
+          &nbsp;•&nbsp;
+          Stake:
+          <input type="number" min="0" step="0.01"
+                 class="stake-input"
+                 data-stake-for="${acc.id}"
+                 value="${stake !== '' ? stake : ''}"
+                 style="max-width:90px; margin-left:6px;" />
+        </p>
+        <div class="portfolio-actions">
+          <button class="cta cta--tiny" data-load-acca="${acc.id}">Open in builder</button>
+          <button class="cta cta--tiny" data-status="won" data-acc-id="${acc.id}">Mark won</button>
+          <button class="cta cta--tiny" data-status="lost" data-acc-id="${acc.id}">Mark lost</button>
+          <button class="cta cta--tiny" data-status="pending" data-acc-id="${acc.id}">Reset</button>
+        </div>
       `;
       container.appendChild(card);
     });
 
-  container.querySelectorAll('button[data-load-acca]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const id = btn.getAttribute('data-load-acca');
+  // Wire stake updates
+  container.querySelectorAll('input[data-stake-for]').forEach(input=>{
+    input.addEventListener('change', ()=>{
+      const id  = input.getAttribute('data-stake-for');
+      const acc = savedAccas.find(a => a.id === id);
+      if (!acc) return;
+      const v = parseFloat(input.value);
+      acc.stake = Number.isFinite(v) && v >= 0 ? v : 0;
+      persistSession();
+    });
+  });
+
+  // Wire status buttons
+  container.querySelectorAll('button[data-status]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const id     = btn.getAttribute('data-acc-id');
+      const status = btn.getAttribute('data-status') || 'pending';
+      const acc    = savedAccas.find(a => a.id === id);
+      if (!acc) return;
+      acc.status = status;
+      persistSession();
+      renderPortfolio();
+    });
+  });
+
+  // Wire "Open in builder"
+  container.querySelectorAll('button[data-load-acca]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const id  = btn.getAttribute('data-load-acca');
       const acc = userAccas.find(a => a.id === id);
       if (!acc) return;
 
-      const match = fixtures.find(
-        f =>
+      // Find fixture by fixture_id or fallback to home/away/date_utc
+      let match = null;
+      if (acc.fixture.fixture_id) {
+        match = fixtures.find(f => f.fixture_id === acc.fixture.fixture_id);
+      }
+      if (!match) {
+        match = fixtures.find(f =>
           f.home_team === acc.fixture.home_team &&
           f.away_team === acc.fixture.away_team &&
-          f.date_utc === acc.fixture.date_utc
-      );
+          f.date_utc  === acc.fixture.date_utc
+        );
+      }
       if (!match) {
         showToast('error', 'Original fixture not found in current data set');
         return;
       }
 
-      currentFixture = match;
+      // Route to acca-builder view
       window.location.hash = '#/acca-builder';
-      showToast('info', 'Fixture loaded in Acca Builder. Leg restoration coming next.');
+
+      // Set fixture dropdown & hero state
+      const fixtureSelect = document.getElementById('ab-fixture-select');
+      if (fixtureSelect) fixtureSelect.value = match.fixture_id;
+      setAccaFixture(match);
+
+      // Restore legs into cart
+      abCartLegs = (acc.legs || []).map(l => ({ ...l }));
+      renderAccaCart();
+      refreshAccaPicks();
+
+      showToast('info', 'Loaded saved acca into builder');
     });
   });
+}
+
+// -----------------------------------------
+// Three-Globe loader & scene init
+// -----------------------------------------
+async function loadThreeGlobe(){
+  for (const v of ['2.31.3','2.31.1','2.30.1','2.29.3']){
+    try {
+      const m = await import(`https://esm.sh/three-globe@${v}?bundle&external=three`);
+      console.warn('[three-globe] using esm.sh ESM:', v);
+      return m.default ?? m;
+    } catch {}
+  }
+  for (const url of [
+    'https://cdn.jsdelivr.net/npm/three-globe@2.31.1/dist/three-globe.min.js',
+    'https://unpkg.com/three-globe@2.31.1/dist/three-globe.min.js',
+    './vendor/three-globe.min.js'
+  ]){
+    try {
+      const ctor = await import(url);
+      console.warn('[three-globe] using UMD:', url);
+      return ctor;
+    } catch {}
+  }
+  throw new Error('three-globe failed to load');
+}
+
+async function init(){
+  loadSessionFromStorage();
+  updateAuthUI();
+
+  ThreeGlobeCtor = await loadThreeGlobe();
+
+  scene = new THREE.Scene();
+  renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+  renderer.setSize(el.globeWrap.clientWidth, el.globeWrap.clientHeight);
+  el.globeWrap.innerHTML = '';
+  el.globeWrap.appendChild(renderer.domElement);
+  if ('outputColorSpace' in renderer) renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+  camera = new THREE.PerspectiveCamera(45, el.globeWrap.clientWidth/el.globeWrap.clientHeight, 0.1, 5000);
+  camera.position.set(0, 0, getGlobeRadius()*3);
+
+  controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true; controls.enablePan = false; controls.enableZoom = true;
+  controls.autoRotate = false; controls.minDistance = getGlobeRadius()*1.2; controls.maxDistance = getGlobeRadius()*6;
+
+  composer = new EffectComposer(renderer);
+  composer.addPass(new RenderPass(scene, camera));
+  const fxaa = new ShaderPass(FXAAShader);
+  const setFXAA = ()=>{ const px=renderer.getPixelRatio();
+    fxaa.material.uniforms['resolution'].value.set( 1/(el.globeWrap.clientWidth*px), 1/(el.globeWrap.clientHeight*px) ); };
+  setFXAA(); composer.addPass(fxaa);
+  const bloom = new UnrealBloomPass(
+    new THREE.Vector2(el.globeWrap.clientWidth, el.globeWrap.clientHeight),
+    BLOOM.strength, BLOOM.radius, BLOOM.threshold
+  );
+  composer.addPass(bloom);
+
+  scene.add(new THREE.AmbientLight(0xffffff,0.9));
+  const hemi = new THREE.HemisphereLight(0xddeeff, 0x223344, 0.6);
+  scene.add(hemi);
+
+  globe = new ThreeGlobeCtor({ waitForGlobeReady:true })
+    .showAtmosphere(true).atmosphereColor('#9ef9e3').atmosphereAltitude(0.28)
+    .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
+    .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
+    .pointAltitude(()=>SURFACE_EPS)
+    .pointRadius(d=>d.__active?RADIUS_ACTIVE:RADIUS_BASE)
+    .pointColor(d=>d.__active?COLORS.markerActive:COLORS.marker)
+    .pointsMerge(true);
+
+  scene.add(globe);
+
+  // custom marker group
+  MARKER = createMarker();
+  scene.add(MARKER.group);
+
+  // click handler for pill sprite
+  renderer.domElement.addEventListener('click', onCanvasClick);
+
+  // hover & click on globe points
+  if (typeof globe.onPointHover === 'function') globe.onPointHover(handleHover);
+  globe.onPointClick?.(pt=>{
+    if (!pt) return;
+    const idx = visibleFixtures.findIndex(f=>f.latitude===pt.latitude && f.longitude===pt.longitude);
+    if (idx>=0) selectIndex(idx, { fly:true });
+  });
+
+  // Resize
+  window.addEventListener('resize', ()=>{
+    const {clientWidth:w, clientHeight:h} = el.globeWrap;
+    renderer.setSize(w,h); camera.aspect=w/h; camera.updateProjectionMatrix(); setFXAA();
+  });
+
+  bindTabs();
+  bindDateControls();
+  bindSheet();
+
+  // deep-dive opens sheet for current fixture
+  el.deepBtn?.addEventListener('click', () => {
+    if (currentFixture) openSheetForFixture(currentFixture);
+  });
+
+  await loadFixturesCSV('./data/fixtures.csv');
+  buildLeagueChips();
+  buildDateStrip();
+  applyFiltersAndRender();
+  initAccaFromFixtures();
+
+  // Save to portfolio button
+  const accSaveBtn   = document.getElementById('acc-save');
+  const accSaveHint  = document.getElementById('acc-save-hint');
+  if (accSaveBtn) {
+    accSaveBtn.addEventListener('click', () => {
+      saveCurrentAccaToPortfolio();
+      if (accSaveHint) {
+        accSaveHint.textContent = currentUser
+          ? 'Acca saved. View it in your Portfolio tab.'
+          : 'Sign in to save accas permanently.';
+      }
+    });
+  }
+
+  // loop
+  (function loop(){
+    requestAnimationFrame(loop);
+    if (!isHomeActive) return;
+    controls.update();
+    composer.render();
+  })();
 }
 
 // -----------------------------------------
@@ -1222,7 +1483,10 @@ function renderPortfolio() {
 // -----------------------------------------
 async function loadFixturesCSV(url){
   const res = await fetch(`${url}?v=${Date.now()}`); // cache-bust CSV only
-  if (!res.ok){ showToast('error',`Could not load ${url} (HTTP ${res.status}).`); return; }
+  if (!res.ok){
+    showToast('error',`Could not load ${url} (HTTP ${res.status}).`);
+    return;
+  }
   const text = await res.text();
   const { data, errors } = Papa.parse(text, { header:true, skipEmptyLines:true });
   if (errors?.length) console.warn('[CSV parse errors]', errors);
@@ -1300,7 +1564,12 @@ function selectIndex(idx,{fly=false}={}){
   syncRail(idx);
 }
 
-function elmEmpty(msg){ const d=document.createElement('div'); d.className='empty'; d.textContent=msg; return d; }
+function elmEmpty(msg){
+  const d=document.createElement('div');
+  d.className='empty';
+  d.textContent=msg;
+  return d;
+}
 
 function renderPanel(f){
   if (!f) return;
@@ -1334,7 +1603,12 @@ function renderPanel(f){
     clearNode(el.watchlist);
     const shots = (f.key_players_shots||'').split(';').map(s=>s.trim()).filter(Boolean).slice(0,6);
     if (shots.length){
-      shots.forEach(s=>{ const row=document.createElement('div'); row.className='row'; row.textContent=s; el.watchlist.appendChild(row); });
+      shots.forEach(s=>{
+        const row=document.createElement('div');
+        row.className='row';
+        row.textContent=s;
+        el.watchlist.appendChild(row);
+      });
     } else el.watchlist.appendChild(elmEmpty('No player highlights available.'));
   }
 
@@ -1358,9 +1632,6 @@ function bindTabs(){
   });
 }
 
-// ----------------------------
-// Bottom sheet (fixture details)
-// ----------------------------
 function openSheetForFixture(f) {
   const sheet = document.getElementById('sheet');
   if (!sheet || !f) return;
@@ -1419,6 +1690,7 @@ function createMarker(){
 
   const R = getGlobeRadius();
 
+  // Radar: 4 concentric static rings
   const radarRings = [];
   const baseInner = R * 0.02;
   const baseWidth = R * 0.008;
@@ -1426,7 +1698,6 @@ function createMarker(){
   for (let i = 0; i < 4; i++) {
     const inner = baseInner + i * (baseWidth * 0.9);
     const outer = inner + baseWidth * (1 - i * 0.2);
-
     const baseAlpha = 0.35 * (1 - i * 0.18);
 
     const ringGeom = new THREE.RingGeometry(inner, outer, 64);
@@ -1438,16 +1709,15 @@ function createMarker(){
       depthWrite: false,
       depthTest: false
     });
-
     const ring = new THREE.Mesh(ringGeom, ringMat);
     ring.rotation.x = Math.PI / 2;
     ring.renderOrder = 998;
     ring.userData.baseAlpha = baseAlpha;
-
     group.add(ring);
     radarRings.push(ring);
   }
 
+  // Beam
   const beamGeom = new THREE.CylinderGeometry(0.18, 0.28, 30, 24, 1, true);
   const beamMat  = new THREE.MeshBasicMaterial({
     color: 0x7df9c4,
@@ -1462,6 +1732,7 @@ function createMarker(){
   beam.renderOrder = 998;
   group.add(beam);
 
+  // Pill sprite
   const billboardMat = new THREE.SpriteMaterial({
     transparent: true,
     opacity: 0,
@@ -1469,12 +1740,10 @@ function createMarker(){
     depthWrite: false
   });
   const billboard = new THREE.Sprite(billboardMat);
-
   const baseScaleX = 15;
   const baseScaleY = 7.5;
   billboard.scale.set(baseScaleX, baseScaleY, 1);
   billboard.userData.baseScale = { x: baseScaleX, y: baseScaleY };
-
   billboard.renderOrder = 999;
   group.add(billboard);
 
@@ -1571,15 +1840,10 @@ function moveMarkerToFixture(f, { fly = false } = {}) {
     S.group.position.copy(worldPos);
 
     const up = curN.clone().normalize();
-
     const toCam = camera.position.clone().sub(worldPos).normalize();
     let forward = toCam.clone().sub(up.clone().multiplyScalar(toCam.dot(up)));
-    if (forward.lengthSq() < 1e-6) {
-      forward = new THREE.Vector3(0, 0, 1);
-    } else {
-      forward.normalize();
-    }
-
+    if (forward.lengthSq() < 1e-6) forward = new THREE.Vector3(0,0,1);
+    else forward.normalize();
     const right = new THREE.Vector3().crossVectors(forward, up).normalize();
     forward.crossVectors(up, right).normalize();
 
@@ -1590,6 +1854,7 @@ function moveMarkerToFixture(f, { fly = false } = {}) {
     if (t >= 1) {
       S.raf.travel.cancel();
 
+      // Beam animation
       S.beam.position.set(0, 0, 0);
       S.beam.quaternion.identity();
       S.beam.scale.set(1, 0.001, 1);
@@ -1607,9 +1872,9 @@ function moveMarkerToFixture(f, { fly = false } = {}) {
         if (tb >= 1) S.raf.beam.cancel();
       });
 
+      // Radar breathing
       const rings      = Array.isArray(S.radar) ? S.radar : (S.radar ? [S.radar] : []);
       const radarStart = performance.now();
-
       rings.forEach(r => { if (r) r.visible = true; });
 
       S.raf.radar.run(() => {
@@ -1619,17 +1884,17 @@ function moveMarkerToFixture(f, { fly = false } = {}) {
         }
         const now   = performance.now();
         const tWave = (now - radarStart) / 800;
-
         rings.forEach((ring, idx) => {
           if (!ring) return;
           const base  = ring.userData?.baseAlpha ?? 0.25;
           const phase = tWave + idx * 0.8;
-          const sinVal = Math.sin(phase);
-          const wave   = 0.2 + 0.8 * Math.max(0, sinVal);
+          const sinVal= Math.sin(phase);
+          const wave  = 0.2 + 0.8 * Math.max(0, sinVal);
           ring.material.opacity = base * wave;
         });
       });
 
+      // Pill positioning & texture
       const PILL_ALT = R * 0.05;
       const PILL_OUT = R * 0.03;
       S.billboard.position.set(0, PILL_ALT, PILL_OUT);
@@ -1647,7 +1912,6 @@ function moveMarkerToFixture(f, { fly = false } = {}) {
 
       (async () => {
         if (S.state.reqId !== myReq) return;
-
         let stadiumImage = null;
         for (const url of stadiumCandidates(f)) {
           try {
@@ -1655,13 +1919,9 @@ function moveMarkerToFixture(f, { fly = false } = {}) {
             if (S.state.reqId !== myReq) return;
             stadiumImage = tex.image || null;
             break;
-          } catch {
-            // ignore and try next
-          }
+          } catch {}
         }
-
         if (!stadiumImage || S.state.reqId !== myReq) return;
-
         const pillTex = makeStadiumPillTexture(f, stadiumImage);
         S.billboard.material.map = pillTex;
         S.billboard.material.needsUpdate = true;
@@ -1673,11 +1933,9 @@ function moveMarkerToFixture(f, { fly = false } = {}) {
 
 function onCanvasClick(event) {
   if (!MARKER || !MARKER.billboard || !currentFixture || !renderer || !camera) return;
-
   const rect = renderer.domElement.getBoundingClientRect();
   pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
   pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-
   raycaster.setFromCamera(pointer, camera);
   const hits = raycaster.intersectObject(MARKER.billboard, false);
   if (hits.length > 0) {
@@ -1751,7 +2009,7 @@ async function runBetChecker(file) {
   const out = document.getElementById('bc-output');
   if (out) out.innerHTML = '<div class="muted">Reading slip…</div>';
   try {
-    const text = await ocrImageOrPdf(file);
+    const text   = await ocrImageOrPdf(file);
     const parsed = parseSlipText(text);
     if (!parsed.legs.length) {
       out && (out.innerHTML = `<div class="muted">No legs detected. <br/><pre style="white-space:pre-wrap">${parsed.raw || text.slice(0,400)}…</pre></div>`);
@@ -1776,6 +2034,7 @@ async function runBetChecker(file) {
     showToast('success', `Scored ${scored.legs?.length || parsed.legs.length} leg(s)`);
   } catch (e) {
     showToast('error', e.message);
+    const out = document.getElementById('bc-output');
     out && (out.innerHTML = `<div class="muted">Error: ${e.message}</div>`);
   }
 }
@@ -1788,7 +2047,7 @@ async function runBetChecker(file) {
   });
 }
 
-// ---------- Acca Builder (API-driven, separate from globe view) ----------
+// ---------- Acca Builder via API (legacy view, safe to leave) ----------
 async function runAccaSuggest() {
   const league = (document.getElementById('ab-league')?.value || 'ALL');
   const market = (document.getElementById('ab-market')?.value || 'ou25');
@@ -1836,6 +2095,7 @@ async function runAccaSuggest() {
 async function optimiseAcca(chosen, market) {
   showToast('info', `Optimising ${chosen.length}-fold…`);
   const grid = document.getElementById('ab-grid');
+  if (!grid) return;
   try {
     const res = await API.accaOptimise({ market, legs: chosen, strategy: { objective:'max_ev', stake:10 }});
     grid.innerHTML = '';
@@ -1911,8 +2171,8 @@ function handleSignup() {
   const passInput  = document.getElementById('su-pass');
   if (!emailInput || !passInput) return;
 
-  const email = (emailInput.value || '').trim();
-  const password = (passInput.value || '').trim();
+  const email    = (emailInput.value || '').trim();
+  const password = (passInput.value  || '').trim();
 
   if (!email || !password) {
     showToast('error', 'Please enter email and password');
@@ -1935,23 +2195,19 @@ function handleLogin() {
   const passInput  = document.getElementById('li-pass');
   if (!emailInput || !passInput) return;
 
-  const email = (emailInput.value || '').trim();
-  const password = (passInput.value || '').trim();
+  const email    = (emailInput.value || '').trim();
+  const password = (passInput.value  || '').trim();
 
   if (!email || !password) {
     showToast('error', 'Enter email & password');
     return;
   }
 
-  const stored = window.localStorage.getItem(STORAGE_KEYS.user);
-  if (stored) {
-    const u = JSON.parse(stored);
-    if (u.email && u.email.toLowerCase() === email.toLowerCase()) {
-      currentUser = u;
-    } else {
-      currentUser = { email, role: email.toLowerCase().startsWith('admin') ? 'admin' : 'user' };
-    }
+  // Demo special case: admin / admin
+  if (email === 'admin' && password === 'admin') {
+    currentUser = { email: 'admin', role: 'admin' };
   } else {
+    // For now accept anything as a "user" role
     currentUser = { email, role: email.toLowerCase().startsWith('admin') ? 'admin' : 'user' };
   }
 
@@ -1969,15 +2225,15 @@ function handleLogout() {
   window.location.hash = '#/';
 }
 
-// Hook up auth forms (demo)
+// Hook up auth forms (demo wiring)
 {
   const suBtn    = document.getElementById('su-submit');
   const liBtn    = document.getElementById('li-submit');
-  const logoutBtn= document.getElementById('logout-btn');
+  const logoutEl = document.querySelector('.profile-item[data-action="logout"]');
 
   if (suBtn)    suBtn.addEventListener('click', (e) => { e.preventDefault(); handleSignup(); });
   if (liBtn)    liBtn.addEventListener('click', (e) => { e.preventDefault(); handleLogin(); });
-  if (logoutBtn) logoutBtn.addEventListener('click', (e) => { e.preventDefault(); handleLogout(); });
+  if (logoutEl) logoutEl.addEventListener('click', (e) => { e.preventDefault(); handleLogout(); });
 }
 
 // ----------------------------
@@ -1988,20 +2244,23 @@ const ROUTES = {
   '#/home':        'view-home',
   '#/bet-checker': 'view-betchecker',
   '#/acca-builder':'view-accabuilder',
-  '#/portfolio':   'view-portfolio',
   '#/copilot':     'view-copilot',
   '#/login':       'view-signin',
-  '#/signup':      'view-signup'
+  '#/signup':      'view-signup',
+  '#/portfolio':   'view-portfolio'
 };
-
 function showRoute(hash) {
   if (!hash) hash = '#/';
   const id = ROUTES[hash] || 'view-home';
 
   document.querySelectorAll('.view').forEach(v => {
-    const active = (v.id === id);
-    v.classList.toggle('is-active', active);
-    if (active) v.removeAttribute('hidden'); else v.setAttribute('hidden','');
+    if (v.id === id) {
+      v.classList.add('is-active');
+      v.removeAttribute('hidden');
+    } else {
+      v.classList.remove('is-active');
+      v.setAttribute('hidden','');
+    }
   });
 
   document.querySelectorAll('[data-route]').forEach(a=>{
@@ -2021,140 +2280,24 @@ function showRoute(hash) {
   scrim?.classList.remove('show');
   drawer?.setAttribute('aria-hidden','true');
 
+  // Control globe render loop
   isHomeActive = (id === 'view-home');
 
+  // Render portfolio view on demand
   if (id === 'view-portfolio') {
     renderPortfolio();
   }
 }
 
-// -----------------------------------------
-// Three-Globe loader & scene init
-// -----------------------------------------
-async function loadThreeGlobe(){
-  for (const v of ['2.31.3','2.31.1','2.30.1','2.29.3']){
-    try {
-      const m = await import(`https://esm.sh/three-globe@${v}?bundle&external=three`);
-      console.warn('[three-globe] using esm.sh ESM:', v);
-      return m.default ?? m;
-    } catch {}
-  }
-  for (const url of [
-    'https://cdn.jsdelivr.net/npm/three-globe@2.31.1/dist/three-globe.min.js',
-    'https://unpkg.com/three-globe@2.31.1/dist/three-globe.min.js',
-    './vendor/three-globe.min.js'
-  ]){
-    try {
-      const ctor = await import(url);
-      console.warn('[three-globe] using UMD:', url);
-      return ctor;
-    } catch {}
-  }
-  throw new Error('three-globe failed to load');
-}
-
-async function init(){
-  loadSessionFromStorage();
-  updateAuthUI();
-
-  ThreeGlobeCtor = await loadThreeGlobe();
-
-  scene = new THREE.Scene();
-  renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
-  renderer.setSize(el.globeWrap.clientWidth, el.globeWrap.clientHeight);
-  el.globeWrap.innerHTML = '';
-  el.globeWrap.appendChild(renderer.domElement);
-  if ('outputColorSpace' in renderer) renderer.outputColorSpace = THREE.SRGBColorSpace;
-
-  camera = new THREE.PerspectiveCamera(45, el.globeWrap.clientWidth/el.globeWrap.clientHeight, 0.1, 5000);
-  camera.position.set(0, 0, getGlobeRadius()*3);
-
-  controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true; controls.enablePan = false; controls.enableZoom = true;
-  controls.autoRotate = false; controls.minDistance = getGlobeRadius()*1.2; controls.maxDistance = getGlobeRadius()*6;
-
-  composer = new EffectComposer(renderer);
-  composer.addPass(new RenderPass(scene, camera));
-  const fxaa = new ShaderPass(FXAAShader);
-  const setFXAA = ()=>{ const px=renderer.getPixelRatio();
-    fxaa.material.uniforms['resolution'].value.set( 1/(el.globeWrap.clientWidth*px), 1/(el.globeWrap.clientHeight*px) ); };
-  setFXAA(); composer.addPass(fxaa);
-  const bloom = new UnrealBloomPass(new THREE.Vector2(el.globeWrap.clientWidth, el.globeWrap.clientHeight), BLOOM.strength, BLOOM.radius, BLOOM.threshold);
-  composer.addPass(bloom);
-
-  scene.add(new THREE.AmbientLight(0xffffff,0.9));
-  const hemi = new THREE.HemisphereLight(0xddeeff, 0x223344, 0.6); scene.add(hemi);
-
-  globe = new ThreeGlobeCtor({ waitForGlobeReady:true })
-    .showAtmosphere(true).atmosphereColor('#9ef9e3').atmosphereAltitude(0.28)
-    .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
-    .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
-    .pointAltitude(()=>SURFACE_EPS)
-    .pointRadius(d=>d.__active?RADIUS_ACTIVE:RADIUS_BASE)
-    .pointColor(d=>d.__active?COLORS.markerActive:COLORS.marker)
-    .pointsMerge(true);
-
-  scene.add(globe);
-
-  MARKER = createMarker();
-  scene.add(MARKER.group);
-
-  renderer.domElement.addEventListener('click', onCanvasClick);
-
-  if (typeof globe.onPointHover === 'function') globe.onPointHover(handleHover);
-  globe.onPointClick?.(pt=>{
-    if (!pt) return;
-    const idx = visibleFixtures.findIndex(f=>f.latitude===pt.latitude && f.longitude===pt.longitude);
-    if (idx>=0) selectIndex(idx, { fly:true });
-  });
-
-  window.addEventListener('resize', ()=>{
-    const {clientWidth:w, clientHeight:h} = el.globeWrap;
-    renderer.setSize(w,h); camera.aspect=w/h; camera.updateProjectionMatrix(); setFXAA();
-  });
-
-  bindTabs();
-  bindDateControls();
-  bindSheet();
-
-  el.deepBtn?.addEventListener('click', () => {
-    if (currentFixture) {
-      openSheetForFixture(currentFixture);
-    }
-  });
-
-  await loadFixturesCSV('./data/fixtures.csv');
-  buildLeagueChips();
-  buildDateStrip();
-  applyFiltersAndRender();
-  initAccaFromFixtures();
-
-  const saveBtn = document.getElementById('acc-save');
-  if (saveBtn) {
-    saveBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      saveCurrentAccaToPortfolio();
-    });
-  }
-
-  (function loop(){
-    requestAnimationFrame(loop);
-    if (!isHomeActive) return;
-    controls.update();
-    composer.render();
-  })();
-}
-
 window.addEventListener('hashchange', ()=> showRoute(location.hash));
 window.addEventListener('DOMContentLoaded', ()=>{
-  if (!location.hash) location.hash = '#/'; 
+  if (!location.hash) location.hash = '#/';
   showRoute(location.hash);
   init().catch(err=>{ console.error(err); showToast('error', String(err)); });
 });
 
 // ----------------------------
-// Quick self-test for logos
+// Quick self-test for two known files
 // ----------------------------
 (function verifyLocalLogoSetup(){
   const tests = [
