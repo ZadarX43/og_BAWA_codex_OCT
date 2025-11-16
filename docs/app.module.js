@@ -2275,7 +2275,11 @@ async function runBetChecker(file) {
   const out = document.getElementById('bc-output');
   if (out) out.innerHTML = '<div class="muted">Reading slip…</div>';
   try {
-    const text   = await ocrImageOrPdf(file);
+    const text = await ocrImageOrPdf(file);
+
+    // 🔍 DEBUG: log raw OCR output so we can build bookie-specific parsers later
+    console.log('[BetChecker OCR raw text]\n', text);
+
     const parsed = parseSlipText(text);
     if (!parsed.legs.length) {
       out && (out.innerHTML = `<div class="muted">No legs detected. <br/><pre style="white-space:pre-wrap">${parsed.raw || text.slice(0,400)}…</pre></div>`);
