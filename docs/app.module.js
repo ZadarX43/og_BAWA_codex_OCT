@@ -1431,15 +1431,18 @@ async function init(){
     if (idx>=0) selectIndex(idx, { fly:true });
   });
 
-  // Resize
+ 
+ // Resize
   window.addEventListener('resize', ()=>{
     const {clientWidth:w, clientHeight:h} = el.globeWrap;
     renderer.setSize(w,h); camera.aspect=w/h; camera.updateProjectionMatrix(); setFXAA();
   });
 
+  bindHeaderNav();      // <— NEW
   bindTabs();
   bindDateControls();
   bindSheet();
+
 
   // deep-dive opens sheet for current fixture
   el.deepBtn?.addEventListener('click', () => {
@@ -1616,6 +1619,43 @@ function renderPanel(f){
   }
 
   renderCompetitionAccuracy(f.competition);
+}
+// ----------------------------
+// Header nav bindings (profile menu + side drawer)
+// ----------------------------
+function bindHeaderNav() {
+  const profileBtn  = document.getElementById('btn-profile');
+  const profileMenu = document.getElementById('profile-menu');
+
+  if (profileBtn && profileMenu) {
+    profileBtn.addEventListener('click', () => {
+      const isOpen = profileMenu.classList.toggle('show');
+      profileBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      profileMenu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+    });
+  }
+
+  const btnMenu   = document.getElementById('btn-menu');
+  const sideDrawer= document.getElementById('side-drawer');
+  const scrim     = document.getElementById('scrim');
+  const btnClose  = document.getElementById('btn-close-drawer');
+
+  if (btnMenu && sideDrawer && scrim) {f
+    const openDrawer = () => {
+      sideDrawer.classList.add('show');
+      scrim.classList.add('show');
+      sideDrawer.setAttribute('aria-hidden', 'false');
+    };
+    const closeDrawer = () => {
+      sideDrawer.classList.remove('show');
+      scrim.classList.remove('show');
+      sideDrawer.setAttribute('aria-hidden', 'true');
+    };
+
+    btnMenu.addEventListener('click', openDrawer);
+    btnClose?.addEventListener('click', closeDrawer);
+    scrim.addEventListener('click', closeDrawer);
+  }
 }
 
 function bindTabs(){
