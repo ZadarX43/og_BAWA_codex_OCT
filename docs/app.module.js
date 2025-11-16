@@ -2239,6 +2239,7 @@ async function ocrImageOrPdf(file) {
   const { data } = await window.Tesseract.recognize(file, 'eng', { logger: () => {} });
   return (data && data.text) ? data.text : '';
 }
+
 // --- Helpers for BetChecker parsers ---
 function fracToDecimal(fracStr) {
   const m = String(fracStr).trim().match(/^(\d+)\s*\/\s*(\d+)$/);
@@ -2248,6 +2249,7 @@ function fracToDecimal(fracStr) {
   if (!den) return null;
   return 1 + num/den;
 }
+
 function parseGenericSlip(text) {
   const lines = String(text).split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
   const legs = [];
@@ -2270,15 +2272,25 @@ function parseGenericSlip(text) {
       }
       if (!market) continue;
       let price=null;
-      const frac=M.match(/(\d+)\s*\/\s*(\d+)/); const dec=M.match(/(\d+(?:\.\d+)?)/);
+      const frac=M.match(/(\d+)\s*\/\s*(\d+)/);
+      const dec=M.match(/(\d+(?:\.\d+)?)/);
       if (frac) price = (parseFloat(frac[1])/parseFloat(frac[2]))+1;
       else if (dec) price = parseFloat(dec[1]);
-      legs.push({ teamHome:home, teamAway:away, market, selection:pick||'—', price, bookmaker:null, kickoffUTC:null });
+      legs.push({
+        teamHome: home,
+        teamAway: away,
+        market,
+        selection: pick || '—',
+        price,
+        bookmaker: null,
+        kickoffUTC: null
+      });
       break;
     }
   }
   return { legs, raw: lines.slice(0,60).join('\n') };
 }
+
 // --- Betfred-specific parser (team total over 1.5 style slips) ---
 function parseBetfred(text) {
   const lines = String(text)
@@ -2335,19 +2347,18 @@ function parseBetfred(text) {
 
   return { legs, raw: text };
 }
+
 // --- Dispatcher: choose parser based on bookie text ---
 function parseSlipText(text) {
-  const upper = String(text).toUpperCase();
-
-  // Try Betfred first if we see its branding
-  if (upper.includes('BETFRED')) {
-    const out = parseBetfred(text);
-    if (out.legs && out.legs.length) {
-      return out;
-    }
+  // 1) Always try Betfred-style patterns first.
+  //    This only picks up lines like "Spain total OVER 1.5- 2/7" or "Over 1.5-1/9",
+  //    so it won't interfere with other bookies.
+  const bf = parseBetfred(text);
+  if (bf.legs && bf.legs.length) {
+    return bf;
   }
 
-  // Fallback: original generic parser
+  // 2) Fallback: original generic "Team A vs Team B" parser
   return parseGenericSlip(text);
 }
 
@@ -2396,6 +2407,7 @@ async function runBetChecker(file) {
     e.target.value = '';
   });
 }
+
 
 // ---------- Acca Builder via API (legacy view) ----------
 async function runAccaSuggest() {
