@@ -1640,7 +1640,7 @@ function bindHeaderNav() {
   const scrim     = document.getElementById('scrim');
   const btnClose  = document.getElementById('btn-close-drawer');
 
-  if (btnMenu && sideDrawer && scrim) {f
+  if (btnMenu && sideDrawer && scrim) {
     const openDrawer = () => {
       sideDrawer.classList.add('show');
       scrim.classList.add('show');
@@ -2205,60 +2205,52 @@ function appendChatLine(role, text) {
 // ----------------------------
 
 function handleSignup() {
-  // For now, disable signup and tell the user how to log in
-  showToast('info', 'Signup is disabled in this demo. Use admin / admin to log in.');
-  window.location.hash = '#/login';
-}
-
-function handleLogin() {
-  const emailInput = document.getElementById('li-email');
-  const passInput  = document.getElementById('li-pass');
+  const emailInput = document.getElementById('su-email');
+  const passInput  = document.getElementById('su-pass');
   if (!emailInput || !passInput) return;
 
   const email = (emailInput.value || '').trim();
   const password = (passInput.value || '').trim();
 
-  // Demo rule: only allow admin / admin
+  if (!email || !password) {
+    showToast('error', 'Please enter email and password');
+    return;
+  }
+
   if (email !== 'admin' || password !== 'admin') {
-    showToast('error', 'Use admin / admin to log in.');
+    showToast('error', 'Demo mode: use admin / admin');
     return;
   }
 
   currentUser = { email: 'admin', role: 'admin' };
   persistSession();
   updateAuthUI();
-
-  showToast('success', 'Signed in as admin');
-  window.location.hash = '#/portfolio'; // or '#/' if you prefer
-}
-
-function handleLogout() {
-  currentUser = null;
-  persistSession();
-  updateAuthUI();
-  showToast('info', 'Signed out');
-  window.location.hash = '#/login';
+  showToast('success', 'Admin account ready');
+  window.location.hash = '#/portfolio';
 }
 
 // Hook up auth forms (demo)
 {
   const suBtn    = document.getElementById('su-submit');
   const liBtn    = document.getElementById('li-submit');
+  const logoutEl = document.querySelector('[data-action="logout"]');
 
-  if (suBtn) {
-    suBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      handleSignup();
-    });
-  }
+  if (suBtn) suBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    handleSignup();
+  });
 
-  if (liBtn) {
-    liBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      handleLogin();
-    });
-  }
+  if (liBtn) liBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    handleLogin();
+  });
+
+  if (logoutEl) logoutEl.addEventListener('click', (e) => {
+    e.preventDefault();
+    handleLogout();
+  });
 }
+
 
 
 // ----------------------------
