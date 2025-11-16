@@ -1176,37 +1176,29 @@ function copyAccaToClipboard(){
 // ----------------------------
 // Portfolio (saved accas)
 // ----------------------------
-function getCurrentAccaSnapshot() {
-  if (!currentFixture || !currentAccaLegs.length) return null;
 
-  const createdAt = new Date().toISOString();
-  const whenLabel = (() => {
-    try {
-      const d = currentFixture.date_utc ? new Date(currentFixture.date_utc) : new Date();
-      return d.toLocaleString();
-    } catch {
-      return new Date().toLocaleString();
-    }
-  })();
+function getCurrentAccaSnapshot() {
+  // Need a fixture and at least one leg in the cart
+  if (!currentFixture || !abCartLegs || !abCartLegs.length) return null;
 
   return {
-    id: `acc_${createdAt}_${Math.random().toString(36).slice(2,8)}`,
+    id: `acc_${Date.now()}`,
     userEmail: currentUser?.email || null,
-    name: `${currentFixture.home_team} vs ${currentFixture.away_team} (${whenLabel})`,
-    createdAt,
-    status: 'pending',
-    stake: 0,
+    name: `${currentFixture.home_team} vs ${currentFixture.away_team}`,
+    createdAt: new Date().toISOString(),
     fixture: {
-      fixture_id: currentFixture.fixture_id,
-      home_team:  currentFixture.home_team,
-      away_team:  currentFixture.away_team,
-      date_utc:   currentFixture.date_utc,
-      competition:currentFixture.competition,
-      stadium:    currentFixture.stadium,
-      city:       currentFixture.city,
-      country:    currentFixture.country
+      home_team:   currentFixture.home_team,
+      away_team:   currentFixture.away_team,
+      date_utc:    currentFixture.date_utc,
+      competition: currentFixture.competition,
+      stadium:     currentFixture.stadium,
+      city:        currentFixture.city,
+      country:     currentFixture.country,
     },
-    legs: currentAccaLegs.map(l => ({ ...l }))
+    // clone the legs so we don’t mutate the live cart later
+    legs: abCartLegs.map(l => ({ ...l })),
+    status: 'pending',   // pending | won | lost
+    stake: 0             // user-editable £ stake
   };
 }
 
@@ -1229,119 +1221,224 @@ function saveCurrentAccaToPortfolio() {
 function renderPortfolio() {
   const container = document.getElementById('portfolio-list');
   if (!container) return;
+
   container.innerHTML = '';
 
-  const userAccas = savedAccas.filter(a =>
-    !currentUser || !a.userEmail || a.userEmail === currentUser?.email
+  // Filter to current user (or unassigned if you later support shared)
+  const userAccas = savedAccas.filter(
+    a => !currentUser || !a.userEmail || a.userEmail === currentUser.email
   );
 
   if (!userAccas.length) {
-    container.innerHTML = `<p class="muted">No saved accas yet. Build one in the Acca Builder and click “Save to portfolio”.</p>`;
+    container.innerHTML = `
+      <p class="muted">
+        No saved accas yet. Build one in the Acca Builder and click “Save to portfolio”.
+      </p>`;
     return;
   }
 
+  // Newest first
   userAccas
     .slice()
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     .forEach(acc => {
-      const card = document.createElement('div');
-      card.className = 'insight-card';
-      const when = new Date(acc.createdAt).toLocaleString();
-      const legCount = acc.legs?.length || 0;
-      const status   = acc.status || 'pending';
-      const stake    = acc.stake ?? '';
+      const when  = new Date(acc.createdAt).toLocaleString();
+      const legs  = Array.isArray(acc.legs) ? acc.legs : [];
+      const stake = typeof acc.stake === 'number' && !Number.isNaN(acc.stake)
+        ? acc.stake.toFixed(2)
+        : '0.00';
+      const status = acc.status || 'pending';
 
+      const locParts = [];
+      if (acc.fixture?.city)    locParts.push(acc.fixture.city);
+      if (acc.fixture?.country) locParts.push(acc.fixture.country);
+      const locText = locParts.join(', ');
+
+      const card = document.createElement('div');
+      card.className = 'insight-card portfolio-card';
       card.innerHTML = `
-        <h2>${acc.name}</h2>
-        <p class="muted">${when} • ${acc.fixture.competition || ''} • ${acc.fixture.city || ''}${acc.fixture.country ? ', ' + acc.fixture.country : ''}</p>
-        <p class="muted">${legCount} leg(s)</p>
-        <p class="muted">
-          Status:
-          <strong>${status}</strong>
-          &nbsp;•&nbsp;
-          Stake:
-          <input type="number" min="0" step="0.01"
-                 class="stake-input"
-                 data-stake-for="${acc.id}"
-                 value="${stake !== '' ? stake : ''}"
-                 style="max-width:90px; margin-left:6px;" />
-        </p>
+        <header class="portfolio-card__header">
+          <div>
+            <h2>${acc.name}</h2>
+            <p class="muted">
+              ${when}
+              ${acc.fixture?.competition ? ' • ' + acc.fixture.competition : ''}
+              ${locText ? ' • ' + locText : ''}
+            </p>
+            <p class="muted">${legs.length} leg(s)</p>
+          </div>
+          <button
+            class="portfolio-card__delete"
+            type="button"
+            data-delete-acca="${acc.id}"
+            aria-label="Delete saved acca"
+          >✕</button>
+        </header>
+
+        ${
+          legs.length
+            ? `
+              <ul class="portfolio-leg-list">
+                ${legs.map(l => {
+                  const probPct = l.prob  != null ? Math.round(l.prob * 100) + '%' : '–';
+                  const fairTxt  = l.fair  != null ? l.fair.toFixed(2)          : '–';
+                  const priceTxt = l.price != null ? l.price.toFixed(2)         : '–';
+                  const edgeTxt  = l.edge  != null
+                    ? (l.edge >= 0 ? '+' : '') + l.edge.toFixed(1) + '%'
+                    : '–';
+                  const label    = l.label || '';
+                  const fixLabel = l.fixture_label ||
+                    `${acc.fixture.home_team} vs ${acc.fixture.away_team}`;
+                  return `
+                    <li class="portfolio-leg">
+                      <div class="portfolio-leg__label">${fixLabel} – ${label}</div>
+                      <div class="portfolio-leg__meta muted">
+                        Model ${probPct}
+                        • Fair ${fairTxt}
+                        • Price ${priceTxt}
+                        • EV ${edgeTxt}
+                      </div>
+                    </li>
+                  `;
+                }).join('')}
+              </ul>
+            `
+            : '<p class="muted">No legs saved on this slip.</p>'
+        }
+
+        <div class="portfolio-meta-row">
+          <div class="portfolio-meta-col">
+            <span class="control-label">Status</span>
+            <span class="portfolio-status" data-status="${acc.id}">
+              ${status}
+            </span>
+          </div>
+          <label class="control control--compact portfolio-meta-col">
+            <span class="control-label">Stake (£)</span>
+            <input
+              type="number"
+              min="0"
+              step="0.01"
+              class="portfolio-stake-input"
+              data-stake="${acc.id}"
+              value="${stake}"
+            />
+          </label>
+        </div>
+
         <div class="portfolio-actions">
-          <button class="cta cta--tiny" data-load-acca="${acc.id}">Open in builder</button>
-          <button class="cta cta--tiny" data-status="won" data-acc-id="${acc.id}">Mark won</button>
-          <button class="cta cta--tiny" data-status="lost" data-acc-id="${acc.id}">Mark lost</button>
-          <button class="cta cta--tiny" data-status="pending" data-acc-id="${acc.id}">Reset</button>
+          <button class="cta" data-load-acca="${acc.id}">
+            Open in builder
+          </button>
+          <button class="cta cta--secondary" data-status-win="${acc.id}">
+            Mark as won
+          </button>
+          <button class="cta cta--secondary" data-status-loss="${acc.id}">
+            Mark as lost
+          </button>
+          <button class="cta cta--ghost" data-status-reset="${acc.id}">
+            Reset
+          </button>
         </div>
       `;
       container.appendChild(card);
     });
 
-  // Wire stake updates
-  container.querySelectorAll('input[data-stake-for]').forEach(input=>{
-    input.addEventListener('change', ()=>{
-      const id  = input.getAttribute('data-stake-for');
+  // Wire: open in builder (fixture + legs)
+  container.querySelectorAll('button[data-load-acca]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id  = btn.getAttribute('data-load-acca');
       const acc = savedAccas.find(a => a.id === id);
       if (!acc) return;
-      const v = parseFloat(input.value);
-      acc.stake = Number.isFinite(v) && v >= 0 ? v : 0;
-      persistSession();
-    });
-  });
 
-  // Wire status buttons
-  container.querySelectorAll('button[data-status]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const id     = btn.getAttribute('data-acc-id');
-      const status = btn.getAttribute('data-status') || 'pending';
-      const acc    = savedAccas.find(a => a.id === id);
-      if (!acc) return;
-      acc.status = status;
-      persistSession();
-      renderPortfolio();
-    });
-  });
-
-  // Wire "Open in builder"
-  container.querySelectorAll('button[data-load-acca]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const id  = btn.getAttribute('data-load-acca');
-      const acc = userAccas.find(a => a.id === id);
-      if (!acc) return;
-
-      // Find fixture by fixture_id or fallback to home/away/date_utc
-      let match = null;
-      if (acc.fixture.fixture_id) {
-        match = fixtures.find(f => f.fixture_id === acc.fixture.fixture_id);
-      }
-      if (!match) {
-        match = fixtures.find(f =>
+      // Find matching fixture in current fixtures list
+      const match = fixtures.find(
+        f =>
           f.home_team === acc.fixture.home_team &&
           f.away_team === acc.fixture.away_team &&
           f.date_utc  === acc.fixture.date_utc
-        );
-      }
+      );
       if (!match) {
         showToast('error', 'Original fixture not found in current data set');
         return;
       }
 
-      // Route to acca-builder view
-      window.location.hash = '#/acca-builder';
+      // Set as current fixture for builder & globe
+      currentFixture = match;
 
-      // Set fixture dropdown & hero state
-      const fixtureSelect = document.getElementById('ab-fixture-select');
-      if (fixtureSelect) fixtureSelect.value = match.fixture_id;
-      setAccaFixture(match);
-
-      // Restore legs into cart
-      abCartLegs = (acc.legs || []).map(l => ({ ...l }));
+      // Replace acca cart with saved legs and re-render
+      abCartLegs = Array.isArray(acc.legs) ? acc.legs.map(l => ({ ...l })) : [];
       renderAccaCart();
       refreshAccaPicks();
 
+      // Navigate to builder
+      window.location.hash = '#/acca-builder';
       showToast('info', 'Loaded saved acca into builder');
     });
   });
+
+  // Wire: stake input change
+  container.querySelectorAll('.portfolio-stake-input').forEach(input => {
+    input.addEventListener('change', () => {
+      const id   = input.getAttribute('data-stake');
+      const acc  = savedAccas.find(a => a.id === id);
+      if (!acc) return;
+      const val  = parseFloat(input.value);
+      acc.stake  = !Number.isNaN(val) && val >= 0 ? val : 0;
+      persistSession();
+    });
+  });
+
+  // Wire: mark won / lost / reset
+  container.querySelectorAll('[data-status-win]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id  = btn.getAttribute('data-status-win');
+      const acc = savedAccas.find(a => a.id === id);
+      if (!acc) return;
+      acc.status = 'won';
+      persistSession();
+      renderPortfolio();
+    });
+  });
+  container.querySelectorAll('[data-status-loss]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id  = btn.getAttribute('data-status-loss');
+      const acc = savedAccas.find(a => a.id === id);
+      if (!acc) return;
+      acc.status = 'lost';
+      persistSession();
+      renderPortfolio();
+    });
+  });
+  container.querySelectorAll('[data-status-reset]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id  = btn.getAttribute('data-status-reset');
+      const acc = savedAccas.find(a => a.id === id);
+      if (!acc) return;
+      acc.status = 'pending';
+      persistSession();
+      renderPortfolio();
+    });
+  });
+
+  // Wire: delete with confirm
+  container.querySelectorAll('[data-delete-acca]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id  = btn.getAttribute('data-delete-acca');
+      const acc = savedAccas.find(a => a.id === id);
+      if (!acc) return;
+
+      const ok = window.confirm('Delete slip? Are you sure?');
+      if (!ok) return;
+
+      savedAccas = savedAccas.filter(a => a.id !== id);
+      persistSession();
+      renderPortfolio();
+      showToast('info', 'Slip deleted from portfolio');
+    });
+  });
 }
+
 
 // -----------------------------------------
 // Three-Globe loader & scene init
