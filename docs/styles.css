@@ -1055,21 +1055,25 @@ canvas{ border-radius:24px; }
   font-size: 1.6rem;
 }
 /* =========================
-   Portfolio – Saved Accas
+   Portfolio – Saved accas
    ========================= */
 
 .portfolio-screen {
   padding: 24px;
 }
 
+/* Keep cards at a neat column width, wrap like a masonry */
 .portfolio-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 16px;
   margin-top: 12px;
 }
 
+/* Each card is a fixed width with internal scrolling for long slips */
 .portfolio-card {
+  width: 260px;
+  max-height: 540px;
   background: var(--bg-panel);
   border-radius: 18px;
   padding: 14px 16px 16px;
@@ -1077,7 +1081,8 @@ canvas{ border-radius:24px; }
   box-shadow: var(--card-shadow);
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
+  overflow-y: auto;
 }
 
 .portfolio-card__header {
@@ -1087,8 +1092,14 @@ canvas{ border-radius:24px; }
 }
 
 .portfolio-card__header h2 {
-  font-size: 1rem;
-  margin-bottom: 4px;
+  font-size: 0.95rem;
+  margin-bottom: 2px;
+}
+
+/* Small, muted timestamp/fixture meta */
+.portfolio-card__meta {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
 }
 
 /* Legs list inside each saved acca */
@@ -1110,12 +1121,12 @@ canvas{ border-radius:24px; }
 }
 
 .portfolio-leg__label {
-  font-size: 0.86rem;
+  font-size: 0.84rem;
   font-weight: 600;
 }
 
 .portfolio-leg__meta {
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   color: var(--text-secondary);
 }
 
@@ -1132,7 +1143,12 @@ canvas{ border-radius:24px; }
 .portfolio-meta-col {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 2px;
+}
+
+.portfolio-meta-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
 }
 
 .portfolio-status {
@@ -1141,15 +1157,32 @@ canvas{ border-radius:24px; }
   text-transform: capitalize;
 }
 
-/* Actions row (Open / Mark / Reset / Delete) */
+/* Optional status colours */
+.portfolio-status--pending { color: var(--text-secondary); }
+.portfolio-status--won     { color: #4ade80; }   /* green */
+.portfolio-status--lost    { color: #f97373; }   /* red */
 
+.portfolio-stake-input {
+  width: 100%;
+  padding: 4px 6px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.04);
+  color: var(--text-primary);
+  font-size: 0.78rem;
+}
+
+/* Actions row (Open / Mark / Reset / Delete)
+   Sticks to the bottom of the card */
 .portfolio-actions {
+  margin-top: auto;                      /* push to bottom */
+  padding-top: 8px;
+  border-top: 1px solid rgba(255,255,255,.08);
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 8px;
 }
 
 .portfolio-actions-left,
@@ -1158,8 +1191,13 @@ canvas{ border-radius:24px; }
   gap: 8px;
 }
 
-/* Make delete a small ghost-red pill */
+/* Smaller CTAs for inside cards */
+.portfolio-actions .cta {
+  padding: 8px 14px;
+  font-size: 0.78rem;
+}
 
+/* Make delete a small ghost-red pill */
 .cta--ghost {
   background: transparent;
   color: var(--text-primary);
