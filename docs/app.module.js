@@ -2215,26 +2215,26 @@ const API_BASE = '/api';
 
 async function apiJson(url, opts = {}) {
   const res = await fetch(`${API_BASE}${url}`, {
-    headers: { 'Content-Type': 'application/json', ...(opts.headers||{}) },
-    credentials: 'include',
-    ...opts
+    ...opts,
+    headers: { 'Content-Type': 'application/json', ...(opts.headers || {}) },
+    credentials: 'include'
   });
   if (!res.ok) {
-    const t = await res.text().catch(()=> '');
+    const t = await res.text().catch(() => '');
     throw new Error(`HTTP ${res.status}: ${t || res.statusText}`);
   }
   return res.json();
 }
 
 const API = {
-  scoreSlip: (payload)=> apiJson('/score-slip', { method:'POST', body: JSON.stringify(payload) }),
-  accaSuggest: (q)=>   apiJson(`/acca/suggest?${new URLSearchParams(q)}`),
-  accaOptimise: (p)=>  apiJson('/acca/optimise', { method:'POST', body: JSON.stringify(p) }),
-  copilot: (p)=>       apiJson('/copilot', { method:'POST', body: JSON.stringify(p) })
+  scoreSlip:   (payload) => apiJson('/score-slip', { method: 'POST', body: JSON.stringify(payload) }),
+  accaSuggest: (q)       => apiJson(`/acca/suggest?${new URLSearchParams(q)}`),
+  accaOptimise:(p)       => apiJson('/acca/optimise', { method: 'POST', body: JSON.stringify(p) }),
+  copilot:     (p)       => apiJson('/copilot', { method: 'POST', body: JSON.stringify(p) })
 };
 
 // ---------- Bet Checker ----------
-async function ocrImageOrPdf(file) {
+async function oohndefault(file) {
   if (!window.Tesseract) throw new Error('OCR engine not loaded');
   const { data } = await window.Tesseract.recognize(file, 'eng', { logger: () => {} });
   return (data && data.text) ? data.text : '';
@@ -2247,51 +2247,65 @@ function fracToDecimal(fracStr) {
   const num = parseFloat(m[1]);
   const den = parseFloat(m[2]);
   if (!den) return null;
-  return 1 + num/den;
+  return 1 + num / den;
 }
 
 function parseGenericSlip(text) {
-  const lines = String(text).split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
+  const lines = String(text).split(/\r?\n/).map(s => s.trim()).filter(Boolean);
   const legs = [];
-  for (let i=0;i<lines.length;i++){
+
+  for (let i = 0; i < lines.length; i++) {
     const L = lines[i];
-    const m = L.match(/^\s*([A-Za-z0-9 .'\-]+)\s+(?:v|vs\.?|VS)\s+([A-Za-z0-9 .'\-]+)\s*$/i);
+    // Strict “TeamA v TeamB” / “TeamA vs TeamB”
+    const m = L.match(/^\s*([A-Za-z0-9 .'-]+)\s+(?:V|VS\.?)\s+([A-Za-z0-9 .'-]+)\s*$/i);
     if (!m) continue;
-    const home = m[1].trim(), away = m[2].trim();
-    for (let j=1;j<=3 && (i+j)<lines.length;j++){
-      const M = lines[i+j];
-      let market=null, pick=null;
-      if (/over\s*2\.?5/i.test(M)) { market='OVER_UNDER_2_5'; pick='OVER'; }
-      else if (/under\s*2\.?5/i.test(M)) { market='OVER_UNDER_2_5'; pick='UNDER'; }
-      else if (/both\s*teams\s*to\s*score|btts/i.test(M)) { market='BTTS'; pick=/\bno\b/i.test(M)?'NO':'YES'; }
-      else if (/(?:^|\s)(?:1x2|home|away|draw|1|2|x)(?:\s|$)/i.test(M)) {
-        market='FTR';
-        if (/\bdraw\b|(?:^|\s)x(?:\s|$)/i.test(M)) pick='DRAW';
-        else if (/\bhome\b|(?:^|\s)1(?:\s|$)/i.test(M)) pick='HOME';
-        else if (/\baway\b|(?:^|\s)2(?:\s|$)/i.test(M)) pick='AWAY';
+
+    const home = m[1].trim();
+    const away = m[2].trim();
+
+    // Look ahead a few lines for the market/price
+    for (let j = 1; j <= 3 && (i + j) < lines.length; j++) {
+      const M = lines[i + j];
+      let market = null;
+      let pick   = null;
+
+      if (/OVER\s*2\.?5/i.test(M))      { market = 'OVER_UNDER_2_5'; pick = 'OVER'; }
+      else if (/UNDER\s*2\.?5/i.test(M)){ market = 'OVER_UNDER_2_5'; pick = 'UNDER'; }
+      else if (/BOTH\s*TEAMS\s*TO\s*SCORE|BTTS/i.test(M)) {
+        market = 'BTTS';
+        pick   = /\bNO\b/i.test(M) ? 'NO' : 'YES';
+      } else if (/(?:^|\s)(?:1X2|HOME|AWAY|DRAW|1|2|X)(?:\s|$)/i.test(M)) {
+        market = 'FTR';
+        if    (/\bDRAW\b|(?:^|\s)X(?:\s|$)/i.test(M))  pick = 'DRAW';
+        else if (/\bHOME\b|(?:^|\s)1(?:\s|$)/i.test(M))   pick = 'HOME';
+        else if (/\bAWAY\b|(?:^|\s)2(?:\s|$)/i.test(M))   pick = 'AWAY';
       }
+
       if (!market) continue;
-      let price=null;
-      const frac=M.match(/(\d+)\s*\/\s*(\d+)/);
-      const dec=M.match(/(\d+(?:\.\d+)?)/);
-      if (frac) price = (parseFloat(frac[1])/parseFloat(frac[2]))+1;
-      else if (dec) price = parseFloat(dec[1]);
+
+      let price = null;
+      const frac = M.match(/(\d+)\s*\/\s*(\d+)/);
+      const dec  = M.match(/(\d+(?:\.\d+)?)/);
+      if (frac)      price = (parseFloat(frac[1]) / parseFloat(frac[2])) + 1;
+      else if (dec)  price = parseFloat(dec[1]);
+
       legs.push({
-        teamHome: home,
-        teamAway: away,
+        teamHome:   home,
+        teamAway:   away,
         market,
-        selection: pick || '—',
+        selection:  pick || '—',
         price,
-        bookmaker: null,
+        bookmaker:  null,
         kickoffUTC: null
       });
-      break;
+      break; // stop after first market line for this fixture
     }
   }
-  return { legs, raw: lines.slice(0,60).join('\n') };
+
+  return { legs, raw: lines.slice(0, 60).join('\n') };
 }
 
-// --- Betfred-specific parser (team total over 1.5 style slips) ---
+// --- Betfred-specific parser (team total 1.5+ etc) ---
 function parseBetfred(text) {
   const lines = String(text)
     .split(/\r?\n/)
@@ -2301,28 +2315,28 @@ function parseBetfred(text) {
   const legs = [];
 
   // Pattern: "Spain total OVER 1.5- 2/7"
-  const reTeamTotal = /^(.+?)\s+total\s+OVER\s+([0-9.]+)\s*-\s*(\d+\/\d+)/i;
-  // Pattern: "Over 1.5-1/9" (no team name, still useful)
-  const reBareOver  = /^Over\s+([0-9.]+)\s*-\s*(\d+\/\d+)/i;
+  const reTeamTotal = /^(.+?)\s+TOTAL\s+OVER\s+([0-9.]+)\s*-\s*([0-9]+\/[0-9]+)/i;
+  // Pattern: "Over 1.5-1/9" (no team name)
+  const reBareOver  = /^OVER\s+([0-9.]+)\s*-\s*([0-9]+\/[0-9]+)/i;
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
 
     let m = reTeamTotal.exec(line);
     if (m) {
-      const team    = m[1].trim();         // e.g. "Spain"
-      const goalVal = m[2];                // "1.5"
-      const frac    = m[3];                // "2/7"
+      const team    = m[1].trim();
+      const goalVal = m[2];
+      const frac    = m[3];
       const price   = fracToDecimal(frac);
 
       legs.push({
-        fixture_label: `${team} total goals`,
+        teamHome:      team,          // pack team name into home side
+        teamAway:      '',
         market:        'TEAM_GOALS_OVER',
-        label:         `${team} over ${goalVal} goals`,
+        selection:     `OVER_${goalVal}`,
         price,
-        prob:          null,
-        fair:          null,
-        edge:          null,
+        bookmaker:     null,
+        kickoffUTC:    null
       });
       continue;
     }
@@ -2334,48 +2348,59 @@ function parseBetfred(text) {
       const price   = fracToDecimal(frac);
 
       legs.push({
-        fixture_label: `Over ${goalVal} goals`,
+        teamHome:      'TOTAL_GOALS',
+        teamAway:      '',
         market:        'GOALS_OVER',
-        label:         `Over ${goalVal} goals`,
+        selection:     `OVER_${goalVal}`,
         price,
-        prob:          null,
-        fair:          null,
-        edge:          null,
+        bookmaker:     null,
+        kickoffUTC:    null
       });
     }
   }
 
-  return { legs, raw: text };
+  return { legs, raw: lines.slice(0, 60).join('\n') };
 }
 
-// --- Dispatcher: choose parser based on bookie text ---
+// --- Dispatcher: choose parser based on bookie / format ---
 function parseSlipText(text) {
-  // 1) Always try Betfred-style patterns first.
-  //    This only picks up lines like "Spain total OVER 1.5- 2/7" or "Over 1.5-1/9",
-  //    so it won't interfere with other bookies.
-  const bf = parseBetfred(text);
-  if (bf.legs && bf.legs.length) {
-    return bf;
+  const upper = String(text).toUpperCase();
+
+  // 1) Betfred-style totals: detect either explicit brand or "total OVER X/Y" patterns.
+  const looksLikeBetfredTotals =
+    upper.includes('BETFRED') ||
+    /TOTAL\s+OVER\s+[0-9.]+\s*-\s*[0-9]+\/[0-9]+/i.test(text) ||
+    /^OVER\s+[0-9.]+\s*-\s*[0-9]+\/[0-9]+/im.test(text);
+
+  if (looksLikeBetfredTotals) {
+    const bf = parseBetfred(text);
+    if (bf.legs && bf.legs.length) {
+      return bf;
+    }
   }
 
-  // 2) Fallback: original generic "Team A vs Team B" parser
+  // 2) Fallback: generic match-style parser ("Team A v/VS Team B")
   return parseGenericSlip(text);
 }
 
 async function runBetChecker(file) {
   const out = document.getElementById('bc-output');
   if (out) out.innerHTML = '<div class="muted">Reading slip…</div>';
+
   try {
     const text = await ocrImageOrPdf(file);
 
-    // 🔍 DEBUG: log raw OCR output so we can build bookie-specific parsers later
+    // Keep logging OCR so we can design more parsers later
     console.log('[BetChecker OCR raw text]\n', text);
 
     const parsed = parseSlipText(text);
+
     if (!parsed.legs.length) {
-      out && (out.innerHTML = `<div class="muted">No legs detected. <br/><pre style="white-space:pre-wrap">${parsed.raw || text.slice(0,400)}…</pre></div>`);
+      out && (out.innerHTML =
+        `<div class="muted">No legs detected. <br/><pre style="white-space:pre-wrap">${parsed.raw || text.slice(0, 400)}…</pre></div>`);
       return;
     }
+
     out && (out.innerHTML = '<div class="muted">Scoring legs…</div>');
     const scored = await API.scoreSlip({ legs: parsed.legs });
 
@@ -2383,31 +2408,56 @@ async function runBetChecker(file) {
     const sum = scored.summary || {};
     container.innerHTML = `
       <div class="insight-card"><h2>Summary</h2>
-      <div>Implied EV: <strong>${(sum.evPct??0).toFixed(1)}%</strong> · Prob: <strong>${Math.round((sum.comboProb??0)*100)}%</strong> · Payout: <strong>${sum.payout ? '£'+sum.payout.toFixed(2) : '—'}</strong></div></div>`;
-    (scored.legs||[]).forEach((lg,i)=>{
-      const card=document.createElement('div'); card.className='insight-card';
-      card.innerHTML = `<h2>Leg ${i+1}: ${lg.teamHome} vs ${lg.teamAway}</h2>
-        <ul><li><strong>Market:</strong> ${lg.market} · <strong>Pick:</strong> ${lg.selection}</li>
-        <li><strong>Model%:</strong> ${lg.prob?Math.round(lg.prob*100)+'%':'—'} · <strong>Fair:</strong> ${lg.fair?.toFixed?.(2)??'—'} · <strong>Book:</strong> ${lg.price?.toFixed?.(2)??'—'} · <strong>Edge:</strong> ${lg.edgePct!=null?lg.edgePct.toFixed(1)+'%':'—'}</li></ul>`;
+        <div>
+          Implied EV: <strong>${(sum.evPct ?? 0).toFixed(1)}%</strong>
+          · Prob: <strong>${Math.round((sum.comboProb ?? 0) * 100)}%</strong>
+          · Payout: <strong>${sum.payout ? '£' + sum.payout.toFixed(2) : '—'}</strong>
+        </div>
+      </div>`;
+
+    (scored.legs || []).forEach((lg, i) => {
+      const card = document.createElement('div');
+      card.className = 'insight-card';
+      const probPct = lg.prob != null ? Math.round(lg.prob * 100) + '%' : '—';
+      const fairTxt  = lg.fair  != null ? lg.fair.toFixed(2)  : '—';
+      const priceTxt = lg.price != null ? lg.price.toFixed(2) : '—';
+      const edgeTxt  = lg.edgePct != null ? (lg.edgePct >= 0 ? '+' : '') + lg.edgePct.toFixed(1) + '%' : '—';
+
+      card.innerHTML = `
+        <h2>Leg ${i + 1}: ${lg.teamHome || lg.fixture_label || ''} vs ${lg.teamAway || ''}</h2>
+        <ul>
+          <li><strong>Market:</strong> ${lg.market || '—'} · <strong>Pick:</strong> ${lg.selection || '—'}</li>
+          <li><strong>Model%:</strong> ${probPct}
+              · <strong>Fair:</strong> ${fairTxt}
+              · <strong>Book:</strong> ${priceTxt}
+              · <strong>Edge:</strong> ${edgeTxt}</li>
+        </ul>`;
       container.appendChild(card);
     });
-    out.innerHTML=''; out.appendChild(container);
+
+    if (out) {
+      out.innerHTML = '';
+      out.appendChild(container);
+    }
+
     showToast('success', `Scored ${scored.legs?.length || parsed.legs.length} leg(s)`);
   } catch (e) {
+    console.error(e);
     showToast('error', e.message);
-    const out = document.getElementById('bc-output');
-    out && (out.innerHTML = `<div class="muted">Error: ${e.message}</div>`);
+    const outEl = document.getElementById('bc-output');
+    outEl && (outEl.innerHTML = `<div class="muted">Error: ${e.message}</div>`);
   }
 }
+
+// Wire up the file input
 {
   const bcUpload = document.getElementById('bc-upload');
-  bcUpload?.addEventListener('change', (e)=>{
+  bcUpload?.addEventListener('change', (e) => {
     const f = e.target.files?.[0];
     if (f) runBetChecker(f);
     e.target.value = '';
   });
 }
-
 
 // ---------- Acca Builder via API (legacy view) ----------
 async function runAccaSuggest() {
