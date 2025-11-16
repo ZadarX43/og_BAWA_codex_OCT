@@ -1054,3 +1054,123 @@ canvas{ border-radius:24px; }
 .acca-screen h1 {
   font-size: 1.6rem;
 }
+/* =========================
+   Portfolio – Saved Accas
+   ========================= */
+
+.portfolio-screen {
+  padding: 24px;
+}
+
+.portfolio-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.portfolio-card {
+  background: var(--bg-panel);
+  border-radius: 18px;
+  padding: 14px 16px 16px;
+  border: 1px solid rgba(108,229,177,.18);
+  box-shadow: var(--card-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.portfolio-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.portfolio-card__header h2 {
+  font-size: 1rem;
+  margin-bottom: 4px;
+}
+
+/* Legs list inside each saved acca */
+
+.portfolio-leg-list {
+  list-style: none;
+  padding: 0;
+  margin: 4px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.portfolio-leg {
+  border-radius: 10px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.06);
+  padding: 6px 8px;
+}
+
+.portfolio-leg__label {
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.portfolio-leg__meta {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+/* Status + stake row */
+
+.portfolio-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.portfolio-meta-col {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.portfolio-status {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+/* Actions row (Open / Mark / Reset / Delete) */
+
+.portfolio-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.portfolio-actions-left,
+.portfolio-actions-right {
+  display: flex;
+  gap: 8px;
+}
+
+/* Make delete a small ghost-red pill */
+
+.cta--ghost {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid rgba(255,255,255,.18);
+}
+
+.cta--danger {
+  border-color: rgba(248,113,113,0.9);
+  color: rgba(248,113,113,0.95);
+}
+
+.cta--danger:hover {
+  background: rgba(248,113,113,0.08);
+}
