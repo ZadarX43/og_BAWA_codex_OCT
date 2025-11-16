@@ -2239,7 +2239,16 @@ async function ocrImageOrPdf(file) {
   const { data } = await window.Tesseract.recognize(file, 'eng', { logger: () => {} });
   return (data && data.text) ? data.text : '';
 }
-function parseSlipText(text) {
+// --- Helpers for BetChecker parsers ---
+function fracToDecimal(fracStr) {
+  const m = String(fracStr).trim().match(/^(\d+)\s*\/\s*(\d+)$/);
+  if (!m) return null;
+  const num = parseFloat(m[1]);
+  const den = parseFloat(m[2]);
+  if (!den) return null;
+  return 1 + num/den;
+}
+function parseGenericSlip(text) {
   const lines = String(text).split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
   const legs = [];
   for (let i=0;i<lines.length;i++){
@@ -2269,6 +2278,77 @@ function parseSlipText(text) {
     }
   }
   return { legs, raw: lines.slice(0,60).join('\n') };
+}
+// --- Betfred-specific parser (team total over 1.5 style slips) ---
+function parseBetfred(text) {
+  const lines = String(text)
+    .split(/\r?\n/)
+    .map(s => s.trim())
+    .filter(Boolean);
+
+  const legs = [];
+
+  // Pattern: "Spain total OVER 1.5- 2/7"
+  const reTeamTotal = /^(.+?)\s+total\s+OVER\s+([0-9.]+)\s*-\s*(\d+\/\d+)/i;
+  // Pattern: "Over 1.5-1/9" (no team name, still useful)
+  const reBareOver  = /^Over\s+([0-9.]+)\s*-\s*(\d+\/\d+)/i;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+
+    let m = reTeamTotal.exec(line);
+    if (m) {
+      const team    = m[1].trim();         // e.g. "Spain"
+      const goalVal = m[2];                // "1.5"
+      const frac    = m[3];                // "2/7"
+      const price   = fracToDecimal(frac);
+
+      legs.push({
+        fixture_label: `${team} total goals`,
+        market:        'TEAM_GOALS_OVER',
+        label:         `${team} over ${goalVal} goals`,
+        price,
+        prob:          null,
+        fair:          null,
+        edge:          null,
+      });
+      continue;
+    }
+
+    m = reBareOver.exec(line);
+    if (m) {
+      const goalVal = m[1];
+      const frac    = m[2];
+      const price   = fracToDecimal(frac);
+
+      legs.push({
+        fixture_label: `Over ${goalVal} goals`,
+        market:        'GOALS_OVER',
+        label:         `Over ${goalVal} goals`,
+        price,
+        prob:          null,
+        fair:          null,
+        edge:          null,
+      });
+    }
+  }
+
+  return { legs, raw: text };
+}
+// --- Dispatcher: choose parser based on bookie text ---
+function parseSlipText(text) {
+  const upper = String(text).toUpperCase();
+
+  // Try Betfred first if we see its branding
+  if (upper.includes('BETFRED')) {
+    const out = parseBetfred(text);
+    if (out.legs && out.legs.length) {
+      return out;
+    }
+  }
+
+  // Fallback: original generic parser
+  return parseGenericSlip(text);
 }
 
 async function runBetChecker(file) {
