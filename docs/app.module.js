@@ -1257,76 +1257,71 @@ function renderPortfolio() {
       const card = document.createElement('div');
       card.className = 'insight-card portfolio-card';
       card.innerHTML = `
-        <header class="portfolio-card__header">
-          <div>
-            <h2>${acc.name}</h2>
-            <p class="muted">
-              ${when}
-              ${acc.fixture?.competition ? ' • ' + acc.fixture.competition : ''}
-              ${locText ? ' • ' + locText : ''}
-            </p>
-            <p class="muted">${legs.length} leg(s)</p>
-          </div>
-          <button
-            class="portfolio-card__delete"
-            type="button"
-            data-delete-acca="${acc.id}"
-            aria-label="Delete saved acca"
-          >✕</button>
-        </header>
-
-        ${
-          legs.length
-            ? `
-              <ul class="portfolio-leg-list">
-                ${legs.map(l => {
-                  const probPct = l.prob  != null ? Math.round(l.prob * 100) + '%' : '–';
-                  const fairTxt  = l.fair  != null ? l.fair.toFixed(2)          : '–';
-                  const priceTxt = l.price != null ? l.price.toFixed(2)         : '–';
-                  const edgeTxt  = l.edge  != null
-                    ? (l.edge >= 0 ? '+' : '') + l.edge.toFixed(1) + '%'
-                    : '–';
-                  const label    = l.label || '';
-                  const fixLabel = l.fixture_label ||
-                    `${acc.fixture.home_team} vs ${acc.fixture.away_team}`;
-                  return `
-                    <li class="portfolio-leg">
-                      <div class="portfolio-leg__label">${fixLabel} – ${label}</div>
-                      <div class="portfolio-leg__meta muted">
-                        Model ${probPct}
-                        • Fair ${fairTxt}
-                        • Price ${priceTxt}
-                        • EV ${edgeTxt}
-                      </div>
-                    </li>
-                  `;
-                }).join('')}
-              </ul>
-            `
-            : '<p class="muted">No legs saved on this slip.</p>'
-        }
-
-        <div class="portfolio-meta-row">
-          <div class="portfolio-meta-col">
-            <span class="control-label">Status</span>
-            <span class="portfolio-status" data-status="${acc.id}">
-              ${status}
-            </span>
-          </div>
-          <label class="control control--compact portfolio-meta-col">
-            <span class="control-label">Stake (£)</span>
-            <input
-              type="number"
-              min="0"
-              step="0.01"
-              class="portfolio-stake-input"
-              data-stake="${acc.id}"
-              value="${stake}"
-            />
-          </label>
+      <header class="portfolio-card__header">
+        <div>
+          <h2>${acc.name}</h2>
+          <p class="muted">
+            ${when}
+            ${acc.fixture?.competition ? ' • ' + acc.fixture.competition : ''}
+            ${locText ? ' • ' + locText : ''}
+          </p>
+          <p class="muted">${legs.length} leg(s)</p>
         </div>
-
-        <div class="portfolio-actions">
+      </header>
+    
+      ${
+        legs.length
+          ? `
+            <ul class="portfolio-leg-list">
+              ${legs.map(l => {
+                const probPct = l.prob  != null ? Math.round(l.prob * 100) + '%' : '–';
+                const fairTxt  = l.fair  != null ? l.fair.toFixed(2)          : '–';
+                const priceTxt = l.price != null ? l.price.toFixed(2)         : '–';
+                const edgeTxt  = l.edge  != null
+                  ? (l.edge >= 0 ? '+' : '') + l.edge.toFixed(1) + '%'
+                  : '–';
+                const label    = l.label || '';
+                const fixLabel = l.fixture_label ||
+                  `${acc.fixture.home_team} vs ${acc.fixture.away_team}`;
+                return `
+                  <li class="portfolio-leg">
+                    <div class="portfolio-leg__label">${fixLabel} – ${label}</div>
+                    <div class="portfolio-leg__meta muted">
+                      Model ${probPct}
+                      • Fair ${fairTxt}
+                      • Price ${priceTxt}
+                      • EV ${edgeTxt}
+                    </div>
+                  </li>
+                `;
+              }).join('')}
+            </ul>
+          `
+          : '<p class="muted">No legs saved on this slip.</p>'
+      }
+    
+      <div class="portfolio-meta-row">
+        <div class="portfolio-meta-col">
+          <span class="control-label">Status</span>
+          <span class="portfolio-status" data-status="${acc.id}">
+            ${status}
+          </span>
+        </div>
+        <label class="control control--compact portfolio-meta-col">
+          <span class="control-label">Stake (£)</span>
+          <input
+            type="number"
+            min="0"
+            step="0.01"
+            class="portfolio-stake-input"
+            data-stake="${acc.id}"
+            value="${stake}"
+          />
+        </label>
+      </div>
+    
+      <div class="portfolio-actions">
+        <div class="portfolio-actions-left">
           <button class="cta" data-load-acca="${acc.id}">
             Open in builder
           </button>
@@ -1336,11 +1331,23 @@ function renderPortfolio() {
           <button class="cta cta--secondary" data-status-loss="${acc.id}">
             Mark as lost
           </button>
+        </div>
+        <div class="portfolio-actions-right">
           <button class="cta cta--ghost" data-status-reset="${acc.id}">
             Reset
           </button>
+          <button
+            class="cta cta--ghost cta--danger"
+            type="button"
+            data-delete-acca="${acc.id}"
+            aria-label="Delete saved acca"
+          >
+            ✕
+          </button>
         </div>
-      `;
+      </div>
+    `;
+
       container.appendChild(card);
     });
 
