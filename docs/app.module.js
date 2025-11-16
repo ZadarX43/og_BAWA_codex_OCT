@@ -2370,10 +2370,21 @@ const ROUTES = {
   '#/signup':      'view-signup',
   '#/portfolio':   'view-portfolio'
 };
+
 function showRoute(hash) {
   if (!hash) hash = '#/';
+
+  // ---- Guarded routes: require login ----
+  const guardedRoutes = ['#/acca-builder', '#/portfolio'];
+  if (!currentUser && guardedRoutes.includes(hash)) {
+    showToast('error', 'Please sign in to use Acca Builder and Portfolio');
+    window.location.hash = '#/login';
+    return;
+  }
+
   const id = ROUTES[hash] || 'view-home';
 
+  // Toggle view visibility
   document.querySelectorAll('.view').forEach(v => {
     if (v.id === id) {
       v.classList.add('is-active');
@@ -2384,6 +2395,7 @@ function showRoute(hash) {
     }
   });
 
+  // Update nav state
   document.querySelectorAll('[data-route]').forEach(a=>{
     a.classList.toggle('is-active', a.getAttribute('href') === hash);
     if (a.classList.contains('side-link')) {
@@ -2391,6 +2403,7 @@ function showRoute(hash) {
     }
   });
 
+  // Close menus/drawers
   const profileMenu = document.getElementById('profile-menu');
   const profileBtn  = document.getElementById('btn-profile');
   profileMenu?.classList.remove('show');
@@ -2407,6 +2420,9 @@ function showRoute(hash) {
   // Render portfolio view on demand
   if (id === 'view-portfolio') {
     renderPortfolio();
+    if (typeof renderPortfolioStats === 'function') {
+      renderPortfolioStats();
+    }
   }
 }
 
