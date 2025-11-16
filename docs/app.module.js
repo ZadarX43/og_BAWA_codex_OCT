@@ -2234,7 +2234,7 @@ const API = {
 };
 
 // ---------- Bet Checker ----------
-async function oohndefault(file) {
+async function ocrImageOrPdf(file) {
   if (!window.Tesseract) throw new Error('OCR engine not loaded');
   const { data } = await window.Tesseract.recognize(file, 'eng', { logger: () => {} });
   return (data && data.text) ? data.text : '';
