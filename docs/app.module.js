@@ -1590,22 +1590,42 @@ async function init(){
   el.globeWrap.appendChild(renderer.domElement);
   if ('outputColorSpace' in renderer) renderer.outputColorSpace = THREE.SRGBColorSpace;
 
-  camera = new THREE.PerspectiveCamera(45, el.globeWrap.clientWidth/el.globeWrap.clientHeight, 0.1, 5000);
+  camera = new THREE.PerspectiveCamera(
+    45,
+    el.globeWrap.clientWidth/el.globeWrap.clientHeight,
+    0.1,
+    5000
+  );
   camera.position.set(0, 0, getGlobeRadius()*3);
 
   controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true; controls.enablePan = false; controls.enableZoom = true;
-  controls.autoRotate = false; controls.minDistance = getGlobeRadius()*1.2; controls.maxDistance = getGlobeRadius()*6;
+  controls.enableDamping = true;
+  controls.enablePan = false;
+  controls.enableZoom = true;
+  controls.autoRotate = false;
+  controls.minDistance = getGlobeRadius()*1.2;
+  controls.maxDistance = getGlobeRadius()*6;
 
+  // --- Postprocessing: FXAA + Bloom ---
   composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
+
   const fxaa = new ShaderPass(FXAAShader);
-  const setFXAA = ()=>{ const px=renderer.getPixelRatio();
-    fxaa.material.uniforms['resolution'].value.set( 1/(el.globeWrap.clientWidth*px), 1/(el.globeWrap.clientHeight*px) ); };
-  setFXAA(); composer.addPass(fxaa);
+  const setFXAA = () => {
+    const px = renderer.getPixelRatio();
+    fxaa.material.uniforms['resolution'].value.set(
+      1 / (el.globeWrap.clientWidth * px),
+      1 / (el.globeWrap.clientHeight * px)
+    );
+  };
+  setFXAA();
+  composer.addPass(fxaa);
+
   const bloom = new UnrealBloomPass(
     new THREE.Vector2(el.globeWrap.clientWidth, el.globeWrap.clientHeight),
-    BLOOM.strength, BLOOM.radius, BLOOM.threshold
+    BLOOM.strength,
+    BLOOM.radius,
+    BLOOM.threshold
   );
   composer.addPass(bloom);
 
@@ -1639,19 +1659,12 @@ async function init(){
     if (idx>=0) selectIndex(idx, { fly:true });
   });
 
-  // Resize
-  const fxaa = composer.passes.find(p => p instanceof ShaderPass);
-  const setFXAA = ()=>{
-    const px = renderer.getPixelRatio();
-    fxaa.material.uniforms['resolution'].value.set(
-      1/(el.globeWrap.clientWidth*px),
-      1/(el.globeWrap.clientHeight*px)
-    );
-  };
-  window.addEventListener('resize', ()=>{
+  // --- Resize: reuse setFXAA defined above ---
+  window.addEventListener('resize', () => {
     const {clientWidth:w, clientHeight:h} = el.globeWrap;
     renderer.setSize(w,h);
-    camera.aspect=w/h; camera.updateProjectionMatrix();
+    camera.aspect = w/h;
+    camera.updateProjectionMatrix();
     setFXAA();
   });
 
@@ -1693,6 +1706,7 @@ async function init(){
     composer.render();
   })();
 }
+
 
 // -----------------------------------------
 // CSV ingest
