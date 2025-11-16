@@ -166,6 +166,7 @@ function updateAuthUI() {
   const items  = profileMenu?.querySelectorAll('.profile-item') || [];
 
   if (currentUser) {
+    // Show initials in avatar, hide Login/Signup items
     if (avatar) {
       const initials = (currentUser.email || '?')
         .split('@')[0]
@@ -174,21 +175,17 @@ function updateAuthUI() {
       avatar.textContent = initials;
     }
     items.forEach(el => {
-      const action = el.dataset.action;
-      const href   = el.getAttribute('href');
-      if (action === 'logout') {
-        el.style.display = 'block';
-      } else if (href === '#/login' || href === '#/signup') {
+      const href = el.getAttribute('href');
+      if (href === '#/login' || href === '#/signup') {
         el.style.display = 'none';
       }
     });
   } else {
+    // Logged out – show default avatar and Login/Signup again
     if (avatar) avatar.textContent = 'OG';
     items.forEach(el => {
-      const action = el.dataset.action;
-      if (action === 'logout') {
-        el.style.display = 'none';
-      } else {
+      const href = el.getAttribute('href');
+      if (href === '#/login' || href === '#/signup') {
         el.style.display = '';
       }
     });
@@ -2166,28 +2163,11 @@ function appendChatLine(role, text) {
 // ----------------------------
 // Demo Auth: Sign up / Sign in / Sign out
 // ----------------------------
+
 function handleSignup() {
-  const emailInput = document.getElementById('su-email');
-  const passInput  = document.getElementById('su-pass');
-  if (!emailInput || !passInput) return;
-
-  const email    = (emailInput.value || '').trim();
-  const password = (passInput.value  || '').trim();
-
-  if (!email || !password) {
-    showToast('error', 'Please enter email and password');
-    return;
-  }
-
-  currentUser = {
-    email,
-    role: email.toLowerCase().startsWith('admin') ? 'admin' : 'user'
-  };
-  persistSession();
-  updateAuthUI();
-
-  showToast('success', `Welcome, ${email}`);
-  window.location.hash = '#/';
+  // For now, disable signup and tell the user how to log in
+  showToast('info', 'Signup is disabled in this demo. Use admin / admin to log in.');
+  window.location.hash = '#/login';
 }
 
 function handleLogin() {
@@ -2195,26 +2175,21 @@ function handleLogin() {
   const passInput  = document.getElementById('li-pass');
   if (!emailInput || !passInput) return;
 
-  const email    = (emailInput.value || '').trim();
-  const password = (passInput.value  || '').trim();
+  const email = (emailInput.value || '').trim();
+  const password = (passInput.value || '').trim();
 
-  if (!email || !password) {
-    showToast('error', 'Enter email & password');
+  // Demo rule: only allow admin / admin
+  if (email !== 'admin' || password !== 'admin') {
+    showToast('error', 'Use admin / admin to log in.');
     return;
   }
 
-  // Demo special case: admin / admin
-  if (email === 'admin' && password === 'admin') {
-    currentUser = { email: 'admin', role: 'admin' };
-  } else {
-    // For now accept anything as a "user" role
-    currentUser = { email, role: email.toLowerCase().startsWith('admin') ? 'admin' : 'user' };
-  }
-
+  currentUser = { email: 'admin', role: 'admin' };
   persistSession();
   updateAuthUI();
-  showToast('success', `Signed in as ${email}`);
-  window.location.hash = '#/';
+
+  showToast('success', 'Signed in as admin');
+  window.location.hash = '#/portfolio'; // or '#/' if you prefer
 }
 
 function handleLogout() {
@@ -2222,19 +2197,29 @@ function handleLogout() {
   persistSession();
   updateAuthUI();
   showToast('info', 'Signed out');
-  window.location.hash = '#/';
+  window.location.hash = '#/login';
 }
 
-// Hook up auth forms (demo wiring)
+// Hook up auth forms (demo)
 {
   const suBtn    = document.getElementById('su-submit');
   const liBtn    = document.getElementById('li-submit');
-  const logoutEl = document.querySelector('.profile-item[data-action="logout"]');
 
-  if (suBtn)    suBtn.addEventListener('click', (e) => { e.preventDefault(); handleSignup(); });
-  if (liBtn)    liBtn.addEventListener('click', (e) => { e.preventDefault(); handleLogin(); });
-  if (logoutEl) logoutEl.addEventListener('click', (e) => { e.preventDefault(); handleLogout(); });
+  if (suBtn) {
+    suBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      handleSignup();
+    });
+  }
+
+  if (liBtn) {
+    liBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      handleLogin();
+    });
+  }
 }
+
 
 // ----------------------------
 // Router + Boot
