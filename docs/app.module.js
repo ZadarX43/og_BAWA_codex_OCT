@@ -92,9 +92,9 @@ const pointer   = new THREE.Vector2();
 
 // ---- UI demo “today”
 const UI = {
-  anchorISO: '2023-11-28', // fixed demo “today”
-  offsetDays: 0,           // 0=today, 1=tomorrow, etc
-  rangeDays: 1,            // 1 or 2 (weekend)
+  anchorISO: '2023-11-28',
+  offsetDays: 0,
+  rangeDays: 1,
   league: 'ALL',
   leagues: []
 };
@@ -166,7 +166,6 @@ function updateAuthUI() {
   const items  = profileMenu?.querySelectorAll('.profile-item') || [];
 
   if (currentUser) {
-    // Show initials in avatar, hide Login/Signup items
     if (avatar) {
       const initials = (currentUser.email || '?')
         .split('@')[0]
@@ -180,8 +179,9 @@ function updateAuthUI() {
         el.style.display = 'none';
       }
     });
+    const logoutBtn = document.querySelector('[data-action="logout"]');
+    if (logoutBtn) logoutBtn.style.display = 'block';
   } else {
-    // Logged out – show default avatar and Login/Signup again
     if (avatar) avatar.textContent = 'OG';
     items.forEach(el => {
       const href = el.getAttribute('href');
@@ -189,6 +189,8 @@ function updateAuthUI() {
         el.style.display = '';
       }
     });
+    const logoutBtn = document.querySelector('[data-action="logout"]');
+    if (logoutBtn) logoutBtn.style.display = 'none';
   }
 }
 
@@ -1173,12 +1175,110 @@ function copyAccaToClipboard(){
     ta.remove();
   }
 }
+
+// ----------------------------
+// Portfolio stats helpers
+// ----------------------------
+function computePortfolioStats() {
+  const userEmail = currentUser?.email || null;
+  const userAccas = savedAccas.filter(a =>
+    !userEmail || !a.userEmail || a.userEmail === userEmail
+  );
+
+  if (!userAccas.length) {
+    return {
+      count: 0,
+      totalStake: 0,
+      totalReturn: 0,
+      netProfit: 0,
+      wins: 0,
+      losses: 0,
+      strikeRate: 0
+    };
+  }
+
+  let totalStake  = 0;
+  let totalReturn = 0;
+  let wins        = 0;
+  let losses      = 0;
+
+  userAccas.forEach(acc => {
+    const stake = Number(acc.stake) || 0;
+    totalStake += stake;
+
+    const combinedPrice = acc.legs?.reduce((prod, leg) => {
+      return prod * (leg.price != null ? leg.price : 1);
+    }, 1) || 1;
+
+    const returnAmount = stake * combinedPrice;
+
+    if (acc.status === 'won') {
+      wins += 1;
+      totalReturn += returnAmount;
+    } else if (acc.status === 'lost') {
+      losses += 1;
+    }
+  });
+
+  const netProfit  = totalReturn - totalStake;
+  const strikeRate = wins + losses > 0 ? (wins / (wins + losses)) * 100 : 0;
+
+  return {
+    count: userAccas.length,
+    totalStake,
+    totalReturn,
+    netProfit,
+    wins,
+    losses,
+    strikeRate
+  };
+}
+
+function renderPortfolioStats() {
+  const elStats = document.getElementById('portfolio-stats');
+  if (!elStats) return;
+
+  const stats = computePortfolioStats();
+
+  if (!stats.count) {
+    elStats.innerHTML = `
+      <span class="muted">
+        No saved accas yet. Build one in the Acca Builder and click “Save to portfolio”.
+      </span>`;
+    return;
+  }
+
+  const fmtMoney = v => '£' + v.toFixed(2);
+  const fmtPct   = v => v.toFixed(1) + '%';
+
+  elStats.innerHTML = `
+    <div class="portfolio-stats__item">
+      <span class="portfolio-stats__label">Accas:</span>
+      <span class="portfolio-stats__value">${stats.count}</span>
+    </div>
+    <div class="portfolio-stats__item">
+      <span class="portfolio-stats__label">Staked:</span>
+      <span class="portfolio-stats__value">${fmtMoney(stats.totalStake)}</span>
+    </div>
+    <div class="portfolio-stats__item">
+      <span class="portfolio-stats__label">Returned:</span>
+      <span class="portfolio-stats__value">${fmtMoney(stats.totalReturn)}</span>
+    </div>
+    <div class="portfolio-stats__item">
+      <span class="portfolio-stats__label">Net P/L:</span>
+      <span class="portfolio-stats__value">${fmtMoney(stats.netProfit)}</span>
+    </div>
+    <div class="portfolio-stats__item">
+      <span class="portfolio-stats__label">Strike rate:</span>
+      <span class="portfolio-stats__value">${fmtPct(stats.strikeRate)}</span>
+    </div>
+  `;
+}
+
 // ----------------------------
 // Portfolio (saved accas)
 // ----------------------------
-
 function getCurrentAccaSnapshot() {
-  // Need a fixture and at least one leg in the cart
   if (!currentFixture || !abCartLegs || !abCartLegs.length) return null;
 
   return {
@@ -1195,10 +1295,9 @@ function getCurrentAccaSnapshot() {
       city:        currentFixture.city,
       country:     currentFixture.country,
     },
-    // clone the legs so we don’t mutate the live cart later
     legs: abCartLegs.map(l => ({ ...l })),
-    status: 'pending',   // pending | won | lost
-    stake: 0             // user-editable £ stake
+    status: 'pending',
+    stake: 0
   };
 }
 
@@ -1216,6 +1315,7 @@ function saveCurrentAccaToPortfolio() {
   persistSession();
   showToast('success', 'Acca saved to your portfolio');
   renderPortfolio();
+  renderPortfolioStats();
 }
 
 function renderPortfolio() {
@@ -1224,7 +1324,6 @@ function renderPortfolio() {
 
   container.innerHTML = '';
 
-  // Filter to current user (or unassigned if you later support shared)
   const userAccas = savedAccas.filter(
     a => !currentUser || !a.userEmail || a.userEmail === currentUser.email
   );
@@ -1237,7 +1336,6 @@ function renderPortfolio() {
     return;
   }
 
-  // Newest first
   userAccas
     .slice()
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
@@ -1351,14 +1449,18 @@ function renderPortfolio() {
       container.appendChild(card);
     });
 
-  // Wire: open in builder (fixture + legs)
+  // Wire: open in builder (fixture + legs, with clear confirm)
   container.querySelectorAll('button[data-load-acca]').forEach(btn => {
     btn.addEventListener('click', () => {
       const id  = btn.getAttribute('data-load-acca');
       const acc = savedAccas.find(a => a.id === id);
       if (!acc) return;
 
-      // Find matching fixture in current fixtures list
+      if (abCartLegs.length && acc.legs && acc.legs.length) {
+        const ok = window.confirm('Picks already in Builder – clear current selections?');
+        if (!ok) return;
+      }
+
       const match = fixtures.find(
         f =>
           f.home_team === acc.fixture.home_team &&
@@ -1370,15 +1472,12 @@ function renderPortfolio() {
         return;
       }
 
-      // Set as current fixture for builder & globe
-      currentFixture = match;
+      setAccaFixture(match);
 
-      // Replace acca cart with saved legs and re-render
       abCartLegs = Array.isArray(acc.legs) ? acc.legs.map(l => ({ ...l })) : [];
       renderAccaCart();
       refreshAccaPicks();
 
-      // Navigate to builder
       window.location.hash = '#/acca-builder';
       showToast('info', 'Loaded saved acca into builder');
     });
@@ -1393,6 +1492,7 @@ function renderPortfolio() {
       const val  = parseFloat(input.value);
       acc.stake  = !Number.isNaN(val) && val >= 0 ? val : 0;
       persistSession();
+      renderPortfolioStats();
     });
   });
 
@@ -1405,6 +1505,7 @@ function renderPortfolio() {
       acc.status = 'won';
       persistSession();
       renderPortfolio();
+      renderPortfolioStats();
     });
   });
   container.querySelectorAll('[data-status-loss]').forEach(btn => {
@@ -1415,6 +1516,7 @@ function renderPortfolio() {
       acc.status = 'lost';
       persistSession();
       renderPortfolio();
+      renderPortfolioStats();
     });
   });
   container.querySelectorAll('[data-status-reset]').forEach(btn => {
@@ -1423,8 +1525,10 @@ function renderPortfolio() {
       const acc = savedAccas.find(a => a.id === id);
       if (!acc) return;
       acc.status = 'pending';
+      acc.stake  = 0;
       persistSession();
       renderPortfolio();
+      renderPortfolioStats();
     });
   });
 
@@ -1441,11 +1545,11 @@ function renderPortfolio() {
       savedAccas = savedAccas.filter(a => a.id !== id);
       persistSession();
       renderPortfolio();
+      renderPortfolioStats();
       showToast('info', 'Slip deleted from portfolio');
     });
   });
 }
-
 
 // -----------------------------------------
 // Three-Globe loader & scene init
@@ -1535,18 +1639,26 @@ async function init(){
     if (idx>=0) selectIndex(idx, { fly:true });
   });
 
- 
- // Resize
+  // Resize
+  const fxaa = composer.passes.find(p => p instanceof ShaderPass);
+  const setFXAA = ()=>{
+    const px = renderer.getPixelRatio();
+    fxaa.material.uniforms['resolution'].value.set(
+      1/(el.globeWrap.clientWidth*px),
+      1/(el.globeWrap.clientHeight*px)
+    );
+  };
   window.addEventListener('resize', ()=>{
     const {clientWidth:w, clientHeight:h} = el.globeWrap;
-    renderer.setSize(w,h); camera.aspect=w/h; camera.updateProjectionMatrix(); setFXAA();
+    renderer.setSize(w,h);
+    camera.aspect=w/h; camera.updateProjectionMatrix();
+    setFXAA();
   });
 
-  bindHeaderNav();      // <— NEW
+  bindHeaderNav();
   bindTabs();
   bindDateControls();
   bindSheet();
-
 
   // deep-dive opens sheet for current fixture
   el.deepBtn?.addEventListener('click', () => {
@@ -1724,6 +1836,7 @@ function renderPanel(f){
 
   renderCompetitionAccuracy(f.competition);
 }
+
 // ----------------------------
 // Header nav bindings (profile menu + side drawer)
 // ----------------------------
@@ -1831,7 +1944,6 @@ function createMarker(){
 
   const R = getGlobeRadius();
 
-  // Radar: 4 concentric static rings
   const radarRings = [];
   const baseInner = R * 0.02;
   const baseWidth = R * 0.008;
@@ -1858,7 +1970,6 @@ function createMarker(){
     radarRings.push(ring);
   }
 
-  // Beam
   const beamGeom = new THREE.CylinderGeometry(0.18, 0.28, 30, 24, 1, true);
   const beamMat  = new THREE.MeshBasicMaterial({
     color: 0x7df9c4,
@@ -1873,7 +1984,6 @@ function createMarker(){
   beam.renderOrder = 998;
   group.add(beam);
 
-  // Pill sprite
   const billboardMat = new THREE.SpriteMaterial({
     transparent: true,
     opacity: 0,
@@ -2083,6 +2193,7 @@ function onCanvasClick(event) {
     openSheetForFixture(currentFixture);
   }
 }
+
 // =====================================================
 // API HELPERS + FEATURE PAGES (BetChecker / Acca / Co-Pilot)
 // =====================================================
@@ -2188,7 +2299,7 @@ async function runBetChecker(file) {
   });
 }
 
-// ---------- Acca Builder via API (legacy view, safe to leave) ----------
+// ---------- Acca Builder via API (legacy view) ----------
 async function runAccaSuggest() {
   const league = (document.getElementById('ab-league')?.value || 'ALL');
   const market = (document.getElementById('ab-market')?.value || 'ou25');
@@ -2333,6 +2444,39 @@ function handleSignup() {
   window.location.hash = '#/portfolio';
 }
 
+function handleLogin() {
+  const emailInput = document.getElementById('li-email');
+  const passInput  = document.getElementById('li-pass');
+  if (!emailInput || !passInput) return;
+
+  const email = (emailInput.value || '').trim();
+  const password = (passInput.value || '').trim();
+
+  if (!email || !password) {
+    showToast('error', 'Enter email & password');
+    return;
+  }
+
+  if (email !== 'admin' || password !== 'admin') {
+    showToast('error', 'Demo mode: use admin / admin');
+    return;
+  }
+
+  currentUser = { email: 'admin', role: 'admin' };
+  persistSession();
+  updateAuthUI();
+  showToast('success', 'Signed in as admin');
+  window.location.hash = '#/portfolio';
+}
+
+function handleLogout() {
+  currentUser = null;
+  persistSession();
+  updateAuthUI();
+  showToast('info', 'Signed out');
+  window.location.hash = '#/login';
+}
+
 // Hook up auth forms (demo)
 {
   const suBtn    = document.getElementById('su-submit');
@@ -2355,8 +2499,6 @@ function handleSignup() {
   });
 }
 
-
-
 // ----------------------------
 // Router + Boot
 // ----------------------------
@@ -2374,7 +2516,7 @@ const ROUTES = {
 function showRoute(hash) {
   if (!hash) hash = '#/';
 
-  // ---- Guarded routes: require login ----
+  // Guarded routes: require login
   const guardedRoutes = ['#/acca-builder', '#/portfolio'];
   if (!currentUser && guardedRoutes.includes(hash)) {
     showToast('error', 'Please sign in to use Acca Builder and Portfolio');
@@ -2420,9 +2562,7 @@ function showRoute(hash) {
   // Render portfolio view on demand
   if (id === 'view-portfolio') {
     renderPortfolio();
-    if (typeof renderPortfolioStats === 'function') {
-      renderPortfolioStats();
-    }
+    renderPortfolioStats();
   }
 }
 
