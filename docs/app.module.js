@@ -2376,13 +2376,13 @@ function detectBookie(text) {
   return 'GENERIC';
 }
 
-// --- Bet365 parser (goals, team goals, BTTS, cards) ---
+// --- Bet365 parser (goals, team goals, BTTS, cards, simple corners) ---
 function parseBet365(text) {
   const raw   = String(text);
   const lines = raw.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
   const legs  = [];
 
-  // Try to detect a fixture line: "Rangers v Roma"
+  // Try to detect any "TeamA v TeamB" line as a global fixture fallback
   let fixtureHome = '';
   let fixtureAway = '';
   for (const L of lines) {
@@ -2394,33 +2394,35 @@ function parseBet365(text) {
     }
   }
 
-  // Clean up OCR quirks from team names
   const cleanTeamName = (name) => {
     let t = String(name || '').trim();
+    // strip obvious bullets / symbols
+    t = t.replace(/^[^A-Za-z0-9]+/, '').trim();
     // strip leading "o " bullet
     if (t.toLowerCase().startsWith('o ')) t = t.slice(2).trim();
-    // strip bullet symbols like "•", "-" etc
+    // strip stray bullets again
     t = t.replace(/^[•\-–]+\s*/, '');
     return t;
   };
 
-  // 1) Team-specific goals: "Celta Vigo Over 0.5 2/7"
+  // Regexes — allow leading bullets/icons before "Over"
   const reTeamOverGoals =
-    /^(.+?)\s+Over\s+([0-9]+(?:\.[0-9]+)?)\s+([0-9]+\/[0-9]+)/i;
-
-  // 2) Match goals: "Over 2.5 Goals in the Match", "Over 0 Goals"
+    /^[^A-Za-z0-9]*(.+?)\s+Over\s+([0-9]+(?:\.[0-9]+)?)\s+([0-9]+\/[0-9]+)/i; // "Celta Vigo Over 0.5 2/7"
   const reOverGoals =
-    /^Over\s+([0-9]+(?:\.[0-9]+)?)\s+Goals(?:\s+in\s+the\s+Match|\s+in\s+Match|\s+in\s+90\s+Minutes)?/i;
-
-  // 3) Bare goals with price: "Over3.0 1/4" or "Over 3.0 1/4"
+    /^[^A-Za-z0-9]*Over\s+([0-9]+(?:\.[0-9]+)?)\s+Goals(?:\s+in\s+the\s+Match|\s+in\s+Match|\s+in\s+90\s+Minutes)?/i;
   const reOverBare =
-    /^Over\s*([0-9]+(?:\.[0-9]+)?)\s+([0-9]+\/[0-9]+)/i;
+    /^[^A-Za-z0-9]*Over\s*([0-9]+(?:\.[0-9]+)?)\s+([0-9]+\/[0-9]+)/i; // "© Over3.0 1/4"
+  const reOverCards =
+    /^[^A-Za-z0-9]*Over\s+(\d+)\s+Cards\b/i;
+  const reBTTS =
+    /(Both\s+Teams\s+To\s+Score|BTTS)/i;
 
-  // 4) Cards totals: "Over 2 Cards"
-  const reOverCards = /^Over\s+(\d+)\s+Cards\b/i;
-
-  // 5) BTTS: "Both Teams To Score" / "BTTS"
-  const reBTTS = /(Both\s+Teams\s+To\s+Score|BTTS)/i;
+  const isSelectionLine = (s) =>
+    reTeamOverGoals.test(s) ||
+    reOverGoals.test(s) ||
+    reOverBare.test(s) ||
+    reOverCards.test(s) ||
+    reBTTS.test(s);
 
   const findNearbyPrice = (startIdx) => {
     // Search this line + next 2 for a fractional or decimal price
@@ -2444,6 +2446,46 @@ function parseBet365(text) {
     return null;
   };
 
+  // Look forward from a selection line to find the next two team names
+  const findFixtureAfter = (startIdx) => {
+    let team1 = '';
+    let team2 = '';
+
+    for (let k = 1; k <= 8 && (startIdx + k) < lines.length; k++) {
+      const txt = lines[startIdx + k];
+
+      // Stop if we hit another obvious selection line and we haven't found anything yet
+      if (isSelectionLine(txt) && !team1 && !team2) break;
+      // Stop once we’ve found two team names
+      if (team1 && team2) break;
+
+      // Extract leading wordy chunk as candidate team name
+      const m = txt.match(/^[^A-Za-z0-9]*([A-Za-z][A-Za-z .']+)/);
+      if (!m) continue;
+
+      let candidate = cleanTeamName(m[1]);
+
+      // Filter out obvious non-team stuff (days, generic labels)
+      if (/^(mon|tue|wed|thu|fri|sat|sun)\b/i.test(candidate)) continue;
+      if (/^(bet builder|cash out|stake|to return)/i.test(candidate)) continue;
+
+      if (!team1) {
+        team1 = candidate;
+      } else if (!team2 && candidate.toLowerCase() !== team1.toLowerCase()) {
+        team2 = candidate;
+        break;
+      }
+    }
+
+    if (!team1 && !team2) {
+      return { home: fixtureHome || '', away: fixtureAway || '' };
+    }
+    return {
+      home: team1 || fixtureHome || '',
+      away: team2 || fixtureAway || ''
+    };
+  };
+
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
 
@@ -2455,9 +2497,14 @@ function parseBet365(text) {
       const frac    = m[3];
       const price   = fracToDecimal(frac);
 
+      const fx = findFixtureAfter(i);
+      const fixture_label =
+        fx.home && fx.away ? `${fx.home} vs ${fx.away}` : '';
+
       legs.push({
-        teamHome:   team,
+        teamHome:   team,          // emphasise the team whose goals we're backing
         teamAway:   '',
+        fixture_label,
         market:     'TEAM_GOALS_OVER',
         selection:  `OVER_${goalStr}`,
         price,
@@ -2472,10 +2519,11 @@ function parseBet365(text) {
     if (m) {
       const cards = m[1];
       const price = findNearbyPrice(i);
+      const fx = findFixtureAfter(i);
 
       legs.push({
-        teamHome:   '',
-        teamAway:   '',
+        teamHome:   fx.home,
+        teamAway:   fx.away,
         market:     'CARDS_OVER',
         selection:  `OVER_${cards}`,
         price,
@@ -2490,6 +2538,7 @@ function parseBet365(text) {
     if (m) {
       const goalStr = m[1];
       const price   = findNearbyPrice(i);
+      const fx      = findFixtureAfter(i);
 
       let market    = 'GOALS_OVER';
       let selection = `OVER_${goalStr}`;
@@ -2500,8 +2549,8 @@ function parseBet365(text) {
       }
 
       legs.push({
-        teamHome:   fixtureHome || 'TOTAL_GOALS',
-        teamAway:   fixtureAway || '',
+        teamHome:   fx.home || 'TOTAL_GOALS',
+        teamAway:   fx.away || '',
         market,
         selection,
         price,
@@ -2511,17 +2560,18 @@ function parseBet365(text) {
       continue;
     }
 
-    // --- Bare "Over3.0 1/4" style ---
+    // --- Bare "© Over3.0 1/4" style (corners in your example) ---
     m = line.match(reOverBare);
     if (m) {
       const goalStr = m[1];
       const frac    = m[2];
       const price   = fracToDecimal(frac);
+      const fx      = findFixtureAfter(i);
 
       legs.push({
-        teamHome:   fixtureHome || 'TOTAL_GOALS',
-        teamAway:   fixtureAway || '',
-        market:     'GOALS_OVER',
+        teamHome:   fx.home,
+        teamAway:   fx.away,
+        market:     'CORNERS_OVER',        // we don't model this yet, but it's structured
         selection:  `OVER_${goalStr}`,
         price,
         bookmaker:  'BET365',
@@ -2530,9 +2580,10 @@ function parseBet365(text) {
       continue;
     }
 
-    // --- BTTS: "Both Teams To Score" / "BTTS" (Yes / No) ---
+    // --- BTTS: "Both Teams To Score" / "BTTS" ---
     if (reBTTS.test(line)) {
-      // Look for "Yes" / "No" on this line or the next line
+      const fx = findFixtureAfter(i);
+
       const search = [lines[i], lines[i + 1] || ''].join(' ');
       let selection = 'YES';
       if (/\bNO\b/i.test(search)) selection = 'NO';
@@ -2540,8 +2591,8 @@ function parseBet365(text) {
       const price = findNearbyPrice(i);
 
       legs.push({
-        teamHome:   fixtureHome || '',
-        teamAway:   fixtureAway || '',
+        teamHome:   fx.home,
+        teamAway:   fx.away,
         market:     'BTTS',
         selection,
         price,
@@ -2559,6 +2610,7 @@ function parseBet365(text) {
 
   return { legs, raw: lines.slice(0, 60).join('\n') };
 }
+
 
 // --- Dispatcher: choose parser based on bookie / format ---
 function parseSlipText(text) {
