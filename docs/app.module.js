@@ -2376,23 +2376,51 @@ function detectBookie(text) {
   return 'GENERIC';
 }
 
-/// --- Bet365 parser (goals + simple team goals + cards) ---
+// --- Bet365 parser (goals, team goals, BTTS, cards) ---
 function parseBet365(text) {
   const raw   = String(text);
   const lines = raw.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
   const legs  = [];
 
-  // 1) Team-specific goals: "Celta Vigo Over 0.5 2/7"
-  const reTeamOverGoals = /^(.+?)\s+Over\s+([0-9]+(?:\.[0-9]+)?)\s+([0-9]+\/[0-9]+)/i;
+  // Try to detect a fixture line: "Rangers v Roma"
+  let fixtureHome = '';
+  let fixtureAway = '';
+  for (const L of lines) {
+    const m = L.match(/^(.+?)\s+(?:v|vs\.?)\s+(.+?)$/i);
+    if (m) {
+      fixtureHome = m[1].trim();
+      fixtureAway = m[2].trim();
+      break;
+    }
+  }
 
-  // 2) Match goals: "Over 0 Goals", "Over 2.5 Goals in the Match"
-  const reOverGoals = /^Over\s+([0-9]+(?:\.[0-9]+)?)\s+Goals(?:\s+in\s+the\s+Match)?/i;
+  // Clean up OCR quirks from team names
+  const cleanTeamName = (name) => {
+    let t = String(name || '').trim();
+    // strip leading "o " bullet
+    if (t.toLowerCase().startsWith('o ')) t = t.slice(2).trim();
+    // strip bullet symbols like "•", "-" etc
+    t = t.replace(/^[•\-–]+\s*/, '');
+    return t;
+  };
+
+  // 1) Team-specific goals: "Celta Vigo Over 0.5 2/7"
+  const reTeamOverGoals =
+    /^(.+?)\s+Over\s+([0-9]+(?:\.[0-9]+)?)\s+([0-9]+\/[0-9]+)/i;
+
+  // 2) Match goals: "Over 2.5 Goals in the Match", "Over 0 Goals"
+  const reOverGoals =
+    /^Over\s+([0-9]+(?:\.[0-9]+)?)\s+Goals(?:\s+in\s+the\s+Match|\s+in\s+Match|\s+in\s+90\s+Minutes)?/i;
 
   // 3) Bare goals with price: "Over3.0 1/4" or "Over 3.0 1/4"
-  const reOverBare = /^Over\s*([0-9]+(?:\.[0-9]+)?)\s+([0-9]+\/[0-9]+)/i;
+  const reOverBare =
+    /^Over\s*([0-9]+(?:\.[0-9]+)?)\s+([0-9]+\/[0-9]+)/i;
 
   // 4) Cards totals: "Over 2 Cards"
   const reOverCards = /^Over\s+(\d+)\s+Cards\b/i;
+
+  // 5) BTTS: "Both Teams To Score" / "BTTS"
+  const reBTTS = /(Both\s+Teams\s+To\s+Score|BTTS)/i;
 
   const findNearbyPrice = (startIdx) => {
     // Search this line + next 2 for a fractional or decimal price
@@ -2406,7 +2434,7 @@ function parseBet365(text) {
         if (dec != null) return dec;
       }
 
-      // decimal like "1.80" (avoid tiny numbers)
+      // decimal like "1.80"
       const decMatch = cand.match(/\b(\d+(?:\.\d+)?)\b/);
       if (decMatch) {
         const v = parseFloat(decMatch[1]);
@@ -2419,10 +2447,10 @@ function parseBet365(text) {
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
 
-    // Team goals: "Celta Vigo Over 0.5 2/7"
+    // --- Team goals: "Celta Vigo Over 0.5 2/7" ---
     let m = line.match(reTeamOverGoals);
     if (m) {
-      const team    = m[1].trim();
+      let team    = cleanTeamName(m[1]);
       const goalStr = m[2];
       const frac    = m[3];
       const price   = fracToDecimal(frac);
@@ -2439,7 +2467,7 @@ function parseBet365(text) {
       continue;
     }
 
-    // Cards totals: "Over 2 Cards"
+    // --- Cards totals: "Over 2 Cards" ---
     m = line.match(reOverCards);
     if (m) {
       const cards = m[1];
@@ -2457,7 +2485,7 @@ function parseBet365(text) {
       continue;
     }
 
-    // Match goals: "Over 0 Goals" / "Over 2.5 Goals in the Match"
+    // --- Match goals: "Over 0 Goals", "Over 2.5 Goals in the Match" ---
     m = line.match(reOverGoals);
     if (m) {
       const goalStr = m[1];
@@ -2466,13 +2494,14 @@ function parseBet365(text) {
       let market    = 'GOALS_OVER';
       let selection = `OVER_${goalStr}`;
       if (goalStr === '2.5' || goalStr === '2.50') {
+        // Special-case our main wired market
         market    = 'OVER_UNDER_2_5';
         selection = 'OVER';
       }
 
       legs.push({
-        teamHome:   'TOTAL_GOALS',
-        teamAway:   '',
+        teamHome:   fixtureHome || 'TOTAL_GOALS',
+        teamAway:   fixtureAway || '',
         market,
         selection,
         price,
@@ -2482,7 +2511,7 @@ function parseBet365(text) {
       continue;
     }
 
-    // Bare: "Over3.0 1/4"
+    // --- Bare "Over3.0 1/4" style ---
     m = line.match(reOverBare);
     if (m) {
       const goalStr = m[1];
@@ -2490,8 +2519,8 @@ function parseBet365(text) {
       const price   = fracToDecimal(frac);
 
       legs.push({
-        teamHome:   'TOTAL_GOALS',
-        teamAway:   '',
+        teamHome:   fixtureHome || 'TOTAL_GOALS',
+        teamAway:   fixtureAway || '',
         market:     'GOALS_OVER',
         selection:  `OVER_${goalStr}`,
         price,
@@ -2500,17 +2529,36 @@ function parseBet365(text) {
       });
       continue;
     }
+
+    // --- BTTS: "Both Teams To Score" / "BTTS" (Yes / No) ---
+    if (reBTTS.test(line)) {
+      // Look for "Yes" / "No" on this line or the next line
+      const search = [lines[i], lines[i + 1] || ''].join(' ');
+      let selection = 'YES';
+      if (/\bNO\b/i.test(search)) selection = 'NO';
+
+      const price = findNearbyPrice(i);
+
+      legs.push({
+        teamHome:   fixtureHome || '',
+        teamAway:   fixtureAway || '',
+        market:     'BTTS',
+        selection,
+        price,
+        bookmaker:  'BET365',
+        kickoffUTC: null
+      });
+      continue;
+    }
   }
 
-  // If we didn't recognise anything Bet365-specific, fall back
+  // If nothing Bet365-specific matched, fall back to generic parsing
   if (!legs.length) {
     return parseGenericSlip(text);
   }
 
   return { legs, raw: lines.slice(0, 60).join('\n') };
 }
-
-
 
 // --- Dispatcher: choose parser based on bookie / format ---
 function parseSlipText(text) {
@@ -2601,7 +2649,13 @@ async function runBetChecker(file) {
         : '—';
 
       const leftLabel =
-        lg.teamHome || lg.fixture_label || 'Selection';
+        lg.teamHome ||
+        lg.fixture_label ||
+        (lg.market === 'CARDS_OVER'      ? 'Total Cards' :
+         lg.market === 'GOALS_OVER'      ? 'Total Goals' :
+         lg.market === 'TEAM_GOALS_OVER' ? 'Team Goals' :
+         'Selection');
+
 
       card.innerHTML = `
         <h2>Leg ${i + 1}: ${leftLabel}${lg.teamAway ? ' vs ' + lg.teamAway : ''}</h2>
