@@ -2376,16 +2376,89 @@ function detectBookie(text) {
   return 'GENERIC';
 }
 
-// --- Bet365 / Paddy stubs (for now they just reuse generic) ---
+// --- Bet365 / Paddy stubs (Bet365 has a simple Over Goals parser) ---
 function parseBet365(text) {
-  // Later: decode “FT Result: Finland”, “Over 2.5 Goals in the Match”, etc.
-  return parseGenericSlip(text);
+  const raw   = String(text);
+  const lines = raw.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+  const legs  = [];
+
+  // Try to detect a "TeamA v TeamB" fixture line
+  let home = '';
+  let away = '';
+  for (const L of lines) {
+    const m = L.match(/^(.+?)\s+(?:v|vs\.?)\s+(.+?)$/i);
+    if (m) {
+      home = m[1].trim();
+      away = m[2].trim();
+      break;
+    }
+  }
+
+  // Pattern: "Over 2.5 Goals in the Match" / "Over 2.5 Goals"
+  const reOverGoals = /\bOver\s+([0-9]+(?:\.[0-9]+)?)\s+Goals(?:\s+in\s+the\s+Match)?/i;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const m = line.match(reOverGoals);
+    if (!m) continue;
+
+    const goalStr = m[1]; // e.g. "2.5"
+
+    // Look for a price on this line or the next couple of lines
+    let price = null;
+    for (let j = 0; j <= 2 && (i + j) < lines.length; j++) {
+      const cand = lines[i + j];
+
+      // Fractional odds like "4/5"
+      const fracMatch = cand.match(/(\d+)\s*\/\s*(\d+)/);
+      if (fracMatch) {
+        price = fracToDecimal(fracMatch[0]);
+        if (price != null) break;
+      }
+
+      // Decimal odds like "1.80" (heuristic: >= 1.01 to avoid picking dates, IDs, etc.)
+      const decMatch = cand.match(/\b(\d+(?:\.\d+)?)\b/);
+      if (decMatch) {
+        const v = parseFloat(decMatch[1]);
+        if (v >= 1.01 && v <= 1000) {
+          price = v;
+          break;
+        }
+      }
+    }
+
+    // Map to internal market keys
+    let market    = 'GOALS_OVER';
+    let selection = `OVER_${goalStr}`;
+    if (goalStr === '2.5' || goalStr === '2.50') {
+      market    = 'OVER_UNDER_2_5';
+      selection = 'OVER';
+    }
+
+    legs.push({
+      teamHome:   home,
+      teamAway:   away,
+      market,
+      selection,
+      price,
+      bookmaker:  'BET365',
+      kickoffUTC: null
+    });
+  }
+
+  // If we didn't recognise anything Bet365-specific, fall back to the generic parser
+  if (!legs.length) {
+    return parseGenericSlip(text);
+  }
+
+  return { legs, raw: lines.slice(0, 60).join('\n') };
 }
 
 function parsePaddyPower(text) {
   // Later: decode “To Score Or Assist Super Sub”, “Shown a Card”, etc.
   return parseGenericSlip(text);
 }
+
 
 // --- Dispatcher: choose parser based on bookie / format ---
 function parseSlipText(text) {
@@ -2482,25 +2555,29 @@ async function runBetChecker(file) {
   }
 }
 
-// Wire up the file input
+// Wire up BetChecker inputs (BetChecker view + floating home bar)
 {
+  // BetChecker view
   const bcUpload = document.getElementById('bc-upload');
   bcUpload?.addEventListener('change', (e) => {
     const f = e.target.files?.[0];
     if (f) runBetChecker(f);
+    e.target.value = '';
+  });
+
+  // Floating upload on Home
+  const homeUpload = document.getElementById('bet-upload');
+  homeUpload?.addEventListener('change', (e) => {
+    const f = e.target.files?.[0];
+    if (f) {
+      // Show results in the BetChecker view
+      window.location.hash = '#/bet-checker';
+      runBetChecker(f);
+    }
     e.target.value = '';
   });
 }
 
-// Wire up the file input
-{
-  const bcUpload = document.getElementById('bc-upload');
-  bcUpload?.addEventListener('change', (e) => {
-    const f = e.target.files?.[0];
-    if (f) runBetChecker(f);
-    e.target.value = '';
-  });
-}
 
 
 // ---------- Acca Builder via API (legacy view) ----------
