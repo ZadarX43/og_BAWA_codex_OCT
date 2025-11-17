@@ -2376,77 +2376,133 @@ function detectBookie(text) {
   return 'GENERIC';
 }
 
-// --- Bet365 / Paddy stubs (Bet365 has a simple Over Goals parser) ---
+/// --- Bet365 parser (goals + simple team goals + cards) ---
 function parseBet365(text) {
   const raw   = String(text);
   const lines = raw.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
   const legs  = [];
 
-  // Try to detect a "TeamA v TeamB" fixture line
-  let home = '';
-  let away = '';
-  for (const L of lines) {
-    const m = L.match(/^(.+?)\s+(?:v|vs\.?)\s+(.+?)$/i);
-    if (m) {
-      home = m[1].trim();
-      away = m[2].trim();
-      break;
-    }
-  }
+  // 1) Team-specific goals: "Celta Vigo Over 0.5 2/7"
+  const reTeamOverGoals = /^(.+?)\s+Over\s+([0-9]+(?:\.[0-9]+)?)\s+([0-9]+\/[0-9]+)/i;
 
-  // Pattern: "Over 2.5 Goals in the Match" / "Over 2.5 Goals"
-  const reOverGoals = /\bOver\s+([0-9]+(?:\.[0-9]+)?)\s+Goals(?:\s+in\s+the\s+Match)?/i;
+  // 2) Match goals: "Over 0 Goals", "Over 2.5 Goals in the Match"
+  const reOverGoals = /^Over\s+([0-9]+(?:\.[0-9]+)?)\s+Goals(?:\s+in\s+the\s+Match)?/i;
 
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    const m = line.match(reOverGoals);
-    if (!m) continue;
+  // 3) Bare goals with price: "Over3.0 1/4" or "Over 3.0 1/4"
+  const reOverBare = /^Over\s*([0-9]+(?:\.[0-9]+)?)\s+([0-9]+\/[0-9]+)/i;
 
-    const goalStr = m[1]; // e.g. "2.5"
+  // 4) Cards totals: "Over 2 Cards"
+  const reOverCards = /^Over\s+(\d+)\s+Cards\b/i;
 
-    // Look for a price on this line or the next couple of lines
-    let price = null;
-    for (let j = 0; j <= 2 && (i + j) < lines.length; j++) {
-      const cand = lines[i + j];
+  const findNearbyPrice = (startIdx) => {
+    // Search this line + next 2 for a fractional or decimal price
+    for (let j = 0; j <= 2 && (startIdx + j) < lines.length; j++) {
+      const cand = lines[startIdx + j];
 
-      // Fractional odds like "4/5"
+      // fractional like "2/7"
       const fracMatch = cand.match(/(\d+)\s*\/\s*(\d+)/);
       if (fracMatch) {
-        price = fracToDecimal(fracMatch[0]);
-        if (price != null) break;
+        const dec = fracToDecimal(fracMatch[0]);
+        if (dec != null) return dec;
       }
 
-      // Decimal odds like "1.80" (heuristic: >= 1.01 to avoid picking dates, IDs, etc.)
+      // decimal like "1.80" (avoid tiny numbers)
       const decMatch = cand.match(/\b(\d+(?:\.\d+)?)\b/);
       if (decMatch) {
         const v = parseFloat(decMatch[1]);
-        if (v >= 1.01 && v <= 1000) {
-          price = v;
-          break;
-        }
+        if (v >= 1.01 && v <= 1000) return v;
       }
     }
+    return null;
+  };
 
-    // Map to internal market keys
-    let market    = 'GOALS_OVER';
-    let selection = `OVER_${goalStr}`;
-    if (goalStr === '2.5' || goalStr === '2.50') {
-      market    = 'OVER_UNDER_2_5';
-      selection = 'OVER';
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+
+    // Team goals: "Celta Vigo Over 0.5 2/7"
+    let m = line.match(reTeamOverGoals);
+    if (m) {
+      const team    = m[1].trim();
+      const goalStr = m[2];
+      const frac    = m[3];
+      const price   = fracToDecimal(frac);
+
+      legs.push({
+        teamHome:   team,
+        teamAway:   '',
+        market:     'TEAM_GOALS_OVER',
+        selection:  `OVER_${goalStr}`,
+        price,
+        bookmaker:  'BET365',
+        kickoffUTC: null
+      });
+      continue;
     }
 
-    legs.push({
-      teamHome:   home,
-      teamAway:   away,
-      market,
-      selection,
-      price,
-      bookmaker:  'BET365',
-      kickoffUTC: null
-    });
+    // Cards totals: "Over 2 Cards"
+    m = line.match(reOverCards);
+    if (m) {
+      const cards = m[1];
+      const price = findNearbyPrice(i);
+
+      legs.push({
+        teamHome:   '',
+        teamAway:   '',
+        market:     'CARDS_OVER',
+        selection:  `OVER_${cards}`,
+        price,
+        bookmaker:  'BET365',
+        kickoffUTC: null
+      });
+      continue;
+    }
+
+    // Match goals: "Over 0 Goals" / "Over 2.5 Goals in the Match"
+    m = line.match(reOverGoals);
+    if (m) {
+      const goalStr = m[1];
+      const price   = findNearbyPrice(i);
+
+      let market    = 'GOALS_OVER';
+      let selection = `OVER_${goalStr}`;
+      if (goalStr === '2.5' || goalStr === '2.50') {
+        market    = 'OVER_UNDER_2_5';
+        selection = 'OVER';
+      }
+
+      legs.push({
+        teamHome:   'TOTAL_GOALS',
+        teamAway:   '',
+        market,
+        selection,
+        price,
+        bookmaker:  'BET365',
+        kickoffUTC: null
+      });
+      continue;
+    }
+
+    // Bare: "Over3.0 1/4"
+    m = line.match(reOverBare);
+    if (m) {
+      const goalStr = m[1];
+      const frac    = m[2];
+      const price   = fracToDecimal(frac);
+
+      legs.push({
+        teamHome:   'TOTAL_GOALS',
+        teamAway:   '',
+        market:     'GOALS_OVER',
+        selection:  `OVER_${goalStr}`,
+        price,
+        bookmaker:  'BET365',
+        kickoffUTC: null
+      });
+      continue;
+    }
   }
 
-  // If we didn't recognise anything Bet365-specific, fall back to the generic parser
+  // If we didn't recognise anything Bet365-specific, fall back
   if (!legs.length) {
     return parseGenericSlip(text);
   }
@@ -2454,10 +2510,6 @@ function parseBet365(text) {
   return { legs, raw: lines.slice(0, 60).join('\n') };
 }
 
-function parsePaddyPower(text) {
-  // Later: decode “To Score Or Assist Super Sub”, “Shown a Card”, etc.
-  return parseGenericSlip(text);
-}
 
 
 // --- Dispatcher: choose parser based on bookie / format ---
@@ -2495,6 +2547,7 @@ async function runBetChecker(file) {
     console.log('[BetChecker OCR raw text]\n', text);
 
     const parsed = parseSlipText(text);
+    console.log('[BetChecker parsed legs]', parsed.legs);
 
     if (!parsed.legs.length) {
       out && (out.innerHTML =
@@ -2502,10 +2555,31 @@ async function runBetChecker(file) {
       return;
     }
 
-    out && (out.innerHTML = '<div class="muted">Scoring legs…</div>');
-    const scored = await API.scoreSlip({ legs: parsed.legs });
+    let scored;
+    if (out) out.innerHTML = '<div class="muted">Scoring legs…</div>';
+
+    try {
+      // Try calling backend API (real environment)
+      scored = await API.scoreSlip({ legs: parsed.legs });
+    } catch (err) {
+      // Demo / GitHub Pages: no backend → just show parsed legs
+      console.warn('[BetChecker] scoreSlip failed, falling back to parsed legs only', err);
+      showToast('error', 'Scoring API unavailable – showing parsed legs only.');
+
+      scored = {
+        summary: null,
+        legs: parsed.legs.map(l => ({
+          ...l,
+          prob: null,
+          fair: null,
+          edgePct: null
+        }))
+      };
+    }
 
     const container = document.createElement('div');
+
+    // Summary (may be null in fallback)
     const sum = scored.summary || {};
     container.innerHTML = `
       <div class="insight-card"><h2>Summary</h2>
@@ -2521,7 +2595,7 @@ async function runBetChecker(file) {
       card.className = 'insight-card';
       const probPct = lg.prob != null ? Math.round(lg.prob * 100) + '%' : '—';
       const fairTxt  = lg.fair  != null ? lg.fair.toFixed(2)  : '—';
-      const priceTxt = lg.price != null ? lg.price.toFixed(2) : '—';
+      const priceTxt = lg.price != null ? lg.price.toFixed(2) : (l.price ?? '—');
       const edgeTxt  = lg.edgePct != null
         ? (lg.edgePct >= 0 ? '+' : '') + lg.edgePct.toFixed(1) + '%'
         : '—';
@@ -2546,7 +2620,7 @@ async function runBetChecker(file) {
       out.appendChild(container);
     }
 
-    showToast('success', `Scored ${scored.legs?.length || parsed.legs.length} leg(s)`);
+    showToast('success', `Parsed ${scored.legs?.length || parsed.legs.length} leg(s)`);
   } catch (e) {
     console.error(e);
     showToast('error', e.message);
@@ -2554,6 +2628,7 @@ async function runBetChecker(file) {
     outEl && (outEl.innerHTML = `<div class="muted">Error: ${e.message}</div>`);
   }
 }
+
 
 // Wire up BetChecker inputs (BetChecker view + floating home bar)
 {
