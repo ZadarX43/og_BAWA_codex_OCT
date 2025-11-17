@@ -2643,6 +2643,43 @@ function parseSlipText(text) {
   // Coral / William Hill can also fall back to generic for now
   return parseGenericSlip(text);
 }
+// --- Slip meta extraction (Report 1: header + stake/return) ---
+function extractSlipMeta(text) {
+  const lines = String(text).split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+
+  // Bookmaker from text
+  const bookmaker = detectBookie(text) || 'UNKNOWN';
+
+  // Created time line (e.g. "Thu 06 Nov 16:13 bet365")
+  const createdLine = lines.find(l => /\b\d{2}:\d{2}\b/.test(l) && /bet365/i.test(l)) || '';
+  const createdAt   = createdLine || null;
+
+  // Stake / To Return
+  let stake   = null;
+  let ret     = null;
+  let currency = '£';
+
+  for (let i = 0; i < lines.length; i++) {
+    const L = lines[i];
+    if (/stake/i.test(L) && /return/i.test(L)) {
+      const next = lines[i + 1] || '';
+      // e.g. "£9.00 £18.80"
+      const m = next.match(/([£€$])\s*([\d.,]+)\s+([£€$])\s*([\d.,]+)/);
+      if (m) {
+        currency = m[1];
+        stake    = parseFloat(m[2].replace(/,/g, '')) || null;
+        ret      = parseFloat(m[4].replace(/,/g, '')) || null;
+      }
+      break;
+    }
+  }
+
+  // Bet type: look for "Bet Builder", "Single", "Accumulator" etc.
+  const betTypeLine = lines.find(l => /bet builder|bet\s+builder|\bacca\b|single|accumulator/i.test(l)) || '';
+  const betType = betTypeLine || null;
+
+  return { bookmaker, createdAt, stake, ret, currency, betType };
+}
 
 async function runBetChecker(file) {
   const out = document.getElementById('bc-output');
@@ -2651,15 +2688,21 @@ async function runBetChecker(file) {
   try {
     const text = await ocrImageOrPdf(file);
 
-    // Keep logging OCR so we can design more parsers later
+    // Log OCR so we can keep refining parsers
     console.log('[BetChecker OCR raw text]\n', text);
 
+    // REPORT 1: slip meta from raw text
+    const meta = extractSlipMeta(text);
+
+    // REPORT 2: structured legs (markets / selections / prices)
     const parsed = parseSlipText(text);
     console.log('[BetChecker parsed legs]', parsed.legs);
 
     if (!parsed.legs.length) {
-      out && (out.innerHTML =
-        `<div class="muted">No legs detected. <br/><pre style="white-space:pre-wrap">${parsed.raw || text.slice(0, 400)}…</pre></div>`);
+      if (out) {
+        out.innerHTML =
+          `<div class="muted">No legs detected. <br/><pre style="white-space:pre-wrap">${parsed.raw || text.slice(0, 400)}…</pre></div>`;
+      }
       return;
     }
 
@@ -2667,10 +2710,9 @@ async function runBetChecker(file) {
     if (out) out.innerHTML = '<div class="muted">Scoring legs…</div>';
 
     try {
-      // Try calling backend API (real environment)
+      // Real backend path (will 405 on GitHub Pages)
       scored = await API.scoreSlip({ legs: parsed.legs });
     } catch (err) {
-      // Demo / GitHub Pages: no backend → just show parsed legs
       console.warn('[BetChecker] scoreSlip failed, falling back to parsed legs only', err);
       showToast('error', 'Scoring API unavailable – showing parsed legs only.');
 
@@ -2687,45 +2729,72 @@ async function runBetChecker(file) {
 
     const container = document.createElement('div');
 
-    // Summary (may be null in fallback)
-    const sum = scored.summary || {};
-    container.innerHTML = `
-      <div class="insight-card"><h2>Summary</h2>
-        <div>
-          Implied EV: <strong>${(sum.evPct ?? 0).toFixed(1)}%</strong>
-          · Prob: <strong>${Math.round((sum.comboProb ?? 0) * 100)}%</strong>
-          · Payout: <strong>${sum.payout ? '£' + sum.payout.toFixed(2) : '—'}</strong>
-        </div>
-      </div>`;
+    // --------- Card 1: Slip Overview (Report 1) ---------
+    const stakeText = meta.stake != null ? `${meta.currency}${meta.stake.toFixed(2)}` : '—';
+    const retText   = meta.ret   != null ? `${meta.currency}${meta.ret.toFixed(2)}`   : '—';
 
+    const overview = document.createElement('div');
+    overview.className = 'insight-card';
+    overview.innerHTML = `
+      <h2>Slip Overview</h2>
+      <ul>
+        <li><strong>Bookmaker:</strong> ${meta.bookmaker}</li>
+        <li><strong>Bet type:</strong> ${meta.betType || 'Bet Builder'}</li>
+        <li><strong>Created:</strong> ${meta.createdAt || '—'}</li>
+        <li><strong>Stake:</strong> ${stakeText}</li>
+        <li><strong>To return:</strong> ${retText}</li>
+      </ul>`;
+    container.appendChild(overview);
+
+    // --------- Card 2: Model Summary (will be mostly zero in demo) ---------
+    const sum = scored.summary || {};
+    const summaryCard = document.createElement('div');
+    summaryCard.className = 'insight-card';
+    summaryCard.innerHTML = `
+      <h2>Model Summary</h2>
+      <div>
+        Implied EV: <strong>${(sum.evPct ?? 0).toFixed(1)}%</strong>
+        · Prob: <strong>${Math.round((sum.comboProb ?? 0) * 100)}%</strong>
+        · Payout: <strong>${sum.payout ? '£' + sum.payout.toFixed(2) : '—'}</strong>
+      </div>`;
+    container.appendChild(summaryCard);
+
+    // --------- Cards 3+: each leg ---------
     (scored.legs || []).forEach((lg, i) => {
       const card = document.createElement('div');
       card.className = 'insight-card';
+
       const probPct = lg.prob != null ? Math.round(lg.prob * 100) + '%' : '—';
       const fairTxt  = lg.fair  != null ? lg.fair.toFixed(2)  : '—';
-      const priceTxt = lg.price != null ? lg.price.toFixed(2) : (l.price ?? '—');
+      const priceTxt = lg.price != null ? lg.price.toFixed(2) : '—';
       const edgeTxt  = lg.edgePct != null
         ? (lg.edgePct >= 0 ? '+' : '') + lg.edgePct.toFixed(1) + '%'
         : '—';
 
-      cconst fixtureTitle =
-        lg.fixture_label ||
-        (lg.teamHome && lg.teamAway ? `${lg.teamHome} vs ${lg.teamAway}` : '');
-
-      const leftLabel =
-        fixtureTitle ||
-        (lg.market === 'TEAM_GOALS_OVER' && lg.teamHome) ? lg.teamHome :
-        (lg.market === 'CARDS_OVER'      ? 'Total Cards' :
-         lg.market === 'GOALS_OVER'      ? 'Total Goals' :
-         lg.market === 'OVER_UNDER_2_5'  ? 'Match Goals (2.5 line)' :
-         lg.market === 'BTTS'            ? 'Both Teams To Score' :
-         lg.market === 'CORNERS_OVER'    ? 'Total Corners' :
-         lg.teamHome || 'Selection');
-
-
+      // Stable, friendly title for the leg
+      let leftLabel = 'Selection';
+      if (lg.fixture_label) {
+        leftLabel = lg.fixture_label;
+      } else if (lg.teamHome && lg.teamAway) {
+        leftLabel = `${lg.teamHome} vs ${lg.teamAway}`;
+      } else if (lg.market === 'TEAM_GOALS_OVER' && lg.teamHome) {
+        leftLabel = `${lg.teamHome} Team Goals`;
+      } else if (lg.market === 'CARDS_OVER') {
+        leftLabel = 'Total Cards';
+      } else if (lg.market === 'GOALS_OVER') {
+        leftLabel = 'Total Goals';
+      } else if (lg.market === 'OVER_UNDER_2_5') {
+        leftLabel = 'Match Goals (2.5 line)';
+      } else if (lg.market === 'BTTS') {
+        leftLabel = 'Both Teams To Score';
+      } else if (lg.market === 'CORNERS_OVER') {
+        leftLabel = 'Total Corners';
+      } else if (lg.teamHome) {
+        leftLabel = lg.teamHome;
+      }
 
       card.innerHTML = `
-        <h2>Leg ${i + 1}: ${leftLabel}${lg.teamAway ? ' vs ' + lg.teamAway : ''}</h2>
+        <h2>Leg ${i + 1}: ${leftLabel}</h2>
         <ul>
           <li><strong>Market:</strong> ${lg.market || '—'} · <strong>Pick:</strong> ${lg.selection || '—'}</li>
           <li><strong>Model%:</strong> ${probPct}
@@ -2746,10 +2815,11 @@ async function runBetChecker(file) {
     console.error(e);
     showToast('error', e.message);
     const outEl = document.getElementById('bc-output');
-    outEl && (outEl.innerHTML = `<div class="muted">Error: ${e.message}</div>`);
+    if (outEl) {
+      outEl.innerHTML = `<div class="muted">Error: ${e.message}</div>`;
+    }
   }
 }
-
 
 // Wire up BetChecker inputs (BetChecker view + floating home bar)
 {
