@@ -2514,16 +2514,18 @@ function parseBet365(text) {
       continue;
     }
 
-    // --- Cards totals: "Over 2 Cards" ---
     m = line.match(reOverCards);
     if (m) {
       const cards = m[1];
       const price = findNearbyPrice(i);
-      const fx = findFixtureAfter(i);
-
+      const fx    = findFixtureAfter(i);
+      const fixture_label =
+        fx.home && fx.away ? `${fx.home} vs ${fx.away}` : '';
+    
       legs.push({
         teamHome:   fx.home,
         teamAway:   fx.away,
+        fixture_label,
         market:     'CARDS_OVER',
         selection:  `OVER_${cards}`,
         price,
@@ -2533,24 +2535,26 @@ function parseBet365(text) {
       continue;
     }
 
-    // --- Match goals: "Over 0 Goals", "Over 2.5 Goals in the Match" ---
+
     m = line.match(reOverGoals);
     if (m) {
       const goalStr = m[1];
       const price   = findNearbyPrice(i);
       const fx      = findFixtureAfter(i);
-
+      const fixture_label =
+        fx.home && fx.away ? `${fx.home} vs ${fx.away}` : '';
+    
       let market    = 'GOALS_OVER';
       let selection = `OVER_${goalStr}`;
       if (goalStr === '2.5' || goalStr === '2.50') {
-        // Special-case our main wired market
         market    = 'OVER_UNDER_2_5';
         selection = 'OVER';
       }
-
+    
       legs.push({
         teamHome:   fx.home || 'TOTAL_GOALS',
         teamAway:   fx.away || '',
+        fixture_label,
         market,
         selection,
         price,
@@ -2560,18 +2564,21 @@ function parseBet365(text) {
       continue;
     }
 
-    // --- Bare "© Over3.0 1/4" style (corners in your example) ---
+
     m = line.match(reOverBare);
     if (m) {
       const goalStr = m[1];
       const frac    = m[2];
       const price   = fracToDecimal(frac);
       const fx      = findFixtureAfter(i);
-
+      const fixture_label =
+        fx.home && fx.away ? `${fx.home} vs ${fx.away}` : '';
+    
       legs.push({
         teamHome:   fx.home,
         teamAway:   fx.away,
-        market:     'CORNERS_OVER',        // we don't model this yet, but it's structured
+        fixture_label,
+        market:     'CORNERS_OVER',
         selection:  `OVER_${goalStr}`,
         price,
         bookmaker:  'BET365',
@@ -2579,27 +2586,28 @@ function parseBet365(text) {
       });
       continue;
     }
-
-    // --- BTTS: "Both Teams To Score" / "BTTS" ---
-    if (reBTTS.test(line)) {
-      const fx = findFixtureAfter(i);
-
-      const search = [lines[i], lines[i + 1] || ''].join(' ');
-      let selection = 'YES';
-      if (/\bNO\b/i.test(search)) selection = 'NO';
-
-      const price = findNearbyPrice(i);
-
-      legs.push({
-        teamHome:   fx.home,
-        teamAway:   fx.away,
-        market:     'BTTS',
-        selection,
-        price,
-        bookmaker:  'BET365',
-        kickoffUTC: null
-      });
-      continue;
+      if (reBTTS.test(line)) {
+        const fx = findFixtureAfter(i);
+        const fixture_label =
+          fx.home && fx.away ? `${fx.home} vs ${fx.away}` : '';
+      
+        const search = [lines[i], lines[i + 1] || ''].join(' ');
+        let selection = 'YES';
+        if (/\bNO\b/i.test(search)) selection = 'NO';
+      
+        const price = findNearbyPrice(i);
+      
+        legs.push({
+          teamHome:   fx.home,
+          teamAway:   fx.away,
+          fixture_label,
+          market:     'BTTS',
+          selection,
+          price,
+          bookmaker:  'BET365',
+          kickoffUTC: null
+        });
+        continue;
     }
   }
 
@@ -2700,13 +2708,20 @@ async function runBetChecker(file) {
         ? (lg.edgePct >= 0 ? '+' : '') + lg.edgePct.toFixed(1) + '%'
         : '—';
 
-      const leftLabel =
-        lg.teamHome ||
+      cconst fixtureTitle =
         lg.fixture_label ||
+        (lg.teamHome && lg.teamAway ? `${lg.teamHome} vs ${lg.teamAway}` : '');
+
+      const leftLabel =
+        fixtureTitle ||
+        (lg.market === 'TEAM_GOALS_OVER' && lg.teamHome) ? lg.teamHome :
         (lg.market === 'CARDS_OVER'      ? 'Total Cards' :
          lg.market === 'GOALS_OVER'      ? 'Total Goals' :
-         lg.market === 'TEAM_GOALS_OVER' ? 'Team Goals' :
-         'Selection');
+         lg.market === 'OVER_UNDER_2_5'  ? 'Match Goals (2.5 line)' :
+         lg.market === 'BTTS'            ? 'Both Teams To Score' :
+         lg.market === 'CORNERS_OVER'    ? 'Total Corners' :
+         lg.teamHome || 'Selection');
+
 
 
       card.innerHTML = `
