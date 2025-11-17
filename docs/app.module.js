@@ -2234,6 +2234,8 @@ const API = {
 };
 
 // ---------- Bet Checker ----------
+
+// ✅ Correct name: OCR helper used by runBetChecker
 async function ocrImageOrPdf(file) {
   if (!window.Tesseract) throw new Error('OCR engine not loaded');
   const { data } = await window.Tesseract.recognize(file, 'eng', { logger: () => {} });
@@ -2250,13 +2252,15 @@ function fracToDecimal(fracStr) {
   return 1 + num / den;
 }
 
+// Generic “TeamA v TeamB” parser – works for old-school match slips
 function parseGenericSlip(text) {
   const lines = String(text).split(/\r?\n/).map(s => s.trim()).filter(Boolean);
   const legs = [];
 
   for (let i = 0; i < lines.length; i++) {
     const L = lines[i];
-    // Strict “TeamA v TeamB” / “TeamA vs TeamB”
+
+    // “TeamA v TeamB” / “TeamA vs TeamB”
     const m = L.match(/^\s*([A-Za-z0-9 .'-]+)\s+(?:V|VS\.?)\s+([A-Za-z0-9 .'-]+)\s*$/i);
     if (!m) continue;
 
@@ -2276,9 +2280,9 @@ function parseGenericSlip(text) {
         pick   = /\bNO\b/i.test(M) ? 'NO' : 'YES';
       } else if (/(?:^|\s)(?:1X2|HOME|AWAY|DRAW|1|2|X)(?:\s|$)/i.test(M)) {
         market = 'FTR';
-        if    (/\bDRAW\b|(?:^|\s)X(?:\s|$)/i.test(M))  pick = 'DRAW';
-        else if (/\bHOME\b|(?:^|\s)1(?:\s|$)/i.test(M))   pick = 'HOME';
-        else if (/\bAWAY\b|(?:^|\s)2(?:\s|$)/i.test(M))   pick = 'AWAY';
+        if      (/\bDRAW\b|(?:^|\s)X(?:\s|$)/i.test(M)) pick = 'DRAW';
+        else if (/\bHOME\b|(?:^|\s)1(?:\s|$)/i.test(M)) pick = 'HOME';
+        else if (/\bAWAY\b|(?:^|\s)2(?:\s|$)/i.test(M)) pick = 'AWAY';
       }
 
       if (!market) continue;
@@ -2330,12 +2334,12 @@ function parseBetfred(text) {
       const price   = fracToDecimal(frac);
 
       legs.push({
-        teamHome:      team,          // pack team name into home side
+        teamHome:      team,
         teamAway:      '',
         market:        'TEAM_GOALS_OVER',
         selection:     `OVER_${goalVal}`,
         price,
-        bookmaker:     null,
+        bookmaker:     'BETFRED',
         kickoffUTC:    null
       });
       continue;
@@ -2353,7 +2357,7 @@ function parseBetfred(text) {
         market:        'GOALS_OVER',
         selection:     `OVER_${goalVal}`,
         price,
-        bookmaker:     null,
+        bookmaker:     'BETFRED',
         kickoffUTC:    null
       });
     }
@@ -2362,24 +2366,50 @@ function parseBetfred(text) {
   return { legs, raw: lines.slice(0, 60).join('\n') };
 }
 
+// --- Bookie detection (MVP: just enough for routing) ---
+function detectBookie(text) {
+  const upper = String(text).toUpperCase();
+  if (upper.includes('BET365'))      return 'BET365';
+  if (upper.includes('PADDY'))       return 'PADDY';
+  if (upper.includes('BETFRED'))     return 'BETFRED';
+  return 'GENERIC';
+}
+
+// --- Bet365/Paddy stubs (for now just delegate to generic) ---
+function parseBet365(text) {
+  // MVP: reuse generic match parser.
+  // Later we’ll teach this to read BetBuilder legs like
+  // “FT Result: Finland”, “Over 2.5 Goals in the Match”, etc.
+  return parseGenericSlip(text);
+}
+
+function parsePaddyPower(text) {
+  // MVP: reuse generic match parser.
+  // Later we’ll parse Bet Builder legs like
+  // “To Score Or Assist Super Sub”, “Shown a Card”, etc.
+  return parseGenericSlip(text);
+}
+
 // --- Dispatcher: choose parser based on bookie / format ---
 function parseSlipText(text) {
-  const upper = String(text).toUpperCase();
+  const bookie = detectBookie(text);
 
-  // 1) Betfred-style totals: detect either explicit brand or "total OVER X/Y" patterns.
-  const looksLikeBetfredTotals =
-    upper.includes('BETFRED') ||
-    /TOTAL\s+OVER\s+[0-9.]+\s*-\s*[0-9]+\/[0-9]+/i.test(text) ||
-    /^OVER\s+[0-9.]+\s*-\s*[0-9]+\/[0-9]+/im.test(text);
-
-  if (looksLikeBetfredTotals) {
+  if (bookie === 'BETFRED') {
     const bf = parseBetfred(text);
-    if (bf.legs && bf.legs.length) {
-      return bf;
-    }
+    if (bf.legs && bf.legs.length) return bf;
   }
 
-  // 2) Fallback: generic match-style parser ("Team A v/VS Team B")
+  if (bookie === 'BET365') {
+    const b365 = parseBet365(text);
+    if (b365.legs && b365.legs.length) return b365;
+  }
+
+  if (bookie === 'PADDY') {
+    const paddy = parsePaddyPower(text);
+    if (paddy.legs && paddy.legs.length) return paddy;
+  }
+
+  // Fallback: generic match-style parser ("Team A v Team B")
   return parseGenericSlip(text);
 }
 
@@ -2421,10 +2451,15 @@ async function runBetChecker(file) {
       const probPct = lg.prob != null ? Math.round(lg.prob * 100) + '%' : '—';
       const fairTxt  = lg.fair  != null ? lg.fair.toFixed(2)  : '—';
       const priceTxt = lg.price != null ? lg.price.toFixed(2) : '—';
-      const edgeTxt  = lg.edgePct != null ? (lg.edgePct >= 0 ? '+' : '') + lg.edgePct.toFixed(1) + '%' : '—';
+      const edgeTxt  = lg.edgePct != null
+        ? (lg.edgePct >= 0 ? '+' : '') + lg.edgePct.toFixed(1) + '%'
+        : '—';
+
+      const leftLabel =
+        lg.teamHome || lg.fixture_label || 'Selection';
 
       card.innerHTML = `
-        <h2>Leg ${i + 1}: ${lg.teamHome || lg.fixture_label || ''} vs ${lg.teamAway || ''}</h2>
+        <h2>Leg ${i + 1}: ${leftLabel}${lg.teamAway ? ' vs ' + lg.teamAway : ''}</h2>
         <ul>
           <li><strong>Market:</strong> ${lg.market || '—'} · <strong>Pick:</strong> ${lg.selection || '—'}</li>
           <li><strong>Model%:</strong> ${probPct}
@@ -2458,6 +2493,7 @@ async function runBetChecker(file) {
     e.target.value = '';
   });
 }
+
 
 // ---------- Acca Builder via API (legacy view) ----------
 async function runAccaSuggest() {
