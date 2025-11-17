@@ -2235,7 +2235,7 @@ const API = {
 
 // ---------- Bet Checker ----------
 
-// ✅ Correct name: OCR helper used by runBetChecker
+// ✅ Correct OCR helper (this is what runBetChecker calls)
 async function ocrImageOrPdf(file) {
   if (!window.Tesseract) throw new Error('OCR engine not loaded');
   const { data } = await window.Tesseract.recognize(file, 'eng', { logger: () => {} });
@@ -2252,14 +2252,13 @@ function fracToDecimal(fracStr) {
   return 1 + num / den;
 }
 
-// Generic “TeamA v TeamB” parser – works for old-school match slips
+// Generic “TeamA v TeamB” parser – works for classic match slips
 function parseGenericSlip(text) {
   const lines = String(text).split(/\r?\n/).map(s => s.trim()).filter(Boolean);
   const legs = [];
 
   for (let i = 0; i < lines.length; i++) {
     const L = lines[i];
-
     // “TeamA v TeamB” / “TeamA vs TeamB”
     const m = L.match(/^\s*([A-Za-z0-9 .'-]+)\s+(?:V|VS\.?)\s+([A-Za-z0-9 .'-]+)\s*$/i);
     if (!m) continue;
@@ -2369,24 +2368,22 @@ function parseBetfred(text) {
 // --- Bookie detection (MVP: just enough for routing) ---
 function detectBookie(text) {
   const upper = String(text).toUpperCase();
-  if (upper.includes('BET365'))      return 'BET365';
-  if (upper.includes('PADDY'))       return 'PADDY';
-  if (upper.includes('BETFRED'))     return 'BETFRED';
+  if (upper.includes('BET365'))   return 'BET365';
+  if (upper.includes('PADDY'))    return 'PADDY';
+  if (upper.includes('CORAL'))    return 'CORAL';
+  if (upper.includes('WILLIAM'))  return 'WILLIAM_HILL';
+  if (upper.includes('BETFRED'))  return 'BETFRED';
   return 'GENERIC';
 }
 
-// --- Bet365/Paddy stubs (for now just delegate to generic) ---
+// --- Bet365 / Paddy stubs (for now they just reuse generic) ---
 function parseBet365(text) {
-  // MVP: reuse generic match parser.
-  // Later we’ll teach this to read BetBuilder legs like
-  // “FT Result: Finland”, “Over 2.5 Goals in the Match”, etc.
+  // Later: decode “FT Result: Finland”, “Over 2.5 Goals in the Match”, etc.
   return parseGenericSlip(text);
 }
 
 function parsePaddyPower(text) {
-  // MVP: reuse generic match parser.
-  // Later we’ll parse Bet Builder legs like
-  // “To Score Or Assist Super Sub”, “Shown a Card”, etc.
+  // Later: decode “To Score Or Assist Super Sub”, “Shown a Card”, etc.
   return parseGenericSlip(text);
 }
 
@@ -2394,6 +2391,7 @@ function parsePaddyPower(text) {
 function parseSlipText(text) {
   const bookie = detectBookie(text);
 
+  // Betfred totals first – these patterns are very specific
   if (bookie === 'BETFRED') {
     const bf = parseBetfred(text);
     if (bf.legs && bf.legs.length) return bf;
@@ -2409,7 +2407,7 @@ function parseSlipText(text) {
     if (paddy.legs && paddy.legs.length) return paddy;
   }
 
-  // Fallback: generic match-style parser ("Team A v Team B")
+  // Coral / William Hill can also fall back to generic for now
   return parseGenericSlip(text);
 }
 
@@ -2482,6 +2480,16 @@ async function runBetChecker(file) {
     const outEl = document.getElementById('bc-output');
     outEl && (outEl.innerHTML = `<div class="muted">Error: ${e.message}</div>`);
   }
+}
+
+// Wire up the file input
+{
+  const bcUpload = document.getElementById('bc-upload');
+  bcUpload?.addEventListener('change', (e) => {
+    const f = e.target.files?.[0];
+    if (f) runBetChecker(f);
+    e.target.value = '';
+  });
 }
 
 // Wire up the file input
