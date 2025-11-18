@@ -1563,6 +1563,11 @@ function renderPortfolio() {
 // Helper: load UMD script and resolve when window.ThreeGlobe is ready
 function loadThreeGlobeUMD(url) {
   return new Promise((resolve, reject) => {
+    // Make sure the UMD build sees THREE on the global object
+    if (!window.THREE) {
+      window.THREE = THREE; // the ES-module import from the top of this file
+    }
+
     // Already loaded?
     if (window.ThreeGlobe) {
       return resolve(window.ThreeGlobe);
@@ -1571,6 +1576,7 @@ function loadThreeGlobeUMD(url) {
     const s = document.createElement('script');
     s.src = url;
     s.async = true;
+
     s.onload = () => {
       if (window.ThreeGlobe) {
         resolve(window.ThreeGlobe);
@@ -1578,10 +1584,15 @@ function loadThreeGlobeUMD(url) {
         reject(new Error('ThreeGlobe global not found after ' + url));
       }
     };
-    s.onerror = () => reject(new Error('Failed to load three-globe from ' + url));
+
+    s.onerror = () => {
+      reject(new Error('Failed to load three-globe from ' + url));
+    };
+
     document.head.appendChild(s);
   });
 }
+
 
 async function loadThreeGlobe() {
   // Try public CDNs, then your local vendored copy.
