@@ -88,8 +88,8 @@ const COLORS = {
 // Small manual tweak to align fixture positions on the globe.
 // Adjust lonBias / latBias until Europe-based fixtures sit over Europe.
 const MAP_OFFSET = {
-  latBias: 0,    // e.g. +5 or -5 degrees if everything is too far north/south
-  lonBias: 40    // tweak this: +40 is a good first guess if Europe is over N. America
+  latBias: 0,   // leave N/S alone for now
+  lonBias: 55   // shift everything ~15° further east (was 40)
 };
 
 // Raycaster for clickable pill sprite
