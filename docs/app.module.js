@@ -1560,27 +1560,50 @@ function renderPortfolio() {
 // -----------------------------------------
 // Three-Globe loader & scene init
 // -----------------------------------------
-async function loadThreeGlobe(){
-  for (const v of ['2.31.3','2.31.1','2.30.1','2.29.3']){
-    try {
-      const m = await import(`https://esm.sh/three-globe@${v}?bundle&external=three`);
-      console.warn('[three-globe] using esm.sh ESM:', v);
-      return m.default ?? m;
-    } catch {}
-  }
-  for (const url of [
+// Helper: load UMD script and resolve when window.ThreeGlobe is ready
+function loadThreeGlobeUMD(url) {
+  return new Promise((resolve, reject) => {
+    // Already loaded?
+    if (window.ThreeGlobe) {
+      return resolve(window.ThreeGlobe);
+    }
+
+    const s = document.createElement('script');
+    s.src = url;
+    s.async = true;
+    s.onload = () => {
+      if (window.ThreeGlobe) {
+        resolve(window.ThreeGlobe);
+      } else {
+        reject(new Error('ThreeGlobe global not found after ' + url));
+      }
+    };
+    s.onerror = () => reject(new Error('Failed to load three-globe from ' + url));
+    document.head.appendChild(s);
+  });
+}
+
+async function loadThreeGlobe() {
+  // Try public CDNs, then your local vendored copy.
+  const candidates = [
     'https://cdn.jsdelivr.net/npm/three-globe@2.31.1/dist/three-globe.min.js',
     'https://unpkg.com/three-globe@2.31.1/dist/three-globe.min.js',
     './vendor/three-globe.min.js'
-  ]){
+  ];
+
+  for (const url of candidates) {
     try {
-      const ctor = await import(url);
-      console.warn('[three-globe] using UMD:', url);
+      const ctor = await loadThreeGlobeUMD(url);
+      console.warn('[three-globe] using UMD build from:', url);
       return ctor;
-    } catch {}
+    } catch (err) {
+      console.warn('[three-globe] failed to load from', url, err);
+    }
   }
+
   throw new Error('three-globe failed to load');
 }
+
 
 async function init(){
   loadSessionFromStorage();
