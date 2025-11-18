@@ -85,6 +85,12 @@ const COLORS = {
   markerActive:   '#CFFFFA',
   ring:           '#9EE7E3'
 };
+// Small manual tweak to align fixture positions on the globe.
+// Adjust lonBias / latBias until Europe-based fixtures sit over Europe.
+const MAP_OFFSET = {
+  latBias: 0,    // e.g. +5 or -5 degrees if everything is too far north/south
+  lonBias: 40    // tweak this: +40 is a good first guess if Europe is over N. America
+};
 
 // Raycaster for clickable pill sprite
 const raycaster = new THREE.Raycaster();
@@ -1722,34 +1728,47 @@ async function loadFixturesCSV(url){
   if (errors?.length) console.warn('[CSV parse errors]', errors);
 
   fixtures = (data||[])
-    .map(row=>{
-      const lat = parseFloat(row.latitude ?? row.lat ?? row.Latitude ?? row.lat_deg);
-      const lon = parseFloat(row.longitude ?? row.lon ?? row.lng ?? row.Longitude);
-      return {
-        fixture_id:(row.fixture_id||row.id||`${row.home_team}-${row.away_team}-${row.date_utc||''}`).trim(),
-        home_team:(row.home_team||row.Home||'').trim(),
-        away_team:(row.away_team||row.Away||'').trim(),
-        home_badge_url: pick(row,['home_badge_url','home_logo_url','home_logo','home_badge']),
-        away_badge_url: pick(row,['away_badge_url','away_logo_url','away_logo','away_badge']),
-        date_utc: row.date_utc || row.date || '',
-        competition: row.competition || row.league || '',
-        stadium: row.stadium || '',
-        city: row.city || '',
-        country: row.country || row.venue_country || '',
-        latitude: Number.isFinite(lat)?lat:undefined,
-        longitude: Number.isFinite(lon)?lon:undefined,
-        predicted_winner: row.predicted_winner || '',
-        confidence_ftr: +row.confidence_ftr || +row.confidence || 0,
-        xg_home:+row.xg_home||0, xg_away:+row.xg_away||0,
-        ppg_home:+row.ppg_home||0, ppg_away:+row.ppg_away||0,
-        over25_prob:+row.over25_prob||0, btts_prob:+row.btts_prob||0,
-        key_players_shots:(row.key_players_shots||'').trim(),
-        key_players_tackles:(row.key_players_tackles||'').trim(),
-        key_players_bookings:(row.key_players_bookings||'').trim(),
-        __active:false
-      };
-    })
-    .filter(f=>Number.isFinite(f.latitude)&&Number.isFinite(f.longitude));
+  .map(row=>{
+    // --- existing parse, but we keep raw values separate ---
+    const rawLat = parseFloat(row.latitude ?? row.lat ?? row.Latitude ?? row.lat_deg);
+    const rawLon = parseFloat(row.longitude ?? row.lon ?? row.lng ?? row.Longitude);
+
+    // Apply global offset (demo alignment tweak)
+    let lat = Number.isFinite(rawLat) ? rawLat + MAP_OFFSET.latBias : NaN;
+    let lon = Number.isFinite(rawLon) ? rawLon + MAP_OFFSET.lonBias : NaN;
+
+    // Normalise longitude into [-180, 180] so Three-Globe stays happy
+    if (Number.isFinite(lon)) {
+      if (lon > 180) lon -= 360;
+      if (lon < -180) lon += 360;
+    }
+
+    return {
+      fixture_id:(row.fixture_id||row.id||`${row.home_team}-${row.away_team}-${row.date_utc||''}`).trim(),
+      home_team:(row.home_team||row.Home||'').trim(),
+      away_team:(row.away_team||row.Away||'').trim(),
+      home_badge_url: pick(row,['home_badge_url','home_logo_url','home_logo','home_badge']),
+      away_badge_url: pick(row,['away_badge_url','away_logo_url','away_logo','away_badge']),
+      date_utc: row.date_utc || row.date || '',
+      competition: row.competition || row.league || '',
+      stadium: row.stadium || '',
+      city: row.city || '',
+      country: row.country || row.venue_country || '',
+      latitude:  Number.isFinite(lat) ? lat : undefined,
+      longitude: Number.isFinite(lon) ? lon : undefined,
+      predicted_winner: row.predicted_winner || '',
+      confidence_ftr: +row.confidence_ftr || +row.confidence || 0,
+      xg_home:+row.xg_home||0, xg_away:+row.xg_away||0,
+      ppg_home:+row.ppg_home||0, ppg_away:+row.ppg_away||0,
+      over25_prob:+row.over25_prob||0, btts_prob:+row.btts_prob||0,
+      key_players_shots:(row.key_players_shots||'').trim(),
+      key_players_tackles:(row.key_players_tackles||'').trim(),
+      key_players_bookings:(row.key_players_bookings||'').trim(),
+      __active:false
+    };
+  })
+  .filter(f=>Number.isFinite(f.latitude)&&Number.isFinite(f.longitude));
+
 
   showToast('success', `Loaded ${fixtures.length} fixtures`);
 }
