@@ -89,7 +89,7 @@ const COLORS = {
 // Adjust lonBias / latBias until Europe-based fixtures sit over Europe.
 const MAP_OFFSET = {
   latBias: 0,   // leave N/S alone for now
-  lonBias: 90   // shift everything ~15° further east (was 40)
+  lonBias: 95   // shift everything ~15° further east (was 40)
 };
 
 // Raycaster for clickable pill sprite
