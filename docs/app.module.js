@@ -1808,18 +1808,6 @@ async function init(){
   bindTabs();
   bindDateControls();
   bindSheet();
-  // Keyboard navigation: left/right arrows cycle fixtures on the Home view
-  window.addEventListener('keydown', (ev) => {
-    if (!isHomeActive) return;           // only when the Home view is active
-    if (ev.key === 'ArrowRight') {
-      ev.preventDefault();
-      goToNextFixture();
-    } else if (ev.key === 'ArrowLeft') {
-      ev.preventDefault();
-      goToPrevFixture();
-    }
-  });
-
 
   // deep-dive opens sheet for current fixture
   el.deepBtn?.addEventListener('click', () => {
