@@ -690,7 +690,8 @@ function renderCompetitionAccuracy(league){
 // -----------------------------------------
 // Date & League filter UI
 // -----------------------------------------
-// Helper: cycle visibleFixtures index (used by buttons + keyboard)
+
+// Navigate to previous/next fixture in the current visibleFixtures window
 function goToPrevFixture() {
   if (!visibleFixtures.length) return;
   const cur = visibleFixtures.findIndex(f => f.__active);
@@ -710,15 +711,28 @@ function buildDateStrip(){
   const dayA = base;
   const dayB = datePlusDays(base,1);
 
-  if (el.dateA) { el.dateA.textContent = fmtDay(dayA); el.dateA.dataset.iso = isoDay(dayA); }
-  if (el.dateB) { el.dateB.textContent = fmtDay(dayB); el.dateB.dataset.iso = isoDay(dayB); }
+  if (el.dateA) { 
+    el.dateA.textContent = fmtDay(dayA); 
+    el.dateA.dataset.iso = isoDay(dayA); 
+  }
+  if (el.dateB) { 
+    el.dateB.textContent = fmtDay(dayB); 
+    el.dateB.dataset.iso = isoDay(dayB); 
+  }
 
   [el.dateToday, el.dateTomorrow, el.dateWeekend]
-    .filter(Boolean).forEach(b => b.classList.remove('is-active'));
+    .filter(Boolean)
+    .forEach(b => b.classList.remove('is-active'));
 
-  if (UI.rangeDays===1 && UI.offsetDays===0 && el.dateToday)    el.dateToday.classList.add('is-active');
-  if (UI.rangeDays===1 && UI.offsetDays===1 && el.dateTomorrow) el.dateTomorrow.classList.add('is-active');
-  if (UI.rangeDays>=2 && el.dateWeekend)                        el.dateWeekend.classList.add('is-active');
+  if (UI.rangeDays === 1 && UI.offsetDays === 0 && el.dateToday) {
+    el.dateToday.classList.add('is-active');
+  }
+  if (UI.rangeDays === 1 && UI.offsetDays === 1 && el.dateTomorrow) {
+    el.dateTomorrow.classList.add('is-active');
+  }
+  if (UI.rangeDays >= 2 && el.dateWeekend) {
+    el.dateWeekend.classList.add('is-active');
+  }
 
   const t = document.getElementById('cal-title');
   if (t) {
@@ -728,56 +742,96 @@ function buildDateStrip(){
 }
 
 function bindDateControls(){
-  // Quick-range buttons
+  // Quick range buttons
   el.dateToday?.addEventListener('click', ()=>{
-    UI.offsetDays = 0; UI.rangeDays = 1;
-    buildDateStrip(); applyFiltersAndRender();
+    UI.offsetDays = 0;
+    UI.rangeDays  = 1;
+    buildDateStrip();
+    applyFiltersAndRender();
   });
-  el.dateTomorrow?.addEventListener('click', ()=>{
-    UI.offsetDays = 1; UI.rangeDays = 1;
-    buildDateStrip(); applyFiltersAndRender();
+
+  el.dateTomorrow?.ring}>addEventListener('click', ()=>{
+    UI.offsetDays = 1;
+    UI.rangeDays  = 1;
+    buildDateStrip();
+    applyFiltersAndRender();
   });
+
   el.dateWeekend?.addEventListener('click', ()=>{
     const b   = baseDate();
     const dow = b.getUTCDay();
     const toSat = (6 - dow + 7) % 7;
     UI.offsetDays = toSat;
     UI.rangeDays  = 2;
-    buildDateStrip(); applyFiltersAndRender();
+    buildDateStrip();
+    applyFiltersAndRender();
   });
 
-  // Month nav
+  // Month navigation
   el.datePrev?.addEventListener('click', ()=>{
     UI.offsetDays -= UI.rangeDays;
-    buildDateStrip(); applyFiltersAndRender();
+    buildDateStrip();
+    applyFiltersAndRender();
   });
+
   el.dateNext?.addEventListener('click', ()=>{
     UI.offsetDays += UI.rangeDays;
-    buildDateStrip(); applyFiltersAndRender();
+    buildDateStrip();
+    applyFiltersAndRender();
   });
 
-  // Day cells (when present)
+  // Direct date cells (day A/B)
   el.dateA?.addEventListener('click', ()=>{
-    const iso = el.dateA.dataset.iso; if (!iso) return;
-    UI.offsetDays = Math.round((Date.parse(`${iso}T00:00:00Z`) - Date.parse(`${UI.anchorISO}T00:00:00Z`)) / MS_DAY);
-    UI.rangeDays  = 1;
-    buildDateStrip(); applyFiltersAndRender();
-  });
-  el.dateB?.addEventListener('click', ()=>{
-    const iso = el.dateB.dataset.iso; if (!iso) return;
-    UI.offsetDays = Math.round((Date.parse(`${iso}T00:00:00Z`) - Date.parse(`${UI.anchorISO}T00:00:00Z`)) / MS_DAY);
-    UI.rangeDays  = 1;
-    buildDateStrip(); applyFiltersAndRender();
+    const iso = el.dateA.dataset.iso;
+    if (!iso) return;
+    UI.offsetDays = Math.round(
+      (Date.parse(`${iso}T00:00:00Z`) - Date.parse(`${UI.anchorISO}T00:00:00Z`)) / MS_DAY
+    );
+    UI.rangeDays = 1;
+    buildDateStrip();
+    applyFiltersAndRender();
   });
 
-  // Prev/Next fixture buttons (under globe)
-  document.getElementById('nav-prev')?.addEventListener('click', () => {
-    goToPrevFixture();
+  el.dateB?.addEventListener('click', ()=>{
+    const iso = el.dateB.dataset.iso;
+    if (!iso) return;
+    UI.offsetDays = Math.round(
+      (Date.parse(`${iso}T00:00:00Z`) - Date.parse(`${UI.anchorISO}T00:00:00Z`)) / MS_DAY
+    );
+    UI.rangeDays = 1;
+    buildDateStrip();
+    applyFiltersAndRender();
   });
-  document.getElementById('nav-next')?.addEventListener('click', () => {
-    goToNextFixture();
+
+  // Prev/Next fixture buttons under the globe
+  const navPrev = document.getElementById('nav-prev');
+  const navNext = document.getElementById('nav-next');
+
+  if (navPrev) {
+    navPrev.addEventListener('click', () => {
+      goToPrevFixture();
+    });
+  }
+
+  if (navNext) {
+    navNext.addEventListener('click', () => {
+      goToNextFixture();
+    });
+  }
+
+  // Keyboard: left/right arrows also cycle fixtures when home view is active
+  window.addEventListener('keydown', (ev) => {
+    if (!isHomeActive) return;
+    if (ev.key === 'ArrowLeft') {
+      ev.preventDefault();
+      goToPrevFixture();
+    } else if (ev.key === 'ArrowRight') {
+      ev.preventDefault();
+      goToNextFixture();
+    }
   });
 }
+
 
 function buildLeagueChips(){
   if (!el.leagueChips) return;
