@@ -1457,3 +1457,39 @@ canvas{ border-radius:24px; }
 .fixture-rail .rail-item.is-active p {
   color: rgba(6, 24, 30, 0.85);
 }
+/* === OG – Heading & label contrast pass === */
+
+/* Main “screen” titles: Bet Checker, Acca Builder, Portfolio, etc. */
+.screen h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #f8fbff;
+}
+
+/* Floating bar heading “BetChecker Upload” */
+.floating-bar h2 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(239, 248, 255, 0.96);
+}
+
+/* Small section labels like “UPCOMING FIXTURES” */
+.left-rail .section-label,
+.left-rail h2 {
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(225, 239, 255, 0.9);
+}
+
+/* Any “muted” copy inside cards / rails – nudge brighter */
+.insight-card .muted,
+.fixture-rail .muted,
+.screen .muted {
+  color: rgba(214, 232, 248, 0.9);
+}
