@@ -1789,7 +1789,7 @@ async function init(){
   controls.enablePan = false;
   controls.enableZoom = true;
   controls.autoRotate = false;
-  controls.minDistance = getGlobeRadius()*1.2;
+  controls.minDistance = getGlobeRadius()*1.0;
   controls.maxDistance = getGlobeRadius()*6;
 
   // --- Postprocessing: FXAA + Bloom ---
