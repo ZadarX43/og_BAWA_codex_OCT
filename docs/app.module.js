@@ -1066,63 +1066,69 @@ function refreshAccaPicks(){
   emptyEl.hidden = true;
   summaryEl.textContent = `Showing ${picks.length} picks for ${marketLabelFromKey(abCurrentMarket)}.`;
 
-  picks.forEach(pick => {
-    const marketKey = pick.marketKey || abCurrentMarket;
-    const key       = accaLegKey(currentFixture.fixture_id, marketKey, pick.id);
-    const isInCart  = abCartLegs.some(l => l.key === key);
+ picks.forEach((pick, idx) => {
+  const marketKey = pick.marketKey || abCurrentMarket;
+  const key       = accaLegKey(currentFixture.fixture_id, marketKey, pick.id);
+  const isInCart  = abCartLegs.some(l => l.key === key);
 
-    const card = document.createElement('article');
-    card.className = 'pick-card';
-    card.dataset.pickId = pick.id;
+  const card = document.createElement('article');
+  card.className = 'pick-card';
+  card.dataset.pickId = pick.id;
 
-    const main = document.createElement('div');
-    main.className = 'pick-main';
+  const main = document.createElement('div');
+  main.className = 'pick-main';
 
-    const h3 = document.createElement('h3');
-    h3.className = 'pick-title';
-    h3.textContent = pick.label;
+  // NEW: tiny leg pill at the top of each card
+  const legPill = document.createElement('span');
+  legPill.className = 'pick-leg-pill';
+  legPill.textContent = `Leg ${idx + 1} of ${picks.length}`;
 
-    const sub = document.createElement('p');
-    sub.className = 'pick-subtitle';
-    const probPct   = Math.round(pick.prob * 100);
-    const fairText  = pick.fair  != null ? pick.fair.toFixed(2)  : '–';
-    const priceText = pick.price != null ? pick.price.toFixed(2) : '–';
-    sub.textContent = `Model ${probPct}% • Fair ${fairText} • Price ${priceText}`;
+  const h3 = document.createElement('h3');
+  h3.className = 'pick-title';
+  h3.textContent = pick.label;
 
-    main.appendChild(h3);
-    main.appendChild(sub);
+  const sub = document.createElement('p');
+  sub.className = 'pick-subtitle';
+  const probPct   = Math.round(pick.prob * 100);
+  const fairText  = pick.fair  != null ? pick.fair.toFixed(2)  : '–';
+  const priceText = pick.price != null ? pick.price.toFixed(2) : '–';
+  sub.textContent = `Model ${probPct}% • Fair ${fairText} • Price ${priceText}`;
 
-    const meta = document.createElement('div');
-    meta.className = 'pick-meta';
+  main.appendChild(legPill);
+  main.appendChild(h3);
+  main.appendChild(sub);
 
-    const badge = document.createElement('div');
-    badge.className = 'pick-badge' + (pick.edge != null && pick.edge >= 0 ? ' pick-badge--positive' : '');
-    if (pick.edge != null){
-      const edgeTxt = pick.edge.toFixed(1);
-      badge.textContent = `EV ${pick.edge >= 0 ? '+' : ''}${edgeTxt}%`;
-    } else {
-      badge.textContent = 'Model pick';
-    }
+  const meta = document.createElement('div');
+  meta.className = 'pick-meta';
 
-    const btn = document.createElement('button');
-    btn.className = 'pick-add-btn';
+  const badge = document.createElement('div');
+  badge.className = 'pick-badge' + (pick.edge != null && pick.edge >= 0 ? ' pick-badge--positive' : '');
+  if (pick.edge != null){
+    const edgeTxt = pick.edge.toFixed(1);
+    badge.textContent = `EV ${pick.edge >= 0 ? '+' : ''}${edgeTxt}%`;
+  } else {
+    badge.textContent = 'Model pick';
+  }
 
-    if (isInCart) {
-      btn.classList.add('pick-add-btn--active');
-      btn.textContent = 'Remove';
-    } else {
-      btn.textContent = '+ Add';
-    }
+  const btn = document.createElement('button');
+  btn.className = 'pick-add-btn';
 
-    btn.addEventListener('click', () => addLegToAcca(pick));
+  if (isInCart) {
+    btn.classList.add('pick-add-btn--active');
+    btn.textContent = 'Remove';
+  } else {
+    btn.textContent = '+ Add';
+  }
 
-    meta.appendChild(badge);
-    meta.appendChild(btn);
+  btn.addEventListener('click', () => addLegToAcca(pick));
 
-    card.appendChild(main);
-    card.appendChild(meta);
-    listEl.appendChild(card);
-  });
+  meta.appendChild(badge);
+  meta.appendChild(btn);
+
+  card.appendChild(main);
+  card.appendChild(meta);
+  listEl.appendChild(card);
+});
 }
 
 function addLegToAcca(pick){
