@@ -8,7 +8,7 @@
   --gradient-end:#64d863;
   --bg-dark:#050b12;
   --bg-panel:rgba(10,18,28,.82);
-  --bg-card:rgba(17,28,40,.88);x
+  --bg-card:rgba(17,28,40,.88);
   --text-primary:#f5faff;
   --text-secondary:#a7bdd6;
   --accent:#7df9c4;
@@ -1397,4 +1397,63 @@ canvas{ border-radius:24px; }
   border-radius: 22px;
   border: 1px solid rgba(120, 232, 192, 0.16);
   box-shadow: 0 18px 44px rgba(0, 0, 0, 0.55);
+}
+/* =========================================
+   OG – Visibility bump for headings & labels
+   ========================================= */
+
+/* Hero titles (fixture name & section titles on the right) */
+.fixture-meta h1,
+.hero__insights h1,
+.screen h1 {
+  color: #fafdff;
+  letter-spacing: 0.05em;
+}
+
+/* Card titles like "Match Intelligence", "Player Watchlist" */
+.insight-card h2 {
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: #f5f9ff;
+  opacity: 0.98;
+}
+
+/* Copy inside the three insight tabs */
+#match-intelligence,
+#player-watchlist,
+#market-snapshot {
+  color: rgba(231, 243, 255, 0.94);
+}
+
+/* Muted lines inside the right-hand panel – brighten a bit */
+.hero__insights .muted,
+.insight-card .muted {
+  color: rgba(205, 224, 248, 0.92);
+}
+
+/* Left rail legend + "Upcoming fixtures" labels */
+.left-rail .cal-legend,
+.left-rail .muted {
+  color: rgba(220, 236, 255, 0.9);
+}
+
+/* Tighten and brighten section headers on secondary screens */
+.screen h1 {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+/* Ensure fixture rail text is always readable */
+.fixture-rail .rail-item h4 {
+  color: #f8fbff;
+}
+.fixture-rail .rail-item p {
+  color: rgba(210, 228, 249, 0.9);
+}
+.fixture-rail .rail-item.is-active h4 {
+  color: #041418;
+}
+.fixture-rail .rail-item.is-active p {
+  color: rgba(6, 24, 30, 0.85);
 }
