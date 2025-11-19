@@ -1664,3 +1664,72 @@ canvas{ border-radius:24px; }
 .acca-cart-actions .cta {
   margin-top: 4px;
 }
+/* ========== Bet Checker — header row + Powered by OG ========== */
+
+.bc-results-card {
+  position: relative;
+}
+
+.bc-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.bc-header-row h2 {
+  margin: 0;
+}
+
+/* Micro “Powered by OG” label */
+.bc-powered {
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(196, 217, 242, 0.9);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  opacity: 0.95;
+}
+
+.bc-powered__brand {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(10, 214, 149, 0.1);
+  border: 1px solid rgba(125, 249, 196, 0.55);
+  color: #ecfdf5;
+  font-weight: 700;
+}
+/* ========== Floating BetChecker Upload bar — glassy pass ========== */
+
+.floating-bar {
+  background:
+    radial-gradient(circle at 0 0, rgba(99, 230, 190, 0.20), transparent 60%),
+    linear-gradient(135deg, rgba(5, 18, 31, 0.98), rgba(8, 30, 45, 0.96));
+  border-color: rgba(148, 237, 199, 0.45);
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.75),
+    0 0 0 1px rgba(0, 0, 0, 0.42) inset;
+}
+
+.floating-bar h2 {
+  font-size: 0.86rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: rgba(235, 247, 255, 0.96);
+}
+
+.floating-bar p {
+  margin-top: 2px;
+  font-size: 0.8rem;
+  color: rgba(204, 223, 242, 0.95);
+}
+
+/* Slightly brighter hint on the upload CTA */
+.upload-hint {
+  font-size: 0.78rem;
+  color: #032014;
+  opacity: 0.92;
+}
