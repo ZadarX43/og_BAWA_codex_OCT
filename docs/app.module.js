@@ -81,10 +81,11 @@ const BLOOM = { strength: 0.9, radius: 0.6, threshold: 0.75 };
 
 const COLORS = {
   marker:         'rgba(125,249,196,0.45)',  // soft teal glow for all fixtures
-  markerInactive: 'rgba(125,249,196,0.15)',  // (kept for future use if you want)
+  markerInactive: 'rgba(125,249,196,0.15)',  // kept for future use
   markerActive:   '#FFFFFF',                 // bright white for active
-  ring:           '#9EE7E3'          'rgba(255, 194, 112, 0.9)'
+  ring:           'rgba(255, 194, 112, 0.9)' // warm halo for active marker
 };
+
 
 // Small manual tweak to align fixture positions on the globe.
 // Adjust lonBias / latBias until Europe-based fixtures sit over Europe.
