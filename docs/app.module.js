@@ -750,7 +750,7 @@ function bindDateControls(){
     applyFiltersAndRender();
   });
 
-  el.dateTomorrow?.ring}>addEventListener('click', ()=>{
+  el.dateTomorrow?.addEventListener('click', ()=>{
     UI.offsetDays = 1;
     UI.rangeDays  = 1;
     buildDateStrip();
