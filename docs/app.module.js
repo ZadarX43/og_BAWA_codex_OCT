@@ -859,11 +859,44 @@ function buildLeagueChips() {
     el.leagueChips.appendChild(b);
   }
 }
+function centerCameraOnVisibleFixtures() {
+  if (!visibleFixtures.length || !camera || !controls || !globe) return;
+
+  const sum = new THREE.Vector3(0, 0, 0);
+  let count = 0;
+
+  visibleFixtures.forEach(f => {
+    const lat = Number(f.latitude);
+    const lon = Number(f.longitude);
+    if (!Number.isFinite(lat) || !Number.isFinite(lon)) return;
+
+    const n = latLngToUnit(lat, lon); // unit vector from globe center
+    sum.add(n);
+    count++;
+  });
+
+  if (!count) return;
+
+  const avg = sum.multiplyScalar(1 / count).normalize();
+  const R   = getGlobeRadius();
+
+  // Camera target: just above the surface at the cluster center
+  const target = avg.clone().multiplyScalar(R * (1 + SURFACE_EPS));
+  // Camera position: further out along the same vector
+  const distance = R * 3; // matches your initial camera distance
+  const camPos   = avg.clone().multiplyScalar(distance);
+
+  camera.position.copy(camPos);
+  controls.target.copy(target);
+  controls.update();
+}
 
 function applyFiltersAndRender() {
   if (!fixtures.length) return;
+
   const start = baseDate();
   const end   = datePlusDays(start, UI.rangeDays);
+
   visibleFixtures = fixtures.filter(f => {
     const d = new Date(f.date_utc);
     if (isNaN(d)) return false;
@@ -872,6 +905,9 @@ function applyFiltersAndRender() {
         (f.competition || '').toLowerCase() !== UI.league.toLowerCase()) return false;
     return true;
   });
+
+  // Auto-center camera on the cluster of visible fixtures
+  centerCameraOnVisibleFixtures();
 
   const many = visibleFixtures.length > 250;
   globe
@@ -882,13 +918,17 @@ function applyFiltersAndRender() {
     .pointsData(visibleFixtures);
 
   buildRail(visibleFixtures);
+
   if (visibleFixtures.length) {
+    // This will also refresh point colours / altitudes + stadium pill
     selectIndex(0, { fly: true });
   }
+
   renderCompetitionAccuracy(
     UI.league === 'ALL' ? (visibleFixtures[0]?.competition || '—') : UI.league
   );
 }
+
 
 // -----------------------------------------
 // Acca Builder helpers (UI acca builder, not API acca)
@@ -1779,10 +1819,12 @@ async function init(){
     .showAtmosphere(true).atmosphereColor('#9ef9e3').atmosphereAltitude(0.28)
     .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
     .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
-    .pointAltitude(()=>SURFACE_EPS)
-    .pointRadius(d=>d.__active?RADIUS_ACTIVE:RADIUS_BASE)
-    .pointColor(d=>d.__active?COLORS.markerActive:COLORS.marker)
+    // Tiny cyan dots for all fixtures, slightly higher + warmer for the active one
+    .pointAltitude(d => d.__active ? SURFACE_EPS * 1.7 : SURFACE_EPS)
+    .pointRadius(d => d.__active ? RADIUS_ACTIVE : RADIUS_BASE)
+    .pointColor(d => d.__active ? COLORS.markerActive : COLORS.marker)
     .pointsMerge(true);
+
 
   scene.add(globe);
 
@@ -1936,18 +1978,30 @@ function syncRail(activeIdx){
   [...rail.children].forEach((c,idx)=>c.classList.toggle('is-active', idx===activeIdx));
 }
 
-function selectIndex(idx,{fly=false}={}){
+function selectIndex(idx, { fly = false } = {}) {
   if (!visibleFixtures.length) return;
-  const f = visibleFixtures[idx]; if (!f) return;
+  const f = visibleFixtures[idx];
+  if (!f) return;
+
   currentFixture = f;
-  visibleFixtures.forEach(it=>it.__active = (it===f));
-  globe.pointColor(d=>d.__active?COLORS.markerActive:COLORS.marker)
-       .pointRadius(d=>d.__active?RADIUS_ACTIVE:RADIUS_BASE)
-       .pointsTransitionDuration?.(200);
-  moveMarkerToFixture(f,{fly});
+
+  // Mark which fixture is active
+  visibleFixtures.forEach(it => {
+    it.__active = (it === f);
+  });
+
+  // Re-apply point styling so active dot “pops”
+  globe
+    .pointColor(d => d.__active ? COLORS.markerActive : COLORS.marker)
+    .pointRadius(d => d.__active ? RADIUS_ACTIVE : RADIUS_BASE)
+    .pointAltitude(d => d.__active ? SURFACE_EPS * 1.7 : SURFACE_EPS)
+    .pointsTransitionDuration?.(220);
+
+  moveMarkerToFixture(f, { fly });
   renderPanel(f);
   syncRail(idx);
 }
+
 
 function elmEmpty(msg){
   const d=document.createElement('div');
