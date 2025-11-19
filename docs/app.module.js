@@ -1789,8 +1789,8 @@ async function init(){
   controls.enablePan = false;
   controls.enableZoom = true;
   controls.autoRotate = false;
-  controls.minDistance = getGlobeRadius()*1.0;
-  controls.maxDistance = getGlobeRadius()*6;
+  controls.minDistance = getGlobeRadius()*0.9;
+  controls.maxDistance = getGlobeRadius()*4;
 
   // --- Postprocessing: FXAA + Bloom ---
   composer = new EffectComposer(renderer);
