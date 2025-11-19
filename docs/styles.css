@@ -1733,3 +1733,21 @@ canvas{ border-radius:24px; }
   color: #032014;
   opacity: 0.92;
 }
+/* ========== Acca Builder — Leg x of y pill ========== */
+
+.pick-leg-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-bottom: 4px;
+
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+
+  background: rgba(148, 208, 255, 0.12);
+  border: 1px solid rgba(148, 208, 255, 0.45);
+  color: rgba(227, 243, 255, 0.96);
+}
