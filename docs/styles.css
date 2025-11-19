@@ -1493,3 +1493,174 @@ canvas{ border-radius:24px; }
 .screen .muted {
   color: rgba(214, 232, 248, 0.9);
 }
+/* ========== BET CHECKER POLISH ========== */
+
+#view-betchecker .screen {
+  padding: 28px 32px 32px;
+}
+
+/* Big, confident page title + subhead */
+#view-betchecker h1 {
+  font-size: 1.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+#view-betchecker > .screen > p.muted {
+  margin-top: 6px;
+  margin-bottom: 20px;
+  max-width: 640px;
+  font-size: 0.9rem;
+}
+
+/* Upload + “View recent checks” row */
+#view-betchecker .panel-row {
+  margin-top: 18px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+#view-betchecker .upload-btn,
+#view-betchecker .panel-row .cta {
+  min-height: 44px;
+  align-items: center;
+}
+
+/* Results card + heading */
+#bc-results {
+  margin-top: 24px;
+  padding: 18px 20px 20px;
+}
+
+#bc-results h2 {
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(226, 240, 255, 0.85);
+  margin-bottom: 10px;
+}
+
+/* Raw OCR / “No legs detected” area */
+#bc-output {
+  margin-top: 10px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: radial
+    at 0 0,
+    rgba(7, 23, 40, 0.9) 0,
+    rgba(3, 8, 20, 0.96) 60%;
+  border: 1px solid rgba(148, 173, 207, 0.3);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "JetBrains Mono",
+    "SF Mono", monospace;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: #e5f9ff;
+  max-height: 260px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
+#bc-output .muted {
+  color: rgba(188, 206, 231, 0.9);
+}
+
+/* Tiny utility used in the results card */
+.mt-2 {
+  margin-top: 8px;
+}
+/* ========== ACCA BUILDER POLISH ========== */
+
+/* Give the Acca Builder screen a little more breathing room */
+#view-accabuilder .screen {
+  padding: 28px 32px 32px;
+}
+
+/* Hero title + subcopy */
+.acca-hero {
+  margin-bottom: 24px;
+}
+
+.acca-hero-text h1 {
+  font-size: 1.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.acca-hero-text p {
+  margin-top: 4px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+/* Fixture controls – make labels feel like UI chrome */
+.acca-hero .control-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(188, 206, 231, 0.9);
+}
+
+.acca-hero-controls {
+  gap: 16px;
+}
+
+/* Picks list header/summary */
+.acca-picks {
+  padding-top: 18px;
+}
+
+.acca-picks-toolbar {
+  margin-bottom: 16px;
+}
+
+.acca-picks-toolbar .muted {
+  font-size: 0.85rem;
+  color: rgba(188, 206, 231, 0.9);
+}
+
+/* Give each pick a bit more vertical rhythm */
+.acca-picks-list .pick-card + .pick-card {
+  margin-top: 8px;
+}
+
+/* Acca cart heading + summary */
+.acca-cart h2 {
+  font-size: 0.9rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.acca-cart-summary .acca-cart-row span {
+  font-size: 0.8rem;
+  color: rgba(188, 206, 231, 0.9);
+}
+
+.acca-cart-summary strong {
+  font-weight: 600;
+}
+
+/* Nice bordered empty states for picks/cart */
+#ab-picks-empty,
+#ab-cart-empty {
+  margin-top: 8px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px dashed rgba(148, 173, 207, 0.4);
+  background: radial-gradient(circle at 0 0, rgba(7, 23, 40, 0.7), rgba(3, 8, 20, 0.9));
+  color: rgba(188, 206, 231, 0.9);
+  font-size: 0.85rem;
+}
+
+/* So the little call-to-action in the cart reads clearly */
+#acc-save-hint {
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: rgba(188, 206, 231, 0.9);
+}
+
+/* Slightly more space between the main call-to-action buttons */
+.acca-cart-actions .cta {
+  margin-top: 4px;
+}
