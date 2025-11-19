@@ -73,18 +73,22 @@ let abCartLegs       = [];     // legs currently in the "Your Acca" cart
 let currentAccaLegs  = [];     // snapshot of last rendered cart (for saving)
 const abFixtureById  = new Map();
 
-const SURFACE_EPS   = 0.009;
-const RADIUS_BASE   = 0.014;
-const RADIUS_ACTIVE = 0.040;
+const SURFACE_EPS   = 0.010;  // slightly higher so dots sit above the texture
+const RADIUS_BASE   = 0.018;  // bigger = easier to see non-active fixtures
+const RADIUS_ACTIVE = 0.040;  // keep the active one noticeably larger
 const CAMERA_ALT    = 2.0;
 const BLOOM = { strength: 0.9, radius: 0.6, threshold: 0.75 };
 
 const COLORS = {
-  marker:         '#A7FFF6',
-  markerInactive: '#8CEFE5',
-  markerActive:   '#CFFFFA',
-  ring:           '#9EE7E3'
+  // soft cyan for non-active fixtures
+  marker:         'rgba(148, 208, 255, 0.75)',
+  markerInactive: 'rgba(148, 208, 255, 0.35)',
+  // warm amber/orange for the active fixture
+  markerActive:   '#fbbf24',
+  // ring glow also shifts to a warmer tone
+  ring:           'rgba(255, 194, 112, 0.9)'
 };
+
 // Small manual tweak to align fixture positions on the globe.
 // Adjust lonBias / latBias until Europe-based fixtures sit over Europe.
 const MAP_OFFSET = {
@@ -686,6 +690,7 @@ function renderCompetitionAccuracy(league){
 // -----------------------------------------
 // Date & League filter UI
 // -----------------------------------------
+
 function buildDateStrip(){
   const base = baseDate();
   const dayA = base;
@@ -709,6 +714,7 @@ function buildDateStrip(){
 }
 
 function bindDateControls(){
+  // Quick-range buttons
   el.dateToday?.addEventListener('click', ()=>{
     UI.offsetDays = 0; UI.rangeDays = 1;
     buildDateStrip(); applyFiltersAndRender();
@@ -718,40 +724,44 @@ function bindDateControls(){
     buildDateStrip(); applyFiltersAndRender();
   });
   el.dateWeekend?.addEventListener('click', ()=>{
-    const b = baseDate(); const dow = b.getUTCDay(); const toSat = (6 - dow + 7) % 7;
-    UI.offsetDays = toSat; UI.rangeDays = 2;
+    const b   = baseDate();
+    const dow = b.getUTCDay();
+    const toSat = (6 - dow + 7) % 7;
+    UI.offsetDays = toSat;
+    UI.rangeDays  = 2;
     buildDateStrip(); applyFiltersAndRender();
   });
 
+  // Month nav
   el.datePrev?.addEventListener('click', ()=>{
-    UI.offsetDays -= UI.rangeDays; buildDateStrip(); applyFiltersAndRender();
+    UI.offsetDays -= UI.rangeDays;
+    buildDateStrip(); applyFiltersAndRender();
   });
   el.dateNext?.addEventListener('click', ()=>{
-    UI.offsetDays += UI.rangeDays; buildDateStrip(); applyFiltersAndRender();
+    UI.offsetDays += UI.rangeDays;
+    buildDateStrip(); applyFiltersAndRender();
   });
 
-  document.getElementById('nav-prev')?.addEventListener('click', ()=>{
-    if (!visibleFixtures.length) return;
-    const cur = visibleFixtures.findIndex(f=>f.__active);
-    const idx = (cur - 1 + visibleFixtures.length) % visibleFixtures.length;
-    selectIndex(idx, { fly:true });
-  });
-  document.getElementById('nav-next')?.addEventListener('click', ()=>{
-    if (!visibleFixtures.length) return;
-    const cur = visibleFixtures.findIndex(f=>f.__active);
-    const idx = (cur + 1) % visibleFixtures.length;
-    selectIndex(idx, { fly:true });
-  });
-
+  // Day cells (when present)
   el.dateA?.addEventListener('click', ()=>{
     const iso = el.dateA.dataset.iso; if (!iso) return;
-    UI.offsetDays = Math.round((Date.parse(`${iso}T00:00:00Z`) - Date.parse(`${UI.anchorISO}T00:00:00Z`))/MS_DAY);
-    UI.rangeDays = 1; buildDateStrip(); applyFiltersAndRender();
+    UI.offsetDays = Math.round((Date.parse(`${iso}T00:00:00Z`) - Date.parse(`${UI.anchorISO}T00:00:00Z`)) / MS_DAY);
+    UI.rangeDays  = 1;
+    buildDateStrip(); applyFiltersAndRender();
   });
   el.dateB?.addEventListener('click', ()=>{
     const iso = el.dateB.dataset.iso; if (!iso) return;
-    UI.offsetDays = Math.round((Date.parse(`${iso}T00:00:00Z`) - Date.parse(`${UI.anchorISO}T00:00:00Z`))/MS_DAY);
-    UI.rangeDays = 1; buildDateStrip(); applyFiltersAndRender();
+    UI.offsetDays = Math.round((Date.parse(`${iso}T00:00:00Z`) - Date.parse(`${UI.anchorISO}T00:00:00Z`)) / MS_DAY);
+    UI.rangeDays  = 1;
+    buildDateStrip(); applyFiltersAndRender();
+  });
+
+  // Prev/Next fixture buttons (under globe)
+  document.getElementById('nav-prev')?.addEventListener('click', () => {
+    goToPrevFixture();
+  });
+  document.getElementById('nav-next')?.addEventListener('click', () => {
+    goToNextFixture();
   });
 }
 
@@ -1712,6 +1722,18 @@ async function init(){
   bindTabs();
   bindDateControls();
   bindSheet();
+  // Keyboard navigation: left/right arrows cycle fixtures on the Home view
+  window.addEventListener('keydown', (ev) => {
+    if (!isHomeActive) return;           // only when the Home view is active
+    if (ev.key === 'ArrowRight') {
+      ev.preventDefault();
+      goToNextFixture();
+    } else if (ev.key === 'ArrowLeft') {
+      ev.preventDefault();
+      goToPrevFixture();
+    }
+  });
+
 
   // deep-dive opens sheet for current fixture
   el.deepBtn?.addEventListener('click', () => {
