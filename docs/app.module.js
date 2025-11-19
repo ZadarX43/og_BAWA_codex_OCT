@@ -706,18 +706,18 @@ function goToNextFixture() {
   selectIndex(idx, { fly: true });
 }
 
-function buildDateStrip(){
+function buildDateStrip() {
   const base = baseDate();
   const dayA = base;
-  const dayB = datePlusDays(base,1);
+  const dayB = datePlusDays(base, 1);
 
-  if (el.dateA) { 
-    el.dateA.textContent = fmtDay(dayA); 
-    el.dateA.dataset.iso = isoDay(dayA); 
+  if (el.dateA) {
+    el.dateA.textContent = fmtDay(dayA);
+    el.dateA.dataset.iso = isoDay(dayA);
   }
-  if (el.dateB) { 
-    el.dateB.textContent = fmtDay(dayB); 
-    el.dateB.dataset.iso = isoDay(dayB); 
+  if (el.dateB) {
+    el.dateB.textContent = fmtDay(dayB);
+    el.dateB.dataset.iso = isoDay(dayB);
   }
 
   [el.dateToday, el.dateTomorrow, el.dateWeekend]
@@ -736,28 +736,32 @@ function buildDateStrip(){
 
   const t = document.getElementById('cal-title');
   if (t) {
-    const mo = base.toLocaleString(undefined, { month: 'long', year: 'numeric', timeZone: 'UTC' });
+    const mo = base.toLocaleString(undefined, {
+      month: 'long',
+      year: 'numeric',
+      timeZone: 'UTC'
+    });
     t.textContent = mo;
   }
 }
 
-function bindDateControls(){
+function bindDateControls() {
   // Quick range buttons
-  el.dateToday?.addEventListener('click', ()=>{
+  el.dateToday?.addEventListener('click', () => {
     UI.offsetDays = 0;
     UI.rangeDays  = 1;
     buildDateStrip();
     applyFiltersAndRender();
   });
 
-  el.dateTomorrow?.addEventListener('click', ()=>{
+  el.dateTomorrow?.addEventListener('click', () => {
     UI.offsetDays = 1;
     UI.rangeDays  = 1;
     buildDateStrip();
     applyFiltersAndRender();
   });
 
-  el.dateWeekend?.addEventListener('click', ()=>{
+  el.dateWeekend?.addEventListener('click', () => {
     const b   = baseDate();
     const dow = b.getUTCDay();
     const toSat = (6 - dow + 7) % 7;
@@ -768,20 +772,20 @@ function bindDateControls(){
   });
 
   // Month navigation
-  el.datePrev?.addEventListener('click', ()=>{
+  el.datePrev?.addEventListener('click', () => {
     UI.offsetDays -= UI.rangeDays;
     buildDateStrip();
     applyFiltersAndRender();
   });
 
-  el.dateNext?.addEventListener('click', ()=>{
+  el.dateNext?.addEventListener('click', () => {
     UI.offsetDays += UI.rangeDays;
     buildDateStrip();
     applyFiltersAndRender();
   });
 
   // Direct date cells (day A/B)
-  el.dateA?.addEventListener('click', ()=>{
+  el.dateA?.addEventListener('click', () => {
     const iso = el.dateA.dataset.iso;
     if (!iso) return;
     UI.offsetDays = Math.round(
@@ -792,7 +796,7 @@ function bindDateControls(){
     applyFiltersAndRender();
   });
 
-  el.dateB?.addEventListener('click', ()=>{
+  el.dateB?.addEventListener('click', () => {
     const iso = el.dateB.dataset.iso;
     if (!iso) return;
     UI.offsetDays = Math.round(
@@ -808,13 +812,15 @@ function bindDateControls(){
   const navNext = document.getElementById('nav-next');
 
   if (navPrev) {
-    navPrev.addEventListener('click', () => {
+    navPrev.addEventListener('click', (ev) => {
+      ev.preventDefault();
       goToPrevFixture();
     });
   }
 
   if (navNext) {
-    navNext.addEventListener('click', () => {
+    navNext.addEventListener('click', (ev) => {
+      ev.preventDefault();
       goToNextFixture();
     });
   }
@@ -832,45 +838,56 @@ function bindDateControls(){
   });
 }
 
-
-
-function buildLeagueChips(){
+function buildLeagueChips() {
   if (!el.leagueChips) return;
   const uniq = Array.from(new Set(fixtures.map(f => f.competition).filter(Boolean))).sort();
   UI.leagues = ['ALL', ...uniq];
   el.leagueChips.innerHTML = '';
-  for (const name of UI.leagues){
+  for (const name of UI.leagues) {
     const b = document.createElement('button');
-    b.className = `chip${name===UI.league?' is-active':''}`;
+    b.className = `chip${name === UI.league ? ' is-active' : ''}`;
     b.dataset.league = name;
     b.textContent = name;
-    b.addEventListener('click', ()=>{
-      document.querySelectorAll('#league-chips .chip').forEach(x=>x.classList.remove('is-active'));
+    b.addEventListener('click', () => {
+      document
+        .querySelectorAll('#league-chips .chip')
+        .forEach(x => x.classList.remove('is-active'));
       b.classList.add('is-active');
-      UI.league = name; applyFiltersAndRender();
+      UI.league = name;
+      applyFiltersAndRender();
     });
     el.leagueChips.appendChild(b);
   }
 }
 
-function applyFiltersAndRender(){
+function applyFiltersAndRender() {
   if (!fixtures.length) return;
   const start = baseDate();
   const end   = datePlusDays(start, UI.rangeDays);
-  visibleFixtures = fixtures.filter(f=>{
-    const d = new Date(f.date_utc); if (isNaN(d)) return false;
-    if (!(d>=start && d<end)) return false;
-    if (UI.league !== 'ALL' && (f.competition||'').toLowerCase() !== UI.league.toLowerCase()) return false;
+  visibleFixtures = fixtures.filter(f => {
+    const d = new Date(f.date_utc);
+    if (isNaN(d)) return false;
+    if (!(d >= start && d < end)) return false;
+    if (UI.league !== 'ALL' &&
+        (f.competition || '').toLowerCase() !== UI.league.toLowerCase()) return false;
     return true;
   });
 
   const many = visibleFixtures.length > 250;
-  globe.pointsMerge(many).pointResolution(12);
-  globe.pointLat('latitude').pointLng('longitude').pointsData(visibleFixtures);
+  globe
+    .pointsMerge(many)
+    .pointResolution(12)
+    .pointLat('latitude')
+    .pointLng('longitude')
+    .pointsData(visibleFixtures);
 
   buildRail(visibleFixtures);
-  if (visibleFixtures.length) selectIndex(0, { fly:true });
-  renderCompetitionAccuracy(UI.league==='ALL' ? (visibleFixtures[0]?.competition||'—') : UI.league);
+  if (visibleFixtures.length) {
+    selectIndex(0, { fly: true });
+  }
+  renderCompetitionAccuracy(
+    UI.league === 'ALL' ? (visibleFixtures[0]?.competition || '—') : UI.league
+  );
 }
 
 // -----------------------------------------
