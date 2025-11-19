@@ -690,6 +690,20 @@ function renderCompetitionAccuracy(league){
 // -----------------------------------------
 // Date & League filter UI
 // -----------------------------------------
+// Helper: cycle visibleFixtures index (used by buttons + keyboard)
+function goToPrevFixture() {
+  if (!visibleFixtures.length) return;
+  const cur = visibleFixtures.findIndex(f => f.__active);
+  const idx = cur <= 0 ? visibleFixtures.length - 1 : cur - 1;
+  selectIndex(idx, { fly: true });
+}
+
+function goToNextFixture() {
+  if (!visibleFixtures.length) return;
+  const cur = visibleFixtures.findIndex(f => f.__active);
+  const idx = (cur + 1) % visibleFixtures.length;
+  selectIndex(idx, { fly: true });
+}
 
 function buildDateStrip(){
   const base = baseDate();
