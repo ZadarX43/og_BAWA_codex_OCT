@@ -80,13 +80,10 @@ const CAMERA_ALT    = 2.0;
 const BLOOM = { strength: 0.9, radius: 0.6, threshold: 0.75 };
 
 const COLORS = {
-  // soft cyan for non-active fixtures
-  marker:         'rgba(148, 208, 255, 0.75)',
-  markerInactive: 'rgba(148, 208, 255, 0.35)',
-  // warm amber/orange for the active fixture
-  markerActive:   '#fbbf24',
-  // ring glow also shifts to a warmer tone
-  ring:           'rgba(255, 194, 112, 0.9)'
+  marker:         'rgba(125,249,196,0.45)',  // soft teal glow for all fixtures
+  markerInactive: 'rgba(125,249,196,0.15)',  // (kept for future use if you want)
+  markerActive:   '#FFFFFF',                 // bright white for active
+  ring:           '#9EE7E3'          'rgba(255, 194, 112, 0.9)'
 };
 
 // Small manual tweak to align fixture positions on the globe.
@@ -865,31 +862,37 @@ function centerCameraOnVisibleFixtures() {
   const sum = new THREE.Vector3(0, 0, 0);
   let count = 0;
 
-  visibleFixtures.forEach(f => {
+  for (const f of visibleFixtures) {
     const lat = Number(f.latitude);
     const lon = Number(f.longitude);
-    if (!Number.isFinite(lat) || !Number.isFinite(lon)) return;
+    if (!Number.isFinite(lat) || !Number.isFinite(lon)) continue;
 
-    const n = latLngToUnit(lat, lon); // unit vector from globe center
+    const n = latLngToUnit(lat, lon); // unit vector from globe centre
     sum.add(n);
     count++;
-  });
+  }
 
   if (!count) return;
 
   const avg = sum.multiplyScalar(1 / count).normalize();
   const R   = getGlobeRadius();
 
-  // Camera target: just above the surface at the cluster center
+  // Target: just above the surface at the cluster centre
   const target = avg.clone().multiplyScalar(R * (1 + SURFACE_EPS));
-  // Camera position: further out along the same vector
-  const distance = R * 3; // matches your initial camera distance
-  const camPos   = avg.clone().multiplyScalar(distance);
+
+  // Choose a camera distance that’s closer than the old R*3, but not *too* close
+  const minDist     = R * 1.6;
+  const maxDist     = R * 2.2;
+  const currentDist = camera.position.length() || (R * 2.0);
+  const dist        = Math.min(maxDist, Math.max(minDist, currentDist));
+
+  const camPos = avg.clone().multiplyScalar(dist);
 
   camera.position.copy(camPos);
   controls.target.copy(target);
   controls.update();
 }
+
 
 function applyFiltersAndRender() {
   if (!fixtures.length) return;
