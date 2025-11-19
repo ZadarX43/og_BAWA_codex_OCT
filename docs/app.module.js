@@ -881,8 +881,8 @@ function centerCameraOnVisibleFixtures() {
   const target = avg.clone().multiplyScalar(R * (1 + SURFACE_EPS));
 
   // Choose a camera distance that’s closer than the old R*3, but not *too* close
-  const minDist     = R * 1.6;
-  const maxDist     = R * 2.2;
+  const minDist     = R * 1.2;
+  const maxDist     = R * 1.8;
   const currentDist = camera.position.length() || (R * 2.0);
   const dist        = Math.min(maxDist, Math.max(minDist, currentDist));
 
