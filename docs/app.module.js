@@ -833,6 +833,7 @@ function bindDateControls(){
 }
 
 
+
 function buildLeagueChips(){
   if (!el.leagueChips) return;
   const uniq = Array.from(new Set(fixtures.map(f => f.competition).filter(Boolean))).sort();
