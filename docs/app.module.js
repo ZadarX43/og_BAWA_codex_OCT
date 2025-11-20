@@ -913,6 +913,26 @@ function centerCameraOnFixture(f, distanceFactor = 2.2) {
   controls.target.copy(target);
   controls.update();
 }
+function centerCameraOnFixture(f, distanceFactor = 2.2) {
+  if (!f || !camera || !controls || !globe) return;
+
+  const lat = Number(f.latitude);
+  const lon = Number(f.longitude);
+  if (!Number.isFinite(lat) || !Number.isFinite(lon)) return;
+
+  const R   = getGlobeRadius();
+  const dir = latLngToUnit(lat, lon).normalize();
+
+  // Point the camera *at* the fixture
+  const target = dir.clone().multiplyScalar(R * (1 + SURFACE_EPS));
+
+  // Pull the camera back along the same direction by `distanceFactor`
+  const camPos = dir.clone().multiplyScalar(R * distanceFactor);
+
+  camera.position.copy(camPos);
+  controls.target.copy(target);
+  controls.update();
+}
 
 
 function applyFiltersAndRender() {
