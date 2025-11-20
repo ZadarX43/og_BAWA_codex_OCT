@@ -103,7 +103,7 @@ const COLORS = {
   marker:         'rgba(125,249,196,0.45)',  // soft teal glow for all fixtures
   markerInactive: 'rgba(125,249,196,0.15)',  // kept for future use
   markerActive:   '#FFFFFF',                 // bright white for active
-  ring:           'rgba(255, 194, 112, 0.9)' // warm halo for active marker
+  ring:           'rgba(255, 194, 112, 0.9)', // warm halo for active marker
   
   dotBase:        'rgba(87,195,191,0.70)',
   dotHot:         '#ffd777',
