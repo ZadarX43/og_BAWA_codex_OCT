@@ -2572,16 +2572,9 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
 
   const R = getGlobeRadius();
 
-  // --- Anchor point in world space ---
-  // For the initial spawn, always use lat/lon so the card appears at the right place.
-  // For subsequent frames (repositionOnly = true), follow the animated marker if visible.
-  let worldPos;
-  if (repositionOnly && MARKER && MARKER.group && MARKER.group.visible) {
-    worldPos = MARKER.group.position.clone();
-  } else {
-    const dir = latLngToUnit(lat, lon).normalize();
-    worldPos  = dir.clone().multiplyScalar(R * (1 + SURFACE_EPS));
-  }
+  // --- Anchor point in world space (always from lat/lon) ---
+  const dir      = latLngToUnit(lat, lon).normalize();
+  const worldPos = dir.clone().multiplyScalar(R * (1 + SURFACE_EPS));
 
   const ndc = worldPos.clone().project(camera);
   if (ndc.z > 1 || ndc.z < -1) {
@@ -2653,7 +2646,7 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
   }
 
   // Content update when fixture changes
-  if (!repositionOnly && f.fixture_id !== lastStadiumFixtureId) {
+  if (f.fixture_id !== lastStadiumFixtureId) {
     lastStadiumFixtureId = f.fixture_id;
 
     const d = f.date_utc ? new Date(f.date_utc) : null;
@@ -2711,6 +2704,7 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
 
   card.classList.add('stadium-card--visible');
 }
+
 
 function moveMarkerToFixture(f, { fly = false } = {}) {
   if (!MARKER || !f) return;
