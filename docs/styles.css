@@ -1802,6 +1802,7 @@ canvas{ border-radius:24px; }
   border: 1px solid rgba(148, 208, 255, 0.45);
   color: rgba(227, 243, 255, 0.96);
 }
+
 /* ========== Stadium hero hologram card ========== */
 
 .stadium-overlay {
@@ -1813,13 +1814,11 @@ canvas{ border-radius:24px; }
 
 .stadium-card {
   position: absolute;
-  /* JS controls left/top in pixel space */
-  left: 0;
-  top: 0;
-
+  /* JS sets left/top to the ANCHOR point (bottom-centre of card) */
+  left: 50%;
+  top: 50%;
   transform-origin: 50% 100%;
-  /* start slightly smaller for spawn animation */
-  transform: scale(0.9);
+  transform: translate(-50%, -100%) scale(0.9); /* centre-bottom anchor */
 
   opacity: 0;
   pointer-events: auto;
@@ -1844,6 +1843,23 @@ canvas{ border-radius:24px; }
   transition:
     opacity 200ms ease-out,
     transform 220ms ease-out;
+}
+
+/* Spawn state */
+.stadium-card--visible {
+  opacity: 1;
+  transform: translate(-50%, -100%) scale(1);
+}
+
+/* Bob only the inner content, not the anchor position */
+@keyframes stadium-bob {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-4px); }
+  100% { transform: translateY(0); }
+}
+
+.stadium-card--visible .stadium-card__body {
+  animation: stadium-bob 3.4s ease-in-out infinite;
 }
 
 .stadium-card__left {
@@ -1966,21 +1982,6 @@ canvas{ border-radius:24px; }
   color: var(--text-primary);
   border: 1px solid rgba(255, 255, 255, 0.18);
 }
-@keyframes stadium-bob {
-  0%   { transform: translateY(0); }
-  50%  { transform: translateY(-4px); }
-  100% { transform: translateY(0); }
-}
-
-.stadium-card--visible {
-  opacity: 1;
-  transform: scale(1);   /* no translate here */
-}
-
-/* Bob only the inner content, not the card position */
-.stadium-card--visible .stadium-card__body {
-  animation: stadium-bob 3.4s ease-in-out infinite;
-}
 
 /* Anchor pin + stem */
 
@@ -2011,6 +2012,8 @@ canvas{ border-radius:24px; }
   opacity: 0;
   transition: opacity 160ms ease-out;
 }
+
+
 /* Tiny tooltip for globe point hover */
 .globe-tooltip {
   position: absolute;
