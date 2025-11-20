@@ -118,7 +118,55 @@
               <div class="globe-loading" role="status">Loading globe…</div>
               <button id="nav-prev" aria-label="Previous fixture" title="Previous (←)" tabindex="0">&#x2039;</button>
               <button id="nav-next" aria-label="Next fixture"   title="Next (→)" tabindex="0">&#x203A;</button>
+            
+              <!-- Stadium hero hologram overlay (HTML, anchored via JS) -->
+              <div id="stadium-overlay" class="stadium-overlay" aria-hidden="true">
+                <div id="stadium-stem" class="stadium-stem"></div>
+                <div id="stadium-pin" class="stadium-pin"></div>
+            
+                <article id="stadium-card" class="stadium-card" aria-live="polite">
+                  <div class="stadium-card__body">
+                    <div class="stadium-card__left">
+                      <div class="stadium-card__crest-wrap">
+                        <div id="stadium-crest" class="stadium-card__crest">OG</div>
+                        <div id="stadium-comp-pill" class="stadium-card__comp-pill">LG</div>
+                      </div>
+                    </div>
+                    <div class="stadium-card__right">
+                      <div id="stadium-eyebrow" class="stadium-card__eyebrow">
+                        Competition • Tue 21:00 GMT
+                      </div>
+                      <h2 id="stadium-title" class="stadium-card__title">
+                        Home vs Away
+                      </h2>
+                      <p id="stadium-sub" class="stadium-card__sub">
+                        Stadium • City, Country
+                      </p>
+                      <p id="stadium-stats" class="stadium-card__stats">
+                        OG Edge: —
+                      </p>
+                      <div class="stadium-card__actions">
+                        <button
+                          type="button"
+                          id="stadium-open-insights"
+                          class="stadium-card__btn stadium-card__btn--primary"
+                        >
+                          Open fixture insight
+                        </button>
+                        <button
+                          type="button"
+                          id="stadium-add-acca"
+                          class="stadium-card__btn stadium-card__btn--ghost"
+                        >
+                          + Add to Acca
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              </div>
             </div>
+
             <p id="globe-help" class="visually-hidden">Use left and right arrow keys or buttons to change fixture.</p>
 
             <!-- Competition Accuracy (pretty) -->
@@ -185,8 +233,9 @@
           </aside>
         </main>
 
-        <!-- Fixture rail (quick selector) -->
+       <!-- Fixture rail (quick selector) -->
         <div id="fixture-rail" class="fixture-rail" aria-label="Fixtures"></div>
+        <p id="fixture-progress" class="fixture-progress muted"></p>
 
         <!-- Floating upload bar -->
         <footer class="floating-bar">
