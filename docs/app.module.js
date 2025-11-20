@@ -2203,9 +2203,19 @@ function updateGlobeTooltip(pt) {
     return;
   }
 
-  const rect = el.globeWrap.getBoundingClientRect();
-  const x = (ndc.x * 0.5 + 0.5) * rect.width;
-  const y = (-ndc.y * 0.5 + 0.5) * rect.height;
+  // Map NDC → canvas pixels, then into container space
+  const containerRect = el.globeWrap.getBoundingClientRect();
+  const canvasRect    = renderer.domElement.getBoundingClientRect();
+
+  const relWidth  = canvasRect.width;
+  const relHeight = canvasRect.height;
+
+  const offsetX = canvasRect.left - containerRect.left;
+  const offsetY = canvasRect.top  - containerRect.top;
+
+  const rawX = (ndc.x * 0.5 + 0.5) * relWidth  + offsetX;
+  const rawY = (-ndc.y * 0.5 + 0.5) * relHeight + offsetY;
+
 
   tip.style.left = `${x}px`;
   tip.style.top  = `${y - 18}px`;
@@ -2535,6 +2545,7 @@ function slerpUnitVec(fromN, toN, t) {
   const q     = new THREE.Quaternion().setFromAxisAngle(axis, angle * t);
   return v0.clone().applyQuaternion(q).normalize();
 }
+
 function updateStadiumCard(f, { repositionOnly = false } = {}) {
   const card = el.stadiumCard;
   const pin  = el.stadiumPin;
@@ -2580,21 +2591,30 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
     return;
   }
 
-  const rect = el.globeWrap.getBoundingClientRect();
-  const rawX = (ndc.x * 0.5 + 0.5) * rect.width;
-  const rawY = (-ndc.y * 0.5 + 0.5) * rect.height;
+  // Map NDC -> canvas pixels, then into container space
+  const containerRect = el.globeWrap.getBoundingClientRect();
+  const canvasRect    = renderer.domElement.getBoundingClientRect();
+
+  const relWidth  = canvasRect.width;
+  const relHeight = canvasRect.height;
+
+  const offsetX = canvasRect.left - containerRect.left;
+  const offsetY = canvasRect.top  - containerRect.top;
+
+  const rawX = (ndc.x * 0.5 + 0.5) * relWidth  + offsetX;
+  const rawY = (-ndc.y * 0.5 + 0.5) * relHeight + offsetY;
 
   const minMarginX = 140;
   const minMarginY = 90;
 
   // How far to offset the card horizontally from the stadium
-  const baseOffsetX = Math.min(120, rect.width * 0.18);
+  const baseOffsetX = Math.min(120, containerRect.width * 0.18);
 
   // Default: try to put the card to the right of the stadium
   let cardX = rawX + baseOffsetX;
   let cardY = rawY - 120; // above the point
 
-  const maxX = rect.width - minMarginX;
+  const maxX = containerRect.width - minMarginX;
   const minX = minMarginX;
 
   // If going right would push us off the edge, flip to the left
@@ -2607,14 +2627,12 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
 
   // Clamp vertically based on card height so the bottom never drops out of view
   const cardHeight = card.offsetHeight || 180; // fallback height
-  const maxY = rect.height - minMarginY - cardHeight;
+  const maxY = containerRect.height - minMarginY - cardHeight;
   cardY = Math.max(minMarginY, Math.min(maxY, cardY));
 
   // Stem base is always at the actual stadium position
   const pinX = rawX;
   const pinY = rawY;
-
-
 
   card.style.left = `${cardX}px`;
   card.style.top  = `${cardY}px`;
