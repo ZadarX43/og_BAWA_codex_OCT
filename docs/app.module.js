@@ -2094,7 +2094,7 @@ function handleHover(pt){
 
 
 
-ffunction buildRail(items){
+function buildRail(items){
   const rail = document.getElementById('fixture-rail');
   if (!rail) return;
 
