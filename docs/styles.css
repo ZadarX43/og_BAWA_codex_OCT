@@ -1954,6 +1954,33 @@ canvas{ border-radius:24px; }
   opacity: 0;
   transition: opacity 160ms ease-out;
 }
+/* Tiny tooltip for globe point hover */
+.globe-tooltip {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -120%);
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  white-space: nowrap;
+
+  background: rgba(3, 12, 20, 0.92);
+  border: 1px solid rgba(148, 208, 255, 0.45);
+  color: rgba(230, 245, 255, 0.96);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.6);
+
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 140ms ease-out,
+    transform 140ms ease-out;
+}
+
+.globe-tooltip--visible {
+  opacity: 1;
+  transform: translate(-50%, -130%);
+}
 
 /* Exploration progress text under rail */
 
