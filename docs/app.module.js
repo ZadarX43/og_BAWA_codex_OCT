@@ -43,6 +43,23 @@ const el = {
   compName:      document.getElementById('comp-name'),
   compLogo:      document.getElementById('comp-logo'),
   compTraffic:   document.getElementById('comp-traffic')
+
+  // Stadium hero card overlay
+  stadiumCard:   document.getElementById('stadium-card'),
+  stadiumOverlay:document.getElementById('stadium-overlay'),
+  stadiumStem:   document.getElementById('stadium-stem'),
+  stadiumPin:    document.getElementById('stadium-pin'),
+  stadiumCrest:  document.getElementById('stadium-crest'),
+  stadiumCompPill:document.getElementById('stadium-comp-pill'),
+  stadiumEyebrow:document.getElementById('stadium-eyebrow'),
+  stadiumTitle:  document.getElementById('stadium-title'),
+  stadiumSub:    document.getElementById('stadium-sub'),
+  stadiumStats:  document.getElementById('stadium-stats'),
+  stadiumOpenBtn:document.getElementById('stadium-open-insights'),
+  stadiumAccaBtn:document.getElementById('stadium-add-acca'),
+
+  // Rail progress
+  fixtureProgress: document.getElementById('fixture-progress')
 };
 
 // -----------------------------------------
@@ -57,6 +74,9 @@ let htmlTabsData = [];
 let MARKER = null;             // custom marker group object
 let currentFixture = null;
 let isHomeActive = true;       // controls whether globe render loop runs
+let lastStadiumFixtureId = null;
+const visitedFixtureIds = new Set();
+
 
 // Demo auth + portfolio
 let currentUser = null;        // { email, role }
@@ -84,6 +104,10 @@ const COLORS = {
   markerInactive: 'rgba(125,249,196,0.15)',  // kept for future use
   markerActive:   '#FFFFFF',                 // bright white for active
   ring:           'rgba(255, 194, 112, 0.9)' // warm halo for active marker
+  
+  dotBase:        'rgba(87,195,191,0.70)',
+  dotHot:         '#ffd777',
+  dotActive:      '#ffffff'
 };
 
 
@@ -684,6 +708,7 @@ function renderCompetitionAccuracy(league){
       <span class="light light--amber">BTTS ${stats.btts||0}%</span>`;
   }
 }
+updateFixtureProgress();
 
 // -----------------------------------------
 // Date & League filter UI
@@ -857,47 +882,7 @@ function buildLeagueChips() {
     el.leagueChips.appendChild(b);
   }
 }
-function centerCameraOnVisibleFixtures() {
-  if (!visibleFixtures.length || !camera || !controls || !globe) return;
-
-  const sum = new THREE.Vector3(0, 0, 0);
-  let count = 0;
-
-  for (const f of visibleFixtures) {
-    const lat = Number(f.latitude);
-    const lon = Number(f.longitude);
-    if (!Number.isFinite(lat) || !Number.isFinite(lon)) continue;
-
-    const n = latLngToUnit(lat, lon); // unit vector from globe centre
-    sum.add(n);
-    count++;
-  }
-function centerCameraOnFixture(f, distanceFactor = 2.2) {
-  if (!f || !camera || !controls || !globe) return;
-
-  const lat = Number(f.latitude);
-  const lon = Number(f.longitude);
-  if (!Number.isFinite(lat) || !Number.isFinite(lon)) return;
-
-  const R   = getGlobeRadius();
-  const dir = latLngToUnit(lat, lon).normalize();
-
-  // Look-at target: just above the surface at the fixture
-  const target = dir.clone().multiplyScalar(R * (1 + SURFACE_EPS));
-
-  // Camera position: further out along same vector
-  const camPos = dir.clone().multiplyScalar(R * distanceFactor);
-
-  camera.position.copy(camPos);
-  controls.target.copy(target);
-  controls.update();
-}
-
-  if (!count) return;
-
-  const avg = sum.multiplyScalar(1 / count).normalize();
-  const R   = getGlobeRadius();
-
+function centerCameraOnVisibleFixtures()
   // Target: just above the surface at the cluster centre
   const target = avg.clone().multiplyScalar(R * (1 + SURFACE_EPS));
 
@@ -1223,8 +1208,10 @@ function addLegToAcca(pick){
 
   const existingIdx = abCartLegs.findIndex(l => l.key === key);
   if (existingIdx >= 0){
+    // Remove leg from cart
     abCartLegs.splice(existingIdx, 1);
   } else {
+    // Add leg to cart
     abCartLegs.push({
       key,
       fixture_id: currentFixture.fixture_id,
@@ -1236,7 +1223,13 @@ function addLegToAcca(pick){
       price: pick.price,
       edge: pick.edge
     });
+
+    // High-EV celebration toast
+    if (typeof pick.edge === 'number' && pick.edge >= 5) {
+      showToast('success', `High-value leg added · EV +${pick.edge.toFixed(1)}%`);
+    }
   }
+
   renderAccaCart();
   refreshAccaPicks();
 }
@@ -1812,8 +1805,12 @@ async function init(){
   renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
   renderer.setSize(el.globeWrap.clientWidth, el.globeWrap.clientHeight);
-  el.globeWrap.innerHTML = '';
+
+  // Keep nav buttons + stadium overlay – just remove the loading text
+  const loading = el.globeWrap.querySelector('.globe-loading');
+  if (loading) loading.remove();
   el.globeWrap.appendChild(renderer.domElement);
+
   if ('outputColorSpace' in renderer) renderer.outputColorSpace = THREE.SRGBColorSpace;
 
   camera = new THREE.PerspectiveCamera(
@@ -1863,12 +1860,16 @@ async function init(){
     .showAtmosphere(true).atmosphereColor('#9ef9e3').atmosphereAltitude(0.28)
     .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
     .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
-    // Tiny cyan dots for all fixtures, slightly higher + warmer for the active one
-    .pointAltitude(d => d.__active ? SURFACE_EPS * 1.7 : SURFACE_EPS)
-    .pointRadius(d => d.__active ? RADIUS_ACTIVE : RADIUS_BASE)
-    .pointColor(d => d.__active ? COLORS.markerActive : COLORS.marker)
+    .pointAltitude(d => d.__active ? SURFACE_EPS * 2.0 : SURFACE_EPS)
+    .pointRadius(d => {
+      if (d.__active) return RADIUS_ACTIVE;
+      return d.__hot ? RADIUS_BASE * 1.3 : RADIUS_BASE * 0.75;
+    })
+    .pointColor(d => {
+      if (d.__active) return COLORS.dotActive;
+      return d.__hot ? COLORS.dotHot : COLORS.dotBase;
+    })
     .pointsMerge(true);
-
 
   scene.add(globe);
 
@@ -1901,6 +1902,21 @@ async function init(){
   bindDateControls();
   bindSheet();
 
+  // Stadium card buttons
+  if (el.stadiumOpenBtn) {
+    el.stadiumOpenBtn.addEventListener('click', () => {
+      if (currentFixture) openSheetForFixture(currentFixture);
+    });
+  }
+  if (el.stadiumAccaBtn) {
+    el.stadiumAccaBtn.addEventListener('click', () => {
+      if (!currentFixture) return;
+      window.location.hash = '#/acca-builder';
+      setAccaFixture(currentFixture);
+      showToast('info', 'Fixture loaded into Acca Builder');
+    });
+  }
+
   // deep-dive opens sheet for current fixture
   el.deepBtn?.addEventListener('click', () => {
     if (currentFixture) openSheetForFixture(currentFixture);
@@ -1932,8 +1948,14 @@ async function init(){
     if (!isHomeActive) return;
     controls.update();
     composer.render();
+
+    // Keep the stadium card anchored as the camera moves
+    if (currentFixture) {
+      updateStadiumCard(currentFixture, { repositionOnly: true });
+    }
   })();
 }
+
 
 
 // -----------------------------------------
@@ -1982,11 +2004,14 @@ async function loadFixturesCSV(url){
       confidence_ftr: +row.confidence_ftr || +row.confidence || 0,
       xg_home:+row.xg_home||0, xg_away:+row.xg_away||0,
       ppg_home:+row.ppg_home||0, ppg_away:+row.ppg_away||0,
-      over25_prob:+row.over25_prob||0, btts_prob:+row.btts_prob||0,
+      over25_prob:+row.over25_prob||0,
+      btts_prob:+row.btts_prob||0,
       key_players_shots:(row.key_players_shots||'').trim(),
       key_players_tackles:(row.key_players_tackles||'').trim(),
       key_players_bookings:(row.key_players_bookings||'').trim(),
-      __active:false
+      __active:false,
+      __hot: (+row.over25_prob || 0) >= 0.65 ||
+             (+row.confidence_ftr || +row.confidence || 0) >= 0.75
     };
   })
   .filter(f=>Number.isFinite(f.latitude)&&Number.isFinite(f.longitude));
@@ -2002,9 +2027,11 @@ function handleHover(pt){
   const hoverMatch = pt ? (p => p.latitude===pt.latitude && p.longitude===pt.longitude) : ()=>false;
   globe.pointRadius(p=>{
     if (p.__active) return RADIUS_ACTIVE;
-    return hoverMatch(p) ? RADIUS_BASE*1.6 : RADIUS_BASE;
+    if (hoverMatch(p)) return RADIUS_BASE * 1.6;
+    return p.__hot ? RADIUS_BASE * 1.3 : RADIUS_BASE * 0.75;
   });
 }
+
 
 function buildRail(items){
   const rail = document.getElementById('fixture-rail'); if (!rail) return;
@@ -2021,6 +2048,23 @@ function syncRail(activeIdx){
   const rail = document.getElementById('fixture-rail'); if (!rail) return;
   [...rail.children].forEach((c,idx)=>c.classList.toggle('is-active', idx===activeIdx));
 }
+function updateFixtureProgress() {
+  const elProg = el.fixtureProgress;
+  if (!elProg) return;
+
+  const total = visibleFixtures.length;
+  if (!total) {
+    elProg.textContent = '';
+    return;
+  }
+
+  let visited = 0;
+  for (const f of visibleFixtures) {
+    if (visitedFixtureIds.has(f.fixture_id)) visited++;
+  }
+
+  elProg.textContent = `Explored ${visited} of ${total} fixtures`;
+}
 
 function selectIndex(idx, { fly = false } = {}) {
   if (!visibleFixtures.length) return;
@@ -2028,13 +2072,21 @@ function selectIndex(idx, { fly = false } = {}) {
   if (!f) return;
 
   currentFixture = f;
+  visitedFixtureIds.add(f.fixture_id);
 
   // Mark active
   visibleFixtures.forEach(it => it.__active = (it === f));
   globe
-    .pointColor(d => d.__active ? COLORS.markerActive : COLORS.marker)
-    .pointRadius(d => d.__active ? RADIUS_ACTIVE : RADIUS_BASE)
-    .pointsTransitionDuration?.(200);
+    .pointColor(d => {
+      if (d.__active) return COLORS.dotActive;
+      return d.__hot ? COLORS.dotHot : COLORS.dotBase;
+    })
+    .pointRadius(d => {
+      if (d.__active) return RADIUS_ACTIVE;
+      return d.__hot ? RADIUS_BASE * 1.3 : RADIUS_BASE * 0.75;
+    })
+    .pointsTransitionDuration?.(260);
+
 
   // Recenter camera on this fixture when we are "flying" to it
   if (fly) {
@@ -2043,10 +2095,14 @@ function selectIndex(idx, { fly = false } = {}) {
 
   // Move the billboard / radar marker
   moveMarkerToFixture(f, { fly });
+  updateStadiumCard(f);
+
 
   // Update right-hand panel + bottom rail highlight
   renderPanel(f);
   syncRail(idx);
+  updateFixtureProgress();
+
 }
 
 
@@ -2310,6 +2366,143 @@ function slerpUnitVec(fromN, toN, t) {
   const axis  = new THREE.Vector3().crossVectors(v0, v1).normalize();
   const q     = new THREE.Quaternion().setFromAxisAngle(axis, angle * t);
   return v0.clone().applyQuaternion(q).normalize();
+}
+function updateStadiumCard(f, { repositionOnly = false } = {}) {
+  const card = el.stadiumCard;
+  const pin  = el.stadiumPin;
+  const stem = el.stadiumStem;
+
+  if (!card || !el.globeWrap || !camera || !renderer) return;
+
+  if (!f) {
+    card.classList.remove('stadium-card--visible');
+    if (pin)  pin.style.opacity  = '0';
+    if (stem) stem.style.opacity = '0';
+    lastStadiumFixtureId = null;
+    return;
+  }
+
+  const lat = Number(f.latitude);
+  const lon = Number(f.longitude);
+  if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+    card.classList.remove('stadium-card--visible');
+    if (pin)  pin.style.opacity  = '0';
+    if (stem) stem.style.opacity = '0';
+    return;
+  }
+
+  const R   = getGlobeRadius();
+  const dir = latLngToUnit(lat, lon).normalize();
+  const worldPos = dir.clone().multiplyScalar(R * (1 + SURFACE_EPS));
+
+  const ndc = worldPos.clone().project(camera);
+  if (ndc.z > 1 || ndc.z < -1) {
+    card.classList.remove('stadium-card--visible');
+    if (pin)  pin.style.opacity  = '0';
+    if (stem) stem.style.opacity = '0';
+    return;
+  }
+
+  const rect = el.globeWrap.getBoundingClientRect();
+  const rawX = (ndc.x * 0.5 + 0.5) * rect.width;
+  const rawY = (-ndc.y * 0.5 + 0.5) * rect.height;
+
+  const minMarginX = 130;
+  const minMarginY = 80;
+
+  let pinX  = rawX;
+  let pinY  = rawY;
+  let cardX = rawX;
+  let cardY = rawY - 140; // place card above the point
+
+  const maxX = rect.width - minMarginX;
+  const minX = minMarginX;
+  cardX = Math.max(minX, Math.min(maxX, cardX));
+
+  const maxY = rect.height - minMarginY;
+  cardY = Math.max(minMarginY, Math.min(maxY, cardY));
+
+  // If the clamp moved the card far away horizontally, keep pin roughly aligned
+  if (Math.abs(cardX - rawX) > 100) {
+    pinX = cardX;
+  }
+
+  card.style.left = `${cardX}px`;
+  card.style.top  = `${cardY}px`;
+
+  if (pin) {
+    pin.style.left    = `${pinX}px`;
+    pin.style.top     = `${pinY}px`;
+    pin.style.opacity = '1';
+  }
+
+  if (stem) {
+    const stemTop    = Math.min(cardY, pinY);
+    const stemBottom = Math.max(cardY, pinY);
+    stem.style.left   = `${pinX}px`;
+    stem.style.top    = `${stemTop}px`;
+    stem.style.height = `${Math.max(14, stemBottom - stemTop)}px`;
+    stem.style.opacity= '1';
+  }
+
+  // Content update when fixture changes
+  if (!repositionOnly && f.fixture_id !== lastStadiumFixtureId) {
+    lastStadiumFixtureId = f.fixture_id;
+
+    const d = f.date_utc ? new Date(f.date_utc) : null;
+    let eyebrow = f.competition || 'Fixture';
+    if (d && !isNaN(d)) {
+      const dateStr = d.toLocaleDateString(undefined, {
+        weekday:'short', day:'2-digit', month:'short'
+      });
+      const timeStr = d.toLocaleTimeString(undefined, {
+        hour:'2-digit', minute:'2-digit'
+      });
+      eyebrow = `${eyebrow} • ${dateStr} ${timeStr} GMT`;
+    }
+
+    if (el.stadiumTitle) {
+      el.stadiumTitle.textContent = `${f.home_team} vs ${f.away_team}`;
+    }
+    if (el.stadiumEyebrow) {
+      el.stadiumEyebrow.textContent = eyebrow;
+    }
+    if (el.stadiumSub) {
+      const parts = [];
+      if (f.stadium) parts.push(f.stadium);
+      const loc = [f.city, f.country].filter(Boolean).join(', ');
+      if (loc) parts.push(loc);
+      el.stadiumSub.textContent = parts.join(' • ') || 'Location TBC';
+    }
+    if (el.stadiumStats) {
+      const ftrPct   = f.confidence_ftr ? Math.round(f.confidence_ftr * 100) : null;
+      const overPct  = f.over25_prob    ? Math.round(f.over25_prob * 100)    : null;
+      const bttsPct  = f.btts_prob      ? Math.round(f.btts_prob * 100)      : null;
+      el.stadiumStats.textContent =
+        `OG Edge: ${
+          ftrPct != null ? `Home ${ftrPct}%` : '—'
+        } · O2.5 ${
+          overPct != null ? overPct + '%' : '—'
+        } · BTTS ${
+          bttsPct != null ? bttsPct + '%' : '—'
+        }`;
+    }
+    if (el.stadiumCompPill) {
+      const comp = (f.competition || '').trim();
+      if (comp) {
+        const parts = comp.split(/\s+/);
+        const short = (parts[0]?.[0] || '') + (parts[1]?.[0] || '');
+        el.stadiumCompPill.textContent = short.toUpperCase() || 'OG';
+      } else {
+        el.stadiumCompPill.textContent = 'OG';
+      }
+    }
+    if (el.stadiumCrest) {
+      setBadgeLocal(el.stadiumCrest, null, f.home_team);
+    }
+  }
+
+  card.classList.add('stadium-card--visible');
 }
 
 function moveMarkerToFixture(f, { fly = false } = {}) {
@@ -3362,12 +3555,18 @@ function showRoute(hash) {
   // Control globe render loop
   isHomeActive = (id === 'view-home');
 
+  // Hide stadium card when we’re not on the home view
+  if (!isHomeActive) {
+    updateStadiumCard(null);
+  }
+
   // Render portfolio view on demand
   if (id === 'view-portfolio') {
     renderPortfolio();
     renderPortfolioStats();
   }
 }
+
 
 window.addEventListener('hashchange', ()=> showRoute(location.hash));
 window.addEventListener('DOMContentLoaded', ()=>{
