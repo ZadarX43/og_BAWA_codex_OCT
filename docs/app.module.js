@@ -2094,6 +2094,7 @@ function updateFixtureProgress() {
 
   elProg.textContent = `Explored ${visited} of ${total} fixtures`;
 }
+
 function updateGlobeTooltip(pt) {
   const tip = el.globeTooltip;
   if (!tip || !camera || !el.globeWrap) return;
@@ -2155,6 +2156,7 @@ function updateGlobeTooltip(pt) {
   tip.classList.add('globe-tooltip--visible');
   tip.setAttribute('aria-hidden', 'false');
 }
+
 
 function selectIndex(idx, { fly = false } = {}) {
   if (!visibleFixtures.length) return;
