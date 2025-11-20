@@ -59,7 +59,10 @@ const el = {
   stadiumAccaBtn:document.getElementById('stadium-add-acca'),
 
   // Rail progress
-  fixtureProgress: document.getElementById('fixture-progress')
+  fixtureProgress: document.getElementById('fixture-progress'),
+
+  // Globe hover tooltip
+  globeTooltip: document.getElementById('globe-tooltip')
 };
 
 // -----------------------------------------
@@ -2046,13 +2049,17 @@ async function loadFixturesCSV(url){
 // Selection, hover, rail, panel
 // ----------------------------
 function handleHover(pt){
-  const hoverMatch = pt ? (p => p.latitude===pt.latitude && p.longitude===pt.longitude) : ()=>false;
-  globe.pointRadius(p=>{
+  const hoverMatch = pt ? (p => p === pt) : () => false;
+
+  globe.pointRadius(p => {
     if (p.__active) return RADIUS_ACTIVE;
     if (hoverMatch(p)) return RADIUS_BASE * 1.6;
     return p.__hot ? RADIUS_BASE * 1.3 : RADIUS_BASE * 0.75;
   });
+
+  updateGlobeTooltip(pt);
 }
+
 
 
 function buildRail(items){
@@ -2086,6 +2093,67 @@ function updateFixtureProgress() {
   }
 
   elProg.textContent = `Explored ${visited} of ${total} fixtures`;
+}
+function updateGlobeTooltip(pt) {
+  const tip = el.globeTooltip;
+  if (!tip || !camera || !el.globeWrap) return;
+
+  // Hide when nothing is hovered
+  if (!pt) {
+    tip.classList.remove('globe-tooltip--visible');
+    tip.setAttribute('aria-hidden', 'true');
+    return;
+  }
+
+  const lat = Number(pt.latitude);
+  const lon = Number(pt.longitude);
+  if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+    tip.classList.remove('globe-tooltip--visible');
+    tip.setAttribute('aria-hidden', 'true');
+    return;
+  }
+
+  const R = getGlobeRadius();
+  const worldPos = latLngToUnit(lat, lon)
+    .normalize()
+    .multiplyScalar(R * (1 + SURFACE_EPS));
+
+  const ndc = worldPos.clone().project(camera);
+  if (ndc.z > 1 || ndc.z < -1) {
+    tip.classList.remove('globe-tooltip--visible');
+    tip.setAttribute('aria-hidden', 'true');
+    return;
+  }
+
+  const rect = el.globeWrap.getBoundingClientRect();
+  const x = (ndc.x * 0.5 + 0.5) * rect.width;
+  const y = (-ndc.y * 0.5 + 0.5) * rect.height;
+
+  tip.style.left = `${x}px`;
+  tip.style.top  = `${y - 18}px`;
+
+  // Label: "Home vs Away • 20:00"
+  const home = pt.home_team || pt.home || 'Home';
+  const away = pt.away_team || pt.away || 'Away';
+
+  let timeStr = '';
+  try {
+    if (pt.date_utc) {
+      const d = new Date(pt.date_utc);
+      timeStr = d.toLocaleTimeString(undefined, {
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+  } catch {}
+
+  const parts = [`${home} vs ${away}`];
+  if (timeStr) parts.push(timeStr);
+
+  tip.textContent = parts.join(' • ');
+
+  tip.classList.add('globe-tooltip--visible');
+  tip.setAttribute('aria-hidden', 'false');
 }
 
 function selectIndex(idx, { fly = false } = {}) {
@@ -3554,10 +3622,12 @@ function showRoute(hash) {
   // Control globe render loop
   isHomeActive = (id === 'view-home');
 
-  // Hide stadium card when we’re not on the home view
+  // Hide stadium card + tooltip when we’re not on the home view
   if (!isHomeActive) {
     updateStadiumCard(null);
+    updateGlobeTooltip(null);
   }
+
 
   // Render portfolio view on demand
   if (id === 'view-portfolio') {
