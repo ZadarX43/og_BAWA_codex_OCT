@@ -1814,11 +1814,13 @@ canvas{ border-radius:24px; }
 
 .stadium-card {
   position: absolute;
-  /* JS sets left/top to the ANCHOR point (bottom-centre of card) */
-  left: 50%;
-  top: 50%;
+  /* JS will set left/top to the PIN location */
+  left: 0;
+  top: 0;
+
+  /* Bottom-centre of the card sits on left/top */
   transform-origin: 50% 100%;
-  transform: translate(-50%, -100%) scale(0.9); /* centre-bottom anchor */
+  transform: translate(-50%, -100%) scale(0.9);
 
   opacity: 0;
   pointer-events: auto;
@@ -1845,17 +1847,20 @@ canvas{ border-radius:24px; }
     transform 220ms ease-out;
 }
 
-/* Spawn state */
+@keyframes stadium-bob {
+  0%   { transform: translate(-50%, -100%) scale(1); }
+  50%  { transform: translate(-50%, -102%) scale(1); }
+  100% { transform: translate(-50%, -100%) scale(1); }
+}
+
 .stadium-card--visible {
   opacity: 1;
   transform: translate(-50%, -100%) scale(1);
 }
 
-/* Bob only the inner content, not the anchor position */
-@keyframes stadium-bob {
-  0%   { transform: translateY(0); }
-  50%  { transform: translateY(-4px); }
-  100% { transform: translateY(0); }
+/* Bob only the inner content, not the anchor point */
+.stadium-card--visible .stadium-card__body {
+  animation: stadium-bob 3.4s ease-in-out infinite;
 }
 
 .stadium-card--visible .stadium-card__body {
