@@ -468,7 +468,6 @@ canvas{ border-radius:24px; }
   color:var(--text-secondary);background:rgba(255,255,255,.07);
   border:1px solid rgba(255,255,255,.12);
   transition:background .25s ease,color .25s ease,transform .2s ease;
-  font-size:. nine; /* keep size; reduces jumping on hover */
   font-size:.9rem;
 }
 .tab.is-active{
@@ -1977,7 +1976,7 @@ canvas{ border-radius:24px; }
 }
 @keyframes stadium-bob {
   0%   { transform: translateY(0); }
-  50%  { transform: translateY(-4px); }
+  50%  { transform: translateY(-8px); }
   100% { transform: translateY(0); }
 }
 /* Bob the hero card content very gently when visible */
