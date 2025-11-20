@@ -111,7 +111,6 @@
             <!-- League chips host (JS will populate) -->
             <div class="league-chips" id="league-chips" aria-label="League filters"></div>
           </aside>
-
           <!-- Globe pane -->
           <section class="hero__globe" aria-label="Upcoming fixtures globe">
             <div id="globe-container" tabindex="0" aria-describedby="globe-help">
@@ -165,9 +164,15 @@
                   </div>
                 </article>
               </div>
+          
+              <!-- Tiny hover tooltip for globe dots -->
+              <div id="globe-tooltip" class="globe-tooltip" aria-hidden="true"></div>
             </div>
-
-            <p id="globe-help" class="visually-hidden">Use left and right arrow keys or buttons to change fixture.</p>
+          
+            <p id="globe-help" class="visually-hidden">
+              Use left and right arrow keys or buttons to change fixture.
+            </p>
+          </section>
 
             <!-- Competition Accuracy (pretty) -->
             <section class="comp-accuracy" id="comp-accuracy" aria-label="Competition accuracy">
