@@ -2547,13 +2547,14 @@ function slerpUnitVec(fromN, toN, t) {
   return v0.clone().applyQuaternion(q).normalize();
 }
 
-function updateStadiumCard(f, { repositionOnly = false } = {}) {
+ffunction updateStadiumCard(f, { repositionOnly = false } = {}) {
   const card = el.stadiumCard;
   const pin  = el.stadiumPin;
   const stem = el.stadiumStem;
 
   if (!card || !el.globeWrap || !camera || !renderer) return;
 
+  // Hide everything if there is no fixture
   if (!f) {
     card.classList.remove('stadium-card--visible');
     if (pin)  pin.style.opacity  = '0';
@@ -2583,43 +2584,28 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
     return;
   }
 
-  // Map NDC -> canvas pixels, then into container space
-  const containerRect = el.globeWrap.getBoundingClientRect();
-  const canvasRect    = renderer.domElement.getBoundingClientRect();
+  // --- Map NDC → plain container pixels (no canvas rect gymnastics) ---
+  const rect = el.globeWrap.getBoundingClientRect();
+  const rawX = (ndc.x * 0.5 + 0.5) * rect.width;
+  const rawY = (-ndc.y * 0.5 + 0.5) * rect.height;
 
-  const relWidth  = canvasRect.width;
-  const relHeight = canvasRect.height;
+  // Stadium anchor (dot) – this is the ONLY source of truth for X
+  const pinX = rawX;
+  const pinY = rawY;
 
-  const offsetX = canvasRect.left - containerRect.left;
-  const offsetY = canvasRect.top  - containerRect.top;
+  // Card is centred on the SAME X, just floated above in Y
+  const verticalOffset = 190;          // distance above dot in px
+  const cardHeight     = card.offsetHeight || 180;
 
-  const stadiumX = (ndc.x * 0.5 + 0.5) * relWidth  + offsetX;
-  const stadiumY = (-ndc.y * 0.5 + 0.5) * relHeight + offsetY;
+  let cardX = rawX;
+  let cardY = rawY - verticalOffset;
 
-  // ---- Card position: fixed offset above the stadium ----
-  const cardHeight      = card.offsetHeight || 180;
-  const verticalOffset  = 190;  // distance above the dot in px
+  // Vertical clamp only (keep card inside globe frame); NO horizontal clamp
+  const minY = 40;
+  const maxY = rect.height - 60 - cardHeight;
+  cardY = Math.max(minY, Math.min(maxY, cardY));
 
-  let cardX = stadiumX;
-  let cardY = stadiumY - verticalOffset;
-
-  // Clamp just enough to avoid clipping edges
-  const marginX      = 120;
-  const marginTop    = 40;
-  const marginBottom = 60;
-
-  const minX = marginX;
-  const maxX = containerRect.width - marginX;
-  cardX      = Math.max(minX, Math.min(maxX, cardX));
-
-  const minY = marginTop;
-  const maxY = containerRect.height - marginBottom - cardHeight;
-  cardY      = Math.max(minY, Math.min(maxY, cardY));
-
-  // Stem & pin: straight down from card centre to the stadium
-  const pinX = cardX;
-  const pinY = stadiumY;
-
+  // Apply positions – remember the card, pin and stem all use translateX(-50%)
   card.style.left = `${cardX}px`;
   card.style.top  = `${cardY}px`;
 
@@ -2638,18 +2624,21 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
     stem.style.opacity= '1';
   }
 
-  // Content update only when fixture changes
-  if (f.fixture_id !== lastStadiumFixtureId) {
+  // ---- Content update only when the fixture actually changes ----
+  if (!repositionOnly && f.fixture_id !== lastStadiumFixtureId) {
     lastStadiumFixtureId = f.fixture_id;
 
     const d = f.date_utc ? new Date(f.date_utc) : null;
     let eyebrow = f.competition || 'Fixture';
     if (d && !isNaN(d)) {
       const dateStr = d.toLocaleDateString(undefined, {
-        weekday:'short', day:'2-digit', month:'short'
+        weekday: 'short',
+        day: '2-digit',
+        month: 'short'
       });
       const timeStr = d.toLocaleTimeString(undefined, {
-        hour:'2-digit', minute:'2-digit'
+        hour: '2-digit',
+        minute: '2-digit'
       });
       eyebrow = `${eyebrow} • ${dateStr} ${timeStr} GMT`;
     }
@@ -2668,16 +2657,16 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
       el.stadiumSub.textContent = parts.join(' • ') || 'Location TBC';
     }
     if (el.stadiumStats) {
-      const ftrPct   = f.confidence_ftr ? Math.round(f.confidence_ftr * 100) : null;
-      const overPct  = f.over25_prob    ? Math.round(f.over25_prob * 100)    : null;
-      const bttsPct  = f.btts_prob      ? Math.round(f.btts_prob * 100)      : null;
+      const ftrPct  = f.confidence_ftr ? Math.round(f.confidence_ftr * 100) : null;
+      const overPct = f.over25_prob    ? Math.round(f.over25_prob * 100)    : null;
+      const bttsPct = f.btts_prob      ? Math.round(f.btts_prob * 100)      : null;
       el.stadiumStats.textContent =
         `OG Edge: ${
           ftrPct != null ? `Home ${ftrPct}%` : '—'
         } · O2.5 ${
-          overPct != null ? overPct + '%' : '—'
+          overPct != null ? `${overPct}%` : '—'
         } · BTTS ${
-          bttsPct != null ? bttsPct + '%' : '—'
+          bttsPct != null ? `${bttsPct}%` : '—'
         }`;
     }
     if (el.stadiumCompPill) {
@@ -2697,7 +2686,6 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
 
   card.classList.add('stadium-card--visible');
 }
-
 
 
 function moveMarkerToFixture(f, { fly = false } = {}) {
