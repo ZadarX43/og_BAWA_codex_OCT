@@ -42,7 +42,7 @@ const el = {
   compWrap:      document.getElementById('comp-accuracy'),
   compName:      document.getElementById('comp-name'),
   compLogo:      document.getElementById('comp-logo'),
-  compTraffic:   document.getElementById('comp-traffic')
+  compTraffic:   document.getElementById('comp-traffic'),
 
   // Stadium hero card overlay
   stadiumCard:   document.getElementById('stadium-card'),
