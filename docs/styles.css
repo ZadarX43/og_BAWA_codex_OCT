@@ -1974,7 +1974,7 @@ canvas{ border-radius:24px; }
 
 .stadium-card--visible {
   opacity: 1;
-  transform: translate(-50%, -100%) scale(1);
+  transform: scale(1);   /* no translate here */
 }
 
 /* Bob only the inner content, not the card position */
