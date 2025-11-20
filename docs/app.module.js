@@ -2584,24 +2584,34 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
   const rawX = (ndc.x * 0.5 + 0.5) * rect.width;
   const rawY = (-ndc.y * 0.5 + 0.5) * rect.height;
 
-  const minMarginX = 130;
-  const minMarginY = 100; 
+  const minMarginX = 140;
+  const minMarginY = 90;
 
-  let pinX  = rawX;
-  let pinY  = rawY;
-  let cardX = rawX;
-  let cardY = rawY - 120; // place card above the point
+  // How far to offset the card horizontally from the stadium
+  const baseOffsetX = Math.min(120, rect.width * 0.18);
+
+  // Default: try to put the card to the right of the stadium
+  let cardX = rawX + baseOffsetX;
+  let cardY = rawY - 120; // above the point
 
   const maxX = rect.width - minMarginX;
   const minX = minMarginX;
+
+  // If going right would push us off the edge, flip to the left
+  if (cardX > maxX) {
+    cardX = rawX - baseOffsetX;
+  }
+
+  // Final clamp to keep inside container
   cardX = Math.max(minX, Math.min(maxX, cardX));
 
   const maxY = rect.height - minMarginY;
   cardY = Math.max(minMarginY, Math.min(maxY, cardY));
 
-  if (Math.abs(cardX - rawX) > 100) {
-    pinX = cardX;
-  }
+  // Stem base is always at the actual stadium position
+  const pinX = rawX;
+  const pinY = rawY;
+
 
   card.style.left = `${cardX}px`;
   card.style.top  = `${cardY}px`;
