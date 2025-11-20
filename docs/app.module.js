@@ -2585,7 +2585,7 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
   const containerRect = el.globeWrap.getBoundingClientRect();
   const canvasRect    = renderer.domElement.getBoundingClientRect();
 
-  const relWidth  = canvasRect.width;
+  c  const relWidth  = canvasRect.width;
   const relHeight = canvasRect.height;
 
   const offsetX = canvasRect.left - containerRect.left;
@@ -2597,20 +2597,21 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
   const minMarginX = 120;
   const minMarginY = 80;
 
-  // Horizontal: keep card roughly over the stadium, but away from the very edges
-  const maxX = containerRect.width - minMarginX;
-  const minX = minMarginX;
-  let cardX  = Math.max(minX, Math.min(maxX, rawX));
+  // === Fixed “lane” for the hero card ===
+  // Horizontal: keep the card around the centre of the globe container
+  const laneX = containerRect.width * 0.5; // 0.5 = centred, tweak to 0.55 for slight right bias
+  let cardX   = laneX;
 
-  // Vertical: keep card in a “nice” band, independent of rawY
-  const idealBandCenter = containerRect.height * 0.32; // ~upper third
+  // Vertical: keep the card in a nice band near the top third of the globe
   const cardHeight      = card.offsetHeight || 180;
+  const bandCenterY     = containerRect.height * 0.26; // ~top third
   const maxY            = containerRect.height - minMarginY - cardHeight;
-  let cardY             = Math.max(minMarginY, Math.min(maxY, idealBandCenter));
+  let cardY             = Math.max(minMarginY, Math.min(maxY, bandCenterY));
 
-  // Stem & pin: visually under the card, but base still at stadium’s Y
-  const pinX = cardX;
+  // Stem & pin: straight down under the card, hitting the stadium dot at rawY
+  const pinX = laneX;
   const pinY = rawY;
+
 
 
   card.style.left = `${cardX}px`;
