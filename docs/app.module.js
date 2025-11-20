@@ -79,6 +79,8 @@ let currentFixture = null;
 let isHomeActive = true;       // controls whether globe render loop runs
 let lastStadiumFixtureId = null;
 const visitedFixtureIds = new Set();
+let lastCardPos = { x: null, y: null };
+
 
 let cameraTravelRaf = null;
 let cameraMoveReqId = 0;
@@ -1883,8 +1885,13 @@ async function init(){
   controls.enablePan = false;
   controls.enableZoom = true;
   controls.autoRotate = false;
-  controls.minDistance = getGlobeRadius()*0.3;
-  controls.maxDistance = getGlobeRadius()*4;
+  
+  // Keep zoom & tilt in a comfortable, cinematic band
+  controls.minDistance   = getGlobeRadius() * 1.3;
+  controls.maxDistance   = getGlobeRadius() * 2.5;
+  controls.minPolarAngle = Math.PI * 0.20; // ≈ 36°
+  controls.maxPolarAngle = Math.PI * 0.80; // ≈ 144°
+
 
   // --- Postprocessing: FXAA + Bloom ---
   composer = new EffectComposer(renderer);
@@ -2573,6 +2580,7 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
     if (pin)  pin.style.opacity  = '0';
     if (stem) stem.style.opacity = '0';
     lastStadiumFixtureId = null;
+    lastCardPos.x = lastCardPos.y = null;
     return;
   }
 
@@ -2583,6 +2591,7 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
     if (overlay) overlay.setAttribute('aria-hidden', 'true');
     if (pin)  pin.style.opacity  = '0';
     if (stem) stem.style.opacity = '0';
+    lastCardPos.x = lastCardPos.y = null;
     return;
   }
 
@@ -2600,33 +2609,56 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
     return;
   }
 
-  const rect = el.globeWrap.getBoundingClientRect();
+  // Map NDC → pixels inside #globe-container
+  const rect    = el.globeWrap.getBoundingClientRect();
   const anchorX = (ndc.x * 0.5 + 0.5) * rect.width;
   const anchorY = (-ndc.y * 0.5 + 0.5) * rect.height;
 
   // Measure card (fallbacks before first paint)
   const cardWidth  = card.offsetWidth  || 320;
   const cardHeight = card.offsetHeight || 190;
-  const GAP        = 18;   // px between anchor and card bottom
-  const EDGE_M     = 16;   // px inset from container edges
-  const MIN_TOP    = 24;   // don’t let the card hug the top bar
 
-  // Base: centre the card horizontally over the anchor, above it
-  let cardLeft = anchorX - cardWidth / 2;
-  let cardTop  = anchorY - GAP - cardHeight;
+  const GAP        = 18;                  // distance between anchor and card bottom
+  const EDGE_M     = 16;                  // horizontal inset
+  const MIN_TOP    = 24;                  // never hug the very top
+  const MAX_TOP    = rect.height * 0.35;  // card lives in roughly top third
+  const SMOOTH     = 0.25;                // 0 = instant, 1 = super sticky
 
-  // Clamp vertically
-  if (cardTop < MIN_TOP) cardTop = MIN_TOP;
+  // ---- 1) Horizontal: follow anchor, but clamp to edges ----
+  let targetLeft = anchorX - cardWidth / 2;
+  const maxLeft  = rect.width - cardWidth - EDGE_M;
 
-  // Clamp horizontally
-  const maxLeft = rect.width - cardWidth - EDGE_M;
   if (maxLeft <= EDGE_M) {
     // Container narrower than card + margins → just centre
-    cardLeft = (rect.width - cardWidth) / 2;
+    targetLeft = (rect.width - cardWidth) / 2;
   } else {
-    if (cardLeft < EDGE_M) cardLeft = EDGE_M;
-    if (cardLeft > maxLeft) cardLeft = maxLeft;
+    if (targetLeft < EDGE_M) targetLeft = EDGE_M;
+    if (targetLeft > maxLeft) targetLeft = maxLeft;
   }
+
+  // ---- 2) Vertical: primarily follow anchor, but soft clamp ----
+  let targetTop = anchorY - GAP - cardHeight;
+  if (targetTop < MIN_TOP) targetTop = MIN_TOP;
+  if (targetTop > MAX_TOP) targetTop = MAX_TOP;
+
+  // ---- 3) Smoothing: glide on camera movement, snap on new fixture ----
+  if (!repositionOnly) {
+    // New fixture / initial spawn – snap to position and reset cache
+    lastCardPos.x = targetLeft;
+    lastCardPos.y = targetTop;
+  } else {
+    // Camera is moving; glide towards the new target
+    if (lastCardPos.x == null || lastCardPos.y == null) {
+      lastCardPos.x = targetLeft;
+      lastCardPos.y = targetTop;
+    } else {
+      lastCardPos.x += (targetLeft - lastCardPos.x) * SMOOTH;
+      lastCardPos.y += (targetTop - lastCardPos.y) * SMOOTH;
+    }
+  }
+
+  const cardLeft = lastCardPos.x;
+  const cardTop  = lastCardPos.y;
 
   card.style.left = `${cardLeft}px`;
   card.style.top  = `${cardTop}px`;
@@ -2649,7 +2681,7 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
     stem.style.opacity= '1';
   }
 
-  // Only rewrite content when the fixture actually changes
+  // ---- 4) Content only updates when fixture changes ----
   if (!repositionOnly && f.fixture_id !== lastStadiumFixtureId) {
     lastStadiumFixtureId = f.fixture_id;
 
