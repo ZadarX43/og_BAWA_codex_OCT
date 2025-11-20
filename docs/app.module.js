@@ -2586,7 +2586,7 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
   const containerRect = el.globeWrap.getBoundingClientRect();
   const canvasRect    = renderer.domElement.getBoundingClientRect();
 
-  c  const relWidth  = canvasRect.width;
+  const relWidth  = canvasRect.width;
   const relHeight = canvasRect.height;
 
   const offsetX = canvasRect.left - containerRect.left;
