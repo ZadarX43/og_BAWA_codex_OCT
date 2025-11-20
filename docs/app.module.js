@@ -882,14 +882,34 @@ function buildLeagueChips() {
     el.leagueChips.appendChild(b);
   }
 }
-function centerCameraOnVisibleFixtures()
+function centerCameraOnVisibleFixtures() {
+  if (!visibleFixtures.length || !camera || !controls || !globe) return;
+
+  const sum = new THREE.Vector3(0, 0, 0);
+  let count = 0;
+
+  for (const f of visibleFixtures) {
+    const lat = Number(f.latitude);
+    const lon = Number(f.longitude);
+    if (!Number.isFinite(lat) || !Number.isFinite(lon)) continue;
+
+    const n = latLngToUnit(lat, lon);
+    sum.add(n);
+    count++;
+  }
+
+  if (!count) return;
+
+  const avg = sum.multiplyScalar(1 / count).normalize();
+  const R   = getGlobeRadius();
+
   // Target: just above the surface at the cluster centre
   const target = avg.clone().multiplyScalar(R * (1 + SURFACE_EPS));
 
-  // Choose a camera distance that’s closer than the old R*3, but not *too* close
-  const minDist     = R * 1.4;
-  const maxDist     = R * 2.0;
+  // Choose a camera distance that frames the cluster nicely
   const currentDist = camera.position.length() || (R * 1.8);
+  const minDist     = R * 1.4;
+  const maxDist     = R * 2.2;
   const dist        = Math.min(maxDist, Math.max(minDist, currentDist));
 
   const camPos = avg.clone().multiplyScalar(dist);
@@ -898,7 +918,8 @@ function centerCameraOnVisibleFixtures()
   controls.target.copy(target);
   controls.update();
 }
-function centerCameraOnFixture(f, distanceFactor = 2.2) {
+
+function centerCameraOnFixture(f, distanceFactor = 2.05) {
   if (!f || !camera || !controls || !globe) return;
 
   const lat = Number(f.latitude);
@@ -908,7 +929,7 @@ function centerCameraOnFixture(f, distanceFactor = 2.2) {
   const R   = getGlobeRadius();
   const dir = latLngToUnit(lat, lon).normalize();
 
-  // Point the camera *at* the fixture
+  // Point the camera at the fixture
   const target = dir.clone().multiplyScalar(R * (1 + SURFACE_EPS));
 
   // Pull the camera back along the same direction by `distanceFactor`
@@ -918,6 +939,7 @@ function centerCameraOnFixture(f, distanceFactor = 2.2) {
   controls.target.copy(target);
   controls.update();
 }
+
 
 
 function applyFiltersAndRender() {
@@ -2101,7 +2123,6 @@ function selectIndex(idx, { fly = false } = {}) {
   // Update right-hand panel + bottom rail highlight
   renderPanel(f);
   syncRail(idx);
-  updateFixtureProgress();
 
 }
 
