@@ -2436,12 +2436,12 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
   const rawY = (-ndc.y * 0.5 + 0.5) * rect.height;
 
   const minMarginX = 130;
-  const minMarginY = 80;
+  const minMarginY = 100; 
 
   let pinX  = rawX;
   let pinY  = rawY;
   let cardX = rawX;
-  let cardY = rawY - 140; // place card above the point
+  let cardY = rawY - 130; // place card above the point
 
   const maxX = rect.width - minMarginX;
   const minX = minMarginX;
