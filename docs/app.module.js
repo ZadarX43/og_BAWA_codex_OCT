@@ -2554,93 +2554,93 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
 
   if (!card || !el.globeWrap || !camera || !renderer) return;
 
-  if (!f) {
+  // Hide + reset
+  const hide = () => {
     card.classList.remove('stadium-card--visible');
     if (pin)  pin.style.opacity  = '0';
     if (stem) stem.style.opacity = '0';
+  };
+
+  if (!f) {
     lastStadiumFixtureId = null;
+    hide();
     return;
   }
 
   const lat = Number(f.latitude);
   const lon = Number(f.longitude);
   if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
-    card.classList.remove('stadium-card--visible');
-    if (pin)  pin.style.opacity  = '0';
-    if (stem) stem.style.opacity = '0';
+    hide();
     return;
   }
 
+  // World-space position just above the surface
   const R   = getGlobeRadius();
   const dir = latLngToUnit(lat, lon).normalize();
   const worldPos = dir.clone().multiplyScalar(R * (1 + SURFACE_EPS));
 
+  // Project to NDC
   const ndc = worldPos.clone().project(camera);
   if (ndc.z > 1 || ndc.z < -1) {
-    card.classList.remove('stadium-card--visible');
-    if (pin)  pin.style.opacity  = '0';
-    if (stem) stem.style.opacity = '0';
+    hide();
     return;
   }
 
-  // ---- Convert NDC to container pixel coords ----
+  // Map NDC -> canvas pixels -> container pixels
   const containerRect = el.globeWrap.getBoundingClientRect();
   const canvasRect    = renderer.domElement.getBoundingClientRect();
 
   const relWidth  = canvasRect.width;
   const relHeight = canvasRect.height;
-  const offsetX   = canvasRect.left - containerRect.left;
-  const offsetY   = canvasRect.top  - containerRect.top;
 
+  const offsetX = canvasRect.left - containerRect.left;
+  const offsetY = canvasRect.top  - containerRect.top;
+
+  // Stadium dot in container space
   const stadiumX = (ndc.x * 0.5 + 0.5) * relWidth  + offsetX;
   const stadiumY = (-ndc.y * 0.5 + 0.5) * relHeight + offsetY;
 
-  // ================================
-  //  Fixed "hero band" for the card
-  // ================================
+  // Anchor point = bottom-centre of card.
+  // Start with anchor exactly on the dot.
+  let anchorX = stadiumX;
+  let anchorY = stadiumY;
+
   const cardWidth  = card.offsetWidth  || 300;
   const cardHeight = card.offsetHeight || 180;
 
-  // X: keep card centre above the stadium,
-  // but clamp so it never hangs off the sides.
-  let cardX = stadiumX;
-  const marginX = 32;
-  const minX    = marginX + cardWidth / 2;
-  const maxX    = containerRect.width - marginX - cardWidth / 2;
-  cardX         = Math.max(minX, Math.min(maxX, cardX));
+  // Vertical clamp so card top never clips the top of globe container
+  const marginTop = 32; // px
+  const topY      = anchorY - cardHeight;
+  if (topY < marginTop) {
+    anchorY = marginTop + cardHeight;
+  }
 
-  // Y: park the card in the upper third of the globe container,
-  // not derived from latitude.
-  const heroBandY = containerRect.height * 0.22;  // ~22% from top
-  let cardY       = Math.max(32, heroBandY);
+  // No horizontal clamp: we want the card centred exactly on the stem.
+  // (If you ever want to clamp horizontally, you must move pinX too.)
 
-  // Apply final position (top-left corner)
-  card.style.left = `${cardX - cardWidth / 2}px`;
-  card.style.top  = `${cardY}px`;
+  // Apply anchor (CSS translate(-50%,-100%) will treat this as bottom-centre)
+  card.style.left = `${anchorX}px`;
+  card.style.top  = `${anchorY}px`;
 
-  // Stem: vertical line from card bottom centre down to the stadium dot
-  const pinX = cardX;
-  const pinY = stadiumY;
-
+  // Pin sits at the actual stadium dot
   if (pin) {
-    pin.style.left    = `${pinX}px`;
-    pin.style.top     = `${pinY}px`;
+    pin.style.left    = `${stadiumX}px`;
+    pin.style.top     = `${stadiumY}px`;
     pin.style.opacity = '1';
   }
 
+  // Stem connects dot ↔ bottom-centre of card
   if (stem) {
-    const stemTop    = cardY + cardHeight;     // bottom of card
-    const stemBottom = pinY;
-    stem.style.left   = `${pinX}px`;
-    stem.style.top    = `${Math.min(stemTop, stemBottom)}px`;
-    stem.style.height = `${Math.abs(stemBottom - stemTop)}px`;
-    stem.style.opacity = '1';
+    const stemTop    = Math.min(stadiumY, anchorY);
+    const stemBottom = Math.max(stadiumY, anchorY);
+    stem.style.left   = `${stadiumX}px`;
+    stem.style.top    = `${stemTop}px`;
+    stem.style.height = `${Math.max(14, stemBottom - stemTop)}px`;
+    stem.style.opacity= '1';
   }
 
-  // =============================
-  //  Content update (unchanged)
-  // =============================
-  if (f.fixture_id !== lastStadiumFixtureId) {
+  // Only update text/crests when fixture changes (not every frame)
+  if (!repositionOnly && f.fixture_id !== lastStadiumFixtureId) {
     lastStadiumFixtureId = f.fixture_id;
 
     const d = f.date_utc ? new Date(f.date_utc) : null;
@@ -2698,6 +2698,7 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
 
   card.classList.add('stadium-card--visible');
 }
+
 
 
 function moveMarkerToFixture(f, { fly = false } = {}) {
