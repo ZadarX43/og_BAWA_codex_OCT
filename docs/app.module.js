@@ -1391,6 +1391,7 @@ function renderAccaCart(){
 
   // keep snapshot for portfolio save
   currentAccaLegs = abCartLegs.map(l => ({ ...l }));
+  updateRailFlags();
 }
 
 function copyAccaToClipboard(){
@@ -2096,18 +2097,59 @@ function handleHover(pt){
 function buildRail(items){
   const rail = document.getElementById('fixture-rail'); if (!rail) return;
   rail.innerHTML = '';
-  items.forEach((f,i)=>{
+    items.forEach((f, i) => {
     const it = document.createElement('button');
-    it.className = `rail-item${i===0?' is-active':''}`;
-    it.innerHTML = `<h4>${f.home_team} vs ${f.away_team}</h4><p>${f.city||f.country||''}</p>`;
-    it.addEventListener('click', ()=>selectIndex(i,{fly:true}));
+    it.className = `rail-item${i === 0 ? ' is-active' : ''}`;
+    it.dataset.fixtureId = f.fixture_id;
+
+    it.innerHTML = `
+      <div class="rail-item-main">
+        <h4>${f.home_team} vs ${f.away_team}</h4>
+        <p>${f.city || f.country || ''}</p>
+      </div>
+      <div class="rail-item-flags">
+        <span class="rail-flag rail-flag--visited" aria-hidden="true"></span>
+        <span class="rail-flag rail-flag--acca" aria-hidden="true"></span>
+      </div>
+    `;
+
+    it.addEventListener('click', () => selectIndex(i, { fly: true }));
     rail.appendChild(it);
   });
+
+  updateRailFlags();
 }
+
 function syncRail(activeIdx){
   const rail = document.getElementById('fixture-rail'); if (!rail) return;
   [...rail.children].forEach((c,idx)=>c.classList.toggle('is-active', idx===activeIdx));
 }
+function updateRailFlags() {
+  const rail = document.getElementById('fixture-rail');
+  if (!rail) return;
+
+  const hasAccaForFixture = (fixtureId) =>
+    abCartLegs.some(l => l.fixture_id === fixtureId);
+
+  [...rail.children].forEach(btn => {
+    const fixtureId = btn.dataset.fixtureId;
+    if (!fixtureId) return;
+
+    const visited = visitedFixtureIds.has(fixtureId);
+    const acca    = hasAccaForFixture(fixtureId);
+
+    const visitedEl = btn.querySelector('.rail-flag--visited');
+    const accaEl    = btn.querySelector('.rail-flag--acca');
+
+    if (visitedEl) {
+      visitedEl.classList.toggle('rail-flag--on', !!visited);
+    }
+    if (accaEl) {
+      accaEl.classList.toggle('rail-flag--on', !!acca);
+    }
+  });
+}
+
 function updateFixtureProgress() {
   const elProg = el.fixtureProgress;
   if (!elProg) return;
@@ -2210,7 +2252,6 @@ function selectIndex(idx, { fly = false } = {}) {
     })
     .pointsTransitionDuration?.(260);
 
-
   // Recenter camera on this fixture when we are "flying" to it
   if (fly) {
     centerCameraOnFixture(f);
@@ -2220,12 +2261,13 @@ function selectIndex(idx, { fly = false } = {}) {
   moveMarkerToFixture(f, { fly });
   updateStadiumCard(f);
 
-
   // Update right-hand panel + bottom rail highlight
   renderPanel(f);
   syncRail(idx);
-
+  updateRailFlags();          //  update visited/acca dots
+  updateFixtureProgress();    //  keep "Explored X of Y" in sync
 }
+
 
 
 function elmEmpty(msg){
