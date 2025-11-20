@@ -2635,39 +2635,11 @@ function moveMarkerToFixture(f, { fly = false } = {}) {
         });
       });
 
-      // Pill positioning & texture
-      const PILL_ALT = R * 0.05;
-      const PILL_OUT = R * 0.03;
-      S.billboard.position.set(0, PILL_ALT, PILL_OUT);
-      S.billboard.material.rotation = 0;
-
-      const basePillTex = makeStadiumPillTexture(f, null);
-      S.billboard.material.map = basePillTex;
+            // WebGL billboard pill disabled — HTML hero card handles stadium info now
+      S.billboard.visible = false;
+      S.billboard.material.opacity = 0.0;
+      S.billboard.material.map = null;
       S.billboard.material.needsUpdate = true;
-      S.billboard.material.opacity = 1.0;
-      S.billboard.visible = true;
-
-      if (curN.dot(camera.position.clone().normalize()) < -0.25) {
-        S.billboard.visible = false;
-      }
-
-      (async () => {
-        if (S.state.reqId !== myReq) return;
-        let stadiumImage = null;
-        for (const url of stadiumCandidates(f)) {
-          try {
-            const tex = await loadTextureQueued(url);
-            if (S.state.reqId !== myReq) return;
-            stadiumImage = tex.image || null;
-            break;
-          } catch {}
-        }
-        if (!stadiumImage || S.state.reqId !== myReq) return;
-        const pillTex = makeStadiumPillTexture(f, stadiumImage);
-        S.billboard.material.map = pillTex;
-        S.billboard.material.needsUpdate = true;
-        S.billboard.visible = true;
-      })();
     }
   });
 }
