@@ -1,5 +1,10 @@
 // app.module.js
 // Odds Genius — Full UI (Globe + Filters + Panels + OCR + Acca + Co-Pilot)
+console.log(
+  '%c[OG] app.module.js build 2025-11-20-1',
+  'color:#7df9c4;font-weight:bold;'
+);
+window.OG_BUILD = '2025-11-20-1';
 
 import * as THREE from 'three';
 import { OrbitControls }   from 'three/examples/jsm/controls/OrbitControls.js';
