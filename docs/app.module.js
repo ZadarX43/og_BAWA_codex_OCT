@@ -2120,10 +2120,14 @@ function buildRail(items){
   updateRailFlags();
 }
 
-function syncRail(activeIdx){
-  const rail = document.getElementById('fixture-rail'); if (!rail) return;
-  [...rail.children].forEach((c,idx)=>c.classList.toggle('is-active', idx===activeIdx));
+function syncRail(activeIdx) {
+  const rail = document.getElementById('fixture-rail');
+  if (!rail) return;
+  [...rail.children].forEach((c, idx) => {
+    c.classList.toggle('is-active', idx === activeIdx);
+  });
 }
+
 function updateRailFlags() {
   const rail = document.getElementById('fixture-rail');
   if (!rail) return;
