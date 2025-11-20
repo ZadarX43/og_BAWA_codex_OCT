@@ -2570,10 +2570,8 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
     return;
   }
 
-  const R = getGlobeRadius();
-
-  // --- Anchor point in world space (always from lat/lon) ---
-  const dir      = latLngToUnit(lat, lon).normalize();
+  const R   = getGlobeRadius();
+  const dir = latLngToUnit(lat, lon).normalize();
   const worldPos = dir.clone().multiplyScalar(R * (1 + SURFACE_EPS));
 
   const ndc = worldPos.clone().project(camera);
@@ -2597,33 +2595,25 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
   const rawX = (ndc.x * 0.5 + 0.5) * relWidth  + offsetX;
   const rawY = (-ndc.y * 0.5 + 0.5) * relHeight + offsetY;
 
-  const minMarginX = 140;
-  const minMarginY = 90;
+  // Base positioning: card directly above the stadium dot
+  let cardX = rawX;
+  let cardY = rawY - 140; // vertical gap
 
-  // How far to offset the card horizontally from the stadium
-  const baseOffsetX = Math.min(120, containerRect.width * 0.18);
-
-  // Default: try to put the card to the right of the stadium
-  let cardX = rawX + baseOffsetX;
-  let cardY = rawY - 120; // above the point
+  const minMarginX = 120;
+  const minMarginY = 80;
 
   const maxX = containerRect.width - minMarginX;
   const minX = minMarginX;
 
-  // If going right would push us off the edge, flip to the left
-  if (cardX > maxX) {
-    cardX = rawX - baseOffsetX;
-  }
-
   // Clamp horizontally
   cardX = Math.max(minX, Math.min(maxX, cardX));
 
-  // Clamp vertically based on card height so the bottom never drops out of view
-  const cardHeight = card.offsetHeight || 180; // fallback height
+  // Clamp vertically based on card height so bottom never clips out of the globe card
+  const cardHeight = card.offsetHeight || 180;
   const maxY = containerRect.height - minMarginY - cardHeight;
   cardY = Math.max(minMarginY, Math.min(maxY, cardY));
 
-  // Stem base is always at the actual stadium position
+  // Stem & pin: always at the actual stadium position
   const pinX = rawX;
   const pinY = rawY;
 
@@ -2645,7 +2635,7 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
     stem.style.opacity= '1';
   }
 
-  // Content update when fixture changes
+  // Content update only when fixture changes
   if (f.fixture_id !== lastStadiumFixtureId) {
     lastStadiumFixtureId = f.fixture_id;
 
