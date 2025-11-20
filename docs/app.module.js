@@ -2102,16 +2102,25 @@ function buildRail(items){
     it.className = `rail-item${i === 0 ? ' is-active' : ''}`;
     it.dataset.fixtureId = f.fixture_id;
 
-    it.innerHTML = `
+    iit.innerHTML = `
       <div class="rail-item-main">
         <h4>${f.home_team} vs ${f.away_team}</h4>
         <p>${f.city || f.country || ''}</p>
       </div>
       <div class="rail-item-flags">
-        <span class="rail-flag rail-flag--visited" aria-hidden="true"></span>
-        <span class="rail-flag rail-flag--acca" aria-hidden="true"></span>
+        <span
+          class="rail-flag rail-flag--visited"
+          aria-hidden="true"
+          title="Visited"
+        ></span>
+        <span
+          class="rail-flag rail-flag--acca"
+          aria-hidden="true"
+          title="In acca"
+        ></span>
       </div>
     `;
+
 
     it.addEventListener('click', () => selectIndex(i, { fly: true }));
     rail.appendChild(it);
