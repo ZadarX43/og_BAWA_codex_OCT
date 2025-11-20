@@ -640,6 +640,37 @@ canvas{ border-radius:24px; }
   background:#38bdf8;           /* blue */
   border-color:rgba(56,189,248,0.9);
 }
+/* Tiny glyphs inside the rail flags for quick scanning */
+.rail-flag {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.55rem;
+  line-height: 1;
+  color: #021015; /* dark text on bright dots */
+}
+
+/* Start with glyphs hidden until the flag is "on" */
+.rail-flag::before {
+  content: "";
+  opacity: 0;
+  transition: opacity 160ms ease-out;
+}
+
+/* Visited: green dot + checkmark */
+.rail-flag--visited.rail-flag--on::before {
+  content: "✓";
+  opacity: 1;
+  font-weight: 700;
+}
+
+/* In acca: blue dot + plus */
+.rail-flag--acca.rail-flag--on::before {
+  content: "+";
+  opacity: 1;
+  font-weight: 700;
+}
 
 /* ===== Floating upload bar ===== */
 .floating-bar{
