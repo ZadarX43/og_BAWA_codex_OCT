@@ -2220,6 +2220,7 @@ function updateGlobeTooltip(pt) {
   tip.style.top  = `${y - 18}px`;
 
 
+
   // Label: "Home vs Away • 20:00"
   const home = pt.home_team || pt.home || 'Home';
   const away = pt.away_team || pt.away || 'Away';
@@ -2592,28 +2593,32 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
   const offsetX = canvasRect.left - containerRect.left;
   const offsetY = canvasRect.top  - containerRect.top;
 
-  const rawX = (ndc.x * 0.5 + 0.5) * relWidth  + offsetX;
-  const rawY = (-ndc.y * 0.5 + 0.5) * relHeight + offsetY;
+  const stadiumX = (ndc.x * 0.5 + 0.5) * relWidth  + offsetX;
+  const stadiumY = (-ndc.y * 0.5 + 0.5) * relHeight + offsetY;
 
-  const minMarginX = 120;
-  const minMarginY = 80;
-
-  // === Fixed “lane” for the hero card ===
-  // Horizontal: keep the card around the centre of the globe container
-  const laneX = containerRect.width * 0.5; // 0.5 = centred, tweak to 0.55 for slight right bias
-  let cardX   = laneX;
-
-  // Vertical: keep the card in a nice band near the top third of the globe
+  // ---- Card position: fixed offset above the stadium ----
   const cardHeight      = card.offsetHeight || 180;
-  const bandCenterY     = containerRect.height * 0.26; // ~top third
-  const maxY            = containerRect.height - minMarginY - cardHeight;
-  let cardY             = Math.max(minMarginY, Math.min(maxY, bandCenterY));
+  const verticalOffset  = 190;  // distance above the dot in px
 
-  // Stem & pin: straight down under the card, hitting the stadium dot at rawY
-  const pinX = laneX;
-  const pinY = rawY;
+  let cardX = stadiumX;
+  let cardY = stadiumY - verticalOffset;
 
+  // Clamp just enough to avoid clipping edges
+  const marginX      = 120;
+  const marginTop    = 40;
+  const marginBottom = 60;
 
+  const minX = marginX;
+  const maxX = containerRect.width - marginX;
+  cardX      = Math.max(minX, Math.min(maxX, cardX));
+
+  const minY = marginTop;
+  const maxY = containerRect.height - marginBottom - cardHeight;
+  cardY      = Math.max(minY, Math.min(maxY, cardY));
+
+  // Stem & pin: straight down from card centre to the stadium
+  const pinX = cardX;
+  const pinY = stadiumY;
 
   card.style.left = `${cardX}px`;
   card.style.top  = `${cardY}px`;
@@ -2692,6 +2697,7 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
 
   card.classList.add('stadium-card--visible');
 }
+
 
 
 function moveMarkerToFixture(f, { fly = false } = {}) {
