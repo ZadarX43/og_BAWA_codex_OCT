@@ -2548,26 +2548,28 @@ function slerpUnitVec(fromN, toN, t) {
 }
 
 function updateStadiumCard(f, { repositionOnly = false } = {}) {
-  const card = el.stadiumCard;
-  const pin  = el.stadiumPin;
-  const stem = el.stadiumStem;
+  const card    = el.stadiumCard;
+  const pin     = el.stadiumPin;
+  const stem    = el.stadiumStem;
+  const overlay = el.stadiumOverlay;
 
   if (!card || !el.globeWrap || !camera || !renderer) return;
 
-  // Hide if no fixture
+  // Hide everything if no fixture
   if (!f) {
     card.classList.remove('stadium-card--visible');
+    if (overlay) overlay.setAttribute('aria-hidden', 'true');
     if (pin)  pin.style.opacity  = '0';
     if (stem) stem.style.opacity = '0';
     lastStadiumFixtureId = null;
     return;
   }
 
-  // Lat / lon sanity
   const lat = Number(f.latitude);
   const lon = Number(f.longitude);
   if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
     card.classList.remove('stadium-card--visible');
+    if (overlay) overlay.setAttribute('aria-hidden', 'true');
     if (pin)  pin.style.opacity  = '0';
     if (stem) stem.style.opacity = '0';
     return;
@@ -2581,54 +2583,62 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
   const ndc = worldPos.clone().project(camera);
   if (ndc.z > 1 || ndc.z < -1) {
     card.classList.remove('stadium-card--visible');
+    if (overlay) overlay.setAttribute('aria-hidden', 'true');
     if (pin)  pin.style.opacity  = '0';
     if (stem) stem.style.opacity = '0';
     return;
   }
 
-  // Map NDC → pixels inside #globe-container
   const rect = el.globeWrap.getBoundingClientRect();
-  const stadiumX = (ndc.x * 0.5 + 0.5) * rect.width;
-  const stadiumY = (-ndc.y * 0.5 + 0.5) * rect.height;
+  const anchorX = (ndc.x * 0.5 + 0.5) * rect.width;
+  const anchorY = (-ndc.y * 0.5 + 0.5) * rect.height;
 
-  // Measure card
-  const cardWidth  = card.offsetWidth  || 300;
+  // Measure card (fall back to reasonable defaults before first paint)
+  const cardWidth  = card.offsetWidth  || 320;
   const cardHeight = card.offsetHeight || 190;
-  const GAP        = 18;   // distance between dot and card bottom
+  const GAP        = 18;   // px between anchor and card bottom
+  const EDGE_M     = 16;   // px padding from container edges
+  const MIN_TOP    = 24;   // don’t let the card hug the top bar
 
-  // Bottom-centre of card sits directly above the stadium line
-  let cardLeft = stadiumX - cardWidth / 2;
-  let cardTop  = stadiumY - GAP - cardHeight;
+  // Base position: center the card over the anchor, above it
+  let cardLeft = anchorX - cardWidth / 2;
+  let cardTop  = anchorY - GAP - cardHeight;
 
-  // Only clamp vertically so it never clips the top frame
-  const MIN_TOP = 24;
-  if (cardTop < MIN_TOP) {
-    cardTop = MIN_TOP;
+  // Clamp vertically so we don’t clip under header
+  if (cardTop < MIN_TOP) cardTop = MIN_TOP;
+
+  // Clamp horizontally so we don’t run off edges
+  const maxLeft = rect.width - cardWidth - EDGE_M;
+  if (maxLeft <= EDGE_M) {
+    // Container is narrower than card + margins: just center it
+    cardLeft = (rect.width - cardWidth) / 2;
+  } else {
+    if (cardLeft < EDGE_M) cardLeft = EDGE_M;
+    if (cardLeft > maxLeft) cardLeft = maxLeft;
   }
 
-  // Apply position (top/left is top-left of the rectangle)
   card.style.left = `${cardLeft}px`;
   card.style.top  = `${cardTop}px`;
 
-  // Pin = stadium position; stem from card bottom-centre → stadium
-  const bottomCenterY = cardTop + cardHeight;
+  // Pin = exact anchor; stem from card bottom centre → anchor
+  const cardBottomY = cardTop + cardHeight;
 
   if (pin) {
-    pin.style.left    = `${stadiumX}px`;
-    pin.style.top     = `${stadiumY}px`;
+    pin.style.left    = `${anchorX}px`;
+    pin.style.top     = `${anchorY}px`;
     pin.style.opacity = '1';
   }
 
   if (stem) {
-    const stemTop    = Math.min(bottomCenterY, stadiumY);
-    const stemBottom = Math.max(bottomCenterY, stadiumY);
-    stem.style.left   = `${stadiumX}px`;
+    const stemTop    = Math.min(cardBottomY, anchorY);
+    const stemBottom = Math.max(cardBottomY, anchorY);
+    stem.style.left   = `${anchorX}px`;
     stem.style.top    = `${stemTop}px`;
     stem.style.height = `${Math.max(14, stemBottom - stemTop)}px`;
     stem.style.opacity= '1';
   }
 
-  // Content only changes when fixture changes
+  // Only rewrite card content when the fixture actually changes
   if (!repositionOnly && f.fixture_id !== lastStadiumFixtureId) {
     lastStadiumFixtureId = f.fixture_id;
 
@@ -2685,6 +2695,7 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
     }
   }
 
+  if (overlay) overlay.setAttribute('aria-hidden', 'false');
   card.classList.add('stadium-card--visible');
 }
 
