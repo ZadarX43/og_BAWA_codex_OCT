@@ -1843,7 +1843,7 @@ canvas{ border-radius:24px; }
   pointer-events: none;
 }
 
-.stadium-card {
+..stadium-card {
   position: absolute;
   /* JS sets left/top as the TOP-LEFT of the card */
   left: 0;
@@ -1855,32 +1855,33 @@ canvas{ border-radius:24px; }
   opacity: 0;
   pointer-events: auto;
 
-  min-width: 260px;
-  max-width: 320px;
+  /* SMALLER FOOTPRINT */
+  min-width: 230px;
+  max-width: 280px;
 
   background: linear-gradient(
     145deg,
     rgba(7, 20, 32, 0.96),
     rgba(9, 34, 48, 0.96)
   );
-  border-radius: 18px;
+  border-radius: 14px;
   border: 1px solid rgba(125, 249, 196, 0.35);
   box-shadow:
-    0 20px 40px rgba(0, 0, 0, 0.6),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(14px) saturate(120%);
-  padding: 10px 12px 12px;
+    0 14px 26px rgba(0, 0, 0, 0.55),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px) saturate(120%);
+  padding: 8px 10px 9px;
   color: var(--text-primary);
 
   transition:
     opacity 200ms ease-out,
-    transform 220ms ease-out;
+    transform 200ms ease-out;
 }
 
 /* Gentle bob just on the content, not the anchor maths */
 @keyframes stadium-bob {
   0%   { transform: translateY(0); }
-  50%  { transform: translateY(-4px); }
+  50%  { transform: translateY(-3px); }
   100% { transform: translateY(0); }
 }
 
@@ -1893,6 +1894,7 @@ canvas{ border-radius:24px; }
   animation: stadium-bob 3.4s ease-in-out infinite;
 }
 
+/* LEFT SIDE – CREST slightly smaller */
 .stadium-card__left {
   display: flex;
   align-items: center;
@@ -1901,8 +1903,8 @@ canvas{ border-radius:24px; }
 
 .stadium-card__crest-wrap {
   position: relative;
-  width: 68px;
-  height: 68px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   background: radial-gradient(
     circle at 30% 20%,
@@ -1911,21 +1913,21 @@ canvas{ border-radius:24px; }
   );
   border: 1px solid rgba(125, 249, 196, 0.6);
   box-shadow:
-    0 10px 22px rgba(0, 0, 0, 0.65),
+    0 8px 18px rgba(0, 0, 0, 0.6),
     0 0 0 1px rgba(0, 0, 0, 0.7) inset;
   display: grid;
   place-items: center;
 }
 
 .stadium-card__crest {
-  width: 52px;
-  height: 52px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background: rgba(4, 15, 22, 0.96);
   display: grid;
   place-items: center;
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #e6fbff;
@@ -1940,11 +1942,11 @@ canvas{ border-radius:24px; }
 
 .stadium-card__comp-pill {
   position: absolute;
-  bottom: -4px;
-  right: -4px;
-  padding: 1px 6px;
+  bottom: -3px;
+  right: -3px;
+  padding: 1px 5px;
   border-radius: 999px;
-  font-size: 0.6rem;
+  font-size: 0.56rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
@@ -1952,48 +1954,50 @@ canvas{ border-radius:24px; }
   border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
+/* RIGHT SIDE – Tighter type */
 .stadium-card__right {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 2px;
 }
 
 .stadium-card__eyebrow {
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   text-transform: uppercase;
   letter-spacing: 0.16em;
-  color: rgba(206, 228, 248, 0.92);
+  color: rgba(206, 228, 248, 0.9);
 }
 
 .stadium-card__title {
-  font-size: 0.94rem;
+  font-size: 0.86rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   color: #f9fdff;
 }
 
 .stadium-card__sub {
-  font-size: 0.78rem;
+  font-size: 0.74rem;
   color: rgba(206, 228, 248, 0.9);
 }
 
 .stadium-card__stats {
-  font-size: 0.74rem;
-  color: rgba(190, 230, 255, 0.96);
+  font-size: 0.7rem;
+  color: rgba(190, 230, 255, 0.95);
   margin-top: 1px;
 }
 
+/* ACTIONS – compact chips instead of big CTAs */
 .stadium-card__actions {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
-  margin-top: 6px;
+  margin-top: 4px;
 }
 
 .stadium-card__btn {
   border-radius: 999px;
-  font-size: 0.74rem;
-  padding: 5px 10px;
+  font-size: 0.68rem;
+  padding: 3px 8px;
   border: none;
   cursor: pointer;
   font-weight: 600;
@@ -2011,9 +2015,8 @@ canvas{ border-radius:24px; }
 .stadium-card__btn--ghost {
   background: rgba(255, 255, 255, 0.05);
   color: var(--text-primary);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.16);
 }
-
 /* Anchor pin + stem */
 
 .stadium-pin {
