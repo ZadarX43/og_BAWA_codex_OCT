@@ -80,6 +80,9 @@ let isHomeActive = true;       // controls whether globe render loop runs
 let lastStadiumFixtureId = null;
 const visitedFixtureIds = new Set();
 
+let cameraTravelRaf = null;
+let cameraMoveReqId = 0;
+
 
 // Demo auth + portfolio
 let currentUser = null;        // { email, role }
@@ -106,7 +109,8 @@ const COLORS = {
   marker:         'rgba(125,249,196,0.45)',  // soft teal glow for all fixtures
   markerInactive: 'rgba(125,249,196,0.15)',  // kept for future use
   markerActive:   '#FFFFFF',                 // bright white for active
-  ring:           'rgba(255, 194, 112, 0.9)', // warm halo for active marker
+  ring: '#ffc270',
+
   
   dotBase:        'rgba(87,195,191,0.70)',
   dotHot:         '#ffd777',
@@ -932,16 +936,43 @@ function centerCameraOnFixture(f, distanceFactor = 2.05) {
   const R   = getGlobeRadius();
   const dir = latLngToUnit(lat, lon).normalize();
 
-  // Point the camera at the fixture
-  const target = dir.clone().multiplyScalar(R * (1 + SURFACE_EPS));
+  // End state: camera pulled back along surface normal, looking at fixture
+  const endTarget = dir.clone().multiplyScalar(R * (1 + SURFACE_EPS));
+  const endPos    = dir.clone().multiplyScalar(R * distanceFactor);
 
-  // Pull the camera back along the same direction by `distanceFactor`
-  const camPos = dir.clone().multiplyScalar(R * distanceFactor);
+  const startPos    = camera.position.clone();
+  const startTarget = controls.target.clone();
 
-  camera.position.copy(camPos);
-  controls.target.copy(target);
-  controls.update();
+  const duration = 650; // ms
+  const reqId    = ++cameraMoveReqId;
+  const t0       = performance.now();
+
+  if (cameraTravelRaf != null) {
+    cancelAnimationFrame(cameraTravelRaf);
+    cameraTravelRaf = null;
+  }
+
+  const step = () => {
+    if (cameraMoveReqId !== reqId) return; // superseded by a newer move
+
+    const now = performance.now();
+    const t   = Math.min(1, (now - t0) / duration);
+    const k   = easeInOut(t);
+
+    camera.position.lerpVectors(startPos, endPos, k);
+    controls.target.lerpVectors(startTarget, endTarget, k);
+    controls.update();
+
+    if (t < 1) {
+      cameraTravelRaf = requestAnimationFrame(step);
+    } else {
+      cameraTravelRaf = null;
+    }
+  };
+
+  cameraTravelRaf = requestAnimationFrame(step);
 }
+
 
 
 
