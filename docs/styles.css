@@ -1843,7 +1843,7 @@ canvas{ border-radius:24px; }
   pointer-events: none;
 }
 
-..stadium-card {
+.stadium-card {
   position: absolute;
   /* JS sets left/top as the TOP-LEFT of the card */
   left: 0;
