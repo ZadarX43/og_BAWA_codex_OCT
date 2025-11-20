@@ -2213,9 +2213,8 @@ function updateGlobeTooltip(pt) {
   const offsetX = canvasRect.left - containerRect.left;
   const offsetY = canvasRect.top  - containerRect.top;
 
-  const rawX = (ndc.x * 0.5 + 0.5) * relWidth  + offsetX;
-  const rawY = (-ndc.y * 0.5 + 0.5) * relHeight + offsetY;
-
+    const x = (ndc.x * 0.5 + 0.5) * relWidth  + offsetX;
+  const y = (-ndc.y * 0.5 + 0.5) * relHeight + offsetY;
 
   tip.style.left = `${x}px`;
   tip.style.top  = `${y - 18}px`;
@@ -2595,27 +2594,24 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
   const rawX = (ndc.x * 0.5 + 0.5) * relWidth  + offsetX;
   const rawY = (-ndc.y * 0.5 + 0.5) * relHeight + offsetY;
 
-  // Base positioning: card directly above the stadium dot
-  let cardX = rawX;
-  let cardY = rawY - 140; // vertical gap
-
   const minMarginX = 120;
   const minMarginY = 80;
 
+  // Horizontal: keep card roughly over the stadium, but away from the very edges
   const maxX = containerRect.width - minMarginX;
   const minX = minMarginX;
+  let cardX  = Math.max(minX, Math.min(maxX, rawX));
 
-  // Clamp horizontally
-  cardX = Math.max(minX, Math.min(maxX, cardX));
+  // Vertical: keep card in a “nice” band, independent of rawY
+  const idealBandCenter = containerRect.height * 0.32; // ~upper third
+  const cardHeight      = card.offsetHeight || 180;
+  const maxY            = containerRect.height - minMarginY - cardHeight;
+  let cardY             = Math.max(minMarginY, Math.min(maxY, idealBandCenter));
 
-  // Clamp vertically based on card height so bottom never clips out of the globe card
-  const cardHeight = card.offsetHeight || 180;
-  const maxY = containerRect.height - minMarginY - cardHeight;
-  cardY = Math.max(minMarginY, Math.min(maxY, cardY));
-
-  // Stem & pin: visually align under the card (base still at stadium Y)
+  // Stem & pin: visually under the card, but base still at stadium’s Y
   const pinX = cardX;
   const pinY = rawY;
+
 
   card.style.left = `${cardX}px`;
   card.style.top  = `${cardY}px`;
