@@ -2547,7 +2547,7 @@ function slerpUnitVec(fromN, toN, t) {
   return v0.clone().applyQuaternion(q).normalize();
 }
 
-ffunction updateStadiumCard(f, { repositionOnly = false } = {}) {
+function updateStadiumCard(f, { repositionOnly = false } = {}) {
   const card = el.stadiumCard;
   const pin  = el.stadiumPin;
   const stem = el.stadiumStem;
