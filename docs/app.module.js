@@ -2602,15 +2602,18 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
     cardX = rawX - baseOffsetX;
   }
 
-  // Final clamp to keep inside container
+  // Clamp horizontally
   cardX = Math.max(minX, Math.min(maxX, cardX));
 
-  const maxY = rect.height - minMarginY;
+  // Clamp vertically based on card height so the bottom never drops out of view
+  const cardHeight = card.offsetHeight || 180; // fallback height
+  const maxY = rect.height - minMarginY - cardHeight;
   cardY = Math.max(minMarginY, Math.min(maxY, cardY));
 
   // Stem base is always at the actual stadium position
   const pinX = rawX;
   const pinY = rawY;
+
 
 
   card.style.left = `${cardX}px`;
