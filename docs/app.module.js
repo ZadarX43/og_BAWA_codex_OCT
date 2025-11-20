@@ -2578,14 +2578,13 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
 
   if (!card || !el.globeWrap || !camera || !renderer) return;
 
-  // Hide everything if no fixture
+  // No fixture → hide everything
   if (!f) {
     card.classList.remove('stadium-card--visible');
     if (overlay) overlay.setAttribute('aria-hidden', 'true');
     if (pin)  pin.style.opacity  = '0';
     if (stem) stem.style.opacity = '0';
     lastStadiumFixtureId = null;
-    lastCardPos.x = lastCardPos.y = null;
     return;
   }
 
@@ -2596,7 +2595,6 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
     if (overlay) overlay.setAttribute('aria-hidden', 'true');
     if (pin)  pin.style.opacity  = '0';
     if (stem) stem.style.opacity = '0';
-    lastCardPos.x = lastCardPos.y = null;
     return;
   }
 
@@ -2604,9 +2602,10 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
   const dir = latLngToUnit(lat, lon).normalize();
   const worldPos = dir.clone().multiplyScalar(R * (1 + SURFACE_EPS));
 
-  // Project to screen
+  // Project stadium point to clip space
   const ndc = worldPos.clone().project(camera);
   if (ndc.z > 1 || ndc.z < -1) {
+    // Behind camera → hide
     card.classList.remove('stadium-card--visible');
     if (overlay) overlay.setAttribute('aria-hidden', 'true');
     if (pin)  pin.style.opacity  = '0';
@@ -2619,64 +2618,32 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
   const anchorX = (ndc.x * 0.5 + 0.5) * rect.width;
   const anchorY = (-ndc.y * 0.5 + 0.5) * rect.height;
 
-  // Measure card (fallbacks before first paint)
+  // Measure card
   const cardWidth  = card.offsetWidth  || 320;
   const cardHeight = card.offsetHeight || 190;
 
-  const GAP        = 18;                  // distance between anchor and card bottom
-  const EDGE_M     = 16;                  // horizontal inset
-  const MIN_TOP    = 24;                  // never hug the very top
-  const MAX_TOP    = rect.height * 0.35;  // card lives in roughly top third
-  const SMOOTH     = 0.25;                // 0 = instant, 1 = super sticky
+  // We want the *centre* of the card to sit above the stadium point
+  const GAP     = 18;  // distance between stadium point and card bottom
+  const MIN_TOP = 24;  // don’t let the card hug the very top
 
-  // ---- 1) Horizontal: follow anchor, but clamp to edges ----
-  let targetLeft = anchorX - cardWidth / 2;
-  const maxLeft  = rect.width - cardWidth - EDGE_M;
+  let cardLeft = anchorX - cardWidth / 2;
+  let cardTop  = anchorY - GAP - cardHeight;
 
-  if (maxLeft <= EDGE_M) {
-    // Container narrower than card + margins → just centre
-    targetLeft = (rect.width - cardWidth) / 2;
-  } else {
-    if (targetLeft < EDGE_M) targetLeft = EDGE_M;
-    if (targetLeft > maxLeft) targetLeft = maxLeft;
-  }
+  if (cardTop < MIN_TOP) cardTop = MIN_TOP;
 
-  // ---- 2) Vertical: primarily follow anchor, but soft clamp ----
-  let targetTop = anchorY - GAP - cardHeight;
-  if (targetTop < MIN_TOP) targetTop = MIN_TOP;
-  if (targetTop > MAX_TOP) targetTop = MAX_TOP;
-
-  // ---- 3) Smoothing: glide on camera movement, snap on new fixture ----
-  if (!repositionOnly) {
-    // New fixture / initial spawn – snap to position and reset cache
-    lastCardPos.x = targetLeft;
-    lastCardPos.y = targetTop;
-  } else {
-    // Camera is moving; glide towards the new target
-    if (lastCardPos.x == null || lastCardPos.y == null) {
-      lastCardPos.x = targetLeft;
-      lastCardPos.y = targetTop;
-    } else {
-      lastCardPos.x += (targetLeft - lastCardPos.x) * SMOOTH;
-      lastCardPos.y += (targetTop - lastCardPos.y) * SMOOTH;
-    }
-  }
-
-  const cardLeft = lastCardPos.x;
-  const cardTop  = lastCardPos.y;
-
+  // Apply position directly (no smoothing / extra transforms)
   card.style.left = `${cardLeft}px`;
   card.style.top  = `${cardTop}px`;
 
-  // Pin = anchor; stem = line from card bottom centre → anchor
-  const cardBottomY = cardTop + cardHeight;
-
+  // Pin = actual stadium projection
   if (pin) {
     pin.style.left    = `${anchorX}px`;
     pin.style.top     = `${anchorY}px`;
     pin.style.opacity = '1';
   }
 
+  // Stem: from card bottom-centre to stadium
+  const cardBottomY = cardTop + cardHeight;
   if (stem) {
     const stemTop    = Math.min(cardBottomY, anchorY);
     const stemBottom = Math.max(cardBottomY, anchorY);
@@ -2686,7 +2653,7 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
     stem.style.opacity= '1';
   }
 
-  // ---- 4) Content only updates when fixture changes ----
+  // Content only changes when the fixture changes
   if (!repositionOnly && f.fixture_id !== lastStadiumFixtureId) {
     lastStadiumFixtureId = f.fixture_id;
 
@@ -2746,7 +2713,6 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
   if (overlay) overlay.setAttribute('aria-hidden', 'false');
   card.classList.add('stadium-card--visible');
 }
-
 
 
 function moveMarkerToFixture(f, { fly = false } = {}) {
