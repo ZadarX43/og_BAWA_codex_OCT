@@ -2550,22 +2550,24 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
     return;
   }
 
-  // --- Anchor point in world space: prefer MARKER position, fallback to lat/lon ---
-  let worldPos = null;
+  const lat = Number(f.latitude);
+  const lon = Number(f.longitude);
+  if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+    card.classList.remove('stadium-card--visible');
+    if (pin)  pin.style.opacity  = '0';
+    if (stem) stem.style.opacity = '0';
+    return;
+  }
 
-  if (MARKER && MARKER.group && MARKER.group.visible) {
+  const R = getGlobeRadius();
+
+  // --- Anchor point in world space ---
+  // For the initial spawn, always use lat/lon so the card appears at the right place.
+  // For subsequent frames (repositionOnly = true), follow the animated marker if visible.
+  let worldPos;
+  if (repositionOnly && MARKER && MARKER.group && MARKER.group.visible) {
     worldPos = MARKER.group.position.clone();
   } else {
-    const lat = Number(f.latitude);
-    const lon = Number(f.longitude);
-    if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
-      card.classList.remove('stadium-card--visible');
-      if (pin)  pin.style.opacity  = '0';
-      if (stem) stem.style.opacity = '0';
-      return;
-    }
-
-    const R   = getGlobeRadius();
     const dir = latLngToUnit(lat, lon).normalize();
     worldPos  = dir.clone().multiplyScalar(R * (1 + SURFACE_EPS));
   }
