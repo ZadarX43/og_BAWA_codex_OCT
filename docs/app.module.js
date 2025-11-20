@@ -2593,24 +2593,24 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
   const anchorX = (ndc.x * 0.5 + 0.5) * rect.width;
   const anchorY = (-ndc.y * 0.5 + 0.5) * rect.height;
 
-  // Measure card (fall back to reasonable defaults before first paint)
+  // Measure card (fallbacks before first paint)
   const cardWidth  = card.offsetWidth  || 320;
   const cardHeight = card.offsetHeight || 190;
   const GAP        = 18;   // px between anchor and card bottom
-  const EDGE_M     = 16;   // px padding from container edges
+  const EDGE_M     = 16;   // px inset from container edges
   const MIN_TOP    = 24;   // don’t let the card hug the top bar
 
-  // Base position: center the card over the anchor, above it
+  // Base: centre the card horizontally over the anchor, above it
   let cardLeft = anchorX - cardWidth / 2;
   let cardTop  = anchorY - GAP - cardHeight;
 
-  // Clamp vertically so we don’t clip under header
+  // Clamp vertically
   if (cardTop < MIN_TOP) cardTop = MIN_TOP;
 
-  // Clamp horizontally so we don’t run off edges
+  // Clamp horizontally
   const maxLeft = rect.width - cardWidth - EDGE_M;
   if (maxLeft <= EDGE_M) {
-    // Container is narrower than card + margins: just center it
+    // Container narrower than card + margins → just centre
     cardLeft = (rect.width - cardWidth) / 2;
   } else {
     if (cardLeft < EDGE_M) cardLeft = EDGE_M;
@@ -2620,7 +2620,7 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
   card.style.left = `${cardLeft}px`;
   card.style.top  = `${cardTop}px`;
 
-  // Pin = exact anchor; stem from card bottom centre → anchor
+  // Pin = anchor; stem = line from card bottom centre → anchor
   const cardBottomY = cardTop + cardHeight;
 
   if (pin) {
@@ -2638,7 +2638,7 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
     stem.style.opacity= '1';
   }
 
-  // Only rewrite card content when the fixture actually changes
+  // Only rewrite content when the fixture actually changes
   if (!repositionOnly && f.fixture_id !== lastStadiumFixtureId) {
     lastStadiumFixtureId = f.fixture_id;
 
@@ -2698,6 +2698,7 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
   if (overlay) overlay.setAttribute('aria-hidden', 'false');
   card.classList.add('stadium-card--visible');
 }
+
 
 
 function moveMarkerToFixture(f, { fly = false } = {}) {
