@@ -2094,15 +2094,18 @@ function handleHover(pt){
 
 
 
-function buildRail(items){
-  const rail = document.getElementById('fixture-rail'); if (!rail) return;
+ffunction buildRail(items){
+  const rail = document.getElementById('fixture-rail');
+  if (!rail) return;
+
   rail.innerHTML = '';
-    items.forEach((f, i) => {
+
+  items.forEach((f, i) => {
     const it = document.createElement('button');
     it.className = `rail-item${i === 0 ? ' is-active' : ''}`;
     it.dataset.fixtureId = f.fixture_id;
 
-    iit.innerHTML = `
+    it.innerHTML = `
       <div class="rail-item-main">
         <h4>${f.home_team} vs ${f.away_team}</h4>
         <p>${f.city || f.country || ''}</p>
@@ -2120,7 +2123,6 @@ function buildRail(items){
         ></span>
       </div>
     `;
-
 
     it.addEventListener('click', () => selectIndex(i, { fly: true }));
     rail.appendChild(it);
