@@ -872,6 +872,26 @@ function centerCameraOnVisibleFixtures() {
     sum.add(n);
     count++;
   }
+function centerCameraOnFixture(f, distanceFactor = 2.2) {
+  if (!f || !camera || !controls || !globe) return;
+
+  const lat = Number(f.latitude);
+  const lon = Number(f.longitude);
+  if (!Number.isFinite(lat) || !Number.isFinite(lon)) return;
+
+  const R   = getGlobeRadius();
+  const dir = latLngToUnit(lat, lon).normalize();
+
+  // Look-at target: just above the surface at the fixture
+  const target = dir.clone().multiplyScalar(R * (1 + SURFACE_EPS));
+
+  // Camera position: further out along same vector
+  const camPos = dir.clone().multiplyScalar(R * distanceFactor);
+
+  camera.position.copy(camPos);
+  controls.target.copy(target);
+  controls.update();
+}
 
   if (!count) return;
 
@@ -1989,19 +2009,22 @@ function selectIndex(idx, { fly = false } = {}) {
 
   currentFixture = f;
 
-  // Mark which fixture is active
-  visibleFixtures.forEach(it => {
-    it.__active = (it === f);
-  });
-
-  // Re-apply point styling so active dot “pops”
+  // Mark active
+  visibleFixtures.forEach(it => it.__active = (it === f));
   globe
     .pointColor(d => d.__active ? COLORS.markerActive : COLORS.marker)
     .pointRadius(d => d.__active ? RADIUS_ACTIVE : RADIUS_BASE)
-    .pointAltitude(d => d.__active ? SURFACE_EPS * 1.7 : SURFACE_EPS)
-    .pointsTransitionDuration?.(220);
+    .pointsTransitionDuration?.(200);
 
+  // Recenter camera on this fixture when we are "flying" to it
+  if (fly) {
+    centerCameraOnFixture(f);
+  }
+
+  // Move the billboard / radar marker
   moveMarkerToFixture(f, { fly });
+
+  // Update right-hand panel + bottom rail highlight
   renderPanel(f);
   syncRail(idx);
 }
