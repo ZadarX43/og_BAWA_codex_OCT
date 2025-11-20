@@ -2403,18 +2403,25 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
     return;
   }
 
-  const lat = Number(f.latitude);
-  const lon = Number(f.longitude);
-  if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
-    card.classList.remove('stadium-card--visible');
-    if (pin)  pin.style.opacity  = '0';
-    if (stem) stem.style.opacity = '0';
-    return;
-  }
+  // --- Anchor point in world space: prefer MARKER position, fallback to lat/lon ---
+  let worldPos = null;
 
-  const R   = getGlobeRadius();
-  const dir = latLngToUnit(lat, lon).normalize();
-  const worldPos = dir.clone().multiplyScalar(R * (1 + SURFACE_EPS));
+  if (MARKER && MARKER.group && MARKER.group.visible) {
+    worldPos = MARKER.group.position.clone();
+  } else {
+    const lat = Number(f.latitude);
+    const lon = Number(f.longitude);
+    if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+      card.classList.remove('stadium-card--visible');
+      if (pin)  pin.style.opacity  = '0';
+      if (stem) stem.style.opacity = '0';
+      return;
+    }
+
+    const R   = getGlobeRadius();
+    const dir = latLngToUnit(lat, lon).normalize();
+    worldPos  = dir.clone().multiplyScalar(R * (1 + SURFACE_EPS));
+  }
 
   const ndc = worldPos.clone().project(camera);
   if (ndc.z > 1 || ndc.z < -1) {
@@ -2443,7 +2450,6 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
   const maxY = rect.height - minMarginY;
   cardY = Math.max(minMarginY, Math.min(maxY, cardY));
 
-  // If the clamp moved the card far away horizontally, keep pin roughly aligned
   if (Math.abs(cardX - rawX) > 100) {
     pinX = cardX;
   }
