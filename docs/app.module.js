@@ -2613,8 +2613,8 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
   const maxY = containerRect.height - minMarginY - cardHeight;
   cardY = Math.max(minMarginY, Math.min(maxY, cardY));
 
-  // Stem & pin: always at the actual stadium position
-  const pinX = rawX;
+  // Stem & pin: visually align under the card (base still at stadium Y)
+  const pinX = cardX;
   const pinY = rawY;
 
   card.style.left = `${cardX}px`;
