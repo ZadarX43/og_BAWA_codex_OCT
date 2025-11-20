@@ -1979,7 +1979,7 @@ canvas{ border-radius:24px; }
   transform: translate(-50%, -100%) scale(1);
 }
 
-/* Bob the inner content gently when card is visible */
+/* Bob only the inner content, not the card position */
 .stadium-card--visible .stadium-card__body {
   animation: stadium-bob 3.4s ease-in-out infinite;
 }
