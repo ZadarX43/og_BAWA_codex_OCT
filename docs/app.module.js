@@ -2213,11 +2213,12 @@ function updateGlobeTooltip(pt) {
   const offsetX = canvasRect.left - containerRect.left;
   const offsetY = canvasRect.top  - containerRect.top;
 
-    const x = (ndc.x * 0.5 + 0.5) * relWidth  + offsetX;
+  const x = (ndc.x * 0.5 + 0.5) * relWidth  + offsetX;
   const y = (-ndc.y * 0.5 + 0.5) * relHeight + offsetY;
 
   tip.style.left = `${x}px`;
   tip.style.top  = `${y - 18}px`;
+
 
   // Label: "Home vs Away • 20:00"
   const home = pt.home_team || pt.home || 'Home';
