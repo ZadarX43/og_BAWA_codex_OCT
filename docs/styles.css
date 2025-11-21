@@ -1845,7 +1845,7 @@ canvas{ border-radius:24px; }
 
 /* ========== Stadium hero hologram — compact ========== */
 
-..stadium-card {
+.stadium-card {
   position: absolute;
   left: 0;
   top: 0;
@@ -1879,7 +1879,6 @@ canvas{ border-radius:24px; }
     opacity 200ms ease-out,
     transform 200ms ease-out;
 }
-
 
 /* Card content layout */
 .stadium-card__body {
@@ -2117,81 +2116,4 @@ canvas{ border-radius:24px; }
 #globe-container .stadium-card,
 #globe-container .stadium-card__btn {
   pointer-events: auto;
-}
-/* ===== OG Stadium Card – hard reset, compact label ===== */
-
-#stadium-card.stadium-card {
-  position: absolute;
-  left: 0;
-  top: 0;
-
-  /* JS sets left/top as top-left, so just scale */
-  transform-origin: 50% 50%;
-  transform: scale(0.95);
-  opacity: 0;
-  pointer-events: auto;
-
-  /* Compact: roughly France/UK sized */
-  width: 210px;
-  max-width: 210px;
-  min-width: 190px;
-  padding: 6px 8px 7px;
-
-  background: linear-gradient(
-    145deg,
-    rgba(7, 20, 32, 0.96),
-    rgba(9, 34, 48, 0.96)
-  ) !important;
-  border-radius: 14px;
-  border: 1px solid rgba(125, 249, 196, 0.35);
-  box-shadow:
-    0 12px 24px rgba(0, 0, 0, 0.5),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(12px) saturate(120%);
-  color: var(--text-primary);
-  z-index: 8;
-}
-
-/* Make sure the inner body is laid out properly */
-#stadium-card .stadium-card__body {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-}
-
-/* Tiny crest + comp pill so it feels like a tag */
-#stadium-card .stadium-card__crest-wrap {
-  width: 40px;
-  height: 40px;
-}
-#stadium-card .stadium-card__crest {
-  width: 30px;
-  height: 30px;
-  font-size: 0.68rem;
-}
-#stadium-card .stadium-card__comp-pill {
-  bottom: -2px;
-  right: -2px;
-  padding: 1px 4px;
-  font-size: 0.52rem;
-}
-
-/* Text stack – small label, not headline block */
-#stadium-card .stadium-card__eyebrow {
-  font-size: 0.56rem;
-  letter-spacing: 0.16em;
-}
-#stadium-card .stadium-card__title {
-  font-size: 0.78rem;
-}
-#stadium-card .stadium-card__sub {
-  font-size: 0.68rem;
-}
-#stadium-card .stadium-card__stats {
-  font-size: 0.62rem;
-}
-
-/* On-globe: no CTA row – this is a map label only */
-#stadium-card .stadium-card__actions {
-  display: none !important;
 }
