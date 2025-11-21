@@ -1843,23 +1843,24 @@ canvas{ border-radius:24px; }
   pointer-events: none;
 }
 
-/* ========== Stadium hero hologram — compact ========== */
+/* ========== Stadium hero hologram — compact label ========== */
 
 .stadium-card {
   position: absolute;
   left: 0;
   top: 0;
 
+  /* JS sets left/top as TOP-LEFT of card */
   transform-origin: 50% 50%;
   transform: scale(0.95);
 
   opacity: 0;
   pointer-events: auto;
 
-  /* MUCH SMALLER FOOTPRINT */
-  width: 200px;
-  max-width: 200px;
-  min-width: 180px;
+  /* SMALL LABEL FOOTPRINT – roughly France/UK width on the globe */
+  width: 170px;
+  max-width: 170px;
+  min-width: 150px;
   padding: 6px 8px 7px;
 
   background: linear-gradient(
@@ -1884,7 +1885,7 @@ canvas{ border-radius:24px; }
 .stadium-card__body {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
+  gap: 6px; /* tighter than 10px */
 }
 
 /* Gentle bob just on the content, not the anchor maths */
@@ -1903,7 +1904,7 @@ canvas{ border-radius:24px; }
   animation: stadium-bob 3.4s ease-in-out infinite;
 }
 
-/* LEFT SIDE – crest */
+/* LEFT SIDE – tiny crest */
 
 .stadium-card__left {
   display: flex;
@@ -1913,8 +1914,8 @@ canvas{ border-radius:24px; }
 
 .stadium-card__crest-wrap {
   position: relative;
-  width: 42px;
-  height: 42px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   background: radial-gradient(
     circle at 30% 20%,
@@ -1923,21 +1924,21 @@ canvas{ border-radius:24px; }
   );
   border: 1px solid rgba(125, 249, 196, 0.6);
   box-shadow:
-    0 8px 18px rgba(0, 0, 0, 0.6),
+    0 6px 14px rgba(0, 0, 0, 0.55),
     0 0 0 1px rgba(0, 0, 0, 0.7) inset;
   display: grid;
   place-items: center;
 }
 
 .stadium-card__crest {
-  width: 32px;
-  height: 32px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   background: rgba(4, 15, 22, 0.96);
   display: grid;
   place-items: center;
   font-weight: 700;
-  font-size: 0.68rem;
+  font-size: 0.6rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #e6fbff;
@@ -1956,7 +1957,7 @@ canvas{ border-radius:24px; }
   right: -2px;
   padding: 1px 4px;
   border-radius: 999px;
-  font-size: 0.52rem;
+  font-size: 0.5rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
@@ -1964,71 +1965,47 @@ canvas{ border-radius:24px; }
   border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
-/* RIGHT SIDE – match text */
+/* RIGHT SIDE – lean text */
 
 .stadium-card__right {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
 }
 
+/* Competition + time */
 .stadium-card__eyebrow {
-  font-size: 0.56rem;
+  font-size: 0.52rem;
   text-transform: uppercase;
   letter-spacing: 0.16em;
   color: rgba(206, 228, 248, 0.9);
 }
 
+/* Teams */
 .stadium-card__title {
-  font-size: 0.80rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
   color: #f9fdff;
 }
 
+/* Venue line – hide on globe label to keep it short */
 .stadium-card__sub {
-  font-size: 0.68rem;
-  color: rgba(206, 228, 248, 0.9);
+  display: none;
 }
 
+/* Single OG stats line */
 .stadium-card__stats {
-  font-size: 0.62rem;
+  font-size: 0.6rem;
   color: rgba(190, 230, 255, 0.95);
   margin-top: 1px;
 }
 
-/* ACTIONS – compact chips */
-
+/* ACTIONS – map label only, no CTAs here (right panel handles actions) */
 .stadium-card__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin-top: 4px;
+  display: none;
 }
 
-.stadium-card__btn {
-  border-radius: 999px;
-  font-size: 0.66rem;
-  padding: 3px 7px;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-}
-
-.stadium-card__btn--primary {
-  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-  color: var(--bg-dark);
-}
-
-.stadium-card__btn--ghost {
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--text-primary);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-}
 
 /* Anchor pin + stem */
 
