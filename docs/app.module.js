@@ -1892,7 +1892,7 @@ async function init(){
   controls.autoRotate = false;
   
   // Keep zoom & tilt in a comfortable, cinematic band
-  controls.minDistance = getGlobeRadius() * 0.5;
+  controls.minDistance = getGlobeRadius() * 0.3;
   controls.maxDistance = getGlobeRadius() * 3.0;
   controls.minPolarAngle = Math.PI * 0.20; // ≈ 36°
   controls.maxPolarAngle = Math.PI * 0.80; // ≈ 144°
