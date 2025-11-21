@@ -2613,14 +2613,31 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
     return;
   }
 
-  // Map NDC → pixels inside #globe-container
   const rect    = el.globeWrap.getBoundingClientRect();
   const anchorX = (ndc.x * 0.5 + 0.5) * rect.width;
   const anchorY = (-ndc.y * 0.5 + 0.5) * rect.height;
 
-  // Measure card
-  const cardWidth  = card.offsetWidth  || 320;
-  const cardHeight = card.offsetHeight || 190;
+  // --- Zoom-aware label width ---
+  // Card is full size when close to the globe; shrinks as we zoom out.
+  const Rg   = getGlobeRadius();
+  const dist = camera.position.length();          // distance from globe centre
+  const CLOSE = Rg * 1.2;                         // at or inside this = full size
+  const FAR   = Rg * 2.8;                         // at or beyond this = minimum size
+
+  let widthScale = 1;
+  if (dist > CLOSE) {
+    const t = Math.min(1, Math.max(0, (dist - CLOSE) / (FAR - CLOSE))); // 0..1
+    widthScale = 1 - t * 0.35; // scale from 1.0 (close) down to 0.65 (far)
+  }
+
+  const BASE_WIDTH = 190; // must match CSS width
+  const scaledWidthPx = BASE_WIDTH * widthScale;
+  card.style.width = `${scaledWidthPx}px`;
+
+  // Measure card AFTER setting width
+  const cardWidth  = card.offsetWidth  || BASE_WIDTH;
+  const cardHeight = card.offsetHeight || 120;
+
 
   // We want the *centre* of the card to sit above the stadium point
   const GAP     = 18;  // distance between stadium point and card bottom
