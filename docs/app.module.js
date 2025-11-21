@@ -3609,6 +3609,39 @@ function buildCopilotContext() {
   return { fixture, slip, bankroll };
 }
 
+// ---------- OG Co-Pilot ----------
+
+function buildCopilotContext() {
+  // Last slip from Bet Checker (if any)
+  const slipJson = window.sessionStorage.getItem('og_last_slip');
+  let slip = null;
+  try {
+    if (slipJson) slip = JSON.parse(slipJson);
+  } catch (e) {
+    console.warn('[CoPilot] failed to parse og_last_slip', e);
+  }
+
+  // Current "primary" fixture from the globe, if available
+  const f = (visibleFixtures && visibleFixtures[0]) || null;
+  const fixture = f ? {
+    home:   f.home_team,
+    away:   f.away_team,
+    date:   f.date_utc,
+    league: f.competition
+  } : null;
+
+  // Simple bankroll stub (set via Co-Pilot form)
+  const bankrollJson = window.localStorage.getItem('og_bankroll');
+  let bankroll = null;
+  try {
+    if (bankrollJson) bankroll = JSON.parse(bankrollJson);
+  } catch (e) {
+    console.warn('[CoPilot] failed to parse og_bankroll', e);
+  }
+
+  return { fixture, slip, bankroll };
+}
+
 async function sendCopilotMessage(text) {
   const payload = { 
     messages: [
@@ -3620,9 +3653,9 @@ async function sendCopilotMessage(text) {
     ],
     context: buildCopilotContext()
   };
-
   return API.copilot(payload);
 }
+
 function appendChatLine(role, text) {
   const wrap = document.getElementById('cp-thread');
   if (!wrap) return;
@@ -3632,6 +3665,8 @@ function appendChatLine(role, text) {
   wrap.appendChild(div);
   wrap.scrollTop = wrap.scrollHeight;
 }
+
+// Wire text chat send button
 {
   const cpInput = document.getElementById('cp-input');
   const cpSend  = document.getElementById('cp-send');
@@ -3651,6 +3686,40 @@ function appendChatLine(role, text) {
     }
   });
 }
+
+// Bankroll UI in Co-Pilot (cp-bankroll / cp-target)
+(function initCopilotBankrollUI(){
+  const bnInput  = document.getElementById('cp-bankroll');
+  const tgtInput = document.getElementById('cp-target');
+  const btnSave  = document.getElementById('cp-save-bankroll');
+
+  if (!bnInput || !tgtInput || !btnSave) return;
+
+  // Load any saved state
+  const bankrollJson = window.localStorage.getItem('og_bankroll');
+  if (bankrollJson) {
+    try {
+      const b = JSON.parse(bankrollJson);
+      if (b.weekly != null) bnInput.value  = b.weekly;
+      if (b.target != null) tgtInput.value = b.target;
+    } catch (e) {
+      console.warn('[CoPilot] failed to parse og_bankroll', e);
+    }
+  }
+
+  btnSave.addEventListener('click', () => {
+    const weekly = parseFloat(bnInput.value) || 0;
+    const target = parseFloat(tgtInput.value) || 0;
+    const payload = { weekly, target };
+    try {
+      window.localStorage.setItem('og_bankroll', JSON.stringify(payload));
+    } catch (e) {
+      console.warn('[CoPilot] failed to store og_bankroll', e);
+    }
+    showToast('success', 'Bankroll settings updated for Co-Pilot');
+  });
+})();
+
 
 // ----------------------------
 // Demo Auth: Sign up / Sign in / Sign out
