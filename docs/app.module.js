@@ -85,6 +85,8 @@ let isHomeActive = true;       // controls whether globe render loop runs
 let lastStadiumFixtureId = null;
 const visitedFixtureIds = new Set();
 let lastCardPos = { x: null, y: null };
+let lastParsedSlipForChat = null;
+
 
 
 let cameraTravelRaf = null;
@@ -97,7 +99,7 @@ let savedAccas  = [];          // [{ id, userEmail, name, status, stake, legs, .
 
 const STORAGE_KEYS = {
   user:  'og_user',
-  accas: 'og_saved_accas'
+  accas: 'og_saved_accas'f
 };
 
 // Acca Builder state
@@ -3328,6 +3330,14 @@ function extractSlipMeta(text) {
 
   return { bookmaker, createdAt, stake, ret, currency, betType };
 }
+// After meta + parsed.legs are ready
+lastParsedSlipForChat = {
+  meta,
+  legs: parsed.legs
+};
+try {
+  window.sessionStorage.setItem('og_last_slip', JSON.stringify(lastParsedSlipForChat));
+} catch {}
 
 async function runBetChecker(file) {
   const out = document.getElementById('bc-output');
@@ -3567,18 +3577,50 @@ async function optimiseAcca(chosen, market) {
 document.getElementById('ab-build')?.addEventListener('click', ()=> runAccaSuggest());
 
 // ---------- OG Co-Pilot ----------
+function buildCopilotContext() {
+  // Last slip from Bet Checker (if any)
+  const slipJson = window.sessionStorage.getItem('og_last_slip');
+  let slip = null;
+  try {
+    if (slipJson) slip = JSON.parse(slipJson);
+  } catch (e) {
+    console.warn('[CoPilot] failed to parse og_last_slip', e);
+  }
+
+  // Current "primary" fixture from the globe, if available
+  const f = visibleFixtures && visibleFixtures[0];
+  const fixture = f ? {
+    home:   f.home_team,
+    away:   f.away_team,
+    date:   f.date_utc,
+    league: f.competition
+  } : null;
+
+  // Simple bankroll stub (can be wired to a real form later)
+  const bankrollJson = window.localStorage.getItem('og_bankroll');
+  let bankroll = null;
+  try {
+    if (bankrollJson) bankroll = JSON.parse(bankrollJson);
+  } catch (e) {
+    console.warn('[CoPilot] failed to parse og_bankroll', e);
+  }
+
+  // Return a single context object the backend / model can consume
+  return { fixture, slip, bankroll };
+}
+
 async function sendCopilotMessage(text) {
   const payload = { 
     messages: [
-      { role:'system', content: 'You are OddsGenius Co-Pilot. Be concise, provide bullet reasoning, cite model features where relevant.' },
-      { role:'user', content: text }
+      {
+        role: 'system',
+        content: 'You are OddsGenius Co-Pilot. Be concise, provide bullet reasoning, and use the provided context (fixture, slip, bankroll) when relevant.'
+      },
+      { role: 'user', content: text }
     ],
-    context: (function(){
-      const f = visibleFixtures[0];
-      if (!f) return null;
-      return { fixture: { home:f.home_team, away:f.away_team, date:f.date_utc, league:f.competition } };
-    })()
+    context: buildCopilotContext()
   };
+
   return API.copilot(payload);
 }
 function appendChatLine(role, text) {
@@ -3789,5 +3831,26 @@ window.addEventListener('DOMContentLoaded', ()=>{
     img.onload  = () => console.log('%c[LOGOS] OK', 'color:#22c55e', src);
     img.onerror = () => console.warn('%c[LOGOS] 404', 'color:#f43f5e', src, '→ path or filename mismatch');
     img.src = src;
+  });
+})();
+
+(function initBetCheckerTalkToOG(){
+  const btn = document.getElementById('bc-talk-og');
+  if (!btn) return;
+
+  btn.addEventListener('click', () => {
+    if (!lastParsedSlipForChat) {
+      showToast('error', 'Upload and parse a slip first');
+      return;
+    }
+
+    // Already saved to sessionStorage in runBetChecker, but we can be safe:
+    try {
+      window.sessionStorage.setItem('og_last_slip', JSON.stringify(lastParsedSlipForChat));
+    } catch {}
+
+    // Jump to Co-Pilot view
+    window.location.hash = '#/copilot';
+    showToast('info', 'Slip sent to OG Co-Pilot');
   });
 })();
