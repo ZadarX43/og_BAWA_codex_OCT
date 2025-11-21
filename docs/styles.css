@@ -1858,10 +1858,10 @@ canvas{ border-radius:24px; }
   pointer-events: auto;
 
   /* SMALL LABEL FOOTPRINT – roughly France/UK width on the globe */
-  width: 170px;
-  max-width: 170px;
-  min-width: 150px;
-  padding: 6px 8px 7px;
+  width: 190px;
+  max-width: 190px;
+  min-width: 160px;
+  padding: 6px 10px 7px;
 
   background: linear-gradient(
     145deg,
@@ -1884,8 +1884,8 @@ canvas{ border-radius:24px; }
 /* Card content layout */
 .stadium-card__body {
   display: flex;
-  align-items: flex-start;
-  gap: 6px; /* tighter than 10px */
+  align-items: center;   /* centre crest vertically */
+  gap: 8px;     
 }
 
 /* Gentle bob just on the content, not the anchor maths */
