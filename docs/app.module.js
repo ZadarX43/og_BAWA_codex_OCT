@@ -129,7 +129,7 @@ const COLORS = {
 // Adjust lonBias / latBias until Europe-based fixtures sit over Europe.
 const MAP_OFFSET = {
   latBias: 0,   // leave N/S alone for now
-  lonBias: 95   // shift everything ~15° further east (was 40)
+  lonBias: 90   // shift everything ~15° further east (was 40)
 };
 
 // Raycaster for clickable pill sprite
@@ -2630,7 +2630,7 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
     widthScale = 1 - t * 0.35; // scale from 1.0 (close) down to 0.65 (far)
   }
 
-  const BASE_WIDTH = 190; // must match CSS width
+  const BASE_WIDTH = 220; // must match CSS width
   const scaledWidthPx = BASE_WIDTH * widthScale;
   card.style.width = `${scaledWidthPx}px`;
 
