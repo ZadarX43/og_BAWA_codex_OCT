@@ -3577,39 +3577,6 @@ async function optimiseAcca(chosen, market) {
 document.getElementById('ab-build')?.addEventListener('click', ()=> runAccaSuggest());
 
 // ---------- OG Co-Pilot ----------
-function buildCopilotContext() {
-  // Last slip from Bet Checker (if any)
-  const slipJson = window.sessionStorage.getItem('og_last_slip');
-  let slip = null;
-  try {
-    if (slipJson) slip = JSON.parse(slipJson);
-  } catch (e) {
-    console.warn('[CoPilot] failed to parse og_last_slip', e);
-  }
-
-  // Current "primary" fixture from the globe, if available
-  const f = visibleFixtures && visibleFixtures[0];
-  const fixture = f ? {
-    home:   f.home_team,
-    away:   f.away_team,
-    date:   f.date_utc,
-    league: f.competition
-  } : null;
-
-  // Simple bankroll stub (can be wired to a real form later)
-  const bankrollJson = window.localStorage.getItem('og_bankroll');
-  let bankroll = null;
-  try {
-    if (bankrollJson) bankroll = JSON.parse(bankrollJson);
-  } catch (e) {
-    console.warn('[CoPilot] failed to parse og_bankroll', e);
-  }
-
-  // Return a single context object the backend / model can consume
-  return { fixture, slip, bankroll };
-}
-
-// ---------- OG Co-Pilot ----------
 
 function buildCopilotContext() {
   // Last slip from Bet Checker (if any)
@@ -3636,9 +3603,11 @@ function buildCopilotContext() {
   try {
     if (bankrollJson) bankroll = JSON.parse(bankrollJson);
   } catch (e) {
-    console.warn('[CoPilot] failed to parse og_bankroll', e);
+    const msg = e && e.message ? e.message : String(e);
+    console.warn('[CoPilot] failed to parse og_bankroll', msg);
   }
 
+  // This is what we send to the backend demo API
   return { fixture, slip, bankroll };
 }
 
@@ -3647,7 +3616,7 @@ async function sendCopilotMessage(text) {
     messages: [
       {
         role: 'system',
-        content: 'You are OddsGenius Co-Pilot. Be concise, provide bullet reasoning, and use the provided context (fixture, slip, bankroll) when relevant.'
+        content: 'You are OddsGenius Co-Pilot. Be concise, provide bullet reasoning, and use the provided context (fixture, slip, bankroll) where helpful. Do not place bets; you only advise.'
       },
       { role: 'user', content: text }
     ],
@@ -3671,20 +3640,23 @@ function appendChatLine(role, text) {
   const cpInput = document.getElementById('cp-input');
   const cpSend  = document.getElementById('cp-send');
 
-  cpSend?.addEventListener('click', async ()=>{
-    const q = (cpInput?.value || '').trim();
-    if (!q) return;
-    appendChatLine('user', q);
-    cpInput.value = '';
-    try {
-      const { messages, error } = await sendCopilotMessage(q);
-      if (error) throw new Error(error);
-      const msg = (messages && messages.find(m=>m.role==='assistant'))?.content || '(no reply)';
-      appendChatLine('assistant', msg);
-    } catch (e) {
-      appendChatLine('assistant', `⚠ ${e.message}`);
-    }
-  });
+  if (cpSend) {
+    cpSend.addEventListener('click', async () => {
+      const q = (cpInput?.value || '').trim();
+      if (!q) return;
+      appendChatLine('user', q);
+      if (cpInput) cpInput.value = '';
+      try {
+        const { messages, error } = await sendCopilotMessage(q);
+        if (error) throw new Error(error);
+        const msg = (messages && messages.find(m => m.role === 'assistant'))?.content || '(no reply)';
+        appendChatLine('assistant', msg);
+      } catch (e) {
+        const errMsg = e && e.message ? e.message : String(e);
+        appendChatLine('assistant', `⚠ ${errMsg}`);
+      }
+    });
+  }
 }
 
 // Bankroll UI in Co-Pilot (cp-bankroll / cp-target)
@@ -3703,7 +3675,8 @@ function appendChatLine(role, text) {
       if (b.weekly != null) bnInput.value  = b.weekly;
       if (b.target != null) tgtInput.value = b.target;
     } catch (e) {
-      console.warn('[CoPilot] failed to parse og_bankroll', e);
+      const msg = e && e.message ? e.message : String(e);
+      console.warn('[CoPilot] failed to parse og_bankroll', msg);
     }
   }
 
@@ -3714,7 +3687,8 @@ function appendChatLine(role, text) {
     try {
       window.localStorage.setItem('og_bankroll', JSON.stringify(payload));
     } catch (e) {
-      console.warn('[CoPilot] failed to store og_bankroll', e);
+      const msg = e && e.message ? e.message : String(e);
+      console.warn('[CoPilot] failed to store og_bankroll', msg);
     }
     showToast('success', 'Bankroll settings updated for Co-Pilot');
   });
