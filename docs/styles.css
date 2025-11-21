@@ -1880,11 +1880,6 @@ canvas{ border-radius:24px; }
     transform 200ms ease-out;
 }
 
-/* On-globe hero card: no CTAs – acts as a label only */
-.stadium-card__actions {
-  display: none;
-}
-
 
 /* Card content layout */
 .stadium-card__body {
