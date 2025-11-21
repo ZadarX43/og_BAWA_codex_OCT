@@ -1850,17 +1850,16 @@ canvas{ border-radius:24px; }
   left: 0;
   top: 0;
 
-  /* JS sets left/top as TOP-LEFT of card */
   transform-origin: 50% 50%;
   transform: scale(0.95);
 
   opacity: 0;
   pointer-events: auto;
 
-  /* SMALL LABEL FOOTPRINT – roughly France/UK width on the globe */
-  width: 190px;
-  max-width: 190px;
-  min-width: 160px;
+  /* SLIGHTLY WIDER LABEL */
+  width: 220px;
+  max-width: 220px;
+  min-width: 190px;
   padding: 6px 10px 7px;
 
   background: linear-gradient(
