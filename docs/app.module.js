@@ -933,7 +933,7 @@ function centerCameraOnVisibleFixtures() {
   controls.update();
 }
 
-function centerCameraOnFixture(f, distanceFactor = 1.4) {
+function centerCameraOnFixture(f, distanceFactor = 0.9) {
   if (!f || !camera || !controls || !globe) return;
 
   const lat = Number(f.latitude);
@@ -1892,7 +1892,7 @@ async function init(){
   controls.autoRotate = false;
   
   // Keep zoom & tilt in a comfortable, cinematic band
-  controls.minDistance = getGlobeRadius() * 0.3;
+  controls.minDistance = getGlobeRadius() * 0.2;
   controls.maxDistance = getGlobeRadius() * 3.0;
   controls.minPolarAngle = Math.PI * 0.20; // ≈ 36°
   controls.maxPolarAngle = Math.PI * 0.80; // ≈ 144°
