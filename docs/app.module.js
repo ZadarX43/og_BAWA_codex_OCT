@@ -99,7 +99,7 @@ let savedAccas  = [];          // [{ id, userEmail, name, status, stake, legs, .
 
 const STORAGE_KEYS = {
   user:  'og_user',
-  accas: 'og_saved_accas'f
+  accas: 'og_saved_accas'
 };
 
 // Acca Builder state
