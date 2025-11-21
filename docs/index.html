@@ -268,6 +268,7 @@
             </label>
             <button class="cta" id="bc-history-btn">View recent checks</button>
           </div>
+      
           <div id="bc-results" class="insight-card bc-results-card" style="margin-top:16px; min-height:140px;">
             <div class="bc-header-row">
               <h2>Results</h2>
@@ -278,8 +279,16 @@
             <div class="skel" aria-hidden="true"></div>
             <div id="bc-output" class="mt-2"></div>
           </div>
+      
+          <!-- New: send parsed slip to OG Co-Pilot -->
+          <div class="panel-row" style="margin-top:12px;">
+            <button class="cta cta--secondary" id="bc-talk-og">
+              Discuss this slip with OG Co-Pilot
+            </button>
+          </div>
         </div>
       </section>
+
 
       <!-- ACCA BUILDER VIEW -->
       <section id="view-accabuilder" class="view" hidden>
