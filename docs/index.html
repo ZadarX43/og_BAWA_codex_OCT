@@ -445,19 +445,38 @@
     </section>
 
 
+      
       <!-- GPT-5 OG CO-PILOT VIEW -->
       <section id="view-copilot" class="view" hidden>
         <div class="screen">
           <h1>GPT-5 OG Co-Pilot</h1>
-          <div id="cp-thread" class="chat-window">
-            <div class="chat-empty muted">Ask about any fixture, slip, or model insight. Example: “Build a safe 4-fold O2.5 for tonight.”</div>
+      
+          <!-- Bankroll + target controls -->
+          <div class="panel-row" style="margin-bottom:8px;">
+            <label class="control control--compact">
+              <span class="control-label">Weekly bankroll (£)</span>
+              <input id="cp-bankroll" type="number" min="0" step="1" placeholder="e.g. 50" />
+            </label>
+            <label class="control control--compact">
+              <span class="control-label">Target (£)</span>
+              <input id="cp-target" type="number" min="0" step="1" placeholder="e.g. 200" />
+            </label>
+            <button class="cta cta--secondary" id="cp-save-bankroll">Save</button>
           </div>
+      
+          <div id="cp-thread" class="chat-window">
+            <div class="chat-empty muted">
+              Ask about any fixture, slip, or model insight. Example: “Build a safe 4-fold O2.5 for tonight.”
+            </div>
+          </div>
+      
           <div class="chat-input">
             <input id="cp-input" placeholder="Ask Co-Pilot…" />
             <button id="cp-send" class="cta">Send</button>
           </div>
         </div>
       </section>
+
 
       <!-- AUTH: LOGIN -->
       <section id="view-signin" class="view auth" hidden>
