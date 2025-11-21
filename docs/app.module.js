@@ -933,7 +933,7 @@ function centerCameraOnVisibleFixtures() {
   controls.update();
 }
 
-function centerCameraOnFixture(f, distanceFactor = 0.9) {
+function centerCameraOnFixture(f, distanceFactor = 1.2) {
   if (!f || !camera || !controls || !globe) return;
 
   const lat = Number(f.latitude);
