@@ -3330,14 +3330,6 @@ function extractSlipMeta(text) {
 
   return { bookmaker, createdAt, stake, ret, currency, betType };
 }
-// After meta + parsed.legs are ready
-lastParsedSlipForChat = {
-  meta,
-  legs: parsed.legs
-};
-try {
-  window.sessionStorage.setItem('og_last_slip', JSON.stringify(lastParsedSlipForChat));
-} catch {}
 
 async function runBetChecker(file) {
   const out = document.getElementById('bc-output');
@@ -3363,6 +3355,18 @@ async function runBetChecker(file) {
       }
       return;
     }
+
+    // ---- Save for OG Co-Pilot (slip + meta) ----
+    lastParsedSlipForChat = {
+      meta,
+      legs: parsed.legs
+    };
+    try {
+      window.sessionStorage.setItem('og_last_slip', JSON.stringify(lastParsedSlipForChat));
+    } catch (e) {
+      console.warn('[BetChecker] failed to store og_last_slip', e);
+    }
+    // -------------------------------------------
 
     let scored;
     if (out) out.innerHTML = '<div class="muted">Scoring legs…</div>';
@@ -3429,7 +3433,6 @@ async function runBetChecker(file) {
         ? (lg.edgePct >= 0 ? '+' : '') + lg.edgePct.toFixed(1) + '%'
         : '—';
 
-      // Stable, friendly title for the leg
       let leftLabel = 'Selection';
       if (lg.fixture_label) {
         leftLabel = lg.fixture_label;
