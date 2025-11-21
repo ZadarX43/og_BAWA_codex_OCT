@@ -52,8 +52,14 @@ body{
   align-items:stretch;
   min-height: 540px;             /* taller hero so globe feels like the star */
 }
-@media (max-width: 1100px){
-  .hero{ grid-template-columns: 1fr; }
+/* Only collapse hero to 1 column on genuinely small screens */
+@media (max-width: 900px){
+  .hero{
+    grid-template-columns: 1fr;
+  }
+  .hero__insights{
+    order: -1; /* insights above globe when stacked */
+  }
 }
 
 
