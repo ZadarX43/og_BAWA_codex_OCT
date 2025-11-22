@@ -3885,17 +3885,41 @@ window.addEventListener('DOMContentLoaded', ()=>{
   if (!btn) return;
 
   btn.addEventListener('click', () => {
-    if (!lastParsedSlipForChat) {
+    // Prefer persisted slip context
+    const slipJson = window.sessionStorage.getItem('og_last_slip');
+    let slip = null;
+
+    if (slipJson) {
+      try {
+        slip = JSON.parse(slipJson);
+      } catch (e) {
+        console.warn('[BetChecker] failed to parse og_last_slip in click handler', e);
+      }
+    }
+
+    // Fallback to in-memory var if needed
+    if (!slip && lastParsedSlipForChat) {
+      slip = lastParsedSlipForChat;
+      try {
+        window.sessionStorage.setItem('og_last_slip', JSON.stringify(slip));
+      } catch (e) {
+        console.warn('[BetChecker] failed to store og_last_slip from memory', e);
+      }
+    }
+
+    // Still nothing? Then user really hasn’t parsed a slip yet
+    if (!slip || !Array.isArray(slip.legs) || !slip.legs.length) {
       showToast('error', 'Upload and parse a slip first');
       return;
     }
 
-    // Already saved to sessionStorage in runBetChecker, but we can be safe:
+    // Ensure latest slip is saved, then jump to Co-Pilot
     try {
-      window.sessionStorage.setItem('og_last_slip', JSON.stringify(lastParsedSlipForChat));
-    } catch {}
+      window.sessionStorage.setItem('og_last_slip', JSON.stringify(slip));
+    } catch (e) {
+      console.warn('[BetChecker] failed to persist og_last_slip before navigation', e);
+    }
 
-    // Jump to Co-Pilot view
     window.location.hash = '#/copilot';
     showToast('info', 'Slip sent to OG Co-Pilot');
   });
