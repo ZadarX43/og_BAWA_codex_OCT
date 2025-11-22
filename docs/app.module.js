@@ -3924,3 +3924,14 @@ window.addEventListener('DOMContentLoaded', ()=>{
     showToast('info', 'Slip sent to OG Co-Pilot');
   });
 })();
+
+(function initGlobeFullscreen(){
+  const btn = document.getElementById('globe-fullscreen-toggle');
+  const globePane = document.querySelector('.hero__globe');
+  if (!btn || !globePane) return;
+
+  btn.addEventListener('click', () => {
+    const on = globePane.classList.toggle('hero__globe--fullscreen');
+    btn.textContent = on ? '✕' : '⛶';
+  });
+})();
