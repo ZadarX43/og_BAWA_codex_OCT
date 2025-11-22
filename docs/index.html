@@ -115,9 +115,25 @@
           <section class="hero__globe" aria-label="Upcoming fixtures globe">
             <div id="globe-container" tabindex="0" aria-describedby="globe-help">
               <div class="globe-loading" role="status">Loading globe…</div>
-              <button id="nav-prev" aria-label="Previous fixture" title="Previous (←)" tabindex="0">&#x2039;</button>
-              <button id="nav-next" aria-label="Next fixture"   title="Next (→)" tabindex="0">&#x203A;</button>
-            
+          
+              <button id="nav-prev" aria-label="Previous fixture" title="Previous (←)" tabindex="0">
+                &#x2039;
+              </button>
+              <button id="nav-next" aria-label="Next fixture" title="Next (→)" tabindex="0">
+                &#x203A;
+              </button>
+          
+              <!-- NEW: Fullscreen toggle for globe -->
+              <button
+                id="globe-fullscreen-toggle"
+                class="icon-btn"
+                type="button"
+                aria-label="Toggle full-screen globe"
+                title="Toggle full-screen globe"
+              >
+                ⛶
+              </button>
+          
               <!-- Stadium hero hologram overlay (HTML, anchored via JS) -->
               <div id="stadium-overlay" class="stadium-overlay" aria-hidden="true">
                 <div id="stadium-stem" class="stadium-stem"></div>
@@ -172,7 +188,7 @@
             <p id="globe-help" class="visually-hidden">
               Use left and right arrow keys or buttons to change fixture.
             </p>
-
+          
             <!-- Competition Accuracy (pretty) -->
             <section class="comp-accuracy" id="comp-accuracy" aria-label="Competition accuracy">
               <div class="comp-row">
@@ -189,52 +205,6 @@
               </div>
             </section>
           </section>
-
-          <!-- Insights panel -->
-          <aside class="hero__insights" aria-live="polite">
-            <div class="insights__header">
-              <div class="badge badge--home" id="home-badge" aria-label="Home team crest"></div>
-              <div class="fixture-meta">
-                <h1 id="fixture-title">Loading fixtures…</h1>
-                <p id="fixture-context"></p>
-              </div>
-              <div class="badge badge--away" id="away-badge" aria-label="Away team crest"></div>
-            </div>
-            <div class="tabs" role="tablist" aria-label="Insights">
-              <button class="tab is-active" role="tab" aria-selected="true" aria-controls="tab-mi" data-tab="mi" id="tabbtn-mi">Match Intelligence</button>
-              <button class="tab" role="tab" aria-selected="false" aria-controls="tab-players" data-tab="players" id="tabbtn-players">Player Watchlist</button>
-              <button class="tab" role="tab" aria-selected="false" aria-controls="tab-market" data-tab="market" id="tabbtn-market">Market Snapshot</button>
-            </div>
-
-            <div class="tabpanes" id="insights-content">
-              <section id="tab-mi" class="tabpane is-active" role="tabpanel" aria-labelledby="tabbtn-mi">
-                <div class="insight-card">
-                  <h2>Match Intelligence</h2>
-                  <div class="skel" aria-hidden="true"></div>
-                  <ul id="match-intelligence"></ul>
-                </div>
-              </section>
-
-              <section id="tab-players" class="tabpane" role="tabpanel" aria-labelledby="tabbtn-players">
-                <div class="insight-card">
-                  <h2>Player Watchlist</h2>
-                  <div class="skel" aria-hidden="true"></div>
-                  <ul id="player-watchlist"></ul>
-                </div>
-              </section>
-
-              <section id="tab-market" class="tabpane" role="tabpanel" aria-labelledby="tabbtn-market">
-                <div class="insight-card">
-                  <h2>Market Snapshot</h2>
-                  <div class="skel" aria-hidden="true"></div>
-                  <ul id="market-snapshot"></ul>
-                </div>
-              </section>
-
-              <button class="cta" id="deep-dive-btn">Open full fixture intelligence</button>
-            </div>
-          </aside>
-        </main>
 
        <!-- Fixture rail (quick selector) -->
         <div id="fixture-rail" class="fixture-rail" aria-label="Fixtures"></div>
