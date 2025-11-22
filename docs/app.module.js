@@ -3926,12 +3926,16 @@ window.addEventListener('DOMContentLoaded', ()=>{
 })();
 
 (function initGlobeFullscreen(){
-  const btn = document.getElementById('globe-fullscreen-toggle');
+  const btn       = document.getElementById('globe-fullscreen-toggle');
   const globePane = document.querySelector('.hero__globe');
+  const page      = document.querySelector('.page');
   if (!btn || !globePane) return;
 
   btn.addEventListener('click', () => {
     const on = globePane.classList.toggle('hero__globe--fullscreen');
+    if (page) {
+      page.classList.toggle('page--globe-fullscreen', on);
+    }
     btn.textContent = on ? '✕' : '⛶';
   });
 })();
