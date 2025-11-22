@@ -261,7 +261,7 @@ function latLngToUnit(latDeg, lonDeg){
   const lat = THREE.MathUtils.degToRad(latDeg);  // latitude in radians
   const lon = THREE.MathUtils.degToRad(lonDeg);  // longitude in radians
 
-  // Standard globe: y = up, lat positive north, lon positive east
+  // Standard earth-on-a-sphere: y = up, lat north+, lon east+
   const x = -Math.cos(lat) * Math.cos(lon);
   const y =  Math.sin(lat);
   const z =  Math.cos(lat) * Math.sin(lon);
@@ -2052,17 +2052,17 @@ async function loadFixturesCSV(url){
 
   fixtures = (data || [])
   .map(row => {
-    // --- existing parse, but we keep raw values separate ---
+    // Parse raw values
     const rawLat = parseFloat(row.latitude ?? row.lat ?? row.Latitude ?? row.lat_deg);
     let   rawLon = parseFloat(row.longitude ?? row.lon ?? row.lng ?? row.Longitude);
 
-    // Some demo rows have longitude stored as "degrees × 10"
-    // e.g. Hamburg ~10°E but CSV says ~100. If |lon|>40 but <400, treat as *10 bug.
+    // ⚠️ Some rows have longitude stored as "degrees × 10"
+    // Example: Hamburg ~10°E but CSV shows ~100. If |lon| in (40, 400), treat as ×10 bug.
     if (Number.isFinite(rawLon) && Math.abs(rawLon) > 40 && Math.abs(rawLon) < 400) {
       rawLon = rawLon / 10;
     }
 
-    // Apply global offset (demo alignment tweak)
+    // Apply global offset (we're using neutral 0/0 for now)
     let lat = Number.isFinite(rawLat) ? rawLat + MAP_OFFSET.latBias : NaN;
     let lon = Number.isFinite(rawLon) ? rawLon + MAP_OFFSET.lonBias : NaN;
 
@@ -2073,11 +2073,11 @@ async function loadFixturesCSV(url){
     }
 
     return {
-      fixture_id: (row.fixture_id || row.id || `${row.home_team}-${row.away_team}-${row.date_utc || ''}`).trim(),
-      home_team: (row.home_team || row.Home || '').trim(),
-      away_team: (row.away_team || row.Away || '').trim(),
-      home_badge_url: pick(row, ['home_badge_url', 'home_logo_url', 'home_logo', 'home_badge']),
-      away_badge_url: pick(row, ['away_badge_url', 'away_logo_url', 'away_logo', 'away_badge']),
+      fixture_id:(row.fixture_id||row.id||`${row.home_team}-${row.away_team}-${row.date_utc||''}`).trim(),
+      home_team:(row.home_team||row.Home||'').trim(),
+      away_team:(row.away_team||row.Away||'').trim(),
+      home_badge_url: pick(row,['home_badge_url','home_logo_url','home_logo','home_badge']),
+      away_badge_url: pick(row,['away_badge_url','away_logo_url','away_logo','away_badge']),
       date_utc: row.date_utc || row.date || '',
       competition: row.competition || row.league || '',
       stadium: row.stadium || '',
@@ -2087,16 +2087,14 @@ async function loadFixturesCSV(url){
       longitude: Number.isFinite(lon) ? lon : undefined,
       predicted_winner: row.predicted_winner || '',
       confidence_ftr: +row.confidence_ftr || +row.confidence || 0,
-      xg_home: +row.xg_home || 0,
-      xg_away: +row.xg_away || 0,
-      ppg_home: +row.ppg_home || 0,
-      ppg_away: +row.ppg_away || 0,
-      over25_prob: +row.over25_prob || 0,
-      btts_prob: +row.btts_prob || 0,
-      key_players_shots: (row.key_players_shots || '').trim(),
-      key_players_tackles: (row.key_players_tackles || '').trim(),
-      key_players_bookings: (row.key_players_bookings || '').trim(),
-      __active: false,
+      xg_home:+row.xg_home||0, xg_away:+row.xg_away||0,
+      ppg_home:+row.ppg_home||0, ppg_away:+row.ppg_away||0,
+      over25_prob:+row.over25_prob||0,
+      btts_prob:+row.btts_prob||0,
+      key_players_shots:(row.key_players_shots||'').trim(),
+      key_players_tackles:(row.key_players_tackles||'').trim(),
+      key_players_bookings:(row.key_players_bookings||'').trim(),
+      __active:false,
       __hot: (+row.over25_prob || 0) >= 0.65 ||
              (+row.confidence_ftr || +row.confidence || 0) >= 0.75
     };
@@ -2105,7 +2103,6 @@ async function loadFixturesCSV(url){
 
 showToast('success', `Loaded ${fixtures.length} fixtures`);
 
-}
 
 // ----------------------------
 // Selection, hover, rail, panel
