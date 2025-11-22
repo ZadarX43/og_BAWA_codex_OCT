@@ -307,29 +307,60 @@ canvas{ border-radius:24px; }
 #globe-container .globe-html-elements,
 #globe-container .globeHtmlElements,
 #globe-container .globe-html-overlay {
-  position:absolute; inset:0; z-index:6; pointer-events:none;
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
 }
-#globe-container > * { pointer-events: none; }
-#globe-container .fixture-tab{ pointer-events: auto; }
+
+/* Disable all children by default… */
+#globe-container > * {
+  pointer-events: none;
+}
+
+/* …then explicitly enable the stuff we actually interact with */
+#globe-container canvas,
+#globe-container .fixture-tab,
+#globe-container .stadium-card,
+#globe-container .stadium-card__btn,
+#nav-prev,
+#nav-next,
+#globe-fullscreen-toggle {
+  pointer-events: auto;
+}
 
 /* On-globe prev/next pills (offset for optical center) */
-#nav-prev,#nav-next{
-  position:absolute; top:calc(50% - 6px); transform:translateY(-50%);
-  width:38px; height:38px; border-radius:50%;
-  border:1px solid rgba(255,255,255,.14);
-  background:rgba(5,18,31,.65);
-  color:#e6f5ff; display:grid; place-items:center; cursor:pointer;
-  transition:background .2s ease, transform .15s ease, border-color .2s ease;
-  z-index:5; user-select:none;
+#nav-prev,
+#nav-next {
+  position: absolute;
+  top: calc(50% - 6px);
+  transform: translateY(-50%);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(5,18,31,.65);
+  color: #e6f5ff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background .2s ease, transform .15s ease, border-color .2s ease;
+  z-index: 5;
+  user-select: none;
 }
-#nav-prev{ left:10px; }
-#nav-next{ right:10px; }
-#nav-prev:hover,#nav-next:hover{
-  background:rgba(12,40,50,.8);
-  border-color:rgba(125,249,196,.4);
-  transform:translateY(-50%) scale(1.04);
+#nav-prev { left: 10px; }
+#nav-next { right: 10px; }
+#nav-prev:hover,
+#nav-next:hover {
+  background: rgba(12,40,50,.8);
+  border-color: rgba(125,249,196,.4);
+  transform: translateY(-50%) scale(1.04);
 }
-#nav-prev:active,#nav-next:active{ transform:translateY(-50%) scale(.98); }
+#nav-prev:active,
+#nav-next:active {
+  transform: translateY(-50%) scale(.98);
+}
+
 /* Full-screen toggle control on globe */
 #globe-fullscreen-toggle {
   position: absolute;
@@ -348,6 +379,7 @@ canvas{ border-radius:24px; }
   background: rgba(12,40,50,.9);
   border-color: rgba(125,249,196,.4);
 }
+
 
 /* ===== Competition strip (tall, teal/green/blue) ===== */
 .comp-accuracy{
