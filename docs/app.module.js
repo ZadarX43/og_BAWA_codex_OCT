@@ -256,17 +256,17 @@ function getGlobeRadius(){
   return m?.geometry?.parameters?.radius || 100;
 }
 
-// Lat/lon → unit vector in world space (match ThreeGlobe)
+// Lat/lon → unit vector in world space (match ThreeGlobe’s phi/theta mapping)
 function latLngToUnit(latDeg, lonDeg){
-  const lat = THREE.MathUtils.degToRad(latDeg);  // latitude in radians
-  const lon = THREE.MathUtils.degToRad(lonDeg);  // longitude in radians
+  // phi = (90 - lat), theta = (180 - lon)
+  const phi   = THREE.MathUtils.degToRad(90 - latDeg);
+  const theta = THREE.MathUtils.degToRad(180 - lonDeg);
 
-  // Standard earth-on-a-sphere: y = up, lat north+, lon east+
-  const x = -Math.cos(lat) * Math.cos(lon);
-  const y =  Math.sin(lat);
-  const z =  Math.cos(lat) * Math.sin(lon);
-
-  return new THREE.Vector3(x, y, z).normalize();
+  return new THREE.Vector3(
+    Math.sin(phi) * Math.cos(theta),
+    Math.cos(phi),
+    Math.sin(phi) * Math.sin(theta)
+  ).normalize();
 }
 
 function latLngToVec3(lat, lon, alt = 0){
@@ -274,7 +274,6 @@ function latLngToVec3(lat, lon, alt = 0){
   const n = latLngToUnit(lat, lon);
   return n.clone().multiplyScalar(R * (1 + alt));
 }
-
 
 function makeFallbackCanvasTexture(label='STADIUM'){
   const c = document.createElement('canvas');
@@ -2052,26 +2051,20 @@ async function init(){
   
     fixtures = (data || [])
     .map(row => {
-      // Parse raw values
+      // Parse raw values from CSV
       const rawLat = parseFloat(row.latitude ?? row.lat ?? row.Latitude ?? row.lat_deg);
-      let   rawLon = parseFloat(row.longitude ?? row.lon ?? row.lng ?? row.Longitude);
-  
-      // ⚠️ Some rows have longitude stored as "degrees × 10"
-      // Example: Hamburg ~10°E but CSV shows ~100. If |lon| in (40, 400), treat as ×10 bug.
-      if (Number.isFinite(rawLon) && Math.abs(rawLon) > 40 && Math.abs(rawLon) < 400) {
-        rawLon = rawLon / 10;
-      }
-  
-      // Apply global offset (we're using neutral 0/0 for now)
+      const rawLon = parseFloat(row.longitude ?? row.lon ?? row.lng ?? row.Longitude);
+    
+      // Apply global offset (we keep this neutral for now)
       let lat = Number.isFinite(rawLat) ? rawLat + MAP_OFFSET.latBias : NaN;
       let lon = Number.isFinite(rawLon) ? rawLon + MAP_OFFSET.lonBias : NaN;
-  
+    
       // Normalise longitude into [-180, 180] so Three-Globe stays happy
       if (Number.isFinite(lon)) {
         if (lon > 180) lon -= 360;
         if (lon < -180) lon += 360;
       }
-  
+    
       return {
         fixture_id:(row.fixture_id||row.id||`${row.home_team}-${row.away_team}-${row.date_utc||''}`).trim(),
         home_team:(row.home_team||row.Home||'').trim(),
@@ -2100,8 +2093,8 @@ async function init(){
       };
     })
     .filter(f => Number.isFinite(f.latitude) && Number.isFinite(f.longitude));
-  
-  showToast('success', `Loaded ${fixtures.length} fixtures`);
+    
+    showToast('success', `Loaded ${fixtures.length} fixtures`);
 }
 
 // ----------------------------
