@@ -256,21 +256,25 @@ function getGlobeRadius(){
   return m?.geometry?.parameters?.radius || 100;
 }
 
-// three-globe: phi = (90 - lat), theta = (180 - lon)
+// Lat/lon → unit vector in world space (match ThreeGlobe)
 function latLngToUnit(latDeg, lonDeg){
-  const phi   = THREE.MathUtils.degToRad(90 - latDeg);
-  const theta = THREE.MathUtils.degToRad(180 - lonDeg);
-  return new THREE.Vector3(
-    Math.sin(phi) * Math.cos(theta),
-    Math.cos(phi),
-    Math.sin(phi) * Math.sin(theta)
-  ).normalize();
+  const lat = THREE.MathUtils.degToRad(latDeg);  // latitude in radians
+  const lon = THREE.MathUtils.degToRad(lonDeg);  // longitude in radians
+
+  // Standard globe: y = up, lat positive north, lon positive east
+  const x = -Math.cos(lat) * Math.cos(lon);
+  const y =  Math.sin(lat);
+  const z =  Math.cos(lat) * Math.sin(lon);
+
+  return new THREE.Vector3(x, y, z).normalize();
 }
-function latLngToVec3(lat, lon, alt=0){
+
+function latLngToVec3(lat, lon, alt = 0){
   const R = getGlobeRadius();
   const n = latLngToUnit(lat, lon);
-  return n.clone().multiplyScalar(R*(1+alt));
+  return n.clone().multiplyScalar(R * (1 + alt));
 }
+
 
 function makeFallbackCanvasTexture(label='STADIUM'){
   const c = document.createElement('canvas');
@@ -2046,11 +2050,17 @@ async function loadFixturesCSV(url){
   const { data, errors } = Papa.parse(text, { header:true, skipEmptyLines:true });
   if (errors?.length) console.warn('[CSV parse errors]', errors);
 
-  fixtures = (data||[])
-  .map(row=>{
+  fixtures = (data || [])
+  .map(row => {
     // --- existing parse, but we keep raw values separate ---
     const rawLat = parseFloat(row.latitude ?? row.lat ?? row.Latitude ?? row.lat_deg);
-    const rawLon = parseFloat(row.longitude ?? row.lon ?? row.lng ?? row.Longitude);
+    let   rawLon = parseFloat(row.longitude ?? row.lon ?? row.lng ?? row.Longitude);
+
+    // Some demo rows have longitude stored as "degrees × 10"
+    // e.g. Hamburg ~10°E but CSV says ~100. If |lon|>40 but <400, treat as *10 bug.
+    if (Number.isFinite(rawLon) && Math.abs(rawLon) > 40 && Math.abs(rawLon) < 400) {
+      rawLon = rawLon / 10;
+    }
 
     // Apply global offset (demo alignment tweak)
     let lat = Number.isFinite(rawLat) ? rawLat + MAP_OFFSET.latBias : NaN;
@@ -2063,11 +2073,11 @@ async function loadFixturesCSV(url){
     }
 
     return {
-      fixture_id:(row.fixture_id||row.id||`${row.home_team}-${row.away_team}-${row.date_utc||''}`).trim(),
-      home_team:(row.home_team||row.Home||'').trim(),
-      away_team:(row.away_team||row.Away||'').trim(),
-      home_badge_url: pick(row,['home_badge_url','home_logo_url','home_logo','home_badge']),
-      away_badge_url: pick(row,['away_badge_url','away_logo_url','away_logo','away_badge']),
+      fixture_id: (row.fixture_id || row.id || `${row.home_team}-${row.away_team}-${row.date_utc || ''}`).trim(),
+      home_team: (row.home_team || row.Home || '').trim(),
+      away_team: (row.away_team || row.Away || '').trim(),
+      home_badge_url: pick(row, ['home_badge_url', 'home_logo_url', 'home_logo', 'home_badge']),
+      away_badge_url: pick(row, ['away_badge_url', 'away_logo_url', 'away_logo', 'away_badge']),
       date_utc: row.date_utc || row.date || '',
       competition: row.competition || row.league || '',
       stadium: row.stadium || '',
@@ -2077,22 +2087,24 @@ async function loadFixturesCSV(url){
       longitude: Number.isFinite(lon) ? lon : undefined,
       predicted_winner: row.predicted_winner || '',
       confidence_ftr: +row.confidence_ftr || +row.confidence || 0,
-      xg_home:+row.xg_home||0, xg_away:+row.xg_away||0,
-      ppg_home:+row.ppg_home||0, ppg_away:+row.ppg_away||0,
-      over25_prob:+row.over25_prob||0,
-      btts_prob:+row.btts_prob||0,
-      key_players_shots:(row.key_players_shots||'').trim(),
-      key_players_tackles:(row.key_players_tackles||'').trim(),
-      key_players_bookings:(row.key_players_bookings||'').trim(),
-      __active:false,
+      xg_home: +row.xg_home || 0,
+      xg_away: +row.xg_away || 0,
+      ppg_home: +row.ppg_home || 0,
+      ppg_away: +row.ppg_away || 0,
+      over25_prob: +row.over25_prob || 0,
+      btts_prob: +row.btts_prob || 0,
+      key_players_shots: (row.key_players_shots || '').trim(),
+      key_players_tackles: (row.key_players_tackles || '').trim(),
+      key_players_bookings: (row.key_players_bookings || '').trim(),
+      __active: false,
       __hot: (+row.over25_prob || 0) >= 0.65 ||
              (+row.confidence_ftr || +row.confidence || 0) >= 0.75
     };
   })
-  .filter(f=>Number.isFinite(f.latitude)&&Number.isFinite(f.longitude));
+  .filter(f => Number.isFinite(f.latitude) && Number.isFinite(f.longitude));
 
+showToast('success', `Loaded ${fixtures.length} fixtures`);
 
-  showToast('success', `Loaded ${fixtures.length} fixtures`);
 }
 
 // ----------------------------
