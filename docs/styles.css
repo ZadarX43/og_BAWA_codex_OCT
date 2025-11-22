@@ -179,6 +179,14 @@ body{
 .hero__globe--fullscreen #globe-container {
   min-height: calc(100vh - 80px);
 }
+/* When globe is fullscreen, hide the right hero column & rail to avoid "broken" layout */
+.page--globe-fullscreen .hero__insights,
+.page--globe-fullscreen #fixture-rail,
+.page--globe-fullscreen .fixture-progress,
+.page--globe-fullscreen .floating-bar {
+  opacity: 0;
+  pointer-events: none;
+}
 
 #globe-container{
   flex:1;
