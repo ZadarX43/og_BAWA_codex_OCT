@@ -108,9 +108,9 @@ let abCartLegs       = [];     // legs currently in the "Your Acca" cart
 let currentAccaLegs  = [];     // snapshot of last rendered cart (for saving)
 const abFixtureById  = new Map();
 
-const SURFACE_EPS   = 0.010;  // slightly higher so dots sit above the texture
-const RADIUS_BASE   = 0.018;  // bigger = easier to see non-active fixtures
-const RADIUS_ACTIVE = 0.040;  // keep the active one noticeably larger
+const SURFACE_EPS   = 0.015;  // a bit higher above the surface
+const RADIUS_BASE   = 0.024;  // base fixtures more visible
+const RADIUS_ACTIVE = 0.055;  // active clearly stands out
 const CAMERA_ALT    = 2.0;
 const BLOOM = { strength: 0.9, radius: 0.6, threshold: 0.75 };
 
@@ -1931,7 +1931,11 @@ async function init(){
     .showAtmosphere(true).atmosphereColor('#9ef9e3').atmosphereAltitude(0.28)
     .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
     .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
-    .pointAltitude(d => d.__active ? SURFACE_EPS * 2.0 : SURFACE_EPS)
+    .pointAltitude(d => {
+      if (d.__active) return SURFACE_EPS * 2.5;  // active fixture floats highest
+      if (d.__hot)    return SURFACE_EPS * 1.6;  // hot fixtures sit slightly above surface
+      return SURFACE_EPS;                        // normal fixtures
+    })
     .pointRadius(d => {
       if (d.__active) return RADIUS_ACTIVE;
       return d.__hot ? RADIUS_BASE * 1.3 : RADIUS_BASE * 0.75;
