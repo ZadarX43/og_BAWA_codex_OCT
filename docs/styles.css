@@ -166,6 +166,19 @@ body{
   box-shadow: var(--card-shadow);
 }
 .hero__insights{ box-shadow: var(--card-shadow); }
+/* Full-screen globe mode */
+.hero__globe--fullscreen {
+  position: fixed;
+  inset: 16px;
+  z-index: 50;
+  border-radius: 24px;
+  box-shadow: 0 28px 60px rgba(0,0,0,.8);
+  background: linear-gradient(145deg, rgba(5,18,31,.96), rgba(8,30,45,.9));
+}
+
+.hero__globe--fullscreen #globe-container {
+  min-height: calc(100vh - 80px);
+}
 
 #globe-container{
   flex:1;
@@ -317,6 +330,24 @@ canvas{ border-radius:24px; }
   transform:translateY(-50%) scale(1.04);
 }
 #nav-prev:active,#nav-next:active{ transform:translateY(-50%) scale(.98); }
+/* Full-screen toggle control on globe */
+#globe-fullscreen-toggle {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 8;
+  border-radius: 999px;
+  padding: 4px 8px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(5,18,31,.75);
+  color: #e6f5ff;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+#globe-fullscreen-toggle:hover {
+  background: rgba(12,40,50,.9);
+  border-color: rgba(125,249,196,.4);
+}
 
 /* ===== Competition strip (tall, teal/green/blue) ===== */
 .comp-accuracy{
