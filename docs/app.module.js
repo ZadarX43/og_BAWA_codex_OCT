@@ -2280,6 +2280,14 @@ function selectIndex(idx, { fly = false } = {}) {
   const f = visibleFixtures[idx];
   if (!f) return;
 
+  // Debug: log fixture coordinates after offsets have been applied
+  console.log('[OG coords]',
+    f.fixture_id,
+    '|', f.home_team, 'vs', f.away_team,
+    '| lat:', f.latitude,
+    'lon:', f.longitude
+  );
+
   currentFixture = f;
   visitedFixtureIds.add(f.fixture_id);
 
