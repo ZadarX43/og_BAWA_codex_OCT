@@ -20,7 +20,6 @@ except Exception:
 import numpy as np
 import pandas as pd
 import re
-from typing import Any
 import math
 from typing import Any, Optional, cast
 
@@ -212,7 +211,7 @@ def _map_prob_od_for_market(df, market: str):
         # After assigning real market odds, set od_source to 'market' if positive odds
         try:
             _chk = _pd.to_numeric(out.get("od"), errors="coerce")
-            if _chk is not None and bool((_chk > 0).any()):
+            if _chk is not None and bool(np.any(_chk > 0)):
                 out["od_source"] = out.get("od_source").fillna("market") if "od_source" in out.columns else "market"
         except Exception:
             pass
@@ -279,9 +278,9 @@ if "_resolve_draw_temp" not in globals():
         """
         import os, re
         try:
-            base = float(os.getenv("DRAW_TEMP", str(1.4 if default is None else default)))
+            base = _to_float(os.getenv("DRAW_TEMP", str(1.4 if default is None else default)))
         except Exception:
-            base = 1.4 if default is None else float(default)
+            base = 1.4 if default is None else _to_float(default)
         if not league:
             return base
         try:
@@ -289,7 +288,7 @@ if "_resolve_draw_temp" not in globals():
         except Exception:
             tag = ""
         try:
-            return float(os.getenv(f"DRAW_TEMP_{tag}", str(base)))
+            return _to_float(os.getenv(f"DRAW_TEMP_{tag}", str(base)))
         except Exception:
             return base
 
@@ -302,9 +301,9 @@ if "_resolve_gate_param" not in globals():
         """
         import os, re
         try:
-            base = float(os.getenv(base_key, str(default)))
+            base = _to_float(os.getenv(base_key, str(default)))
         except Exception:
-            base = float(default)
+            base = _to_float(default)
         if not league:
             return base
         try:
@@ -312,7 +311,7 @@ if "_resolve_gate_param" not in globals():
         except Exception:
             tag = ""
         try:
-            return float(os.getenv(f"{base_key}_{tag}", str(base)))
+            return _to_float(os.getenv(f"{base_key}_{tag}", str(base)))
         except Exception:
             return base
 
@@ -406,7 +405,7 @@ def attach_ftr_with_draw_mix(df, league):
             with open(thr_path, "r") as fh:
                 thr_payload = json.load(fh) or {}
             if "threshold" in thr_payload and thr_payload["threshold"] is not None:
-                draw_thr = float(thr_payload["threshold"])
+                draw_thr = _to_float(thr_payload.get("threshold"))
         except Exception as e:
             print(f"⚠️ draw threshold load failed: {e}")
 
@@ -508,10 +507,10 @@ def attach_ftr_with_draw_mix(df, league):
 
     # League-specific mix params (YAML via pipeline; fallback to LOCKED only if needed)
     mix = _get_mix(league)
-    alpha = float(mix.get("alpha", 0.50))
-    beta  = float(mix.get("beta",  0.10))
-    cap   = float(mix.get("cap",   0.33))
-    gate_scale = float(mix.get("gate_scale", 1.00))
+    alpha = _to_float(mix.get("alpha", 0.50))
+    beta  = _to_float(mix.get("beta",  0.10))
+    cap   = _to_float(mix.get("cap",   0.33))
+    gate_scale = _to_float(mix.get("gate_scale", 1.00))
     import os as _os
     use_gate = (_os.getenv("NO_DRAW_GATE", "0") != "1")
     if not use_gate and _os.getenv("VERBOSE_DRAW", "0") == "1":
@@ -627,8 +626,8 @@ def attach_ftr_with_draw_mix(df, league):
 
     # (verbose) surface anything unexpected before we convert to NumPy
     if (_os.getenv("VERBOSE_DRAW","0") == "1" or _os.getenv("VERBOSE_QUICK","0") == "1"):
-        if bool(X.isna().any().any()):
-            bad = [c for c in draw_feats if bool(X[c].isna().any())]
+        if bool(np.any(X.isna())):
+            bad = [c for c in draw_feats if bool(np.any(X[c].isna()))]
             print(f"⚠️ overlay: NaNs remain in draw X after fill; cols={bad}")
         try:
             dvc = X.dtypes.value_counts()
@@ -675,9 +674,9 @@ def attach_ftr_with_draw_mix(df, league):
     use_gate = (not no_gate)
 
     # Predicate pass counts (treat NaNs as False so they don't inflate)
-    _cnt_imp_ok = int((draw_implied >= imp_thr_scaled).fillna(False).sum()) if isinstance(draw_implied, pd.Series) else 0
-    _cnt_par_ok = int((lam_parity   >= par_thr_scaled).fillna(False).sum())  if isinstance(lam_parity,   pd.Series) else 0
-    _cnt_mrg_ok = int((imp_diff     <= margin_thr_scaled).fillna(False).sum()) if isinstance(imp_diff,     pd.Series) else 0
+    _cnt_imp_ok = int((draw_implied >= _to_float(imp_thr_scaled)).fillna(False).sum()) if isinstance(draw_implied, pd.Series) else 0
+    _cnt_par_ok = int((lam_parity   >= _to_float(par_thr_scaled)).fillna(False).sum())  if isinstance(lam_parity,   pd.Series) else 0
+    _cnt_mrg_ok = int((imp_diff     <= _to_float(margin_thr_scaled)).fillna(False).sum()) if isinstance(imp_diff,     pd.Series) else 0
 
     # Availability counts (diagnostics)
     _cnt_imp_avail = int(draw_implied.notna().sum()) if isinstance(draw_implied, pd.Series) else 0
@@ -768,10 +767,10 @@ def attach_ftr_with_draw_mix(df, league):
     # Introduce counters for diagnostics
     _n_rows = len(df)
     _ser_p  = pd.Series(p_draw_sup, index=df.index)
-    _cnt_cls_agree = int(_ser_p.ge(_to_float(draw_thr)).sum()) if (draw_thr is not None) else 0 
-    _cnt_imp_ok = int(draw_implied.ge(imp_thr_scaled).sum()) if isinstance(draw_implied, pd.Series) else 0
-    _cnt_par_ok = int(lam_parity.ge(par_thr_scaled).sum())   if isinstance(lam_parity,   pd.Series) else 0
-    _cnt_mrg_ok = int(imp_diff.le(margin_thr_scaled).sum())  if isinstance(imp_diff,     pd.Series) else 0
+    _cnt_cls_agree = int(_ser_p.ge(_to_float(draw_thr)).sum()) if (draw_thr is not None) else 0
+    _cnt_imp_ok = int(draw_implied.ge(_to_float(imp_thr_scaled)).fillna(False).sum()) if isinstance(draw_implied, pd.Series) else 0
+    _cnt_par_ok = int(lam_parity.ge(_to_float(par_thr_scaled)).fillna(False).sum())   if isinstance(lam_parity,   pd.Series) else 0
+    _cnt_mrg_ok = int(imp_diff.le(_to_float(margin_thr_scaled)).fillna(False).sum())  if isinstance(imp_diff,     pd.Series) else 0
     _cnt_gate_used = 0
 
     ph, pdw, pa = [], [], []
@@ -780,7 +779,7 @@ def attach_ftr_with_draw_mix(df, league):
         try:
             if (not no_gate) and (draw_thr is not None):
                 # Classifier agreement is mandatory
-                _ok = bool(cls_mask.loc[i]) if (cls_mask is not None) else True
+                _ok = bool(cls_mask.loc[i]) if (cls_mask is not None and i in cls_mask.index) else True
 
                 # Track individual predicate passes
                 imp_pass = True
@@ -1195,7 +1194,7 @@ def attach_decisive_over_btts_scores(df: pd.DataFrame, league_name: str | None =
 
     # Drawish trap via model draw confidence
     try:
-        draw_trap_min = float(os.getenv("DRAW_TRAP_MIN", "0.35"))
+        draw_trap_min = _to_float(os.getenv("DRAW_TRAP_MIN", "0.35"))
     except Exception:
         draw_trap_min = 0.35
     cD = pd.to_numeric(out.get("confidence_draw"), errors="coerce")
@@ -1207,9 +1206,9 @@ def attach_decisive_over_btts_scores(df: pd.DataFrame, league_name: str | None =
     # Weights (env-overridable)
     def _w(name, dflt):
         try:
-            return float(os.getenv(name, str(dflt)))
+            return _to_float(os.getenv(name, str(dflt)))
         except Exception:
-            return float(dflt)
+            return _to_float(dflt)
 
     w = {
         "O_O25_IMP": _w("W_O_O25_IMP", 18), "O_DECISIVE": _w("W_O_DECISIVE", 14),
@@ -1309,7 +1308,7 @@ def _prepare_candidates_legacy(df: pd.DataFrame, market: str, min_edge: float, m
             prob_col = "prob_over25"
         else:
             prob_col = _first_present(["adjusted_over25_confidence","over25_confidence","prob_over25"])
-        ocol = _first_present(["odds_over25","odds_ft_over25","odds_ft_over_25","over25_odds"]) or "odds_over25"
+        ocol = _first_present(["odds_over25","odds_ft_over25","odds_ft_over_25","over25_odds"])
 
     elif m == "btts":
         # Robust probability column fallback for BTTS YES
@@ -1322,7 +1321,7 @@ def _prepare_candidates_legacy(df: pd.DataFrame, market: str, min_edge: float, m
         else:
             prob_col = None
         # Odds column for BTTS YES (prefer market, then implied, then existing 'od')
-        ocol = _first_present(["odds_btts_yes","imp_odds_btts_yes","od"]) or "odds_btts_yes"
+        ocol = _first_present(["odds_btts_yes","imp_odds_btts_yes","od"])
 
     elif m == "ftr_home":
         prob_col = _first_present([
@@ -1342,7 +1341,7 @@ def _prepare_candidates_legacy(df: pd.DataFrame, market: str, min_edge: float, m
         ocol = _first_present([
             "odds_ft_home_team_win","odds_home_win","odds_ft_home_win","home_win_odds",
             "imp_odds_ft_home_team_win"
-        ]) or "odds_ft_home_team_win"
+        ])
 
     elif m == "ftr_draw":
         prob_col = _first_present([
@@ -1358,7 +1357,7 @@ def _prepare_candidates_legacy(df: pd.DataFrame, market: str, min_edge: float, m
             mask = pd.to_numeric(df["ftr_pred_outcome"], errors="coerce").astype("Int64") == 1
             df["__tmp_prob_draw"] = tmp.where(mask, np.nan)
             prob_col = "__tmp_prob_draw"
-        ocol = _first_present(["odds_ft_draw","odds_draw","imp_odds_ft_draw"]) or "odds_ft_draw"
+        ocol = _first_present(["odds_ft_draw","odds_draw","imp_odds_ft_draw"])
 
     elif m == "ftr_away":
         prob_col = _first_present([
@@ -1377,7 +1376,7 @@ def _prepare_candidates_legacy(df: pd.DataFrame, market: str, min_edge: float, m
         ocol = _first_present([
             "odds_ft_away_team_win","odds_away_win","odds_ft_away_win","away_win_odds",
             "imp_odds_ft_away_team_win"
-        ]) or "odds_ft_away_team_win"
+        ])
 
     elif m == "ah_home_minus15":
         prob_col = "prob_ah_home_minus15" if "prob_ah_home_minus15" in df.columns else None
@@ -1438,7 +1437,7 @@ def _prepare_candidates_legacy(df: pd.DataFrame, market: str, min_edge: float, m
     # ---- Optional CLV filter per market (env: CLV_MIN) ----
     try:
         clv_min_raw = _os.getenv("CLV_MIN", None)
-        clv_min: float | None = float(clv_min_raw) if clv_min_raw is not None else None
+        clv_min: float | None = _to_float(clv_min_raw) if clv_min_raw is not None else None
         if clv_min is not None:
             clv_map = {
                 "over25": "clv_over25",
@@ -1455,40 +1454,49 @@ def _prepare_candidates_legacy(df: pd.DataFrame, market: str, min_edge: float, m
     except Exception:
         pass
 
+    # ---- Early bail if mapping failed ----
+    if prob_col is None or prob_col not in df.columns:
+        return pd.DataFrame(columns=["Date","Time","League","Home","Away","ev","edge"])
+    if ocol is None or ocol not in df.columns:
+        return pd.DataFrame(columns=["Date","Time","League","Home","Away","ev","edge"])
+
+    prob_col_s = cast(str, prob_col)
+    ocol_s = cast(str, ocol)
+
     # ---- Compute EV + edge ----
     try:
-        df["ev"]   = pd.to_numeric(df[prob_col], errors="coerce") * pd.to_numeric(df[ocol], errors="coerce") - 1.0
-        df["edge"] = pd.to_numeric(df[prob_col], errors="coerce") - (1.0 / pd.to_numeric(df[ocol], errors="coerce").replace(0, np.nan))
+        df["ev"]   = pd.to_numeric(df[prob_col_s], errors="coerce") * pd.to_numeric(df[ocol_s], errors="coerce") - 1.0
+        df["edge"] = pd.to_numeric(df[prob_col_s], errors="coerce") - (1.0 / pd.to_numeric(df[ocol_s], errors="coerce").replace(0, np.nan))
     except Exception:
         return pd.DataFrame(columns=["Date","Time","League","Home","Away","ev","edge"])
 
     # --- Ensure usable odds: synthesize if allowed, then drop non-positive
     try:
-        _odv = pd.to_numeric(df[ocol], errors="coerce")
+        _odv = pd.to_numeric(df[ocol_s], errors="coerce")
         if (_odv.le(0).all() or _odv.isna().all()) and str(_os.getenv("ALLOW_SYNTH_ODDS","0")).strip().lower() in ("1","true","yes","y","on"):
-            syn = (1.0 / pd.to_numeric(df[prob_col], errors="coerce").replace(0, np.nan)).clip(lower=1.01)
-            df[ocol] = syn
-            df["ev"]   = pd.to_numeric(df[prob_col], errors="coerce") * syn - 1.0
-            df["edge"] = pd.to_numeric(df[prob_col], errors="coerce") - (1.0 / syn)
+            syn = (1.0 / pd.to_numeric(df[prob_col_s], errors="coerce").replace(0, np.nan)).clip(lower=1.01)
+            df[ocol_s] = syn
+            df["ev"]   = pd.to_numeric(df[prob_col_s], errors="coerce") * syn - 1.0
+            df["edge"] = pd.to_numeric(df[prob_col_s], errors="coerce") - (1.0 / syn)
         # finally drop rows with non-positive odds
-        df = df[pd.to_numeric(df[ocol], errors="coerce") > 0].copy()
+        df = df[pd.to_numeric(df[ocol_s], errors="coerce") > 0].copy()
     except Exception:
         pass
 
     # ---- EV_MIN gate + min_edge ----
     try:
-        _ev_min = float(_os.getenv("EV_MIN", "0.0"))
+        _ev_min = _to_float(_os.getenv("EV_MIN", "0.0"))
     except Exception:
         _ev_min = 0.0
 
     if max_odds is not None:
         try:
-            df = df[pd.to_numeric(df[ocol], errors="coerce") <= float(max_odds)]
+            df = df[pd.to_numeric(df[ocol_s], errors="coerce") <= _to_float(max_odds)]
         except Exception:
             pass
 
     mask_ev   = pd.to_numeric(df["ev"], errors="coerce")   >= _ev_min
-    mask_edge = pd.to_numeric(df["edge"], errors="coerce") >= float(min_edge)
+    mask_edge = pd.to_numeric(df["edge"], errors="coerce") >= _to_float(min_edge)
     df = df[mask_ev & mask_edge].copy()
 
     # ---- Fallback: probability thresholds + decisive score gates if empty ----
@@ -1498,27 +1506,27 @@ def _prepare_candidates_legacy(df: pd.DataFrame, market: str, min_edge: float, m
             # env-first fallback precedence
             thr = None
             if m == "over25":
-                thr = float(_os.getenv(
+                thr = _to_float(_os.getenv(
                     "FALLBACK_OVER25_PROB_MIN",
                     str(df0.attrs.get("thr_over25", _os.getenv("FALLBACK_PROB_MIN", "0")))
                 ))
             elif m == "under25":
-                thr = float(_os.getenv(
+                thr = _to_float(_os.getenv(
                     "FALLBACK_UNDER25_PROB_MIN",
                     str(df0.attrs.get("thr_under25", _os.getenv("FALLBACK_PROB_MIN", "0")))
                 ))
             elif m == "btts":
-                thr = float(_os.getenv(
+                thr = _to_float(_os.getenv(
                     "FALLBACK_BTTS_PROB_MIN",
                     str(df0.attrs.get("thr_btts", _os.getenv("FALLBACK_PROB_MIN", "0")))
                 ))
             elif m == "btts_no":
-                thr = float(_os.getenv(
+                thr = _to_float(_os.getenv(
                     "FALLBACK_BTTS_NO_PROB_MIN",
                     str(df0.attrs.get("thr_btts_no", _os.getenv("FALLBACK_PROB_MIN", "0")))
                 ))
             elif m in ("ftr_home","ftr_draw","ftr_away"):
-                thr = float(_os.getenv(
+                thr = _to_float(_os.getenv(
                     "FALLBACK_FTR_PROB_MIN",
                     str(df0.attrs.get("thr_ftr", _os.getenv("FALLBACK_PROB_MIN", "0")))
                 ))
@@ -1616,7 +1624,8 @@ def _prepare_candidates_legacy(df: pd.DataFrame, market: str, min_edge: float, m
     df.attrs["_prob_col"] = prob_col
     df.attrs["_odds_col"] = ocol
     df.attrs["_od"]       = "od"
-    return df.sort_values(["ev","edge",prob_col], ascending=[False, False, False])
+    sort_cols = ["ev", "edge"] + ([prob_col] if prob_col and prob_col in df.columns else [])
+    return df.sort_values(sort_cols, ascending=[False] * len(sort_cols))
 # ----------------------------------------------------------------------------
 # Walk-forward reporting: Accuracy / LogLoss / Brier / ECE by time period
 # ----------------------------------------------------------------------------
@@ -1819,9 +1828,9 @@ def summarize_confidence_and_write(df: pd.DataFrame, league_name: str, out_dir: 
     dstdir = out_dir or _reports_dir()
 
     # Resolve thresholds
-    try: over_min = float(os.getenv("OVER_SCORE_MIN", "66"))
+    try: over_min = _to_float(os.getenv("OVER_SCORE_MIN", "66"))
     except Exception: over_min = 66.0
-    try: btts_min = float(os.getenv("BTTS_SCORE_MIN", "60"))
+    try: btts_min = _to_float(os.getenv("BTTS_SCORE_MIN", "60"))
     except Exception: btts_min = 60.0
 
     # Decide league tag
@@ -2567,21 +2576,18 @@ def _resolve_odds(df: pd.DataFrame, candidates: list[str], *, label: str = "odds
     _log_any = cast(Any, _log)
     if not hasattr(_log_any, "_logged_labels"):
         setattr(_log_any, "_logged_labels", set())
-    # Track which labels have been logged to avoid duplicate logs per run
-    if not hasattr(_resolve_odds, "_logged_labels"):
-        _resolve_odds._logged_labels = set()
-    logged_labels = _resolve_odds._logged_labels
+    logged_labels = cast(set[str], _log_any._logged_labels)
     for c in candidates:
         if c in df.columns:
             # ensure numeric and drop invalid odds (≤ 1.0)
             df[c] = pd.to_numeric(df[c], errors='coerce')
             df[c] = df[c].where(df[c] > 1.0)
             if label not in logged_labels:
-                _log("INFO", f"🔎 Using {label} column: '{c}'")
+                _log_any("INFO", f"🔎 Using {label} column: '{c}'")
                 logged_labels.add(label)
             return c
     if label not in logged_labels:
-        _log("WARN", f"⚠️ Missing {label} columns; tried {candidates}.")
+        _log_any("WARN", f"⚠️ Missing {label} columns; tried {candidates}.")
         logged_labels.add(label)
     return None
 
@@ -2912,58 +2918,53 @@ def _pick_prob_odds_for_market(df: pd.DataFrame, market: str) -> tuple[str|None,
     return None, None
 
 
-def _summarize_confidence_and_write_dup(df: pd.DataFrame,
-                                   league_name: str,
-                                   out_dir: str | None,
-                                   markets: tuple[str,...] = ("over25","btts","ftr_home","ftr_draw","ftr_away"),
-                                   top_n: int = 100) -> None:
-    """
-    Produce a quick 'confidence coverage' snapshot for a league slate:
-      - counts above prob threshold (env/attrs),
-      - counts meeting decisive score gates (if present),
-      - counts passing EV/edge gating (if odds & probs present).
-    Writes CSVs under out_dir:
-      * <League>_confidence_summary.csv
-      * <League>_confidence_details.csv  (top-N per market by EV, includes decisive scores)
-    Safe no-op if df empty.
-    """
-    import os, math
-    if not isinstance(df, pd.DataFrame) or df.empty:
-        return
-    dstdir = out_dir or os.path.join("predictions_output", datetime.datetime.utcnow().strftime("%Y-%m-%d"))
-    os.makedirs(dstdir, exist_ok=True)
+if "summarize_confidence_and_write" not in globals():
+    def summarize_confidence_and_write(df: pd.DataFrame,
+                                       league_name: str,
+                                       out_dir: str | None,
+                                       markets: tuple[str,...] = ("over25","btts","ftr_home","ftr_draw","ftr_away"),
+                                       top_n: int = 100) -> None:
+        """
+        Produce a quick 'confidence coverage' snapshot for a league slate:
+          - counts above prob threshold (env/attrs),
+          - counts meeting decisive score gates (if present),
+          - counts passing EV/edge gating (if odds & probs present).
+        Writes CSVs under out_dir:
+          * <League>_confidence_summary.csv
+          * <League>_confidence_details.csv  (top-N per market by EV, includes decisive scores)
+        Safe no-op if df empty.
+        """
+        import os
+        if not isinstance(df, pd.DataFrame) or df.empty:
+            return
+        dstdir = out_dir or os.path.join("predictions_output", datetime.datetime.utcnow().strftime("%Y-%m-%d"))
+        os.makedirs(dstdir, exist_ok=True)
 
-    rows = []
-    details = []
+        rows = []
+        details = []
 
-    # Resolve slate-level gate defaults from env / attrs / config
-    def _thr_for(mkt:str, df: pd.DataFrame) -> float:
-        m = mkt.lower()
-        if m == "over25":
-            return float(os.getenv("FALLBACK_OVER25_PROB_MIN",
-                                   df.attrs.get("thr_over25", os.getenv("FALLBACK_PROB_MIN","0"))))
-        if m == "btts":
-            return float(os.getenv("FALLBACK_BTTS_PROB_MIN",
-                                   df.attrs.get("thr_btts", os.getenv("FALLBACK_PROB_MIN","0"))))
-        if m.startswith("ftr"):
-            return float(os.getenv("FALLBACK_FTR_PROB_MIN",
-                                   df.attrs.get("thr_ftr", os.getenv("FALLBACK_PROB_MIN","0"))))
-        return 0.0
+        # Resolve slate-level gate defaults from env / attrs / config
+        def _thr_for(mkt:str, df: pd.DataFrame) -> float:
+            m = mkt.lower()
+            if m == "over25":
+                return _getenv_float("FALLBACK_OVER25_PROB_MIN",
+                                       _to_float(df.attrs.get("thr_over25", os.getenv("FALLBACK_PROB_MIN","0"))))
+            if m == "btts":
+                return _getenv_float("FALLBACK_BTTS_PROB_MIN",
+                                       _to_float(df.attrs.get("thr_btts", os.getenv("FALLBACK_PROB_MIN","0"))))
+            if m.startswith("ftr"):
+                return _getenv_float("FALLBACK_FTR_PROB_MIN",
+                                       _to_float(df.attrs.get("thr_ftr", os.getenv("FALLBACK_PROB_MIN","0"))))
+            return 0.0
 
-    try:
-        ev_min = float(os.getenv("EV_MIN","0.0"))
-    except Exception:
-        ev_min = 0.0
-    try:
-        min_edge = float(os.getenv("MIN_EDGE","0.0"))
-    except Exception:
-        min_edge = 0.0
-    try:
-        max_odds = float(os.getenv("MAX_ODDS", str(config.get("max_leg_odds", 12.0))))
-    except Exception:
-        max_odds = 12.0
-    over_min = float(os.getenv("OVER_SCORE_MIN","66"))
-    btts_min = float(os.getenv("BTTS_SCORE_MIN","60"))
+        ev_min = _getenv_float("EV_MIN", 0.0)
+        min_edge = _getenv_float("MIN_EDGE", 0.0)
+        try:
+            max_odds = _getenv_float("MAX_ODDS", _to_float(config.get("max_leg_odds", 12.0)))
+        except Exception:
+            max_odds = 12.0
+    over_min = _getenv_float("OVER_SCORE_MIN", 66.0)
+    btts_min = _getenv_float("BTTS_SCORE_MIN", 60.0)
 
     for m in markets:
         pc, oc = _pick_prob_odds_for_market(df, m)
@@ -3028,9 +3029,16 @@ def _summarize_confidence_and_write_dup(df: pd.DataFrame,
         def _prepare_candidates(df: pd.DataFrame, market: str, min_edge: float, max_odds: float | None = None) -> pd.DataFrame:
             m = market.lower()
             df = df.copy()
-            df0 = df.copy() 
+            df0 = df.copy()
             # Map market to probability/odds columns with robust fallbacks
-            prob_col, odds_col = None, None
+            prob_col: Optional[str] = None
+            odds_col: Optional[str] = None
+
+            def _first_present(cols: list[str]) -> Optional[str]:
+                for c in cols:
+                    if c in df.columns:
+                        return c
+                return None
 
             if m == "ftr_home":
                 if "prob_ftr_home" in df.columns:
@@ -3051,7 +3059,7 @@ def _summarize_confidence_and_write_dup(df: pd.DataFrame,
                     mask = pd.to_numeric(df["ftr_pred_outcome"], errors="coerce").astype("Int64") == 0
                     df["__tmp_prob_home"] = tmp.where(mask, np.nan)
                     prob_col = "__tmp_prob_home"
-                odds_col = "odds_ft_home_team_win"
+                odds_col = _first_present(["odds_ft_home_team_win"])
 
             elif m == "ftr_draw":
                 if "prob_ftr_draw" in df.columns:
@@ -3072,7 +3080,7 @@ def _summarize_confidence_and_write_dup(df: pd.DataFrame,
                     mask = pd.to_numeric(df["ftr_pred_outcome"], errors="coerce").astype("Int64") == 1
                     df["__tmp_prob_draw"] = tmp.where(mask, np.nan)
                     prob_col = "__tmp_prob_draw"
-                odds_col = "odds_ft_draw"
+                odds_col = _first_present(["odds_ft_draw"])
 
             elif m == "ftr_away":
                 if "prob_ftr_away" in df.columns:
@@ -3093,15 +3101,16 @@ def _summarize_confidence_and_write_dup(df: pd.DataFrame,
                     mask = pd.to_numeric(df["ftr_pred_outcome"], errors="coerce").astype("Int64") == 2
                     df["__tmp_prob_away"] = tmp.where(mask, np.nan)
                     prob_col = "__tmp_prob_away"
-                odds_col = "odds_ft_away_team_win"
+                odds_col = _first_present(["odds_ft_away_team_win"])
 
             elif m == "btts":
                 if "adjusted_btts_confidence" in df.columns:
-                    prob_col, odds_col = "adjusted_btts_confidence", "odds_btts_yes"
+                    prob_col, odds_col = "adjusted_btts_confidence", _first_present(["odds_btts_yes"])
                 elif "btts_confidence" in df.columns:
-                    prob_col, odds_col = "btts_confidence", "odds_btts_yes"
+                    prob_col, odds_col = "btts_confidence", _first_present(["odds_btts_yes"])
                 else:
-                    prob_col, odds_col = ("prob_btts" if "prob_btts" in df.columns else None), "odds_btts_yes"
+                    prob_col = "prob_btts" if "prob_btts" in df.columns else None
+                    odds_col = _first_present(["odds_btts_yes"])
 
             elif m == "under25":
                 if "prob_under25" in df.columns:
@@ -3112,7 +3121,7 @@ def _summarize_confidence_and_write_dup(df: pd.DataFrame,
                     prob_col = "under25_confidence"
                 else:
                     prob_col = None
-                odds_col = "odds_under25" if "odds_under25" in df.columns else "odds_ft_under25"
+                odds_col = _first_present(["odds_under25","odds_ft_under25"])
 
             elif m == "over25":
                 if "prob_over25" in df.columns:
@@ -3123,52 +3132,57 @@ def _summarize_confidence_and_write_dup(df: pd.DataFrame,
                     prob_col = "over25_confidence"
                 else:
                     prob_col = None
-                odds_col = "odds_over25" if "odds_over25" in df.columns else "odds_ft_over25"
+                odds_col = _first_present(["odds_over25","odds_ft_over25"])
 
             elif m == "btts_no":
                 if "prob_btts_no" in df.columns:
-                    prob_col, odds_col = "prob_btts_no", "odds_btts_no"
+                    prob_col, odds_col = "prob_btts_no", _first_present(["odds_btts_no"])
                 elif "btts_no_confidence" in df.columns:
-                    prob_col, odds_col = "btts_no_confidence", "odds_btts_no"
+                    prob_col, odds_col = "btts_no_confidence", _first_present(["odds_btts_no"])
                 else:
-                    prob_col, odds_col = (None, "odds_btts_no")
+                    prob_col, odds_col = (None, _first_present(["odds_btts_no"]))
 
             elif m == "wtn_home":
                 if "prob_wtn_home" in df.columns:
-                    prob_col, odds_col = "prob_wtn_home", "odds_home_wtn"
+                    prob_col, odds_col = "prob_wtn_home", _first_present(["odds_home_wtn"])
                 elif "wtn_home_confidence" in df.columns:
-                    prob_col, odds_col = "wtn_home_confidence", "odds_home_wtn"
+                    prob_col, odds_col = "wtn_home_confidence", _first_present(["odds_home_wtn"])
                 else:
-                    prob_col, odds_col = (None, "odds_home_wtn")
+                    prob_col, odds_col = (None, _first_present(["odds_home_wtn"]))
 
             elif m == "wtn_away":
                 if "prob_wtn_away" in df.columns:
-                    prob_col, odds_col = "prob_wtn_away", "odds_away_wtn"
+                    prob_col, odds_col = "prob_wtn_away", _first_present(["odds_away_wtn"])
                 elif "wtn_away_confidence" in df.columns:
-                    prob_col, odds_col = "wtn_away_confidence", "odds_away_wtn"
+                    prob_col, odds_col = "wtn_away_confidence", _first_present(["odds_away_wtn"])
                 else:
-                    prob_col, odds_col = (None, "odds_away_wtn")
+                    prob_col, odds_col = (None, _first_present(["odds_away_wtn"]))
 
             elif m == "ah_home_minus15":
-                prob_col, odds_col = "prob_ah_home_minus15", "odds_ah_home_minus15"
+                prob_col, odds_col = "prob_ah_home_minus15", _first_present(["odds_ah_home_minus15"])
 
             elif m == "ah_home_minus25":
-                prob_col, odds_col = "prob_ah_home_minus25", "odds_ah_home_minus25"
+                prob_col, odds_col = "prob_ah_home_minus25", _first_present(["odds_ah_home_minus25"])
 
             else:
                 raise ValueError(f"Unknown market {market}")
 
             # Keep a copy for fallbacks AFTER mapping
             df0 = df.copy()
-            # Early exit if we still don't have a prob column
+            # Early exit if we still don't have a prob/odds column
             if prob_col is None or prob_col not in df.columns:
                 return pd.DataFrame(columns=["Date","Time","League","Home","Away","ev","edge"])
+            if odds_col is None or odds_col not in df.columns:
+                return pd.DataFrame(columns=["Date","Time","League","Home","Away","ev","edge"])
+
+            prob_col_s = cast(str, prob_col)
+            odds_col_s = cast(str, odds_col)
 
             # Optional CLV filter if clv_min is set
             try:
                 import os as _os
                 clv_min_raw = _os.getenv("CLV_MIN", None)
-                clv_min: float | None = float(clv_min_raw) if clv_min_raw is not None else None
+                clv_min: float | None = _to_float(clv_min_raw) if clv_min_raw is not None else None
                 if clv_min is not None:
                     clv_map = {
                         "over25": "clv_over25",
@@ -3186,28 +3200,28 @@ def _summarize_confidence_and_write_dup(df: pd.DataFrame,
                 pass
             # Compute EV + edge columns
             try:
-                df["ev"] = pd.to_numeric(df[prob_col], errors="coerce") * pd.to_numeric(df[odds_col], errors="coerce") - 1.0
-                df["edge"] = pd.to_numeric(df[prob_col], errors="coerce") - (1.0 / pd.to_numeric(df[odds_col], errors="coerce").replace(0, np.nan))
+                df["ev"] = pd.to_numeric(df[prob_col_s], errors="coerce") * pd.to_numeric(df[odds_col_s], errors="coerce") - 1.0
+                df["edge"] = pd.to_numeric(df[prob_col_s], errors="coerce") - (1.0 / pd.to_numeric(df[odds_col_s], errors="coerce").replace(0, np.nan))
             except Exception:
                 return pd.DataFrame(columns=["Date","Time","League","Home","Away","ev","edge"])  # empty
 
             # EV gate (allow debug-time negative EV via EV_MIN)
             try:
                 import os as _os
-                _ev_min = float(_os.getenv("EV_MIN", "0.0"))
+                _ev_min = _to_float(_os.getenv("EV_MIN", "0.0"))
             except Exception:
                 _ev_min = 0.0
 
             # Optional odds cap
             if max_odds is not None:
                 try:
-                    df = df[pd.to_numeric(df[odds_col], errors="coerce") <= float(max_odds)]
+                    df = df[pd.to_numeric(df[odds_col_s], errors="coerce") <= _to_float(max_odds)]
                 except Exception:
                     pass
 
             # EV/edge gate (using _ev_min)
             mask_ev   = pd.to_numeric(df["ev"], errors="coerce")   >= _ev_min
-            mask_edge = pd.to_numeric(df["edge"], errors="coerce") >= float(min_edge)
+            mask_edge = pd.to_numeric(df["edge"], errors="coerce") >= _to_float(min_edge)
             df = df[mask_ev & mask_edge].copy()
             # Fallback: if EV/edge gating yields empty, use calibrated market thresholds to seed a pool
             if df.empty:
@@ -3215,27 +3229,27 @@ def _summarize_confidence_and_write_dup(df: pd.DataFrame,
                     import os as _os
                     _thr = None
                     if m == "over25":
-                        _thr = float(_os.getenv("FALLBACK_OVER25_PROB_MIN",
+                        _thr = _to_float(_os.getenv("FALLBACK_OVER25_PROB_MIN",
                                                 df0.attrs.get("thr_over25",
                                                               _os.getenv("FALLBACK_PROB_MIN", "0"))))
                     elif m == "btts":
-                        _thr = float(_os.getenv("FALLBACK_BTTS_PROB_MIN",
+                        _thr = _to_float(_os.getenv("FALLBACK_BTTS_PROB_MIN",
                                                 df0.attrs.get("thr_btts",
                                                               _os.getenv("FALLBACK_PROB_MIN", "0"))))
                     elif m in ("ftr_home","ftr_draw","ftr_away"):
-                        _thr = float(_os.getenv("FALLBACK_FTR_PROB_MIN",
+                        _thr = _to_float(_os.getenv("FALLBACK_FTR_PROB_MIN",
                                                 df0.attrs.get("thr_ftr",
                                                               _os.getenv("FALLBACK_PROB_MIN", "0"))))
                     # Build probability mask if possible
                     _fallback_df = pd.DataFrame(index=df0.index)
                     if _thr is not None and prob_col is not None and prob_col in df0.columns:
-                        _pmask = pd.to_numeric(df0[prob_col], errors="coerce") >= float(_thr)
+                        _pmask = pd.to_numeric(df0[prob_col_s], errors="coerce") >= _to_float(_thr)
                         _fallback_df = df0.loc[_pmask].copy()
 
                     # Add Decisive score gates (env: OVER_SCORE_MIN / BTTS_SCORE_MIN)
                     if m == "over25" and "decisive_over_score" in df0.columns:
                         try:
-                            over_min = float(_os.getenv("OVER_SCORE_MIN", "66"))
+                            over_min = _to_float(_os.getenv("OVER_SCORE_MIN", "66"))
                         except Exception:
                             over_min = 66.0
                         _mask_o = pd.to_numeric(df0["decisive_over_score"], errors="coerce") >= over_min
@@ -3243,7 +3257,7 @@ def _summarize_confidence_and_write_dup(df: pd.DataFrame,
 
                     if m == "btts" and "decisive_btts_score" in df0.columns:
                         try:
-                            btts_min = float(_os.getenv("BTTS_SCORE_MIN", "60"))
+                            btts_min = _to_float(_os.getenv("BTTS_SCORE_MIN", "60"))
                         except Exception:
                             btts_min = 60.0
                         _mask_b = pd.to_numeric(df0["decisive_btts_score"], errors="coerce") >= btts_min
@@ -3258,13 +3272,13 @@ def _summarize_confidence_and_write_dup(df: pd.DataFrame,
                         if "ev" not in _fallback_df.columns or "edge" not in _fallback_df.columns:
                             try:
                                 _fallback_df["ev"] = (
-                                    pd.to_numeric(_fallback_df[prob_col], errors="coerce")
-                                    * pd.to_numeric(_fallback_df[odds_col], errors="coerce")
+                                    pd.to_numeric(_fallback_df[prob_col_s], errors="coerce")
+                                    * pd.to_numeric(_fallback_df[odds_col_s], errors="coerce")
                                     - 1.0
                                 )
                                 _fallback_df["edge"] = (
-                                    pd.to_numeric(_fallback_df[prob_col], errors="coerce")
-                                    - (1.0 / pd.to_numeric(_fallback_df[odds_col], errors="coerce").replace(0, np.nan))
+                                    pd.to_numeric(_fallback_df[prob_col_s], errors="coerce")
+                                    - (1.0 / pd.to_numeric(_fallback_df[odds_col_s], errors="coerce").replace(0, np.nan))
                                 )
                             except Exception:
                                 pass
@@ -3276,8 +3290,14 @@ def _summarize_confidence_and_write_dup(df: pd.DataFrame,
             # Tag prob/odds columns for composer context
             df.attrs["_prob_col"] = prob_col
             df.attrs["_odds_col"] = odds_col
-            # Order by EV desc, then edge, then prob
-            return df.sort_values(["ev","edge",prob_col], ascending=[False, False, False])
+            # Order by EV desc, then edge, then prob (if present)
+            _sort_keys: list[str] = []
+            for _k in ("ev", "edge", prob_col):
+                if isinstance(_k, str) and _k in df.columns:
+                    _sort_keys.append(_k)
+            if _sort_keys:
+                df = df.sort_values(_sort_keys, ascending=[False] * len(_sort_keys))
+            return df
 
 # Compose best accas from a single pool
 if "compose_best_accas" not in globals():
@@ -3327,7 +3347,7 @@ if "compose_best_accas" not in globals():
                 acc_df = pd.DataFrame(acc).copy()
 
                 # Ensure canonical probability column per leg
-                if "p_model" not in acc_df.columns or acc_df["p_model"].isna().any():
+                if "p_model" not in acc_df.columns or bool(np.any(acc_df["p_model"].isna())):
                     # Attr-first
                     if prob_attr and prob_attr in acc_df.columns:
                         if "p_model" not in acc_df.columns:
@@ -3342,7 +3362,7 @@ if "compose_best_accas" not in globals():
                             else:
                                 acc_df["p_model"] = acc_df["p_model"].fillna(pd.to_numeric(acc_df[_c], errors="coerce"))
                     # Row-wise last resort
-                    if "p_model" not in acc_df.columns or acc_df["p_model"].isna().any():
+                    if "p_model" not in acc_df.columns or bool(np.any(acc_df["p_model"].isna())):
                         def _row_prob(r):
                             k = _first_present_row(r, PROB_PREF)
                             return pd.to_numeric(r.get(k, pd.NA), errors="coerce") if k else pd.NA
@@ -3351,7 +3371,7 @@ if "compose_best_accas" not in globals():
                         acc_df.loc[acc_df["p_model"].isna(), "p_model"] = acc_df.apply(_row_prob, axis=1)
 
                 # Ensure canonical odds column per leg
-                if "od" not in acc_df.columns or acc_df["od"].isna().any():
+                if "od" not in acc_df.columns or bool(np.any(acc_df["od"].isna())):
                     # Attr-first
                     if odds_attr and odds_attr in acc_df.columns:
                         if "od" not in acc_df.columns:
@@ -3362,7 +3382,7 @@ if "compose_best_accas" not in globals():
                     if "od" not in acc_df.columns and "odds" in acc_df.columns:
                         acc_df["od"] = pd.to_numeric(acc_df["odds"], errors="coerce")
                     # Fallbacks
-                    if "od" not in acc_df.columns or acc_df["od"].isna().any():
+                    if "od" not in acc_df.columns or bool(np.any(acc_df["od"].isna())):
                         def _row_od(r):
                             k = _first_present_row(r, ODDS_PREF)
                             return pd.to_numeric(r.get(k, pd.NA), errors="coerce") if k else pd.NA
@@ -3458,7 +3478,7 @@ if "compose_best_accas" not in globals():
 if "write_betslips" not in globals():
     def write_betslips(accas: list[dict], dst_dir: str, stake: float | None = None, title: str = "best_betslips", bankroll: float | None = None):
         _cstr: dict[str, Any] = {}
-        import os, json, datetime
+        import os, json
         os.makedirs(dst_dir, exist_ok=True)
         stake_f: float = _to_float(stake if stake is not None else overlay_config.get("stake_per_acca", 10))
         md_lines = [f"# {title}\n"]
@@ -3466,13 +3486,13 @@ if "write_betslips" not in globals():
         try:
             import os, json
             _cstr = {
-                "MAX_AH_LEGS": int(os.getenv("MAX_AH_LEGS", str(overlay_config.get("max_ah_legs", 2)))),
-                "MAX_PER_LEAGUE": int(os.getenv("MAX_PER_LEAGUE", str(overlay_config.get("max_per_league", 999)))),
+                "MAX_AH_LEGS": _to_int(os.getenv("MAX_AH_LEGS", str(overlay_config.get("max_ah_legs", 2)))),
+                "MAX_PER_LEAGUE": _to_int(os.getenv("MAX_PER_LEAGUE", str(overlay_config.get("max_per_league", 999)))),
                 "MAX_PER_MARKET": os.getenv("MAX_PER_MARKET", json.dumps(overlay_config.get("max_per_market", {}))),
-                "MAX_COMBINED_ODDS": float(os.getenv("MAX_COMBINED_ODDS", str(overlay_config.get("max_combined_odds", 1e12)))),
-                "MIN_COMBINED_PROB": float(os.getenv("MIN_COMBINED_PROB", str(overlay_config.get("min_combined_prob", 0.0)))),
-                "MAX_LONGSHOTS": int(os.getenv("MAX_LONGSHOTS", str(overlay_config.get("max_longshots", 999)))),
-                "LONGSHOT_ODDS": float(os.getenv("LONGSHOT_ODDS", str(overlay_config.get("longshot_odds", 3.0)))),
+                "MAX_COMBINED_ODDS": _to_float(os.getenv("MAX_COMBINED_ODDS", str(overlay_config.get("max_combined_odds", 1e12)))),
+                "MIN_COMBINED_PROB": _to_float(os.getenv("MIN_COMBINED_PROB", str(overlay_config.get("min_combined_prob", 0.0)))),
+                "MAX_LONGSHOTS": _to_int(os.getenv("MAX_LONGSHOTS", str(overlay_config.get("max_longshots", 999)))),
+                "LONGSHOT_ODDS": _to_float(os.getenv("LONGSHOT_ODDS", str(overlay_config.get("longshot_odds", 3.0)))),
             }
             md_lines.append("\n**Constraints:** " + ", ".join(f"{k}={v}" for k,v in _cstr.items()) + "\n")
         except Exception:
@@ -3666,6 +3686,14 @@ def compose_best_accas_mixed(pools: list[tuple[str, pd.DataFrame]],
         # Normalize prob/od columns to canonical names for safety
         try:
             tmp = _map_prob_od_for_market(tmp, mkt)
+            # Drop synthesized odds from slips when disabled
+            import os as _os
+            _allow_synth_in = (
+                str(_os.getenv("ALLOW_SYNTH_IN_SLIPS", "1")).strip().lower()
+                in ("1", "true", "yes", "y", "on")
+            )
+            if (not _allow_synth_in) and ("od_source" in tmp.columns):
+                tmp = tmp[tmp["od_source"].fillna("market") != "synth"].copy()
         except Exception:
             pass
         merged.append(tmp)
@@ -4274,7 +4302,7 @@ if "compose_betslips_with_ah" not in globals():
             try:
                 import os
                 _disable_scn = str(os.getenv("DISABLE_SCENARIO", "0")).strip().lower() in ("1","true","yes","y","on")
-                _min_scn = float(os.getenv("SCENARIO_MIN", "0.0"))
+                _min_scn = _to_float(os.getenv("SCENARIO_MIN", "0.0"))
             except Exception:
                 _disable_scn, _min_scn = False, 0.0
             if not _disable_scn:
@@ -4297,6 +4325,16 @@ if "compose_betslips_with_ah" not in globals():
             ):
                 try:
                     cand = _prepare_candidates(work, key, min_edge, max_odds)
+                    cand = _map_prob_od_for_market(cand, key)
+                    try:
+                        if isinstance(cand, pd.DataFrame):
+                            if "p_model" in cand.columns and "od" in cand.columns:
+                                cand["ev"] = pd.to_numeric(cand["p_model"], errors="coerce") * pd.to_numeric(cand["od"], errors="coerce") - 1.0
+                                cand["edge"] = pd.to_numeric(cand["p_model"], errors="coerce") - (1.0 / pd.to_numeric(cand["od"], errors="coerce").replace(0, np.nan))
+                            if "od" in cand.columns and ("od_source" not in cand.columns or cand["od_source"].isna().all()):
+                                cand["od_source"] = cand.get("od_source", "market")
+                    except Exception:
+                        pass
                     # Preserve the full pre-gate pool for fallback candidate dumps
                     try:
                         if isinstance(cand, pd.DataFrame):
@@ -4533,7 +4571,7 @@ if "compose_betslips_with_ah" not in globals():
             except Exception:
                 pass
             try:
-                bankroll = float(os.getenv("KELLY_BANKROLL", "0"))
+                bankroll = _to_float(os.getenv("KELLY_BANKROLL", "0"))
                 bankroll = bankroll if bankroll > 0 else None
             except Exception:
                 bankroll = None
@@ -4583,10 +4621,10 @@ def generate_ah_candidates(df: pd.DataFrame,
 
     # Defaults from env/config
     if min_edge is None:
-        try: min_edge = float(os.getenv("MIN_EDGE_AH", os.getenv("MIN_EDGE", str(config.get("min_edge", 0.0)))))
+        try: min_edge = _to_float(os.getenv("MIN_EDGE_AH", os.getenv("MIN_EDGE", str(config.get("min_edge", 0.0)))))
         except Exception: min_edge = 0.0
     if max_odds is None:
-        try: max_odds = float(os.getenv("MAX_ODDS_AH", os.getenv("MAX_ODDS", str(config.get("max_leg_odds", 12.0)))))
+        try: max_odds = _to_float(os.getenv("MAX_ODDS_AH", os.getenv("MAX_ODDS", str(config.get("max_leg_odds", 12.0)))))
         except Exception: max_odds = 12.0
 
     # Normalise numeric-likes & existing odds
@@ -4764,10 +4802,10 @@ if "apply_ev_filters_for_o15_o35_o45" not in globals():
         df = df.copy()
         # Pull defaults from env or overlay config
         if min_edge is None:
-            try: min_edge = float(os.getenv("MIN_EDGE", str(config.get("min_edge", 0.0))))
+            try: min_edge = _to_float(os.getenv("MIN_EDGE", str(config.get("min_edge", 0.0))))
             except Exception: min_edge = 0.0
         if max_odds is None:
-            try: max_odds = float(os.getenv("MAX_ODDS", str(config.get("max_leg_odds", 12.0))))
+            try: max_odds = _to_float(os.getenv("MAX_ODDS", str(config.get("max_leg_odds", 12.0))))
             except Exception: max_odds = 12.0
         # Ensure numeric coercions and Poisson fallback
         try: df = _coerce_numeric_like(df, odds_whitelist=ODD_COLUMN_WHITELIST)
@@ -4782,7 +4820,7 @@ if "apply_ev_filters_for_o15_o35_o45" not in globals():
             p = _pd.to_numeric(df[prob_col], errors="coerce").fillna(0.0)
             o = _pd.to_numeric(df[odds_col], errors="coerce")
             df[ev_col] = p * (o - 1.0) - (1.0 - p)
-            keep = (df[ev_col] >= float(min_edge)) & (o <= float(max_odds))
+            keep = (df[ev_col] >= _to_float(min_edge)) & (o <= _to_float(max_odds))
             # Mask out-of-gate rows by nulling the EV and leaving other columns intact
             df.loc[~keep, ev_col] = _pd.NA
         # Apply per market
@@ -4817,10 +4855,10 @@ def prepare_deployable_overlay(df: pd.DataFrame,
 
         # Defaults
         if min_edge is None:
-            try: min_edge = float(os.getenv("MIN_EDGE", str(config.get("min_edge", 0.0))))
+            try: min_edge = _to_float(os.getenv("MIN_EDGE", str(config.get("min_edge", 0.0))))
             except Exception: min_edge = 0.0
         if max_odds is None:
-            try: max_odds = float(os.getenv("MAX_ODDS", str(config.get("max_leg_odds", 12.0))))
+            try: max_odds = _to_float(os.getenv("MAX_ODDS", str(config.get("max_leg_odds", 12.0))))
             except Exception: max_odds = 12.0
 
         # 1) Minimal signals (no models required)
@@ -5558,7 +5596,7 @@ def print_deployable_summary(df) -> None:
     """Print a one‑liner with rows, draw share, and gate used (FTR_PICK_GATE)."""
     try:
         import os
-        gate = float(os.getenv("FTR_PICK_GATE", "0.68"))
+        gate = _to_float(os.getenv("FTR_PICK_GATE", "0.68"))
     except Exception:
         gate = 0.68
     try:
@@ -6463,37 +6501,39 @@ def attach_win_to_nil_proxy(df: pd.DataFrame,
         * _pd.to_numeric(df[hfts_col], errors="coerce").fillna(0.0)
     ).clip(0, 1)
     return df
-def _ensure_report_probs_inplace_dup(df):
-    """
-    Create compatibility probability columns used by older ROI code paths:
-      • prob_over25, prob_btts  (from adjusted_* → raw *_confidence → 0.5)
-      • Over25, BTTS            (binary flags from those probs when missing)
-    Works in-place and returns df.
-    """
-    import pandas as pd
-    if not isinstance(df, pd.DataFrame):
+
+if "_ensure_report_probs_inplace" not in globals():
+    def _ensure_report_probs_inplace_dup(df):
+        """
+        Create compatibility probability columns used by older ROI code paths:
+          • prob_over25, prob_btts  (from adjusted_* → raw *_confidence → 0.5)
+          • Over25, BTTS            (binary flags from those probs when missing)
+        Works in-place and returns df.
+        """
+        import pandas as pd
+        if not isinstance(df, pd.DataFrame):
+            return df
+        # --- SAFE: ensure Series fallback so .fillna() exists ---
+        if "prob_over25" not in df.columns:
+            src_over25 = (
+                df["adjusted_over25_confidence"] if "adjusted_over25_confidence" in df.columns
+                else (df["over25_confidence"] if "over25_confidence" in df.columns
+                      else pd.Series(0.5, index=df.index))
+            )
+            df["prob_over25"] = pd.to_numeric(src_over25, errors="coerce").fillna(0.5).clip(0, 1)
+        # --- SAFE: ensure Series fallback so .fillna() exists ---
+        if "prob_btts" not in df.columns:
+            src_btts = (
+                df["adjusted_btts_confidence"] if "adjusted_btts_confidence" in df.columns
+                else (df["btts_confidence"] if "btts_confidence" in df.columns
+                      else pd.Series(0.5, index=df.index))
+            )
+            df["prob_btts"] = pd.to_numeric(src_btts, errors="coerce").fillna(0.5).clip(0, 1)
+        if "Over25" not in df.columns:
+            df["Over25"] = (df["prob_over25"] > 0.5).astype(int)
+        if "BTTS" not in df.columns:
+            df["BTTS"] = (df["prob_btts"] > 0.5).astype(int)
         return df
-    # --- SAFE: ensure Series fallback so .fillna() exists ---
-    if "prob_over25" not in df.columns:
-        src_over25 = (
-            df["adjusted_over25_confidence"] if "adjusted_over25_confidence" in df.columns
-            else (df["over25_confidence"] if "over25_confidence" in df.columns
-                  else pd.Series(0.5, index=df.index))
-        )
-        df["prob_over25"] = pd.to_numeric(src_over25, errors="coerce").fillna(0.5).clip(0, 1)
-    # --- SAFE: ensure Series fallback so .fillna() exists ---
-    if "prob_btts" not in df.columns:
-        src_btts = (
-            df["adjusted_btts_confidence"] if "adjusted_btts_confidence" in df.columns
-            else (df["btts_confidence"] if "btts_confidence" in df.columns
-                  else pd.Series(0.5, index=df.index))
-        )
-        df["prob_btts"] = pd.to_numeric(src_btts, errors="coerce").fillna(0.5).clip(0, 1)
-    if "Over25" not in df.columns:
-        df["Over25"] = (df["prob_over25"] > 0.5).astype(int)
-    if "BTTS" not in df.columns:
-        df["BTTS"] = (df["prob_btts"] > 0.5).astype(int)
-    return df
 
 #############################################
 # Monte‑Carlo ROI simulation utilities
@@ -6558,9 +6598,11 @@ def _simulate_acca_roi(cand: pd.DataFrame,
 
     prob = cand[conf_col].to_numpy(dtype=float)
     # Clip probabilities to calm tails
-    prob = np.clip(prob, prob_hi_f if prob_hi_f is not None else 0.97, prob_hi_f if prob_hi_f is not None else 0.97)
-    # Re-clip lower bound explicitly using prob_lo_f
-    prob = np.maximum(prob, prob_lo_f if prob_lo_f is not None else 0.03)
+    prob = np.clip(
+        prob,
+        prob_lo_f if prob_lo_f is not None else 0.03,
+        prob_hi_f if prob_hi_f is not None else 0.97,
+    )
 
     # Clip per-leg odds to avoid extreme tails in MC
     odds = cand[odds_col].to_numpy(dtype=float)
@@ -6979,14 +7021,9 @@ def generate_accumulator_recommendations(df,
                     print(f"⏭️ Skipped {sz}-fold {target_type.upper()} sim (insufficient pool or capped).")
 
         # Walk-forward P&L (flat vs ½-Kelly)
+        _stake_val = config.get("stake_per_acca", 100)
+        stake_f: float | None = None if _stake_val is None else _to_float(_stake_val)
         for _kelly in (False, True):
-            # normalize stake to float|None for typing
-            _stake_val = config.get("stake_per_acca", 100)
-            try:
-                stake_f: float | None = None if _stake_val is None else _to_float(_stake_val)
-            except Exception:
-                stake_f = None if _stake_val is None else _to_float(_stake_val)
-
             pnl = simulate_walk_forward_pnl(candidates, target_type,
                                             stake=stake_f,
                                             kelly=_kelly)
@@ -7129,14 +7166,9 @@ def generate_accumulator_recommendations(df,
             _write_roi_csv(league_name, f"wtn_{sz}x", roi_stats if isinstance(roi_stats, dict) else roi_stats.to_dict())
 
         # Walk-forward P&L (flat vs ½-Kelly)
+        _stake_val = config.get("stake_per_acca", 100)
+        stake_f: float | None = None if _stake_val is None else _to_float(_stake_val)
         for _kelly in (False, True):
-            # normalize stake to float|None for typing
-            _stake_val = config.get("stake_per_acca", 100)
-            try:
-                stake_f: float | None = None if _stake_val is None else _to_float(_stake_val)
-            except Exception:
-                stake_f = None if _stake_val is None else _to_float(_stake_val)
-
             pnl = simulate_walk_forward_pnl(candidates, "wtn",
                                             stake=stake_f,
                                             kelly=_kelly)
@@ -7241,14 +7273,9 @@ def generate_accumulator_recommendations(df,
                     _log("INFO", f"⏭️ Skipped {sz}-fold CLEAN_SHEET sim (insufficient pool or capped).")
 
         # Walk-forward P&L
+        _stake_val = config.get("stake_per_acca", 100)
+        stake_f: float | None = None if _stake_val is None else _to_float(_stake_val)
         for _kelly in (False, True):
-            # normalize stake to float|None for typing
-            _stake_val = config.get("stake_per_acca", 100)
-            try:
-                stake_f: float | None = None if _stake_val is None else _to_float(_stake_val)
-            except Exception:
-                stake_f = None if _stake_val is None else _to_float(_stake_val)
-
             pnl = simulate_walk_forward_pnl(
                 candidates, 'clean_sheet',
                 stake=stake_f,
@@ -7497,14 +7524,9 @@ def generate_accumulator_recommendations(df,
                     _log("INFO", f"⏭️ Skipped {sz}-fold FTR sim (insufficient pool or capped).")
 
         # Walk-forward P&L
+        _stake_val = config.get("stake_per_acca", 100)
+        stake_f: float | None = None if _stake_val is None else _to_float(_stake_val)
         for _kelly in (False, True):
-            # normalize stake to float|None for typing
-            _stake_val = config.get("stake_per_acca", 100)
-            try:
-                stake_f: float | None = None if _stake_val is None else _to_float(_stake_val)
-            except Exception:
-                stake_f = None if _stake_val is None else _to_float(_stake_val)
-
             pnl = simulate_walk_forward_pnl(candidates, 'ftr',
                                             stake=stake_f,
                                             kelly=_kelly)
@@ -8115,9 +8137,9 @@ if "_resolve_draw_temp" not in globals():
         """
         import os, re
         try:
-            base = float(os.getenv("DRAW_TEMP", str(1.4 if default is None else default)))
+            base = _to_float(os.getenv("DRAW_TEMP", str(1.4 if default is None else default)))
         except Exception:
-            base = 1.4 if default is None else float(default)
+            base = 1.4 if default is None else _to_float(default)
         if not league:
             return base
         try:
@@ -8125,7 +8147,7 @@ if "_resolve_draw_temp" not in globals():
         except Exception:
             tag = ""
         try:
-            return float(os.getenv(f"DRAW_TEMP_{tag}", str(base)))
+            return _to_float(os.getenv(f"DRAW_TEMP_{tag}", str(base)))
         except Exception:
             return base
 
