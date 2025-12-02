@@ -365,10 +365,13 @@ def attach_ftr_with_draw_mix(df, league):
     
     # Safe imports from overlay for schema/placeholder helpers
     try:
-        from prediction_overlay import apply_safe_renames_and_whitelist, ensure_realized_goal_placeholders
+        from prediction_overlay import (
+                apply_safe_renames_and_whitelist as _apply_safe_renames_and_whitelist,
+                ensure_realized_goal_placeholders as _ensure_realized_goal_placeholders,
+        )
     except Exception:
-        apply_safe_renames_and_whitelist = None
-        ensure_realized_goal_placeholders = None
+        _apply_safe_renames_and_whitelist = None
+        _ensure_realized_goal_placeholders = None
     try:
         import joblib
     except Exception:
@@ -700,7 +703,7 @@ def attach_ftr_with_draw_mix(df, league):
 
     # Compute pass rates (treat missing as False)
     imp_ok_rate = (_cnt_imp_ok / max(_cnt_imp_avail, 1)) if _cnt_imp_avail else 0.0
-    mrg_ok_rate = (_cnt_mrg_ok / max(_cnt_mrg_avail, 1)) if _cnt_mrg_avail else 0.0
+    _mrg_ok_rate = (_cnt_mrg_ok / max(_cnt_mrg_avail, 1)) if _cnt_mrg_avail else 0.0
 
     # Auto-disable implied predicate if pass rate is extremely low on this slate
     _min_imp_rate = _getenv_float("DRAW_GATE_IMP_MIN_PASS_RATE", 0.05)
@@ -995,7 +998,6 @@ def load_market_thresholds_for_league(league: str) -> dict:
 # ----------------------------------------------------------------------------
 # Side‑market calibration store (isotonic per league)
 # ----------------------------------------------------------------------------
-from pathlib import Path as _Path
 
 try:
     from sklearn.isotonic import IsotonicRegression as _Iso
@@ -1661,7 +1663,6 @@ def time_split_report(df: pd.DataFrame, league_name: str,
             edges = np.linspace(0, 1, bins+1)
             idx = np.digitize(p.fillna(0.5), edges, right=True)
             ece = 0.0
-            n = len(p)
             for b in range(1, bins+1):
                 mask = (idx == b)
                 if not bool(np.any(mask)):
@@ -2917,387 +2918,280 @@ def _pick_prob_odds_for_market(df: pd.DataFrame, market: str) -> tuple[str|None,
         return pc, (oc if oc in df.columns else None)
     return None, None
 
+# Prepare EV-ranked candidate rows for a single market
+if "_prepare_candidates" not in globals():
+    def _prepare_candidates(df: pd.DataFrame, market: str, min_edge: float, max_odds: float | None = None) -> pd.DataFrame:
+        m = market.lower()
+        df = df.copy()
+        df0 = df.copy()
+        # Map market to probability/odds columns with robust fallbacks
+        prob_col: Optional[str] = None
+        odds_col: Optional[str] = None
 
-if "summarize_confidence_and_write" not in globals():
-    def summarize_confidence_and_write(df: pd.DataFrame,
-                                       league_name: str,
-                                       out_dir: str | None,
-                                       markets: tuple[str,...] = ("over25","btts","ftr_home","ftr_draw","ftr_away"),
-                                       top_n: int = 100) -> None:
-        """
-        Produce a quick 'confidence coverage' snapshot for a league slate:
-          - counts above prob threshold (env/attrs),
-          - counts meeting decisive score gates (if present),
-          - counts passing EV/edge gating (if odds & probs present).
-        Writes CSVs under out_dir:
-          * <League>_confidence_summary.csv
-          * <League>_confidence_details.csv  (top-N per market by EV, includes decisive scores)
-        Safe no-op if df empty.
-        """
-        import os
-        if not isinstance(df, pd.DataFrame) or df.empty:
-            return
-        dstdir = out_dir or os.path.join("predictions_output", datetime.datetime.utcnow().strftime("%Y-%m-%d"))
-        os.makedirs(dstdir, exist_ok=True)
+        def _first_present(cols: list[str]) -> Optional[str]:
+            for c in cols:
+                if c in df.columns:
+                    return c
+            return None
 
-        rows = []
-        details = []
+        if m == "ftr_home":
+            if "prob_ftr_home" in df.columns:
+                prob_col = "prob_ftr_home"
+            elif "confidence_home" in df.columns:
+                prob_col = "confidence_home"
+            elif "p_home" in df.columns:
+                prob_col = "p_home"
+            elif "home_win_proba" in df.columns:
+                prob_col = "home_win_proba"
+            elif {"selected_confidence","selected_outcome"}.issubset(df.columns):
+                tmp = pd.to_numeric(df["selected_confidence"], errors="coerce")
+                mask = df["selected_outcome"].astype(str).str.lower().isin(["home","h","1","home win","home_win"])
+                df["__tmp_prob_home"] = tmp.where(mask, np.nan)
+                prob_col = "__tmp_prob_home"
+            elif {"selected_confidence","ftr_pred_outcome"}.issubset(df.columns):
+                tmp = pd.to_numeric(df["selected_confidence"], errors="coerce")
+                mask = pd.to_numeric(df["ftr_pred_outcome"], errors="coerce").astype("Int64") == 0
+                df["__tmp_prob_home"] = tmp.where(mask, np.nan)
+                prob_col = "__tmp_prob_home"
+            odds_col = _first_present(["odds_ft_home_team_win"])
 
-        # Resolve slate-level gate defaults from env / attrs / config
-        def _thr_for(mkt:str, df: pd.DataFrame) -> float:
-            m = mkt.lower()
-            if m == "over25":
-                return _getenv_float("FALLBACK_OVER25_PROB_MIN",
-                                       _to_float(df.attrs.get("thr_over25", os.getenv("FALLBACK_PROB_MIN","0"))))
-            if m == "btts":
-                return _getenv_float("FALLBACK_BTTS_PROB_MIN",
-                                       _to_float(df.attrs.get("thr_btts", os.getenv("FALLBACK_PROB_MIN","0"))))
-            if m.startswith("ftr"):
-                return _getenv_float("FALLBACK_FTR_PROB_MIN",
-                                       _to_float(df.attrs.get("thr_ftr", os.getenv("FALLBACK_PROB_MIN","0"))))
-            return 0.0
+        elif m == "ftr_draw":
+            if "prob_ftr_draw" in df.columns:
+                prob_col = "prob_ftr_draw"
+            elif "confidence_draw" in df.columns:
+                prob_col = "confidence_draw"
+            elif "p_draw" in df.columns:
+                prob_col = "p_draw"
+            elif "draw_win_proba" in df.columns:
+                prob_col = "draw_win_proba"
+            elif {"selected_confidence","selected_outcome"}.issubset(df.columns):
+                tmp = pd.to_numeric(df["selected_confidence"], errors="coerce")
+                mask = df["selected_outcome"].astype(str).str.lower().isin(["draw","d","x"])
+                df["__tmp_prob_draw"] = tmp.where(mask, np.nan)
+                prob_col = "__tmp_prob_draw"
+            elif {"selected_confidence","ftr_pred_outcome"}.issubset(df.columns):
+                tmp = pd.to_numeric(df["selected_confidence"], errors="coerce")
+                mask = pd.to_numeric(df["ftr_pred_outcome"], errors="coerce").astype("Int64") == 1
+                df["__tmp_prob_draw"] = tmp.where(mask, np.nan)
+                prob_col = "__tmp_prob_draw"
+            odds_col = _first_present(["odds_ft_draw"])
 
-        ev_min = _getenv_float("EV_MIN", 0.0)
-        min_edge = _getenv_float("MIN_EDGE", 0.0)
-        try:
-            max_odds = _getenv_float("MAX_ODDS", _to_float(config.get("max_leg_odds", 12.0)))
-        except Exception:
-            max_odds = 12.0
-    over_min = _getenv_float("OVER_SCORE_MIN", 66.0)
-    btts_min = _getenv_float("BTTS_SCORE_MIN", 60.0)
+        elif m == "ftr_away":
+            if "prob_ftr_away" in df.columns:
+                prob_col = "prob_ftr_away"
+            elif "confidence_away" in df.columns:
+                prob_col = "confidence_away"
+            elif "p_away" in df.columns:
+                prob_col = "p_away"
+            elif "away_win_proba" in df.columns:
+                prob_col = "away_win_proba"
+            elif {"selected_confidence","selected_outcome"}.issubset(df.columns):
+                tmp = pd.to_numeric(df["selected_confidence"], errors="coerce")
+                mask = df["selected_outcome"].astype(str).str.lower().isin(["away","a","2","away win","away_win"])
+                df["__tmp_prob_away"] = tmp.where(mask, np.nan)
+                prob_col = "__tmp_prob_away"
+            elif {"selected_confidence","ftr_pred_outcome"}.issubset(df.columns):
+                tmp = pd.to_numeric(df["selected_confidence"], errors="coerce")
+                mask = pd.to_numeric(df["ftr_pred_outcome"], errors="coerce").astype("Int64") == 2
+                df["__tmp_prob_away"] = tmp.where(mask, np.nan)
+                prob_col = "__tmp_prob_away"
+            odds_col = _first_present(["odds_ft_away_team_win"])
 
-    for m in markets:
-        pc, oc = _pick_prob_odds_for_market(df, m)
-        n_total = len(df)
-        n_prob = n_dec = n_ev = 0
-
-        # Probability threshold coverage
-        if pc and pc in df.columns:
-            n_prob = int((pd.to_numeric(df[pc], errors="coerce") >= _thr_for(m, df)).sum())
-
-        # Decisive score coverage
-        if m == "over25" and "decisive_over_score" in df.columns:
-            n_dec = int((pd.to_numeric(df["decisive_over_score"], errors="coerce") >= over_min).sum())
-        elif m == "btts" and "decisive_btts_score" in df.columns:
-            n_dec = int((pd.to_numeric(df["decisive_btts_score"], errors="coerce") >= btts_min).sum())
-
-        # EV/edge coverage (requires prob+odds)
-        if pc and oc and pc in df.columns and oc in df.columns:
-            p = pd.to_numeric(df[pc], errors="coerce")
-            o = pd.to_numeric(df[oc], errors="coerce")
-            implied = 1.0 / o.replace({0.0: np.nan})
-            ev = p*o - 1.0
-            edge = p - implied
-            mask = (ev >= ev_min) & (edge >= min_edge) & (o <= max_odds)
-            n_ev = int(mask.fillna(False).sum())
-
-            # Collect top-N details for this market
-            take = df.loc[mask].copy()
-            if not take.empty:
-                # attach EV/edge columns for export
-                take["__ev"] = ev
-                take["__edge"] = edge
-                take["__prob"] = p
-                take["__odds"] = o
-                # bring decisive columns if present
-                keep_cols = [c for c in ("match_date","League","home_team_name","away_team_name",
-                                         "__prob","__odds","__ev","__edge",
-                                         "decisive_over_score","decisive_btts_score","decisive_grade") if c in take.columns]
-                top = take.sort_values("__ev", ascending=False).head(int(top_n))[keep_cols].copy()
-                top.insert(0, "market", m)
-                details.append(top)
-
-        rows.append({"league": league_name, "market": m,
-                     "n_rows": n_total, "prob_gate": n_prob,
-                     "decisive_gate": n_dec, "ev_gate": n_ev})
-
-    # Write summary CSV
-    try:
-        import pandas as _pd
-        summ = _pd.DataFrame(rows)
-        tag = league_name.replace(" ","_")
-        summ.to_csv(os.path.join(dstdir, f"{tag}_confidence_summary.csv"), index=False)
-        if details:
-            det = _pd.concat(details, axis=0, ignore_index=True)
-            det.to_csv(os.path.join(dstdir, f"{tag}_confidence_details.csv"), index=False)
-        print(f"📊 Wrote confidence coverage → {dstdir}")
-    except Exception:
-        pass
-
-    # Prepare EV-ranked candidate rows for a single market
-    if "_prepare_candidates" not in globals():
-        def _prepare_candidates(df: pd.DataFrame, market: str, min_edge: float, max_odds: float | None = None) -> pd.DataFrame:
-            m = market.lower()
-            df = df.copy()
-            df0 = df.copy()
-            # Map market to probability/odds columns with robust fallbacks
-            prob_col: Optional[str] = None
-            odds_col: Optional[str] = None
-
-            def _first_present(cols: list[str]) -> Optional[str]:
-                for c in cols:
-                    if c in df.columns:
-                        return c
-                return None
-
-            if m == "ftr_home":
-                if "prob_ftr_home" in df.columns:
-                    prob_col = "prob_ftr_home"
-                elif "confidence_home" in df.columns:
-                    prob_col = "confidence_home"
-                elif "p_home" in df.columns:
-                    prob_col = "p_home"
-                elif "home_win_proba" in df.columns:
-                    prob_col = "home_win_proba"
-                elif {"selected_confidence","selected_outcome"}.issubset(df.columns):
-                    tmp = pd.to_numeric(df["selected_confidence"], errors="coerce")
-                    mask = df["selected_outcome"].astype(str).str.lower().isin(["home","h","1","home win","home_win"])
-                    df["__tmp_prob_home"] = tmp.where(mask, np.nan)
-                    prob_col = "__tmp_prob_home"
-                elif {"selected_confidence","ftr_pred_outcome"}.issubset(df.columns):
-                    tmp = pd.to_numeric(df["selected_confidence"], errors="coerce")
-                    mask = pd.to_numeric(df["ftr_pred_outcome"], errors="coerce").astype("Int64") == 0
-                    df["__tmp_prob_home"] = tmp.where(mask, np.nan)
-                    prob_col = "__tmp_prob_home"
-                odds_col = _first_present(["odds_ft_home_team_win"])
-
-            elif m == "ftr_draw":
-                if "prob_ftr_draw" in df.columns:
-                    prob_col = "prob_ftr_draw"
-                elif "confidence_draw" in df.columns:
-                    prob_col = "confidence_draw"
-                elif "p_draw" in df.columns:
-                    prob_col = "p_draw"
-                elif "draw_win_proba" in df.columns:
-                    prob_col = "draw_win_proba"
-                elif {"selected_confidence","selected_outcome"}.issubset(df.columns):
-                    tmp = pd.to_numeric(df["selected_confidence"], errors="coerce")
-                    mask = df["selected_outcome"].astype(str).str.lower().isin(["draw","d","x"])
-                    df["__tmp_prob_draw"] = tmp.where(mask, np.nan)
-                    prob_col = "__tmp_prob_draw"
-                elif {"selected_confidence","ftr_pred_outcome"}.issubset(df.columns):
-                    tmp = pd.to_numeric(df["selected_confidence"], errors="coerce")
-                    mask = pd.to_numeric(df["ftr_pred_outcome"], errors="coerce").astype("Int64") == 1
-                    df["__tmp_prob_draw"] = tmp.where(mask, np.nan)
-                    prob_col = "__tmp_prob_draw"
-                odds_col = _first_present(["odds_ft_draw"])
-
-            elif m == "ftr_away":
-                if "prob_ftr_away" in df.columns:
-                    prob_col = "prob_ftr_away"
-                elif "confidence_away" in df.columns:
-                    prob_col = "confidence_away"
-                elif "p_away" in df.columns:
-                    prob_col = "p_away"
-                elif "away_win_proba" in df.columns:
-                    prob_col = "away_win_proba"
-                elif {"selected_confidence","selected_outcome"}.issubset(df.columns):
-                    tmp = pd.to_numeric(df["selected_confidence"], errors="coerce")
-                    mask = df["selected_outcome"].astype(str).str.lower().isin(["away","a","2","away win","away_win"])
-                    df["__tmp_prob_away"] = tmp.where(mask, np.nan)
-                    prob_col = "__tmp_prob_away"
-                elif {"selected_confidence","ftr_pred_outcome"}.issubset(df.columns):
-                    tmp = pd.to_numeric(df["selected_confidence"], errors="coerce")
-                    mask = pd.to_numeric(df["ftr_pred_outcome"], errors="coerce").astype("Int64") == 2
-                    df["__tmp_prob_away"] = tmp.where(mask, np.nan)
-                    prob_col = "__tmp_prob_away"
-                odds_col = _first_present(["odds_ft_away_team_win"])
-
-            elif m == "btts":
-                if "adjusted_btts_confidence" in df.columns:
-                    prob_col, odds_col = "adjusted_btts_confidence", _first_present(["odds_btts_yes"])
-                elif "btts_confidence" in df.columns:
-                    prob_col, odds_col = "btts_confidence", _first_present(["odds_btts_yes"])
-                else:
-                    prob_col = "prob_btts" if "prob_btts" in df.columns else None
-                    odds_col = _first_present(["odds_btts_yes"])
-
-            elif m == "under25":
-                if "prob_under25" in df.columns:
-                    prob_col = "prob_under25"
-                elif "adjusted_under25_confidence" in df.columns:
-                    prob_col = "adjusted_under25_confidence"
-                elif "under25_confidence" in df.columns:
-                    prob_col = "under25_confidence"
-                else:
-                    prob_col = None
-                odds_col = _first_present(["odds_under25","odds_ft_under25"])
-
-            elif m == "over25":
-                if "prob_over25" in df.columns:
-                    prob_col = "prob_over25"
-                elif "adjusted_over25_confidence" in df.columns:
-                    prob_col = "adjusted_over25_confidence"
-                elif "over25_confidence" in df.columns:
-                    prob_col = "over25_confidence"
-                else:
-                    prob_col = None
-                odds_col = _first_present(["odds_over25","odds_ft_over25"])
-
-            elif m == "btts_no":
-                if "prob_btts_no" in df.columns:
-                    prob_col, odds_col = "prob_btts_no", _first_present(["odds_btts_no"])
-                elif "btts_no_confidence" in df.columns:
-                    prob_col, odds_col = "btts_no_confidence", _first_present(["odds_btts_no"])
-                else:
-                    prob_col, odds_col = (None, _first_present(["odds_btts_no"]))
-
-            elif m == "wtn_home":
-                if "prob_wtn_home" in df.columns:
-                    prob_col, odds_col = "prob_wtn_home", _first_present(["odds_home_wtn"])
-                elif "wtn_home_confidence" in df.columns:
-                    prob_col, odds_col = "wtn_home_confidence", _first_present(["odds_home_wtn"])
-                else:
-                    prob_col, odds_col = (None, _first_present(["odds_home_wtn"]))
-
-            elif m == "wtn_away":
-                if "prob_wtn_away" in df.columns:
-                    prob_col, odds_col = "prob_wtn_away", _first_present(["odds_away_wtn"])
-                elif "wtn_away_confidence" in df.columns:
-                    prob_col, odds_col = "wtn_away_confidence", _first_present(["odds_away_wtn"])
-                else:
-                    prob_col, odds_col = (None, _first_present(["odds_away_wtn"]))
-
-            elif m == "ah_home_minus15":
-                prob_col, odds_col = "prob_ah_home_minus15", _first_present(["odds_ah_home_minus15"])
-
-            elif m == "ah_home_minus25":
-                prob_col, odds_col = "prob_ah_home_minus25", _first_present(["odds_ah_home_minus25"])
-
+        elif m == "btts":
+            if "adjusted_btts_confidence" in df.columns:
+                prob_col, odds_col = "adjusted_btts_confidence", _first_present(["odds_btts_yes"])
+            elif "btts_confidence" in df.columns:
+                prob_col, odds_col = "btts_confidence", _first_present(["odds_btts_yes"])
             else:
-                raise ValueError(f"Unknown market {market}")
+                prob_col = "prob_btts" if "prob_btts" in df.columns else None
+                odds_col = _first_present(["odds_btts_yes"])
 
-            # Keep a copy for fallbacks AFTER mapping
-            df0 = df.copy()
-            # Early exit if we still don't have a prob/odds column
-            if prob_col is None or prob_col not in df.columns:
-                return pd.DataFrame(columns=["Date","Time","League","Home","Away","ev","edge"])
-            if odds_col is None or odds_col not in df.columns:
-                return pd.DataFrame(columns=["Date","Time","League","Home","Away","ev","edge"])
+        elif m == "under25":
+            if "prob_under25" in df.columns:
+                prob_col = "prob_under25"
+            elif "adjusted_under25_confidence" in df.columns:
+                prob_col = "adjusted_under25_confidence"
+            elif "under25_confidence" in df.columns:
+                prob_col = "under25_confidence"
+            else:
+                prob_col = None
+            odds_col = _first_present(["odds_under25","odds_ft_under25"])
 
-            prob_col_s = cast(str, prob_col)
-            odds_col_s = cast(str, odds_col)
+        elif m == "over25":
+            if "prob_over25" in df.columns:
+                prob_col = "prob_over25"
+            elif "adjusted_over25_confidence" in df.columns:
+                prob_col = "adjusted_over25_confidence"
+            elif "over25_confidence" in df.columns:
+                prob_col = "over25_confidence"
+            else:
+                prob_col = None
+            odds_col = _first_present(["odds_over25","odds_ft_over25"])
 
-            # Optional CLV filter if clv_min is set
+        elif m == "btts_no":
+            if "prob_btts_no" in df.columns:
+                prob_col, odds_col = "prob_btts_no", _first_present(["odds_btts_no"])
+            elif "btts_no_confidence" in df.columns:
+                prob_col, odds_col = "btts_no_confidence", _first_present(["odds_btts_no"])
+            else:
+                prob_col, odds_col = (None, _first_present(["odds_btts_no"]))
+
+        elif m == "wtn_home":
+            if "prob_wtn_home" in df.columns:
+                prob_col, odds_col = "prob_wtn_home", _first_present(["odds_home_wtn"])
+            elif "wtn_home_confidence" in df.columns:
+                prob_col, odds_col = "wtn_home_confidence", _first_present(["odds_home_wtn"])
+            else:
+                prob_col, odds_col = (None, _first_present(["odds_home_wtn"]))
+
+        elif m == "wtn_away":
+            if "prob_wtn_away" in df.columns:
+                prob_col, odds_col = "prob_wtn_away", _first_present(["odds_away_wtn"])
+            elif "wtn_away_confidence" in df.columns:
+                prob_col, odds_col = "wtn_away_confidence", _first_present(["odds_away_wtn"])
+            else:
+                prob_col, odds_col = (None, _first_present(["odds_away_wtn"]))
+
+        elif m == "ah_home_minus15":
+            prob_col, odds_col = "prob_ah_home_minus15", _first_present(["odds_ah_home_minus15"])
+
+        elif m == "ah_home_minus25":
+            prob_col, odds_col = "prob_ah_home_minus25", _first_present(["odds_ah_home_minus25"])
+
+        else:
+            raise ValueError(f"Unknown market {market}")
+
+        # Keep a copy for fallbacks AFTER mapping
+        df0 = df.copy()
+        # Early exit if we still don't have a prob/odds column
+        if prob_col is None or prob_col not in df.columns:
+            return pd.DataFrame(columns=["Date","Time","League","Home","Away","ev","edge"])
+        if odds_col is None or odds_col not in df.columns:
+            return pd.DataFrame(columns=["Date","Time","League","Home","Away","ev","edge"])
+
+        prob_col_s = cast(str, prob_col)
+        odds_col_s = cast(str, odds_col)
+
+        # Optional CLV filter if clv_min is set
+        try:
+            import os as _os
+            clv_min_raw = _os.getenv("CLV_MIN", None)
+            clv_min: float | None = _to_float(clv_min_raw) if clv_min_raw is not None else None
+            if clv_min is not None:
+                clv_map = {
+                    "over25": "clv_over25",
+                    "btts": "clv_btts",
+                    "ftr_home": "clv_ftr_home",
+                    "ftr_draw": "clv_ftr_draw",
+                    "ftr_away": "clv_ftr_away",
+                    "ah_home_minus15": "clv_ah_home_minus15",
+                    "ah_home_minus25": "clv_ah_home_minus25",
+                }
+                clv_col = clv_map.get(m)
+                if isinstance(clv_col, str) and clv_col in df.columns:
+                    df = df[pd.to_numeric(df[clv_col], errors="coerce") >= clv_min].copy()
+        except Exception:
+            pass
+        # Compute EV + edge columns
+        try:
+            df["ev"] = pd.to_numeric(df[prob_col_s], errors="coerce") * pd.to_numeric(df[odds_col_s], errors="coerce") - 1.0
+            df["edge"] = pd.to_numeric(df[prob_col_s], errors="coerce") - (1.0 / pd.to_numeric(df[odds_col_s], errors="coerce").replace(0, np.nan))
+        except Exception:
+            return pd.DataFrame(columns=["Date","Time","League","Home","Away","ev","edge"])  # empty
+
+        # EV gate (allow debug-time negative EV via EV_MIN)
+        try:
+            import os as _os
+            _ev_min = _to_float(_os.getenv("EV_MIN", "0.0"))
+        except Exception:
+            _ev_min = 0.0
+
+        # Optional odds cap
+        if max_odds is not None:
             try:
-                import os as _os
-                clv_min_raw = _os.getenv("CLV_MIN", None)
-                clv_min: float | None = _to_float(clv_min_raw) if clv_min_raw is not None else None
-                if clv_min is not None:
-                    clv_map = {
-                        "over25": "clv_over25",
-                        "btts": "clv_btts",
-                        "ftr_home": "clv_ftr_home",
-                        "ftr_draw": "clv_ftr_draw",
-                        "ftr_away": "clv_ftr_away",
-                        "ah_home_minus15": "clv_ah_home_minus15",
-                        "ah_home_minus25": "clv_ah_home_minus25",
-                    }
-                    clv_col = clv_map.get(m)
-                    if isinstance(clv_col, str) and clv_col in df.columns:
-                        df = df[pd.to_numeric(df[clv_col], errors="coerce") >= clv_min].copy()
+                df = df[pd.to_numeric(df[odds_col_s], errors="coerce") <= _to_float(max_odds)]
             except Exception:
                 pass
-            # Compute EV + edge columns
-            try:
-                df["ev"] = pd.to_numeric(df[prob_col_s], errors="coerce") * pd.to_numeric(df[odds_col_s], errors="coerce") - 1.0
-                df["edge"] = pd.to_numeric(df[prob_col_s], errors="coerce") - (1.0 / pd.to_numeric(df[odds_col_s], errors="coerce").replace(0, np.nan))
-            except Exception:
-                return pd.DataFrame(columns=["Date","Time","League","Home","Away","ev","edge"])  # empty
 
-            # EV gate (allow debug-time negative EV via EV_MIN)
+        # EV/edge gate (using _ev_min)
+        mask_ev   = pd.to_numeric(df["ev"], errors="coerce")   >= _ev_min
+        mask_edge = pd.to_numeric(df["edge"], errors="coerce") >= _to_float(min_edge)
+        df = df[mask_ev & mask_edge].copy()
+        # Fallback: if EV/edge gating yields empty, use calibrated market thresholds to seed a pool
+        if df.empty:
             try:
                 import os as _os
-                _ev_min = _to_float(_os.getenv("EV_MIN", "0.0"))
-            except Exception:
-                _ev_min = 0.0
+                _thr = None
+                if m == "over25":
+                    _thr = _to_float(_os.getenv("FALLBACK_OVER25_PROB_MIN",
+                                            df0.attrs.get("thr_over25",
+                                                            _os.getenv("FALLBACK_PROB_MIN", "0"))))
+                elif m == "btts":
+                    _thr = _to_float(_os.getenv("FALLBACK_BTTS_PROB_MIN",
+                                            df0.attrs.get("thr_btts",
+                                                            _os.getenv("FALLBACK_PROB_MIN", "0"))))
+                elif m in ("ftr_home","ftr_draw","ftr_away"):
+                    _thr = _to_float(_os.getenv("FALLBACK_FTR_PROB_MIN",
+                                            df0.attrs.get("thr_ftr",
+                                                            _os.getenv("FALLBACK_PROB_MIN", "0"))))
+                # Build probability mask if possible
+                _fallback_df = pd.DataFrame(index=df0.index)
+                if _thr is not None and prob_col is not None and prob_col in df0.columns:
+                    _pmask = pd.to_numeric(df0[prob_col_s], errors="coerce") >= _to_float(_thr)
+                    _fallback_df = df0.loc[_pmask].copy()
 
-            # Optional odds cap
-            if max_odds is not None:
-                try:
-                    df = df[pd.to_numeric(df[odds_col_s], errors="coerce") <= _to_float(max_odds)]
-                except Exception:
-                    pass
+                # Add Decisive score gates (env: OVER_SCORE_MIN / BTTS_SCORE_MIN)
+                if m == "over25" and "decisive_over_score" in df0.columns:
+                    try:
+                        over_min = _to_float(_os.getenv("OVER_SCORE_MIN", "66"))
+                    except Exception:
+                        over_min = 66.0
+                    _mask_o = pd.to_numeric(df0["decisive_over_score"], errors="coerce") >= over_min
+                    _fallback_df = pd.concat([_fallback_df, df0.loc[_mask_o]], axis=0).drop_duplicates()
 
-            # EV/edge gate (using _ev_min)
-            mask_ev   = pd.to_numeric(df["ev"], errors="coerce")   >= _ev_min
-            mask_edge = pd.to_numeric(df["edge"], errors="coerce") >= _to_float(min_edge)
-            df = df[mask_ev & mask_edge].copy()
-            # Fallback: if EV/edge gating yields empty, use calibrated market thresholds to seed a pool
-            if df.empty:
-                try:
-                    import os as _os
-                    _thr = None
-                    if m == "over25":
-                        _thr = _to_float(_os.getenv("FALLBACK_OVER25_PROB_MIN",
-                                                df0.attrs.get("thr_over25",
-                                                              _os.getenv("FALLBACK_PROB_MIN", "0"))))
-                    elif m == "btts":
-                        _thr = _to_float(_os.getenv("FALLBACK_BTTS_PROB_MIN",
-                                                df0.attrs.get("thr_btts",
-                                                              _os.getenv("FALLBACK_PROB_MIN", "0"))))
-                    elif m in ("ftr_home","ftr_draw","ftr_away"):
-                        _thr = _to_float(_os.getenv("FALLBACK_FTR_PROB_MIN",
-                                                df0.attrs.get("thr_ftr",
-                                                              _os.getenv("FALLBACK_PROB_MIN", "0"))))
-                    # Build probability mask if possible
-                    _fallback_df = pd.DataFrame(index=df0.index)
-                    if _thr is not None and prob_col is not None and prob_col in df0.columns:
-                        _pmask = pd.to_numeric(df0[prob_col_s], errors="coerce") >= _to_float(_thr)
-                        _fallback_df = df0.loc[_pmask].copy()
+                if m == "btts" and "decisive_btts_score" in df0.columns:
+                    try:
+                        btts_min = _to_float(_os.getenv("BTTS_SCORE_MIN", "60"))
+                    except Exception:
+                        btts_min = 60.0
+                    _mask_b = pd.to_numeric(df0["decisive_btts_score"], errors="coerce") >= btts_min
+                    _fallback_df = pd.concat([_fallback_df, df0.loc[_mask_b]], axis=0).drop_duplicates()
 
-                    # Add Decisive score gates (env: OVER_SCORE_MIN / BTTS_SCORE_MIN)
-                    if m == "over25" and "decisive_over_score" in df0.columns:
+                if not _fallback_df.empty:
+                    try:
+                        print(f"ℹ️ fallback threshold used for {m}: thr={_thr}")
+                    except Exception:
+                        pass
+                    # recompute EV/edge if needed
+                    if "ev" not in _fallback_df.columns or "edge" not in _fallback_df.columns:
                         try:
-                            over_min = _to_float(_os.getenv("OVER_SCORE_MIN", "66"))
-                        except Exception:
-                            over_min = 66.0
-                        _mask_o = pd.to_numeric(df0["decisive_over_score"], errors="coerce") >= over_min
-                        _fallback_df = pd.concat([_fallback_df, df0.loc[_mask_o]], axis=0).drop_duplicates()
-
-                    if m == "btts" and "decisive_btts_score" in df0.columns:
-                        try:
-                            btts_min = _to_float(_os.getenv("BTTS_SCORE_MIN", "60"))
-                        except Exception:
-                            btts_min = 60.0
-                        _mask_b = pd.to_numeric(df0["decisive_btts_score"], errors="coerce") >= btts_min
-                        _fallback_df = pd.concat([_fallback_df, df0.loc[_mask_b]], axis=0).drop_duplicates()
-
-                    if not _fallback_df.empty:
-                        try:
-                            print(f"ℹ️ fallback threshold used for {m}: thr={_thr}")
+                            _fallback_df["ev"] = (
+                                pd.to_numeric(_fallback_df[prob_col_s], errors="coerce")
+                                * pd.to_numeric(_fallback_df[odds_col_s], errors="coerce")
+                                - 1.0
+                            )
+                            _fallback_df["edge"] = (
+                                pd.to_numeric(_fallback_df[prob_col_s], errors="coerce")
+                                - (1.0 / pd.to_numeric(_fallback_df[odds_col_s], errors="coerce").replace(0, np.nan))
+                            )
                         except Exception:
                             pass
-                        # recompute EV/edge if needed
-                        if "ev" not in _fallback_df.columns or "edge" not in _fallback_df.columns:
-                            try:
-                                _fallback_df["ev"] = (
-                                    pd.to_numeric(_fallback_df[prob_col_s], errors="coerce")
-                                    * pd.to_numeric(_fallback_df[odds_col_s], errors="coerce")
-                                    - 1.0
-                                )
-                                _fallback_df["edge"] = (
-                                    pd.to_numeric(_fallback_df[prob_col_s], errors="coerce")
-                                    - (1.0 / pd.to_numeric(_fallback_df[odds_col_s], errors="coerce").replace(0, np.nan))
-                                )
-                            except Exception:
-                                pass
-                        df = _fallback_df
-                        if _pcol_for_mask is not None:
-                            prob_col = cast(str, _pcol_for_mask)
-                except Exception:
-                    pass
-            # Tag prob/odds columns for composer context
-            df.attrs["_prob_col"] = prob_col
-            df.attrs["_odds_col"] = odds_col
-            # Order by EV desc, then edge, then prob (if present)
-            _sort_keys: list[str] = []
-            for _k in ("ev", "edge", prob_col):
-                if isinstance(_k, str) and _k in df.columns:
-                    _sort_keys.append(_k)
-            if _sort_keys:
-                df = df.sort_values(_sort_keys, ascending=[False] * len(_sort_keys))
-            return df
+                    df = _fallback_df
+                    if _pcol_for_mask is not None:
+                        prob_col = cast(str, _pcol_for_mask)
+            except Exception:
+                pass
+        # Tag prob/odds columns for composer context
+        df.attrs["_prob_col"] = prob_col
+        df.attrs["_odds_col"] = odds_col
+        # Order by EV desc, then edge, then prob (if present)
+        _sort_keys: list[str] = []
+        for _k in ("ev", "edge", prob_col):
+            if isinstance(_k, str) and _k in df.columns:
+                _sort_keys.append(_k)
+        if _sort_keys:
+            df = df.sort_values(_sort_keys, ascending=[False] * len(_sort_keys))
+        return df
 
 # Compose best accas from a single pool
 if "compose_best_accas" not in globals():
@@ -3478,7 +3372,7 @@ if "compose_best_accas" not in globals():
 if "write_betslips" not in globals():
     def write_betslips(accas: list[dict], dst_dir: str, stake: float | None = None, title: str = "best_betslips", bankroll: float | None = None):
         _cstr: dict[str, Any] = {}
-        import os, json
+        import os
         os.makedirs(dst_dir, exist_ok=True)
         stake_f: float = _to_float(stake if stake is not None else overlay_config.get("stake_per_acca", 10))
         md_lines = [f"# {title}\n"]
@@ -4356,7 +4250,6 @@ if "compose_betslips_with_ah" not in globals():
                             # --- Canonicalize prob/odds on pool rows and carry diagnostics ---
                             tmp = cand.copy()
                             _pc = cand.attrs.get("_prob_col")
-                            _oc = cand.attrs.get("_odds_col")
                             try:
                                 if _pc and _pc in tmp.columns:
                                     tmp["p_model"] = pd.to_numeric(tmp[_pc], errors="coerce")
