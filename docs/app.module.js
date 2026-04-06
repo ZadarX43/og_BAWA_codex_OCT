@@ -22,16 +22,21 @@ if (!Papa) throw new Error('PapaParse missing from window');
 // DOM refs
 // -----------------------------------------
 const el = {
-  globeWrap:     document.getElementById('globe-container'),
-  insights:      document.getElementById('insights-content'),
-  fixtureTitle:  document.getElementById('fixture-title'),
-  fixtureContext:document.getElementById('fixture-context'),
-  matchList:     document.getElementById('match-intelligence'),
-  watchlist:     document.getElementById('player-watchlist'),
-  market:        document.getElementById('market-snapshot'),
-  deepBtn:       document.getElementById('deep-dive-btn'),
-  homeBadge:     document.getElementById('home-badge'),
-  awayBadge:     document.getElementById('away-badge'),
+  globeWrap:      document.getElementById('globe-container'),
+  insights:       document.getElementById('insights-content'),
+  fixtureTitle:   document.getElementById('fixture-title'),
+  fixtureContext: document.getElementById('fixture-context'),
+  matchList:      document.getElementById('match-intelligence'),
+  watchlist:      document.getElementById('player-watchlist'),
+  market:         document.getElementById('market-snapshot'),
+  deepBtn:        document.getElementById('deep-dive-btn'),
+  homeBadge:      document.getElementById('home-badge'),
+  awayBadge:      document.getElementById('away-badge'),
+
+  // New nav refs
+  mobileBottomNav: document.getElementById('mobile-bottom-nav'),
+  navDrawer:       document.getElementById('nav-drawer'),
+  navBurger:       document.getElementById('nav-burger'),
 
   // Date & league filters
   dateToday:    document.querySelector('[data-range="today"]'),
@@ -44,24 +49,24 @@ const el = {
   leagueChips:  document.getElementById('league-chips'),
 
   // Competition strip
-  compWrap:      document.getElementById('comp-accuracy'),
-  compName:      document.getElementById('comp-name'),
-  compLogo:      document.getElementById('comp-logo'),
-  compTraffic:   document.getElementById('comp-traffic'),
+  compWrap:    document.getElementById('comp-accuracy'),
+  compName:    document.getElementById('comp-name'),
+  compLogo:    document.getElementById('comp-logo'),
+  compTraffic: document.getElementById('comp-traffic'),
 
   // Stadium hero card overlay
-  stadiumCard:   document.getElementById('stadium-card'),
-  stadiumOverlay:document.getElementById('stadium-overlay'),
-  stadiumStem:   document.getElementById('stadium-stem'),
-  stadiumPin:    document.getElementById('stadium-pin'),
-  stadiumCrest:  document.getElementById('stadium-crest'),
-  stadiumCompPill:document.getElementById('stadium-comp-pill'),
-  stadiumEyebrow:document.getElementById('stadium-eyebrow'),
-  stadiumTitle:  document.getElementById('stadium-title'),
-  stadiumSub:    document.getElementById('stadium-sub'),
-  stadiumStats:  document.getElementById('stadium-stats'),
-  stadiumOpenBtn:document.getElementById('stadium-open-insights'),
-  stadiumAccaBtn:document.getElementById('stadium-add-acca'),
+  stadiumCard:     document.getElementById('stadium-card'),
+  stadiumOverlay:  document.getElementById('stadium-overlay'),
+  stadiumStem:     document.getElementById('stadium-stem'),
+  stadiumPin:      document.getElementById('stadium-pin'),
+  stadiumCrest:    document.getElementById('stadium-crest'),
+  stadiumCompPill: document.getElementById('stadium-comp-pill'),
+  stadiumEyebrow:  document.getElementById('stadium-eyebrow'),
+  stadiumTitle:    document.getElementById('stadium-title'),
+  stadiumSub:      document.getElementById('stadium-sub'),
+  stadiumStats:    document.getElementById('stadium-stats'),
+  stadiumOpenBtn:  document.getElementById('stadium-open-insights'),
+  stadiumAccaBtn:  document.getElementById('stadium-add-acca'),
 
   // Rail progress
   fixtureProgress: document.getElementById('fixture-progress'),
@@ -87,11 +92,8 @@ const visitedFixtureIds = new Set();
 let lastCardPos = { x: null, y: null };
 let lastParsedSlipForChat = null;
 
-
-
 let cameraTravelRaf = null;
 let cameraMoveReqId = 0;
-
 
 // Demo auth + portfolio
 let currentUser = null;        // { email, role }
@@ -120,18 +122,16 @@ const COLORS = {
   markerActive:   '#FFFFFF',                 // bright white for active
   ring: '#ffc270',
 
-  
   dotBase:        'rgba(87,195,191,0.70)',
   dotHot:         '#ffd777',
   dotActive:      '#ffffff'
 };
 
-
 // Small manual tweak to align fixture positions on the globe.
 // Adjust lonBias / latBias until Europe-based fixtures sit over Europe.
 const MAP_OFFSET = {
-  latBias: 0,   // leave N/S alone for now
-  lonBias: 90    // no manual east/west shift
+  latBias: 0,
+  lonBias: 90
 };
 
 // Raycaster for clickable pill sprite
@@ -151,17 +151,17 @@ const UI = {
 // Utilities
 // -----------------------------------------
 const clamp01   = v => Math.max(0, Math.min(1, v));
-const easeInOut = t => t*t*(3-2*t);
+const easeInOut = t => t * t * (3 - 2 * t);
 
-function showToast(type, text, ms=2600){
+function showToast(type, text, ms = 2600) {
   const t = document.createElement('div');
   t.className = `og-toast ${type}`;
   t.textContent = text;
   document.body.appendChild(t);
-  requestAnimationFrame(()=>t.classList.add('show'));
-  setTimeout(()=>{
+  requestAnimationFrame(() => t.classList.add('show'));
+  setTimeout(() => {
     t.classList.remove('show');
-    setTimeout(()=>t.remove(),250);
+    setTimeout(() => t.remove(), 250);
   }, ms);
 }
 
@@ -178,12 +178,53 @@ function pick(row, keys) {
   return '';
 }
 
+// ---- Nav helpers
+function normaliseRouteFromHash(hash = window.location.hash) {
+  if (!hash || hash === '#') return '/';
+  return hash.replace(/^#/, '') || '/';
+}
+
+function updateMobileNav(route) {
+  document.querySelectorAll('.mob-nav-item').forEach(item => {
+    item.classList.toggle(
+      'active',
+      item.dataset.route === route || (route === '' && item.dataset.route === '/')
+    );
+  });
+}
+
+function updatePrimaryNav(route) {
+  document.querySelectorAll('.nav-tab[data-route], .side-link[data-route], .profile-item[data-route]').forEach(item => {
+    const target = item.dataset.route || '/';
+    const isActive = target === route || (route === '' && target === '/');
+    item.classList.toggle('active', isActive);
+    item.classList.toggle('is-active', isActive);
+  });
+}
+
+function closeNavDrawer() {
+  if (!el.navDrawer) return;
+  el.navDrawer.classList.remove('open');
+  el.navDrawer.setAttribute('aria-hidden', 'true');
+}
+
+function openNavDrawer() {
+  if (!el.navDrawer) return;
+  el.navDrawer.classList.add('open');
+  el.navDrawer.setAttribute('aria-hidden', 'false');
+}
+
+function updateAllNav(route) {
+  updateMobileNav(route);
+  updatePrimaryNav(route);
+}
+
 // ---- Session & portfolio persistence (demo: localStorage) ----
 function loadSessionFromStorage() {
   try {
     const rawUser  = window.localStorage.getItem(STORAGE_KEYS.user);
     const rawAccas = window.localStorage.getItem(STORAGE_KEYS.accas);
-    currentUser = rawUser  ? JSON.parse(rawUser)  : null;
+    currentUser = rawUser ? JSON.parse(rawUser) : null;
     savedAccas  = rawAccas ? JSON.parse(rawAccas) : [];
   } catch (e) {
     console.warn('Failed to parse stored session', e);
@@ -221,20 +262,20 @@ function updateAuthUI() {
         .toUpperCase();
       avatar.textContent = initials;
     }
-    items.forEach(el => {
-      const href = el.getAttribute('href');
+    items.forEach(link => {
+      const href = link.getAttribute('href');
       if (href === '#/login' || href === '#/signup') {
-        el.style.display = 'none';
+        link.style.display = 'none';
       }
     });
     const logoutBtn = document.querySelector('[data-action="logout"]');
     if (logoutBtn) logoutBtn.style.display = 'block';
   } else {
     if (avatar) avatar.textContent = 'OG';
-    items.forEach(el => {
-      const href = el.getAttribute('href');
+    items.forEach(link => {
+      const href = link.getAttribute('href');
       if (href === '#/login' || href === '#/signup') {
-        el.style.display = '';
+        link.style.display = '';
       }
     });
     const logoutBtn = document.querySelector('[data-action="logout"]');
@@ -243,22 +284,21 @@ function updateAuthUI() {
 }
 
 // ---- Dates
-const MS_DAY = 24*60*60*1000;
-function baseDate(){ return new Date(Date.parse(`${UI.anchorISO}T00:00:00Z`) + UI.offsetDays*MS_DAY); }
-function datePlusDays(base, n){ return new Date(base.getTime() + n*MS_DAY); }
-function fmtDay(d){ return String(d.getUTCDate()).padStart(2,'0'); }
-function isoDay(d){ return d.toISOString().slice(0,10); }
+const MS_DAY = 24 * 60 * 60 * 1000;
+function baseDate() { return new Date(Date.parse(`${UI.anchorISO}T00:00:00Z`) + UI.offsetDays * MS_DAY); }
+function datePlusDays(base, n) { return new Date(base.getTime() + n * MS_DAY); }
+function fmtDay(d) { return String(d.getUTCDate()).padStart(2, '0'); }
+function isoDay(d) { return d.toISOString().slice(0, 10); }
 
 // ---- THREE helpers
-function getGlobeRadius(){
+function getGlobeRadius() {
   if (globe?.getGlobeRadius) return globe.getGlobeRadius();
   const m = globe?.children?.find?.(c => c.geometry?.parameters?.radius);
   return m?.geometry?.parameters?.radius || 100;
 }
 
 // Lat/lon → unit vector in world space (match ThreeGlobe’s phi/theta mapping)
-function latLngToUnit(latDeg, lonDeg){
-  // phi = (90 - lat), theta = (180 - lon)
+function latLngToUnit(latDeg, lonDeg) {
   const phi   = THREE.MathUtils.degToRad(90 - latDeg);
   const theta = THREE.MathUtils.degToRad(180 - lonDeg);
 
@@ -269,27 +309,31 @@ function latLngToUnit(latDeg, lonDeg){
   ).normalize();
 }
 
-function latLngToVec3(lat, lon, alt = 0){
+function latLngToVec3(lat, lon, alt = 0) {
   const R = getGlobeRadius();
   const n = latLngToUnit(lat, lon);
   return n.clone().multiplyScalar(R * (1 + alt));
 }
 
-function makeFallbackCanvasTexture(label='STADIUM'){
+function makeFallbackCanvasTexture(label = 'STADIUM') {
   const c = document.createElement('canvas');
-  c.width = 512; c.height = 512;
+  c.width = 512;
+  c.height = 512;
   const g = c.getContext('2d');
 
   const r = 220, cx = 256, cy = 256;
-  const grd = g.createRadialGradient(cx, cy, r*0.25, cx, cy, r);
+  const grd = g.createRadialGradient(cx, cy, r * 0.25, cx, cy, r);
   grd.addColorStop(0, 'rgba(255,255,255,0.95)');
   grd.addColorStop(1, 'rgba(125,249,196,0.20)');
   g.fillStyle = grd;
-  g.beginPath(); g.arc(cx, cy, r, 0, Math.PI*2); g.fill();
+  g.beginPath();
+  g.arc(cx, cy, r, 0, Math.PI * 2);
+  g.fill();
 
   g.fillStyle = '#0b1f29';
   g.font = 'bold 46px Montserrat, system-ui, sans-serif';
-  g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.textAlign = 'center';
+  g.textBaseline = 'middle';
   g.fillText(label, cx, cy);
 
   const tex = new THREE.CanvasTexture(c);
@@ -309,7 +353,6 @@ function makeStadiumPillTexture(f, img) {
 
   g.clearRect(0, 0, w, h);
 
-  // Background pill
   const padX = 32;
   const padY = 32;
   const pillX = padX;
@@ -337,7 +380,6 @@ function makeStadiumPillTexture(f, img) {
   g.closePath();
   g.fill();
 
-  // Stadium circle on the left
   const cx = pillX + 170;
   const cy = pillY + pillH / 2;
   const cr = 110;
@@ -360,14 +402,12 @@ function makeStadiumPillTexture(f, img) {
     g.restore();
   }
 
-  // White circle border
   g.strokeStyle = 'rgba(255,255,255,0.9)';
   g.lineWidth = 8;
   g.beginPath();
   g.arc(cx, cy, cr, 0, Math.PI * 2);
   g.stroke();
 
-  // Text: fixture + time + city/country
   const home = f?.home_team || 'Home';
   const away = f?.away_team || 'Away';
   const line1 = `${home} vs ${away}`;
@@ -495,7 +535,6 @@ function slugLocal(name = '') {
     .replace(/^-+|-+$/g, '');
 }
 
-// explicit overrides mapped to actual filenames
 const TEAM_LOGO_OVERRIDES = {
   'Atlético Madrid'       : `${LOGO_LOCAL_BASE}/atletico-madrid.svg`,
   'Atletico Madrid'       : `${LOGO_LOCAL_BASE}/atletico-madrid.svg`,
@@ -563,7 +602,6 @@ function initialsFor(name = '') {
   return p.length ? (p[0][0] + (p[1]?.[0] || '')).toUpperCase() : '';
 }
 
-// *** Simple badge loader – no races, loud logging ***
 function setBadgeLocal(elm, _urlFromCsv, teamName = '') {
   if (!elm) return;
 
@@ -613,7 +651,7 @@ function makeCompetitionBadgeDataUrl(label = 'LEAGUE') {
 
   const r = size * 0.42;
   g.beginPath();
-  g.arc(size/2, size/2, r, 0, Math.PI * 2);
+  g.arc(size / 2, size / 2, r, 0, Math.PI * 2);
   g.fill();
 
   const parts = String(label || '').split(/\s+/).filter(Boolean);
@@ -626,7 +664,7 @@ function makeCompetitionBadgeDataUrl(label = 'LEAGUE') {
   g.font = 'bold 72px Montserrat, system-ui, sans-serif';
   g.textAlign = 'center';
   g.textBaseline = 'middle';
-  g.fillText(initials, size/2, size/2);
+  g.fillText(initials, size / 2, size / 2);
 
   return c.toDataURL('image/png');
 }
@@ -681,11 +719,11 @@ function stadiumCandidates(f) {
 
 const __TEX_CACHE = new Map();
 const __TEX_WAIT  = new Map();
-function loadTextureQueued(url){
+function loadTextureQueued(url) {
   if (__TEX_CACHE.has(url)) return Promise.resolve(__TEX_CACHE.get(url));
   if (__TEX_WAIT.has(url))  return __TEX_WAIT.get(url);
 
-  const p = new Promise((resolve, reject)=>{
+  const p = new Promise((resolve, reject) => {
     new THREE.TextureLoader().load(
       url,
       tex => { __TEX_CACHE.set(url, tex); __TEX_WAIT.delete(url); resolve(tex); },
@@ -701,30 +739,30 @@ function loadTextureQueued(url){
 // Competition accuracy strip
 // -----------------------------------------
 const DEMO_FTR = 0.87;
-function getCompetitionSnapshot(league){
-  const rows = league && league!=='ALL'
-    ? fixtures.filter(f => (f.competition||'').toLowerCase() === league.toLowerCase())
+function getCompetitionSnapshot(league) {
+  const rows = league && league !== 'ALL'
+    ? fixtures.filter(f => (f.competition || '').toLowerCase() === league.toLowerCase())
     : fixtures.slice();
-  const avg = a => a.length ? a.reduce((x,y)=>x+y,0)/a.length : 0;
-  const pct = x => Math.round(x*100);
+  const avg = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : 0;
+  const pct = x => Math.round(x * 100);
   return {
     n: rows.length,
-    ftr:    pct(avg(rows.map(r => +r.confidence_ftr||0))),
-    over25: pct(avg(rows.map(r => +r.over25_prob   ||0))),
-    btts:   pct(avg(rows.map(r => +r.btts_prob     ||0)))
+    ftr:    pct(avg(rows.map(r => +r.confidence_ftr || 0))),
+    over25: pct(avg(rows.map(r => +r.over25_prob   || 0))),
+    btts:   pct(avg(rows.map(r => +r.btts_prob     || 0)))
   };
 }
-function renderCompetitionAccuracy(league){
+function renderCompetitionAccuracy(league) {
   if (!el.compWrap) return;
   const stats = getCompetitionSnapshot(league);
   const name = league || '—';
   if (el.compName) el.compName.textContent = name;
   setCompetitionLogo(name);
-  if (el.compTraffic){
+  if (el.compTraffic) {
     el.compTraffic.innerHTML = `
-      <span class="light light--green">FTR ${Math.round(DEMO_FTR*100)}%</span>
-      <span class="light light--blue">O2.5 ${stats.over25||0}%</span>
-      <span class="light light--amber">BTTS ${stats.btts||0}%</span>`;
+      <span class="light light--green">FTR ${Math.round(DEMO_FTR * 100)}%</span>
+      <span class="light light--blue">O2.5 ${stats.over25 || 0}%</span>
+      <span class="light light--amber">BTTS ${stats.btts || 0}%</span>`;
   }
 }
 updateFixtureProgress();
@@ -732,8 +770,6 @@ updateFixtureProgress();
 // -----------------------------------------
 // Date & League filter UI
 // -----------------------------------------
-
-// Navigate to previous/next fixture in the current visibleFixtures window
 function goToPrevFixture() {
   if (!visibleFixtures.length) return;
   const cur = visibleFixtures.findIndex(f => f.__active);
@@ -764,15 +800,21 @@ function buildDateStrip() {
 
   [el.dateToday, el.dateTomorrow, el.dateWeekend]
     .filter(Boolean)
-    .forEach(b => b.classList.remove('is-active'));
+    .forEach(b => {
+      b.classList.remove('active');
+      b.classList.remove('is-active');
+    });
 
   if (UI.rangeDays === 1 && UI.offsetDays === 0 && el.dateToday) {
+    el.dateToday.classList.add('active');
     el.dateToday.classList.add('is-active');
   }
   if (UI.rangeDays === 1 && UI.offsetDays === 1 && el.dateTomorrow) {
+    el.dateTomorrow.classList.add('active');
     el.dateTomorrow.classList.add('is-active');
   }
   if (UI.rangeDays >= 2 && el.dateWeekend) {
+    el.dateWeekend.classList.add('active');
     el.dateWeekend.classList.add('is-active');
   }
 
@@ -788,32 +830,30 @@ function buildDateStrip() {
 }
 
 function bindDateControls() {
-  // Quick range buttons
   el.dateToday?.addEventListener('click', () => {
     UI.offsetDays = 0;
-    UI.rangeDays  = 1;
+    UI.rangeDays = 1;
     buildDateStrip();
     applyFiltersAndRender();
   });
 
   el.dateTomorrow?.addEventListener('click', () => {
     UI.offsetDays = 1;
-    UI.rangeDays  = 1;
+    UI.rangeDays = 1;
     buildDateStrip();
     applyFiltersAndRender();
   });
 
   el.dateWeekend?.addEventListener('click', () => {
-    const b   = baseDate();
+    const b = baseDate();
     const dow = b.getUTCDay();
     const toSat = (6 - dow + 7) % 7;
     UI.offsetDays = toSat;
-    UI.rangeDays  = 2;
+    UI.rangeDays = 2;
     buildDateStrip();
     applyFiltersAndRender();
   });
 
-  // Month navigation
   el.datePrev?.addEventListener('click', () => {
     UI.offsetDays -= UI.rangeDays;
     buildDateStrip();
@@ -826,7 +866,6 @@ function bindDateControls() {
     applyFiltersAndRender();
   });
 
-  // Direct date cells (day A/B)
   el.dateA?.addEventListener('click', () => {
     const iso = el.dateA.dataset.iso;
     if (!iso) return;
@@ -849,7 +888,6 @@ function bindDateControls() {
     applyFiltersAndRender();
   });
 
-  // Prev/Next fixture buttons under the globe
   const navPrev = document.getElementById('nav-prev');
   const navNext = document.getElementById('nav-next');
 
@@ -867,7 +905,6 @@ function bindDateControls() {
     });
   }
 
-  // Keyboard: left/right arrows also cycle fixtures when home view is active
   window.addEventListener('keydown', (ev) => {
     if (!isHomeActive) return;
     if (ev.key === 'ArrowLeft') {
@@ -885,22 +922,31 @@ function buildLeagueChips() {
   const uniq = Array.from(new Set(fixtures.map(f => f.competition).filter(Boolean))).sort();
   UI.leagues = ['ALL', ...uniq];
   el.leagueChips.innerHTML = '';
+
   for (const name of UI.leagues) {
     const b = document.createElement('button');
-    b.className = `chip${name === UI.league ? ' is-active' : ''}`;
+    b.className = `league-chip${name === UI.league ? ' active is-active' : ''}`;
     b.dataset.league = name;
     b.textContent = name;
+
     b.addEventListener('click', () => {
       document
-        .querySelectorAll('#league-chips .chip')
-        .forEach(x => x.classList.remove('is-active'));
+        .querySelectorAll('#league-chips .league-chip, #league-chips .chip')
+        .forEach(x => {
+          x.classList.remove('active');
+          x.classList.remove('is-active');
+        });
+
+      b.classList.add('active');
       b.classList.add('is-active');
       UI.league = name;
       applyFiltersAndRender();
     });
+
     el.leagueChips.appendChild(b);
   }
 }
+
 function centerCameraOnVisibleFixtures() {
   if (!visibleFixtures.length || !camera || !controls || !globe) return;
 
@@ -920,16 +966,14 @@ function centerCameraOnVisibleFixtures() {
   if (!count) return;
 
   const avg = sum.multiplyScalar(1 / count).normalize();
-  const R   = getGlobeRadius();
+  const R = getGlobeRadius();
 
-  // Target: just above the surface at the cluster centre
   const target = avg.clone().multiplyScalar(R * (1 + SURFACE_EPS));
 
-  // Choose a camera distance that frames the cluster nicely
   const currentDist = camera.position.length() || (R * 1.8);
-  const minDist     = R * 1.4;
-  const maxDist     = R * 2.2;
-  const dist        = Math.min(maxDist, Math.max(minDist, currentDist));
+  const minDist = R * 1.4;
+  const maxDist = R * 2.2;
+  const dist = Math.min(maxDist, Math.max(minDist, currentDist));
 
   const camPos = avg.clone().multiplyScalar(dist);
 
@@ -945,19 +989,18 @@ function centerCameraOnFixture(f, distanceFactor = 1.2) {
   const lon = Number(f.longitude);
   if (!Number.isFinite(lat) || !Number.isFinite(lon)) return;
 
-  const R   = getGlobeRadius();
+  const R = getGlobeRadius();
   const dir = latLngToUnit(lat, lon).normalize();
 
-  // End state: camera pulled back along surface normal, looking at fixture
   const endTarget = dir.clone().multiplyScalar(R * (1 + SURFACE_EPS));
-  const endPos    = dir.clone().multiplyScalar(R * distanceFactor);
+  const endPos = dir.clone().multiplyScalar(R * distanceFactor);
 
-  const startPos    = camera.position.clone();
+  const startPos = camera.position.clone();
   const startTarget = controls.target.clone();
 
-  const duration = 650; // ms
-  const reqId    = ++cameraMoveReqId;
-  const t0       = performance.now();
+  const duration = 650;
+  const reqId = ++cameraMoveReqId;
+  const t0 = performance.now();
 
   if (cameraTravelRaf != null) {
     cancelAnimationFrame(cameraTravelRaf);
@@ -965,11 +1008,11 @@ function centerCameraOnFixture(f, distanceFactor = 1.2) {
   }
 
   const step = () => {
-    if (cameraMoveReqId !== reqId) return; // superseded by a newer move
+    if (cameraMoveReqId !== reqId) return;
 
     const now = performance.now();
-    const t   = Math.min(1, (now - t0) / duration);
-    const k   = easeInOut(t);
+    const t = Math.min(1, (now - t0) / duration);
+    const k = easeInOut(t);
 
     camera.position.lerpVectors(startPos, endPos, k);
     controls.target.lerpVectors(startTarget, endTarget, k);
@@ -985,14 +1028,11 @@ function centerCameraOnFixture(f, distanceFactor = 1.2) {
   cameraTravelRaf = requestAnimationFrame(step);
 }
 
-
-
-
 function applyFiltersAndRender() {
   if (!fixtures.length) return;
 
   const start = baseDate();
-  const end   = datePlusDays(start, UI.rangeDays);
+  const end = datePlusDays(start, UI.rangeDays);
 
   visibleFixtures = fixtures.filter(f => {
     const d = new Date(f.date_utc);
@@ -1003,7 +1043,6 @@ function applyFiltersAndRender() {
     return true;
   });
 
-  // Auto-center camera on the cluster of visible fixtures
   centerCameraOnVisibleFixtures();
 
   const many = visibleFixtures.length > 250;
@@ -1017,7 +1056,6 @@ function applyFiltersAndRender() {
   buildRail(visibleFixtures);
 
   if (visibleFixtures.length) {
-    // This will also refresh point colours / altitudes + stadium pill
     selectIndex(0, { fly: true });
   }
 
@@ -1026,7 +1064,6 @@ function applyFiltersAndRender() {
   );
 }
 
-
 // -----------------------------------------
 // Acca Builder helpers (UI acca builder, not API acca)
 // -----------------------------------------
@@ -1034,7 +1071,7 @@ function accaLegKey(fixtureId, marketKey, pickId) {
   return `${fixtureId}__${marketKey}__${pickId}`;
 }
 
-function initAccaFromFixtures(){
+function initAccaFromFixtures() {
   const fixtureSelect = document.getElementById('ab-fixture-select');
   const leagueSelect  = document.getElementById('ab-league');
   const marketNav     = document.getElementById('ab-market-nav');
@@ -1044,14 +1081,14 @@ function initAccaFromFixtures(){
 
   const leagues = Array.from(new Set(fixtures.map(f => f.competition).filter(Boolean))).sort();
   leagueSelect.innerHTML = '<option value="ALL">All Leagues</option>';
-  leagues.forEach(name=>{
+  leagues.forEach(name => {
     const opt = document.createElement('option');
     opt.value = name;
     opt.textContent = name;
     leagueSelect.appendChild(opt);
   });
 
-  function refreshFixtureOptions(){
+  function refreshFixtureOptions() {
     const leagueFilter = leagueSelect.value || 'ALL';
     fixtureSelect.innerHTML = '';
     const placeholder = document.createElement('option');
@@ -1062,13 +1099,13 @@ function initAccaFromFixtures(){
     const filtered = fixtures
       .filter(f => leagueFilter === 'ALL' || (f.competition || '') === leagueFilter)
       .slice()
-      .sort((a,b) => new Date(a.date_utc) - new Date(b.date_utc));
+      .sort((a, b) => new Date(a.date_utc) - new Date(b.date_utc));
 
-    filtered.forEach(f=>{
+    filtered.forEach(f => {
       const opt = document.createElement('option');
       opt.value = f.fixture_id;
       const d = f.date_utc ? new Date(f.date_utc) : null;
-      const timeStr = d && !isNaN(d) ? d.toLocaleTimeString(undefined,{hour:'2-digit', minute:'2-digit'}) : '';
+      const timeStr = d && !isNaN(d) ? d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' }) : '';
       opt.textContent = `${f.home_team} vs ${f.away_team}${timeStr ? ' • ' + timeStr : ''}`;
       fixtureSelect.appendChild(opt);
       abFixtureById.set(f.fixture_id, f);
@@ -1077,22 +1114,22 @@ function initAccaFromFixtures(){
 
   refreshFixtureOptions();
 
-  leagueSelect.addEventListener('change', ()=>{
+  leagueSelect.addEventListener('change', () => {
     refreshFixtureOptions();
     setAccaFixture(null);
   });
 
-  fixtureSelect.addEventListener('change', ()=>{
+  fixtureSelect.addEventListener('change', () => {
     const id = fixtureSelect.value;
-    const f  = abFixtureById.get(id) || null;
+    const f = abFixtureById.get(id) || null;
     setAccaFixture(f);
   });
 
-  marketNav.querySelectorAll('.market-chip').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      marketNav.querySelectorAll('.market-chip').forEach(b=>b.classList.remove('is-active'));
+  marketNav.querySelectorAll('.market-chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      marketNav.querySelectorAll('.market-chip').forEach(b => b.classList.remove('is-active'));
       btn.classList.add('is-active');
-      abCurrentMarket = btn.dataset.market || 'ftr';
+      abCurrentMarket = btn.dataset.market || 'all';
       refreshAccaPicks();
     });
   });
@@ -1101,7 +1138,7 @@ function initAccaFromFixtures(){
   refreshAccaPicks();
 }
 
-function setAccaFixture(f){
+function setAccaFixture(f) {
   currentFixture = f || null;
 
   const titleEl   = document.getElementById('ab-fixture-title');
@@ -1109,26 +1146,26 @@ function setAccaFixture(f){
   const crestHome = document.getElementById('ab-crest-home');
   const crestAway = document.getElementById('ab-crest-away');
 
-  if (!f){
+  if (!f) {
     if (titleEl) titleEl.textContent = 'Select a fixture';
-    if (metaEl)  metaEl.textContent  = '';
-    if (crestHome){ crestHome.innerHTML = ''; crestHome.textContent = ''; }
-    if (crestAway){ crestAway.innerHTML = ''; crestAway.textContent = ''; }
+    if (metaEl)  metaEl.textContent = '';
+    if (crestHome) { crestHome.innerHTML = ''; crestHome.textContent = ''; }
+    if (crestAway) { crestAway.innerHTML = ''; crestAway.textContent = ''; }
     refreshAccaPicks();
     return;
   }
 
   if (titleEl) titleEl.textContent = `${f.home_team} vs ${f.away_team}`;
-  if (metaEl){
+  if (metaEl) {
     const parts = [];
     if (f.competition) parts.push(f.competition);
-    if (f.date_utc){
-      try{
+    if (f.date_utc) {
+      try {
         const d = new Date(f.date_utc);
-        const date = d.toLocaleDateString(undefined,{weekday:'short', day:'2-digit', month:'short'});
-        const time = d.toLocaleTimeString(undefined,{hour:'2-digit', minute:'2-digit'});
+        const date = d.toLocaleDateString(undefined, { weekday: 'short', day: '2-digit', month: 'short' });
+        const time = d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
         parts.push(`${date} · ${time} GMT`);
-      }catch{}
+      } catch {}
     }
     if (f.stadium) parts.push(f.stadium + (f.city ? `, ${f.city}` : ''));
     metaEl.textContent = parts.join(' • ');
@@ -1140,8 +1177,8 @@ function setAccaFixture(f){
   refreshAccaPicks();
 }
 
-function marketLabelFromKey(key){
-  switch(key){
+function marketLabelFromKey(key) {
+  switch (key) {
     case 'all':        return 'All markets';
     case 'ftr':        return 'Full Time Result';
     case 'goals_main': return 'Match Goals (Over/Under)';
@@ -1150,7 +1187,7 @@ function marketLabelFromKey(key){
   }
 }
 
-function refreshAccaPicks(){
+function refreshAccaPicks() {
   const listEl    = document.getElementById('ab-picks-list');
   const emptyEl   = document.getElementById('ab-picks-empty');
   const summaryEl = document.getElementById('ab-picks-summary');
@@ -1158,7 +1195,7 @@ function refreshAccaPicks(){
 
   listEl.innerHTML = '';
 
-  if (!currentFixture){
+  if (!currentFixture) {
     emptyEl.hidden = false;
     emptyEl.textContent = 'Select a fixture to see model picks.';
     summaryEl.textContent = '';
@@ -1169,31 +1206,31 @@ function refreshAccaPicks(){
   const picks = [];
 
   const wantAll  = (abCurrentMarket === 'all');
-  const wantFTR  = (abCurrentMarket === 'ftr'        || wantAll);
+  const wantFTR  = (abCurrentMarket === 'ftr' || wantAll);
   const wantGOAL = (abCurrentMarket === 'goals_main' || wantAll);
-  const wantBTTS = (abCurrentMarket === 'btts'       || wantAll);
+  const wantBTTS = (abCurrentMarket === 'btts' || wantAll);
 
-  if (wantFTR){
+  if (wantFTR) {
     picks.push(
       { id: 'HOME', marketKey: 'ftr', label: `${f.home_team} to Win`, prob: 0.62, fair: 1.61, price: 1.80, edge: 6.5 },
-      { id: 'DRAW', marketKey: 'ftr', label: 'Draw',                   prob: 0.22, fair: 4.55, price: 4.75, edge: 1.8 },
-      { id: 'AWAY', marketKey: 'ftr', label: `${f.away_team} to Win`,  prob: 0.16, fair: 6.25, price: 6.50, edge: 1.2 }
+      { id: 'DRAW', marketKey: 'ftr', label: 'Draw', prob: 0.22, fair: 4.55, price: 4.75, edge: 1.8 },
+      { id: 'AWAY', marketKey: 'ftr', label: `${f.away_team} to Win`, prob: 0.16, fair: 6.25, price: 6.50, edge: 1.2 }
     );
   }
-  if (wantGOAL){
+  if (wantGOAL) {
     picks.push(
-      { id: 'O25', marketKey: 'goals_main', label: 'Over 2.5 Goals',  prob: 0.71, fair: 1.41, price: 1.65, edge: 6.4 },
+      { id: 'O25', marketKey: 'goals_main', label: 'Over 2.5 Goals', prob: 0.71, fair: 1.41, price: 1.65, edge: 6.4 },
       { id: 'U25', marketKey: 'goals_main', label: 'Under 2.5 Goals', prob: 0.29, fair: 3.45, price: 3.60, edge: 1.3 }
     );
   }
-  if (wantBTTS){
+  if (wantBTTS) {
     picks.push(
       { id: 'BTTS_Y', marketKey: 'btts', label: 'Both Teams To Score – Yes', prob: 0.65, fair: 1.54, price: 1.75, edge: 4.5 },
-      { id: 'BTTS_N', marketKey: 'btts', label: 'Both Teams To Score – No',  prob: 0.35, fair: 2.85, price: 3.10, edge: 3.2 }
+      { id: 'BTTS_N', marketKey: 'btts', label: 'Both Teams To Score – No', prob: 0.35, fair: 2.85, price: 3.10, edge: 3.2 }
     );
   }
 
-  if (!picks.length){
+  if (!picks.length) {
     emptyEl.hidden = false;
     emptyEl.textContent = 'This market is not wired yet. Try Full Time Result or Match Goals.';
     summaryEl.textContent = '';
@@ -1203,83 +1240,80 @@ function refreshAccaPicks(){
   emptyEl.hidden = true;
   summaryEl.textContent = `Showing ${picks.length} picks for ${marketLabelFromKey(abCurrentMarket)}.`;
 
- picks.forEach((pick, idx) => {
-  const marketKey = pick.marketKey || abCurrentMarket;
-  const key       = accaLegKey(currentFixture.fixture_id, marketKey, pick.id);
-  const isInCart  = abCartLegs.some(l => l.key === key);
+  picks.forEach((pick, idx) => {
+    const marketKey = pick.marketKey || abCurrentMarket;
+    const key = accaLegKey(currentFixture.fixture_id, marketKey, pick.id);
+    const isInCart = abCartLegs.some(l => l.key === key);
 
-  const card = document.createElement('article');
-  card.className = 'pick-card';
-  card.dataset.pickId = pick.id;
+    const card = document.createElement('article');
+    card.className = 'pick-card';
+    card.dataset.pickId = pick.id;
 
-  const main = document.createElement('div');
-  main.className = 'pick-main';
+    const main = document.createElement('div');
+    main.className = 'pick-main';
 
-  // NEW: tiny leg pill at the top of each card
-  const legPill = document.createElement('span');
-  legPill.className = 'pick-leg-pill';
-  legPill.textContent = `Leg ${idx + 1} of ${picks.length}`;
+    const legPill = document.createElement('span');
+    legPill.className = 'pick-leg-pill';
+    legPill.textContent = `Leg ${idx + 1} of ${picks.length}`;
 
-  const h3 = document.createElement('h3');
-  h3.className = 'pick-title';
-  h3.textContent = pick.label;
+    const h3 = document.createElement('h3');
+    h3.className = 'pick-title';
+    h3.textContent = pick.label;
 
-  const sub = document.createElement('p');
-  sub.className = 'pick-subtitle';
-  const probPct   = Math.round(pick.prob * 100);
-  const fairText  = pick.fair  != null ? pick.fair.toFixed(2)  : '–';
-  const priceText = pick.price != null ? pick.price.toFixed(2) : '–';
-  sub.textContent = `Model ${probPct}% • Fair ${fairText} • Price ${priceText}`;
+    const sub = document.createElement('p');
+    sub.className = 'pick-subtitle';
+    const probPct = Math.round(pick.prob * 100);
+    const fairText = pick.fair != null ? pick.fair.toFixed(2) : '–';
+    const priceText = pick.price != null ? pick.price.toFixed(2) : '–';
+    sub.textContent = `Model ${probPct}% • Fair ${fairText} • Price ${priceText}`;
 
-  main.appendChild(legPill);
-  main.appendChild(h3);
-  main.appendChild(sub);
+    main.appendChild(legPill);
+    main.appendChild(h3);
+    main.appendChild(sub);
 
-  const meta = document.createElement('div');
-  meta.className = 'pick-meta';
+    const meta = document.createElement('div');
+    meta.className = 'pick-meta';
 
-  const badge = document.createElement('div');
-  badge.className = 'pick-badge' + (pick.edge != null && pick.edge >= 0 ? ' pick-badge--positive' : '');
-  if (pick.edge != null){
-    const edgeTxt = pick.edge.toFixed(1);
-    badge.textContent = `EV ${pick.edge >= 0 ? '+' : ''}${edgeTxt}%`;
-  } else {
-    badge.textContent = 'Model pick';
-  }
+    const badge = document.createElement('div');
+    badge.className = 'pick-badge' + (pick.edge != null && pick.edge >= 0 ? ' pick-badge--positive' : '');
+    if (pick.edge != null) {
+      const edgeTxt = pick.edge.toFixed(1);
+      badge.textContent = `EV ${pick.edge >= 0 ? '+' : ''}${edgeTxt}%`;
+    } else {
+      badge.textContent = 'Model pick';
+    }
 
-  const btn = document.createElement('button');
-  btn.className = 'pick-add-btn';
+    const btn = document.createElement('button');
+    btn.className = 'pick-add-btn';
 
-  if (isInCart) {
-    btn.classList.add('pick-add-btn--active');
-    btn.textContent = 'Remove';
-  } else {
-    btn.textContent = '+ Add';
-  }
+    if (isInCart) {
+      btn.classList.add('pick-add-btn--active');
+      btn.textContent = 'Remove';
+    } else {
+      btn.textContent = '+ Add';
+    }
 
-  btn.addEventListener('click', () => addLegToAcca(pick));
+    btn.addEventListener('click', () => addLegToAcca(pick));
 
-  meta.appendChild(badge);
-  meta.appendChild(btn);
+    meta.appendChild(badge);
+    meta.appendChild(btn);
 
-  card.appendChild(main);
-  card.appendChild(meta);
-  listEl.appendChild(card);
-});
+    card.appendChild(main);
+    card.appendChild(meta);
+    listEl.appendChild(card);
+  });
 }
 
-function addLegToAcca(pick){
+function addLegToAcca(pick) {
   if (!currentFixture) return;
 
   const marketKey = pick.marketKey || abCurrentMarket;
-  const key       = accaLegKey(currentFixture.fixture_id, marketKey, pick.id);
+  const key = accaLegKey(currentFixture.fixture_id, marketKey, pick.id);
 
   const existingIdx = abCartLegs.findIndex(l => l.key === key);
-  if (existingIdx >= 0){
-    // Remove leg from cart
+  if (existingIdx >= 0) {
     abCartLegs.splice(existingIdx, 1);
   } else {
-    // Add leg to cart
     abCartLegs.push({
       key,
       fixture_id: currentFixture.fixture_id,
@@ -1292,7 +1326,6 @@ function addLegToAcca(pick){
       edge: pick.edge
     });
 
-    // High-EV celebration toast
     if (typeof pick.edge === 'number' && pick.edge >= 5) {
       showToast('success', `High-value leg added · EV +${pick.edge.toFixed(1)}%`);
     }
@@ -1302,13 +1335,13 @@ function addLegToAcca(pick){
   refreshAccaPicks();
 }
 
-function removeLegFromAcca(index){
+function removeLegFromAcca(index) {
   abCartLegs.splice(index, 1);
   renderAccaCart();
   refreshAccaPicks();
 }
 
-function renderAccaCart(){
+function renderAccaCart() {
   const listEl   = document.getElementById('ab-cart-legs');
   const emptyEl  = document.getElementById('ab-cart-empty');
   const sumEl    = document.getElementById('ab-cart-summary');
@@ -1324,28 +1357,30 @@ function renderAccaCart(){
 
   listEl.innerHTML = '';
 
-  if (!abCartLegs.length){
+  if (!abCartLegs.length) {
     emptyEl.hidden = false;
-    sumEl.hidden   = true;
+    sumEl.hidden = true;
     if (priceEl) priceEl.textContent = '–';
-    if (probEl)  probEl.textContent  = '–';
-    if (evEl)    evEl.textContent    = '–';
-    if (btnCopy)  btnCopy.disabled  = true;
+    if (probEl)  probEl.textContent = '–';
+    if (evEl)    evEl.textContent = '–';
+    if (btnCopy) btnCopy.disabled = true;
     if (btnCheck) btnCheck.disabled = true;
-    if (saveBtn)  saveBtn.disabled  = true;
+    if (saveBtn) saveBtn.disabled = true;
     if (saveHint) saveHint.textContent = 'Build an acca to save it to your portfolio.';
     currentAccaLegs = [];
     return;
   }
 
   emptyEl.hidden = true;
-  sumEl.hidden   = false;
-  if (saveBtn)  saveBtn.disabled  = false;
-  if (saveHint) saveHint.textContent = currentUser
-    ? 'Click “Save to portfolio” to store this acca.'
-    : 'Sign in to save this acca to your portfolio.';
+  sumEl.hidden = false;
+  if (saveBtn) saveBtn.disabled = false;
+  if (saveHint) {
+    saveHint.textContent = currentUser
+      ? 'Click “Save to portfolio” to store this acca.'
+      : 'Sign in to save this acca to your portfolio.';
+  }
 
-  abCartLegs.forEach((leg, idx)=>{
+  abCartLegs.forEach((leg, idx) => {
     const li = document.createElement('li');
     li.className = 'acca-leg';
 
@@ -1356,10 +1391,10 @@ function renderAccaCart(){
     label.textContent = `${leg.fixture_label} – ${leg.label}`;
     const sub = document.createElement('div');
     sub.className = 'acca-leg-sub muted';
-    const probPct = leg.prob != null ? Math.round(leg.prob*100) + '%' : '–';
-    const fairTxt  = leg.fair  != null ? leg.fair.toFixed(2)  : '–';
+    const probPct = leg.prob != null ? Math.round(leg.prob * 100) + '%' : '–';
+    const fairTxt = leg.fair != null ? leg.fair.toFixed(2) : '–';
     const priceTxt = leg.price != null ? leg.price.toFixed(2) : '–';
-    const edgeTxt  = leg.edge  != null ? (leg.edge >=0 ? '+' : '') + leg.edge.toFixed(1) + '%' : '–';
+    const edgeTxt = leg.edge != null ? (leg.edge >= 0 ? '+' : '') + leg.edge.toFixed(1) + '%' : '–';
     sub.textContent = `Model ${probPct} • Fair ${fairTxt} • Price ${priceTxt} • EV ${edgeTxt}`;
     main.appendChild(label);
     main.appendChild(sub);
@@ -1367,65 +1402,63 @@ function renderAccaCart(){
     const btn = document.createElement('button');
     btn.className = 'acca-leg-remove';
     btn.textContent = '✕';
-    btn.addEventListener('click', ()=> removeLegFromAcca(idx));
+    btn.addEventListener('click', () => removeLegFromAcca(idx));
 
     li.appendChild(main);
     li.appendChild(btn);
     listEl.appendChild(li);
   });
 
-  // Combined stats (demo)
   let comboProb = 1;
-  let avgEdge   = 0;
+  let avgEdge = 0;
   let comboPrice = 1;
   let countWithEdge = 0;
-  abCartLegs.forEach(leg=>{
-    if (leg.prob  != null) comboProb  *= leg.prob;
+  abCartLegs.forEach(leg => {
+    if (leg.prob != null) comboProb *= leg.prob;
     if (leg.price != null) comboPrice *= leg.price;
-    if (leg.edge  != null){ avgEdge += leg.edge; countWithEdge++; }
+    if (leg.edge != null) { avgEdge += leg.edge; countWithEdge++; }
   });
   if (countWithEdge) avgEdge /= countWithEdge;
 
   if (priceEl) priceEl.textContent = comboPrice && isFinite(comboPrice) ? comboPrice.toFixed(2) : '–';
-  if (probEl)  probEl.textContent  = comboProb && isFinite(comboProb) ? Math.round(comboProb*100) + '%' : '–';
-  if (evEl)    evEl.textContent    = countWithEdge ? (avgEdge >=0 ? '+' : '') + avgEdge.toFixed(1) + '%' : '–';
+  if (probEl)  probEl.textContent = comboProb && isFinite(comboProb) ? Math.round(comboProb * 100) + '%' : '–';
+  if (evEl)    evEl.textContent = countWithEdge ? (avgEdge >= 0 ? '+' : '') + avgEdge.toFixed(1) + '%' : '–';
 
-  if (btnCopy){
+  if (btnCopy) {
     btnCopy.disabled = false;
-    btnCopy.onclick = ()=> copyAccaToClipboard();
+    btnCopy.onclick = () => copyAccaToClipboard();
   }
-  if (btnCheck){
+  if (btnCheck) {
     btnCheck.disabled = false;
-    btnCheck.onclick = ()=> {
-      showToast('info','Bet Checker integration coming soon.');
+    btnCheck.onclick = () => {
+      showToast('info', 'Bet Checker integration coming soon.');
     };
   }
 
-  // keep snapshot for portfolio save
   currentAccaLegs = abCartLegs.map(l => ({ ...l }));
   updateRailFlags();
 }
 
-function copyAccaToClipboard(){
+function copyAccaToClipboard() {
   if (!abCartLegs.length) return;
-  const lines = abCartLegs.map(leg=>{
+  const lines = abCartLegs.map(leg => {
     const priceTxt = leg.price != null ? '@ ' + leg.price.toFixed(2) : '';
     return `${leg.fixture_label} – ${leg.label} ${priceTxt}`;
   });
   const text = lines.join('\n');
-  if (navigator.clipboard && navigator.clipboard.writeText){
-    navigator.clipboard.writeText(text).then(()=>{
-      showToast('success','Acca copied to clipboard');
-    }).catch(()=>{
-      showToast('error','Could not copy acca');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => {
+      showToast('success', 'Acca copied to clipboard');
+    }).catch(() => {
+      showToast('error', 'Could not copy acca');
     });
   } else {
     const ta = document.createElement('textarea');
     ta.value = text;
     document.body.appendChild(ta);
     ta.select();
-    try { document.execCommand('copy'); showToast('success','Acca copied to clipboard'); }
-    catch { showToast('error','Could not copy acca'); }
+    try { document.execCommand('copy'); showToast('success', 'Acca copied to clipboard'); }
+    catch { showToast('error', 'Could not copy acca'); }
     ta.remove();
   }
 }
@@ -1451,10 +1484,10 @@ function computePortfolioStats() {
     };
   }
 
-  let totalStake  = 0;
+  let totalStake = 0;
   let totalReturn = 0;
-  let wins        = 0;
-  let losses      = 0;
+  let wins = 0;
+  let losses = 0;
 
   userAccas.forEach(acc => {
     const stake = Number(acc.stake) || 0;
@@ -1474,7 +1507,7 @@ function computePortfolioStats() {
     }
   });
 
-  const netProfit  = totalReturn - totalStake;
+  const netProfit = totalReturn - totalStake;
   const strikeRate = wins + losses > 0 ? (wins / (wins + losses)) * 100 : 0;
 
   return {
@@ -1594,8 +1627,8 @@ function renderPortfolio() {
     .slice()
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     .forEach(acc => {
-      const when  = new Date(acc.createdAt).toLocaleString();
-      const legs  = Array.isArray(acc.legs) ? acc.legs : [];
+      const when = new Date(acc.createdAt).toLocaleString();
+      const legs = Array.isArray(acc.legs) ? acc.legs : [];
       const stake = typeof acc.stake === 'number' && !Number.isNaN(acc.stake)
         ? acc.stake.toFixed(2)
         : '0.00';
@@ -1620,19 +1653,19 @@ function renderPortfolio() {
           <p class="muted">${legs.length} leg(s)</p>
         </div>
       </header>
-    
+
       ${
         legs.length
           ? `
             <ul class="portfolio-leg-list">
               ${legs.map(l => {
-                const probPct = l.prob  != null ? Math.round(l.prob * 100) + '%' : '–';
-                const fairTxt  = l.fair  != null ? l.fair.toFixed(2)          : '–';
-                const priceTxt = l.price != null ? l.price.toFixed(2)         : '–';
-                const edgeTxt  = l.edge  != null
+                const probPct = l.prob != null ? Math.round(l.prob * 100) + '%' : '–';
+                const fairTxt = l.fair != null ? l.fair.toFixed(2) : '–';
+                const priceTxt = l.price != null ? l.price.toFixed(2) : '–';
+                const edgeTxt = l.edge != null
                   ? (l.edge >= 0 ? '+' : '') + l.edge.toFixed(1) + '%'
                   : '–';
-                const label    = l.label || '';
+                const label = l.label || '';
                 const fixLabel = l.fixture_label ||
                   `${acc.fixture.home_team} vs ${acc.fixture.away_team}`;
                 return `
@@ -1651,7 +1684,7 @@ function renderPortfolio() {
           `
           : '<p class="muted">No legs saved on this slip.</p>'
       }
-    
+
       <div class="portfolio-meta-row">
         <div class="portfolio-meta-col">
           <span class="control-label">Status</span>
@@ -1671,7 +1704,7 @@ function renderPortfolio() {
           />
         </label>
       </div>
-    
+
       <div class="portfolio-actions">
         <div class="portfolio-actions-left">
           <button class="cta" data-load-acca="${acc.id}">
@@ -1703,10 +1736,9 @@ function renderPortfolio() {
       container.appendChild(card);
     });
 
-  // Wire: open in builder (fixture + legs, with clear confirm)
   container.querySelectorAll('button[data-load-acca]').forEach(btn => {
     btn.addEventListener('click', () => {
-      const id  = btn.getAttribute('data-load-acca');
+      const id = btn.getAttribute('data-load-acca');
       const acc = savedAccas.find(a => a.id === id);
       if (!acc) return;
 
@@ -1719,7 +1751,7 @@ function renderPortfolio() {
         f =>
           f.home_team === acc.fixture.home_team &&
           f.away_team === acc.fixture.away_team &&
-          f.date_utc  === acc.fixture.date_utc
+          f.date_utc === acc.fixture.date_utc
       );
       if (!match) {
         showToast('error', 'Original fixture not found in current data set');
@@ -1737,23 +1769,21 @@ function renderPortfolio() {
     });
   });
 
-  // Wire: stake input change
   container.querySelectorAll('.portfolio-stake-input').forEach(input => {
     input.addEventListener('change', () => {
-      const id   = input.getAttribute('data-stake');
-      const acc  = savedAccas.find(a => a.id === id);
+      const id = input.getAttribute('data-stake');
+      const acc = savedAccas.find(a => a.id === id);
       if (!acc) return;
-      const val  = parseFloat(input.value);
-      acc.stake  = !Number.isNaN(val) && val >= 0 ? val : 0;
+      const val = parseFloat(input.value);
+      acc.stake = !Number.isNaN(val) && val >= 0 ? val : 0;
       persistSession();
       renderPortfolioStats();
     });
   });
 
-  // Wire: mark won / lost / reset
   container.querySelectorAll('[data-status-win]').forEach(btn => {
     btn.addEventListener('click', () => {
-      const id  = btn.getAttribute('data-status-win');
+      const id = btn.getAttribute('data-status-win');
       const acc = savedAccas.find(a => a.id === id);
       if (!acc) return;
       acc.status = 'won';
@@ -1764,7 +1794,7 @@ function renderPortfolio() {
   });
   container.querySelectorAll('[data-status-loss]').forEach(btn => {
     btn.addEventListener('click', () => {
-      const id  = btn.getAttribute('data-status-loss');
+      const id = btn.getAttribute('data-status-loss');
       const acc = savedAccas.find(a => a.id === id);
       if (!acc) return;
       acc.status = 'lost';
@@ -1775,21 +1805,20 @@ function renderPortfolio() {
   });
   container.querySelectorAll('[data-status-reset]').forEach(btn => {
     btn.addEventListener('click', () => {
-      const id  = btn.getAttribute('data-status-reset');
+      const id = btn.getAttribute('data-status-reset');
       const acc = savedAccas.find(a => a.id === id);
       if (!acc) return;
       acc.status = 'pending';
-      acc.stake  = 0;
+      acc.stake = 0;
       persistSession();
       renderPortfolio();
       renderPortfolioStats();
     });
   });
 
-  // Wire: delete with confirm
   container.querySelectorAll('[data-delete-acca]').forEach(btn => {
     btn.addEventListener('click', () => {
-      const id  = btn.getAttribute('data-delete-acca');
+      const id = btn.getAttribute('data-delete-acca');
       const acc = savedAccas.find(a => a.id === id);
       if (!acc) return;
 
@@ -1808,15 +1837,12 @@ function renderPortfolio() {
 // -----------------------------------------
 // Three-Globe loader & scene init
 // -----------------------------------------
-// Helper: load UMD script and resolve when window.ThreeGlobe is ready
 function loadThreeGlobeUMD(url) {
   return new Promise((resolve, reject) => {
-    // Make sure the UMD build sees THREE on the global object
     if (!window.THREE) {
-      window.THREE = THREE; // the ES-module import from the top of this file
+      window.THREE = THREE;
     }
 
-    // Already loaded?
     if (window.ThreeGlobe) {
       return resolve(window.ThreeGlobe);
     }
@@ -1841,9 +1867,7 @@ function loadThreeGlobeUMD(url) {
   });
 }
 
-
 async function loadThreeGlobe() {
-  // Try public CDNs, then your local vendored copy.
   const candidates = [
     'https://cdn.jsdelivr.net/npm/three-globe@2.31.1/dist/three-globe.min.js',
     'https://unpkg.com/three-globe@2.31.1/dist/three-globe.min.js',
@@ -1863,19 +1887,17 @@ async function loadThreeGlobe() {
   throw new Error('three-globe failed to load');
 }
 
-
-async function init(){
+async function init() {
   loadSessionFromStorage();
   updateAuthUI();
 
   ThreeGlobeCtor = await loadThreeGlobe();
 
   scene = new THREE.Scene();
-  renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.setSize(el.globeWrap.clientWidth, el.globeWrap.clientHeight);
 
-  // Keep nav buttons + stadium overlay – just remove the loading text
   const loading = el.globeWrap.querySelector('.globe-loading');
   if (loading) loading.remove();
   el.globeWrap.appendChild(renderer.domElement);
@@ -1884,33 +1906,29 @@ async function init(){
 
   camera = new THREE.PerspectiveCamera(
     45,
-    el.globeWrap.clientWidth/el.globeWrap.clientHeight,
+    el.globeWrap.clientWidth / el.globeWrap.clientHeight,
     0.1,
     5000
   );
-  camera.position.set(0, 0, getGlobeRadius()*3);
+  camera.position.set(0, 0, getGlobeRadius() * 3);
 
   controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
   controls.enablePan = false;
   controls.enableZoom = true;
   controls.autoRotate = false;
-  
-  // Keep zoom & tilt in a comfortable, cinematic band
   controls.minDistance = getGlobeRadius() * 0.2;
   controls.maxDistance = getGlobeRadius() * 3.0;
-  controls.minPolarAngle = Math.PI * 0.20; // ≈ 36°
-  controls.maxPolarAngle = Math.PI * 0.80; // ≈ 144°
+  controls.minPolarAngle = Math.PI * 0.20;
+  controls.maxPolarAngle = Math.PI * 0.80;
 
-
-  // --- Postprocessing: FXAA + Bloom ---
   composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
 
   const fxaa = new ShaderPass(FXAAShader);
   const setFXAA = () => {
     const px = renderer.getPixelRatio();
-    fxaa.material.uniforms['resolution'].value.set(
+    fxaa.material.uniforms.resolution.value.set(
       1 / (el.globeWrap.clientWidth * px),
       1 / (el.globeWrap.clientHeight * px)
     );
@@ -1926,18 +1944,18 @@ async function init(){
   );
   composer.addPass(bloom);
 
-  scene.add(new THREE.AmbientLight(0xffffff,0.9));
+  scene.add(new THREE.AmbientLight(0xffffff, 0.9));
   const hemi = new THREE.HemisphereLight(0xddeeff, 0x223344, 0.6);
   scene.add(hemi);
 
-  globe = new ThreeGlobeCtor({ waitForGlobeReady:true })
+  globe = new ThreeGlobeCtor({ waitForGlobeReady: true })
     .showAtmosphere(true).atmosphereColor('#9ef9e3').atmosphereAltitude(0.28)
     .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
     .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
     .pointAltitude(d => {
-      if (d.__active) return SURFACE_EPS * 2.5;  // active fixture floats highest
-      if (d.__hot)    return SURFACE_EPS * 1.6;  // hot fixtures sit slightly above surface
-      return SURFACE_EPS;                        // normal fixtures
+      if (d.__active) return SURFACE_EPS * 2.5;
+      if (d.__hot)    return SURFACE_EPS * 1.6;
+      return SURFACE_EPS;
     })
     .pointRadius(d => {
       if (d.__active) return RADIUS_ACTIVE;
@@ -1951,26 +1969,22 @@ async function init(){
 
   scene.add(globe);
 
-  // custom marker group
   MARKER = createMarker();
   scene.add(MARKER.group);
 
-  // click handler for pill sprite
   renderer.domElement.addEventListener('click', onCanvasClick);
 
-  // hover & click on globe points
   if (typeof globe.onPointHover === 'function') globe.onPointHover(handleHover);
-  globe.onPointClick?.(pt=>{
+  globe.onPointClick?.(pt => {
     if (!pt) return;
-    const idx = visibleFixtures.findIndex(f=>f.latitude===pt.latitude && f.longitude===pt.longitude);
-    if (idx>=0) selectIndex(idx, { fly:true });
+    const idx = visibleFixtures.findIndex(f => f.latitude === pt.latitude && f.longitude === pt.longitude);
+    if (idx >= 0) selectIndex(idx, { fly: true });
   });
 
-  // --- Resize: reuse setFXAA defined above ---
   window.addEventListener('resize', () => {
-    const {clientWidth:w, clientHeight:h} = el.globeWrap;
-    renderer.setSize(w,h);
-    camera.aspect = w/h;
+    const { clientWidth: w, clientHeight: h } = el.globeWrap;
+    renderer.setSize(w, h);
+    camera.aspect = w / h;
     camera.updateProjectionMatrix();
     setFXAA();
   });
@@ -1980,7 +1994,6 @@ async function init(){
   bindDateControls();
   bindSheet();
 
-  // Stadium card buttons
   if (el.stadiumOpenBtn) {
     el.stadiumOpenBtn.addEventListener('click', () => {
       if (currentFixture) openSheetForFixture(currentFixture);
@@ -1995,7 +2008,6 @@ async function init(){
     });
   }
 
-  // deep-dive opens sheet for current fixture
   el.deepBtn?.addEventListener('click', () => {
     if (currentFixture) openSheetForFixture(currentFixture);
   });
@@ -2006,9 +2018,8 @@ async function init(){
   applyFiltersAndRender();
   initAccaFromFixtures();
 
-  // Save to portfolio button
-  const accSaveBtn   = document.getElementById('acc-save');
-  const accSaveHint  = document.getElementById('acc-save-hint');
+  const accSaveBtn = document.getElementById('acc-save');
+  const accSaveHint = document.getElementById('acc-save-hint');
   if (accSaveBtn) {
     accSaveBtn.addEventListener('click', () => {
       saveCurrentAccaToPortfolio();
@@ -2020,87 +2031,82 @@ async function init(){
     });
   }
 
-  // loop
-  (function loop(){
+  (function loop() {
     requestAnimationFrame(loop);
     if (!isHomeActive) return;
     controls.update();
     composer.render();
 
-    // Keep the stadium card anchored as the camera moves
     if (currentFixture) {
       updateStadiumCard(currentFixture, { repositionOnly: true });
     }
   })();
 }
 
+// -----------------------------------------
+// CSV ingest
+// -----------------------------------------
+async function loadFixturesCSV(url) {
+  const res = await fetch(`${url}?v=${Date.now()}`);
+  if (!res.ok) {
+    showToast('error', `Could not load ${url} (HTTP ${res.status}).`);
+    return;
+  }
+  const text = await res.text();
+  const { data, errors } = Papa.parse(text, { header: true, skipEmptyLines: true });
+  if (errors?.length) console.warn('[CSV parse errors]', errors);
 
-
-  // -----------------------------------------
-  // CSV ingest
-  // -----------------------------------------
-  async function loadFixturesCSV(url){
-    const res = await fetch(`${url}?v=${Date.now()}`); // cache-bust CSV only
-    if (!res.ok){
-      showToast('error',`Could not load ${url} (HTTP ${res.status}).`);
-      return;
-    }
-    const text = await res.text();
-    const { data, errors } = Papa.parse(text, { header:true, skipEmptyLines:true });
-    if (errors?.length) console.warn('[CSV parse errors]', errors);
-  
-    fixtures = (data || [])
+  fixtures = (data || [])
     .map(row => {
-      // Parse raw values from CSV
       const rawLat = parseFloat(row.latitude ?? row.lat ?? row.Latitude ?? row.lat_deg);
       const rawLon = parseFloat(row.longitude ?? row.lon ?? row.lng ?? row.Longitude);
-    
-      // Apply global offset (we keep this neutral for now)
+
       let lat = Number.isFinite(rawLat) ? rawLat + MAP_OFFSET.latBias : NaN;
       let lon = Number.isFinite(rawLon) ? rawLon + MAP_OFFSET.lonBias : NaN;
-    
-      // Normalise longitude into [-180, 180] so Three-Globe stays happy
+
       if (Number.isFinite(lon)) {
         if (lon > 180) lon -= 360;
         if (lon < -180) lon += 360;
       }
-    
+
       return {
-        fixture_id:(row.fixture_id||row.id||`${row.home_team}-${row.away_team}-${row.date_utc||''}`).trim(),
-        home_team:(row.home_team||row.Home||'').trim(),
-        away_team:(row.away_team||row.Away||'').trim(),
-        home_badge_url: pick(row,['home_badge_url','home_logo_url','home_logo','home_badge']),
-        away_badge_url: pick(row,['away_badge_url','away_logo_url','away_logo','away_badge']),
+        fixture_id: (row.fixture_id || row.id || `${row.home_team}-${row.away_team}-${row.date_utc || ''}`).trim(),
+        home_team: (row.home_team || row.Home || '').trim(),
+        away_team: (row.away_team || row.Away || '').trim(),
+        home_badge_url: pick(row, ['home_badge_url', 'home_logo_url', 'home_logo', 'home_badge']),
+        away_badge_url: pick(row, ['away_badge_url', 'away_logo_url', 'away_logo', 'away_badge']),
         date_utc: row.date_utc || row.date || '',
         competition: row.competition || row.league || '',
         stadium: row.stadium || '',
         city: row.city || '',
         country: row.country || row.venue_country || '',
-        latitude:  Number.isFinite(lat) ? lat : undefined,
+        latitude: Number.isFinite(lat) ? lat : undefined,
         longitude: Number.isFinite(lon) ? lon : undefined,
         predicted_winner: row.predicted_winner || '',
         confidence_ftr: +row.confidence_ftr || +row.confidence || 0,
-        xg_home:+row.xg_home||0, xg_away:+row.xg_away||0,
-        ppg_home:+row.ppg_home||0, ppg_away:+row.ppg_away||0,
-        over25_prob:+row.over25_prob||0,
-        btts_prob:+row.btts_prob||0,
-        key_players_shots:(row.key_players_shots||'').trim(),
-        key_players_tackles:(row.key_players_tackles||'').trim(),
-        key_players_bookings:(row.key_players_bookings||'').trim(),
-        __active:false,
+        xg_home: +row.xg_home || 0,
+        xg_away: +row.xg_away || 0,
+        ppg_home: +row.ppg_home || 0,
+        ppg_away: +row.ppg_away || 0,
+        over25_prob: +row.over25_prob || 0,
+        btts_prob: +row.btts_prob || 0,
+        key_players_shots: (row.key_players_shots || '').trim(),
+        key_players_tackles: (row.key_players_tackles || '').trim(),
+        key_players_bookings: (row.key_players_bookings || '').trim(),
+        __active: false,
         __hot: (+row.over25_prob || 0) >= 0.65 ||
                (+row.confidence_ftr || +row.confidence || 0) >= 0.75
       };
     })
     .filter(f => Number.isFinite(f.latitude) && Number.isFinite(f.longitude));
-    
-    showToast('success', `Loaded ${fixtures.length} fixtures`);
+
+  showToast('success', `Loaded ${fixtures.length} fixtures`);
 }
 
 // ----------------------------
 // Selection, hover, rail, panel
 // ----------------------------
-function handleHover(pt){
+function handleHover(pt) {
   const hoverMatch = pt ? (p => p === pt) : () => false;
 
   globe.pointRadius(p => {
@@ -2112,9 +2118,7 @@ function handleHover(pt){
   updateGlobeTooltip(pt);
 }
 
-
-
-function buildRail(items){
+function buildRail(items) {
   const rail = document.getElementById('fixture-rail');
   if (!rail) return;
 
@@ -2171,10 +2175,10 @@ function updateRailFlags() {
     if (!fixtureId) return;
 
     const visited = visitedFixtureIds.has(fixtureId);
-    const acca    = hasAccaForFixture(fixtureId);
+    const acca = hasAccaForFixture(fixtureId);
 
     const visitedEl = btn.querySelector('.rail-flag--visited');
-    const accaEl    = btn.querySelector('.rail-flag--acca');
+    const accaEl = btn.querySelector('.rail-flag--acca');
 
     if (visitedEl) {
       visitedEl.classList.toggle('rail-flag--on', !!visited);
@@ -2207,7 +2211,6 @@ function updateGlobeTooltip(pt) {
   const tip = el.globeTooltip;
   if (!tip || !camera || !el.globeWrap) return;
 
-  // Hide when nothing is hovered
   if (!pt) {
     tip.classList.remove('globe-tooltip--visible');
     tip.setAttribute('aria-hidden', 'true');
@@ -2234,25 +2237,21 @@ function updateGlobeTooltip(pt) {
     return;
   }
 
-  // Map NDC → canvas pixels, then into container space
   const containerRect = el.globeWrap.getBoundingClientRect();
-  const canvasRect    = renderer.domElement.getBoundingClientRect();
+  const canvasRect = renderer.domElement.getBoundingClientRect();
 
-  const relWidth  = canvasRect.width;
+  const relWidth = canvasRect.width;
   const relHeight = canvasRect.height;
 
   const offsetX = canvasRect.left - containerRect.left;
-  const offsetY = canvasRect.top  - containerRect.top;
+  const offsetY = canvasRect.top - containerRect.top;
 
-  const x = (ndc.x * 0.5 + 0.5) * relWidth  + offsetX;
+  const x = (ndc.x * 0.5 + 0.5) * relWidth + offsetX;
   const y = (-ndc.y * 0.5 + 0.5) * relHeight + offsetY;
 
   tip.style.left = `${x}px`;
-  tip.style.top  = `${y - 18}px`;
+  tip.style.top = `${y - 18}px`;
 
-
-
-  // Label: "Home vs Away • 20:00"
   const home = pt.home_team || pt.home || 'Home';
   const away = pt.away_team || pt.away || 'Away';
 
@@ -2276,13 +2275,11 @@ function updateGlobeTooltip(pt) {
   tip.setAttribute('aria-hidden', 'false');
 }
 
-
 function selectIndex(idx, { fly = false } = {}) {
   if (!visibleFixtures.length) return;
   const f = visibleFixtures[idx];
   if (!f) return;
 
-  // Debug: log fixture coordinates after offsets have been applied
   console.log('[OG coords]',
     f.fixture_id,
     '|', f.home_team, 'vs', f.away_team,
@@ -2293,7 +2290,6 @@ function selectIndex(idx, { fly = false } = {}) {
   currentFixture = f;
   visitedFixtureIds.add(f.fixture_id);
 
-  // Mark active
   visibleFixtures.forEach(it => it.__active = (it === f));
   globe
     .pointColor(d => {
@@ -2306,83 +2302,85 @@ function selectIndex(idx, { fly = false } = {}) {
     })
     .pointsTransitionDuration?.(260);
 
-  // Recenter camera on this fixture when we are "flying" to it
   if (fly) {
     centerCameraOnFixture(f);
   }
 
-  // Move the billboard / radar marker
   moveMarkerToFixture(f, { fly });
   updateStadiumCard(f);
 
-  // Update right-hand panel + bottom rail highlight
   renderPanel(f);
   syncRail(idx);
-  updateRailFlags();          //  update visited/acca dots
-  updateFixtureProgress();    //  keep "Explored X of Y" in sync
+  updateRailFlags();
+  updateFixtureProgress();
 }
 
-
-
-function elmEmpty(msg){
-  const d=document.createElement('div');
-  d.className='empty';
-  d.textContent=msg;
+function elmEmpty(msg) {
+  const d = document.createElement('div');
+  d.className = 'empty';
+  d.textContent = msg;
   return d;
 }
 
-function renderPanel(f){
+function renderPanel(f) {
   if (!f) return;
-  const fmt = iso=>{
-    try{
-      const d=new Date(iso);
-      const date=d.toLocaleDateString(undefined,{weekday:'short', day:'2-digit', month:'short'});
-      const time=d.toLocaleTimeString(undefined,{hour:'2-digit', minute:'2-digit'});
+  const fmt = iso => {
+    try {
+      const d = new Date(iso);
+      const date = d.toLocaleDateString(undefined, { weekday: 'short', day: '2-digit', month: 'short' });
+      const time = d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
       return `${date} · ${time} GMT`;
-    }catch{ return iso||''; }
+    } catch { return iso || ''; }
   };
-  el.fixtureTitle && (el.fixtureTitle.textContent = `${f.home_team} vs ${f.away_team}`);
-  el.fixtureContext && (el.fixtureContext.textContent = [
-    f.competition, fmt(f.date_utc), f.stadium && `${f.stadium} (${f.city||''})`, f.country
-  ].filter(Boolean).join(' • '));
+  if (el.fixtureTitle) el.fixtureTitle.textContent = `${f.home_team} vs ${f.away_team}`;
+  if (el.fixtureContext) {
+    el.fixtureContext.textContent = [
+      f.competition,
+      fmt(f.date_utc),
+      f.stadium && `${f.stadium} (${f.city || ''})`,
+      f.country
+    ].filter(Boolean).join(' • ');
+  }
 
-  setBadgeLocal(el.homeBadge,  f.home_badge_url || null, f.home_team);
-  setBadgeLocal(el.awayBadge,  f.away_badge_url || null, f.away_team);
+  setBadgeLocal(el.homeBadge, f.home_badge_url || null, f.home_team);
+  setBadgeLocal(el.awayBadge, f.away_badge_url || null, f.away_team);
 
-  if (el.matchList){
+  if (el.matchList) {
     clearNode(el.matchList);
     const mi = document.createElement('div');
     mi.innerHTML = `
-      <div><strong>Full-time prediction:</strong> ${f.predicted_winner||'–'} ${f.confidence_ftr ? `(${Math.round(f.confidence_ftr*100)}%)` : ''}</div>
-      <div><strong>xG edge:</strong> ${(f.xg_home||0).toFixed(1)} vs ${(f.xg_away||0).toFixed(1)}</div>
-      <div><strong>Points momentum:</strong> ${(f.ppg_home||0).toFixed(1)} PPG • ${(f.ppg_away||0).toFixed(1)} PPG</div>`;
+      <div><strong>Full-time prediction:</strong> ${f.predicted_winner || '–'} ${f.confidence_ftr ? `(${Math.round(f.confidence_ftr * 100)}%)` : ''}</div>
+      <div><strong>xG edge:</strong> ${(f.xg_home || 0).toFixed(1)} vs ${(f.xg_away || 0).toFixed(1)}</div>
+      <div><strong>Points momentum:</strong> ${(f.ppg_home || 0).toFixed(1)} PPG • ${(f.ppg_away || 0).toFixed(1)} PPG</div>`;
     el.matchList.appendChild(mi);
   }
 
-  if (el.watchlist){
+  if (el.watchlist) {
     clearNode(el.watchlist);
-    const shots = (f.key_players_shots||'').split(';').map(s=>s.trim()).filter(Boolean).slice(0,6);
-    if (shots.length){
-      shots.forEach(s=>{
-        const row=document.createElement('div');
-        row.className='row';
-        row.textContent=s;
+    const shots = (f.key_players_shots || '').split(';').map(s => s.trim()).filter(Boolean).slice(0, 6);
+    if (shots.length) {
+      shots.forEach(s => {
+        const row = document.createElement('div');
+        row.className = 'row';
+        row.textContent = s;
         el.watchlist.appendChild(row);
       });
-    } else el.watchlist.appendChild(elmEmpty('No player highlights available.'));
+    } else {
+      el.watchlist.appendChild(elmEmpty('No player highlights available.'));
+    }
   }
 
-  if (el.market){
+  if (el.market) {
     el.market.innerHTML = `
-      <div><strong>Over 2.5 goals:</strong> ${Math.round((f.over25_prob||0)*100)}%</div>
-      <div><strong>Both teams to score:</strong> ${Math.round((f.btts_prob ||0)*100)}%</div>`;
+      <div><strong>Over 2.5 goals:</strong> ${Math.round((f.over25_prob || 0) * 100)}%</div>
+      <div><strong>Both teams to score:</strong> ${Math.round((f.btts_prob || 0) * 100)}%</div>`;
   }
 
   renderCompetitionAccuracy(f.competition);
 }
 
 // ----------------------------
-// Header nav bindings (profile menu + side drawer)
+// Header nav bindings
 // ----------------------------
 function bindHeaderNav() {
   const profileBtn  = document.getElementById('btn-profile');
@@ -2396,10 +2394,11 @@ function bindHeaderNav() {
     });
   }
 
-  const btnMenu   = document.getElementById('btn-menu');
-  const sideDrawer= document.getElementById('side-drawer');
-  const scrim     = document.getElementById('scrim');
-  const btnClose  = document.getElementById('btn-close-drawer');
+  // Legacy side drawer support
+  const btnMenu = document.getElementById('btn-menu');
+  const sideDrawer = document.getElementById('side-drawer');
+  const scrim = document.getElementById('scrim');
+  const btnClose = document.getElementById('btn-close-drawer');
 
   if (btnMenu && sideDrawer && scrim) {
     const openDrawer = () => {
@@ -2417,14 +2416,43 @@ function bindHeaderNav() {
     btnClose?.addEventListener('click', closeDrawer);
     scrim.addEventListener('click', closeDrawer);
   }
+
+  // New hamburger / nav drawer
+  if (el.navBurger && el.navDrawer) {
+    el.navBurger.addEventListener('click', () => {
+      const isOpen = el.navDrawer.classList.contains('open');
+      if (isOpen) {
+        closeNavDrawer();
+      } else {
+        openNavDrawer();
+      }
+    });
+
+    el.navDrawer.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        closeNavDrawer();
+      });
+    });
+  }
 }
 
-function bindTabs(){
-  document.querySelectorAll('.tab')?.forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      document.querySelectorAll('.tab').forEach(b=>b.classList.remove('is-active'));
-      document.querySelectorAll('.tabpane').forEach(p=>p.classList.remove('is-active'));
+function bindTabs() {
+  document.querySelectorAll('.panel-tab, .tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.panel-tab, .tab').forEach(b => {
+        b.classList.remove('active');
+        b.classList.remove('is-active');
+        b.setAttribute('aria-selected', 'false');
+      });
+
+      document.querySelectorAll('.tabpane').forEach(p => {
+        p.classList.remove('is-active');
+      });
+
+      btn.classList.add('active');
       btn.classList.add('is-active');
+      btn.setAttribute('aria-selected', 'true');
+
       document.getElementById(`tab-${btn.dataset.tab}`)?.classList.add('is-active');
     });
   });
@@ -2438,7 +2466,7 @@ function openSheetForFixture(f) {
   sheet.setAttribute('aria-hidden', 'false');
 
   const titleEl = document.getElementById('sheet-title');
-  const bodyEl  = document.getElementById('sheet-body');
+  const bodyEl = document.getElementById('sheet-body');
 
   if (titleEl) {
     titleEl.textContent = `${f.home_team} vs ${f.away_team}`;
@@ -2447,8 +2475,8 @@ function openSheetForFixture(f) {
     const fmtTime = (iso) => {
       try {
         const d = new Date(iso);
-        const date = d.toLocaleDateString(undefined,{weekday:'short', day:'2-digit', month:'short'});
-        const time = d.toLocaleTimeString(undefined,{hour:'2-digit', minute:'2-digit'});
+        const date = d.toLocaleDateString(undefined, { weekday: 'short', day: '2-digit', month: 'short' });
+        const time = d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
         return `${date} · ${time}`;
       } catch { return iso || ''; }
     };
@@ -2459,9 +2487,9 @@ function openSheetForFixture(f) {
       <p><strong>Stadium:</strong> ${f.stadium || '—'}</p>
       <p><strong>City:</strong> ${f.city || '—'}</p>
       <p><strong>Country:</strong> ${f.country || '—'}</p>
-      <p><strong>Prediction:</strong> ${f.predicted_winner || '—'} ${f.confidence_ftr ? `(${Math.round(f.confidence_ftr*100)}%)` : ''}</p>
-      <p><strong>xG:</strong> ${(f.xg_home||0).toFixed(1)} vs ${(f.xg_away||0).toFixed(1)}</p>
-      <p><strong>PPG:</strong> ${(f.ppg_home||0).toFixed(1)} vs ${(f.ppg_away||0).toFixed(1)}</p>
+      <p><strong>Prediction:</strong> ${f.predicted_winner || '—'} ${f.confidence_ftr ? `(${Math.round(f.confidence_ftr * 100)}%)` : ''}</p>
+      <p><strong>xG:</strong> ${(f.xg_home || 0).toFixed(1)} vs ${(f.xg_away || 0).toFixed(1)}</p>
+      <p><strong>PPG:</strong> ${(f.ppg_home || 0).toFixed(1)} vs ${(f.ppg_away || 0).toFixed(1)}</p>
     `;
   }
 }
@@ -2474,7 +2502,7 @@ function closeSheet() {
 }
 
 function bindSheet() {
-  const sheet  = document.getElementById('sheet');
+  const sheet = document.getElementById('sheet');
   const handle = sheet?.querySelector('.sheet__handle');
   handle?.addEventListener('click', closeSheet);
 }
@@ -2482,7 +2510,7 @@ function bindSheet() {
 // ----------------------------
 // Marker creation & movement
 // ----------------------------
-function createMarker(){
+function createMarker() {
   const group = new THREE.Group();
   group.visible = false;
 
@@ -2498,7 +2526,7 @@ function createMarker(){
     const baseAlpha = 0.35 * (1 - i * 0.18);
 
     const ringGeom = new THREE.RingGeometry(inner, outer, 64);
-    const ringMat  = new THREE.MeshBasicMaterial({
+    const ringMat = new THREE.MeshBasicMaterial({
       color: new THREE.Color(COLORS.ring),
       transparent: true,
       opacity: baseAlpha,
@@ -2515,7 +2543,7 @@ function createMarker(){
   }
 
   const beamGeom = new THREE.CylinderGeometry(0.18, 0.28, 30, 24, 1, true);
-  const beamMat  = new THREE.MeshBasicMaterial({
+  const beamMat = new THREE.MeshBasicMaterial({
     color: 0x7df9c4,
     transparent: true,
     opacity: 0.0,
@@ -2552,18 +2580,18 @@ function createMarker(){
   };
 }
 
-function cancelRAF(handle){
+function cancelRAF(handle) {
   if (handle && handle.id) cancelAnimationFrame(handle.id);
 }
-function makeRAF(){
+function makeRAF() {
   return {
     id: null,
-    run(fn){
+    run(fn) {
       cancelRAF(this);
       const loop = () => { fn(); this.id = requestAnimationFrame(loop); };
       this.id = requestAnimationFrame(loop);
     },
-    cancel(){ cancelRAF(this); this.id = null; }
+    cancel() { cancelRAF(this); this.id = null; }
   };
 }
 
@@ -2574,31 +2602,30 @@ function slerpUnitVec(fromN, toN, t) {
 
   if (dot > 0.9995) return v0.lerp(v1, t).normalize();
   if (dot < -0.9995) {
-    const ortho = Math.abs(v0.x) < 0.9 ? new THREE.Vector3(1,0,0) : new THREE.Vector3(0,1,0);
-    const axis  = new THREE.Vector3().crossVectors(v0, ortho).normalize();
-    const q     = new THREE.Quaternion().setFromAxisAngle(axis, Math.PI * t);
+    const ortho = Math.abs(v0.x) < 0.9 ? new THREE.Vector3(1, 0, 0) : new THREE.Vector3(0, 1, 0);
+    const axis = new THREE.Vector3().crossVectors(v0, ortho).normalize();
+    const q = new THREE.Quaternion().setFromAxisAngle(axis, Math.PI * t);
     return v0.clone().applyQuaternion(q).normalize();
   }
 
   const angle = Math.acos(dot);
-  const axis  = new THREE.Vector3().crossVectors(v0, v1).normalize();
-  const q     = new THREE.Quaternion().setFromAxisAngle(axis, angle * t);
+  const axis = new THREE.Vector3().crossVectors(v0, v1).normalize();
+  const q = new THREE.Quaternion().setFromAxisAngle(axis, angle * t);
   return v0.clone().applyQuaternion(q).normalize();
 }
 
 function updateStadiumCard(f, { repositionOnly = false } = {}) {
-  const card    = el.stadiumCard;
-  const pin     = el.stadiumPin;
-  const stem    = el.stadiumStem;
+  const card = el.stadiumCard;
+  const pin = el.stadiumPin;
+  const stem = el.stadiumStem;
   const overlay = el.stadiumOverlay;
 
   if (!card || !el.globeWrap || !camera || !renderer) return;
 
-  // No fixture → hide everything
   if (!f) {
     card.classList.remove('stadium-card--visible');
     if (overlay) overlay.setAttribute('aria-hidden', 'true');
-    if (pin)  pin.style.opacity  = '0';
+    if (pin)  pin.style.opacity = '0';
     if (stem) stem.style.opacity = '0';
     lastStadiumFixtureId = null;
     return;
@@ -2609,84 +2636,73 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
   if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
     card.classList.remove('stadium-card--visible');
     if (overlay) overlay.setAttribute('aria-hidden', 'true');
-    if (pin)  pin.style.opacity  = '0';
+    if (pin)  pin.style.opacity = '0';
     if (stem) stem.style.opacity = '0';
     return;
   }
 
-  const R   = getGlobeRadius();
+  const R = getGlobeRadius();
   const dir = latLngToUnit(lat, lon).normalize();
   const worldPos = dir.clone().multiplyScalar(R * (1 + SURFACE_EPS));
 
-  // Project stadium point to clip space
   const ndc = worldPos.clone().project(camera);
   if (ndc.z > 1 || ndc.z < -1) {
-    // Behind camera → hide
     card.classList.remove('stadium-card--visible');
     if (overlay) overlay.setAttribute('aria-hidden', 'true');
-    if (pin)  pin.style.opacity  = '0';
+    if (pin)  pin.style.opacity = '0';
     if (stem) stem.style.opacity = '0';
     return;
   }
 
-  const rect    = el.globeWrap.getBoundingClientRect();
+  const rect = el.globeWrap.getBoundingClientRect();
   const anchorX = (ndc.x * 0.5 + 0.5) * rect.width;
   const anchorY = (-ndc.y * 0.5 + 0.5) * rect.height;
 
-  // --- Zoom-aware label width ---
-  // Card is full size when close to the globe; shrinks as we zoom out.
-  const Rg   = getGlobeRadius();
-  const dist = camera.position.length();          // distance from globe centre
-  const CLOSE = Rg * 1.2;                         // at or inside this = full size
-  const FAR   = Rg * 2.8;                         // at or beyond this = minimum size
+  const Rg = getGlobeRadius();
+  const dist = camera.position.length();
+  const CLOSE = Rg * 1.2;
+  const FAR = Rg * 2.8;
 
   let widthScale = 1;
   if (dist > CLOSE) {
-    const t = Math.min(1, Math.max(0, (dist - CLOSE) / (FAR - CLOSE))); // 0..1
-    widthScale = 1 - t * 0.35; // scale from 1.0 (close) down to 0.65 (far)
+    const t = Math.min(1, Math.max(0, (dist - CLOSE) / (FAR - CLOSE)));
+    widthScale = 1 - t * 0.35;
   }
 
-  const BASE_WIDTH = 220; // must match CSS width
+  const BASE_WIDTH = 220;
   const scaledWidthPx = BASE_WIDTH * widthScale;
   card.style.width = `${scaledWidthPx}px`;
 
-  // Measure card AFTER setting width
-  const cardWidth  = card.offsetWidth  || BASE_WIDTH;
+  const cardWidth = card.offsetWidth || BASE_WIDTH;
   const cardHeight = card.offsetHeight || 120;
 
-
-  // We want the *centre* of the card to sit above the stadium point
-  const GAP     = 18;  // distance between stadium point and card bottom
-  const MIN_TOP = 24;  // don’t let the card hug the very top
+  const GAP = 18;
+  const MIN_TOP = 24;
 
   let cardLeft = anchorX - cardWidth / 2;
-  let cardTop  = anchorY - GAP - cardHeight;
+  let cardTop = anchorY - GAP - cardHeight;
 
   if (cardTop < MIN_TOP) cardTop = MIN_TOP;
 
-  // Apply position directly (no smoothing / extra transforms)
   card.style.left = `${cardLeft}px`;
-  card.style.top  = `${cardTop}px`;
+  card.style.top = `${cardTop}px`;
 
-  // Pin = actual stadium projection
   if (pin) {
-    pin.style.left    = `${anchorX}px`;
-    pin.style.top     = `${anchorY}px`;
+    pin.style.left = `${anchorX}px`;
+    pin.style.top = `${anchorY}px`;
     pin.style.opacity = '1';
   }
 
-  // Stem: from card bottom-centre to stadium
   const cardBottomY = cardTop + cardHeight;
   if (stem) {
-    const stemTop    = Math.min(cardBottomY, anchorY);
+    const stemTop = Math.min(cardBottomY, anchorY);
     const stemBottom = Math.max(cardBottomY, anchorY);
-    stem.style.left   = `${anchorX}px`;
-    stem.style.top    = `${stemTop}px`;
+    stem.style.left = `${anchorX}px`;
+    stem.style.top = `${stemTop}px`;
     stem.style.height = `${Math.max(14, stemBottom - stemTop)}px`;
-    stem.style.opacity= '1';
+    stem.style.opacity = '1';
   }
 
-  // Content only changes when the fixture changes
   if (!repositionOnly && f.fixture_id !== lastStadiumFixtureId) {
     lastStadiumFixtureId = f.fixture_id;
 
@@ -2697,7 +2713,7 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
         weekday: 'short', day: '2-digit', month: 'short'
       });
       const timeStr = d.toLocaleTimeString(undefined, {
-        hour:'2-digit', minute:'2-digit'
+        hour: '2-digit', minute: '2-digit'
       });
       eyebrow = `${eyebrow} • ${dateStr} ${timeStr} GMT`;
     }
@@ -2717,8 +2733,8 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
     }
     if (el.stadiumStats) {
       const ftrPct  = f.confidence_ftr ? Math.round(f.confidence_ftr * 100) : null;
-      const overPct = f.over25_prob    ? Math.round(f.over25_prob * 100)    : null;
-      const bttsPct = f.btts_prob      ? Math.round(f.btts_prob * 100)      : null;
+      const overPct = f.over25_prob ? Math.round(f.over25_prob * 100) : null;
+      const bttsPct = f.btts_prob ? Math.round(f.btts_prob * 100) : null;
       el.stadiumStats.textContent =
         `OG Edge: ${
           ftrPct != null ? `Home ${ftrPct}%` : '—'
@@ -2747,12 +2763,11 @@ function updateStadiumCard(f, { repositionOnly = false } = {}) {
   card.classList.add('stadium-card--visible');
 }
 
-
 function moveMarkerToFixture(f, { fly = false } = {}) {
   if (!MARKER || !f) return;
 
   console.log('[marker] move to', f.home_team, f.city || f.country, f.latitude, f.longitude);
-  const S   = MARKER;
+  const S = MARKER;
   const lat = Number(f.latitude);
   const lon = Number(f.longitude);
   if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
@@ -2762,17 +2777,17 @@ function moveMarkerToFixture(f, { fly = false } = {}) {
 
   S.state.reqId++;
   const myReq = S.state.reqId;
-  const R     = getGlobeRadius();
+  const R = getGlobeRadius();
 
-  const toN   = latLngToUnit(lat, lon);
+  const toN = latLngToUnit(lat, lon);
   const fromN = S.group.visible ? S.group.position.clone().normalize() : toN.clone();
 
   const angle = Math.acos(THREE.MathUtils.clamp(fromN.dot(toN), -1, 1));
   const distK = angle * R;
-  const dur   = (fly && S.group.visible)
+  const dur = (fly && S.group.visible)
     ? THREE.MathUtils.clamp(distK * 2.0, 300, 900)
     : 0;
-  const t0    = performance.now();
+  const t0 = performance.now();
 
   S.raf.travel = S.raf.travel || makeRAF();
   S.raf.beam   = S.raf.beam   || makeRAF();
@@ -2792,14 +2807,14 @@ function moveMarkerToFixture(f, { fly = false } = {}) {
     const t = dur ? Math.min(1, (performance.now() - t0) / dur) : 1;
     const k = easeInOut(t);
 
-    const curN     = slerpUnitVec(fromN, toN, k);
+    const curN = slerpUnitVec(fromN, toN, k);
     const worldPos = curN.clone().multiplyScalar(R * (1 + SURFACE_EPS));
     S.group.position.copy(worldPos);
 
     const up = curN.clone().normalize();
     const toCam = camera.position.clone().sub(worldPos).normalize();
     let forward = toCam.clone().sub(up.clone().multiplyScalar(toCam.dot(up)));
-    if (forward.lengthSq() < 1e-6) forward = new THREE.Vector3(0,0,1);
+    if (forward.lengthSq() < 1e-6) forward = new THREE.Vector3(0, 0, 1);
     else forward.normalize();
     const right = new THREE.Vector3().crossVectors(forward, up).normalize();
     forward.crossVectors(up, right).normalize();
@@ -2811,7 +2826,6 @@ function moveMarkerToFixture(f, { fly = false } = {}) {
     if (t >= 1) {
       S.raf.travel.cancel();
 
-      // Beam animation
       S.beam.position.set(0, 0, 0);
       S.beam.quaternion.identity();
       S.beam.scale.set(1, 0.001, 1);
@@ -2823,14 +2837,13 @@ function moveMarkerToFixture(f, { fly = false } = {}) {
       S.raf.beam.run(() => {
         if (S.state.reqId !== myReq) { S.raf.beam.cancel(); return; }
         const tb = Math.min(1, (performance.now() - b0) / bd);
-        const e  = easeInOut(tb);
-        S.beam.scale.y          = 0.001 + e;
+        const e = easeInOut(tb);
+        S.beam.scale.y = 0.001 + e;
         S.beam.material.opacity = 0.5 * e;
         if (tb >= 1) S.raf.beam.cancel();
       });
 
-      // Radar breathing
-      const rings      = Array.isArray(S.radar) ? S.radar : (S.radar ? [S.radar] : []);
+      const rings = Array.isArray(S.radar) ? S.radar : (S.radar ? [S.radar] : []);
       const radarStart = performance.now();
       rings.forEach(r => { if (r) r.visible = true; });
 
@@ -2839,19 +2852,18 @@ function moveMarkerToFixture(f, { fly = false } = {}) {
           S.raf.radar.cancel();
           return;
         }
-        const now   = performance.now();
+        const now = performance.now();
         const tWave = (now - radarStart) / 800;
         rings.forEach((ring, idx) => {
           if (!ring) return;
-          const base  = ring.userData?.baseAlpha ?? 0.25;
+          const base = ring.userData?.baseAlpha ?? 0.25;
           const phase = tWave + idx * 0.8;
-          const sinVal= Math.sin(phase);
-          const wave  = 0.2 + 0.8 * Math.max(0, sinVal);
+          const sinVal = Math.sin(phase);
+          const wave = 0.2 + 0.8 * Math.max(0, sinVal);
           ring.material.opacity = base * wave;
         });
       });
 
-            // WebGL billboard pill disabled — HTML hero card handles stadium info now
       S.billboard.visible = false;
       S.billboard.material.opacity = 0.0;
       S.billboard.material.map = null;
@@ -2898,15 +2910,12 @@ const API = {
 };
 
 // ---------- Bet Checker ----------
-
-// ✅ Correct OCR helper (this is what runBetChecker calls)
 async function ocrImageOrPdf(file) {
   if (!window.Tesseract) throw new Error('OCR engine not loaded');
   const { data } = await window.Tesseract.recognize(file, 'eng', { logger: () => {} });
   return (data && data.text) ? data.text : '';
 }
 
-// --- Helpers for BetChecker parsers ---
 function fracToDecimal(fracStr) {
   const m = String(fracStr).trim().match(/^(\d+)\s*\/\s*(\d+)$/);
   if (!m) return null;
@@ -2916,31 +2925,28 @@ function fracToDecimal(fracStr) {
   return 1 + num / den;
 }
 
-// Generic “TeamA v TeamB” parser – works for classic match slips
 function parseGenericSlip(text) {
   const lines = String(text).split(/\r?\n/).map(s => s.trim()).filter(Boolean);
   const legs = [];
 
   for (let i = 0; i < lines.length; i++) {
     const L = lines[i];
-    // “TeamA v TeamB” / “TeamA vs TeamB”
     const m = L.match(/^\s*([A-Za-z0-9 .'-]+)\s+(?:V|VS\.?)\s+([A-Za-z0-9 .'-]+)\s*$/i);
     if (!m) continue;
 
     const home = m[1].trim();
     const away = m[2].trim();
 
-    // Look ahead a few lines for the market/price
     for (let j = 1; j <= 3 && (i + j) < lines.length; j++) {
       const M = lines[i + j];
       let market = null;
-      let pick   = null;
+      let pick = null;
 
       if (/OVER\s*2\.?5/i.test(M))      { market = 'OVER_UNDER_2_5'; pick = 'OVER'; }
       else if (/UNDER\s*2\.?5/i.test(M)){ market = 'OVER_UNDER_2_5'; pick = 'UNDER'; }
       else if (/BOTH\s*TEAMS\s*TO\s*SCORE|BTTS/i.test(M)) {
         market = 'BTTS';
-        pick   = /\bNO\b/i.test(M) ? 'NO' : 'YES';
+        pick = /\bNO\b/i.test(M) ? 'NO' : 'YES';
       } else if (/(?:^|\s)(?:1X2|HOME|AWAY|DRAW|1|2|X)(?:\s|$)/i.test(M)) {
         market = 'FTR';
         if      (/\bDRAW\b|(?:^|\s)X(?:\s|$)/i.test(M)) pick = 'DRAW';
@@ -2952,27 +2958,26 @@ function parseGenericSlip(text) {
 
       let price = null;
       const frac = M.match(/(\d+)\s*\/\s*(\d+)/);
-      const dec  = M.match(/(\d+(?:\.\d+)?)/);
+      const dec = M.match(/(\d+(?:\.\d+)?)/);
       if (frac)      price = (parseFloat(frac[1]) / parseFloat(frac[2])) + 1;
       else if (dec)  price = parseFloat(dec[1]);
 
       legs.push({
-        teamHome:   home,
-        teamAway:   away,
+        teamHome: home,
+        teamAway: away,
         market,
-        selection:  pick || '—',
+        selection: pick || '—',
         price,
-        bookmaker:  null,
+        bookmaker: null,
         kickoffUTC: null
       });
-      break; // stop after first market line for this fixture
+      break;
     }
   }
 
   return { legs, raw: lines.slice(0, 60).join('\n') };
 }
 
-// --- Betfred-specific parser (team total 1.5+ etc) ---
 function parseBetfred(text) {
   const lines = String(text)
     .split(/\r?\n/)
@@ -2981,9 +2986,7 @@ function parseBetfred(text) {
 
   const legs = [];
 
-  // Pattern: "Spain total OVER 1.5- 2/7"
   const reTeamTotal = /^(.+?)\s+TOTAL\s+OVER\s+([0-9.]+)\s*-\s*([0-9]+\/[0-9]+)/i;
-  // Pattern: "Over 1.5-1/9" (no team name)
   const reBareOver  = /^OVER\s+([0-9.]+)\s*-\s*([0-9]+\/[0-9]+)/i;
 
   for (let i = 0; i < lines.length; i++) {
@@ -2991,19 +2994,19 @@ function parseBetfred(text) {
 
     let m = reTeamTotal.exec(line);
     if (m) {
-      const team    = m[1].trim();
+      const team = m[1].trim();
       const goalVal = m[2];
-      const frac    = m[3];
-      const price   = fracToDecimal(frac);
+      const frac = m[3];
+      const price = fracToDecimal(frac);
 
       legs.push({
-        teamHome:      team,
-        teamAway:      '',
-        market:        'TEAM_GOALS_OVER',
-        selection:     `OVER_${goalVal}`,
+        teamHome: team,
+        teamAway: '',
+        market: 'TEAM_GOALS_OVER',
+        selection: `OVER_${goalVal}`,
         price,
-        bookmaker:     'BETFRED',
-        kickoffUTC:    null
+        bookmaker: 'BETFRED',
+        kickoffUTC: null
       });
       continue;
     }
@@ -3011,17 +3014,17 @@ function parseBetfred(text) {
     m = reBareOver.exec(line);
     if (m) {
       const goalVal = m[1];
-      const frac    = m[2];
-      const price   = fracToDecimal(frac);
+      const frac = m[2];
+      const price = fracToDecimal(frac);
 
       legs.push({
-        teamHome:      'TOTAL_GOALS',
-        teamAway:      '',
-        market:        'GOALS_OVER',
-        selection:     `OVER_${goalVal}`,
+        teamHome: 'TOTAL_GOALS',
+        teamAway: '',
+        market: 'GOALS_OVER',
+        selection: `OVER_${goalVal}`,
         price,
-        bookmaker:     'BETFRED',
-        kickoffUTC:    null
+        bookmaker: 'BETFRED',
+        kickoffUTC: null
       });
     }
   }
@@ -3029,7 +3032,6 @@ function parseBetfred(text) {
   return { legs, raw: lines.slice(0, 60).join('\n') };
 }
 
-// --- Bookie detection (MVP: just enough for routing) ---
 function detectBookie(text) {
   const upper = String(text).toUpperCase();
   if (upper.includes('BET365'))   return 'BET365';
@@ -3040,13 +3042,11 @@ function detectBookie(text) {
   return 'GENERIC';
 }
 
-// --- Bet365 parser (goals, team goals, BTTS, cards, simple corners) ---
 function parseBet365(text) {
-  const raw   = String(text);
+  const raw = String(text);
   const lines = raw.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
-  const legs  = [];
+  const legs = [];
 
-  // Try to detect any "TeamA v TeamB" line as a global fixture fallback
   let fixtureHome = '';
   let fixtureAway = '';
   for (const L of lines) {
@@ -3060,22 +3060,18 @@ function parseBet365(text) {
 
   const cleanTeamName = (name) => {
     let t = String(name || '').trim();
-    // strip obvious bullets / symbols
     t = t.replace(/^[^A-Za-z0-9]+/, '').trim();
-    // strip leading "o " bullet
     if (t.toLowerCase().startsWith('o ')) t = t.slice(2).trim();
-    // strip stray bullets again
     t = t.replace(/^[•\-–]+\s*/, '');
     return t;
   };
 
-  // Regexes — allow leading bullets/icons before "Over"
   const reTeamOverGoals =
-    /^[^A-Za-z0-9]*(.+?)\s+Over\s+([0-9]+(?:\.[0-9]+)?)\s+([0-9]+\/[0-9]+)/i; // "Celta Vigo Over 0.5 2/7"
+    /^[^A-Za-z0-9]*(.+?)\s+Over\s+([0-9]+(?:\.[0-9]+)?)\s+([0-9]+\/[0-9]+)/i;
   const reOverGoals =
     /^[^A-Za-z0-9]*Over\s+([0-9]+(?:\.[0-9]+)?)\s+Goals(?:\s+in\s+the\s+Match|\s+in\s+Match|\s+in\s+90\s+Minutes)?/i;
   const reOverBare =
-    /^[^A-Za-z0-9]*Over\s*([0-9]+(?:\.[0-9]+)?)\s+([0-9]+\/[0-9]+)/i; // "© Over3.0 1/4"
+    /^[^A-Za-z0-9]*Over\s*([0-9]+(?:\.[0-9]+)?)\s+([0-9]+\/[0-9]+)/i;
   const reOverCards =
     /^[^A-Za-z0-9]*Over\s+(\d+)\s+Cards\b/i;
   const reBTTS =
@@ -3089,18 +3085,15 @@ function parseBet365(text) {
     reBTTS.test(s);
 
   const findNearbyPrice = (startIdx) => {
-    // Search this line + next 2 for a fractional or decimal price
     for (let j = 0; j <= 2 && (startIdx + j) < lines.length; j++) {
       const cand = lines[startIdx + j];
 
-      // fractional like "2/7"
       const fracMatch = cand.match(/(\d+)\s*\/\s*(\d+)/);
       if (fracMatch) {
         const dec = fracToDecimal(fracMatch[0]);
         if (dec != null) return dec;
       }
 
-      // decimal like "1.80"
       const decMatch = cand.match(/\b(\d+(?:\.\d+)?)\b/);
       if (decMatch) {
         const v = parseFloat(decMatch[1]);
@@ -3110,7 +3103,6 @@ function parseBet365(text) {
     return null;
   };
 
-  // Look forward from a selection line to find the next two team names
   const findFixtureAfter = (startIdx) => {
     let team1 = '';
     let team2 = '';
@@ -3118,18 +3110,14 @@ function parseBet365(text) {
     for (let k = 1; k <= 8 && (startIdx + k) < lines.length; k++) {
       const txt = lines[startIdx + k];
 
-      // Stop if we hit another obvious selection line and we haven't found anything yet
       if (isSelectionLine(txt) && !team1 && !team2) break;
-      // Stop once we’ve found two team names
       if (team1 && team2) break;
 
-      // Extract leading wordy chunk as candidate team name
       const m = txt.match(/^[^A-Za-z0-9]*([A-Za-z][A-Za-z .']+)/);
       if (!m) continue;
 
       let candidate = cleanTeamName(m[1]);
 
-      // Filter out obvious non-team stuff (days, generic labels)
       if (/^(mon|tue|wed|thu|fri|sat|sun)\b/i.test(candidate)) continue;
       if (/^(bet builder|cash out|stake|to return)/i.test(candidate)) continue;
 
@@ -3153,26 +3141,25 @@ function parseBet365(text) {
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
 
-    // --- Team goals: "Celta Vigo Over 0.5 2/7" ---
     let m = line.match(reTeamOverGoals);
     if (m) {
-      let team    = cleanTeamName(m[1]);
+      let team = cleanTeamName(m[1]);
       const goalStr = m[2];
-      const frac    = m[3];
-      const price   = fracToDecimal(frac);
+      const frac = m[3];
+      const price = fracToDecimal(frac);
 
       const fx = findFixtureAfter(i);
       const fixture_label =
         fx.home && fx.away ? `${fx.home} vs ${fx.away}` : '';
 
       legs.push({
-        teamHome:   team,          // emphasise the team whose goals we're backing
-        teamAway:   '',
+        teamHome: team,
+        teamAway: '',
         fixture_label,
-        market:     'TEAM_GOALS_OVER',
-        selection:  `OVER_${goalStr}`,
+        market: 'TEAM_GOALS_OVER',
+        selection: `OVER_${goalStr}`,
         price,
-        bookmaker:  'BET365',
+        bookmaker: 'BET365',
         kickoffUTC: null
       });
       continue;
@@ -3182,100 +3169,98 @@ function parseBet365(text) {
     if (m) {
       const cards = m[1];
       const price = findNearbyPrice(i);
-      const fx    = findFixtureAfter(i);
+      const fx = findFixtureAfter(i);
       const fixture_label =
         fx.home && fx.away ? `${fx.home} vs ${fx.away}` : '';
-    
+
       legs.push({
-        teamHome:   fx.home,
-        teamAway:   fx.away,
+        teamHome: fx.home,
+        teamAway: fx.away,
         fixture_label,
-        market:     'CARDS_OVER',
-        selection:  `OVER_${cards}`,
+        market: 'CARDS_OVER',
+        selection: `OVER_${cards}`,
         price,
-        bookmaker:  'BET365',
+        bookmaker: 'BET365',
         kickoffUTC: null
       });
       continue;
     }
-
 
     m = line.match(reOverGoals);
     if (m) {
       const goalStr = m[1];
-      const price   = findNearbyPrice(i);
-      const fx      = findFixtureAfter(i);
+      const price = findNearbyPrice(i);
+      const fx = findFixtureAfter(i);
       const fixture_label =
         fx.home && fx.away ? `${fx.home} vs ${fx.away}` : '';
-    
-      let market    = 'GOALS_OVER';
+
+      let market = 'GOALS_OVER';
       let selection = `OVER_${goalStr}`;
       if (goalStr === '2.5' || goalStr === '2.50') {
-        market    = 'OVER_UNDER_2_5';
+        market = 'OVER_UNDER_2_5';
         selection = 'OVER';
       }
-    
+
       legs.push({
-        teamHome:   fx.home || 'TOTAL_GOALS',
-        teamAway:   fx.away || '',
+        teamHome: fx.home || 'TOTAL_GOALS',
+        teamAway: fx.away || '',
         fixture_label,
         market,
         selection,
         price,
-        bookmaker:  'BET365',
+        bookmaker: 'BET365',
         kickoffUTC: null
       });
       continue;
     }
-
 
     m = line.match(reOverBare);
     if (m) {
       const goalStr = m[1];
-      const frac    = m[2];
-      const price   = fracToDecimal(frac);
-      const fx      = findFixtureAfter(i);
+      const frac = m[2];
+      const price = fracToDecimal(frac);
+      const fx = findFixtureAfter(i);
       const fixture_label =
         fx.home && fx.away ? `${fx.home} vs ${fx.away}` : '';
-    
+
       legs.push({
-        teamHome:   fx.home,
-        teamAway:   fx.away,
+        teamHome: fx.home,
+        teamAway: fx.away,
         fixture_label,
-        market:     'CORNERS_OVER',
-        selection:  `OVER_${goalStr}`,
+        market: 'CORNERS_OVER',
+        selection: `OVER_${goalStr}`,
         price,
-        bookmaker:  'BET365',
+        bookmaker: 'BET365',
         kickoffUTC: null
       });
       continue;
     }
-      if (reBTTS.test(line)) {
-        const fx = findFixtureAfter(i);
-        const fixture_label =
-          fx.home && fx.away ? `${fx.home} vs ${fx.away}` : '';
-      
-        const search = [lines[i], lines[i + 1] || ''].join(' ');
-        let selection = 'YES';
-        if (/\bNO\b/i.test(search)) selection = 'NO';
-      
-        const price = findNearbyPrice(i);
-      
-        legs.push({
-          teamHome:   fx.home,
-          teamAway:   fx.away,
-          fixture_label,
-          market:     'BTTS',
-          selection,
-          price,
-          bookmaker:  'BET365',
-          kickoffUTC: null
-        });
-        continue;
+
+    if (reBTTS.test(line)) {
+      const fx = findFixtureAfter(i);
+      const fixture_label =
+        fx.home && fx.away ? `${fx.home} vs ${fx.away}` : '';
+
+      const search = [lines[i], lines[i + 1] || ''].join(' ');
+      let selection = 'YES';
+      if (/\bNO\b/i.test(search)) selection = 'NO';
+
+      const price = findNearbyPrice(i);
+
+      legs.push({
+        teamHome: fx.home,
+        teamAway: fx.away,
+        fixture_label,
+        market: 'BTTS',
+        selection,
+        price,
+        bookmaker: 'BET365',
+        kickoffUTC: null
+      });
+      continue;
     }
   }
 
-  // If nothing Bet365-specific matched, fall back to generic parsing
   if (!legs.length) {
     return parseGenericSlip(text);
   }
@@ -3283,12 +3268,9 @@ function parseBet365(text) {
   return { legs, raw: lines.slice(0, 60).join('\n') };
 }
 
-
-// --- Dispatcher: choose parser based on bookie / format ---
 function parseSlipText(text) {
   const bookie = detectBookie(text);
 
-  // Betfred totals first – these patterns are very specific
   if (bookie === 'BETFRED') {
     const bf = parseBetfred(text);
     if (bf.legs && bf.legs.length) return bf;
@@ -3304,41 +3286,35 @@ function parseSlipText(text) {
     if (paddy.legs && paddy.legs.length) return paddy;
   }
 
-  // Coral / William Hill can also fall back to generic for now
   return parseGenericSlip(text);
 }
-// --- Slip meta extraction (Report 1: header + stake/return) ---
+
 function extractSlipMeta(text) {
   const lines = String(text).split(/\r?\n/).map(s => s.trim()).filter(Boolean);
 
-  // Bookmaker from text
   const bookmaker = detectBookie(text) || 'UNKNOWN';
 
-  // Created time line (e.g. "Thu 06 Nov 16:13 bet365")
   const createdLine = lines.find(l => /\b\d{2}:\d{2}\b/.test(l) && /bet365/i.test(l)) || '';
-  const createdAt   = createdLine || null;
+  const createdAt = createdLine || null;
 
-  // Stake / To Return
-  let stake   = null;
-  let ret     = null;
+  let stake = null;
+  let ret = null;
   let currency = '£';
 
   for (let i = 0; i < lines.length; i++) {
     const L = lines[i];
     if (/stake/i.test(L) && /return/i.test(L)) {
       const next = lines[i + 1] || '';
-      // e.g. "£9.00 £18.80"
       const m = next.match(/([£€$])\s*([\d.,]+)\s+([£€$])\s*([\d.,]+)/);
       if (m) {
         currency = m[1];
-        stake    = parseFloat(m[2].replace(/,/g, '')) || null;
-        ret      = parseFloat(m[4].replace(/,/g, '')) || null;
+        stake = parseFloat(m[2].replace(/,/g, '')) || null;
+        ret = parseFloat(m[4].replace(/,/g, '')) || null;
       }
       break;
     }
   }
 
-  // Bet type: look for "Bet Builder", "Single", "Accumulator" etc.
   const betTypeLine = lines.find(l => /bet builder|bet\s+builder|\bacca\b|single|accumulator/i.test(l)) || '';
   const betType = betTypeLine || null;
 
@@ -3352,13 +3328,9 @@ async function runBetChecker(file) {
   try {
     const text = await ocrImageOrPdf(file);
 
-    // Log OCR so we can keep refining parsers
     console.log('[BetChecker OCR raw text]\n', text);
 
-    // REPORT 1: slip meta from raw text
     const meta = extractSlipMeta(text);
-
-    // REPORT 2: structured legs (markets / selections / prices)
     const parsed = parseSlipText(text);
     console.log('[BetChecker parsed legs]', parsed.legs);
 
@@ -3370,7 +3342,6 @@ async function runBetChecker(file) {
       return;
     }
 
-    // ---- Save for OG Co-Pilot (slip + meta) ----
     lastParsedSlipForChat = {
       meta,
       legs: parsed.legs
@@ -3380,13 +3351,11 @@ async function runBetChecker(file) {
     } catch (e) {
       console.warn('[BetChecker] failed to store og_last_slip', e);
     }
-    // -------------------------------------------
 
     let scored;
     if (out) out.innerHTML = '<div class="muted">Scoring legs…</div>';
 
     try {
-      // Real backend path (will 405 on GitHub Pages)
       scored = await API.scoreSlip({ legs: parsed.legs });
     } catch (err) {
       console.warn('[BetChecker] scoreSlip failed, falling back to parsed legs only', err);
@@ -3405,9 +3374,8 @@ async function runBetChecker(file) {
 
     const container = document.createElement('div');
 
-    // --------- Card 1: Slip Overview (Report 1) ---------
     const stakeText = meta.stake != null ? `${meta.currency}${meta.stake.toFixed(2)}` : '—';
-    const retText   = meta.ret   != null ? `${meta.currency}${meta.ret.toFixed(2)}`   : '—';
+    const retText = meta.ret != null ? `${meta.currency}${meta.ret.toFixed(2)}` : '—';
 
     const overview = document.createElement('div');
     overview.className = 'insight-card';
@@ -3422,7 +3390,6 @@ async function runBetChecker(file) {
       </ul>`;
     container.appendChild(overview);
 
-    // --------- Card 2: Model Summary (will be mostly zero in demo) ---------
     const sum = scored.summary || {};
     const summaryCard = document.createElement('div');
     summaryCard.className = 'insight-card';
@@ -3435,15 +3402,14 @@ async function runBetChecker(file) {
       </div>`;
     container.appendChild(summaryCard);
 
-    // --------- Cards 3+: each leg ---------
     (scored.legs || []).forEach((lg, i) => {
       const card = document.createElement('div');
       card.className = 'insight-card';
 
       const probPct = lg.prob != null ? Math.round(lg.prob * 100) + '%' : '—';
-      const fairTxt  = lg.fair  != null ? lg.fair.toFixed(2)  : '—';
+      const fairTxt = lg.fair != null ? lg.fair.toFixed(2) : '—';
       const priceTxt = lg.price != null ? lg.price.toFixed(2) : '—';
-      const edgeTxt  = lg.edgePct != null
+      const edgeTxt = lg.edgePct != null
         ? (lg.edgePct >= 0 ? '+' : '') + lg.edgePct.toFixed(1) + '%'
         : '—';
 
@@ -3496,9 +3462,8 @@ async function runBetChecker(file) {
   }
 }
 
-// Wire up BetChecker inputs (BetChecker view + floating home bar)
+// Wire up BetChecker inputs
 {
-  // BetChecker view
   const bcUpload = document.getElementById('bc-upload');
   bcUpload?.addEventListener('change', (e) => {
     const f = e.target.files?.[0];
@@ -3506,12 +3471,10 @@ async function runBetChecker(file) {
     e.target.value = '';
   });
 
-  // Floating upload on Home
   const homeUpload = document.getElementById('bet-upload');
   homeUpload?.addEventListener('change', (e) => {
     const f = e.target.files?.[0];
     if (f) {
-      // Show results in the BetChecker view
       window.location.hash = '#/bet-checker';
       runBetChecker(f);
     }
@@ -3519,13 +3482,11 @@ async function runBetChecker(file) {
   });
 }
 
-
-
 // ---------- Acca Builder via API (legacy view) ----------
 async function runAccaSuggest() {
   const league = (document.getElementById('ab-league')?.value || 'ALL');
   const market = (document.getElementById('ab-market')?.value || 'ou25');
-  const legs   = (document.getElementById('ab-legs')?.value || '4').split(' ')[0];
+  const legs = (document.getElementById('ab-legs')?.value || '4').split(' ')[0];
 
   const grid = document.getElementById('ab-grid');
   if (!grid) return;
@@ -3533,30 +3494,31 @@ async function runAccaSuggest() {
 
   try {
     const data = await API.accaSuggest({
-      market, league, from: new Date().toISOString().slice(0,10), to: '', limit: 50
+      market, league, from: new Date().toISOString().slice(0, 10), to: '', limit: 50
     });
     grid.innerHTML = '';
     const chosen = [];
-    (data.items || []).slice(0, 30).forEach((m, i)=>{
+    (data.items || []).slice(0, 30).forEach((m, i) => {
       const card = document.createElement('div');
       card.className = 'insight-card';
-      const prob = Math.round((m.prob||0)*100);
+      const prob = Math.round((m.prob || 0) * 100);
       const edge = m.edgePct != null ? `${m.edgePct.toFixed(1)}%` : '—';
       card.innerHTML = `
         <h2>${m.home} vs ${m.away}</h2>
         <ul>
           <li><strong>Market:</strong> ${m.market} · <strong>Pick:</strong> ${m.pick || '—'}</li>
-          <li><strong>%:</strong> ${prob}% · <strong>Fair:</strong> ${m.fair?.toFixed?.(2)??'—'} · <strong>Price:</strong> ${m.price?.toFixed?.(2)??'—'} · <strong>Edge:</strong> ${edge}</li>
+          <li><strong>%:</strong> ${prob}% · <strong>Fair:</strong> ${m.fair?.toFixed?.(2) ?? '—'} · <strong>Price:</strong> ${m.price?.toFixed?.(2) ?? '—'} · <strong>Edge:</strong> ${edge}</li>
         </ul>
         <button class="cta" data-add="${i}">Add leg</button>`;
       grid.appendChild(card);
     });
 
-    grid.querySelectorAll('button[data-add]').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
+    grid.querySelectorAll('button[data-add]').forEach(btn => {
+      btn.addEventListener('click', () => {
         const idx = +btn.getAttribute('data-add');
         chosen.push(data.items[idx]);
-        btn.textContent = 'Added ✓'; btn.disabled = true;
+        btn.textContent = 'Added ✓';
+        btn.disabled = true;
         if (chosen.length === Number(legs)) {
           optimiseAcca(chosen, market);
         }
@@ -3571,19 +3533,19 @@ async function optimiseAcca(chosen, market) {
   const grid = document.getElementById('ab-grid');
   if (!grid) return;
   try {
-    const res = await API.accaOptimise({ market, legs: chosen, strategy: { objective:'max_ev', stake:10 }});
+    const res = await API.accaOptimise({ market, legs: chosen, strategy: { objective: 'max_ev', stake: 10 } });
     grid.innerHTML = '';
     const sum = document.createElement('div');
     sum.className = 'insight-card';
     sum.innerHTML = `<h2>Optimised Acca</h2>
-      <div><strong>EV:</strong> ${(res.evPct??0).toFixed(1)}% · <strong>Prob:</strong> ${Math.round((res.comboProb??0)*100)}% · <strong>Payout:</strong> £${(res.payout??0).toFixed(2)}</div>`;
+      <div><strong>EV:</strong> ${(res.evPct ?? 0).toFixed(1)}% · <strong>Prob:</strong> ${Math.round((res.comboProb ?? 0) * 100)}% · <strong>Payout:</strong> £${(res.payout ?? 0).toFixed(2)}</div>`;
     grid.appendChild(sum);
 
-    (res.legs||chosen).forEach((lg, i)=>{
+    (res.legs || chosen).forEach((lg, i) => {
       const c = document.createElement('div');
       c.className = 'insight-card';
-      c.innerHTML = `<h2>Leg ${i+1}: ${lg.home} vs ${lg.away}</h2>
-        <div class="muted">${lg.market} • ${lg.pick} • ${Math.round((lg.prob||0)*100)}% @ ${lg.price?.toFixed?.(2)??'—'}</div>`;
+      c.innerHTML = `<h2>Leg ${i + 1}: ${lg.home} vs ${lg.away}</h2>
+        <div class="muted">${lg.market} • ${lg.pick} • ${Math.round((lg.prob || 0) * 100)}% @ ${lg.price?.toFixed?.(2) ?? '—'}</div>`;
       grid.appendChild(c);
     });
     showToast('success', 'Acca ready');
@@ -3591,12 +3553,10 @@ async function optimiseAcca(chosen, market) {
     grid.innerHTML = `<div class="muted">Optimiser failed: ${e.message}</div>`;
   }
 }
-document.getElementById('ab-build')?.addEventListener('click', ()=> runAccaSuggest());
+document.getElementById('ab-build')?.addEventListener('click', () => runAccaSuggest());
 
 // ---------- OG Co-Pilot ----------
-
 function buildCopilotContext() {
-  // Last slip from Bet Checker (if any)
   const slipJson = window.sessionStorage.getItem('og_last_slip');
   let slip = null;
   try {
@@ -3605,7 +3565,6 @@ function buildCopilotContext() {
     console.warn('[CoPilot] failed to parse og_last_slip', e);
   }
 
-  // Current "primary" fixture from the globe, if available
   const f = (visibleFixtures && visibleFixtures[0]) || null;
   const fixture = f ? {
     home:   f.home_team,
@@ -3614,7 +3573,6 @@ function buildCopilotContext() {
     league: f.competition
   } : null;
 
-  // Simple bankroll stub (set via Co-Pilot form)
   const bankrollJson = window.localStorage.getItem('og_bankroll');
   let bankroll = null;
   try {
@@ -3624,12 +3582,11 @@ function buildCopilotContext() {
     console.warn('[CoPilot] failed to parse og_bankroll', msg);
   }
 
-  // This is what we send to the backend demo API
   return { fixture, slip, bankroll };
 }
 
 async function sendCopilotMessage(text) {
-  const payload = { 
+  const payload = {
     messages: [
       {
         role: 'system',
@@ -3652,10 +3609,9 @@ function appendChatLine(role, text) {
   wrap.scrollTop = wrap.scrollHeight;
 }
 
-// Wire text chat send button
 {
   const cpInput = document.getElementById('cp-input');
-  const cpSend  = document.getElementById('cp-send');
+  const cpSend = document.getElementById('cp-send');
 
   if (cpSend) {
     cpSend.addEventListener('click', async () => {
@@ -3676,20 +3632,18 @@ function appendChatLine(role, text) {
   }
 }
 
-// Bankroll UI in Co-Pilot (cp-bankroll / cp-target)
-(function initCopilotBankrollUI(){
-  const bnInput  = document.getElementById('cp-bankroll');
+(function initCopilotBankrollUI() {
+  const bnInput = document.getElementById('cp-bankroll');
   const tgtInput = document.getElementById('cp-target');
-  const btnSave  = document.getElementById('cp-save-bankroll');
+  const btnSave = document.getElementById('cp-save-bankroll');
 
   if (!bnInput || !tgtInput || !btnSave) return;
 
-  // Load any saved state
   const bankrollJson = window.localStorage.getItem('og_bankroll');
   if (bankrollJson) {
     try {
       const b = JSON.parse(bankrollJson);
-      if (b.weekly != null) bnInput.value  = b.weekly;
+      if (b.weekly != null) bnInput.value = b.weekly;
       if (b.target != null) tgtInput.value = b.target;
     } catch (e) {
       const msg = e && e.message ? e.message : String(e);
@@ -3711,14 +3665,12 @@ function appendChatLine(role, text) {
   });
 })();
 
-
 // ----------------------------
-// Demo Auth: Sign up / Sign in / Sign out
+// Demo Auth
 // ----------------------------
-
 function handleSignup() {
   const emailInput = document.getElementById('su-email');
-  const passInput  = document.getElementById('su-pass');
+  const passInput = document.getElementById('su-pass');
   if (!emailInput || !passInput) return;
 
   const email = (emailInput.value || '').trim();
@@ -3743,7 +3695,7 @@ function handleSignup() {
 
 function handleLogin() {
   const emailInput = document.getElementById('li-email');
-  const passInput  = document.getElementById('li-pass');
+  const passInput = document.getElementById('li-pass');
   if (!emailInput || !passInput) return;
 
   const email = (emailInput.value || '').trim();
@@ -3774,10 +3726,9 @@ function handleLogout() {
   window.location.hash = '#/login';
 }
 
-// Hook up auth forms (demo)
 {
-  const suBtn    = document.getElementById('su-submit');
-  const liBtn    = document.getElementById('li-submit');
+  const suBtn = document.getElementById('su-submit');
+  const liBtn = document.getElementById('li-submit');
   const logoutEl = document.querySelector('[data-action="logout"]');
 
   if (suBtn) suBtn.addEventListener('click', (e) => {
@@ -3813,7 +3764,6 @@ const ROUTES = {
 function showRoute(hash) {
   if (!hash) hash = '#/';
 
-  // Guarded routes: require login
   const guardedRoutes = ['#/acca-builder', '#/portfolio'];
   if (!currentUser && guardedRoutes.includes(hash)) {
     showToast('error', 'Please sign in to use Acca Builder and Portfolio');
@@ -3822,84 +3772,82 @@ function showRoute(hash) {
   }
 
   const id = ROUTES[hash] || 'view-home';
+  const route = normaliseRouteFromHash(hash);
 
-  // Toggle view visibility
   document.querySelectorAll('.view').forEach(v => {
     if (v.id === id) {
       v.classList.add('is-active');
       v.removeAttribute('hidden');
     } else {
       v.classList.remove('is-active');
-      v.setAttribute('hidden','');
+      v.setAttribute('hidden', '');
     }
   });
 
-  // Update nav state
-  document.querySelectorAll('[data-route]').forEach(a=>{
-    a.classList.toggle('is-active', a.getAttribute('href') === hash);
-    if (a.classList.contains('side-link')) {
-      a.classList.toggle('active', a.getAttribute('href') === hash);
-    }
-  });
+  updateAllNav(route);
 
-  // Close menus/drawers
   const profileMenu = document.getElementById('profile-menu');
-  const profileBtn  = document.getElementById('btn-profile');
+  const profileBtn = document.getElementById('btn-profile');
   profileMenu?.classList.remove('show');
-  profileBtn?.setAttribute('aria-expanded','false');
-  const drawer  = document.getElementById('side-drawer');
-  const scrim   = document.getElementById('scrim');
+  profileBtn?.setAttribute('aria-expanded', 'false');
+
+  const drawer = document.getElementById('side-drawer');
+  const scrim = document.getElementById('scrim');
   drawer?.classList.remove('show');
   scrim?.classList.remove('show');
-  drawer?.setAttribute('aria-hidden','true');
+  drawer?.setAttribute('aria-hidden', 'true');
 
-  // Control globe render loop
+  closeNavDrawer();
+
   isHomeActive = (id === 'view-home');
 
-  // Hide stadium card + tooltip when we’re not on the home view
   if (!isHomeActive) {
     updateStadiumCard(null);
     updateGlobeTooltip(null);
   }
 
-
-  // Render portfolio view on demand
   if (id === 'view-portfolio') {
     renderPortfolio();
     renderPortfolioStats();
   }
 }
 
+window.addEventListener('hashchange', () => {
+  showRoute(location.hash);
+  updateMobileNav(normaliseRouteFromHash(location.hash));
+});
 
-window.addEventListener('hashchange', ()=> showRoute(location.hash));
-window.addEventListener('DOMContentLoaded', ()=>{
+window.addEventListener('DOMContentLoaded', () => {
   if (!location.hash) location.hash = '#/';
   showRoute(location.hash);
-  init().catch(err=>{ console.error(err); showToast('error', String(err)); });
+  updateMobileNav(normaliseRouteFromHash(location.hash));
+  init().catch(err => {
+    console.error(err);
+    showToast('error', String(err));
+  });
 });
 
 // ----------------------------
 // Quick self-test for two known files
 // ----------------------------
-(function verifyLocalLogoSetup(){
+(function verifyLocalLogoSetup() {
   const tests = [
     './assets/assets/logos/arsenal.svg',
     './assets/assets/logos/fc-barcelona.svg'
   ];
-  tests.forEach(src=>{
+  tests.forEach(src => {
     const img = new Image();
-    img.onload  = () => console.log('%c[LOGOS] OK', 'color:#22c55e', src);
+    img.onload = () => console.log('%c[LOGOS] OK', 'color:#22c55e', src);
     img.onerror = () => console.warn('%c[LOGOS] 404', 'color:#f43f5e', src, '→ path or filename mismatch');
     img.src = src;
   });
 })();
 
-(function initBetCheckerTalkToOG(){
+(function initBetCheckerTalkToOG() {
   const btn = document.getElementById('bc-talk-og');
   if (!btn) return;
 
   btn.addEventListener('click', () => {
-    // Prefer persisted slip context
     const slipJson = window.sessionStorage.getItem('og_last_slip');
     let slip = null;
 
@@ -3911,7 +3859,6 @@ window.addEventListener('DOMContentLoaded', ()=>{
       }
     }
 
-    // Fallback to in-memory var if needed
     if (!slip && lastParsedSlipForChat) {
       slip = lastParsedSlipForChat;
       try {
@@ -3921,13 +3868,11 @@ window.addEventListener('DOMContentLoaded', ()=>{
       }
     }
 
-    // Still nothing? Then user really hasn’t parsed a slip yet
     if (!slip || !Array.isArray(slip.legs) || !slip.legs.length) {
       showToast('error', 'Upload and parse a slip first');
       return;
     }
 
-    // Ensure latest slip is saved, then jump to Co-Pilot
     try {
       window.sessionStorage.setItem('og_last_slip', JSON.stringify(slip));
     } catch (e) {
@@ -3939,10 +3884,10 @@ window.addEventListener('DOMContentLoaded', ()=>{
   });
 })();
 
-(function initGlobeFullscreen(){
-  const btn       = document.getElementById('globe-fullscreen-toggle');
-  const globePane = document.querySelector('.hero__globe');
-  const page      = document.querySelector('.page');
+(function initGlobeFullscreen() {
+  const btn = document.getElementById('globe-fullscreen-toggle');
+  const globePane = document.querySelector('.globe-canvas-wrap, .hero__globe');
+  const page = document.querySelector('.page');
   if (!btn || !globePane) return;
 
   btn.addEventListener('click', () => {
