@@ -2365,3 +2365,114 @@ h1, h2, h3, h4 {
   .mobile-bottom-nav { display: none !important; }
   .nav-burger { display: none !important; }
 }
+/* ===== OddsGenius small corrective patch ===== */
+
+/* 1) Critical: let router-hidden views actually disappear */
+[hidden] {
+  display: none !important;
+}
+
+/* 2) Tighter stadium card so it does not dominate the globe */
+.stadium-card {
+  width: 180px;
+  max-width: 180px;
+  padding: 10px 12px;
+}
+
+.stadium-card__body {
+  gap: 10px;
+}
+
+.stadium-card__crest {
+  width: 42px;
+  height: 42px;
+}
+
+.stadium-card__title {
+  font-size: 13px;
+  line-height: 1.15;
+}
+
+.stadium-card__sub,
+.stadium-card__stats {
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+.stadium-card__actions {
+  gap: 5px;
+}
+
+.stadium-card__btn {
+  padding: 7px 9px;
+  font-size: 10px;
+}
+
+/* 3) Better globe / panel balance */
+.hero {
+  grid-template-columns: 195px 1fr 340px;
+}
+
+.globe-canvas-wrap {
+  min-width: 0;
+}
+
+.insight-panel {
+  min-width: 0;
+}
+
+#globe-container {
+  min-height: 420px;
+}
+
+/* Slightly calmer competition strip footprint */
+.comp-accuracy {
+  padding: 8px 14px;
+}
+
+.comp-row {
+  gap: 10px;
+}
+
+.gauge {
+  min-width: 120px;
+}
+
+/* Keep layout comfortable on medium screens */
+@media (max-width: 1200px) {
+  .hero {
+    grid-template-columns: 175px 1fr 320px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+
+  #globe-container {
+    min-height: 360px;
+  }
+}
+
+@media (max-width: 768px) {
+  .stadium-card {
+    width: 170px;
+    max-width: 170px;
+    padding: 9px 10px;
+  }
+
+  .stadium-card__title {
+    font-size: 12px;
+  }
+
+  .stadium-card__sub,
+  .stadium-card__stats,
+  .stadium-card__btn {
+    font-size: 9px;
+  }
+
+  #globe-container {
+    min-height: 260px;
+  }
+}
