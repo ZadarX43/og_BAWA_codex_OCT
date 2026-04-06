@@ -34,7 +34,28 @@
     <link rel="modulepreload" href="./vendor/examples/jsm/postprocessing/UnrealBloomPass.js" />
     <link rel="modulepreload" href="./app.module.js" />
   </head>
-
+<nav class="mobile-bottom-nav" id="mobile-bottom-nav">
+  <a href="#/" class="mob-nav-item" data-route="/">
+    <span class="mob-nav-icon">🏠</span>
+    <span>Home</span>
+  </a>
+  <a href="#/bet-checker" class="mob-nav-item" data-route="/bet-checker">
+    <span class="mob-nav-icon">📋</span>
+    <span>Checker</span>
+  </a>
+  <a href="#/acca-builder" class="mob-nav-item" data-route="/acca-builder">
+    <span class="mob-nav-icon">⚡</span>
+    <span>Acca</span>
+  </a>
+  <a href="#/portfolio" class="mob-nav-item" data-route="/portfolio">
+    <span class="mob-nav-icon">📂</span>
+    <span>Portfolio</span>
+  </a>
+  <a href="#/copilot" class="mob-nav-item" data-route="/copilot">
+    <span class="mob-nav-icon">🤖</span>
+    <span>Co-Pilot</span>
+  </a>
+</nav>
   <body>
     <div id="scrim" class="scrim" aria-hidden="true"></div>
 
@@ -57,34 +78,50 @@
 
     <div class="page">
       <!-- ===== Header ===== -->
-      <header class="top-bar">
-        <div class="brand brand--xl">
-          <button id="btn-menu" class="header__menu" aria-label="Open menu">☰</button>
-          <span class="brand__name">Odds Genius</span>
-          <span class="brand__tagline">Sports Prediction Super Intelligence Made Easy</span>
-        </div>
-
-        <nav class="top-nav-pill" aria-label="Primary">
-          <a class="nav-link" href="#/" data-route>Home</a>
-          <a class="nav-link" href="#/bet-checker" data-route>Bet Checker</a>
-          <a class="nav-link" href="#/acca-builder" data-route>Acca Builder</a>
-          <a class="nav-link" href="#/portfolio" data-route>Portfolio</a>
-          <a class="nav-link" href="#/copilot" data-route>GPT 5 – OG Co Pilot</a>
-          <div class="profile">
-            <button id="btn-profile" class="profile-btn" aria-haspopup="menu" aria-expanded="false">
-              <span class="avatar">OG</span>
-              <span class="caret">▾</span>
-            </button>
-            <div id="profile-menu" class="profile-menu" role="menu" aria-hidden="true">
-              <a role="menuitem" class="profile-item" href="#/login" data-route>Login</a>
-              <a role="menuitem" class="profile-item" href="#/signup" data-route>Sign up</a>
-              <button type="button" class="profile-item" id="logout-btn" data-action="logout" style="display:none">
-                Log out
-              </button>
-            </div>
-          </div>
+      <header class="site-header">
+        <a href="#/" class="site-logo" aria-label="Odds Genius home">
+          <div class="logo-name">Odds <strong>Genius</strong></div>
+          <div class="logo-tag">Sports Prediction Super Intelligence Made Easy</div>
+        </a>
+      
+        <nav class="nav-tabs main-nav" aria-label="Primary">
+          <a class="nav-tab" href="#/" data-route="/">Home</a>
+          <a class="nav-tab" href="#/bet-checker" data-route="/bet-checker">Bet Checker</a>
+          <a class="nav-tab" href="#/acca-builder" data-route="/acca-builder">Acca Builder</a>
+          <a class="nav-tab" href="#/portfolio" data-route="/portfolio">Portfolio</a>
+          <a class="nav-tab" href="#/copilot" data-route="/copilot">GPT-5 Co-Pilot</a>
         </nav>
+      
+        <div class="nav-account">
+          <button id="btn-profile" class="profile-btn" aria-haspopup="menu" aria-expanded="false">
+            <span class="avatar">OG</span>
+            <span class="caret">▾</span>
+          </button>
+          <div id="profile-menu" class="profile-menu" role="menu" aria-hidden="true">
+            <a role="menuitem" class="profile-item" href="#/login" data-route="/login">Login</a>
+            <a role="menuitem" class="profile-item" href="#/signup" data-route="/signup">Sign up</a>
+            <button type="button" class="profile-item" id="logout-btn" data-action="logout" style="display:none">
+              Log out
+            </button>
+          </div>
+        </div>
+      
+        <button class="nav-burger" id="nav-burger" aria-label="Open menu" type="button">
+          <span></span><span></span><span></span>
+        </button>
       </header>
+      
+      <div class="nav-drawer" id="nav-drawer" aria-hidden="true">
+        <a href="#/" class="nav-tab" data-route="/">Home</a>
+        <a href="#/bet-checker" class="nav-tab" data-route="/bet-checker">Bet Checker</a>
+        <a href="#/acca-builder" class="nav-tab" data-route="/acca-builder">Acca Builder</a>
+        <a href="#/portfolio" class="nav-tab" data-route="/portfolio">Portfolio</a>
+        <a href="#/copilot" class="nav-tab" data-route="/copilot">GPT-5 Co-Pilot</a>
+        <div style="border-top:1px solid var(--border-subtle);padding-top:12px;margin-top:4px;display:flex;gap:8px;">
+          <a href="#/login" class="btn-secondary" style="flex:1" data-route="/login">Log in</a>
+          <a href="#/signup" class="btn-primary" style="flex:1" data-route="/signup">Sign up</a>
+        </div>
+      </div>
 
       <!-- ======== VIEWS (router toggles .is-active) ======== -->
 
@@ -92,11 +129,11 @@
       <section id="view-home" class="view is-active">
         <main class="hero">
           <!-- Left calendar rail (date + league filters) -->
-          <aside id="date-rail" class="left-rail" aria-label="Date filters">
+          <aside id="date-rail" class="sidebar-left" aria-label="Date filters">
             <div class="date-quick">
-              <button class="pill is-active" data-range="today">Today</button>
-              <button class="pill" data-range="tomorrow">Tomorrow</button>
-              <button class="pill" data-range="weekend">Weekend</button>
+            <button class="date-pill active" data-range="today">Today</button>
+            <button class="date-pill" data-range="tomorrow">Tomorrow</button>
+            <button class="date-pill" data-range="weekend">Weekend</button>
             </div>
 
             <div class="cal-head">
@@ -113,14 +150,14 @@
           </aside>
           
           <!-- Globe pane -->
-          <section class="hero__globe" aria-label="Upcoming fixtures globe">
+          <section class="globe-canvas-wrap" aria-label="Upcoming fixtures globe">
             <div id="globe-container" tabindex="0" aria-describedby="globe-help">
               <div class="globe-loading" role="status">Loading globe…</div>
           
-              <button id="nav-prev" aria-label="Previous fixture" title="Previous (←)" tabindex="0">
+              <button id="nav-prev" class="globe-nav-btn prev" aria-label="Previous fixture" title="Previous (←)" tabindex="0">
                 &#x2039;
               </button>
-              <button id="nav-next" aria-label="Next fixture" title="Next (→)" tabindex="0">
+             <button id="nav-next" class="globe-nav-btn next" aria-label="Next fixture" title="Next (→)" tabindex="0">
                 &#x203A;
               </button>
           
@@ -208,29 +245,29 @@
           </section>
           
           <!-- Insights panel (RIGHT COLUMN) -->
-          <aside class="hero__insights" aria-live="polite">
+          <aside class="insight-panel" aria-live="polite">
             <div class="insights__header">
               <div class="badge badge--home" id="home-badge" aria-label="Home team crest"></div>
               <div class="fixture-meta">
-                <h1 id="fixture-title">Loading fixtures…</h1>
+                <h1 id="fixture-title" class="panel-match-title">Loading fixtures…</h1>
                 <p id="fixture-context"></p>
               </div>
               <div class="badge badge--away" id="away-badge" aria-label="Away team crest"></div>
             </div>
           
-            <div class="tabs" role="tablist" aria-label="Insights">
-              <button class="tab is-active" role="tab" aria-selected="true" aria-controls="tab-mi" data-tab="mi" id="tabbtn-mi">
+            <div class="panel-tabs" role="tablist" aria-label="Insights">
+              <button class="panel-tab active" role="tab" aria-selected="true" aria-controls="tab-mi" data-tab="mi" id="tabbtn-mi">
                 Match Intelligence
               </button>
-              <button class="tab" role="tab" aria-selected="false" aria-controls="tab-players" data-tab="players" id="tabbtn-players">
+              <button class="panel-tab" role="tab" aria-selected="false" aria-controls="tab-players" data-tab="players" id="tabbtn-players">
                 Player Watchlist
               </button>
-              <button class="tab" role="tab" aria-selected="false" aria-controls="tab-market" data-tab="market" id="tabbtn-market">
+              <button class="panel-tab" role="tab" aria-selected="false" aria-controls="tab-market" data-tab="market" id="tabbtn-market">
                 Market Snapshot
               </button>
             </div>
           
-            <div class="tabpanes" id="insights-content">
+            <div class="panel-body" id="insights-content">
               <section id="tab-mi" class="tabpane is-active" role="tabpanel" aria-labelledby="tabbtn-mi">
                 <div class="insight-card">
                   <h2>Match Intelligence</h2>
@@ -261,13 +298,13 @@
           </main>
           
           <!-- Fixture rail (quick selector) -->
-          <div id="fixture-rail" class="fixture-rail" aria-label="Fixtures"></div>
+          <div id="fixture-rail" class="fixture-strip" aria-label="Fixtures"></div>
           <p id="fixture-progress" class="fixture-progress muted"></p>
           
           <!-- Floating upload bar -->
-          <footer class="floating-bar">
+         <footer class="sticky-banner">
             <div class="floating-bar__content">
-              <div>
+              <div> 
                 <h2>BetChecker Upload</h2>
                 <p>Upload a slip to see implied probabilities and value flags instantly.</p>
               </div>
