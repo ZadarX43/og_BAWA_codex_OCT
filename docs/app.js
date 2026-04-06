@@ -11,6 +11,23 @@ const homeBadge = document.getElementById('home-badge');
 const awayBadge = document.getElementById('away-badge');
 const uploadInput = document.getElementById('bet-upload');
 
+// ====== Mobile bottom nav active state ======
+function updateMobileNav(route) {
+  document.querySelectorAll('.mob-nav-item').forEach(el => {
+    el.classList.toggle(
+      'active',
+      el.dataset.route === route || (route === '' && el.dataset.route === '/')
+    );
+  });
+}
+
+window.addEventListener('hashchange', () => {
+  const route = location.hash.replace('#', '');
+  updateMobileNav(route);
+});
+
+updateMobileNav(location.hash.replace('#', '') || '/');
+
 // --- Helpers for parsing + stadium fallback ---
 
 // Safe number parse
@@ -61,10 +78,10 @@ function showDependencyError(message) {
 
 // ====== Dependency checks (local vendor versions) ======
 const dependencyChecks = [
-  { name: 'three.js',            ref: window.THREE,                              url: 'vendor/three.min.js' },
-  { name: 'OrbitControls',       ref: window.THREE && window.THREE.OrbitControls, url: 'vendor/OrbitControls.js' },
-  { name: 'ThreeGlobe/Globe',    ref: window.ThreeGlobe || window.Globe,         url: 'vendor/three-globe.min.js' },
-  { name: 'PapaParse',           ref: window.Papa,                                url: 'vendor/papaparse.min.js' },
+  { name: 'three.js', ref: window.THREE, url: 'vendor/three.min.js' },
+  { name: 'OrbitControls', ref: window.THREE && window.THREE.OrbitControls, url: 'vendor/OrbitControls.js' },
+  { name: 'ThreeGlobe/Globe', ref: window.ThreeGlobe || window.Globe, url: 'vendor/three-globe.min.js' },
+  { name: 'PapaParse', ref: window.Papa, url: 'vendor/papaparse.min.js' },
 ];
 
 const missingDeps = dependencyChecks.filter((d) => !d.ref);
@@ -84,7 +101,6 @@ renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(globeContainer.clientWidth, globeContainer.clientHeight);
 // three r150 deprecates outputEncoding in favor of outputColorSpace
 renderer.outputColorSpace = THREE.SRGBColorSpace;
-
 
 const scene = new THREE.Scene();
 scene.add(new THREE.AmbientLight(0xffffff, 1));
@@ -130,7 +146,7 @@ for (let i = 0; i < starCount; i++) {
   const r = 500 + Math.random() * 500;
   const theta = Math.random() * Math.PI * 2;
   const phi = Math.acos(Math.random() * 2 - 1);
-  positions[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
+  positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
   positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
   positions[i * 3 + 2] = r * Math.cos(phi);
 }
@@ -153,16 +169,16 @@ composer.addPass(fxaaPass);
 
 const bloomPass = new THREE.UnrealBloomPass(
   new THREE.Vector2(renderer.domElement.width, renderer.domElement.height),
-  (window.devicePixelRatio > 2 || window.innerWidth < 480) ? 0.4 : 0.6, // strength
-  0.4,  // radius
-  0.85  // threshold
+  (window.devicePixelRatio > 2 || window.innerWidth < 480) ? 0.4 : 0.6,
+  0.4,
+  0.85
 );
 composer.addPass(bloomPass);
 
 // ====== Render loop (composer) ======
 function animate() {
   controls.update();
-  composer.render(); // replaces renderer.render(scene, camera)
+  composer.render();
   requestAnimationFrame(animate);
 }
 animate();
@@ -202,7 +218,7 @@ function flyTo(lat, lng, altitude = 1.8, ms = 900) {
 
   function tick(now) {
     const t = Math.min(1, (now - t0) / ms);
-    const ease = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; // easeInOutCubic
+    const ease = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
     const lerp = (a, b) => a + (b - a) * ease;
     globe.pointOfView({
       lat: lerp(start.lat, end.lat),
@@ -211,6 +227,7 @@ function flyTo(lat, lng, altitude = 1.8, ms = 900) {
     });
     if (t < 1) requestAnimationFrame(tick);
   }
+
   requestAnimationFrame(tick);
 }
 
@@ -261,8 +278,12 @@ function renderFixture(index) {
     { label: 'Over 2.5 goals', value: toPercent(fixture.over25_prob) },
     { label: 'Both teams to score', value: toPercent(fixture.btts_prob) },
   ];
-  fixture.key_players_bookings.forEach((p) => marketItems.push({ label: `${p.name} booking risk`, value: p.detail }));
-  fixture.key_players_tackles.forEach((p) => marketItems.push({ label: `${p.name} tackles`, value: p.detail }));
+  fixture.key_players_bookings.forEach((p) => {
+    marketItems.push({ label: `${p.name} booking risk`, value: p.detail });
+  });
+  fixture.key_players_tackles.forEach((p) => {
+    marketItems.push({ label: `${p.name} tackles`, value: p.detail });
+  });
   marketItems.forEach((item) => {
     const li = document.createElement('li');
     li.innerHTML = `<strong>${item.label}:</strong> ${item.value}`;
@@ -292,9 +313,8 @@ function processPlayerField(field) {
 
 function hydrateFixtures(rawFixtures) {
   return rawFixtures
-    .filter((f) => f.fixture_id) // basic guard
+    .filter((f) => f.fixture_id)
     .map((f) => {
-      // Prefer CSV lat/lng if present, else fallback via stadium name
       const latCsv = num(f.latitude);
       const lngCsv = num(f.longitude);
       const fallback = stadiumLookup[f.stadium?.trim?.() || ""];
@@ -328,10 +348,9 @@ function hydrateFixtures(rawFixtures) {
         pointColor:
           cf > 0.7 ? '#64d863' :
           cf > 0.5 ? '#00bcd4' :
-                     '#ff8a65',
+          '#ff8a65',
       };
     })
-    // ensure we can plot on globe
     .filter((fx) => Number.isFinite(fx.latitude) && Number.isFinite(fx.longitude));
 }
 
@@ -344,23 +363,28 @@ function focusFixture(index) {
 }
 
 // ====== Load fixtures TSV and boot ======
-// Build cache-busted URL so GH Pages doesn’t serve stale CSV/TSV
 const csvUrl = new URL('data/fixtures.csv', window.location.href);
 csvUrl.searchParams.set('v', Date.now().toString());
 
 Papa.parse(csvUrl.href, {
   download: true,
   header: true,
-  delimiter: "\t",       // tab-delimited snapshot
-  skipEmptyLines: true,  // ignore blank/trailing lines
+  delimiter: "\t",
+  skipEmptyLines: true,
   dynamicTyping: false,
   complete: (results) => {
     fixtures = hydrateFixtures(results.data);
 
-    // Default to first UK/EU fixture if present
     const eu = fixtures.findIndex(f =>
-      ['England','Scotland','Wales','Northern Ireland','Ireland','Spain','Portugal','France','Germany','Italy','Netherlands','Belgium','Norway','Sweden','Denmark','Switzerland','Austria','Poland','Czech Republic','Slovakia','Slovenia','Croatia','Serbia','Greece','Turkey'].includes(f.country)
+      [
+        'England', 'Scotland', 'Wales', 'Northern Ireland', 'Ireland',
+        'Spain', 'Portugal', 'France', 'Germany', 'Italy', 'Netherlands',
+        'Belgium', 'Norway', 'Sweden', 'Denmark', 'Switzerland',
+        'Austria', 'Poland', 'Czech Republic', 'Slovakia', 'Slovenia',
+        'Croatia', 'Serbia', 'Greece', 'Turkey'
+      ].includes(f.country)
     );
+
     activeIndex = eu !== -1 ? eu : 0;
 
     globe.pointsData(fixtures);
@@ -386,7 +410,8 @@ if (typeof globe.onPointClick === 'function') {
 
 // Resize handling (renderer + composer + FXAA)
 window.addEventListener('resize', () => {
-  const w = globeContainer.clientWidth, h = globeContainer.clientHeight;
+  const w = globeContainer.clientWidth;
+  const h = globeContainer.clientHeight;
   camera.aspect = w / h;
   camera.updateProjectionMatrix();
   renderer.setSize(w, h);
@@ -397,10 +422,12 @@ window.addEventListener('resize', () => {
 // Keyboard nav
 window.addEventListener('keydown', (event) => {
   if (!fixtures.length) return;
+
   if (event.key === 'ArrowRight') {
     activeIndex = (activeIndex + 1) % fixtures.length;
     focusFixture(activeIndex);
   }
+
   if (event.key === 'ArrowLeft') {
     activeIndex = (activeIndex - 1 + fixtures.length) % fixtures.length;
     focusFixture(activeIndex);
@@ -408,14 +435,16 @@ window.addEventListener('keydown', (event) => {
 });
 
 // Upload placeholder
-uploadInput.addEventListener('change', (event) => {
+uploadInput?.addEventListener('change', (event) => {
   const file = event.target.files?.[0];
   if (!file) return;
+
   const message =
     `Bet slip uploaded: ${file.name}\n\nNext steps:\n` +
     `• OCR the slip to extract selections\n` +
     `• Run the BetChecker audit pipeline\n` +
     `• Generate OG Co-Pilot insights`;
+
   alert(message);
   uploadInput.value = '';
 });
