@@ -34,47 +34,9 @@
     <link rel="modulepreload" href="./vendor/examples/jsm/postprocessing/UnrealBloomPass.js" />
     <link rel="modulepreload" href="./app.module.js" />
   </head>
-<nav class="mobile-bottom-nav" id="mobile-bottom-nav">
-  <a href="#/" class="mob-nav-item" data-route="/">
-    <span class="mob-nav-icon">🏠</span>
-    <span>Home</span>
-  </a>
-  <a href="#/bet-checker" class="mob-nav-item" data-route="/bet-checker">
-    <span class="mob-nav-icon">📋</span>
-    <span>Checker</span>
-  </a>
-  <a href="#/acca-builder" class="mob-nav-item" data-route="/acca-builder">
-    <span class="mob-nav-icon">⚡</span>
-    <span>Acca</span>
-  </a>
-  <a href="#/portfolio" class="mob-nav-item" data-route="/portfolio">
-    <span class="mob-nav-icon">📂</span>
-    <span>Portfolio</span>
-  </a>
-  <a href="#/copilot" class="mob-nav-item" data-route="/copilot">
-    <span class="mob-nav-icon">🤖</span>
-    <span>Co-Pilot</span>
-  </a>
-</nav>
+
   <body>
     <div id="scrim" class="scrim" aria-hidden="true"></div>
-
-    <aside id="side-drawer" class="side-drawer" aria-label="Main menu" aria-hidden="true">
-      <div class="side-drawer__header">
-        <div class="brand">Odds <strong>Genius</strong></div>
-        <button id="btn-close-drawer" class="icon-btn" aria-label="Close menu">✕</button>
-      </div>
-      <nav class="side-drawer__nav">
-        <a class="side-link" href="#/" data-route>Home</a>
-        <a class="side-link" href="#/bet-checker" data-route>Bet Checker</a>
-        <a class="side-link" href="#/acca-builder" data-route>Acca Builder</a>
-        <a class="side-link" href="#/portfolio" data-route>Portfolio</a>
-        <a class="side-link" href="#/copilot" data-route>GPT-5 OG Co-Pilot</a>
-        <hr/>
-        <a class="side-link" href="#/signup" data-route>Sign up</a>
-        <a class="side-link" href="#/login" data-route>Login</a>
-      </nav>
-    </aside>
 
     <div class="page">
       <!-- ===== Header ===== -->
@@ -83,7 +45,7 @@
           <div class="logo-name">Odds <strong>Genius</strong></div>
           <div class="logo-tag">Sports Prediction Super Intelligence Made Easy</div>
         </a>
-      
+
         <nav class="nav-tabs main-nav" aria-label="Primary">
           <a class="nav-tab" href="#/" data-route="/">Home</a>
           <a class="nav-tab" href="#/bet-checker" data-route="/bet-checker">Bet Checker</a>
@@ -91,7 +53,7 @@
           <a class="nav-tab" href="#/portfolio" data-route="/portfolio">Portfolio</a>
           <a class="nav-tab" href="#/copilot" data-route="/copilot">GPT-5 Co-Pilot</a>
         </nav>
-      
+
         <div class="nav-account">
           <button id="btn-profile" class="profile-btn" aria-haspopup="menu" aria-expanded="false">
             <span class="avatar">OG</span>
@@ -105,12 +67,12 @@
             </button>
           </div>
         </div>
-      
+
         <button class="nav-burger" id="nav-burger" aria-label="Open menu" type="button">
           <span></span><span></span><span></span>
         </button>
       </header>
-      
+
       <div class="nav-drawer" id="nav-drawer" aria-hidden="true">
         <a href="#/" class="nav-tab" data-route="/">Home</a>
         <a href="#/bet-checker" class="nav-tab" data-route="/bet-checker">Bet Checker</a>
@@ -125,15 +87,15 @@
 
       <!-- ======== VIEWS (router toggles .is-active) ======== -->
 
-      <!-- HOME VIEW (Calendar + Globe + Insights + Rail + Upload) -->
+      <!-- HOME VIEW -->
       <section id="view-home" class="view is-active">
         <main class="hero">
-          <!-- Left calendar rail (date + league filters) -->
+          <!-- Left calendar rail -->
           <aside id="date-rail" class="sidebar-left" aria-label="Date filters">
             <div class="date-quick">
-            <button class="date-pill active" data-range="today">Today</button>
-            <button class="date-pill" data-range="tomorrow">Tomorrow</button>
-            <button class="date-pill" data-range="weekend">Weekend</button>
+              <button class="date-pill active" data-range="today">Today</button>
+              <button class="date-pill" data-range="tomorrow">Tomorrow</button>
+              <button class="date-pill" data-range="weekend">Weekend</button>
             </div>
 
             <div class="cal-head">
@@ -145,23 +107,21 @@
             <div id="date-grid" class="mini-cal" aria-label="Mini calendar"></div>
             <div class="cal-legend">Upcoming fixtures</div>
 
-            <!-- League chips host (JS will populate) -->
             <div class="league-chips" id="league-chips" aria-label="League filters"></div>
           </aside>
-          
+
           <!-- Globe pane -->
           <section class="globe-canvas-wrap" aria-label="Upcoming fixtures globe">
             <div id="globe-container" tabindex="0" aria-describedby="globe-help">
               <div class="globe-loading" role="status">Loading globe…</div>
-          
+
               <button id="nav-prev" class="globe-nav-btn prev" aria-label="Previous fixture" title="Previous (←)" tabindex="0">
                 &#x2039;
               </button>
-             <button id="nav-next" class="globe-nav-btn next" aria-label="Next fixture" title="Next (→)" tabindex="0">
+              <button id="nav-next" class="globe-nav-btn next" aria-label="Next fixture" title="Next (→)" tabindex="0">
                 &#x203A;
               </button>
-          
-              <!-- Fullscreen toggle for globe -->
+
               <button
                 id="globe-fullscreen-toggle"
                 class="icon-btn"
@@ -171,12 +131,11 @@
               >
                 ⛶
               </button>
-          
-              <!-- Stadium hero hologram overlay -->
+
               <div id="stadium-overlay" class="stadium-overlay" aria-hidden="true">
                 <div id="stadium-stem" class="stadium-stem"></div>
                 <div id="stadium-pin" class="stadium-pin"></div>
-          
+
                 <article id="stadium-card" class="stadium-card" aria-live="polite">
                   <div class="stadium-card__body">
                     <div class="stadium-card__left">
@@ -218,16 +177,14 @@
                   </div>
                 </article>
               </div>
-          
-              <!-- Tiny hover tooltip for globe dots -->
+
               <div id="globe-tooltip" class="globe-tooltip" aria-hidden="true"></div>
             </div>
-          
+
             <p id="globe-help" class="visually-hidden">
               Use left and right arrow keys or buttons to change fixture.
             </p>
-          
-            <!-- Competition Accuracy (pretty) -->
+
             <section class="comp-accuracy" id="comp-accuracy" aria-label="Competition accuracy">
               <div class="comp-row">
                 <img id="comp-logo" class="comp-logo" alt="" />
@@ -238,13 +195,11 @@
                   <span class="gauge-val">—%</span>
                 </div>
               </div>
-              <div class="market-traffic" id="comp-traffic">
-                <!-- JS will inject light chips (FTR / O2.5 / BTTS) -->
-              </div>
+              <div class="market-traffic" id="comp-traffic"></div>
             </section>
           </section>
-          
-          <!-- Insights panel (RIGHT COLUMN) -->
+
+          <!-- Insights panel -->
           <aside class="insight-panel" aria-live="polite">
             <div class="insights__header">
               <div class="badge badge--home" id="home-badge" aria-label="Home team crest"></div>
@@ -254,7 +209,7 @@
               </div>
               <div class="badge badge--away" id="away-badge" aria-label="Away team crest"></div>
             </div>
-          
+
             <div class="panel-tabs" role="tablist" aria-label="Insights">
               <button class="panel-tab active" role="tab" aria-selected="true" aria-controls="tab-mi" data-tab="mi" id="tabbtn-mi">
                 Match Intelligence
@@ -266,7 +221,7 @@
                 Market Snapshot
               </button>
             </div>
-          
+
             <div class="panel-body" id="insights-content">
               <section id="tab-mi" class="tabpane is-active" role="tabpanel" aria-labelledby="tabbtn-mi">
                 <div class="insight-card">
@@ -275,7 +230,7 @@
                   <ul id="match-intelligence"></ul>
                 </div>
               </section>
-          
+
               <section id="tab-players" class="tabpane" role="tabpanel" aria-labelledby="tabbtn-players">
                 <div class="insight-card">
                   <h2>Player Watchlist</h2>
@@ -283,7 +238,7 @@
                   <ul id="player-watchlist"></ul>
                 </div>
               </section>
-          
+
               <section id="tab-market" class="tabpane" role="tabpanel" aria-labelledby="tabbtn-market">
                 <div class="insight-card">
                   <h2>Market Snapshot</h2>
@@ -291,35 +246,16 @@
                   <ul id="market-snapshot"></ul>
                 </div>
               </section>
-          
+
               <button class="cta" id="deep-dive-btn">Open full fixture intelligence</button>
             </div>
           </aside>
-          </main>
-          
-          <!-- Fixture rail (quick selector) -->
-          <div id="fixture-rail" class="fixture-strip" aria-label="Fixtures"></div>
-          <p id="fixture-progress" class="fixture-progress muted"></p>
-          
-          <!-- Floating upload bar -->
-         <footer class="sticky-banner">
-            <div class="floating-bar__content">
-              <div> 
-                <h2>BetChecker Upload</h2>
-                <p>Upload a slip to see implied probabilities and value flags instantly.</p>
-              </div>
-              <label class="upload-btn" for="bet-upload">
-                <span aria-hidden="true">📤</span> Upload slip
-                <span class="upload-hint">Unlock instant predictions</span>
-                <input type="file" id="bet-upload" accept="image/*,application/pdf" />
-              </label>
-            </div>
-          </footer>
-          </section>
+        </main>
 
+        <div id="fixture-rail" class="fixture-strip" aria-label="Fixtures"></div>
+        <p id="fixture-progress" class="fixture-progress muted"></p>
 
-        <!-- Floating upload bar -->
-        <footer class="floating-bar">
+        <footer class="sticky-banner">
           <div class="floating-bar__content">
             <div>
               <h2>BetChecker Upload</h2>
@@ -346,7 +282,7 @@
             </label>
             <button class="cta" id="bc-history-btn">View recent checks</button>
           </div>
-      
+
           <div id="bc-results" class="insight-card bc-results-card" style="margin-top:16px; min-height:140px;">
             <div class="bc-header-row">
               <h2>Results</h2>
@@ -357,8 +293,7 @@
             <div class="skel" aria-hidden="true"></div>
             <div id="bc-output" class="mt-2"></div>
           </div>
-      
-          <!-- New: send parsed slip to OG Co-Pilot -->
+
           <div class="panel-row" style="margin-top:12px;">
             <button class="cta cta--secondary" id="bc-talk-og">
               Discuss this slip with OG Co-Pilot
@@ -367,11 +302,9 @@
         </div>
       </section>
 
-
       <!-- ACCA BUILDER VIEW -->
       <section id="view-accabuilder" class="view" hidden>
         <div class="screen acca-screen">
-          <!-- Fixture header / hero -->
           <header class="acca-hero">
             <div class="acca-hero-main">
               <div class="acca-hero-crests">
@@ -381,9 +314,7 @@
               </div>
               <div class="acca-hero-text">
                 <h1 id="ab-fixture-title">Select a fixture</h1>
-                <p id="ab-fixture-meta" class="muted">
-                  <!-- e.g. UEFA Champions League • Tue 28 Nov · 20:00 GMT • Parc des Princes, Paris -->
-                </p>
+                <p id="ab-fixture-meta" class="muted"></p>
               </div>
             </div>
             <div class="acca-hero-controls">
@@ -402,36 +333,23 @@
             </div>
           </header>
 
-          <!-- 3-column layout: markets | picks | cart -->
           <div class="acca-layout">
-            <!-- LEFT: Market categories -->
             <aside class="acca-sidebar" aria-label="Market categories">
               <h2 class="acca-sidebar-title">Markets</h2>
               <nav id="ab-market-nav" class="acca-market-nav">
-                <!-- All markets view -->
                 <button class="market-chip is-active" data-market="all">Show All</button>
-
-                <!-- Core match result -->
                 <button class="market-chip" data-market="ftr">Full Time Result</button>
-
-                <!-- Goals & team goals -->
                 <button class="market-chip" data-market="goals_main">Match Goals (Over/Under)</button>
                 <button class="market-chip" data-market="btts">Both Teams To Score</button>
                 <button class="market-chip" data-market="btts_halves">BTTS 1st / 2nd Half</button>
                 <button class="market-chip" data-market="team_goals">Team Goals (1.5 / 2.5)</button>
                 <button class="market-chip" data-market="total_goals">Total Goals (Home / Away / Combined)</button>
-
-                <!-- Corners & cards -->
                 <button class="market-chip" data-market="corners">Corners</button>
                 <button class="market-chip" data-market="cards_totals">Cards (Totals)</button>
                 <button class="market-chip" data-market="cards_both">Both Teams to Receive a Card</button>
-
-                <!-- Player shooting & scoring -->
                 <button class="market-chip" data-market="player_goals_assists">Player to Score or Assist</button>
                 <button class="market-chip" data-market="player_shots_on_target">Player Shots on Target</button>
                 <button class="market-chip" data-market="player_shots">Player Shots</button>
-
-                <!-- Player defensive events -->
                 <button class="market-chip" data-market="player_tackles">Player Tackles</button>
                 <button class="market-chip" data-market="player_fouls">Player Fouls Committed</button>
                 <button class="market-chip" data-market="player_fouled">Player To Be Fouled</button>
@@ -442,12 +360,9 @@
               </p>
             </aside>
 
-            <!-- MIDDLE: Candidate picks list -->
             <section class="acca-picks" aria-label="Available picks">
               <div class="acca-picks-toolbar">
-                <div class="muted" id="ab-picks-summary">
-                  <!-- e.g. “Showing 6 best value picks for Over/Under Goals” -->
-                </div>
+                <div class="muted" id="ab-picks-summary"></div>
                 <div class="acca-picks-filters">
                   <label class="control control--compact">
                     <span class="control-label">Sort by</span>
@@ -461,25 +376,20 @@
                 </div>
               </div>
 
-              <div id="ab-picks-list" class="acca-picks-list">
-                <!-- JS will inject pick cards here -->
-              </div>
+              <div id="ab-picks-list" class="acca-picks-list"></div>
 
               <div id="ab-picks-empty" class="muted" hidden>
                 No picks available for this market yet. Choose another market or fixture.
               </div>
             </section>
 
-            <!-- RIGHT: Acca cart -->
             <aside class="acca-cart" aria-label="Your accumulator">
               <h2>Your Acca</h2>
               <div id="ab-cart-empty" class="muted">
                 No legs added yet. Browse markets on the left and use “+ Add” to build your slip.
               </div>
 
-              <ul id="ab-cart-legs" class="acca-cart-list">
-                <!-- JS will inject leg items here -->
-              </ul>
+              <ul id="ab-cart-legs" class="acca-cart-list"></ul>
 
               <div id="ab-cart-summary" class="acca-cart-summary" hidden>
                 <div class="acca-cart-row">
@@ -512,24 +422,20 @@
 
       <!-- PORTFOLIO VIEW -->
       <section id="view-portfolio" class="view" hidden>
-      <div class="screen portfolio-screen">
-        <h1>My Portfolio</h1>
-        <p class="muted">Saved acca builds. Click one to reopen its fixture in the builder.</p>
-    
-        <div id="portfolio-stats" class="portfolio-stats"></div>
-    
-        <div id="portfolio-list" class="portfolio-list"></div>
-      </div>
-    </section>
+        <div class="screen portfolio-screen">
+          <h1>My Portfolio</h1>
+          <p class="muted">Saved acca builds. Click one to reopen its fixture in the builder.</p>
 
+          <div id="portfolio-stats" class="portfolio-stats"></div>
+          <div id="portfolio-list" class="portfolio-list"></div>
+        </div>
+      </section>
 
-      
       <!-- GPT-5 OG CO-PILOT VIEW -->
       <section id="view-copilot" class="view" hidden>
         <div class="screen">
           <h1>GPT-5 OG Co-Pilot</h1>
-      
-          <!-- Bankroll + target controls -->
+
           <div class="panel-row" style="margin-bottom:8px;">
             <label class="control control--compact">
               <span class="control-label">Weekly bankroll (£)</span>
@@ -541,20 +447,19 @@
             </label>
             <button class="cta cta--secondary" id="cp-save-bankroll">Save</button>
           </div>
-      
+
           <div id="cp-thread" class="chat-window">
             <div class="chat-empty muted">
               Ask about any fixture, slip, or model insight. Example: “Build a safe 4-fold O2.5 for tonight.”
             </div>
           </div>
-      
+
           <div class="chat-input">
             <input id="cp-input" placeholder="Ask Co-Pilot…" />
             <button id="cp-send" class="cta">Send</button>
           </div>
         </div>
       </section>
-
 
       <!-- AUTH: LOGIN -->
       <section id="view-signin" class="view auth" hidden>
@@ -563,7 +468,7 @@
           <label>Email <input id="li-email" type="email" placeholder="you@domain.com"></label>
           <label>Password <input id="li-pass" type="password" placeholder="••••••••"></label>
           <button class="cta" id="li-submit">Sign in</button>
-          <p class="muted">No account? <a href="#/signup" data-route>Sign up</a></p>
+          <p class="muted">No account? <a href="#/signup" data-route="/signup">Sign up</a></p>
         </div>
       </section>
 
@@ -574,12 +479,12 @@
           <label>Email <input id="su-email" type="email" placeholder="you@domain.com"></label>
           <label>Password <input id="su-pass" type="password" placeholder="Choose a strong password"></label>
           <button class="cta" id="su-submit">Create account</button>
-          <p class="muted">Already have an account? <a href="#/login" data-route>Log in</a></p>
+          <p class="muted">Already have an account? <a href="#/login" data-route="/login">Log in</a></p>
         </div>
       </section>
     </div>
 
-    <!-- Mobile bottom-sheet (used by JS on small screens) -->
+    <!-- Mobile bottom-sheet -->
     <div id="sheet" class="sheet" aria-hidden="true" aria-label="Fixture details">
       <div class="sheet__handle" role="button" aria-label="Close"></div>
       <div class="sheet__content">
@@ -587,6 +492,30 @@
         <div id="sheet-body"></div>
       </div>
     </div>
+
+    <!-- MOBILE BOTTOM NAV -->
+    <nav class="mobile-bottom-nav" id="mobile-bottom-nav">
+      <a href="#/" class="mob-nav-item" data-route="/">
+        <span class="mob-nav-icon">🏠</span>
+        <span>Home</span>
+      </a>
+      <a href="#/bet-checker" class="mob-nav-item" data-route="/bet-checker">
+        <span class="mob-nav-icon">📋</span>
+        <span>Checker</span>
+      </a>
+      <a href="#/acca-builder" class="mob-nav-item" data-route="/acca-builder">
+        <span class="mob-nav-icon">⚡</span>
+        <span>Acca</span>
+      </a>
+      <a href="#/portfolio" class="mob-nav-item" data-route="/portfolio">
+        <span class="mob-nav-icon">📂</span>
+        <span>Portfolio</span>
+      </a>
+      <a href="#/copilot" class="mob-nav-item" data-route="/copilot">
+        <span class="mob-nav-icon">🤖</span>
+        <span>Co-Pilot</span>
+      </a>
+    </nav>
 
     <!-- PapaParse (UMD) -->
     <script src="./vendor/papaparse.min.js"></script>
