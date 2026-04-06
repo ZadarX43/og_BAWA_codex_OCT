@@ -768,7 +768,8 @@ h1, h2, h3, h4 {
   border: 1px solid var(--border-mid);
   border-radius: var(--radius-lg);
   padding: 12px 14px;
-  width: 220px;
+  width: 180px;
+  max-width: 180px;
   pointer-events: none;
   opacity: 0;
   transform: translateY(6px);
