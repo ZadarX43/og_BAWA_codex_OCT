@@ -218,7 +218,19 @@ function updateAllNav(route) {
   updateMobileNav(route);
   updatePrimaryNav(route);
 }
+function resizeGlobeToContainer() {
+  if (!renderer || !camera || !composer || !el.globeWrap) return;
 
+  const w = el.globeWrap.clientWidth;
+  const h = el.globeWrap.clientHeight;
+
+  if (!w || !h) return;
+
+  renderer.setSize(w, h);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  composer.setSize(w, h);
+}
 // ---- Session & portfolio persistence (demo: localStorage) ----
 function loadSessionFromStorage() {
   try {
@@ -1902,6 +1914,10 @@ async function init() {
   if (loading) loading.remove();
   el.globeWrap.appendChild(renderer.domElement);
 
+  requestAnimationFrame(() => {
+    resizeGlobeToContainer();
+  });
+
   if ('outputColorSpace' in renderer) renderer.outputColorSpace = THREE.SRGBColorSpace;
 
   camera = new THREE.PerspectiveCamera(
@@ -1983,9 +1999,12 @@ async function init() {
 
   window.addEventListener('resize', () => {
     const { clientWidth: w, clientHeight: h } = el.globeWrap;
+    if (!w || !h) return;
+  
     renderer.setSize(w, h);
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
+    composer.setSize(w, h);
     setFXAA();
   });
 
@@ -3800,6 +3819,12 @@ function showRoute(hash) {
   closeNavDrawer();
 
   isHomeActive = (id === 'view-home');
+
+  if (isHomeActive) {
+    requestAnimationFrame(() => {
+      resizeGlobeToContainer();
+    });
+  }
 
   if (!isHomeActive) {
     updateStadiumCard(null);
