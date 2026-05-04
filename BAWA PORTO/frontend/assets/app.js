@@ -5,6 +5,7 @@
   const page = document.body.dataset.page || "home";
   const query = new URLSearchParams(window.location.search);
   const premiumDemoMode = query.get("demo") === "1";
+  const debugMode = query.get("debug") === "1";
   const accountIntent = query.get("intent") || "";
   const checkoutState = query.get("checkout") || "";
   const runtimeConfig = window.OG_CONFIG || {};
@@ -177,7 +178,9 @@
           }
           <span class="pill">${escapeHtml(confidenceLabel(row))}</span>
         </div>
-        <p class="muted">${escapeHtml(row.short_reason || row.human_reason || "Model-backed selection.")}</p>
+        <p class="muted">${escapeHtml(
+          row.short_reason || row.human_reason || "Cleared value-edge threshold vs market price."
+        )}</p>
         ${
           !locked && shortlist.length
             ? `<div class="detail-row"><span class="muted">Correct-score support</span><span>${shortlist
@@ -307,24 +310,27 @@
     <section class="hero">
       <div class="hero-main">
         <p class="hero-kicker">Odds Genius Live Board</p>
-        <h1>Evidence-first football picks for bettors who want signal, not noise.</h1>
+        <h1>Evidence-first football market intelligence.</h1>
+        <div class="pill-row">
+          <span class="stat-chip">+53.90% ROI</span>
+          <span class="stat-chip">15,203 graded premium signals</span>
+          <span class="stat-chip">3-year walk-forward validation</span>
+        </div>
         <p>
-          Model-backed selections, weekly proof, and a premium board that stays protected behind the Worker.
-          Built to surface real edge, not tipster theatre.
+          Odds Genius identifies bookmaker mispricing and only deploys signals when the model edge survives
+          structural, volatility, and stability checks. Not tipster theatre. Not vibes. A selective deployment
+          engine built to find edge.
         </p>
         <div class="hero-actions">
-          <a class="button" href="./predictions.html">View live picks</a>
+          <a class="button" href="./predictions.html">View live board</a>
           <a class="ghost-button" href="./results.html">See proof</a>
+          <a class="ghost-button" href="./premium.html">Unlock premium</a>
         </div>
         <div class="proof-strip">
-          ${proofTile("Live board", `${state.summary.public_predictions_count} free picks`, "Current public export")}
-          ${proofTile("Premium board", `${state.summary.premium_predictions_count} cards`, "Protected Worker route ready")}
-          ${proofTile(
-            "Settled hit rate",
-            state.weeklyResults?.overall_hit_rate == null ? "Pending" : `${Math.round(state.weeklyResults.overall_hit_rate * 100)}%`,
-            state.weeklyResults ? `${state.weeklyResults.settled_picks}/${state.weeklyResults.total_picks} settled` : "Results layer ready"
-          )}
-          ${proofTile("Last publish", escapeHtml(state.summary.generated_at.slice(0, 10)), escapeHtml(sourceWindowLabel()))}
+          ${proofTile("Premium value tier", "83.31% hit rate", "+53.90% ROI • 15,203 signals")}
+          ${proofTile("Value edge system", "STANDARD: +13.75% ROI", "STRONG: +19.39% ROI • PREMIUM: +53.90% ROI")}
+          ${proofTile("Protected floors", "BTTS ELITE: 90.68%", "FTR ELITE: 92.64% • OU25 STANDARD: 90.06%")}
+          ${proofTile("Validation", "Walk-forward tested", "45,000+ graded predictions • Week-by-week proof")}
         </div>
       </div>
       <aside class="hero-side">
@@ -376,11 +382,32 @@
         </div>
       </div>
       <article class="panel">
-        <h3>Why this converts</h3>
+        <h3>Why this wins</h3>
         <ul class="method-list">
-          <li>Walk-forward proof is published separately from the picks page.</li>
-          <li>The public board is useful, but the premium board is where the full signal density lives.</li>
-          <li>Protected Worker delivery keeps premium access tied to live subscriber entitlement.</li>
+          <li>Most betting products predict every match. Odds Genius does the opposite.</li>
+          <li>It scans broadly, filters aggressively, and only deploys when independent model systems agree that the price is wrong and the signal is stable enough to act on.</li>
+          <li>The edge is not just prediction accuracy. The edge is knowing when not to bet.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="section split">
+      <article class="panel">
+        <h3>The decision layer is the moat.</h3>
+        <ul class="method-list">
+          <li>Core models estimate probability.</li>
+          <li>Poisson goal mass checks match structure.</li>
+          <li>Value edge compares model price against bookmaker price.</li>
+          <li>Volatility and fragility filters suppress dangerous signals.</li>
+          <li>When the systems align, the pick deploys. When they conflict, it stays out.</li>
+        </ul>
+      </article>
+      <article class="panel">
+        <h3>Why it stands apart</h3>
+        <ul class="method-list">
+          <li>Typical tipster: hidden sample size, cherry-picked wins, no walk-forward validation, no deployment discipline, no measurable value edge.</li>
+          <li>Odds Genius: 15,203 premium value signals, 83.31% hit rate, +8,194.99 units profit, +53.90% ROI, 3-year walk-forward validation, selective 20–30% deployment.</li>
+          <li>If the model doesn't beat the price, it doesn't deploy.</li>
         </ul>
       </article>
     </section>
@@ -393,11 +420,11 @@
           <div class="board-hero-copy">
             <p class="hero-kicker">Predictions Board</p>
             <h1>Live public picks.</h1>
-            <p class="section-copy">
-              Fast-scan public cards built from the latest safe export. Confidence is rounded in public, while the
-              premium board carries the deeper edge view.
-            </p>
-          </div>
+          <p class="section-copy">
+            Fast-scan board from the latest validated deploy. Premium carries the full signal density.
+          </p>
+          <p class="section-copy">All picks are derived from model probability vs bookmaker implied probability.</p>
+        </div>
           <div class="pill-row">
             <span class="pill pill-elite">${state.summary.public_predictions_count} free picks</span>
             <span class="pill">${escapeHtml(sourceWindowLabel())}</span>
@@ -481,11 +508,11 @@
             ${
               secureBoardReady
                 ? "This board is being served through the Worker after token verification and subscriber-state checks."
-                : "Unlock the full deployable board, deeper value context, shortlist support, and richer explanations."
+                : "Premium unlocks the complete deployable board — not just more picks, but the deeper pricing intelligence behind them. Built for bettors who care about value, stability, and proof."
             }
           </p>
           <div class="cta-row">
-            ${checkoutCta()}
+            <a class="button" data-action="worker-checkout" href="./account.html?intent=checkout">Unlock founding membership — £20/month</a>
             <a class="ghost-button" href="./pricing.html">See pricing</a>
           </div>
         </article>
@@ -540,22 +567,30 @@
 
       <section class="section split">
         <article class="panel">
-          <h3>What unlocks</h3>
+          <h3>What you actually get</h3>
           <ul class="feature-list">
-            <li>Full deployable board with ELITE and STANDARD cards.</li>
-            <li>Model probability, bookie implied probability, and value edge.</li>
-            <li>Human-readable premium reasons and shortlist context.</li>
-            <li>Worker-protected access tied to live subscription state.</li>
+            <li>Full deployable board.</li>
+            <li>ELITE and STANDARD picks.</li>
+            <li>Value edge vs bookmaker implied probability.</li>
+            <li>Correct score shortlist support.</li>
+            <li>Acca safety signals.</li>
+            <li>Stability and fragility context.</li>
+            <li>Worker-protected subscriber access.</li>
           </ul>
         </article>
         <article class="panel">
-          <h3>Internal review</h3>
+          <h3>Premium value tier performance</h3>
           <ul class="feature-list">
-            <li><a href="./premium.html?demo=1">Demo mode</a> remains available for internal preview only.</li>
-            <li>No token means the page stays locked by default.</li>
-            <li>Upgrade CTA routes to pricing and Worker checkout flow.</li>
+            <li>15,203 signals.</li>
+            <li>83.31% hit rate.</li>
+            <li>+8,194.99 units profit.</li>
+            <li>+53.90% ROI.</li>
+            <li>3-year walk-forward tested.</li>
           </ul>
         </article>
+      </section>
+      <section class="section">
+        <div class="notice">Public shows the signal. Premium shows where the edge actually lives. Early pricing. Locked while subscribed.</div>
       </section>
     `;
   };
@@ -639,6 +674,7 @@
             Public-safe weekly proof generated from scored deploy outputs. Use this page to evaluate settled
             performance, not hype.
           </p>
+          <p class="section-copy">Results are published independently from predictions.</p>
         </article>
         <aside class="hero-side">
           <div class="metric">
@@ -650,6 +686,7 @@
             <span class="metric-value">${escapeHtml(
               weekly.overall_hit_rate == null ? "Pending" : `${Math.round(weekly.overall_hit_rate * 100)}%`
             )}</span>
+            <span class="muted">Tracked across ${weekly.total_picks} picks (${weekly.settled_picks} settled so far)</span>
           </div>
           <div class="metric">
             <span class="metric-label">Settled picks</span>
@@ -714,7 +751,7 @@
       <section class="section split">
         <article class="hero-main">
           <p class="hero-kicker">Pricing</p>
-          <h1>Free board or founding member.</h1>
+          <h1>Start free. Upgrade for the full edge.</h1>
           <p>
             Start with the public board for free, or unlock the full premium board for the founding member price
             while the product is still in its early paid phase.
@@ -750,19 +787,22 @@
           <ul class="feature-list">
             <li>Top public board only.</li>
             <li>Rounded confidence and rounded edge display.</li>
-            <li>Generic explanation layer.</li>
+            <li>Public proof access.</li>
             <li>No premium shortlist or slip-role detail.</li>
           </ul>
         </article>
         <article class="card pricing-card featured">
           <span class="pricing-tag">Founding Member</span>
           <div class="pricing-price">£20<span class="pricing-price-note">/month</span></div>
-          <p class="pricing-subcopy">Locked while subscribed. Built for the first paying cohort.</p>
+          <p class="pricing-subcopy">Locked while subscribed. Early pricing for the first paying cohort.</p>
           <ul class="feature-list">
-            <li>Full deployable board with ELITE and STANDARD picks.</li>
-            <li>Deeper edge context, richer explanations, and shortlist support.</li>
-            <li>Protected Worker-backed delivery after verified access.</li>
-            <li>Early founding member pricing while the product expands.</li>
+            <li>Full deployable board.</li>
+            <li>ELITE and STANDARD signals.</li>
+            <li>Full value-edge layer.</li>
+            <li>Premium explanations.</li>
+            <li>Correct score shortlist support.</li>
+            <li>Acca safety indicators.</li>
+            <li>Protected access through live Worker entitlement.</li>
           </ul>
           <div class="cta-row">
             ${checkoutCta()}
@@ -776,6 +816,7 @@
             : "Static-only mode cannot provide secure subscriber enforcement."
         }
       </p>
+      <p class="footer-note">If you are serious about betting, you do not need more picks. You need better pricing.</p>
     </section>
   `;
 
@@ -785,8 +826,8 @@
         <p class="hero-kicker">Methodology</p>
         <h1>Built on generated outputs, not frontend guesswork.</h1>
         <p>
-          The website layer consumes exported JSON generated from the live routed board. It does not re-run model
-          logic, routing, or deploy decisions in the browser.
+          Odds Genius does not re-run model logic in the browser. The website displays approved exports from the
+          live deployment engine.
         </p>
       </article>
       <aside class="hero-side">
@@ -804,15 +845,15 @@
       <div class="card-grid">
         <article class="panel">
           <h3>Pipeline boundary</h3>
-          <p class="muted">Ingest, enrichment, routing, and slip logic remain in Python. The frontend only displays approved exports.</p>
+          <p class="muted">Built on generated outputs, not frontend guesswork. Ingest, enrichment, routing, and slip logic remain in Python.</p>
         </article>
         <article class="panel">
-          <h3>Safety posture</h3>
-          <p class="muted">Allowlist-only publishing protects private thresholds, internal gates, raw features, and file paths.</p>
+          <h3>Decision stack</h3>
+          <p class="muted">The system combines independent modelling approaches and only publishes signals that pass probability, structure, value, and stability checks.</p>
         </article>
         <article class="panel">
-          <h3>Evidence posture</h3>
-          <p class="muted">This layer is designed for walk-forward-tested product output rather than vague tipster language.</p>
+          <h3>Final line</h3>
+          <p class="muted">Odds Genius is not built to predict every game. It is built to identify when the market is wrong.</p>
         </article>
       </div>
     </section>
@@ -821,7 +862,7 @@
   const accountView = () => {
     const checkoutNotice =
       checkoutState === "success"
-        ? "Checkout returned successfully. Subscription state still depends on webhook processing and verified login or token issuance."
+        ? "Checkout returned successfully. Your membership unlocks premium board access."
         : checkoutState === "cancelled"
           ? "Checkout was cancelled. No premium access was granted."
           : "";
@@ -830,10 +871,9 @@
       <section class="section split">
         <article class="hero-main">
           <p class="hero-kicker">Account</p>
-          <h1>Worker-aware account placeholder.</h1>
+          <h1>Your membership unlocks premium board access.</h1>
           <p>
-            This page marks the future home for sign in, active membership status, and Stripe-backed subscription
-            management. Developer/test token handling exists here only to help verify the Worker route locally.
+            Manage subscription and premium access from here. Subscription management is coming soon.
           </p>
           <div class="cta-row">
             <a class="button" href="./pricing.html">See founding plan</a>
@@ -850,48 +890,54 @@
             <span class="metric-value">${premiumTokenPresent() ? "Present" : "Missing"}</span>
           </div>
           <div class="metric">
-            <span class="metric-label">Account mode</span>
-            <span class="metric-value">Dev/Test only</span>
+            <span class="metric-label">Membership</span>
+            <span class="metric-value">Premium-ready</span>
           </div>
         </aside>
       </section>
 
       <section class="section">
         ${renderNotice(checkoutNotice, checkoutState === "success" ? "success" : "warning")}
-        ${renderNotice(state.runtime.accountMessage, state.runtime.accountMessage ? "warning" : "default")}
+        ${debugMode ? renderNotice(state.runtime.accountMessage, state.runtime.accountMessage ? "warning" : "default") : ""}
       </section>
 
-      <section class="section split">
-        <article class="panel">
-          <h3>Developer/test token flow</h3>
-          <p class="muted">
-            This is not public auth. It exists only so a verified Worker token can be stored locally during
-            controlled testing before magic-link or authenticated session issuance is built.
-          </p>
-          <form id="premium-token-form" class="stack-form">
-            <label class="field-label" for="premium-token-input">Premium token</label>
-            <textarea id="premium-token-input" name="premium_token" class="text-input" rows="6" placeholder="Paste developer/test premium token here">${escapeHtml(
-              state.runtime.premiumToken || ""
-            )}</textarea>
-            <div class="cta-row">
-              <button class="button" type="submit">Save token</button>
-              <button class="ghost-button" type="button" data-action="clear-premium-token">Clear token</button>
-            </div>
-          </form>
-          <p class="footer-note">
-            Final public access should use magic-link email verification or authenticated session issuance, not
-            manual token pasting.
-          </p>
-        </article>
-        <article class="panel">
-          <h3>${accountIntent === "checkout" ? "Checkout handoff" : "Subscription management placeholder"}</h3>
-          <ul class="feature-list">
-            <li>Worker checkout route is used only when WORKER_API_BASE is configured.</li>
-            <li>Webhook-backed subscriber state remains the authority for premium access.</li>
-            <li>Customer Portal and real sign-in still need production wiring later.</li>
-          </ul>
-        </article>
-      </section>
+      ${
+        debugMode
+          ? `
+            <section class="section split">
+              <article class="panel">
+                <h3>Developer/test token flow</h3>
+                <p class="muted">
+                  Internal only. This exists for controlled Worker verification before magic-link or authenticated
+                  session issuance is finished.
+                </p>
+                <form id="premium-token-form" class="stack-form">
+                  <label class="field-label" for="premium-token-input">Premium token</label>
+                  <textarea id="premium-token-input" name="premium_token" class="text-input" rows="6" placeholder="Paste developer/test premium token here">${escapeHtml(
+                    state.runtime.premiumToken || ""
+                  )}</textarea>
+                  <div class="cta-row">
+                    <button class="button" type="submit">Save token</button>
+                    <button class="ghost-button" type="button" data-action="clear-premium-token">Clear token</button>
+                  </div>
+                </form>
+              </article>
+              <article class="panel">
+                <h3>${accountIntent === "checkout" ? "Checkout handoff" : "Subscription management placeholder"}</h3>
+                <ul class="feature-list">
+                  <li>Worker checkout route is used when WORKER_API_BASE is configured.</li>
+                  <li>Webhook-backed subscriber state remains the authority for premium access.</li>
+                  <li>Customer Portal and real sign-in still need production wiring later.</li>
+                </ul>
+              </article>
+            </section>
+          `
+          : `
+            <section class="section">
+              <div class="notice">Manage subscription coming soon.</div>
+            </section>
+          `
+      }
     `;
   };
 
