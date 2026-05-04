@@ -9,6 +9,7 @@
   const checkoutState = query.get("checkout") || "";
   const runtimeConfig = window.OG_CONFIG || {};
   const workerApiBase = String(runtimeConfig.WORKER_API_BASE || "").replace(/\/+$/, "");
+  const checkoutPlaceholderHref = "./account.html?intent=checkout";
 
   const state = {
     summary: null,
@@ -116,6 +117,26 @@
   const renderNotice = (message, tone = "default") =>
     message ? `<div class="notice notice-${escapeHtml(tone)}">${escapeHtml(message)}</div>` : "";
 
+  const formatProbability = (value) => {
+    const numeric = Number(value);
+    if (!Number.isFinite(numeric)) {
+      return "N/A";
+    }
+    return `${Math.round(numeric * 100)}%`;
+  };
+
+  const edgeLabel = (row) => row.value_edge_display || row.value_edge || "N/A";
+  const confidenceLabel = (row) => row.display_confidence || row.model_prob_display || formatProbability(row.model_prob);
+  const tierClass = (tier) => (String(tier || "").toUpperCase() === "STANDARD" ? "standard" : "elite");
+
+  const proofTile = (label, value, note = "") => `
+    <article class="proof-tile">
+      <span class="metric-label">${escapeHtml(label)}</span>
+      <strong>${escapeHtml(value)}</strong>
+      ${note ? `<span class="muted">${escapeHtml(note)}</span>` : ""}
+    </article>
+  `;
+
   const predictionCard = (row, locked) => {
     const shortlist = Array.isArray(row.correct_score_shortlist) ? row.correct_score_shortlist : [];
     return `
@@ -127,28 +148,34 @@
           </div>
           <div class="pill-row">
             <span class="market-badge">${escapeHtml(row.market)}</span>
-            <span class="confidence-badge">${escapeHtml(row.confidence_tier)}</span>
+            <span class="confidence-badge ${tierClass(row.confidence_tier)}">${escapeHtml(row.confidence_tier)}</span>
           </div>
         </div>
-        <div class="detail-row">
-          <div>
-            <span class="muted">Pick</span>
-            <strong>${escapeHtml(row.pick)}</strong>
+        <div class="signal-grid">
+          <div class="signal-cell">
+            <span class="signal-label">Pick</span>
+            <span class="signal-value">${escapeHtml(row.pick)}</span>
           </div>
-          <div>
-            <span class="muted">Odds</span>
-            <strong>${escapeHtml(row.bookie_od ?? "N/A")}</strong>
+          <div class="signal-cell">
+            <span class="signal-label">Odds</span>
+            <span class="signal-value">${escapeHtml(row.bookie_od ?? "N/A")}</span>
+          </div>
+          <div class="signal-cell">
+            <span class="signal-label">${locked ? "Confidence" : "Model"}</span>
+            <span class="signal-value">${escapeHtml(locked ? confidenceLabel(row) : formatProbability(row.model_prob))}</span>
+          </div>
+          <div class="signal-cell">
+            <span class="signal-label">Edge</span>
+            <span class="signal-value">${escapeHtml(locked ? row.value_edge_display || "Members only" : edgeLabel(row))}</span>
           </div>
         </div>
-        <div class="pill-row">
+        <div class="prediction-footer">
           ${
             locked
-              ? `<span class="premium-lock">Premium detail locked</span>`
-              : `<span class="value-badge">Edge ${escapeHtml(
-                  row.value_edge_display || row.value_edge || "N/A"
-                )}</span>`
+              ? `<span class="premium-lock">Locked in free view</span>`
+              : `<span class="value-badge">Value edge ${escapeHtml(edgeLabel(row))}</span>`
           }
-          <span class="pill">${escapeHtml(row.display_confidence || row.model_prob_display || "Qualified")}</span>
+          <span class="pill">${escapeHtml(confidenceLabel(row))}</span>
         </div>
         <p class="muted">${escapeHtml(row.short_reason || row.human_reason || "Model-backed selection.")}</p>
         ${
@@ -243,15 +270,14 @@
               </div>
               <div class="pill-row">
                 <span class="market-badge">${escapeHtml(row.market || "Premium")}</span>
-                <span class="confidence-badge">${escapeHtml(row.confidence_tier || "Locked")}</span>
+                <span class="confidence-badge ${tierClass(row.confidence_tier)}">${escapeHtml(row.confidence_tier || "Locked")}</span>
               </div>
             </div>
             <div class="locked-copy">
               <span class="premium-lock">Locked while subscribed</span>
               <h3>Premium card ${index + 1}</h3>
               <p>
-                Unlock full pick detail, richer explanation, slip-role hints, and shortlist context once secure
-                subscriber access is in place.
+                Unlock full pick detail, sharper edge context, shortlist support, and the complete premium board.
               </p>
             </div>
             <div class="blur-stack" aria-hidden="true">
@@ -267,93 +293,94 @@
 
   const workerStatusCopy = () => {
     if (!workerConfigured()) {
-      return "Worker API not configured";
+      return "Worker not configured";
     }
-    return premiumTokenPresent() ? "Worker token detected" : "Worker configured, token missing";
+    return premiumTokenPresent() ? "Token detected" : "Token required";
   };
 
   const checkoutCta = () =>
     `<a class="button" data-action="worker-checkout" href="./account.html?intent=checkout">${
-      workerConfigured() ? "Start founding membership" : "Open checkout placeholder"
+      workerConfigured() ? "Unlock founding membership" : "Open checkout placeholder"
     }</a>`;
 
   const homeView = () => `
     <section class="hero">
       <div class="hero-main">
-        <p class="hero-kicker">Live Deployment Layer</p>
-        <h1>Model-backed football predictions.</h1>
+        <p class="hero-kicker">Odds Genius Live Board</p>
+        <h1>Evidence-first football picks for bettors who want signal, not noise.</h1>
         <p>
-          Walk-forward tested. Built for bettors who want evidence, not vibes. The frontend reads the
-          published JSON bridge directly, so what you see here is tied to the current export contract, not
-          demo-only filler.
+          Model-backed selections, weekly proof, and a premium board that stays protected behind the Worker.
+          Built to surface real edge, not tipster theatre.
         </p>
         <div class="hero-actions">
-          <a class="button" href="./predictions.html">View live board</a>
-          <a class="ghost-button" href="./premium.html">See premium view</a>
+          <a class="button" href="./predictions.html">View live picks</a>
+          <a class="ghost-button" href="./results.html">See proof</a>
+        </div>
+        <div class="proof-strip">
+          ${proofTile("Live board", `${state.summary.public_predictions_count} free picks`, "Current public export")}
+          ${proofTile("Premium board", `${state.summary.premium_predictions_count} cards`, "Protected Worker route ready")}
+          ${proofTile(
+            "Settled hit rate",
+            state.weeklyResults?.overall_hit_rate == null ? "Pending" : `${Math.round(state.weeklyResults.overall_hit_rate * 100)}%`,
+            state.weeklyResults ? `${state.weeklyResults.settled_picks}/${state.weeklyResults.total_picks} settled` : "Results layer ready"
+          )}
+          ${proofTile("Last publish", escapeHtml(state.summary.generated_at.slice(0, 10)), escapeHtml(sourceWindowLabel()))}
         </div>
       </div>
       <aside class="hero-side">
-        <div class="metric">
-          <span class="metric-label">Free board</span>
-          <span class="metric-value">${state.summary.public_predictions_count}</span>
-        </div>
-        <div class="metric">
-          <span class="metric-label">Premium board</span>
-          <span class="metric-value">${state.summary.premium_predictions_count}</span>
-        </div>
-        <div class="metric">
-          <span class="metric-label">Source window</span>
-          <span class="metric-value">${escapeHtml(sourceWindowLabel())}</span>
-        </div>
+        <article class="sample-board">
+          <div class="sample-board-head">
+            <div>
+              <span class="metric-label">Board snapshot</span>
+              <strong>What a live card looks like</strong>
+            </div>
+            <span class="pill">Free preview</span>
+          </div>
+          <div class="sample-board-grid">
+            ${state.publicPredictions.slice(0, 2).map((row) => `
+              <article class="sample-row">
+                <div class="sample-row-meta">
+                  <strong>${escapeHtml(row.home_team)} vs ${escapeHtml(row.away_team)}</strong>
+                  <span class="muted">${escapeHtml(row.league)} • ${escapeHtml(row.kickoff_time)}</span>
+                  <div class="pill-row">
+                    <span class="market-badge">${escapeHtml(row.market)}</span>
+                    <span class="confidence-badge ${tierClass(row.confidence_tier)}">${escapeHtml(row.confidence_tier)}</span>
+                  </div>
+                </div>
+                <div class="sample-row-side">
+                  <span class="stat-chip">${escapeHtml(row.pick)}</span>
+                  <span class="stat-chip">${escapeHtml(row.bookie_od ?? "N/A")}</span>
+                  <span class="stat-chip">${escapeHtml(row.value_edge_display || "Edge ready")}</span>
+                </div>
+              </article>
+            `).join("")}
+          </div>
+        </article>
       </aside>
     </section>
 
-    <section class="section">
-      <div class="section-head">
-        <div>
-          <h2>Current board snapshot</h2>
-          <p class="section-copy">
-            Free users get the top live board. Premium users get the full deployable board, richer explanation,
-            and correct-score support where available.
-          </p>
-        </div>
-      </div>
-      <div class="stats-grid">
-        ${statPanel("Source rows read", state.summary.source_rows_read)}
-        ${statPanel("Public cards", state.summary.public_predictions_count)}
-        ${statPanel("Premium cards", state.summary.premium_predictions_count)}
-        ${statPanel("Worker handoff", workerConfigured() ? "Prepared" : "Static-only")}
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-head">
-        <div>
-          <h2>Free board preview</h2>
-          <p class="section-copy">A lean preview of the current public export, pulled from <code>public_predictions.json</code>.</p>
-        </div>
-        <a class="ghost-button" href="./predictions.html">Open full predictions page</a>
-      </div>
-      <div class="card-grid">
-        ${state.publicPredictions.slice(0, 3).map((row) => predictionCard(row, true)).join("")}
-      </div>
-    </section>
-
     <section class="section split">
+      <div>
+        <div class="section-head">
+          <div>
+            <h2>Live public board</h2>
+            <p class="section-copy">
+              A compact look at the current free board. Premium members unlock the full deployable set, richer
+              reasons, shortlist support, and Worker-protected access.
+            </p>
+          </div>
+          <a class="ghost-button" href="./predictions.html">Open full board</a>
+        </div>
+        <div class="card-grid">
+          ${state.publicPredictions.slice(0, 3).map((row) => predictionCard(row, true)).join("")}
+        </div>
+      </div>
       <article class="panel">
-        <h3>What this scaffold proves</h3>
+        <h3>Why this converts</h3>
         <ul class="method-list">
-          <li>The site consumes generated outputs rather than recreating betting logic in the frontend.</li>
-          <li>The public/premium boundary is now driven by strict allowlisted JSON.</li>
-          <li>The frontend is ready to call the Worker when real Cloudflare wiring is in place.</li>
-        </ul>
-      </article>
-      <article class="panel">
-        <h3>What comes next</h3>
-        <ul class="method-list">
-          <li>Wire live Worker API base in the frontend config.</li>
-          <li>Replace developer token handling with magic-link or authenticated session issuance.</li>
-          <li>Move live premium users to Worker-backed protected delivery instead of static preview.</li>
+          <li>Walk-forward proof is published separately from the picks page.</li>
+          <li>The public board is useful, but the premium board is where the full signal density lives.</li>
+          <li>Protected Worker delivery keeps premium access tied to live subscriber entitlement.</li>
         </ul>
       </article>
     </section>
@@ -361,18 +388,39 @@
 
   const predictionsView = () => `
     <section class="section">
+      <div class="hero-main board-layout">
+        <div class="board-toolbar">
+          <div class="board-hero-copy">
+            <p class="hero-kicker">Predictions Board</p>
+            <h1>Live public picks.</h1>
+            <p class="section-copy">
+              Fast-scan public cards built from the latest safe export. Confidence is rounded in public, while the
+              premium board carries the deeper edge view.
+            </p>
+          </div>
+          <div class="pill-row">
+            <span class="pill pill-elite">${state.summary.public_predictions_count} free picks</span>
+            <span class="pill">${escapeHtml(sourceWindowLabel())}</span>
+          </div>
+        </div>
+        <div class="proof-strip">
+          ${proofTile("Source rows", state.summary.source_rows_read)}
+          ${proofTile("Public cards", state.summary.public_predictions_count)}
+          ${proofTile("Premium cards", state.summary.premium_predictions_count)}
+          ${proofTile("Proof page", "Weekly results", "Settled outcomes published separately")}
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
       <div class="section-head">
         <div>
-          <h1>Public predictions board</h1>
+          <h2>Current board</h2>
           <p class="section-copy">
-            Limited free board sourced from <code>public_predictions.json</code>. Confidence and edge are rounded
-            for display and explanation is intentionally generic.
+            Denser live cards with clearer hierarchy across market, pick, odds, confidence, and edge.
           </p>
         </div>
-        <div class="pill-row">
-          <span class="pill pill-elite">${state.summary.public_predictions_count} free picks</span>
-          <span class="pill">Source: ${escapeHtml(sourceWindowLabel())}</span>
-        </div>
+        <a class="ghost-button" href="./premium.html">See premium unlock</a>
       </div>
       <div class="card-grid">
         ${state.publicPredictions.map((row) => predictionCard(row, true)).join("")}
@@ -386,10 +434,10 @@
         <section class="section split">
           <article class="hero-main">
             <p class="hero-kicker">Premium Demo Mode</p>
-            <h1>Internal review view only.</h1>
+            <h1>Internal premium preview.</h1>
             <p>
-              Demo mode is enabled for product review, so the exported premium board is being rendered below.
-              This is not secure access and must move behind authenticated backend or Worker delivery later.
+              Demo mode is enabled for internal product review, so the exported premium board is rendered below.
+              Customer-facing access should continue to rely on the Worker route.
             </p>
             <div class="cta-row">
               <a class="button" href="./pricing.html">See founding plan</a>
@@ -412,8 +460,7 @@
             <div>
               <h2>Premium board preview</h2>
               <p class="section-copy">
-                This table is for controlled internal preview only. It should not be treated as the final secure
-                subscriber architecture.
+                Internal-only rendering of the premium board for product review.
               </p>
             </div>
           </div>
@@ -428,32 +475,32 @@
     return `
       <section class="section split">
         <article class="hero-main">
-          <p class="hero-kicker">Premium Access</p>
-          <h1>${secureBoardReady ? "Protected premium board." : "Locked by default in static v1."}</h1>
+          <p class="hero-kicker">Premium Board</p>
+          <h1>${secureBoardReady ? "Protected premium access is live." : "The strongest board stays locked by default."}</h1>
           <p>
             ${
               secureBoardReady
-                ? "This view is being served through the Worker route after token verification and subscriber-state checks."
-                : "Premium access stays locked unless a Worker API base is configured and a verified premium token is present."
+                ? "This board is being served through the Worker after token verification and subscriber-state checks."
+                : "Unlock the full deployable board, deeper value context, shortlist support, and richer explanations."
             }
           </p>
           <div class="cta-row">
             ${checkoutCta()}
-            <a class="ghost-button" href="./premium.html?demo=1">Internal demo mode</a>
+            <a class="ghost-button" href="./pricing.html">See pricing</a>
           </div>
         </article>
         <aside class="hero-side">
           <div class="metric">
-            <span class="metric-label">Worker status</span>
+            <span class="metric-label">Access state</span>
             <span class="metric-value">${escapeHtml(workerStatusCopy())}</span>
           </div>
           <div class="metric">
-            <span class="metric-label">Token</span>
-            <span class="metric-value">${premiumTokenPresent() ? "Present" : "Missing"}</span>
+            <span class="metric-label">Premium cards</span>
+            <span class="metric-value">${secureBoardReady ? state.securePremiumPredictions.length : state.summary.premium_predictions_count}</span>
           </div>
           <div class="metric">
-            <span class="metric-label">Source</span>
-            <span class="metric-value">${secureBoardReady ? "Worker" : "Locked"}</span>
+            <span class="metric-label">Status</span>
+            <span class="metric-value">${secureBoardReady ? "Unlocked" : "Locked"}</span>
           </div>
         </aside>
       </section>
@@ -478,13 +525,13 @@
               ${renderNotice(
                 workerMessage ||
                   (workerConfigured()
-                    ? "Worker premium route is configured, but verified token access is still required."
-                    : "Set WORKER_API_BASE in frontend/assets/config.js before the frontend can call the Worker."),
+                    ? "Verified premium access is required before the full board is shown."
+                    : "Worker premium access is not configured yet."),
                 workerConfigured() ? "warning" : "default"
               )}
             </section>
             <section class="section">
-              <div class="card-grid">
+              <div class="locked-grid">
                 ${lockedPreviewCards()}
               </div>
             </section>
@@ -493,20 +540,20 @@
 
       <section class="section split">
         <article class="panel">
-          <h3>Worker-backed premium path</h3>
+          <h3>What unlocks</h3>
           <ul class="feature-list">
-            <li>Pricing CTA can call Worker checkout when configured.</li>
-            <li>Premium page fetches protected data only when a token exists.</li>
-            <li>No token means the locked state stays in place.</li>
-            <li>Demo mode remains separate for internal preview.</li>
+            <li>Full deployable board with ELITE and STANDARD cards.</li>
+            <li>Model probability, bookie implied probability, and value edge.</li>
+            <li>Human-readable premium reasons and shortlist context.</li>
+            <li>Worker-protected access tied to live subscription state.</li>
           </ul>
         </article>
         <article class="panel">
-          <h3>Boundary for static v1</h3>
+          <h3>Internal review</h3>
           <ul class="feature-list">
-            <li>Static premium JSON is still not presented as secure paid access.</li>
-            <li>Developer/test tokens are not final public auth.</li>
-            <li>Magic-link or session issuance still needs to replace manual token handling later.</li>
+            <li><a href="./premium.html?demo=1">Demo mode</a> remains available for internal preview only.</li>
+            <li>No token means the page stays locked by default.</li>
+            <li>Upgrade CTA routes to pricing and Worker checkout flow.</li>
           </ul>
         </article>
       </section>
@@ -519,11 +566,11 @@
       return `
         <section class="section split">
           <article class="hero-main">
-            <p class="hero-kicker">Results Layer</p>
-            <h1>Results page scaffold</h1>
+            <p class="hero-kicker">Results & Proof</p>
+            <h1>Proof layer waiting on settled grading.</h1>
             <p>
-              weekly_results.json is not available yet, so this page is showing the safe fallback state rather
-              than settled proof.
+              This page will show settled proof once weekly results are available. The structure is live, but the
+              current window has not been published here yet.
             </p>
           </article>
           <aside class="hero-side">
@@ -587,10 +634,10 @@
       <section class="section split">
         <article class="hero-main">
           <p class="hero-kicker">Weekly Proof</p>
-          <h1>Settled board results</h1>
+          <h1>Settled board proof.</h1>
           <p>
-            Public-safe weekly proof generated from scored deploy outputs. This page summarizes deployable picks
-            only and avoids exposing private routing fields.
+            Public-safe weekly proof generated from scored deploy outputs. Use this page to evaluate settled
+            performance, not hype.
           </p>
         </article>
         <aside class="hero-side">
@@ -612,11 +659,15 @@
       </section>
 
       <section class="section">
-        <div class="stats-grid">
+        <div class="results-highlight">
           ${statPanel("Total picks", weekly.total_picks)}
           ${statPanel("Settled picks", weekly.settled_picks)}
           ${statPanel("Pending picks", weekly.pending_picks)}
-          ${statPanel("Generated", weekly.generated_at.slice(0, 10))}
+          ${statPanel(
+            "Hit rate",
+            weekly.overall_hit_rate == null ? "Pending" : `${Math.round(weekly.overall_hit_rate * 100)}%`,
+            weekly.generated_at.slice(0, 10)
+          )}
         </div>
       </section>
 
@@ -660,19 +711,19 @@
   };
 
   const pricingView = () => `
-    <section class="section split">
-      <article class="hero-main">
-        <p class="hero-kicker">Pricing</p>
-        <h1>Founding Member Plan.</h1>
-        <p>
-          A lean first subscriber offer for bettors who want the full board and early access while the secure
-          account layer is being built.
-        </p>
-        <div class="cta-row">
-          ${checkoutCta()}
-          <a class="ghost-button" href="./premium.html">See locked premium view</a>
-        </div>
-      </article>
+      <section class="section split">
+        <article class="hero-main">
+          <p class="hero-kicker">Pricing</p>
+          <h1>Free board or founding member.</h1>
+          <p>
+            Start with the public board for free, or unlock the full premium board for the founding member price
+            while the product is still in its early paid phase.
+          </p>
+          <div class="cta-row">
+            ${checkoutCta()}
+            <a class="ghost-button" href="./premium.html">Preview locked premium</a>
+          </div>
+        </article>
       <aside class="hero-side">
         <div class="metric">
           <span class="metric-label">Plan</span>
@@ -695,7 +746,7 @@
         <article class="card pricing-card">
           <span class="pricing-tag">Free</span>
           <div class="pricing-price">£0</div>
-          <p class="pricing-subcopy">Useful signal, intentionally limited.</p>
+          <p class="pricing-subcopy">A useful preview of the current board, intentionally limited.</p>
           <ul class="feature-list">
             <li>Top public board only.</li>
             <li>Rounded confidence and rounded edge display.</li>
@@ -708,10 +759,10 @@
           <div class="pricing-price">£20<span class="pricing-price-note">/month</span></div>
           <p class="pricing-subcopy">Locked while subscribed. Built for the first paying cohort.</p>
           <ul class="feature-list">
-            <li>Full deployable board when secure access is live.</li>
-            <li>ELITE picks, richer explanation, and shortlist context.</li>
-            <li>Early access to the premium product direction.</li>
-            <li>Worker checkout route takes over once configured.</li>
+            <li>Full deployable board with ELITE and STANDARD picks.</li>
+            <li>Deeper edge context, richer explanations, and shortlist support.</li>
+            <li>Protected Worker-backed delivery after verified access.</li>
+            <li>Early founding member pricing while the product expands.</li>
           </ul>
           <div class="cta-row">
             ${checkoutCta()}
@@ -721,8 +772,8 @@
       <p class="footer-note">
         ${
           workerConfigured()
-            ? "Frontend Worker handoff is prepared. The upgrade CTA will call the Worker checkout route when available."
-            : "Static v1 does not provide secure subscriber enforcement. Add WORKER_API_BASE in frontend/assets/config.js to prepare live checkout handoff."
+            ? "The upgrade CTA now routes to the live Worker checkout flow."
+            : "Static-only mode cannot provide secure subscriber enforcement."
         }
       </p>
     </section>
