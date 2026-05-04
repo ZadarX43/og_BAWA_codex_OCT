@@ -2,6 +2,17 @@ const isoNow = () => new Date().toISOString();
 
 const asJson = (value) => JSON.stringify(value, null, 2);
 const fromJson = (value) => JSON.parse(value);
+const SUBSCRIPTION_STATUS_PRIORITY = {
+  incomplete: 1,
+  incomplete_expired: 0,
+  trialing: 4,
+  active: 5,
+  past_due: 2,
+  canceled: 1,
+  unpaid: 1,
+  paused: 1,
+  checkout_completed: 3,
+};
 
 const normalizePeriodEnd = (value) => {
   if (value == null || value === "") {
@@ -80,11 +91,37 @@ export const persistSubscriberRecord = async (store, record) => {
     throw new Error("Subscriber record is missing subscription_id.");
   }
 
+  let recordToPersist = record;
+
   if (record.subscription_id) {
-    await store.put(`subscription:${record.subscription_id}`, asJson(record));
+    const subscriptionKey = `subscription:${record.subscription_id}`;
+    const existingRaw = await store.get(subscriptionKey);
+    if (existingRaw) {
+      const existing = fromJson(existingRaw);
+      const existingPriority = SUBSCRIPTION_STATUS_PRIORITY[existing?.status] ?? -1;
+      const incomingPriority = SUBSCRIPTION_STATUS_PRIORITY[record?.status] ?? -1;
+
+      // Never let a weaker checkout-completed snapshot overwrite a stronger
+      // subscription-state record such as active or trialing.
+      if (existingPriority > incomingPriority) {
+        recordToPersist = {
+          ...existing,
+          customer_id: existing.customer_id || record.customer_id,
+          subscription_id: existing.subscription_id || record.subscription_id,
+          checkout_session_id: record.checkout_session_id || existing.checkout_session_id || null,
+          email: existing.email || record.email || null,
+          updated_at: record.updated_at || existing.updated_at,
+          source_event_id: record.source_event_id || existing.source_event_id || null,
+          source_event_type: record.source_event_type || existing.source_event_type || null,
+          source_event_created: record.source_event_created || existing.source_event_created || null,
+        };
+      }
+    }
+
+    await store.put(subscriptionKey, asJson(recordToPersist));
   }
 
-  await store.put(`customer:${record.customer_id}`, asJson(record));
+  await store.put(`customer:${record.customer_id}`, asJson(recordToPersist));
 
   return {
     customer_key: `customer:${record.customer_id}`,
