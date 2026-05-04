@@ -1,0 +1,625 @@
+[
+  {
+    "fixture_id": "2023_08_03_Shamrock_Rovers_Ferencv_ros__FTR__AWAY",
+    "fixture_key": "2023_08_03_Shamrock_Rovers_Ferencv_ros",
+    "kickoff_time": "2023-08-03",
+    "league": "Europa Conference",
+    "home_team": "Shamrock Rovers",
+    "away_team": "Ferencváros",
+    "market": "FTR",
+    "pick": "AWAY",
+    "confidence_tier": "ELITE",
+    "model_prob": 1.0,
+    "bookie_implied_prob": 0.5236,
+    "value_edge": 0.4764,
+    "bookie_od": 1.91,
+    "reason_tokens": [
+      "VALUE_EDGE_PREMIUM",
+      "TEAM_AWAY_GE2_POCKET",
+      "TEAM_INTEL_UPLIFT",
+      "DEPLOYABLE",
+      "MARKET_FTR",
+      "TIER_ELITE"
+    ],
+    "human_reason": "Away carried enough support to remain live in the elite board.",
+    "slip_role_hint": "anchor",
+    "safe_for_small_acca_flag": true,
+    "safe_for_large_acca_flag": true,
+    "correct_score_shortlist": [
+      {
+        "scoreline": "0-1",
+        "probability": 0.127
+      },
+      {
+        "scoreline": "0-2",
+        "probability": 0.117
+      },
+      {
+        "scoreline": "1-1",
+        "probability": 0.105
+      }
+    ],
+    "premium_tier": "ELITE"
+  },
+  {
+    "fixture_id": "2023_08_03_Haverfordwest_County_B36__BTTS__YES",
+    "fixture_key": "2023_08_03_Haverfordwest_County_B36",
+    "kickoff_time": "2023-08-03",
+    "league": "Europa Conference",
+    "home_team": "Haverfordwest County",
+    "away_team": "B36",
+    "market": "BTTS",
+    "pick": "YES",
+    "confidence_tier": "ELITE",
+    "model_prob": 0.7157,
+    "bookie_implied_prob": 0.5556,
+    "value_edge": 0.1602,
+    "bookie_od": 1.8,
+    "reason_tokens": [
+      "VALUE_EDGE_PREMIUM",
+      "DEPLOYABLE",
+      "MARKET_BTTS",
+      "TIER_ELITE"
+    ],
+    "human_reason": "Yes met the live BTTS posture for the elite board.",
+    "slip_role_hint": "anchor",
+    "safe_for_small_acca_flag": true,
+    "safe_for_large_acca_flag": true,
+    "correct_score_shortlist": [
+      {
+        "scoreline": "1-0",
+        "probability": 0.131
+      },
+      {
+        "scoreline": "1-1",
+        "probability": 0.115
+      },
+      {
+        "scoreline": "2-0",
+        "probability": 0.109
+      }
+    ],
+    "premium_tier": "ELITE"
+  },
+  {
+    "fixture_id": "2023_08_08_PSV_Sturm_Graz__BTTS__YES",
+    "fixture_key": "2023_08_08_PSV_Sturm_Graz",
+    "kickoff_time": "2023-08-08",
+    "league": "Champions League",
+    "home_team": "PSV",
+    "away_team": "Sturm Graz",
+    "market": "BTTS",
+    "pick": "YES",
+    "confidence_tier": "ELITE",
+    "model_prob": 0.713,
+    "bookie_implied_prob": 0.5714,
+    "value_edge": 0.1415,
+    "bookie_od": 1.75,
+    "reason_tokens": [
+      "VALUE_EDGE_PREMIUM",
+      "TEAM_HOME_GE2_POCKET",
+      "TEAM_INTEL_CAUTION",
+      "DEPLOYABLE",
+      "MARKET_BTTS",
+      "TIER_ELITE"
+    ],
+    "human_reason": "Yes met the live BTTS posture for the elite board.",
+    "slip_role_hint": "anchor",
+    "safe_for_small_acca_flag": true,
+    "safe_for_large_acca_flag": true,
+    "correct_score_shortlist": [
+      {
+        "scoreline": "2-0",
+        "probability": 0.13
+      },
+      {
+        "scoreline": "1-0",
+        "probability": 0.12
+      },
+      {
+        "scoreline": "2-1",
+        "probability": 0.095
+      }
+    ],
+    "premium_tier": "ELITE"
+  },
+  {
+    "fixture_id": "2023_08_03_Luzern_Djurg_rden__BTTS__NO",
+    "fixture_key": "2023_08_03_Luzern_Djurg_rden",
+    "kickoff_time": "2023-08-03",
+    "league": "Europa Conference",
+    "home_team": "Luzern",
+    "away_team": "Djurgården",
+    "market": "BTTS",
+    "pick": "NO",
+    "confidence_tier": "ELITE",
+    "model_prob": 0.6542,
+    "bookie_implied_prob": 0.4762,
+    "value_edge": 0.178,
+    "bookie_od": 2.1,
+    "reason_tokens": [
+      "VALUE_EDGE_PREMIUM",
+      "DEPLOYABLE",
+      "MARKET_BTTS",
+      "TIER_ELITE"
+    ],
+    "human_reason": "No met the live BTTS posture for the elite board.",
+    "slip_role_hint": "anchor",
+    "safe_for_small_acca_flag": true,
+    "safe_for_large_acca_flag": true,
+    "correct_score_shortlist": [
+      {
+        "scoreline": "1-0",
+        "probability": 0.118
+      },
+      {
+        "scoreline": "2-0",
+        "probability": 0.115
+      },
+      {
+        "scoreline": "1-1",
+        "probability": 0.101
+      }
+    ],
+    "premium_tier": "ELITE"
+  },
+  {
+    "fixture_id": "2023_08_03_Aris_FC_Avan_Academy__BTTS__NO",
+    "fixture_key": "2023_08_03_Aris_FC_Avan_Academy",
+    "kickoff_time": "2023-08-03",
+    "league": "Europa Conference",
+    "home_team": "Aris",
+    "away_team": "FC Avan Academy",
+    "market": "BTTS",
+    "pick": "NO",
+    "confidence_tier": "ELITE",
+    "model_prob": 0.6451,
+    "bookie_implied_prob": 0.5988,
+    "value_edge": 0.0463,
+    "bookie_od": 1.67,
+    "reason_tokens": [
+      "VALUE_EDGE_STRONG",
+      "TEAM_SCORER_VS_SCORER",
+      "TEAM_INTEL_UPLIFT",
+      "DEPLOYABLE",
+      "MARKET_BTTS",
+      "TIER_ELITE"
+    ],
+    "human_reason": "No met the live BTTS posture for the elite board.",
+    "slip_role_hint": "anchor",
+    "safe_for_small_acca_flag": true,
+    "safe_for_large_acca_flag": true,
+    "correct_score_shortlist": [
+      {
+        "scoreline": "1-0",
+        "probability": 0.153
+      },
+      {
+        "scoreline": "1-1",
+        "probability": 0.119
+      },
+      {
+        "scoreline": "2-0",
+        "probability": 0.116
+      }
+    ],
+    "premium_tier": "ELITE"
+  },
+  {
+    "fixture_id": "2023_08_06_Leicester_City_Coventry_City__BTTS__YES",
+    "fixture_key": "2023_08_06_Leicester_City_Coventry_City",
+    "kickoff_time": "2023-08-06",
+    "league": "England Championship",
+    "home_team": "Leicester City",
+    "away_team": "Coventry City",
+    "market": "BTTS",
+    "pick": "YES",
+    "confidence_tier": "ELITE",
+    "model_prob": 0.6156,
+    "bookie_implied_prob": 0.5464,
+    "value_edge": 0.0692,
+    "bookie_od": 1.83,
+    "reason_tokens": [
+      "VALUE_EDGE_PREMIUM",
+      "DEPLOYABLE",
+      "MARKET_BTTS",
+      "TIER_ELITE"
+    ],
+    "human_reason": "Yes met the live BTTS posture for the elite board.",
+    "slip_role_hint": "anchor",
+    "safe_for_small_acca_flag": true,
+    "safe_for_large_acca_flag": true,
+    "correct_score_shortlist": [
+      {
+        "scoreline": "1-1",
+        "probability": 0.114
+      },
+      {
+        "scoreline": "1-2",
+        "probability": 0.092
+      },
+      {
+        "scoreline": "0-1",
+        "probability": 0.088
+      }
+    ],
+    "premium_tier": "ELITE"
+  },
+  {
+    "fixture_id": "2023_08_09_AEK_Larnaca_Maccabi_Tel_Aviv__BTTS__YES",
+    "fixture_key": "2023_08_09_AEK_Larnaca_Maccabi_Tel_Aviv",
+    "kickoff_time": "2023-08-09",
+    "league": "Europa Conference",
+    "home_team": "AEK Larnaca",
+    "away_team": "Maccabi Tel Aviv",
+    "market": "BTTS",
+    "pick": "YES",
+    "confidence_tier": "ELITE",
+    "model_prob": 0.6001,
+    "bookie_implied_prob": 0.5236,
+    "value_edge": 0.0765,
+    "bookie_od": 1.91,
+    "reason_tokens": [
+      "VALUE_EDGE_PREMIUM",
+      "TEAM_INTEL_UPLIFT",
+      "DEPLOYABLE",
+      "MARKET_BTTS",
+      "TIER_ELITE"
+    ],
+    "human_reason": "Yes met the live BTTS posture for the elite board.",
+    "slip_role_hint": "anchor",
+    "safe_for_small_acca_flag": true,
+    "safe_for_large_acca_flag": true,
+    "correct_score_shortlist": [
+      {
+        "scoreline": "1-1",
+        "probability": 0.117
+      },
+      {
+        "scoreline": "2-1",
+        "probability": 0.089
+      },
+      {
+        "scoreline": "1-0",
+        "probability": 0.087
+      }
+    ],
+    "premium_tier": "ELITE"
+  },
+  {
+    "fixture_id": "2023_08_08_Olimpija_Galatasaray__FTR__AWAY",
+    "fixture_key": "2023_08_08_Olimpija_Galatasaray",
+    "kickoff_time": "2023-08-08",
+    "league": "Champions League",
+    "home_team": "Olimpija",
+    "away_team": "Galatasaray",
+    "market": "FTR",
+    "pick": "AWAY",
+    "confidence_tier": "STANDARD",
+    "model_prob": 1.0,
+    "bookie_implied_prob": 0.6667,
+    "value_edge": 0.3333,
+    "bookie_od": 1.5,
+    "reason_tokens": [
+      "VALUE_EDGE_PREMIUM",
+      "FTR_UEFA_HYBRID_RESCUE",
+      "TEAM_INTEL_CAUTION",
+      "DEPLOYABLE",
+      "MARKET_FTR",
+      "TIER_STANDARD"
+    ],
+    "human_reason": "Away carried enough support to remain live in the standard board.",
+    "slip_role_hint": "support",
+    "safe_for_small_acca_flag": false,
+    "safe_for_large_acca_flag": false,
+    "correct_score_shortlist": [
+      {
+        "scoreline": "1-1",
+        "probability": 0.116
+      },
+      {
+        "scoreline": "0-1",
+        "probability": 0.102
+      },
+      {
+        "scoreline": "1-2",
+        "probability": 0.095
+      }
+    ],
+    "premium_tier": "STANDARD"
+  },
+  {
+    "fixture_id": "2023_08_05_St_Johnstone_Hearts__FTR__AWAY",
+    "fixture_key": "2023_08_05_St_Johnstone_Hearts",
+    "kickoff_time": "2023-08-05",
+    "league": "Scotland Premiership",
+    "home_team": "St. Johnstone",
+    "away_team": "Hearts",
+    "market": "FTR",
+    "pick": "AWAY",
+    "confidence_tier": "STANDARD",
+    "model_prob": 0.7872,
+    "bookie_implied_prob": 0.4444,
+    "value_edge": 0.3428,
+    "bookie_od": 2.25,
+    "reason_tokens": [
+      "VALUE_EDGE_PREMIUM",
+      "FTR_CS_PROMOTE_STANDARD",
+      "TEAM_INTEL_CAUTION",
+      "DEPLOYABLE",
+      "MARKET_FTR",
+      "TIER_STANDARD"
+    ],
+    "human_reason": "Away carried enough support to remain live in the standard board.",
+    "slip_role_hint": "support",
+    "safe_for_small_acca_flag": false,
+    "safe_for_large_acca_flag": false,
+    "correct_score_shortlist": [
+      {
+        "scoreline": "0-1",
+        "probability": 0.259
+      },
+      {
+        "scoreline": "0-2",
+        "probability": 0.241
+      },
+      {
+        "scoreline": "0-3",
+        "probability": 0.149
+      }
+    ],
+    "premium_tier": "STANDARD"
+  },
+  {
+    "fixture_id": "2023_08_06_KVC_Westerlo_Club_Brugge__FTR__AWAY",
+    "fixture_key": "2023_08_06_KVC_Westerlo_Club_Brugge",
+    "kickoff_time": "2023-08-06",
+    "league": "Belgium Pro",
+    "home_team": "KVC Westerlo",
+    "away_team": "Club Brugge",
+    "market": "FTR",
+    "pick": "AWAY",
+    "confidence_tier": "STANDARD",
+    "model_prob": 0.7297,
+    "bookie_implied_prob": 0.5155,
+    "value_edge": 0.2143,
+    "bookie_od": 1.94,
+    "reason_tokens": [
+      "VALUE_EDGE_PREMIUM",
+      "DEMOTED_TO_OBSERVE",
+      "FTR_CS_PROMOTE_STANDARD",
+      "TEAM_INTEL_CAUTION",
+      "DEPLOYABLE",
+      "MARKET_FTR"
+    ],
+    "human_reason": "Away carried enough support to remain live in the standard board.",
+    "slip_role_hint": "support",
+    "safe_for_small_acca_flag": false,
+    "safe_for_large_acca_flag": false,
+    "correct_score_shortlist": [
+      {
+        "scoreline": "0-1",
+        "probability": 0.174
+      },
+      {
+        "scoreline": "0-2",
+        "probability": 0.151
+      },
+      {
+        "scoreline": "0-0",
+        "probability": 0.1
+      }
+    ],
+    "premium_tier": "STANDARD"
+  },
+  {
+    "fixture_id": "2023_08_05_Sparta_Praha_Pardubice__FTR__HOME",
+    "fixture_key": "2023_08_05_Sparta_Praha_Pardubice",
+    "kickoff_time": "2023-08-05",
+    "league": "Czech First League",
+    "home_team": "Sparta Praha",
+    "away_team": "Pardubice",
+    "market": "FTR",
+    "pick": "HOME",
+    "confidence_tier": "STANDARD",
+    "model_prob": 0.4164,
+    "bookie_implied_prob": 0.8403,
+    "value_edge": -0.424,
+    "bookie_od": 1.19,
+    "reason_tokens": [
+      "TEAM_HOME_GE2_POCKET",
+      "DEMOTED_MARGIN_STANDARD",
+      "TEAM_INTEL_UPLIFT",
+      "DEPLOYABLE",
+      "MARKET_FTR",
+      "TIER_STANDARD"
+    ],
+    "human_reason": "Home carried enough support to remain live in the standard board.",
+    "slip_role_hint": "support",
+    "safe_for_small_acca_flag": false,
+    "safe_for_large_acca_flag": false,
+    "correct_score_shortlist": [
+      {
+        "scoreline": "2-0",
+        "probability": 0.146
+      },
+      {
+        "scoreline": "1-0",
+        "probability": 0.134
+      },
+      {
+        "scoreline": "3-0",
+        "probability": 0.106
+      }
+    ],
+    "premium_tier": "STANDARD"
+  },
+  {
+    "fixture_id": "2023_08_05_Rapid_Wien_Rheindorf_Altach__FTR__HOME",
+    "fixture_key": "2023_08_05_Rapid_Wien_Rheindorf_Altach",
+    "kickoff_time": "2023-08-05",
+    "league": "Austria Bundesliga",
+    "home_team": "Rapid Wien",
+    "away_team": "Rheindorf Altach",
+    "market": "FTR",
+    "pick": "HOME",
+    "confidence_tier": "STANDARD",
+    "model_prob": 0.3744,
+    "bookie_implied_prob": 0.6667,
+    "value_edge": -0.2923,
+    "bookie_od": 1.5,
+    "reason_tokens": [
+      "TEAM_HOME_GE2_POCKET",
+      "DEMOTED_TO_OBSERVE",
+      "FTR_CS_PROMOTE_STANDARD",
+      "TEAM_INTEL_UPLIFT",
+      "DEPLOYABLE",
+      "MARKET_FTR"
+    ],
+    "human_reason": "Home carried enough support to remain live in the standard board.",
+    "slip_role_hint": "support",
+    "safe_for_small_acca_flag": false,
+    "safe_for_large_acca_flag": false,
+    "correct_score_shortlist": [
+      {
+        "scoreline": "2-0",
+        "probability": 0.127
+      },
+      {
+        "scoreline": "3-0",
+        "probability": 0.103
+      },
+      {
+        "scoreline": "1-0",
+        "probability": 0.103
+      }
+    ],
+    "premium_tier": "STANDARD"
+  },
+  {
+    "fixture_id": "2023_08_06_Salzburg_Wattens__FTR__HOME",
+    "fixture_key": "2023_08_06_Salzburg_Wattens",
+    "kickoff_time": "2023-08-06",
+    "league": "Austria Bundesliga",
+    "home_team": "Salzburg",
+    "away_team": "Wattens",
+    "market": "FTR",
+    "pick": "HOME",
+    "confidence_tier": "STANDARD",
+    "model_prob": 0.3643,
+    "bookie_implied_prob": 0.8696,
+    "value_edge": -0.5053,
+    "bookie_od": 1.15,
+    "reason_tokens": [
+      "TEAM_HOME_GE2_POCKET",
+      "DEMOTED_TO_OBSERVE",
+      "FTR_CS_PROMOTE_STANDARD",
+      "TEAM_INTEL_UPLIFT",
+      "DEPLOYABLE",
+      "MARKET_FTR"
+    ],
+    "human_reason": "Home carried enough support to remain live in the standard board.",
+    "slip_role_hint": "support",
+    "safe_for_small_acca_flag": false,
+    "safe_for_large_acca_flag": false,
+    "correct_score_shortlist": [
+      {
+        "scoreline": "2-0",
+        "probability": 0.156
+      },
+      {
+        "scoreline": "3-0",
+        "probability": 0.136
+      },
+      {
+        "scoreline": "1-0",
+        "probability": 0.12
+      }
+    ],
+    "premium_tier": "STANDARD"
+  },
+  {
+    "fixture_id": "2023_08_05_OH_Leuven_RWDM__OU25__OVER25",
+    "fixture_key": "2023_08_05_OH_Leuven_RWDM",
+    "kickoff_time": "2023-08-05",
+    "league": "Belgium Pro",
+    "home_team": "OH Leuven",
+    "away_team": "RWDM",
+    "market": "OU25",
+    "pick": "OVER25",
+    "confidence_tier": "STANDARD",
+    "model_prob": 0.7826,
+    "bookie_implied_prob": 0.5952,
+    "value_edge": 0.1874,
+    "bookie_od": 1.68,
+    "reason_tokens": [
+      "VALUE_EDGE_PREMIUM",
+      "OU25_HYBRID_BELGIUM_PREMIUM_RESCUE",
+      "TEAM_INTEL_CAUTION",
+      "DEPLOYABLE",
+      "MARKET_OU25",
+      "TIER_STANDARD"
+    ],
+    "human_reason": "Over25 passed the live totals posture for the standard board.",
+    "slip_role_hint": "support",
+    "safe_for_small_acca_flag": false,
+    "safe_for_large_acca_flag": false,
+    "correct_score_shortlist": [
+      {
+        "scoreline": "0-2",
+        "probability": 0.129
+      },
+      {
+        "scoreline": "0-1",
+        "probability": 0.108
+      },
+      {
+        "scoreline": "0-3",
+        "probability": 0.103
+      }
+    ],
+    "premium_tier": "STANDARD"
+  },
+  {
+    "fixture_id": "2023_08_09_Austria_Klagenfurt_Wolfsberger_AC__OU25__OVER25",
+    "fixture_key": "2023_08_09_Austria_Klagenfurt_Wolfsberger_AC",
+    "kickoff_time": "2023-08-09",
+    "league": "Austria Bundesliga",
+    "home_team": "Austria Klagenfurt",
+    "away_team": "Wolfsberger AC",
+    "market": "OU25",
+    "pick": "OVER25",
+    "confidence_tier": "STANDARD",
+    "model_prob": 0.6793,
+    "bookie_implied_prob": 0.565,
+    "value_edge": 0.1144,
+    "bookie_od": 1.77,
+    "reason_tokens": [
+      "OU25_OVER25_BLACKLIST",
+      "OU25_PREMIUM_WHITELIST_STANDARD",
+      "TEAM_INTEL_CAUTION",
+      "DEPLOYABLE",
+      "MARKET_OU25",
+      "TIER_STANDARD"
+    ],
+    "human_reason": "Over25 passed the live totals posture for the standard board.",
+    "slip_role_hint": "support",
+    "safe_for_small_acca_flag": false,
+    "safe_for_large_acca_flag": false,
+    "correct_score_shortlist": [
+      {
+        "scoreline": "1-1",
+        "probability": 0.107
+      },
+      {
+        "scoreline": "1-2",
+        "probability": 0.086
+      },
+      {
+        "scoreline": "2-1",
+        "probability": 0.082
+      }
+    ],
+    "premium_tier": "STANDARD"
+  }
+]

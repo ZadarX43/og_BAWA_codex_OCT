@@ -1,0 +1,30 @@
+name: Validate Public Export
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+
+jobs:
+  validate-public-export:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Validate public export
+        run: python3 validate_public_export.py
+
+      - name: Validate weekly results
+        run: python3 validate_weekly_results.py
+
+      - name: Run frontend static smoke
+        run: python3 scripts/smoke_frontend_static.py

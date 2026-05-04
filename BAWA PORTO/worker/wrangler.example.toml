@@ -1,0 +1,31 @@
+name = "odds-genius-worker"
+main = "src/index.js"
+compatibility_date = "2026-05-04"
+workers_dev = true
+
+[observability]
+enabled = true
+
+[vars]
+SITE_URL = "https://example.com"
+PREMIUM_DATA_SOURCE = "https://example.com/public/data/premium_predictions.json"
+STRIPE_PRICE_ID = "price_example_founding_member"
+
+# Example KV binding for subscriber-state persistence.
+# Replace the placeholder id during real Cloudflare setup.
+[[kv_namespaces]]
+binding = "SUBSCRIBER_STATE"
+id = "replace-with-real-kv-namespace-id"
+
+# Optional example environment override block.
+# [env.production.vars]
+# SITE_URL = "https://oddsgenius.example.com"
+# PREMIUM_DATA_SOURCE = "https://oddsgenius.example.com/public/data/premium_predictions.json"
+# STRIPE_PRICE_ID = "price_live_replace_me"
+#
+# [[env.production.kv_namespaces]]
+# binding = "SUBSCRIBER_STATE"
+# id = "replace-with-real-production-kv-namespace-id"
+
+# Set real secrets with Cloudflare Worker secret management later.
+# Do not place STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, or PREMIUM_TOKEN_SECRET in this file.

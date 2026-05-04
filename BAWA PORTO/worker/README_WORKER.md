@@ -1,0 +1,185 @@
+# README_WORKER
+
+Updated: `2026-05-04`
+
+## Purpose
+
+This folder is the Cloudflare Worker scaffold for future secure billing and premium delivery.
+
+Current status:
+
+- checkout route wired
+- webhook route wired
+- premium token route wired for developer/test issuance
+- premium route is token-protected and schema-filtered
+- portal route remains a placeholder
+- no production auth
+
+## Planned Responsibilities
+
+- create Stripe Checkout sessions
+- create Stripe Customer Portal sessions
+- receive Stripe webhooks
+- return premium predictions only after secure access checks
+
+## Current Routes
+
+- `GET /health`
+- `POST /api/stripe/checkout`
+- `POST /api/premium/token`
+- `POST /api/stripe/portal`
+- `POST /api/stripe/webhook`
+- `GET /api/premium/predictions`
+
+Each route currently returns safe JSON that explains it is not wired yet.
+
+Exception:
+
+- `POST /api/stripe/checkout` now attempts to create a real Stripe Checkout Session when the required env vars are present
+- `POST /api/stripe/webhook` now verifies Stripe signatures and persists subscriber-state records when the required secret and binding are present
+- `POST /api/premium/token` now issues a signed 7-day premium token after verified subscriber-state lookup
+- `GET /api/premium/predictions` now verifies a signed v1 premium token, loads premium data from the configured source, and returns only the approved premium schema
+
+## Required Future Environment Variables
+
+- `STRIPE_SECRET_KEY`
+- `STRIPE_WEBHOOK_SECRET`
+- `SITE_URL`
+- `PREMIUM_DATA_SOURCE`
+- `STRIPE_PRICE_ID`
+- `PREMIUM_TOKEN_SECRET`
+
+Do not store real values in this repo.
+
+Required binding for webhook persistence:
+
+- `SUBSCRIBER_STATE`
+
+## Local Notes
+
+This scaffold is syntax-checkable with:
+
+```bash
+node --check worker/src/index.js
+```
+
+Later, once Wrangler is installed and configured, a local Worker dev loop can be added.
+
+Local harness:
+
+```bash
+node worker/test_worker_local.js
+```
+
+Current harness coverage:
+
+- active subscriber can obtain a developer/test token and access protected premium route
+- protected route returns only allowlisted premium fields
+- missing token returns `401`
+- expired token returns `401`
+- inactive subscriber cannot obtain or use premium access
+
+## Checkout Route
+
+`POST /api/stripe/checkout` now:
+
+- reads `STRIPE_SECRET_KEY`
+- reads `SITE_URL`
+- reads `STRIPE_PRICE_ID`
+- creates a Stripe Checkout Session in `subscription` mode
+- returns `{ "ok": true, "url": "..." }` on success
+
+Redirects:
+
+- success URL: `SITE_URL/account.html?checkout=success`
+- cancel URL: `SITE_URL/pricing.html?checkout=cancelled`
+
+Optional request JSON fields:
+
+- `email`
+- `reference`
+
+Those are only used as optional hints for the Checkout Session and do not provide auth.
+
+## Webhook Route
+
+`POST /api/stripe/webhook` now:
+
+- reads `STRIPE_WEBHOOK_SECRET`
+- verifies the `stripe-signature` header using HMAC SHA-256
+- accepts these event types:
+  - `checkout.session.completed`
+  - `customer.subscription.created`
+  - `customer.subscription.updated`
+  - `customer.subscription.deleted`
+- writes a simple subscriber-state record into `SUBSCRIBER_STATE`
+
+Current persisted record contract:
+
+- `customer_id`
+- `subscription_id`
+- `status`
+- `price_id`
+- `current_period_end`
+- `updated_at`
+
+This route still does not unlock premium delivery by itself.
+
+## Premium Token Route
+
+`POST /api/premium/token` now:
+
+- accepts JSON body with:
+  - `customer_id`
+  - `subscription_id`
+- reads `SUBSCRIBER_STATE`
+- requires matching subscriber state
+- requires `active` or `trialing` status
+- issues a signed token using `PREMIUM_TOKEN_SECRET`
+- sets expiry to 7 days
+
+Important warning:
+
+- this route is developer/test scaffolding only
+- final public issuance should use magic-link email verification or authenticated session checks
+
+## Premium Route
+
+`GET /api/premium/predictions` now:
+
+- calls `verifyPremiumAccess(request, env)`
+- checks for a premium token in `Authorization: Bearer ...` or `og_premium_token` cookie form
+- verifies a v1 HMAC-signed token payload containing:
+  - `customer_id`
+  - `subscription_id`
+  - `exp`
+- requires an active or trialing matching subscriber-state record in `SUBSCRIBER_STATE`
+- loads premium prediction JSON from `PREMIUM_DATA_SOURCE`
+- returns only the approved premium allowlist plus minimal metadata
+
+Current state:
+
+- access remains denied unless token verification and KV state both pass
+- premium data source must currently be an absolute URL or same-origin path
+- frontend-only entitlement is still not trusted
+
+Current response metadata:
+
+- `generated_at` when available from the source payload
+- `subscriber_customer_id`
+- `count`
+
+Current source strategy note:
+
+- Worker runtime cannot rely on local filesystem reads
+- final deployment should use KV, R2, or a protected static asset fetch strategy when direct same-origin fetch is not suitable
+
+## Architecture Boundary
+
+Static frontend pages may describe premium access, but real premium protection must happen here or in an equivalent backend layer.
+
+Until that is implemented:
+
+- `premium.html` remains a locked preview
+- checkout links are placeholders
+- premium JSON is not secure access

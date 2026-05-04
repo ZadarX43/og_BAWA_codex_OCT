@@ -1,0 +1,62 @@
+name: Frontend Static Check
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+
+jobs:
+  frontend-static-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Check frontend shell files
+        run: |
+          test -f frontend/index.html
+          test -f frontend/predictions.html
+          test -f frontend/premium.html
+          test -f frontend/results.html
+          test -f frontend/pricing.html
+          test -f frontend/methodology.html
+          test -f frontend/account.html
+          test -f frontend/assets/styles.css
+          test -f frontend/assets/app.js
+
+      - name: Check published JSON files
+        run: |
+          test -f frontend/public/data/public_predictions.json
+          test -f frontend/public/data/premium_predictions.json
+          test -f frontend/public/data/publish_summary.json
+          test -f frontend/public/data/weekly_results.json
+
+      - name: Parse published JSON files
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          files = [
+              Path("frontend/public/data/public_predictions.json"),
+              Path("frontend/public/data/premium_predictions.json"),
+              Path("frontend/public/data/publish_summary.json"),
+              Path("frontend/public/data/weekly_results.json"),
+          ]
+          for path in files:
+              json.loads(path.read_text(encoding="utf-8"))
+              print(f"parsed {path}")
+          PY
+
+      - name: Validate weekly results
+        run: python3 validate_weekly_results.py
+
+      - name: Run frontend static smoke
+        run: python3 scripts/smoke_frontend_static.py

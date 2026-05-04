@@ -1,0 +1,107 @@
+{
+  "period_start": "2026-03-19",
+  "period_end": "2026-03-22",
+  "generated_at": "2026-05-04T16:30:56+00:00",
+  "total_picks": 26,
+  "settled_picks": 9,
+  "pending_picks": 17,
+  "overall_hit_rate": 1.0,
+  "by_market": [
+    {
+      "total_picks": 4,
+      "settled_picks": 2,
+      "pending_picks": 2,
+      "hit_rate": 1.0,
+      "market": "BTTS"
+    },
+    {
+      "total_picks": 11,
+      "settled_picks": 3,
+      "pending_picks": 8,
+      "hit_rate": 1.0,
+      "market": "FTR"
+    },
+    {
+      "total_picks": 11,
+      "settled_picks": 4,
+      "pending_picks": 7,
+      "hit_rate": 1.0,
+      "market": "OU25"
+    }
+  ],
+  "by_tier": [
+    {
+      "total_picks": 6,
+      "settled_picks": 3,
+      "pending_picks": 3,
+      "hit_rate": 1.0,
+      "tier": "ELITE"
+    },
+    {
+      "total_picks": 20,
+      "settled_picks": 6,
+      "pending_picks": 14,
+      "hit_rate": 1.0,
+      "tier": "STANDARD"
+    }
+  ],
+  "featured_wins": [
+    {
+      "fixture_key": "2026_03_19_Freiburg_KRC_Genk",
+      "kickoff_time": "2026-03-19",
+      "league": "Europa League",
+      "home_team": "Freiburg",
+      "away_team": "KRC Genk",
+      "market": "BTTS",
+      "pick": "YES",
+      "confidence_tier": "ELITE",
+      "result": "WIN"
+    },
+    {
+      "fixture_key": "2026_03_19_Midtjylland_Nottingham_Forest",
+      "kickoff_time": "2026-03-19",
+      "league": "Europa League",
+      "home_team": "Midtjylland",
+      "away_team": "Nottingham Forest",
+      "market": "BTTS",
+      "pick": "YES",
+      "confidence_tier": "ELITE",
+      "result": "WIN"
+    },
+    {
+      "fixture_key": "2026_03_19_Aston_Villa_Lille",
+      "kickoff_time": "2026-03-19",
+      "league": "Europa League",
+      "home_team": "Aston Villa",
+      "away_team": "Lille",
+      "market": "FTR",
+      "pick": "HOME",
+      "confidence_tier": "ELITE",
+      "result": "WIN"
+    },
+    {
+      "fixture_key": "2026_03_19_Freiburg_KRC_Genk",
+      "kickoff_time": "2026-03-19",
+      "league": "Europa League",
+      "home_team": "Freiburg",
+      "away_team": "KRC Genk",
+      "market": "OU25",
+      "pick": "OVER25",
+      "confidence_tier": "STANDARD",
+      "result": "WIN"
+    },
+    {
+      "fixture_key": "2026_03_19_Roma_Bologna",
+      "kickoff_time": "2026-03-19",
+      "league": "Europa League",
+      "home_team": "Roma",
+      "away_team": "Bologna",
+      "market": "OU25",
+      "pick": "OVER25",
+      "confidence_tier": "STANDARD",
+      "result": "WIN"
+    }
+  ],
+  "featured_misses": [],
+  "notes": []
+}
