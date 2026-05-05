@@ -419,57 +419,62 @@
   const homeView = () => `
     <section class="hero">
       <div class="hero-main">
-        <p class="hero-kicker">Odds Genius Live Board</p>
-        <h1>Evidence-first football market intelligence.</h1>
+        <p class="hero-kicker">Prediction intelligence system</p>
+        <h1>Institutional-grade football prediction intelligence.</h1>
         <div class="pill-row">
-          <span class="stat-chip">+53.90% ROI</span>
-          <span class="stat-chip">15,203 graded premium signals</span>
-          <span class="stat-chip">3-year walk-forward validation</span>
+          <span class="stat-chip">Precision</span>
+          <span class="stat-chip">Control</span>
+          <span class="stat-chip">Inevitability</span>
         </div>
         <p>
-          Odds Genius identifies bookmaker mispricing and only deploys signals when the model edge survives
-          structural, volatility, and stability checks. Not tipster theatre. Not vibes. A selective deployment
-          engine built to find edge.
+          Odds Genius identifies bookmaker mispricing and only deploys signals when the edge survives structural,
+          volatility, and stability checks. This is not a betting brand or a flashy tipster shell. It is a
+          prediction intelligence system built to detect when the market is wrong.
         </p>
         <div class="hero-actions">
           <a class="button" href="./predictions.html">View live board</a>
           <a class="ghost-button" href="./results.html">See proof</a>
           <a class="ghost-button" href="./premium.html">Unlock premium</a>
         </div>
+        <div class="section-head home-proof-head">
+          <div>
+            <h2>ELITE / PREMIUM system performance</h2>
+            <p class="section-copy">Consolidated 3-year walk-forward and backtested proof across the core stack.</p>
+          </div>
+        </div>
         <div class="proof-strip">
-          ${proofTile("Premium value tier", "83.31% hit rate", "+53.90% ROI • 15,203 signals")}
-          ${proofTile("Value edge system", "STANDARD: +13.75% ROI", "STRONG: +19.39% ROI • PREMIUM: +53.90% ROI")}
-          ${proofTile("Protected floors", "BTTS ELITE: 90.68%", "FTR ELITE: 92.64% • OU25 STANDARD: 90.06%")}
-          ${proofTile("Validation", "Walk-forward tested", "45,000+ graded predictions • Week-by-week proof")}
+          ${proofTile("Value Edge Premium System", "83.3% hit rate", "15,203 rows • +53.9% ROI")}
+          ${proofTile("FTR", "82%", "29 leagues • 3,000 fixtures")}
+          ${proofTile("OU2.5 calibrated", "95.35%", "3,828 fixtures")}
+          ${proofTile("BTTS calibrated", "93.55%", "3,382 fixtures")}
+          ${proofTile("Correct Score", "41% direct", "81% top-3 shortlist hit rate")}
         </div>
       </div>
       <aside class="hero-side">
-        <article class="sample-board">
+        <article class="sample-board deployment-stack">
           <div class="sample-board-head">
             <div>
-              <span class="metric-label">Board snapshot</span>
-              <strong>What a live card looks like</strong>
+              <span class="metric-label">Weekly production engine</span>
+              <strong>65+ picks every week, year-round</strong>
             </div>
-            <span class="pill">Free preview</span>
+            <span class="pill">Lowest 87% • Avg 92%</span>
           </div>
-          <div class="sample-board-grid">
-            ${state.publicPredictions.slice(0, 2).map((row) => `
-              <article class="sample-row">
-                <div class="sample-row-meta">
-                  <strong>${escapeHtml(row.home_team)} vs ${escapeHtml(row.away_team)}</strong>
-                  <span class="muted">${escapeHtml(row.league)} • ${escapeHtml(row.kickoff_time)}</span>
-                  <div class="pill-row">
-                    <span class="market-badge">${escapeHtml(row.market)}</span>
-                    <span class="confidence-badge ${tierClass(row.confidence_tier)}">${escapeHtml(row.confidence_tier)}</span>
-                  </div>
-                </div>
-                <div class="sample-row-side">
-                  <span class="stat-chip">${escapeHtml(row.pick)}</span>
-                  <span class="stat-chip">${escapeHtml(row.bookie_od ?? "N/A")}</span>
-                  <span class="stat-chip">${escapeHtml(row.value_edge_display || "Edge ready")}</span>
-                </div>
-              </article>
-            `).join("")}
+          <div class="home-ladder">
+            <article class="ladder-card ladder-card-elite">
+              <span class="metric-label">ELITE / PREMIUM</span>
+              <strong>High-ROI selective deployment</strong>
+              <p class="muted">Value edge premium system, correct score support, acca formatting, and flagship filtered output.</p>
+            </article>
+            <article class="ladder-card ladder-card-standard">
+              <span class="metric-label">STANDARD</span>
+              <strong>65+ deployable weekly picks</strong>
+              <p class="muted">Year-round output across FTR, OU2.5, BTTS, and adjacent production-safe markets.</p>
+            </article>
+            <article class="ladder-card ladder-card-soon">
+              <span class="metric-label">COMING SOON</span>
+              <strong>Player events</strong>
+              <p class="muted">Shots, tackles, fouls, and bookings added as the next intelligence layer.</p>
+            </article>
           </div>
         </article>
       </aside>
@@ -495,7 +500,7 @@
         <h3>Why this wins</h3>
         <ul class="method-list">
           <li>Most betting products predict every match. Odds Genius does the opposite.</li>
-          <li>It scans broadly, filters aggressively, and only deploys when independent model systems agree that the price is wrong and the signal is stable enough to act on.</li>
+          <li>It scans broadly, filters aggressively, and only deploys when independent systems agree that the price is wrong and the signal is stable enough to act on.</li>
           <li>The edge is not just prediction accuracy. The edge is knowing when not to bet.</li>
         </ul>
       </article>
@@ -515,8 +520,9 @@
       <article class="panel">
         <h3>Why it stands apart</h3>
         <ul class="method-list">
-          <li>Typical tipster: hidden sample size, cherry-picked wins, no walk-forward validation, no deployment discipline, no measurable value edge.</li>
-          <li>Odds Genius: 15,203 premium value signals, 83.31% hit rate, +8,194.99 units profit, +53.90% ROI, 3-year walk-forward validation, selective 20–30% deployment.</li>
+          <li>Typical public tipster products struggle to sustain even 50–60% with lower volume and weaker proof discipline.</li>
+          <li>Odds Genius combines a flagship selective layer with a weekly production engine delivering 65+ picks at scale.</li>
+          <li>Consolidated proof includes FTR, OU2.5, BTTS, premium value edge, acca formatting, and correct score support.</li>
           <li>If the model doesn't beat the price, it doesn't deploy.</li>
         </ul>
       </article>
