@@ -865,32 +865,31 @@
       <section class="section split">
         <article class="hero-main">
           <p class="hero-kicker">Pricing</p>
-          <h1>Start free. Upgrade for the full edge.</h1>
+          <h1>Choose your intelligence level.</h1>
           <p>
-            Start with the public board for free, or unlock the full premium board for the founding member price
-            while the product is still in its early paid phase.
+            Start free. Secure founder pricing before the main Pro ladder expands.
           </p>
           <div class="pill-row">
             <span class="stat-chip">Worker-protected access</span>
-            <span class="stat-chip">Founding pricing live</span>
+            <span class="stat-chip">First 250 founders</span>
           </div>
           <div class="cta-row">
-            ${checkoutCta()}
+            ${checkoutCta().replace("Unlock founding membership", "Secure founder access")}
             <a class="ghost-button" href="./premium.html">Preview locked premium</a>
           </div>
         </article>
       <aside class="hero-side">
         <div class="metric">
           <span class="metric-label">Plan</span>
-          <span class="metric-value">£20/mo</span>
+          <span class="metric-value">OG Founder</span>
         </div>
         <div class="metric">
-          <span class="metric-label">Access</span>
-          <span class="metric-value">Locked while subscribed</span>
+          <span class="metric-label">Founder pricing</span>
+          <span class="metric-value">£20/mo for life while active</span>
         </div>
         <div class="metric">
-          <span class="metric-label">Worker</span>
-          <span class="metric-value">${workerConfigured() ? "Configured" : "Placeholder"}</span>
+          <span class="metric-label">Cohort cap</span>
+          <span class="metric-value">250 users</span>
         </div>
       </aside>
     </section>
@@ -901,47 +900,52 @@
         <article class="card pricing-card pricing-card-free">
           <span class="pricing-tag">Free</span>
           <div class="pricing-price">£0</div>
-          <p class="pricing-subcopy">A useful preview of the current board, intentionally limited.</p>
+          <p class="pricing-subcopy">Public preview of the board, proof, and methodology layer.</p>
           <ul class="feature-list">
-            <li>Top public board only.</li>
-            <li>Rounded confidence and rounded edge display.</li>
+            <li>Limited public board.</li>
+            <li>Rounded confidence.</li>
+            <li>Rounded edge display.</li>
             <li>Public proof access.</li>
-            <li>No premium shortlist or slip-role detail.</li>
+            <li>No shortlist or premium context.</li>
           </ul>
         </article>
         <article class="card pricing-card featured pricing-card-premium">
-          <span class="pricing-ribbon">Limited founder access</span>
-          <span class="pricing-tag">Founding Member</span>
+          <span class="pricing-ribbon">First 250 users</span>
+          <span class="pricing-tag">OG Founder</span>
           <div class="pricing-price">£20<span class="pricing-price-note">/month</span></div>
-          <p class="pricing-subcopy">Locked while subscribed. Early pricing for the first paying cohort.</p>
+          <p class="pricing-subcopy">Fixed founder pricing while active. Full deployable board access, founder-only upside, and early access to selected advanced systems.</p>
           <ul class="feature-list">
             <li>Full deployable board.</li>
             <li>ELITE and STANDARD signals.</li>
             <li>Full value-edge layer.</li>
-            <li>Premium explanations.</li>
             <li>Correct score shortlist support.</li>
             <li>Acca safety indicators.</li>
-            <li>Protected access through live Worker entitlement.</li>
+            <li>Protected Worker-backed access.</li>
+            <li>Early access to new markets.</li>
+            <li>Early access to selected future systems.</li>
           </ul>
+          <div class="notice founder-guardrail">
+            £20/month for life while active. Non-transferable. Founder pricing ends after the first 250 users.
+          </div>
           <div class="cta-row">
-            ${checkoutCta()}
+            ${checkoutCta().replace("Unlock founding membership", "Secure founder access")}
           </div>
         </article>
       </div>
       <div class="pricing-band">
         <article class="pricing-band-card">
-          <span class="metric-label">Safety protocols</span>
-          <strong>Protected performance floors</strong>
+          <span class="metric-label">Founder advantage</span>
+          <strong>Grandfathered pricing while active</strong>
         </article>
         <article class="pricing-band-card">
-          <span class="metric-label">Risk management</span>
-          <strong>Worker-protected access and premium context</strong>
+          <span class="metric-label">Expansion path</span>
+          <strong>Selected future systems and new markets unlocked earlier</strong>
         </article>
       </div>
       <div class="section-head pricing-matrix-head">
         <div>
           <h2>Technical matrix comparison</h2>
-          <p class="section-copy">Useful for quickly seeing what the free board proves versus what membership actually unlocks.</p>
+          <p class="section-copy">Useful for quickly seeing what the free board proves versus what founder access actually unlocks.</p>
         </div>
       </div>
       <div class="table-shell pricing-matrix-shell">
@@ -950,7 +954,7 @@
             <tr>
               <th>Feature detail</th>
               <th>Free tier</th>
-              <th>Founding Member</th>
+              <th>OG Founder</th>
             </tr>
           </thead>
           <tbody>
@@ -979,23 +983,51 @@
               <td>Static public access</td>
               <td>Protected access through live Worker entitlement</td>
             </tr>
+            <tr>
+              <td>Founder upside</td>
+              <td>None</td>
+              <td>Early markets and selected advanced-system access</td>
+            </tr>
           </tbody>
         </table>
       </div>
       <section class="pricing-visual-note">
         <article class="pricing-visual-card">
-          <span class="metric-label">Founding member access</span>
-          <h2>Professional-grade pricing intelligence with a cleaner, protected delivery layer.</h2>
+          <span class="metric-label">Founder access</span>
+          <h2>Founder pricing now. Pro ladder later.</h2>
           <p class="section-copy">
-            The public board proves the signal. Founding membership unlocks the deployable board, richer context,
-            and Worker-protected access while the product is still in its early paid phase.
+            OG Founder sits above the free board and below the future Pro ladder. It gives the first cohort more than a normal entry tier without promising unlimited access to every future product line.
           </p>
+        </article>
+      </section>
+      <section class="section split">
+        <article class="panel">
+          <h3>Pro — coming later</h3>
+          <p class="muted">
+            The full analyst-grade intelligence layer for users who want deeper edge context, expanded tools, and more control.
+          </p>
+          <ul class="feature-list">
+            <li>Planned price point: £49/month.</li>
+            <li>Deeper edge context and expanded workflow tools.</li>
+            <li>Richer diagnostics and more advanced board controls.</li>
+          </ul>
+        </article>
+        <article class="panel">
+          <h3>Pro Plus — coming later</h3>
+          <p class="muted">
+            Highest-access retail tier for advanced users before true B2B or syndicate product layers.
+          </p>
+          <ul class="feature-list">
+            <li>Planned price point: £99/month.</li>
+            <li>Advanced control-layer access and richer diagnostics.</li>
+            <li>Priority access to selected future systems and tools.</li>
+          </ul>
         </article>
       </section>
       <p class="footer-note">
         ${
           workerConfigured()
-            ? "The upgrade CTA now routes to the live Worker checkout flow."
+            ? "The founder CTA now routes to the live Worker checkout flow."
             : "Static-only mode cannot provide secure subscriber enforcement."
         }
       </p>
