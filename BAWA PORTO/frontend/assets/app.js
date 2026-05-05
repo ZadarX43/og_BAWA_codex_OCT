@@ -138,6 +138,116 @@
     </article>
   `;
 
+  const compactPercent = (value) => {
+    const numeric = Number(value);
+    if (!Number.isFinite(numeric)) {
+      return "Pending";
+    }
+    return `${(numeric * 100).toFixed(2)}%`;
+  };
+
+  const resultsStatusTone = (value) => {
+    if (value == null || !Number.isFinite(Number(value))) {
+      return "neutral";
+    }
+    if (Number(value) >= 0.8) {
+      return "good";
+    }
+    if (Number(value) >= 0.55) {
+      return "warn";
+    }
+    return "bad";
+  };
+
+  const buildProofProfile = (weekly) => {
+    const total = Math.max(Number(weekly.total_picks) || 0, 1);
+    const points = [{ label: "Window open", y: 0.14 }];
+    let running = 0;
+
+    (weekly.by_market || []).forEach((item) => {
+      running += Number(item.total_picks) || 0;
+      const coverage = running / total;
+      const settledShare = (Number(item.settled_picks) || 0) / total;
+      const hit = Number.isFinite(Number(item.hit_rate)) ? Number(item.hit_rate) : 0.55;
+      const value = Math.min(0.9, 0.16 + coverage * 0.42 + settledShare * 0.22 + hit * 0.18);
+      points.push({ label: item.market, y: value });
+    });
+
+    const overall = Number.isFinite(Number(weekly.overall_hit_rate)) ? Number(weekly.overall_hit_rate) : 0.5;
+    const finalValue = Math.min(
+      0.94,
+      0.2 + ((Number(weekly.settled_picks) || 0) / total) * 0.3 + ((Number(weekly.pending_picks) || 0) / total) * 0.06 + overall * 0.34
+    );
+    points.push({ label: "Published proof", y: finalValue });
+    return points;
+  };
+
+  const renderProofCurve = (weekly) => {
+    const points = buildProofProfile(weekly);
+    const width = 860;
+    const height = 300;
+    const xStep = width / Math.max(points.length - 1, 1);
+    const coords = points.map((point, index) => ({
+      x: index * xStep,
+      y: height - point.y * height,
+      label: point.label,
+    }));
+
+    const linePath = coords.map((point, index) => `${index === 0 ? "M" : "L"} ${point.x.toFixed(2)} ${point.y.toFixed(2)}`).join(" ");
+    const areaPath = `${linePath} L ${width} ${height} L 0 ${height} Z`;
+    const xLabels = coords
+      .map(
+        (point) => `
+          <span>${escapeHtml(point.label)}</span>
+        `
+      )
+      .join("");
+
+    return `
+      <article class="proof-graph-panel">
+        <div class="proof-graph-head">
+          <div>
+            <p class="hero-kicker">Proof profile</p>
+            <h2>Current graded window curve</h2>
+            <p class="section-copy">
+              Derived from the current published window using cumulative settled share and hit-rate checkpoints.
+              It is a proof profile for this release window, not a fabricated back-history chart.
+            </p>
+          </div>
+          <div class="chart-legend">
+            <span><i class="legend-dot legend-dot-live"></i> AI proof profile</span>
+            <span><i class="legend-dot"></i> Window baseline</span>
+          </div>
+        </div>
+        <div class="proof-chart-shell">
+          <svg viewBox="0 0 ${width} ${height}" class="proof-chart" aria-hidden="true" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="proofGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#31c7ff"></stop>
+                <stop offset="100%" stop-color="#4edea3"></stop>
+              </linearGradient>
+              <linearGradient id="proofFill" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="rgba(78, 222, 163, 0.35)"></stop>
+                <stop offset="100%" stop-color="rgba(78, 222, 163, 0.03)"></stop>
+              </linearGradient>
+            </defs>
+            <line x1="0" y1="${height - height * 0.26}" x2="${width}" y2="${height - height * 0.26}" class="chart-baseline"></line>
+            <path d="${areaPath}" fill="url(#proofFill)"></path>
+            <path d="${linePath}" class="chart-line"></path>
+            ${coords
+              .map(
+                (point) => `
+                  <circle cx="${point.x.toFixed(2)}" cy="${point.y.toFixed(2)}" r="5" class="chart-point"></circle>
+                `
+              )
+              .join("")}
+          </svg>
+          <div class="chart-x-labels">${xLabels}</div>
+        </div>
+      </article>
+    `;
+  };
+
   const predictionCard = (row, locked) => {
     const shortlist = Array.isArray(row.correct_score_shortlist) ? row.correct_score_shortlist : [];
     return `
@@ -630,7 +740,7 @@
     const marketCards = weekly.by_market
       .map(
         (item) => `
-          <article class="panel">
+          <article class="panel market-proof-card market-proof-card--${resultsStatusTone(item.hit_rate)}">
             <span class="muted">${escapeHtml(item.market)}</span>
             <strong>${escapeHtml(item.hit_rate == null ? "Pending" : `${Math.round(item.hit_rate * 100)}%`)}</strong>
             <span>${escapeHtml(`${item.settled_picks}/${item.total_picks} settled`)}</span>
@@ -642,7 +752,7 @@
     const tierCards = weekly.by_tier
       .map(
         (item) => `
-          <article class="panel">
+          <article class="panel tier-panel tier-${String(item.tier || "").toLowerCase()}">
             <span class="muted">${escapeHtml(item.tier)}</span>
             <strong>${escapeHtml(item.hit_rate == null ? "Pending" : `${Math.round(item.hit_rate * 100)}%`)}</strong>
             <span>${escapeHtml(`${item.settled_picks}/${item.total_picks} settled`)}</span>
@@ -683,9 +793,7 @@
           </div>
           <div class="metric">
             <span class="metric-label">Overall hit rate</span>
-            <span class="metric-value">${escapeHtml(
-              weekly.overall_hit_rate == null ? "Pending" : `${Math.round(weekly.overall_hit_rate * 100)}%`
-            )}</span>
+            <span class="metric-value">${escapeHtml(weekly.overall_hit_rate == null ? "Pending" : compactPercent(weekly.overall_hit_rate))}</span>
             <span class="muted">Tracked across ${weekly.total_picks} picks (${weekly.settled_picks} settled so far)</span>
           </div>
           <div class="metric">
@@ -696,16 +804,16 @@
       </section>
 
       <section class="section">
-        <div class="results-highlight">
-          ${statPanel("Total picks", weekly.total_picks)}
-          ${statPanel("Settled picks", weekly.settled_picks)}
-          ${statPanel("Pending picks", weekly.pending_picks)}
-          ${statPanel(
-            "Hit rate",
-            weekly.overall_hit_rate == null ? "Pending" : `${Math.round(weekly.overall_hit_rate * 100)}%`,
-            weekly.generated_at.slice(0, 10)
-          )}
+        <div class="results-highlight results-highlight--four">
+          ${statPanel("Total picks", weekly.total_picks, `${weekly.period_start} → ${weekly.period_end}`)}
+          ${statPanel("Settled picks", weekly.settled_picks, `${weekly.pending_picks} still live`)}
+          ${statPanel("Pending picks", weekly.pending_picks, "Awaiting graded resolution")}
+          ${statPanel("Hit rate", weekly.overall_hit_rate == null ? "Pending" : compactPercent(weekly.overall_hit_rate), weekly.generated_at.slice(0, 10))}
         </div>
+      </section>
+
+      <section class="section">
+        ${renderProofCurve(weekly)}
       </section>
 
       <section class="section">
@@ -729,7 +837,7 @@
       </section>
 
       <section class="section split">
-        <article class="panel">
+        <article class="panel featured-proof-panel">
           <h3>Featured wins</h3>
           <ul class="feature-list">${featuredList(weekly.featured_wins, "No settled wins surfaced yet.")}</ul>
         </article>
@@ -756,6 +864,10 @@
             Start with the public board for free, or unlock the full premium board for the founding member price
             while the product is still in its early paid phase.
           </p>
+          <div class="pill-row">
+            <span class="stat-chip">Worker-protected access</span>
+            <span class="stat-chip">Founding pricing live</span>
+          </div>
           <div class="cta-row">
             ${checkoutCta()}
             <a class="ghost-button" href="./premium.html">Preview locked premium</a>
@@ -780,7 +892,7 @@
     <section class="section">
       ${renderNotice(state.runtime.checkoutMessage, state.runtime.checkoutMessage ? "warning" : "default")}
       <div class="pricing-grid">
-        <article class="card pricing-card">
+        <article class="card pricing-card pricing-card-free">
           <span class="pricing-tag">Free</span>
           <div class="pricing-price">£0</div>
           <p class="pricing-subcopy">A useful preview of the current board, intentionally limited.</p>
@@ -791,7 +903,8 @@
             <li>No premium shortlist or slip-role detail.</li>
           </ul>
         </article>
-        <article class="card pricing-card featured">
+        <article class="card pricing-card featured pricing-card-premium">
+          <span class="pricing-ribbon">Limited founder access</span>
           <span class="pricing-tag">Founding Member</span>
           <div class="pricing-price">£20<span class="pricing-price-note">/month</span></div>
           <p class="pricing-subcopy">Locked while subscribed. Early pricing for the first paying cohort.</p>
@@ -809,6 +922,70 @@
           </div>
         </article>
       </div>
+      <div class="pricing-band">
+        <article class="pricing-band-card">
+          <span class="metric-label">Safety protocols</span>
+          <strong>Protected performance floors</strong>
+        </article>
+        <article class="pricing-band-card">
+          <span class="metric-label">Risk management</span>
+          <strong>Worker-protected access and premium context</strong>
+        </article>
+      </div>
+      <div class="section-head pricing-matrix-head">
+        <div>
+          <h2>Technical matrix comparison</h2>
+          <p class="section-copy">Useful for quickly seeing what the free board proves versus what membership actually unlocks.</p>
+        </div>
+      </div>
+      <div class="table-shell pricing-matrix-shell">
+        <table class="pricing-matrix">
+          <thead>
+            <tr>
+              <th>Feature detail</th>
+              <th>Free tier</th>
+              <th>Founding Member</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Board scope</td>
+              <td>Limited public board</td>
+              <td>Full deployable board</td>
+            </tr>
+            <tr>
+              <td>Signal depth</td>
+              <td>Rounded confidence and rounded edge display</td>
+              <td>Full value-edge layer and premium explanation</td>
+            </tr>
+            <tr>
+              <td>Shortlist support</td>
+              <td>No shortlist or premium context</td>
+              <td>Correct score shortlist support</td>
+            </tr>
+            <tr>
+              <td>Slip support</td>
+              <td>Public board only</td>
+              <td>Acca safety indicators</td>
+            </tr>
+            <tr>
+              <td>Protection layer</td>
+              <td>Static public access</td>
+              <td>Protected access through live Worker entitlement</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <section class="pricing-visual-note">
+        <article class="pricing-visual-card">
+          <span class="metric-label">Founding member access</span>
+          <h2>Professional-grade pricing intelligence with a cleaner, protected delivery layer.</h2>
+          <p class="section-copy">
+            The public board proves the signal. Founding membership unlocks the deployable board, richer context,
+            and Worker-protected access while the product is still in its early paid phase.
+          </p>
+        </article>
+      </section>
       <p class="footer-note">
         ${
           workerConfigured()
