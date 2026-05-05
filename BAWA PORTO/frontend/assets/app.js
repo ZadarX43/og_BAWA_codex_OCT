@@ -1000,28 +1000,12 @@
           </p>
         </article>
       </section>
-      <section class="section split">
+      <section class="section">
         <article class="panel">
-          <h3>Pro — coming later</h3>
+          <h3>Advanced plans coming later</h3>
           <p class="muted">
-            The full analyst-grade intelligence layer for users who want deeper edge context, expanded tools, and more control.
+            Pro tiers will introduce deeper diagnostics, richer controls, and expanded workflow tooling.
           </p>
-          <ul class="feature-list">
-            <li>Planned price point: £49/month.</li>
-            <li>Deeper edge context and expanded workflow tools.</li>
-            <li>Richer diagnostics and more advanced board controls.</li>
-          </ul>
-        </article>
-        <article class="panel">
-          <h3>Pro Plus — coming later</h3>
-          <p class="muted">
-            Highest-access retail tier for advanced users before true B2B or syndicate product layers.
-          </p>
-          <ul class="feature-list">
-            <li>Planned price point: £99/month.</li>
-            <li>Advanced control-layer access and richer diagnostics.</li>
-            <li>Priority access to selected future systems and tools.</li>
-          </ul>
         </article>
       </section>
       <p class="footer-note">
