@@ -427,9 +427,10 @@
           <span class="stat-chip">Inevitability</span>
         </div>
         <p>
-          Odds Genius identifies bookmaker mispricing and only deploys signals when the edge survives structural,
-          volatility, and stability checks. This is not a betting brand or a flashy tipster shell. It is a
-          prediction intelligence system built to detect when the market is wrong.
+          Validated across 139 rolling walk-forward windows, Odds Genius identifies high-conviction football
+          markets using league-calibrated model probability, bookmaker value, and goal-shape intelligence.
+          This is not tipster theatre. It is a selective prediction intelligence system built to identify when
+          the market is wrong.
         </p>
         <div class="hero-actions">
           <a class="button" href="./predictions.html">View live board</a>
@@ -439,16 +440,18 @@
         <div class="section-head home-proof-head">
           <div>
             <h2>ELITE / PREMIUM system performance</h2>
-            <p class="section-copy">Consolidated 3-year walk-forward and backtested proof across the core stack.</p>
+            <p class="section-copy">Historical walk-forward validation across the current benchmark-safe intelligence stack.</p>
           </div>
         </div>
         <div class="proof-strip">
-          ${proofTile("Value Edge Premium System", "83.3% hit rate", "15,203 rows • +53.9% ROI")}
-          ${proofTile("FTR", "82%", "29 leagues • 3,000 fixtures")}
-          ${proofTile("OU2.5 calibrated", "95.35%", "3,828 fixtures")}
-          ${proofTile("BTTS calibrated", "93.55%", "3,382 fixtures")}
-          ${proofTile("Correct Score", "41% direct", "81% top-3 shortlist hit rate")}
+          ${proofTile("Over 2.5 calibrated", "95.35%", "3,828 historical rows")}
+          ${proofTile("BTTS calibrated", "93.55%", "3,382 historical rows")}
+          ${proofTile("Premium value edge ROI", "+53.9%", "15,203 historical picks")}
+          ${proofTile("Home Team Over 1.5 premium", "93.24%", "1,643 graded rows")}
+          ${proofTile("Competitions analysed", "28", "3-year research estate")}
+          ${proofTile("Validation", "139 windows", "Historical walk-forward only")}
         </div>
+        <p class="footer-note">Historical walk-forward validation. Not a guarantee of future results.</p>
       </div>
       <aside class="hero-side">
         <article class="sample-board deployment-stack">
@@ -462,13 +465,13 @@
           <div class="home-ladder">
             <article class="ladder-card ladder-card-elite">
               <span class="metric-label">ELITE / PREMIUM</span>
-              <strong>High-ROI selective deployment</strong>
-              <p class="muted">Value edge premium system, correct score support, acca formatting, and flagship filtered output.</p>
+              <strong>High-conviction selective deployment</strong>
+              <p class="muted">Value-edge premium system, dominant team-goals angles, shortlist support, and flagship filtered output.</p>
             </article>
             <article class="ladder-card ladder-card-standard">
               <span class="metric-label">STANDARD</span>
               <strong>65+ deployable weekly picks</strong>
-              <p class="muted">Year-round output across FTR, OU2.5, BTTS, and adjacent production-safe markets.</p>
+              <p class="muted">Year-round output across FTR, OU2.5, BTTS, and adjacent production-safe market lanes.</p>
             </article>
             <article class="ladder-card ladder-card-soon">
               <span class="metric-label">COMING SOON</span>
@@ -688,6 +691,7 @@
             <li>Full deployable board.</li>
             <li>ELITE and STANDARD picks.</li>
             <li>Value edge vs bookmaker implied probability.</li>
+            <li>Dominant team-goals angles where the proof is strongest.</li>
             <li>Correct score shortlist support.</li>
             <li>Acca safety signals.</li>
             <li>Stability and fragility context.</li>
@@ -699,9 +703,9 @@
           <ul class="feature-list">
             <li>15,203 signals.</li>
             <li>83.31% hit rate.</li>
-            <li>+8,194.99 units profit.</li>
             <li>+53.90% ROI.</li>
-            <li>3-year walk-forward tested.</li>
+            <li>139 historical walk-forward windows.</li>
+            <li>Historical validation only. Not a guarantee.</li>
           </ul>
         </article>
       </section>
@@ -1028,6 +1032,10 @@
           Odds Genius does not re-run model logic in the browser. The website displays approved exports from the
           live deployment engine.
         </p>
+        <p class="section-copy">
+          The live shell reflects historical walk-forward validation across 139 rolling windows and a wider
+          28-competition research estate, while only benchmark-safe production markets are presented as commercial proof.
+        </p>
       </article>
       <aside class="hero-side">
         <div class="metric">
@@ -1048,7 +1056,7 @@
         </article>
         <article class="panel">
           <h3>Decision stack</h3>
-          <p class="muted">The system combines independent modelling approaches and only publishes signals that pass probability, structure, value, and stability checks.</p>
+          <p class="muted">The system combines independent modelling approaches and only publishes signals that pass probability, structure, value, goal-shape, and stability checks.</p>
         </article>
         <article class="panel">
           <h3>Final line</h3>
