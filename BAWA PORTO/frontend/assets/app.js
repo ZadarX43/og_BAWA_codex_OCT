@@ -107,6 +107,23 @@
     return { response, payload };
   };
 
+  const syncActiveNav = () => {
+    const pageHrefMap = {
+      home: "./index.html",
+      predictions: "./predictions.html",
+      premium: "./premium.html",
+      results: "./results.html",
+      pricing: "./pricing.html",
+      methodology: "./methodology.html",
+      account: "./account.html",
+    };
+    const currentHref = pageHrefMap[page] || "";
+    document.querySelectorAll(".nav a").forEach((anchor) => {
+      const isActive = anchor.getAttribute("href") === currentHref;
+      anchor.classList.toggle("is-active", isActive);
+    });
+  };
+
   const statPanel = (label, value, note = "") => `
     <article class="panel">
       <span class="muted">${escapeHtml(label)}</span>
@@ -250,6 +267,7 @@
 
   const predictionCard = (row, locked) => {
     const shortlist = Array.isArray(row.correct_score_shortlist) ? row.correct_score_shortlist : [];
+    const edge = locked ? row.value_edge_display || edgeLabel(row) : edgeLabel(row);
     return `
       <article class="card prediction-card">
         <div class="prediction-top">
@@ -262,29 +280,37 @@
             <span class="confidence-badge ${tierClass(row.confidence_tier)}">${escapeHtml(row.confidence_tier)}</span>
           </div>
         </div>
-        <div class="signal-grid">
-          <div class="signal-cell">
-            <span class="signal-label">Pick</span>
-            <span class="signal-value">${escapeHtml(row.pick)}</span>
+        <div class="prediction-core">
+          <div class="prediction-call">
+            <div>
+              <span class="signal-label">Pick</span>
+              <strong class="prediction-pick">${escapeHtml(row.pick)}</strong>
+            </div>
+            <div class="prediction-edge">
+              <span class="signal-label">Edge</span>
+              <span class="prediction-edge-chip">${escapeHtml(`EV ${edge}`)}</span>
+            </div>
           </div>
-          <div class="signal-cell">
-            <span class="signal-label">Odds</span>
-            <span class="signal-value">${escapeHtml(row.bookie_od ?? "N/A")}</span>
-          </div>
-          <div class="signal-cell">
-            <span class="signal-label">${locked ? "Confidence" : "Model"}</span>
-            <span class="signal-value">${escapeHtml(locked ? confidenceLabel(row) : formatProbability(row.model_prob))}</span>
-          </div>
-          <div class="signal-cell">
-            <span class="signal-label">Edge</span>
-            <span class="signal-value">${escapeHtml(locked ? row.value_edge_display || "Members only" : edgeLabel(row))}</span>
+          <div class="prediction-meta-grid">
+            <div class="signal-cell">
+              <span class="signal-label">Odds</span>
+              <span class="signal-value">${escapeHtml(row.bookie_od ?? "N/A")}</span>
+            </div>
+            <div class="signal-cell">
+              <span class="signal-label">${locked ? "Confidence" : "Model"}</span>
+              <span class="signal-value">${escapeHtml(locked ? confidenceLabel(row) : formatProbability(row.model_prob))}</span>
+            </div>
+            <div class="signal-cell">
+              <span class="signal-label">Tier</span>
+              <span class="signal-value">${escapeHtml(row.confidence_tier || "N/A")}</span>
+            </div>
           </div>
         </div>
         <div class="prediction-footer">
           ${
             locked
-              ? `<span class="premium-lock">Locked in free view</span>`
-              : `<span class="value-badge">Value edge ${escapeHtml(edgeLabel(row))}</span>`
+              ? `<span class="premium-lock">Free board view</span>`
+              : `<span class="value-badge">Deployable edge cleared</span>`
           }
           <span class="pill">${escapeHtml(confidenceLabel(row))}</span>
         </div>
@@ -419,64 +445,73 @@
   const homeView = () => `
     <section class="hero">
       <div class="hero-main">
-        <p class="hero-kicker">Prediction intelligence system</p>
-        <h1>Institutional-grade football prediction intelligence.</h1>
-        <div class="pill-row">
-          <span class="stat-chip">Precision</span>
-          <span class="stat-chip">Control</span>
-          <span class="stat-chip">Inevitability</span>
+        <div class="hero-copy-stack">
+          <p class="hero-kicker">Prediction intelligence system</p>
+          <h1>Identifying when the market is wrong.</h1>
+          <p>
+            Validated across 139 rolling walk-forward windows, Odds Genius identifies high-conviction football
+            markets using league-calibrated model probability, bookmaker value, and goal-shape intelligence.
+          </p>
+          <div class="pill-row">
+            <span class="stat-chip">28 competitions analysed</span>
+            <span class="stat-chip">Historical walk-forward validation</span>
+            <span class="stat-chip">Selective deployment only</span>
+          </div>
+          <div class="hero-actions">
+            <a class="button" href="./predictions.html">View live board</a>
+            <a class="ghost-button" href="./results.html">See proof</a>
+            <a class="ghost-button" href="./premium.html">Unlock premium</a>
+          </div>
+          <p class="footer-note">Historical walk-forward validation. Not a guarantee of future results.</p>
         </div>
-        <p>
-          Validated across 139 rolling walk-forward windows, Odds Genius identifies high-conviction football
-          markets using league-calibrated model probability, bookmaker value, and goal-shape intelligence.
-          This is not tipster theatre. It is a selective prediction intelligence system built to identify when
-          the market is wrong.
-        </p>
-        <div class="hero-actions">
-          <a class="button" href="./predictions.html">View live board</a>
-          <a class="ghost-button" href="./results.html">See proof</a>
-          <a class="ghost-button" href="./premium.html">Unlock premium</a>
-        </div>
-        <div class="section-head home-proof-head">
-          <div>
-            <h2>ELITE / PREMIUM system performance</h2>
-            <p class="section-copy">Historical walk-forward validation across the current benchmark-safe intelligence stack.</p>
+        <div class="proof-command">
+          <div class="section-head home-proof-head">
+            <div>
+              <h2>ELITE / PREMIUM system performance</h2>
+              <p class="section-copy">Benchmark-safe proof across the current production intelligence stack.</p>
+            </div>
+            <span class="pill">139 rolling windows</span>
+          </div>
+          <div class="proof-strip proof-strip-home">
+            ${proofTile("Over 2.5 calibrated", "95.35%", "3,828 historical rows")}
+            ${proofTile("BTTS calibrated", "93.55%", "3,382 historical rows")}
+            ${proofTile("Premium value-edge ROI", "+53.9%", "15,203 historical picks")}
+            ${proofTile("Home Team Over 1.5 premium", "93.24%", "1,643 graded rows")}
+            ${proofTile("Competitions analysed", "28", "3-year research estate")}
+            ${proofTile("Value edge system", "83.31%", "Premium historical hit rate")}
           </div>
         </div>
-        <div class="proof-strip">
-          ${proofTile("Over 2.5 calibrated", "95.35%", "3,828 historical rows")}
-          ${proofTile("BTTS calibrated", "93.55%", "3,382 historical rows")}
-          ${proofTile("Premium value edge ROI", "+53.9%", "15,203 historical picks")}
-          ${proofTile("Home Team Over 1.5 premium", "93.24%", "1,643 graded rows")}
-          ${proofTile("Competitions analysed", "28", "3-year research estate")}
-          ${proofTile("Validation", "139 windows", "Historical walk-forward only")}
-        </div>
-        <p class="footer-note">Historical walk-forward validation. Not a guarantee of future results.</p>
       </div>
       <aside class="hero-side">
         <article class="sample-board deployment-stack">
           <div class="sample-board-head">
             <div>
-              <span class="metric-label">Weekly production engine</span>
-              <strong>65+ picks every week, year-round</strong>
+              <span class="metric-label">System state</span>
+              <strong>Live board, proof layer, premium gate</strong>
             </div>
-            <span class="pill">Lowest 87% • Avg 92%</span>
+            <span class="pill">Founder access live</span>
           </div>
-          <div class="home-ladder">
-            <article class="ladder-card ladder-card-elite">
-              <span class="metric-label">ELITE / PREMIUM</span>
-              <strong>High-conviction selective deployment</strong>
-              <p class="muted">Value-edge premium system, dominant team-goals angles, shortlist support, and flagship filtered output.</p>
+          <div class="system-stack">
+            <article class="system-row">
+              <span class="metric-label">Weekly production</span>
+              <strong>65+ picks every week, year-round</strong>
+              <p class="muted">Lowest reported weekly accuracy 87%. Average 92% across the current stack.</p>
             </article>
-            <article class="ladder-card ladder-card-standard">
-              <span class="metric-label">STANDARD</span>
-              <strong>65+ deployable weekly picks</strong>
-              <p class="muted">Year-round output across FTR, OU2.5, BTTS, and adjacent production-safe market lanes.</p>
+            <article class="system-row">
+              <span class="metric-label">Production core</span>
+              <strong>FTR • BTTS • Over 2.5 • Value edge overlays</strong>
+              <p class="muted">Dominant team over 1.5 goals is emerging as the cleanest next commercial lane.</p>
             </article>
-            <article class="ladder-card ladder-card-soon">
-              <span class="metric-label">COMING SOON</span>
+            <article class="system-row system-row-founder">
+              <span class="metric-label">OG Founder</span>
+              <strong>£20/mo for life while active</strong>
+              <p class="muted">First 250 users. Early access to new markets and selected future systems.</p>
+              <a class="button button-small" href="./pricing.html">See founder access</a>
+            </article>
+            <article class="system-row system-row-soon">
+              <span class="metric-label">Coming soon</span>
               <strong>Player events</strong>
-              <p class="muted">Shots, tackles, fouls, and bookings added as the next intelligence layer.</p>
+              <p class="muted">Shots, tackles, fouls, and bookings as the next controlled intelligence layer.</p>
             </article>
           </div>
         </article>
@@ -1285,6 +1320,7 @@
 
   const boot = async () => {
     app.innerHTML = `<div class="loading">Loading published board…</div>`;
+    syncActiveNav();
     state.runtime.premiumToken = readStoredPremiumToken();
 
     try {
