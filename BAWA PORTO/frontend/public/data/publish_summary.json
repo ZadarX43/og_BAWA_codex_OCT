@@ -1,8 +1,9 @@
 {
-  "generated_at": "2026-05-08T14:26:57+00:00",
+  "generated_at": "2026-05-08T14:40:44+00:00",
   "selected_source_csv": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11__DEPLOY_PRESET__PRESET_V1__FTR_accuracy.csv",
   "selected_by": "explicit_src",
   "selected_source_mtime_utc": "2026-05-08T12:22:17.288014+00:00",
+  "logo_manifest_csv": "data_sources/api_football/normalized/api_football_logo_asset_manifest.csv",
   "source_rows_read": 28,
   "public_predictions_count": 6,
   "premium_predictions_count": 28,
@@ -16,6 +17,11 @@
     "league",
     "home_team",
     "away_team",
+    "home_team_logo_url",
+    "away_team_logo_url",
+    "league_logo_url",
+    "league_flag_url",
+    "logo_join_status",
     "market",
     "pick",
     "confidence_tier",
@@ -33,6 +39,11 @@
     "league",
     "home_team",
     "away_team",
+    "home_team_logo_url",
+    "away_team_logo_url",
+    "league_logo_url",
+    "league_flag_url",
+    "logo_join_status",
     "market",
     "pick",
     "confidence_tier",
@@ -48,5 +59,15 @@
     "correct_score_shortlist",
     "premium_tier"
   ],
-  "fallbacks_and_drops": {}
+  "fallbacks_and_drops": {
+    "logo_join:FULL_MATCH": 26,
+    "logo_join:NO_MATCH": 1,
+    "logo_join:PARTIAL_MATCH": 1,
+    "logo_manifest:global_alias_assets": 1276,
+    "logo_manifest:global_team_assets": 1294,
+    "logo_manifest:league_assets": 19,
+    "logo_manifest:league_team_assets": 1619,
+    "logo_manifest:loaded": 1,
+    "logo_manifest:scoped_alias_assets": 1753
+  }
 }

@@ -7,6 +7,7 @@ import json
 import math
 import re
 import sys
+import unicodedata
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
@@ -16,6 +17,11 @@ ROOT = Path(__file__).resolve().parent
 PREDICTIONS_ROOT = ROOT / "predictions_output"
 FRONTEND_DATA_DIR = ROOT / "frontend" / "public" / "data"
 REPORTS_DIR = ROOT / "reports" / "latest"
+DEFAULT_LOGO_MANIFEST = ROOT / "data_sources" / "api_football" / "normalized" / "api_football_logo_asset_manifest.csv"
+TEAM_NAME_JOIN_MAPS = [
+    ROOT / "configs" / "team_name_join_map.generated.csv",
+    ROOT / "configs" / "team_name_join_map.csv",
+]
 
 PUBLIC_FIELDS = [
     "fixture_id",
@@ -24,6 +30,11 @@ PUBLIC_FIELDS = [
     "league",
     "home_team",
     "away_team",
+    "home_team_logo_url",
+    "away_team_logo_url",
+    "league_logo_url",
+    "league_flag_url",
+    "logo_join_status",
     "market",
     "pick",
     "confidence_tier",
@@ -42,6 +53,11 @@ PREMIUM_FIELDS = [
     "league",
     "home_team",
     "away_team",
+    "home_team_logo_url",
+    "away_team_logo_url",
+    "league_logo_url",
+    "league_flag_url",
+    "logo_join_status",
     "market",
     "pick",
     "confidence_tier",
@@ -184,6 +200,156 @@ def normalize_tier(value: str) -> str:
     return text
 
 
+def normalize_lookup_text(value: Any) -> str:
+    text = unicodedata.normalize("NFKD", str(value or ""))
+    text = "".join(ch for ch in text if not unicodedata.combining(ch))
+    text = text.lower().replace("&", " and ")
+    return re.sub(r"[^a-z0-9]+", "", text)
+
+
+def load_logo_manifest(path: Path | None, counters: Counter[str]) -> dict[str, Any]:
+    if path is None:
+        return {"league_team": {}, "team_global": {}, "team_alias_scoped": {}, "team_alias_global": {}, "league": {}}
+    if not path.exists():
+        counters["logo_manifest:missing"] += 1
+        return {"league_team": {}, "team_global": {}, "team_alias_scoped": {}, "team_alias_global": {}, "league": {}}
+
+    league_team: dict[tuple[str, str], dict[str, str]] = {}
+    team_candidates: dict[str, list[dict[str, str]]] = {}
+    league_assets: dict[str, dict[str, str]] = {}
+
+    with path.open("r", encoding="utf-8", newline="") as handle:
+        reader = csv.DictReader(handle)
+        for row in reader:
+            asset_type = str(row.get("asset_type", "") or "").strip().lower()
+            league_name = str(row.get("league_name", "") or "").strip()
+            team_name = str(row.get("team_name", "") or "").strip()
+            league_key = normalize_lookup_text(league_name)
+            team_key = normalize_lookup_text(team_name)
+            if asset_type == "league" and league_key:
+                league_assets.setdefault(
+                    league_key,
+                    {
+                        "league_logo_url": str(row.get("league_logo_url", "") or "").strip(),
+                        "league_flag_url": str(row.get("league_flag_url", "") or "").strip(),
+                    },
+                )
+            if asset_type != "team" or not team_key:
+                continue
+            asset = {
+                "team_logo_url": str(row.get("team_logo_url", "") or "").strip(),
+                "league_logo_url": str(row.get("league_logo_url", "") or "").strip(),
+                "league_flag_url": str(row.get("league_flag_url", "") or "").strip(),
+            }
+            if league_key:
+                league_team.setdefault((league_key, team_key), asset)
+            team_candidates.setdefault(team_key, []).append(asset)
+
+    team_global: dict[str, dict[str, str]] = {}
+    for team_key, candidates in team_candidates.items():
+        logos = {candidate.get("team_logo_url", "") for candidate in candidates if candidate.get("team_logo_url")}
+        if len(logos) == 1:
+            team_global[team_key] = candidates[0]
+
+    team_alias_scoped: dict[tuple[str, str], dict[str, str]] = {}
+    team_alias_global: dict[str, dict[str, str]] = {}
+    for map_path in TEAM_NAME_JOIN_MAPS:
+        if not map_path.exists():
+            continue
+        with map_path.open("r", encoding="utf-8", newline="") as handle:
+            reader = csv.DictReader(handle)
+            for row in reader:
+                if str(row.get("approval_status", "") or "").strip().upper() != "APPROVED":
+                    continue
+                api_key = normalize_lookup_text(row.get("api_team_name", ""))
+                fs_key = normalize_lookup_text(row.get("fs_team_name", ""))
+                tag_key = normalize_lookup_text(row.get("tag", ""))
+                if not api_key or not fs_key:
+                    continue
+                asset = team_global.get(api_key)
+                if not asset:
+                    candidates = team_candidates.get(api_key, [])
+                    logos = {candidate.get("team_logo_url", "") for candidate in candidates if candidate.get("team_logo_url")}
+                    if len(logos) == 1:
+                        asset = candidates[0]
+                if not asset:
+                    continue
+                if tag_key and tag_key != "":
+                    team_alias_scoped[(tag_key, fs_key)] = asset
+                if tag_key == "*" or fs_key not in team_alias_global:
+                    team_alias_global[fs_key] = asset
+
+    counters["logo_manifest:loaded"] += 1
+    counters["logo_manifest:league_team_assets"] += len(league_team)
+    counters["logo_manifest:global_team_assets"] += len(team_global)
+    counters["logo_manifest:scoped_alias_assets"] += len(team_alias_scoped)
+    counters["logo_manifest:global_alias_assets"] += len(team_alias_global)
+    counters["logo_manifest:league_assets"] += len(league_assets)
+    return {
+        "league_team": league_team,
+        "team_global": team_global,
+        "team_alias_scoped": team_alias_scoped,
+        "team_alias_global": team_alias_global,
+        "league": league_assets,
+    }
+
+
+def logo_assets_for(
+    logo_index: dict[str, Any],
+    league: str,
+    home_team: str,
+    away_team: str,
+    counters: Counter[str],
+) -> dict[str, str]:
+    league_key = normalize_lookup_text(league)
+    home_key = normalize_lookup_text(home_team)
+    away_key = normalize_lookup_text(away_team)
+    league_team = logo_index.get("league_team", {})
+    team_global = logo_index.get("team_global", {})
+    team_alias_scoped = logo_index.get("team_alias_scoped", {})
+    team_alias_global = logo_index.get("team_alias_global", {})
+    league_assets = logo_index.get("league", {})
+
+    home_asset = (
+        league_team.get((league_key, home_key))
+        or team_alias_scoped.get((league_key, home_key))
+        or team_global.get(home_key)
+        or team_alias_global.get(home_key)
+        or {}
+    )
+    away_asset = (
+        league_team.get((league_key, away_key))
+        or team_alias_scoped.get((league_key, away_key))
+        or team_global.get(away_key)
+        or team_alias_global.get(away_key)
+        or {}
+    )
+    league_asset = league_assets.get(league_key) or home_asset or away_asset or {}
+
+    home_logo = str(home_asset.get("team_logo_url", "") or "").strip()
+    away_logo = str(away_asset.get("team_logo_url", "") or "").strip()
+    league_logo = str(league_asset.get("league_logo_url", "") or "").strip()
+    league_flag = str(league_asset.get("league_flag_url", "") or "").strip()
+
+    if home_logo and away_logo and league_logo:
+        status = "FULL_MATCH"
+    elif home_logo and away_logo:
+        status = "TEAM_MATCH_ONLY"
+    elif home_logo or away_logo or league_logo:
+        status = "PARTIAL_MATCH"
+    else:
+        status = "NO_MATCH"
+
+    counters[f"logo_join:{status}"] += 1
+    return {
+        "home_team_logo_url": home_logo,
+        "away_team_logo_url": away_logo,
+        "league_logo_url": league_logo,
+        "league_flag_url": league_flag,
+        "logo_join_status": status,
+    }
+
+
 def build_fixture_id(fixture_key: str, market: str, pick: str) -> str:
     base = "__".join(part for part in [fixture_key, market, pick] if part)
     return re.sub(r"[^A-Za-z0-9_:-]+", "_", base)
@@ -298,7 +464,7 @@ def build_correct_score_shortlist(row: dict[str, str]) -> list[dict[str, Any]]:
     return shortlist
 
 
-def build_record(row: dict[str, str], counters: Counter[str]) -> dict[str, Any] | None:
+def build_record(row: dict[str, str], counters: Counter[str], logo_index: dict[str, Any]) -> dict[str, Any] | None:
     fixture_key = pick_first(row, ["fixture_key"], "fixture_key", counters)
     kickoff_time = pick_first(row, ["match_date", "kickoff_time"], "kickoff_time", counters)
     league = pick_first(row, ["league"], "league", counters)
@@ -341,6 +507,7 @@ def build_record(row: dict[str, str], counters: Counter[str]) -> dict[str, Any] 
     fixture_id = build_fixture_id(fixture_key, market, pick)
     safe_reason_tokens = derive_safe_reason_tokens(row, market, tier)
     correct_score_shortlist = build_correct_score_shortlist(row)
+    logo_assets = logo_assets_for(logo_index, league, home_team, away_team, counters)
 
     return {
         "fixture_id": fixture_id,
@@ -349,6 +516,7 @@ def build_record(row: dict[str, str], counters: Counter[str]) -> dict[str, Any] 
         "league": league,
         "home_team": home_team,
         "away_team": away_team,
+        **logo_assets,
         "market": market,
         "pick": pick,
         "confidence_tier": tier,
@@ -445,6 +613,7 @@ def build_report(
             "",
             "## Notes",
             "- Exporter uses a strict allowlist and excludes `OBSERVE` rows from premium output.",
+            "- Logo fields are presentation-only and never affect deploy routing.",
             "- Public board prefers `ELITE` rows only.",
             "- If no `ELITE` rows exist, a small `STANDARD` fallback is used and recorded in publish summary.",
             "- Run `python3 validate_public_export.py` after publishing.",
@@ -461,6 +630,11 @@ def parse_args() -> argparse.Namespace:
         default="",
         help="Optional explicit DEPLOY_COMBINED CSV path. If omitted, the newest true DEPLOY_COMBINED_*.csv is used.",
     )
+    parser.add_argument(
+        "--logo-manifest",
+        default=str(DEFAULT_LOGO_MANIFEST),
+        help="Optional API-Football logo manifest CSV. Use an empty string to disable logo enrichment.",
+    )
     return parser.parse_args()
 
 
@@ -470,8 +644,11 @@ def main() -> int:
     counters: Counter[str] = Counter()
 
     source_path = resolve_source_path(str(args.src or "").strip() or None)
+    logo_manifest_text = str(args.logo_manifest or "").strip()
+    logo_manifest_path = (ROOT / logo_manifest_text).resolve() if logo_manifest_text and not Path(logo_manifest_text).is_absolute() else Path(logo_manifest_text) if logo_manifest_text else None
+    logo_index = load_logo_manifest(logo_manifest_path, counters)
     source_rows = load_rows(source_path)
-    built_records = [record for row in source_rows if (record := build_record(row, counters)) is not None]
+    built_records = [record for row in source_rows if (record := build_record(row, counters, logo_index)) is not None]
     premium_records = sort_records(built_records)
     public_records = sort_records(select_public_records(premium_records, counters))
 
@@ -491,6 +668,7 @@ def main() -> int:
         "selected_source_csv": str(source_path.relative_to(ROOT)),
         "selected_by": "explicit_src" if args.src else "latest_mtime",
         "selected_source_mtime_utc": datetime.fromtimestamp(source_path.stat().st_mtime, tz=timezone.utc).isoformat(),
+        "logo_manifest_csv": str(logo_manifest_path.relative_to(ROOT)) if logo_manifest_path and logo_manifest_path.exists() else "",
         "source_rows_read": len(source_rows),
         "public_predictions_count": len(public_payload),
         "premium_predictions_count": len(premium_payload),

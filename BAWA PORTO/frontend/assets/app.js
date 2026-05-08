@@ -147,6 +147,72 @@
   const confidenceLabel = (row) => row.display_confidence || row.model_prob_display || formatProbability(row.model_prob);
   const tierClass = (tier) => (String(tier || "").toUpperCase() === "STANDARD" ? "standard" : "elite");
 
+  const safeLogoUrl = (value) => {
+    const raw = String(value || "").trim();
+    if (!raw) {
+      return "";
+    }
+    try {
+      const url = new URL(raw, window.location.href);
+      const isApiSports = url.protocol === "https:" && url.hostname === "media.api-sports.io";
+      const isLocalAsset = url.origin === window.location.origin && url.pathname.includes("/assets/");
+      return isApiSports || isLocalAsset ? url.toString() : "";
+    } catch {
+      return "";
+    }
+  };
+
+  const teamInitials = (name) => {
+    const words = String(name || "")
+      .replace(/[^A-Za-z0-9\s-]/g, " ")
+      .split(/\s+/)
+      .filter(Boolean);
+    if (!words.length) {
+      return "FC";
+    }
+    return words
+      .slice(0, 2)
+      .map((word) => word[0])
+      .join("")
+      .toUpperCase();
+  };
+
+  const badgeMarkup = (url, name, className = "team-badge") => {
+    const safeUrl = safeLogoUrl(url);
+    const label = escapeHtml(name || "Team");
+    const initials = escapeHtml(teamInitials(name));
+    return `
+      <span class="${className}" aria-hidden="true">
+        <span class="badge-fallback">${initials}</span>
+        ${safeUrl ? `<img src="${escapeHtml(safeUrl)}" alt="" loading="lazy" decoding="async" onerror="this.remove()" />` : ""}
+      </span>
+      <span class="sr-only">${label}</span>
+    `;
+  };
+
+  const fixtureTeamsMarkup = (row, compact = false) => {
+    const leagueBadge = safeLogoUrl(row.league_logo_url || row.league_flag_url);
+    return `
+      <div class="teams fixture-teams ${compact ? "fixture-teams-compact" : ""}">
+        <span class="muted fixture-league">
+          ${
+            leagueBadge
+              ? `<img class="league-badge" src="${escapeHtml(leagueBadge)}" alt="" loading="lazy" decoding="async" onerror="this.remove()" />`
+              : ""
+          }
+          <span>${escapeHtml(row.league)} • ${escapeHtml(row.kickoff_time)}</span>
+        </span>
+        <strong class="fixture-teamline">
+          ${badgeMarkup(row.home_team_logo_url, row.home_team)}
+          <span class="team-name">${escapeHtml(row.home_team)}</span>
+          <span class="versus">vs</span>
+          ${badgeMarkup(row.away_team_logo_url, row.away_team)}
+          <span class="team-name">${escapeHtml(row.away_team)}</span>
+        </strong>
+      </div>
+    `;
+  };
+
   const proofTile = (label, value, note = "") => `
     <article class="proof-tile">
       <span class="metric-label">${escapeHtml(label)}</span>
@@ -271,10 +337,7 @@
     return `
       <article class="card prediction-card">
         <div class="prediction-top">
-          <div class="teams">
-            <span class="muted">${escapeHtml(row.league)} • ${escapeHtml(row.kickoff_time)}</span>
-            <strong>${escapeHtml(row.home_team)} vs ${escapeHtml(row.away_team)}</strong>
-          </div>
+          ${fixtureTeamsMarkup(row)}
           <div class="pill-row">
             <span class="market-badge">${escapeHtml(row.market)}</span>
             <span class="confidence-badge ${tierClass(row.confidence_tier)}">${escapeHtml(row.confidence_tier)}</span>
@@ -352,8 +415,7 @@
                 (row) => `
                   <tr>
                     <td>
-                      <strong>${escapeHtml(row.home_team)} vs ${escapeHtml(row.away_team)}</strong><br />
-                      <span class="muted">${escapeHtml(row.league)} • ${escapeHtml(row.kickoff_time)}</span>
+                      ${fixtureTeamsMarkup(row, true)}
                     </td>
                     <td>${escapeHtml(row.market)}</td>
                     <td>${escapeHtml(row.pick)}</td>
