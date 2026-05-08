@@ -1351,6 +1351,12 @@
     if (authState === "success") {
       return { message: "Premium access unlocked for this device.", tone: "success" };
     }
+    if (authState === "expired") {
+      return { message: "This sign-in link has expired. Request a fresh one to continue.", tone: "warning" };
+    }
+    if (authState === "inactive") {
+      return { message: "Your membership is not active yet. If you just checked out, give the webhook a moment and try again.", tone: "warning" };
+    }
     if (authState === "invalid") {
       return { message: "This sign-in link is invalid or has expired. Request a new one.", tone: "warning" };
     }

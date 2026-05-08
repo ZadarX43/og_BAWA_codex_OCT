@@ -37,6 +37,24 @@ class MockKVStore {
   async put(key, value) {
     this.map.set(key, value);
   }
+
+  async delete(key) {
+    this.map.delete(key);
+  }
+
+  async list({ prefix = "", cursor, limit = 100 } = {}) {
+    const keys = Array.from(this.map.keys())
+      .filter((key) => key.startsWith(prefix))
+      .sort();
+    const start = cursor ? Number(cursor) : 0;
+    const slice = keys.slice(start, start + limit);
+    const next = start + slice.length;
+    return {
+      keys: slice.map((name) => ({ name })),
+      list_complete: next >= keys.length,
+      cursor: next >= keys.length ? undefined : String(next),
+    };
+  }
 }
 
 class MockCacheStore {
@@ -130,7 +148,12 @@ const createEnv = () => {
   const store = new MockKVStore();
   return {
     PREMIUM_TOKEN_SECRET: "test_premium_token_secret",
+    AUTH_MAGIC_LINK_SECRET: "test_auth_magic_link_secret",
+    AUTH_SESSION_SECRET: "test_auth_session_secret",
+    RESEND_API_KEY: "test_resend_api_key",
+    AUTH_EMAIL_FROM: "Odds Genius <auth@oddsgenius.test>",
     PREMIUM_DATA_SOURCE: "/premium-source.json",
+    SITE_URL: "http://localhost",
     SUBSCRIBER_STATE: store,
   };
 };
@@ -160,13 +183,26 @@ const installMockFetch = () => {
   const originalFetch = globalThis.fetch;
   const counters = {
     premiumSourceFetches: 0,
+    resendSendFetches: 0,
   };
+  const sentEmails = [];
 
   globalThis.fetch = async (input, init) => {
     const url = typeof input === "string" ? input : input.url;
     if (url === "http://localhost/premium-source.json") {
       counters.premiumSourceFetches += 1;
       return new Response(JSON.stringify(premiumSourcePayload), {
+        status: 200,
+        headers: {
+          "content-type": "application/json; charset=utf-8",
+        },
+      });
+    }
+
+    if (url === "https://api.resend.com/emails") {
+      counters.resendSendFetches += 1;
+      sentEmails.push(JSON.parse(init?.body || "{}"));
+      return new Response(JSON.stringify({ id: "email_test_123" }), {
         status: 200,
         headers: {
           "content-type": "application/json; charset=utf-8",
@@ -183,6 +219,7 @@ const installMockFetch = () => {
 
   return {
     counters,
+    sentEmails,
     restore: () => {
       globalThis.fetch = originalFetch;
     },
@@ -373,8 +410,14 @@ const testInactiveSubscriber = async () => {
   assert.equal(payload.status, "inactive_subscription");
 };
 
-const testMagicLinkRequestValidation = async () => {
+const testMagicLinkRequestValidation = async (fetchHarness) => {
   const env = createEnv();
+  await writeSubscriberRecord(
+    env,
+    buildSubscriberRecord({
+      email: "member@example.com",
+    })
+  );
 
   const invalidResponse = await worker.fetch(
     jsonRequest("http://localhost/api/auth/magic-link/request", "POST", {
@@ -393,8 +436,11 @@ const testMagicLinkRequestValidation = async () => {
     env
   );
   const validPayload = await validResponse.json();
-  assert.equal(validResponse.status, 501);
-  assert.equal(validPayload.status, "auth_not_wired");
+  assert.equal(validResponse.status, 200);
+  assert.equal(validPayload.status, "magic_link_requested");
+  assert.equal(fetchHarness.counters.resendSendFetches, 1);
+  assert.equal(fetchHarness.sentEmails.length, 1);
+  assert.match(fetchHarness.sentEmails[0].html, /api\/auth\/magic-link\/verify\?token=/);
 };
 
 const testAuthSessionSkeleton = async () => {
@@ -407,8 +453,19 @@ const testAuthSessionSkeleton = async () => {
   assert.equal(payload.entitled, false);
 };
 
-const testMagicLinkVerifyRedirectSkeleton = async () => {
+const extractCookieValue = (setCookieHeader, name) => {
+  const match = String(setCookieHeader || "").match(new RegExp(`${name}=([^;]+)`));
+  return match ? match[1] : "";
+};
+
+const testMagicLinkVerifyAndSessionFlow = async (fetchHarness) => {
   const env = createEnv();
+  await writeSubscriberRecord(
+    env,
+    buildSubscriberRecord({
+      email: "member@example.com",
+    })
+  );
 
   const missingTokenResponse = await worker.fetch(
     makeGetRequest("http://localhost/api/auth/magic-link/verify"),
@@ -420,15 +477,53 @@ const testMagicLinkVerifyRedirectSkeleton = async () => {
     "http://localhost/account.html?auth=invalid"
   );
 
+  const requestResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/auth/magic-link/request", "POST", {
+      email: "member@example.com",
+    }),
+    env
+  );
+  assert.equal(requestResponse.status, 200);
+  const emailBody = fetchHarness.sentEmails.at(-1);
+  const verifyMatch = String(emailBody?.html || "").match(/verify\?token=([^"&]+)/);
+  assert.ok(verifyMatch?.[1], "expected magic-link token in email body");
+  const token = decodeURIComponent(verifyMatch[1]);
+
   const tokenResponse = await worker.fetch(
-    makeGetRequest("http://localhost/api/auth/magic-link/verify?token=test_token"),
+    makeGetRequest(`http://localhost/api/auth/magic-link/verify?token=${encodeURIComponent(token)}`),
     env
   );
   assert.equal(tokenResponse.status, 303);
   assert.equal(
     tokenResponse.headers.get("location"),
-    "http://localhost/account.html?auth=not_wired"
+    "http://localhost/account.html?auth=success"
   );
+  const sessionCookie = extractCookieValue(tokenResponse.headers.get("set-cookie"), "og_premium_session");
+  assert.ok(sessionCookie, "expected premium session cookie after verify");
+
+  const sessionResponse = await worker.fetch(
+    makeGetRequest("http://localhost/api/auth/session", {
+      cookie: `og_premium_session=${sessionCookie}`,
+    }),
+    env
+  );
+  const sessionPayload = await sessionResponse.json();
+  assert.equal(sessionResponse.status, 200);
+  assert.equal(sessionPayload.authenticated, true);
+  assert.equal(sessionPayload.entitled, true);
+  assert.equal(sessionPayload.auth_mode, "session");
+  assert.equal(sessionPayload.subscription_status, "active");
+
+  const premiumResponse = await worker.fetch(
+    makeGetRequest("http://localhost/api/premium/predictions", {
+      cookie: `og_premium_session=${sessionCookie}`,
+    }),
+    env
+  );
+  const premiumPayload = await premiumResponse.json();
+  assert.equal(premiumResponse.status, 200);
+  assert.equal(premiumPayload.ok, true);
+  assert.equal(premiumPayload.auth_mode, "session");
 };
 
 const testLogoutSkeleton = async () => {
@@ -454,9 +549,9 @@ const main = async () => {
     await testMissingToken();
     await testExpiredToken();
     await testInactiveSubscriber();
-    await testMagicLinkRequestValidation();
+    await testMagicLinkRequestValidation(fetchHarness);
     await testAuthSessionSkeleton();
-    await testMagicLinkVerifyRedirectSkeleton();
+    await testMagicLinkVerifyAndSessionFlow(fetchHarness);
     await testLogoutSkeleton();
     console.log("Worker local harness passed.");
     console.log("- success route with valid token: passed");
@@ -464,9 +559,9 @@ const main = async () => {
     console.log("- missing token returns 401: passed");
     console.log("- expired token returns 401: passed");
     console.log("- inactive subscriber returns 401: passed");
-    console.log("- magic-link request skeleton: passed");
-    console.log("- auth session skeleton: passed");
-    console.log("- magic-link verify redirect skeleton: passed");
+    console.log("- magic-link request flow: passed");
+    console.log("- auth session flow: passed");
+    console.log("- magic-link verify + session premium flow: passed");
     console.log("- logout skeleton: passed");
   } finally {
     fetchHarness.restore();

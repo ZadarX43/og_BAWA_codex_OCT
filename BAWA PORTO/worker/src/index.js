@@ -1,6 +1,8 @@
 import {
   buildSubscriberRecord,
   getSubscriberStateStore,
+  loadSubscriberRecordByEmail,
+  loadSubscriberRecordBySubscriptionId,
   persistSubscriberRecord,
 } from "./subscriber_store.js";
 import { issuePremiumToken, verifyPremiumAccess } from "./auth.js";
@@ -8,6 +10,13 @@ import { issuePremiumToken, verifyPremiumAccess } from "./auth.js";
 const STRIPE_WEBHOOK_TOLERANCE_SECONDS = 300;
 const PREMIUM_CACHE_TTL_SECONDS = 300;
 const PREMIUM_CACHE_VERSION = "v1";
+const AUTH_MAGIC_LINK_TTL_SECONDS = 15 * 60;
+const AUTH_SESSION_TTL_SECONDS = 7 * 24 * 60 * 60;
+const AUTH_REQUEST_IP_COOLDOWN_SECONDS = 60;
+const AUTH_REQUEST_EMAIL_COOLDOWN_SECONDS = 5 * 60;
+const AUTH_MAGIC_KEY_PREFIX = "auth_magic:";
+const AUTH_RATE_LIMIT_KEY_PREFIX = "auth_rl:";
+const AUTH_SESSION_COOKIE = "og_premium_session";
 const PREMIUM_ALLOWED_FIELDS = [
   "fixture_id",
   "fixture_key",
@@ -70,6 +79,10 @@ const envSummary = (env) => ({
   has_stripe_price_id: Boolean(env.STRIPE_PRICE_ID),
   has_subscriber_state_binding: Boolean(getSubscriberStateStore(env)),
   has_premium_token_secret: Boolean(env.PREMIUM_TOKEN_SECRET),
+  has_auth_magic_link_secret: Boolean(env.AUTH_MAGIC_LINK_SECRET),
+  has_auth_session_secret: Boolean(env.AUTH_SESSION_SECRET),
+  has_resend_api_key: Boolean(env.RESEND_API_KEY),
+  has_auth_email_from: Boolean(env.AUTH_EMAIL_FROM),
 });
 
 const placeholder = (route, nextStep, env, extras = {}) =>
@@ -137,6 +150,9 @@ const unauthorizedError = (message, details = null) =>
 const normalizeSiteUrl = (value) => String(value || "").replace(/\/+$/, "");
 const isFiniteNumber = (value) => typeof value === "number" && Number.isFinite(value);
 const isLikelyEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || "").trim());
+const normalizeEmail = (value) => String(value || "").trim().toLowerCase();
+const textEncoder = new TextEncoder();
+const textDecoder = new TextDecoder();
 
 const redirect = (location, status = 303, extraHeaders = {}) =>
   new Response(null, {
@@ -160,6 +176,212 @@ const getCookieValue = (request, name) => {
   }
   return null;
 };
+
+const getRequestIp = (request) =>
+  String(request.headers.get("cf-connecting-ip") || request.headers.get("x-forwarded-for") || "")
+    .split(",")[0]
+    .trim();
+
+const maskEmailHint = (email) => {
+  const normalized = normalizeEmail(email);
+  const [localPart, domain] = normalized.split("@");
+  if (!localPart || !domain) {
+    return "";
+  }
+  const visible = localPart.slice(0, 1) || "u";
+  return `${visible}***@${domain}`;
+};
+
+const getSessionSecret = (env) => String(env.AUTH_SESSION_SECRET || env.AUTH_MAGIC_LINK_SECRET || "").trim();
+
+const bytesToBase64Url = (bytes) =>
+  btoa(String.fromCharCode(...bytes))
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/g, "");
+
+const base64UrlToBytes = (value) => {
+  const normalized = String(value || "").replace(/-/g, "+").replace(/_/g, "/");
+  const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, "=");
+  try {
+    return Uint8Array.from(atob(padded), (char) => char.charCodeAt(0));
+  } catch {
+    return null;
+  }
+};
+
+const bytesToUtf8 = (bytes) => {
+  try {
+    return textDecoder.decode(bytes);
+  } catch {
+    return null;
+  }
+};
+
+const buildOpaqueToken = (bytes = 32) => {
+  const random = new Uint8Array(bytes);
+  crypto.getRandomValues(random);
+  return bytesToBase64Url(random);
+};
+
+const buildSessionCookieHeader = (token) =>
+  `${AUTH_SESSION_COOKIE}=${token}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${AUTH_SESSION_TTL_SECONDS}`;
+
+const putKvJson = async (store, key, payload, options = {}) => {
+  if (options.expirationTtl) {
+    await store.put(key, JSON.stringify(payload), { expirationTtl: options.expirationTtl });
+    return;
+  }
+  await store.put(key, JSON.stringify(payload));
+};
+
+const getKvJson = async (store, key) => {
+  const raw = await store.get(key);
+  if (!raw) {
+    return null;
+  }
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+};
+
+const deleteKvKey = async (store, key) => {
+  if (typeof store.delete === "function") {
+    await store.delete(key);
+    return;
+  }
+  await store.put(key, JSON.stringify({ consumed: true, consumed_at: new Date().toISOString() }), {
+    expirationTtl: 60,
+  });
+};
+
+const signText = async (secret, value) => {
+  const key = await crypto.subtle.importKey(
+    "raw",
+    textEncoder.encode(secret),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"]
+  );
+  const signature = await crypto.subtle.sign("HMAC", key, textEncoder.encode(value));
+  return new Uint8Array(signature);
+};
+
+const buildSignedJsonToken = async (payload, secret) => {
+  const payloadSegment = bytesToBase64Url(textEncoder.encode(JSON.stringify(payload)));
+  const signatureBytes = await signText(secret, payloadSegment);
+  return `${payloadSegment}.${bytesToBase64Url(signatureBytes)}`;
+};
+
+const parseSignedJsonToken = async (token, secret) => {
+  const parts = String(token || "").split(".");
+  if (parts.length !== 2 || !parts[0] || !parts[1]) {
+    return { ok: false, status: "invalid_session", message: "Session token format is invalid." };
+  }
+
+  const payloadBytes = base64UrlToBytes(parts[0]);
+  const signatureBytes = base64UrlToBytes(parts[1]);
+  if (!payloadBytes || !signatureBytes) {
+    return { ok: false, status: "invalid_session", message: "Session token could not be decoded." };
+  }
+
+  const expectedSignature = await signText(secret, parts[0]);
+  if (!constantTimeEqual(expectedSignature, signatureBytes)) {
+    return { ok: false, status: "invalid_session", message: "Session token signature verification failed." };
+  }
+
+  const payloadText = bytesToUtf8(payloadBytes);
+  if (!payloadText) {
+    return { ok: false, status: "invalid_session", message: "Session payload is unreadable." };
+  }
+
+  let payload;
+  try {
+    payload = JSON.parse(payloadText);
+  } catch {
+    return { ok: false, status: "invalid_session", message: "Session payload is not valid JSON." };
+  }
+
+  return { ok: true, payload };
+};
+
+const getSessionCookieToken = (request) => getCookieValue(request, AUTH_SESSION_COOKIE);
+
+const hasTransitionalPremiumToken = (request) =>
+  Boolean(getCookieValue(request, "og_premium_token")) ||
+  /^Bearer\s+.+/i.test(request.headers.get("authorization") || "");
+
+const checkAndRecordCooldown = async (store, key, cooldownSeconds) => {
+  const now = Math.floor(Date.now() / 1000);
+  const existing = await getKvJson(store, key);
+  if (existing?.next_allowed_at && Number(existing.next_allowed_at) > now) {
+    return { ok: false, retry_after: Number(existing.next_allowed_at) - now };
+  }
+  await putKvJson(
+    store,
+    key,
+    {
+      next_allowed_at: now + cooldownSeconds,
+      updated_at: new Date().toISOString(),
+    },
+    { expirationTtl: cooldownSeconds }
+  );
+  return { ok: true };
+};
+
+const createMagicLinkRecord = (email, subscriberRecord) => {
+  const now = Math.floor(Date.now() / 1000);
+  return {
+    email,
+    customer_id: subscriberRecord.customer_id,
+    subscription_id: subscriberRecord.subscription_id,
+    issued_at: new Date(now * 1000).toISOString(),
+    exp: now + AUTH_MAGIC_LINK_TTL_SECONDS,
+  };
+};
+
+async function sendMagicLinkEmail(email, verifyUrl, env) {
+  if (!env.RESEND_API_KEY || !env.AUTH_EMAIL_FROM) {
+    return {
+      ok: false,
+      status: "auth_not_wired",
+      message: "Transactional email delivery is not configured.",
+      missing: [
+        !env.RESEND_API_KEY ? "RESEND_API_KEY" : null,
+        !env.AUTH_EMAIL_FROM ? "AUTH_EMAIL_FROM" : null,
+      ].filter(Boolean),
+    };
+  }
+
+  const response = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      authorization: `Bearer ${env.RESEND_API_KEY}`,
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({
+      from: env.AUTH_EMAIL_FROM,
+      to: [email],
+      subject: "Your Odds Genius sign-in link",
+      text: `Sign in to Odds Genius: ${verifyUrl}\n\nThis link expires in 15 minutes.`,
+      html: `<p>Sign in to <strong>Odds Genius</strong>.</p><p><a href="${verifyUrl}">Open your sign-in link</a></p><p>This link expires in 15 minutes.</p>`,
+    }),
+  });
+
+  if (!response.ok) {
+    const details = await response.text();
+    return {
+      ok: false,
+      status: "email_send_failed",
+      message: "Unable to send sign-in link right now.",
+      details,
+    };
+  }
+
+  return { ok: true };
+}
 
 const resolvePremiumSourceUrl = (request, env) => {
   const source = String(env.PREMIUM_DATA_SOURCE || "").trim();
@@ -447,7 +669,7 @@ async function handleStripeWebhook(request, env) {
 }
 
 async function handlePremiumPredictions(request, env) {
-  const access = await verifyPremiumAccess(request, env);
+  const access = await resolvePremiumAccess(request, env);
   if (!access.ok) {
     return json(
       {
@@ -457,7 +679,7 @@ async function handlePremiumPredictions(request, env) {
         recommendation: access.recommendation,
         route: "/api/premium/predictions",
         locked: true,
-        data_note: "Premium predictions remain unavailable until verified token-based entitlement is live.",
+        data_note: "Premium predictions remain unavailable until verified session-backed or token-backed entitlement is live.",
       },
       401
     );
@@ -483,6 +705,7 @@ async function handlePremiumPredictions(request, env) {
       ok: true,
       generated_at: loaded.generated_at,
       subscriber_customer_id: access.customer_id,
+      auth_mode: access.auth_mode || "token",
       count: loaded.count,
       predictions: loaded.rows,
     },
@@ -525,6 +748,153 @@ async function handlePremiumTokenIssue(request, env) {
   });
 }
 
+async function verifySessionAccess(request, env) {
+  const sessionToken = getSessionCookieToken(request);
+  if (!sessionToken) {
+    return {
+      ok: false,
+      status: "missing_session",
+      message: "Premium session cookie is missing.",
+      recommendation: "Verify email to establish a premium session on this device.",
+    };
+  }
+
+  const sessionSecret = getSessionSecret(env);
+  if (!sessionSecret) {
+    return {
+      ok: false,
+      status: "auth_not_wired",
+      message: "Session verification secret is not configured.",
+      recommendation: "Set AUTH_MAGIC_LINK_SECRET and optionally AUTH_SESSION_SECRET.",
+    };
+  }
+
+  const parsed = await parseSignedJsonToken(sessionToken, sessionSecret);
+  if (!parsed.ok) {
+    return {
+      ok: false,
+      status: parsed.status,
+      message: parsed.message,
+      recommendation: "Verify email again to receive a fresh sign-in session.",
+    };
+  }
+
+  const email = normalizeEmail(parsed.payload?.email);
+  const customerId = String(parsed.payload?.customer_id || "").trim();
+  const subscriptionId = String(parsed.payload?.subscription_id || "").trim();
+  const exp = Number(parsed.payload?.exp);
+
+  if (!email || !customerId || !subscriptionId || !Number.isFinite(exp)) {
+    return {
+      ok: false,
+      status: "invalid_session",
+      message: "Premium session payload is incomplete.",
+      recommendation: "Verify email again to receive a fresh sign-in session.",
+    };
+  }
+
+  if (exp <= Math.floor(Date.now() / 1000)) {
+    return {
+      ok: false,
+      status: "expired_session",
+      message: "Premium session has expired.",
+      recommendation: "Request a fresh sign-in link to restore premium access.",
+    };
+  }
+
+  const store = getSubscriberStateStore(env);
+  if (!store) {
+    return {
+      ok: false,
+      status: "state_binding_missing",
+      message: "Subscriber state binding is unavailable.",
+      recommendation: "Bind SUBSCRIBER_STATE before enabling premium sessions.",
+    };
+  }
+
+  let record;
+  try {
+    record = await loadSubscriberRecordBySubscriptionId(store, subscriptionId);
+  } catch (error) {
+    return {
+      ok: false,
+      status: "state_lookup_failed",
+      message: "Subscriber state lookup failed.",
+      recommendation: error.message,
+    };
+  }
+
+  if (!record) {
+    return {
+      ok: false,
+      status: "subscriber_state_missing",
+      message: "No subscriber state record was found for this session.",
+      recommendation: "Wait for Stripe webhook persistence or verify again later.",
+    };
+  }
+
+  if (record.customer_id !== customerId || record.subscription_id !== subscriptionId) {
+    return {
+      ok: false,
+      status: "session_mismatch",
+      message: "Premium session does not match current subscriber state.",
+      recommendation: "Verify email again to refresh the session.",
+    };
+  }
+
+  if (normalizeEmail(record.email) && normalizeEmail(record.email) !== email) {
+    return {
+      ok: false,
+      status: "session_email_mismatch",
+      message: "Premium session email does not match subscriber state.",
+      recommendation: "Verify email again using the subscriber email address.",
+    };
+  }
+
+  if (!["active", "trialing"].includes(String(record.status || ""))) {
+    return {
+      ok: false,
+      status: "inactive_subscription",
+      message: "Subscriber state is not active for premium delivery.",
+      recommendation: "Require active or trialing status before granting premium access.",
+    };
+  }
+
+  return {
+    ok: true,
+    auth_mode: "session",
+    email,
+    email_hint: maskEmailHint(email),
+    customer_id: record.customer_id,
+    subscription_id: record.subscription_id,
+    subscription_status: record.status,
+  };
+}
+
+async function resolvePremiumAccess(request, env) {
+  const sessionAccess = await verifySessionAccess(request, env);
+  if (sessionAccess.ok) {
+    return sessionAccess;
+  }
+
+  if (hasTransitionalPremiumToken(request)) {
+    const tokenAccess = await verifyPremiumAccess(request, env);
+    if (tokenAccess.ok) {
+      return {
+        ...tokenAccess,
+        auth_mode: "transitional_token",
+      };
+    }
+    return tokenAccess;
+  }
+
+  if (sessionAccess.status && sessionAccess.status !== "missing_session") {
+    return sessionAccess;
+  }
+
+  return verifyPremiumAccess(request, env);
+}
+
 async function handleMagicLinkRequest(request, env) {
   let payload;
   try {
@@ -538,17 +908,104 @@ async function handleMagicLinkRequest(request, env) {
     return requestError("A valid email address is required.");
   }
 
-  if (!env.AUTH_MAGIC_LINK_SECRET) {
+  const store = getSubscriberStateStore(env);
+  if (!store) {
+    return configError("Missing required subscriber state binding.", ["SUBSCRIBER_STATE"]);
+  }
+
+  const missingAuthConfig = [
+    !env.AUTH_MAGIC_LINK_SECRET ? "AUTH_MAGIC_LINK_SECRET" : null,
+    !env.RESEND_API_KEY ? "RESEND_API_KEY" : null,
+    !env.AUTH_EMAIL_FROM ? "AUTH_EMAIL_FROM" : null,
+  ].filter(Boolean);
+  if (missingAuthConfig.length) {
     return json(
       {
         ok: false,
         status: "auth_not_wired",
         message: "Magic-link email delivery is not configured yet.",
         route: "/api/auth/magic-link/request",
-        next_step: "Configure AUTH_MAGIC_LINK_SECRET and transactional email delivery before enabling public auth.",
+        next_step: "Configure AUTH_MAGIC_LINK_SECRET, RESEND_API_KEY, and AUTH_EMAIL_FROM before enabling public auth.",
+        missing_env_vars: missingAuthConfig,
       },
       501
     );
+  }
+
+  const normalizedEmail = normalizeEmail(email);
+  const requestIp = getRequestIp(request) || "unknown";
+  const ipLimit = await checkAndRecordCooldown(
+    store,
+    `${AUTH_RATE_LIMIT_KEY_PREFIX}ip:${requestIp}`,
+    AUTH_REQUEST_IP_COOLDOWN_SECONDS
+  );
+  if (!ipLimit.ok) {
+    return json(
+      {
+        ok: false,
+        status: "rate_limited",
+        message: "Too many requests. Try again later.",
+      },
+      429,
+      { "retry-after": String(ipLimit.retry_after || AUTH_REQUEST_IP_COOLDOWN_SECONDS) }
+    );
+  }
+
+  const emailLimit = await checkAndRecordCooldown(
+    store,
+    `${AUTH_RATE_LIMIT_KEY_PREFIX}email:${normalizedEmail}`,
+    AUTH_REQUEST_EMAIL_COOLDOWN_SECONDS
+  );
+  if (!emailLimit.ok) {
+    return json(
+      {
+        ok: false,
+        status: "rate_limited",
+        message: "Too many requests. Try again later.",
+      },
+      429,
+      { "retry-after": String(emailLimit.retry_after || AUTH_REQUEST_EMAIL_COOLDOWN_SECONDS) }
+    );
+  }
+
+  let record = null;
+  try {
+    record = await loadSubscriberRecordByEmail(store, normalizedEmail);
+  } catch (error) {
+    return json(
+      {
+        ok: false,
+        status: "state_lookup_failed",
+        message: "Unable to prepare sign-in link right now.",
+        details: error.message,
+      },
+      500
+    );
+  }
+
+  if (record && ["active", "trialing"].includes(String(record.status || ""))) {
+    const token = buildOpaqueToken();
+    const magicRecord = createMagicLinkRecord(normalizedEmail, record);
+    await putKvJson(store, `${AUTH_MAGIC_KEY_PREFIX}${token}`, magicRecord, {
+      expirationTtl: AUTH_MAGIC_LINK_TTL_SECONDS,
+    });
+
+    const siteUrl = normalizeSiteUrl(env.SITE_URL || new URL(request.url).origin);
+    const verifyUrl = `${siteUrl}/api/auth/magic-link/verify?token=${encodeURIComponent(token)}`;
+    const sent = await sendMagicLinkEmail(normalizedEmail, verifyUrl, env);
+    if (!sent.ok) {
+      return json(
+        {
+          ok: false,
+          status: sent.status,
+          message: sent.message,
+          route: "/api/auth/magic-link/request",
+          details: sent.details || null,
+          missing_env_vars: sent.missing || [],
+        },
+        sent.status === "auth_not_wired" ? 501 : 502
+      );
+    }
   }
 
   return json({
@@ -567,54 +1024,107 @@ async function handleMagicLinkVerify(request, env) {
     return redirect(`${siteUrl}/account.html?auth=invalid`);
   }
 
-  if (!env.AUTH_MAGIC_LINK_SECRET) {
+  const sessionSecret = getSessionSecret(env);
+  if (!env.AUTH_MAGIC_LINK_SECRET || !sessionSecret) {
     return redirect(`${siteUrl}/account.html?auth=not_wired`);
   }
 
-  return redirect(`${siteUrl}/account.html?auth=not_wired`);
+  const store = getSubscriberStateStore(env);
+  if (!store) {
+    return redirect(`${siteUrl}/account.html?auth=invalid`);
+  }
+
+  const record = await getKvJson(store, `${AUTH_MAGIC_KEY_PREFIX}${token}`);
+  if (!record) {
+    return redirect(`${siteUrl}/account.html?auth=invalid`);
+  }
+
+  await deleteKvKey(store, `${AUTH_MAGIC_KEY_PREFIX}${token}`);
+
+  const email = normalizeEmail(record.email);
+  const customerId = String(record.customer_id || "").trim();
+  const subscriptionId = String(record.subscription_id || "").trim();
+  const exp = Number(record.exp);
+  if (!email || !customerId || !subscriptionId || !Number.isFinite(exp)) {
+    return redirect(`${siteUrl}/account.html?auth=invalid`);
+  }
+
+  if (exp <= Math.floor(Date.now() / 1000)) {
+    return redirect(`${siteUrl}/account.html?auth=expired`);
+  }
+
+  let subscriberRecord;
+  try {
+    subscriberRecord = await loadSubscriberRecordBySubscriptionId(store, subscriptionId);
+  } catch {
+    return redirect(`${siteUrl}/account.html?auth=invalid`);
+  }
+
+  if (!subscriberRecord) {
+    return redirect(`${siteUrl}/account.html?auth=invalid`);
+  }
+
+  if (subscriberRecord.customer_id !== customerId || normalizeEmail(subscriberRecord.email) !== email) {
+    return redirect(`${siteUrl}/account.html?auth=invalid`);
+  }
+
+  if (!["active", "trialing"].includes(String(subscriberRecord.status || ""))) {
+    return redirect(`${siteUrl}/account.html?auth=inactive`);
+  }
+
+  const sessionPayload = {
+    email,
+    customer_id: customerId,
+    subscription_id: subscriptionId,
+    exp: Math.floor(Date.now() / 1000) + AUTH_SESSION_TTL_SECONDS,
+  };
+  const sessionToken = await buildSignedJsonToken(sessionPayload, sessionSecret);
+  return redirect(`${siteUrl}/account.html?auth=success`, 303, {
+    "set-cookie": buildSessionCookieHeader(sessionToken),
+  });
 }
 
 async function handleAuthSession(request, env) {
-  const hasSessionCookie = Boolean(getCookieValue(request, "og_premium_session"));
-  if (hasSessionCookie && !env.AUTH_MAGIC_LINK_SECRET) {
+  const sessionAccess = await verifySessionAccess(request, env);
+  if (sessionAccess.ok) {
     return json({
       ok: true,
-      authenticated: false,
-      entitled: false,
-      status: "session_not_wired",
+      authenticated: true,
+      entitled: true,
+      auth_mode: "session",
+      email_hint: sessionAccess.email_hint,
+      customer_id: sessionAccess.customer_id,
+      subscription_id: sessionAccess.subscription_id,
+      subscription_status: sessionAccess.subscription_status,
     });
   }
 
-  const hasTransitionalToken =
-    Boolean(getCookieValue(request, "og_premium_token")) ||
-    /^Bearer\s+.+/i.test(request.headers.get("authorization") || "");
-
-  if (!hasTransitionalToken) {
+  if (hasTransitionalPremiumToken(request)) {
+    const access = await verifyPremiumAccess(request, env);
+    if (access.ok) {
+      return json({
+        ok: true,
+        authenticated: true,
+        entitled: true,
+        auth_mode: "transitional_token",
+        customer_id: access.customer_id,
+        subscription_id: access.subscription_id,
+        subscription_status: "active",
+      });
+    }
     return json({
       ok: true,
       authenticated: false,
       entitled: false,
-    });
-  }
-
-  const access = await verifyPremiumAccess(request, env);
-  if (!access.ok) {
-    return json({
-      ok: true,
-      authenticated: false,
-      entitled: false,
-      status: access.status,
+      status: access.status || "unauthenticated",
     });
   }
 
   return json({
     ok: true,
-    authenticated: true,
-    entitled: true,
-    auth_mode: "transitional_token",
-    customer_id: access.customer_id,
-    subscription_id: access.subscription_id,
-    subscription_status: "active",
+    authenticated: false,
+    entitled: false,
+    status: sessionAccess.status === "missing_session" ? "" : sessionAccess.status,
   });
 }
 
@@ -623,7 +1133,7 @@ async function handleLogout() {
     "content-type": "application/json; charset=utf-8",
     "cache-control": "no-store",
   });
-  headers.append("set-cookie", clearCookieHeader("og_premium_session"));
+  headers.append("set-cookie", clearCookieHeader(AUTH_SESSION_COOKIE));
   headers.append("set-cookie", clearCookieHeader("og_premium_token"));
   return new Response(
     JSON.stringify(

@@ -12,8 +12,9 @@ Current status:
 - webhook route wired
 - premium token route wired for developer/test issuance
 - premium route is token-protected and schema-filtered
+- magic-link request, verify, session, and logout now have a real first implementation
 - portal route remains a placeholder
-- no production auth
+- transactional email delivery still requires provider secrets before production auth is fully live
 
 ## Planned Responsibilities
 
@@ -49,6 +50,10 @@ Exception:
 - `PREMIUM_DATA_SOURCE`
 - `STRIPE_PRICE_ID`
 - `PREMIUM_TOKEN_SECRET`
+- `AUTH_MAGIC_LINK_SECRET`
+- `AUTH_SESSION_SECRET` (optional but recommended)
+- `RESEND_API_KEY`
+- `AUTH_EMAIL_FROM`
 
 Do not store real values in this repo.
 
@@ -75,6 +80,7 @@ node worker/test_worker_local.js
 Current harness coverage:
 
 - active subscriber can obtain a developer/test token and access protected premium route
+- active subscriber can request a magic link, verify it, receive a session cookie, and open the premium route without a bearer token
 - protected route returns only allowlisted premium fields
 - missing token returns `401`
 - expired token returns `401`
@@ -148,7 +154,8 @@ Important warning:
 
 `GET /api/premium/predictions` now:
 
-- calls `verifyPremiumAccess(request, env)`
+- first attempts secure session-cookie verification
+- falls back to transitional premium token verification during migration
 - checks for a premium token in `Authorization: Bearer ...` or `og_premium_token` cookie form
 - verifies a v1 HMAC-signed token payload containing:
   - `customer_id`
@@ -168,7 +175,35 @@ Current response metadata:
 
 - `generated_at` when available from the source payload
 - `subscriber_customer_id`
+- `auth_mode`
 - `count`
+
+## Auth Routes
+
+`POST /api/auth/magic-link/request` now:
+
+- validates email input
+- rate limits by IP and email cooldown keys in KV
+- looks up active/trialing subscriber state by normalized email
+- writes a short-lived one-time token into KV
+- sends a verification email through Resend when the address is eligible
+- always returns a generic success response for eligible/non-eligible addresses
+
+`GET /api/auth/magic-link/verify` now:
+
+- consumes the one-time KV token
+- confirms matching subscriber state is still active or trialing
+- issues a signed `og_premium_session` cookie
+- redirects back to `account.html` with a friendly auth state
+
+`GET /api/auth/session` now:
+
+- reports current session-backed premium state when a valid session cookie is present
+- falls back to transitional token-backed auth during migration
+
+`POST /api/auth/logout` now:
+
+- clears both the session cookie and transitional premium token cookie
 
 Current source strategy note:
 

@@ -2,6 +2,7 @@ const isoNow = () => new Date().toISOString();
 
 const asJson = (value) => JSON.stringify(value, null, 2);
 const fromJson = (value) => JSON.parse(value);
+const normalizeEmail = (value) => String(value || "").trim().toLowerCase();
 const SUBSCRIPTION_STATUS_PRIORITY = {
   incomplete: 1,
   incomplete_expired: 0,
@@ -122,10 +123,15 @@ export const persistSubscriberRecord = async (store, record) => {
   }
 
   await store.put(`customer:${record.customer_id}`, asJson(recordToPersist));
+  const normalizedEmail = normalizeEmail(recordToPersist.email);
+  if (normalizedEmail) {
+    await store.put(`email:${normalizedEmail}`, asJson(recordToPersist));
+  }
 
   return {
     customer_key: `customer:${record.customer_id}`,
     subscription_key: record.subscription_id ? `subscription:${record.subscription_id}` : null,
+    email_key: normalizedEmail ? `email:${normalizedEmail}` : null,
   };
 };
 
@@ -143,4 +149,48 @@ export const loadSubscriberRecordBySubscriptionId = async (store, subscriptionId
   }
 
   return fromJson(raw);
+};
+
+export const loadSubscriberRecordByEmail = async (store, email) => {
+  if (!store) {
+    throw new Error("SUBSCRIBER_STATE binding is unavailable.");
+  }
+
+  const normalizedEmail = normalizeEmail(email);
+  if (!normalizedEmail) {
+    return null;
+  }
+
+  const directRaw = await store.get(`email:${normalizedEmail}`);
+  if (directRaw) {
+    return fromJson(directRaw);
+  }
+
+  if (typeof store.list !== "function") {
+    return null;
+  }
+
+  let cursor;
+  do {
+    const listed = await store.list({ prefix: "customer:", cursor, limit: 100 });
+    const keys = Array.isArray(listed?.keys) ? listed.keys : [];
+    for (const entry of keys) {
+      const keyName = typeof entry?.name === "string" ? entry.name : "";
+      if (!keyName) {
+        continue;
+      }
+      const raw = await store.get(keyName);
+      if (!raw) {
+        continue;
+      }
+      const record = fromJson(raw);
+      if (normalizeEmail(record?.email) === normalizedEmail) {
+        await store.put(`email:${normalizedEmail}`, asJson(record));
+        return record;
+      }
+    }
+    cursor = listed?.list_complete ? undefined : listed?.cursor;
+  } while (cursor);
+
+  return null;
 };
