@@ -22,8 +22,12 @@ const PREMIUM_ALLOWED_FIELDS = [
   "fixture_key",
   "kickoff_time",
   "league",
+  "league_logo_url",
+  "league_flag_url",
   "home_team",
+  "home_team_logo_url",
   "away_team",
+  "away_team_logo_url",
   "market",
   "pick",
   "confidence_tier",
@@ -38,6 +42,7 @@ const PREMIUM_ALLOWED_FIELDS = [
   "safe_for_large_acca_flag",
   "correct_score_shortlist",
   "premium_tier",
+  "logo_join_status",
 ];
 
 const json = (payload, status = 200, extraHeaders = {}) =>
@@ -1358,6 +1363,11 @@ async function fetchPremiumSource(request, env) {
     ok: true,
     payload,
     source: targetUrl,
+    fetched_at: (() => {
+      const lastModified = response.headers.get("last-modified");
+      const parsed = lastModified ? new Date(lastModified) : null;
+      return parsed && !Number.isNaN(parsed.getTime()) ? parsed.toISOString() : null;
+    })(),
   };
 }
 
@@ -1414,7 +1424,8 @@ async function loadPremiumPredictions(request, env) {
 
   const loaded = {
     ok: true,
-    generated_at: typeof payload?.generated_at === "string" ? payload.generated_at : null,
+    generated_at:
+      typeof payload?.generated_at === "string" ? payload.generated_at : fetched.fetched_at || new Date().toISOString(),
     rows: sanitizedRows,
     source: fetched.source,
     count: sanitizedRows.length,

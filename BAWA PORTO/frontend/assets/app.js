@@ -742,7 +742,7 @@
           <p>
             ${
               secureBoardReady
-                ? "This board is being served through the Worker after token verification and subscriber-state checks."
+                ? "This board is being served through the Worker after verified session or premium-access checks."
                 : state.runtime.sessionAuthenticated
                   ? "Your session is recognized. Premium unlock completes automatically once verified entitlement is active."
                   : "Premium unlocks the complete deployable board — not just more picks, but the deeper pricing intelligence behind them. Built for bettors who care about value, stability, and proof."
@@ -751,7 +751,7 @@
           <div class="cta-row">
             ${
               state.runtime.sessionAuthenticated
-                ? `<a class="button" href="./account.html">Verify email / manage access</a>`
+                ? `<a class="button" href="./account.html">Manage access</a>`
                 : `<a class="button" data-action="worker-checkout" href="./account.html?intent=checkout">Unlock founding membership — £20/month</a>`
             }
             <a class="ghost-button" href="${state.runtime.sessionAuthenticated ? "./account.html" : "./pricing.html"}">${
@@ -783,7 +783,7 @@
                 ${statPanel("Protected cards", state.securePremiumPredictions.length)}
                 ${statPanel("Subscriber", state.runtime.premiumSubscriberCustomerId || "Verified")}
                 ${statPanel("Worker source", state.runtime.premiumSourceLabel || "Configured")}
-                ${statPanel("Generated", state.runtime.premiumGeneratedAt ? state.runtime.premiumGeneratedAt.slice(0, 10) : "Unknown")}
+                ${statPanel("Published", state.runtime.premiumGeneratedAt ? state.runtime.premiumGeneratedAt.slice(0, 10) : "Current board")}
               </div>
             </section>
             <section class="section">
