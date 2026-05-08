@@ -13,6 +13,7 @@ Current status:
 - premium token route wired for developer/test issuance
 - premium route is token-protected and schema-filtered
 - magic-link request, verify, session, and logout now have a real first implementation
+- optional D1-backed account-state mirroring now exists for users, subscriptions, Telegram links, preferences, and auth events
 - portal route remains a placeholder
 - transactional email delivery still requires provider secrets before production auth is fully live
 
@@ -26,6 +27,9 @@ Current status:
 ## Current Routes
 
 - `GET /health`
+- `GET /api/account/state`
+- `POST /api/account/telegram/link/start`
+- `POST /api/account/telegram/link/complete`
 - `POST /api/stripe/checkout`
 - `POST /api/premium/token`
 - `POST /api/stripe/portal`
@@ -54,12 +58,17 @@ Exception:
 - `AUTH_SESSION_SECRET` (optional but recommended)
 - `RESEND_API_KEY`
 - `AUTH_EMAIL_FROM`
+- `TELEGRAM_BOT_USERNAME` (optional)
 
 Do not store real values in this repo.
 
 Required binding for webhook persistence:
 
 - `SUBSCRIBER_STATE`
+
+Optional binding for account/product state:
+
+- `ACCOUNT_DB` (D1)
 
 ## Local Notes
 
@@ -81,6 +90,8 @@ Current harness coverage:
 
 - active subscriber can obtain a developer/test token and access protected premium route
 - active subscriber can request a magic link, verify it, receive a session cookie, and open the premium route without a bearer token
+- session-authenticated account state can mirror into the optional D1 layer
+- Telegram link flow can issue a one-time code and complete a D1-backed account link when `ACCOUNT_DB` is present
 - protected route returns only allowlisted premium fields
 - missing token returns `401`
 - expired token returns `401`
@@ -204,6 +215,50 @@ Current response metadata:
 `POST /api/auth/logout` now:
 
 - clears both the session cookie and transitional premium token cookie
+
+## Account State And Telegram Routes
+
+`GET /api/account/state`:
+
+- requires a verified premium session
+- returns session-linked account state
+- includes D1-backed user/subscription/Telegram/preferences data when `ACCOUNT_DB` is configured
+- falls back to session-only metadata when D1 is not yet bound
+
+`POST /api/account/telegram/link/start`:
+
+- requires a verified premium session
+- requires `ACCOUNT_DB` plus `SUBSCRIBER_STATE`
+- generates a short-lived one-time code
+- stores the code in KV with TTL
+- returns a Telegram bot deep link when `TELEGRAM_BOT_USERNAME` is configured
+
+`POST /api/account/telegram/link/complete`:
+
+- accepts `code` and Telegram identity fields
+- consumes the one-time KV code
+- writes the linked Telegram identity into D1
+- enables Telegram notifications in preferences
+
+## D1 Migration
+
+Initial schema lives at:
+
+- `worker/migrations/0001_account_state.sql`
+
+Suggested setup once you create the D1 database in Cloudflare:
+
+```bash
+cd worker
+wrangler d1 create odds-genius-account-state
+wrangler d1 migrations apply ACCOUNT_DB
+```
+
+Then add the returned `database_id` to:
+
+- `worker/wrangler.toml`
+
+or your production environment override.
 
 Current source strategy note:
 

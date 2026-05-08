@@ -5,6 +5,13 @@ import {
   loadSubscriberRecordBySubscriptionId,
   persistSubscriberRecord,
 } from "./subscriber_store.js";
+import {
+  completeTelegramLink,
+  getAccountDb,
+  getAccountStateByEmail,
+  mirrorSubscriptionFromRecord,
+  recordAuthEvent,
+} from "./account_store.js";
 import { issuePremiumToken, verifyPremiumAccess } from "./auth.js";
 
 const STRIPE_WEBHOOK_TOLERANCE_SECONDS = 300;
@@ -14,8 +21,10 @@ const AUTH_MAGIC_LINK_TTL_SECONDS = 15 * 60;
 const AUTH_SESSION_TTL_SECONDS = 7 * 24 * 60 * 60;
 const AUTH_REQUEST_IP_COOLDOWN_SECONDS = 60;
 const AUTH_REQUEST_EMAIL_COOLDOWN_SECONDS = 5 * 60;
+const TELEGRAM_LINK_TTL_SECONDS = 10 * 60;
 const AUTH_MAGIC_KEY_PREFIX = "auth_magic:";
 const AUTH_RATE_LIMIT_KEY_PREFIX = "auth_rl:";
+const TELEGRAM_LINK_KEY_PREFIX = "telegram_link:";
 const AUTH_SESSION_COOKIE = "og_premium_session";
 const PREMIUM_ALLOWED_FIELDS = [
   "fixture_id",
@@ -88,6 +97,8 @@ const envSummary = (env) => ({
   has_auth_session_secret: Boolean(env.AUTH_SESSION_SECRET),
   has_resend_api_key: Boolean(env.RESEND_API_KEY),
   has_auth_email_from: Boolean(env.AUTH_EMAIL_FROM),
+  has_account_db: Boolean(getAccountDb(env)),
+  has_telegram_bot_username: Boolean(env.TELEGRAM_BOT_USERNAME),
 });
 
 const buildCorsHeaders = (request, env) => {
@@ -227,6 +238,7 @@ const getRequestIp = (request) =>
   String(request.headers.get("cf-connecting-ip") || request.headers.get("x-forwarded-for") || "")
     .split(",")[0]
     .trim();
+const getUserAgentHint = (request) => String(request.headers.get("user-agent") || "").slice(0, 240);
 
 const maskEmailHint = (email) => {
   const normalized = normalizeEmail(email);
@@ -237,6 +249,11 @@ const maskEmailHint = (email) => {
   const visible = localPart.slice(0, 1) || "u";
   return `${visible}***@${domain}`;
 };
+
+const buildTelegramLinkCode = () =>
+  Array.from(crypto.getRandomValues(new Uint8Array(6)))
+    .map((value) => "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"[value % 32])
+    .join("");
 
 const getSessionSecret = (env) => String(env.AUTH_SESSION_SECRET || env.AUTH_MAGIC_LINK_SECRET || "").trim();
 
@@ -694,10 +711,19 @@ async function handleStripeWebhook(request, env) {
 
   try {
     const persisted = await persistSubscriberRecord(store, record);
+    const accountDb = getAccountDb(env);
+    if (accountDb) {
+      try {
+        await mirrorSubscriptionFromRecord(accountDb, record);
+      } catch (error) {
+        return stripeError("Webhook persistence succeeded but D1 subscription mirroring failed.", error.message, 500);
+      }
+    }
     return json({
       ok: true,
       received: true,
       stored: true,
+      mirrored_to_d1: Boolean(accountDb),
       event_type: event.type,
       record: {
         customer_id: record.customer_id,
@@ -1054,6 +1080,23 @@ async function handleMagicLinkRequest(request, env) {
     }
   }
 
+  const accountDb = getAccountDb(env);
+  if (accountDb) {
+    try {
+      await recordAuthEvent(accountDb, {
+        email_normalized: normalizedEmail,
+        event_type: "magic_link_requested",
+        ip_hint: requestIp || null,
+        user_agent_hint: getUserAgentHint(request),
+        metadata: {
+          eligible: Boolean(record && ["active", "trialing"].includes(String(record.status || ""))),
+        },
+      });
+    } catch {
+      // Best-effort audit trail only.
+    }
+  }
+
   return json({
     ok: true,
     status: "magic_link_requested",
@@ -1118,6 +1161,29 @@ async function handleMagicLinkVerify(request, env) {
     return redirect(`${siteUrl}/account.html?auth=inactive`);
   }
 
+  const accountDb = getAccountDb(env);
+  if (accountDb) {
+    try {
+      const accountState = await mirrorSubscriptionFromRecord(accountDb, subscriberRecord, {
+        email,
+        emailVerifiedAt: new Date().toISOString(),
+      });
+      await recordAuthEvent(accountDb, {
+        user_id: accountState?.user?.id || null,
+        email_normalized: email,
+        event_type: "magic_link_verified",
+        ip_hint: getRequestIp(request) || null,
+        user_agent_hint: getUserAgentHint(request),
+        metadata: {
+          customer_id: customerId,
+          subscription_id: subscriptionId,
+        },
+      });
+    } catch {
+      // Account-state mirroring is additive only; auth should still succeed.
+    }
+  }
+
   const sessionPayload = {
     email,
     customer_id: customerId,
@@ -1171,6 +1237,219 @@ async function handleAuthSession(request, env) {
     authenticated: false,
     entitled: false,
     status: sessionAccess.status === "missing_session" ? "" : sessionAccess.status,
+  });
+}
+
+async function handleAccountState(request, env) {
+  const sessionAccess = await verifySessionAccess(request, env);
+  if (!sessionAccess.ok) {
+    return json(
+      {
+        ok: false,
+        authenticated: false,
+        entitled: false,
+        status: sessionAccess.status || "unauthenticated",
+        message: sessionAccess.message || "Sign in to view account state.",
+      },
+      401
+    );
+  }
+
+  const accountDb = getAccountDb(env);
+  if (!accountDb) {
+    return json({
+      ok: true,
+      authenticated: true,
+      entitled: true,
+      auth_mode: "session",
+      d1_enabled: false,
+      email_hint: sessionAccess.email_hint,
+      customer_id: sessionAccess.customer_id,
+      subscription_id: sessionAccess.subscription_id,
+      subscription_status: sessionAccess.subscription_status,
+    });
+  }
+
+  const accountState = await getAccountStateByEmail(accountDb, sessionAccess.email);
+  return json({
+    ok: true,
+    authenticated: true,
+    entitled: true,
+    auth_mode: "session",
+    d1_enabled: true,
+    email_hint: sessionAccess.email_hint,
+    customer_id: sessionAccess.customer_id,
+    subscription_id: sessionAccess.subscription_id,
+    subscription_status: sessionAccess.subscription_status,
+    account: accountState,
+  });
+}
+
+async function handleTelegramLinkStart(request, env) {
+  const sessionAccess = await verifySessionAccess(request, env);
+  if (!sessionAccess.ok) {
+    return json(
+      {
+        ok: false,
+        status: sessionAccess.status || "unauthenticated",
+        message: sessionAccess.message || "Verify your email before linking Telegram.",
+      },
+      401
+    );
+  }
+
+  const accountDb = getAccountDb(env);
+  const store = getSubscriberStateStore(env);
+  if (!accountDb) {
+    return configError("ACCOUNT_DB D1 binding is required for Telegram linking.", ["ACCOUNT_DB"]);
+  }
+  if (!store) {
+    return configError("SUBSCRIBER_STATE binding is required for Telegram linking.", ["SUBSCRIBER_STATE"]);
+  }
+
+  const accountState =
+    (await getAccountStateByEmail(accountDb, sessionAccess.email)) ||
+    (await mirrorSubscriptionFromRecord(
+      accountDb,
+      {
+        customer_id: sessionAccess.customer_id,
+        subscription_id: sessionAccess.subscription_id,
+        status: sessionAccess.subscription_status,
+        email: sessionAccess.email,
+      },
+      {
+        email: sessionAccess.email,
+        emailVerifiedAt: new Date().toISOString(),
+      }
+    ));
+
+  if (!accountState?.user?.id) {
+    return json(
+      {
+        ok: false,
+        status: "account_state_missing",
+        message: "Unable to prepare Telegram linking for this account yet.",
+      },
+      500
+    );
+  }
+
+  const code = buildTelegramLinkCode();
+  const issuedAt = new Date().toISOString();
+  const expiresAt = new Date(Date.now() + TELEGRAM_LINK_TTL_SECONDS * 1000).toISOString();
+  await putKvJson(
+    store,
+    `${TELEGRAM_LINK_KEY_PREFIX}${code}`,
+    {
+      user_id: accountState.user.id,
+      email: accountState.user.email_normalized,
+      customer_id: sessionAccess.customer_id,
+      subscription_id: sessionAccess.subscription_id,
+      issued_at: issuedAt,
+      expires_at: expiresAt,
+    },
+    { expirationTtl: TELEGRAM_LINK_TTL_SECONDS }
+  );
+
+  try {
+    await recordAuthEvent(accountDb, {
+      user_id: accountState.user.id,
+      email_normalized: accountState.user.email_normalized,
+      event_type: "telegram_link_started",
+      ip_hint: getRequestIp(request) || null,
+      user_agent_hint: getUserAgentHint(request),
+      metadata: { code_hint: code.slice(0, 4), expires_at: expiresAt },
+    });
+  } catch {
+    // Best-effort audit trail only.
+  }
+
+  const botUsername = String(env.TELEGRAM_BOT_USERNAME || "").trim();
+  const deepLinkUrl = botUsername ? `https://t.me/${botUsername}?start=oglink_${code}` : "";
+
+  return json({
+    ok: true,
+    status: "telegram_link_ready",
+    code,
+    expires_at: expiresAt,
+    expires_in_seconds: TELEGRAM_LINK_TTL_SECONDS,
+    bot_username: botUsername || null,
+    deep_link_url: deepLinkUrl || null,
+    message: botUsername
+      ? "Open the Telegram bot using the deep link to complete linking."
+      : "Use this one-time code inside the Telegram bot to complete linking.",
+  });
+}
+
+async function handleTelegramLinkComplete(request, env) {
+  let payload;
+  try {
+    payload = await request.json();
+  } catch (error) {
+    return requestError("Telegram link completion body must be valid JSON.", error.message);
+  }
+
+  const code = String(payload?.code || "").trim().toUpperCase();
+  const telegramUserId = String(payload?.telegram_user_id || "").trim();
+  const telegramUsername = String(payload?.telegram_username || "").trim();
+  const telegramChatId = String(payload?.telegram_chat_id || "").trim();
+
+  if (!code || !telegramUserId) {
+    return requestError("Both `code` and `telegram_user_id` are required.");
+  }
+
+  const accountDb = getAccountDb(env);
+  const store = getSubscriberStateStore(env);
+  if (!accountDb) {
+    return configError("ACCOUNT_DB D1 binding is required for Telegram linking.", ["ACCOUNT_DB"]);
+  }
+  if (!store) {
+    return configError("SUBSCRIBER_STATE binding is required for Telegram linking.", ["SUBSCRIBER_STATE"]);
+  }
+
+  const kvRecord = await getKvJson(store, `${TELEGRAM_LINK_KEY_PREFIX}${code}`);
+  if (!kvRecord?.user_id || !kvRecord?.email) {
+    return json(
+      {
+        ok: false,
+        status: "invalid_link_code",
+        message: "Telegram link code is invalid or expired.",
+      },
+      400
+    );
+  }
+
+  await deleteKvKey(store, `${TELEGRAM_LINK_KEY_PREFIX}${code}`);
+
+  const accountState = await completeTelegramLink(accountDb, {
+    user_id: kvRecord.user_id,
+    email: kvRecord.email,
+    telegram_user_id: telegramUserId,
+    telegram_username: telegramUsername || null,
+    telegram_chat_id: telegramChatId || null,
+  });
+
+  try {
+    await recordAuthEvent(accountDb, {
+      user_id: kvRecord.user_id,
+      email_normalized: kvRecord.email,
+      event_type: "telegram_link_completed",
+      ip_hint: getRequestIp(request) || null,
+      user_agent_hint: getUserAgentHint(request),
+      metadata: {
+        telegram_user_id: telegramUserId,
+        telegram_username: telegramUsername || null,
+      },
+    });
+  } catch {
+    // Best-effort audit trail only.
+  }
+
+  return json({
+    ok: true,
+    status: "telegram_linked",
+    message: "Telegram has been linked to this Odds Genius account.",
+    account: accountState,
   });
 }
 
@@ -1461,6 +1740,9 @@ async function handleRequest(request, env) {
         "GET /api/auth/magic-link/verify",
         "GET /api/auth/session",
         "POST /api/auth/logout",
+        "GET /api/account/state",
+        "POST /api/account/telegram/link/start",
+        "POST /api/account/telegram/link/complete",
         "POST /api/stripe/checkout",
         "POST /api/premium/token",
         "POST /api/stripe/portal",
@@ -1514,6 +1796,33 @@ async function handleRequest(request, env) {
       return withCors(response, request, env);
     }
     response = await handleLogout(request, env);
+    return withCors(response, request, env);
+  }
+
+  if (pathname === "/api/account/state") {
+    if (request.method !== "GET") {
+      response = methodNotAllowed("GET");
+      return withCors(response, request, env);
+    }
+    response = await handleAccountState(request, env);
+    return withCors(response, request, env);
+  }
+
+  if (pathname === "/api/account/telegram/link/start") {
+    if (request.method !== "POST") {
+      response = methodNotAllowed("POST");
+      return withCors(response, request, env);
+    }
+    response = await handleTelegramLinkStart(request, env);
+    return withCors(response, request, env);
+  }
+
+  if (pathname === "/api/account/telegram/link/complete") {
+    if (request.method !== "POST") {
+      response = methodNotAllowed("POST");
+      return withCors(response, request, env);
+    }
+    response = await handleTelegramLinkComplete(request, env);
     return withCors(response, request, env);
   }
 

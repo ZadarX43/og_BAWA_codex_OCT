@@ -17,11 +17,18 @@ STRIPE_PRICE_ID = "price_example_founding_member"
 binding = "SUBSCRIBER_STATE"
 id = "replace-with-real-kv-namespace-id"
 
+# Optional D1 account-state layer for user/profile/Telegram linkage.
+[[d1_databases]]
+binding = "ACCOUNT_DB"
+database_name = "odds-genius-account-state"
+database_id = "replace-with-real-d1-database-id"
+
 # Optional example environment override block.
 # [env.production.vars]
 # SITE_URL = "https://oddsgenius.example.com"
 # PREMIUM_DATA_SOURCE = "https://oddsgenius.example.com/public/data/premium_predictions.json"
 # STRIPE_PRICE_ID = "price_live_replace_me"
+# TELEGRAM_BOT_USERNAME = "odds_genius_bot"
 #
 # [[env.production.kv_namespaces]]
 # binding = "SUBSCRIBER_STATE"

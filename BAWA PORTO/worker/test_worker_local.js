@@ -85,6 +85,114 @@ class MockCacheStore {
   }
 }
 
+class MockD1 {
+  constructor() {
+    this.users = [];
+    this.subscriptions = [];
+    this.telegramLinks = [];
+    this.notificationPreferences = [];
+    this.authEvents = [];
+  }
+
+  prepare() {
+    throw new Error("MockD1.prepare should not be called directly; tests use __ogCall.");
+  }
+
+  async __ogCall(op, args) {
+    switch (op) {
+      case "get_user_by_email":
+        return this.users.find((row) => row.email_normalized === args.email_normalized) || null;
+      case "insert_user":
+        this.users.push({ ...args });
+        return { success: true };
+      case "update_user_by_email": {
+        const row = this.users.find((item) => item.id === args.id);
+        if (row) {
+          Object.assign(row, {
+            email: args.email,
+            email_normalized: args.email_normalized,
+            email_verified_at: args.email_verified_at,
+            updated_at: args.updated_at,
+            account_status: args.account_status,
+          });
+        }
+        return { success: true };
+      }
+      case "get_user_by_subscription_identity": {
+        const sub = this.subscriptions.find(
+          (row) =>
+            row.stripe_customer_id === args.stripe_customer_id ||
+            row.stripe_subscription_id === args.stripe_subscription_id
+        );
+        return sub ? this.users.find((row) => row.id === sub.user_id) || null : null;
+      }
+      case "get_subscription_by_identity":
+        return (
+          this.subscriptions.find(
+            (row) =>
+              row.stripe_customer_id === args.stripe_customer_id ||
+              row.stripe_subscription_id === args.stripe_subscription_id
+          ) || null
+        );
+      case "upsert_subscription": {
+        const existing = this.subscriptions.find(
+          (row) => row.stripe_subscription_id === args.stripe_subscription_id
+        );
+        if (existing) {
+          Object.assign(existing, args);
+        } else {
+          this.subscriptions.push({ ...args });
+        }
+        return { success: true };
+      }
+      case "ensure_notification_preferences": {
+        const existing = this.notificationPreferences.find((row) => row.user_id === args.user_id);
+        if (!existing) {
+          this.notificationPreferences.push({ ...args });
+        }
+        return { success: true };
+      }
+      case "insert_auth_event":
+        this.authEvents.push({ ...args });
+        return { success: true };
+      case "get_subscription_by_user":
+        return this.subscriptions.find((row) => row.user_id === args.user_id) || null;
+      case "get_telegram_link_by_user":
+        return (
+          [...this.telegramLinks]
+            .sort((a, b) => String(b.updated_at).localeCompare(String(a.updated_at)))
+            .find((row) => row.user_id === args.user_id) || null
+        );
+      case "get_notification_preferences":
+        return this.notificationPreferences.find((row) => row.user_id === args.user_id) || null;
+      case "revoke_telegram_links_for_user":
+        this.telegramLinks = this.telegramLinks.map((row) =>
+          row.user_id === args.user_id && row.link_status !== "revoked"
+            ? { ...row, link_status: "revoked", revoked_at: args.revoked_at, updated_at: args.updated_at }
+            : row
+        );
+        return { success: true };
+      case "revoke_telegram_links_for_telegram_user":
+        this.telegramLinks = this.telegramLinks.map((row) =>
+          row.telegram_user_id === args.telegram_user_id && row.link_status !== "revoked"
+            ? { ...row, link_status: "revoked", revoked_at: args.revoked_at, updated_at: args.updated_at }
+            : row
+        );
+        return { success: true };
+      case "insert_telegram_link":
+        this.telegramLinks.push({ ...args });
+        return { success: true };
+      case "enable_telegram_notifications":
+        this.notificationPreferences = this.notificationPreferences.map((row) =>
+          row.user_id === args.user_id ? { ...row, telegram_enabled: 1, updated_at: args.updated_at } : row
+        );
+        return { success: true };
+      default:
+        throw new Error(`Unhandled MockD1 op: ${op}`);
+    }
+  }
+}
+
 const buildSubscriberRecord = (overrides = {}) => ({
   customer_id: "cus_test_active",
   subscription_id: "sub_test_active",
@@ -155,6 +263,8 @@ const createEnv = () => {
     PREMIUM_DATA_SOURCE: "/premium-source.json",
     SITE_URL: "http://localhost",
     SUBSCRIBER_STATE: store,
+    ACCOUNT_DB: new MockD1(),
+    TELEGRAM_BOT_USERNAME: "oddsgeniusbot",
   };
 };
 
@@ -537,6 +647,75 @@ const testLogoutSkeleton = async () => {
   assert.equal(payload.status, "logged_out");
 };
 
+const testAccountStateAndTelegramLinkFlow = async (fetchHarness) => {
+  const env = createEnv();
+  await writeSubscriberRecord(
+    env,
+    buildSubscriberRecord({
+      email: "member@example.com",
+    })
+  );
+
+  const requestResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/auth/magic-link/request", "POST", {
+      email: "member@example.com",
+    }),
+    env
+  );
+  assert.equal(requestResponse.status, 200);
+  const emailBody = fetchHarness.sentEmails.at(-1);
+  const verifyMatch = String(emailBody?.html || "").match(/verify\?token=([^"&]+)/);
+  assert.ok(verifyMatch?.[1], "expected magic-link token in email body");
+  const token = decodeURIComponent(verifyMatch[1]);
+
+  const tokenResponse = await worker.fetch(
+    makeGetRequest(`http://localhost/api/auth/magic-link/verify?token=${encodeURIComponent(token)}`),
+    env
+  );
+  const sessionCookie = extractCookieValue(tokenResponse.headers.get("set-cookie"), "og_premium_session");
+  assert.ok(sessionCookie, "expected premium session cookie after verify");
+
+  const accountStateResponse = await worker.fetch(
+    makeGetRequest("http://localhost/api/account/state", {
+      cookie: `og_premium_session=${sessionCookie}`,
+    }),
+    env
+  );
+  const accountStatePayload = await accountStateResponse.json();
+  assert.equal(accountStateResponse.status, 200);
+  assert.equal(accountStatePayload.ok, true);
+  assert.equal(accountStatePayload.d1_enabled, true);
+  assert.equal(accountStatePayload.account.user.email_normalized, "member@example.com");
+  assert.equal(accountStatePayload.account.subscription.subscription_status, "active");
+
+  const startResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/account/telegram/link/start", "POST", null, {
+      cookie: `og_premium_session=${sessionCookie}`,
+    }),
+    env
+  );
+  const startPayload = await startResponse.json();
+  assert.equal(startResponse.status, 200);
+  assert.equal(startPayload.status, "telegram_link_ready");
+  assert.ok(startPayload.code);
+  assert.match(startPayload.deep_link_url, /t\.me\/oddsgeniusbot\?start=oglink_/);
+
+  const completeResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/account/telegram/link/complete", "POST", {
+      code: startPayload.code,
+      telegram_user_id: "tg_user_123",
+      telegram_username: "ogfounder",
+      telegram_chat_id: "chat_456",
+    }),
+    env
+  );
+  const completePayload = await completeResponse.json();
+  assert.equal(completeResponse.status, 200);
+  assert.equal(completePayload.status, "telegram_linked");
+  assert.equal(completePayload.account.telegram_link.telegram_user_id, "tg_user_123");
+  assert.equal(completePayload.account.notification_preferences.telegram_enabled, 1);
+};
+
 const main = async () => {
   const cacheHarness = installMockCache();
   const fetchHarness = installMockFetch();
@@ -552,6 +731,7 @@ const main = async () => {
     await testMagicLinkRequestValidation(fetchHarness);
     await testAuthSessionSkeleton();
     await testMagicLinkVerifyAndSessionFlow(fetchHarness);
+    await testAccountStateAndTelegramLinkFlow(fetchHarness);
     await testLogoutSkeleton();
     console.log("Worker local harness passed.");
     console.log("- success route with valid token: passed");
@@ -562,6 +742,7 @@ const main = async () => {
     console.log("- magic-link request flow: passed");
     console.log("- auth session flow: passed");
     console.log("- magic-link verify + session premium flow: passed");
+    console.log("- D1-backed account state + Telegram link flow: passed");
     console.log("- logout skeleton: passed");
   } finally {
     fetchHarness.restore();
