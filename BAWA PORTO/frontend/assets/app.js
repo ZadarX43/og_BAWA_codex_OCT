@@ -554,21 +554,21 @@
             <span class="pill">Founder access live</span>
           </div>
           <div class="system-stack">
-            <article class="system-row">
-              <span class="metric-label">Weekly production</span>
-              <strong>65+ picks every week, year-round</strong>
-              <p class="muted">Lowest reported weekly accuracy 87%. Average 92% across the current stack.</p>
+            <article class="system-row system-row-founder">
+              <span class="metric-label">OG Founder</span>
+              <strong>£20/mo for life while active</strong>
+              <p class="muted">First 250 users. Early access to new markets and selected future systems.</p>
+              <a class="button button-small" href="./pricing.html">Claim founder pricing</a>
             </article>
             <article class="system-row">
               <span class="metric-label">Production core</span>
               <strong>FTR • BTTS • Over 2.5 • Value edge overlays</strong>
               <p class="muted">Dominant team over 1.5 goals is emerging as the cleanest next commercial lane.</p>
             </article>
-            <article class="system-row system-row-founder">
-              <span class="metric-label">OG Founder</span>
-              <strong>£20/mo for life while active</strong>
-              <p class="muted">First 250 users. Early access to new markets and selected future systems.</p>
-              <a class="button button-small" href="./pricing.html">See founder access</a>
+            <article class="system-row">
+              <span class="metric-label">Weekly production</span>
+              <strong>65+ picks every week, year-round</strong>
+              <p class="muted">Lowest reported weekly accuracy 87%. Average 92% across the current stack.</p>
             </article>
             <article class="system-row system-row-soon">
               <span class="metric-label">Coming soon</span>

@@ -484,6 +484,11 @@ body::after {
   justify-content: space-between;
 }
 
+.prediction-card {
+  gap: 16px;
+  padding: 22px;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -498,13 +503,13 @@ body::after {
 
 .teams {
   display: grid;
-  gap: 6px;
+  gap: 8px;
 }
 
 .teams strong {
-  font-size: 1.08rem;
-  line-height: 1.25;
-  letter-spacing: -0.03em;
+  font-size: 1.2rem;
+  line-height: 1.2;
+  letter-spacing: -0.04em;
 }
 
 .fixture-teams {
@@ -518,16 +523,21 @@ body::after {
 }
 
 .fixture-league {
-  gap: 7px;
+  gap: 8px;
+  color: rgba(216, 227, 236, 0.82);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .fixture-teamline {
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
 }
 
 .fixture-teams-compact .fixture-teamline {
-  gap: 6px;
+  gap: 8px;
 }
 
 .team-badge,
@@ -539,15 +549,17 @@ body::after {
   position: relative;
   display: inline-grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
+  width: 42px;
+  height: 42px;
   overflow: hidden;
   border: 1px solid rgba(244, 248, 252, 0.13);
   border-radius: 999px;
   background:
     radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.18), transparent 34%),
     linear-gradient(145deg, rgba(48, 199, 255, 0.14), rgba(78, 222, 163, 0.1));
-  box-shadow: inset 0 0 0 1px rgba(7, 17, 13, 0.44);
+  box-shadow:
+    inset 0 0 0 1px rgba(7, 17, 13, 0.44),
+    0 10px 24px rgba(0, 0, 0, 0.18);
 }
 
 .team-badge img {
@@ -561,14 +573,14 @@ body::after {
 
 .badge-fallback {
   color: var(--mint);
-  font-size: 0.68rem;
+  font-size: 0.8rem;
   font-weight: 900;
   letter-spacing: -0.04em;
 }
 
 .league-badge {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   object-fit: contain;
   border-radius: 5px;
   filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3));
@@ -576,13 +588,15 @@ body::after {
 
 .team-name {
   min-width: 0;
+  font-size: 1.16rem;
+  font-weight: 900;
 }
 
 .versus {
   color: var(--muted-2);
-  font-size: 0.78rem;
+  font-size: 0.74rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
@@ -612,7 +626,7 @@ body::after {
   justify-content: space-between;
   gap: 16px;
   align-items: end;
-  padding: 12px 0 14px;
+  padding: 14px 0 16px;
   border-top: 1px solid rgba(123, 154, 184, 0.12);
   border-bottom: 1px solid rgba(123, 154, 184, 0.12);
 }
@@ -635,13 +649,15 @@ body::after {
   display: inline-flex;
   align-items: center;
   min-height: 42px;
-  padding: 0 16px;
+  padding: 0 18px;
   border-radius: 999px;
   color: #071019;
   font-weight: 900;
   letter-spacing: 0.02em;
   background: linear-gradient(135deg, rgba(48, 199, 255, 0.96), rgba(78, 222, 163, 0.96));
-  box-shadow: 0 0 24px rgba(78, 222, 163, 0.24);
+  box-shadow:
+    0 0 28px rgba(78, 222, 163, 0.28),
+    0 10px 22px rgba(0, 0, 0, 0.18);
 }
 
 .prediction-meta-grid {
@@ -984,8 +1000,8 @@ tbody tr:hover {
 .proof-tile strong {
   display: block;
   margin-top: 8px;
-  font-size: 1.7rem;
-  letter-spacing: -0.03em;
+  font-size: 1.95rem;
+  letter-spacing: -0.04em;
 }
 
 .sample-board {
@@ -1025,6 +1041,9 @@ tbody tr:hover {
 .system-row-founder {
   border-color: rgba(78, 222, 163, 0.24);
   box-shadow: inset 4px 0 0 rgba(78, 222, 163, 0.9);
+  background:
+    radial-gradient(circle at top right, rgba(78, 222, 163, 0.14), transparent 36%),
+    linear-gradient(180deg, rgba(18, 31, 25, 0.99), rgba(11, 19, 16, 0.99));
 }
 
 .system-row-soon {
@@ -1471,6 +1490,15 @@ code {
 
   .hero-main h1 {
     font-size: clamp(2.2rem, 10vw, 3.4rem);
+  }
+
+  .team-badge {
+    width: 38px;
+    height: 38px;
+  }
+
+  .team-name {
+    font-size: 1.03rem;
   }
 
   .prediction-edge {
