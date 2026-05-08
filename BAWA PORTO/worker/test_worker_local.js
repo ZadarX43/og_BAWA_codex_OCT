@@ -373,6 +373,75 @@ const testInactiveSubscriber = async () => {
   assert.equal(payload.status, "inactive_subscription");
 };
 
+const testMagicLinkRequestValidation = async () => {
+  const env = createEnv();
+
+  const invalidResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/auth/magic-link/request", "POST", {
+      email: "not-an-email",
+    }),
+    env
+  );
+  const invalidPayload = await invalidResponse.json();
+  assert.equal(invalidResponse.status, 400);
+  assert.equal(invalidPayload.status, "request_error");
+
+  const validResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/auth/magic-link/request", "POST", {
+      email: "member@example.com",
+    }),
+    env
+  );
+  const validPayload = await validResponse.json();
+  assert.equal(validResponse.status, 501);
+  assert.equal(validPayload.status, "auth_not_wired");
+};
+
+const testAuthSessionSkeleton = async () => {
+  const env = createEnv();
+  const response = await worker.fetch(makeGetRequest("http://localhost/api/auth/session"), env);
+  const payload = await response.json();
+  assert.equal(response.status, 200);
+  assert.equal(payload.ok, true);
+  assert.equal(payload.authenticated, false);
+  assert.equal(payload.entitled, false);
+};
+
+const testMagicLinkVerifyRedirectSkeleton = async () => {
+  const env = createEnv();
+
+  const missingTokenResponse = await worker.fetch(
+    makeGetRequest("http://localhost/api/auth/magic-link/verify"),
+    env
+  );
+  assert.equal(missingTokenResponse.status, 303);
+  assert.equal(
+    missingTokenResponse.headers.get("location"),
+    "http://localhost/account.html?auth=invalid"
+  );
+
+  const tokenResponse = await worker.fetch(
+    makeGetRequest("http://localhost/api/auth/magic-link/verify?token=test_token"),
+    env
+  );
+  assert.equal(tokenResponse.status, 303);
+  assert.equal(
+    tokenResponse.headers.get("location"),
+    "http://localhost/account.html?auth=not_wired"
+  );
+};
+
+const testLogoutSkeleton = async () => {
+  const env = createEnv();
+  const response = await worker.fetch(
+    jsonRequest("http://localhost/api/auth/logout", "POST", null),
+    env
+  );
+  const payload = await response.json();
+  assert.equal(response.status, 200);
+  assert.equal(payload.status, "logged_out");
+};
+
 const main = async () => {
   const cacheHarness = installMockCache();
   const fetchHarness = installMockFetch();
@@ -385,12 +454,20 @@ const main = async () => {
     await testMissingToken();
     await testExpiredToken();
     await testInactiveSubscriber();
+    await testMagicLinkRequestValidation();
+    await testAuthSessionSkeleton();
+    await testMagicLinkVerifyRedirectSkeleton();
+    await testLogoutSkeleton();
     console.log("Worker local harness passed.");
     console.log("- success route with valid token: passed");
     console.log("- premium payload cache hit/miss path: passed");
     console.log("- missing token returns 401: passed");
     console.log("- expired token returns 401: passed");
     console.log("- inactive subscriber returns 401: passed");
+    console.log("- magic-link request skeleton: passed");
+    console.log("- auth session skeleton: passed");
+    console.log("- magic-link verify redirect skeleton: passed");
+    console.log("- logout skeleton: passed");
   } finally {
     fetchHarness.restore();
     cacheHarness.restore();

@@ -136,6 +136,30 @@ const unauthorizedError = (message, details = null) =>
 
 const normalizeSiteUrl = (value) => String(value || "").replace(/\/+$/, "");
 const isFiniteNumber = (value) => typeof value === "number" && Number.isFinite(value);
+const isLikelyEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || "").trim());
+
+const redirect = (location, status = 303, extraHeaders = {}) =>
+  new Response(null, {
+    status,
+    headers: {
+      location,
+      ...extraHeaders,
+    },
+  });
+
+const clearCookieHeader = (name) =>
+  `${name}=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+
+const getCookieValue = (request, name) => {
+  const cookieHeader = request.headers.get("cookie") || "";
+  for (const fragment of cookieHeader.split(";")) {
+    const [cookieName, value] = fragment.split("=", 2).map((part) => part.trim());
+    if (cookieName === name && value) {
+      return value;
+    }
+  }
+  return null;
+};
 
 const resolvePremiumSourceUrl = (request, env) => {
   const source = String(env.PREMIUM_DATA_SOURCE || "").trim();
@@ -501,6 +525,122 @@ async function handlePremiumTokenIssue(request, env) {
   });
 }
 
+async function handleMagicLinkRequest(request, env) {
+  let payload;
+  try {
+    payload = await request.json();
+  } catch (error) {
+    return requestError("Magic-link request body must be valid JSON.", error.message);
+  }
+
+  const email = typeof payload?.email === "string" ? payload.email.trim().toLowerCase() : "";
+  if (!email || !isLikelyEmail(email)) {
+    return requestError("A valid email address is required.");
+  }
+
+  if (!env.AUTH_MAGIC_LINK_SECRET) {
+    return json(
+      {
+        ok: false,
+        status: "auth_not_wired",
+        message: "Magic-link email delivery is not configured yet.",
+        route: "/api/auth/magic-link/request",
+        next_step: "Configure AUTH_MAGIC_LINK_SECRET and transactional email delivery before enabling public auth.",
+      },
+      501
+    );
+  }
+
+  return json({
+    ok: true,
+    status: "magic_link_requested",
+    message: "If the address is eligible, a sign-in link has been sent.",
+    route: "/api/auth/magic-link/request",
+  });
+}
+
+async function handleMagicLinkVerify(request, env) {
+  const url = new URL(request.url);
+  const token = String(url.searchParams.get("token") || "").trim();
+  const siteUrl = normalizeSiteUrl(env.SITE_URL || `${url.protocol}//${url.host}`);
+  if (!token) {
+    return redirect(`${siteUrl}/account.html?auth=invalid`);
+  }
+
+  if (!env.AUTH_MAGIC_LINK_SECRET) {
+    return redirect(`${siteUrl}/account.html?auth=not_wired`);
+  }
+
+  return redirect(`${siteUrl}/account.html?auth=not_wired`);
+}
+
+async function handleAuthSession(request, env) {
+  const hasSessionCookie = Boolean(getCookieValue(request, "og_premium_session"));
+  if (hasSessionCookie && !env.AUTH_MAGIC_LINK_SECRET) {
+    return json({
+      ok: true,
+      authenticated: false,
+      entitled: false,
+      status: "session_not_wired",
+    });
+  }
+
+  const hasTransitionalToken =
+    Boolean(getCookieValue(request, "og_premium_token")) ||
+    /^Bearer\s+.+/i.test(request.headers.get("authorization") || "");
+
+  if (!hasTransitionalToken) {
+    return json({
+      ok: true,
+      authenticated: false,
+      entitled: false,
+    });
+  }
+
+  const access = await verifyPremiumAccess(request, env);
+  if (!access.ok) {
+    return json({
+      ok: true,
+      authenticated: false,
+      entitled: false,
+      status: access.status,
+    });
+  }
+
+  return json({
+    ok: true,
+    authenticated: true,
+    entitled: true,
+    auth_mode: "transitional_token",
+    customer_id: access.customer_id,
+    subscription_id: access.subscription_id,
+    subscription_status: "active",
+  });
+}
+
+async function handleLogout() {
+  const headers = new Headers({
+    "content-type": "application/json; charset=utf-8",
+    "cache-control": "no-store",
+  });
+  headers.append("set-cookie", clearCookieHeader("og_premium_session"));
+  headers.append("set-cookie", clearCookieHeader("og_premium_token"));
+  return new Response(
+    JSON.stringify(
+      {
+        ok: true,
+        status: "logged_out",
+      },
+      null,
+      2
+    ),
+    {
+      status: 200,
+      headers,
+    }
+  );
+}
+
 const sanitizeCorrectScoreShortlist = (value) => {
   if (!Array.isArray(value)) {
     return [];
@@ -749,6 +889,10 @@ async function handleRequest(request, env) {
       status: "placeholder_ready",
       routes: [
         "GET /health",
+        "POST /api/auth/magic-link/request",
+        "GET /api/auth/magic-link/verify",
+        "GET /api/auth/session",
+        "POST /api/auth/logout",
         "POST /api/stripe/checkout",
         "POST /api/premium/token",
         "POST /api/stripe/portal",
@@ -764,6 +908,34 @@ async function handleRequest(request, env) {
       return methodNotAllowed("POST");
     }
     return createCheckoutSession(request, env);
+  }
+
+  if (pathname === "/api/auth/magic-link/request") {
+    if (request.method !== "POST") {
+      return methodNotAllowed("POST");
+    }
+    return handleMagicLinkRequest(request, env);
+  }
+
+  if (pathname === "/api/auth/magic-link/verify") {
+    if (request.method !== "GET") {
+      return methodNotAllowed("GET");
+    }
+    return handleMagicLinkVerify(request, env);
+  }
+
+  if (pathname === "/api/auth/session") {
+    if (request.method !== "GET") {
+      return methodNotAllowed("GET");
+    }
+    return handleAuthSession(request, env);
+  }
+
+  if (pathname === "/api/auth/logout") {
+    if (request.method !== "POST") {
+      return methodNotAllowed("POST");
+    }
+    return handleLogout(request, env);
   }
 
   if (pathname === "/api/premium/token") {

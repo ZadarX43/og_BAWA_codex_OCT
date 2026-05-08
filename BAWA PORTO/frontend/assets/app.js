@@ -8,6 +8,7 @@
   const debugMode = query.get("debug") === "1";
   const accountIntent = query.get("intent") || "";
   const checkoutState = query.get("checkout") || "";
+  const authState = query.get("auth") || "";
   const runtimeConfig = window.OG_CONFIG || {};
   const workerApiBase = String(runtimeConfig.WORKER_API_BASE || "").replace(/\/+$/, "");
   const checkoutPlaceholderHref = "./account.html?intent=checkout";
@@ -27,6 +28,13 @@
       premiumSubscriberCustomerId: "",
       checkoutMessage: "",
       accountMessage: "",
+      authMessage: "",
+      sessionAuthenticated: false,
+      sessionEntitled: false,
+      sessionStatus: "",
+      sessionAuthMode: "",
+      sessionCustomerId: "",
+      sessionSubscriptionId: "",
     },
   };
 
@@ -97,6 +105,7 @@
       method: options.method || "GET",
       headers,
       body: options.body ? JSON.stringify(options.body) : undefined,
+      credentials: "include",
     });
     let payload = null;
     try {
@@ -496,7 +505,13 @@
     if (!workerConfigured()) {
       return "Worker not configured";
     }
-    return premiumTokenPresent() ? "Token detected" : "Token required";
+    if (state.runtime.sessionEntitled) {
+      return "Verified premium access";
+    }
+    if (state.runtime.sessionAuthenticated) {
+      return "Signed in";
+    }
+    return premiumTokenPresent() ? "Token detected" : "Verification required";
   };
 
   const checkoutCta = () =>
@@ -713,7 +728,11 @@
     }
 
     const secureBoardReady = state.securePremiumPredictions.length > 0;
-    const workerMessage = state.runtime.premiumFetchError || (!premiumTokenPresent() ? "No premium token found." : "");
+    const workerMessage =
+      state.runtime.premiumFetchError ||
+      (!state.runtime.sessionAuthenticated && !premiumTokenPresent()
+        ? "Verify your email or sign in to unlock the premium board."
+        : "");
 
     return `
       <section class="section split">
@@ -724,12 +743,20 @@
             ${
               secureBoardReady
                 ? "This board is being served through the Worker after token verification and subscriber-state checks."
-                : "Premium unlocks the complete deployable board — not just more picks, but the deeper pricing intelligence behind them. Built for bettors who care about value, stability, and proof."
+                : state.runtime.sessionAuthenticated
+                  ? "Your session is recognized. Premium unlock completes automatically once verified entitlement is active."
+                  : "Premium unlocks the complete deployable board — not just more picks, but the deeper pricing intelligence behind them. Built for bettors who care about value, stability, and proof."
             }
           </p>
           <div class="cta-row">
-            <a class="button" data-action="worker-checkout" href="./account.html?intent=checkout">Unlock founding membership — £20/month</a>
-            <a class="ghost-button" href="./pricing.html">See pricing</a>
+            ${
+              state.runtime.sessionAuthenticated
+                ? `<a class="button" href="./account.html">Verify email / manage access</a>`
+                : `<a class="button" data-action="worker-checkout" href="./account.html?intent=checkout">Unlock founding membership — £20/month</a>`
+            }
+            <a class="ghost-button" href="${state.runtime.sessionAuthenticated ? "./account.html" : "./pricing.html"}">${
+              state.runtime.sessionAuthenticated ? "Open account" : "See pricing"
+            }</a>
           </div>
         </article>
         <aside class="hero-side">
@@ -1166,22 +1193,35 @@
   const accountView = () => {
     const checkoutNotice =
       checkoutState === "success"
-        ? "Checkout returned successfully. Your membership unlocks premium board access."
+        ? "Your membership is almost ready. Verify your email to unlock premium board access on this device."
         : checkoutState === "cancelled"
           ? "Checkout was cancelled. No premium access was granted."
           : "";
+    const signedIn = state.runtime.sessionAuthenticated;
+    const entitled = state.runtime.sessionEntitled;
+    const accountHeadline = entitled
+      ? "Premium access unlocked."
+      : checkoutState === "success"
+        ? "Your membership is almost ready."
+        : "Verify your email to unlock premium access.";
+    const accountCopy = entitled
+      ? "This device is verified for your membership. Open the premium board or return to proof while subscription management catches up."
+      : "Use the same email you used for checkout. Once verified, premium unlocks automatically on this device.";
 
     return `
       <section class="section split">
         <article class="hero-main">
           <p class="hero-kicker">Account</p>
-          <h1>Your membership unlocks premium board access.</h1>
-          <p>
-            Manage subscription and premium access from here. Subscription management is coming soon.
-          </p>
+          <h1>${accountHeadline}</h1>
+          <p>${accountCopy}</p>
           <div class="cta-row">
-            <a class="button" href="./pricing.html">See founding plan</a>
-            <a class="ghost-button" href="./premium.html">Open premium page</a>
+            <a class="button" href="${entitled ? "./premium.html" : "./pricing.html"}">${
+              entitled ? "Open premium board" : "See founding plan"
+            }</a>
+            <a class="ghost-button" href="${entitled ? "./results.html" : "./premium.html"}">${
+              entitled ? "Go to results" : "Open premium page"
+            }</a>
+            ${signedIn ? `<button class="ghost-button" type="button" data-action="auth-logout">Log out</button>` : ""}
           </div>
         </article>
         <aside class="hero-side">
@@ -1190,23 +1230,50 @@
             <span class="metric-value">${workerConfigured() ? "Configured" : "Placeholder"}</span>
           </div>
           <div class="metric">
-            <span class="metric-label">Stored token</span>
-            <span class="metric-value">${premiumTokenPresent() ? "Present" : "Missing"}</span>
+            <span class="metric-label">Identity</span>
+            <span class="metric-value">${signedIn ? "Verified" : "Not verified"}</span>
           </div>
           <div class="metric">
             <span class="metric-label">Membership</span>
-            <span class="metric-value">Premium-ready</span>
+            <span class="metric-value">${entitled ? "Premium active" : "Premium pending"}</span>
           </div>
         </aside>
       </section>
 
       <section class="section">
         ${renderNotice(checkoutNotice, checkoutState === "success" ? "success" : "warning")}
+        ${renderNotice(state.runtime.authMessage, state.runtime.authMessage ? "warning" : "default")}
         ${debugMode ? renderNotice(state.runtime.accountMessage, state.runtime.accountMessage ? "warning" : "default") : ""}
       </section>
 
       ${
-        debugMode
+        !signedIn
+          ? `
+            <section class="section split">
+              <article class="panel">
+                <h3>Verify your email</h3>
+                <p class="muted">
+                  Use the same email you used for checkout. If the address is eligible, a sign-in link will be sent.
+                </p>
+                <form id="magic-link-form" class="stack-form">
+                  <label class="field-label" for="magic-link-email">Email</label>
+                  <input id="magic-link-email" name="email" class="text-input" type="email" placeholder="you@example.com" autocomplete="email" />
+                  <div class="cta-row">
+                    <button class="button" type="submit">Send sign-in link</button>
+                  </div>
+                </form>
+              </article>
+              <article class="panel">
+                <h3>${accountIntent === "checkout" ? "Checkout handoff" : "Access status"}</h3>
+                <ul class="feature-list">
+                  <li>Checkout confirms billing, not identity.</li>
+                  <li>Webhook-backed subscriber state remains the authority for premium access.</li>
+                  <li>Email verification unlocks this device once auth goes live.</li>
+                </ul>
+              </article>
+            </section>
+          `
+          : debugMode
           ? `
             <section class="section split">
               <article class="panel">
@@ -1238,7 +1305,7 @@
           `
           : `
             <section class="section">
-              <div class="notice">Manage subscription coming soon.</div>
+              <div class="notice">Subscription management is coming soon.</div>
             </section>
           `
       }
@@ -1280,6 +1347,52 @@
     `;
   };
 
+  const authNoticeFromQuery = () => {
+    if (authState === "success") {
+      return { message: "Premium access unlocked for this device.", tone: "success" };
+    }
+    if (authState === "invalid") {
+      return { message: "This sign-in link is invalid or has expired. Request a new one.", tone: "warning" };
+    }
+    if (authState === "not_wired") {
+      return { message: "Email verification is not configured yet. This flow is scaffolded but not live.", tone: "warning" };
+    }
+    return { message: "", tone: "default" };
+  };
+
+  const loadAuthSession = async () => {
+    state.runtime.sessionAuthenticated = false;
+    state.runtime.sessionEntitled = false;
+    state.runtime.sessionStatus = "";
+    state.runtime.sessionAuthMode = "";
+    state.runtime.sessionCustomerId = "";
+    state.runtime.sessionSubscriptionId = "";
+
+    const notice = authNoticeFromQuery();
+    state.runtime.authMessage = notice.message;
+
+    if (!workerConfigured()) {
+      return;
+    }
+
+    const { response, payload } = await fetchWorkerJson("/api/auth/session", {
+      method: "GET",
+      withToken: true,
+    });
+
+    if (!response.ok || !payload?.ok) {
+      state.runtime.sessionStatus = payload?.status || "session_unavailable";
+      return;
+    }
+
+    state.runtime.sessionAuthenticated = Boolean(payload.authenticated);
+    state.runtime.sessionEntitled = Boolean(payload.entitled);
+    state.runtime.sessionStatus = String(payload.status || "");
+    state.runtime.sessionAuthMode = String(payload.auth_mode || "");
+    state.runtime.sessionCustomerId = String(payload.customer_id || "");
+    state.runtime.sessionSubscriptionId = String(payload.subscription_id || "");
+  };
+
   const loadProtectedPremiumPredictions = async () => {
     state.runtime.premiumFetchError = "";
     state.runtime.premiumGeneratedAt = "";
@@ -1290,7 +1403,7 @@
     if (premiumDemoMode || page !== "premium") {
       return;
     }
-    if (!workerConfigured() || !premiumTokenPresent()) {
+    if (!workerConfigured() || (!premiumTokenPresent() && !state.runtime.sessionAuthenticated)) {
       return;
     }
 
@@ -1339,6 +1452,37 @@
     }
   };
 
+  const requestMagicLink = async (event) => {
+    event.preventDefault();
+    if (!workerConfigured()) {
+      state.runtime.authMessage = "Email verification is unavailable until the Worker auth routes are configured.";
+      render();
+      return;
+    }
+
+    const formData = new FormData(event.target);
+    const email = String(formData.get("email") || "").trim();
+    state.runtime.authMessage = "Requesting sign-in link...";
+    render();
+
+    try {
+      const { response, payload } = await fetchWorkerJson("/api/auth/magic-link/request", {
+        method: "POST",
+        body: { email },
+      });
+
+      if (!response.ok || !payload?.ok) {
+        throw new Error(payload?.message || "Unable to request sign-in link.");
+      }
+
+      state.runtime.authMessage = payload.message || "If the address is eligible, a sign-in link has been sent.";
+    } catch (error) {
+      state.runtime.authMessage = error.message || "Unable to request sign-in link.";
+    }
+
+    render();
+  };
+
   const handleTokenSave = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
@@ -1351,6 +1495,34 @@
     if (page === "premium") {
       await loadProtectedPremiumPredictions();
     }
+    render();
+  };
+
+  const handleLogout = async (event) => {
+    event.preventDefault();
+    if (!workerConfigured()) {
+      return;
+    }
+
+    try {
+      await fetchWorkerJson("/api/auth/logout", {
+        method: "POST",
+      });
+    } catch {
+      // Best-effort logout; continue local cleanup.
+    }
+
+    writeStoredPremiumToken("");
+    state.runtime.premiumToken = "";
+    state.runtime.sessionAuthenticated = false;
+    state.runtime.sessionEntitled = false;
+    state.runtime.sessionStatus = "";
+    state.runtime.sessionAuthMode = "";
+    state.runtime.sessionCustomerId = "";
+    state.runtime.sessionSubscriptionId = "";
+    state.securePremiumPredictions = [];
+    state.runtime.premiumFetchError = "";
+    state.runtime.authMessage = "You have been signed out from this device.";
     render();
   };
 
@@ -1371,12 +1543,23 @@
       state.runtime.accountMessage = "Stored premium token cleared.";
       state.runtime.premiumFetchError = "";
       render();
+      return;
+    }
+
+    const logoutTarget = event.target.closest("[data-action='auth-logout']");
+    if (logoutTarget) {
+      await handleLogout(event);
     }
   });
 
   app.addEventListener("submit", async (event) => {
     if (event.target.id === "premium-token-form") {
       await handleTokenSave(event);
+      return;
+    }
+
+    if (event.target.id === "magic-link-form") {
+      await requestMagicLink(event);
     }
   });
 
@@ -1384,6 +1567,7 @@
     app.innerHTML = `<div class="loading">Loading published board…</div>`;
     syncActiveNav();
     state.runtime.premiumToken = readStoredPremiumToken();
+    await loadAuthSession();
 
     try {
       const [summary, publicPredictions, premiumPredictions] = await Promise.all([

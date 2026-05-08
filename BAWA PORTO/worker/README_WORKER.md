@@ -39,6 +39,7 @@ Exception:
 - `POST /api/stripe/webhook` now verifies Stripe signatures and persists subscriber-state records when the required secret and binding are present
 - `POST /api/premium/token` now issues a signed 7-day premium token after verified subscriber-state lookup
 - `GET /api/premium/predictions` now verifies a signed v1 premium token, edge-caches the sanitized shared premium payload, and returns only the approved premium schema
+- auth route skeletons now exist for magic-link request, verify, session, and logout so production auth can replace public token handling incrementally
 
 ## Required Future Environment Variables
 
