@@ -323,7 +323,11 @@ def build_record(row: dict[str, str], counters: Counter[str]) -> dict[str, Any] 
         bookie_implied = parse_float(row.get("bookie_implied_novig", ""))
         if bookie_implied is not None:
             counters["bookie_implied_prob:bookie_implied_novig"] += 1
-    value_edge = parse_float(row.get("gap", ""))
+    value_edge = parse_float(row.get("value_edge", ""))
+    if value_edge is None:
+        value_edge = parse_float(row.get("gap", ""))
+        if value_edge is not None:
+            counters["value_edge:gap"] += 1
     if value_edge is None:
         value_edge = parse_float(row.get("gap_novig", ""))
         if value_edge is not None:

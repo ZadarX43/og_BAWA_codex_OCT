@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-05-04T15:45:25+00:00",
-  "selected_source_csv": "predictions_output/hybrid_shadow_walkforward_2026_05_01_parity_rebuild_timing_refresh/w001_2023_08_03_2023_08_09/02_deploy/DEPLOY_COMBINED_2023-08-03_to_2023-08-09.csv",
+  "generated_at": "2026-05-08T14:26:57+00:00",
+  "selected_source_csv": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11__DEPLOY_PRESET__PRESET_V1__FTR_accuracy.csv",
   "selected_by": "explicit_src",
-  "selected_source_mtime_utc": "2026-05-01T19:31:10.894847+00:00",
-  "source_rows_read": 360,
-  "public_predictions_count": 7,
-  "premium_predictions_count": 15,
+  "selected_source_mtime_utc": "2026-05-08T12:22:17.288014+00:00",
+  "source_rows_read": 28,
+  "public_predictions_count": 6,
+  "premium_predictions_count": 28,
   "public_output": "frontend/public/data/public_predictions.json",
   "premium_output": "frontend/public/data/premium_predictions.json",
   "report_output": "reports/latest/PUBLISH_REPORT.md",
@@ -48,7 +48,5 @@
     "correct_score_shortlist",
     "premium_tier"
   ],
-  "fallbacks_and_drops": {
-    "dropped:non_deployable_tier:OBSERVE": 345
-  }
+  "fallbacks_and_drops": {}
 }
