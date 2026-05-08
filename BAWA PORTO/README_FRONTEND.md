@@ -87,10 +87,22 @@ Default latest-source publish:
 python3 publish_predictions.py
 ```
 
+One-command publish wrapper:
+
+```bash
+./scripts/publish_latest_deploy.sh
+```
+
 Explicit source publish:
 
 ```bash
 python3 publish_predictions.py --src predictions_output/<RUN>/02_deploy/DEPLOY_COMBINED_<FROM>_to_<TO>.csv
+```
+
+Or with the wrapper:
+
+```bash
+./scripts/publish_latest_deploy.sh --src predictions_output/<RUN>/02_deploy/DEPLOY_COMBINED_<FROM>_to_<TO>.csv
 ```
 
 This writes:

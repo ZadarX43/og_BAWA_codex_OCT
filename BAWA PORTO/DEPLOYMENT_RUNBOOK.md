@@ -27,10 +27,22 @@ Use the default latest-source publish:
 python3 publish_predictions.py
 ```
 
+Or use the one-command wrapper:
+
+```bash
+./scripts/publish_latest_deploy.sh
+```
+
 Or use an explicit deploy source:
 
 ```bash
 python3 publish_predictions.py --src predictions_output/<RUN>/02_deploy/DEPLOY_COMBINED_<FROM>_to_<TO>.csv
+```
+
+Wrapper with explicit source:
+
+```bash
+./scripts/publish_latest_deploy.sh --src predictions_output/<RUN>/02_deploy/DEPLOY_COMBINED_<FROM>_to_<TO>.csv
 ```
 
 Outputs:
