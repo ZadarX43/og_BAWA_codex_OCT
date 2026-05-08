@@ -1570,7 +1570,16 @@
   });
 
   const boot = async () => {
-    app.innerHTML = `<div class="loading">Loading published board…</div>`;
+    let loadingMessage = "Loading published board…";
+    if (page === "account") {
+      loadingMessage =
+        checkoutState === "success"
+          ? "Membership confirmed. Please verify your email to continue…"
+          : "Loading your account access…";
+    } else if (page === "premium") {
+      loadingMessage = "Checking premium access…";
+    }
+    app.innerHTML = `<div class="loading">${escapeHtml(loadingMessage)}</div>`;
     syncActiveNav();
     state.runtime.premiumToken = readStoredPremiumToken();
     await loadAuthSession();

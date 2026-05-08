@@ -990,8 +990,8 @@ async function handleMagicLinkRequest(request, env) {
       expirationTtl: AUTH_MAGIC_LINK_TTL_SECONDS,
     });
 
-    const siteUrl = normalizeSiteUrl(env.SITE_URL || new URL(request.url).origin);
-    const verifyUrl = `${siteUrl}/api/auth/magic-link/verify?token=${encodeURIComponent(token)}`;
+    const workerOrigin = new URL(request.url).origin;
+    const verifyUrl = `${workerOrigin}/api/auth/magic-link/verify?token=${encodeURIComponent(token)}`;
     const sent = await sendMagicLinkEmail(normalizedEmail, verifyUrl, env);
     if (!sent.ok) {
       return json(
