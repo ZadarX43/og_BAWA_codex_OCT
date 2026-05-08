@@ -9,6 +9,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parent
 WEEKLY_RESULTS_PATH = ROOT / "frontend" / "public" / "data" / "weekly_results.json"
+RESULTS_ARCHIVE_PATH = ROOT / "frontend" / "public" / "data" / "results_archive.json"
 
 REQUIRED_TOP_LEVEL_FIELDS = {
     "period_start",
@@ -17,9 +18,16 @@ REQUIRED_TOP_LEVEL_FIELDS = {
     "total_picks",
     "settled_picks",
     "pending_picks",
+    "wins",
+    "losses",
+    "voids",
     "overall_hit_rate",
+    "overall_roi",
+    "overall_profit_units",
     "by_market",
     "by_tier",
+    "by_league",
+    "chart_points",
     "featured_wins",
     "featured_misses",
     "notes",
@@ -28,7 +36,19 @@ REQUIRED_TOP_LEVEL_FIELDS = {
 ALLOWED_KEY_NAMES = REQUIRED_TOP_LEVEL_FIELDS | {
     "market",
     "tier",
+    "date",
+    "wins",
+    "losses",
+    "voids",
     "hit_rate",
+    "roi",
+    "profit_units",
+    "settled_picks",
+    "total_picks",
+    "pending_picks",
+    "cumulative_profit_units",
+    "cumulative_roi",
+    "rolling_hit_rate",
     "fixture_key",
     "kickoff_time",
     "league",
@@ -36,7 +56,19 @@ ALLOWED_KEY_NAMES = REQUIRED_TOP_LEVEL_FIELDS | {
     "away_team",
     "pick",
     "confidence_tier",
+    "premium_tier",
+    "bookie_od",
+    "model_prob",
+    "bookie_implied_prob",
+    "value_edge",
     "result",
+    "result_status",
+    "final_home_score",
+    "final_away_score",
+    "settled_at",
+    "published_run_id",
+    "items",
+    "source_file",
 }
 
 CRITICAL_FIELDS = {"period_start", "period_end", "generated_at"}
@@ -133,7 +165,12 @@ def validate_summary_blocks(items: Any, label_key: str, errors: list[str], path:
         total = item.get("total_picks")
         settled = item.get("settled_picks")
         pending = item.get("pending_picks")
+        wins = item.get("wins")
+        losses = item.get("losses")
+        voids = item.get("voids")
         hit_rate = item.get("hit_rate")
+        roi = item.get("roi")
+        profit_units = item.get("profit_units")
 
         if not isinstance(total, int) or total < 0:
             errors.append(f"{item_path}: `total_picks` must be a non-negative integer")
@@ -141,11 +178,25 @@ def validate_summary_blocks(items: Any, label_key: str, errors: list[str], path:
             errors.append(f"{item_path}: `settled_picks` must be a non-negative integer")
         if not isinstance(pending, int) or pending < 0:
             errors.append(f"{item_path}: `pending_picks` must be a non-negative integer")
+        if not isinstance(wins, int) or wins < 0:
+            errors.append(f"{item_path}: `wins` must be a non-negative integer")
+        if not isinstance(losses, int) or losses < 0:
+            errors.append(f"{item_path}: `losses` must be a non-negative integer")
+        if not isinstance(voids, int) or voids < 0:
+            errors.append(f"{item_path}: `voids` must be a non-negative integer")
         if isinstance(total, int) and isinstance(settled, int) and settled > total:
             errors.append(f"{item_path}: `settled_picks` cannot exceed `total_picks`")
+        if isinstance(settled, int) and isinstance(wins, int) and isinstance(losses, int) and isinstance(voids, int):
+            if wins + losses + voids != settled:
+                errors.append(f"{item_path}: `wins + losses + voids` must equal `settled_picks`")
         if hit_rate is not None:
             if not isinstance(hit_rate, (int, float)) or not (0 <= float(hit_rate) <= 1):
                 errors.append(f"{item_path}: `hit_rate` must be between 0 and 1 when present")
+        if roi is not None:
+            if not isinstance(roi, (int, float)):
+                errors.append(f"{item_path}: `roi` must be numeric when present")
+        if profit_units is None or not isinstance(profit_units, (int, float)):
+            errors.append(f"{item_path}: `profit_units` must be numeric")
 
 
 def validate_featured_rows(items: Any, path: str, errors: list[str]) -> None:
@@ -163,17 +214,101 @@ def validate_featured_rows(items: Any, path: str, errors: list[str]) -> None:
                 errors.append(f"{item_path}: missing `{key}`")
 
 
+def validate_chart_points(items: Any, path: str, errors: list[str]) -> None:
+    if not isinstance(items, list):
+        errors.append(f"{path}: must be an array")
+        return
+    for idx, item in enumerate(items):
+        item_path = f"{path}[{idx}]"
+        if not isinstance(item, dict):
+            errors.append(f"{item_path}: must be an object")
+            continue
+        for key in ("date", "settled_picks", "wins", "losses", "voids", "profit_units", "cumulative_profit_units"):
+            if key not in item:
+                errors.append(f"{item_path}: missing `{key}`")
+        for int_key in ("settled_picks", "wins", "losses", "voids"):
+            value = item.get(int_key)
+            if not isinstance(value, int) or value < 0:
+                errors.append(f"{item_path}: `{int_key}` must be a non-negative integer")
+        for num_key in ("profit_units", "cumulative_profit_units"):
+            value = item.get(num_key)
+            if not isinstance(value, (int, float)):
+                errors.append(f"{item_path}: `{num_key}` must be numeric")
+        rolling_hit_rate = item.get("rolling_hit_rate")
+        if rolling_hit_rate is not None and (
+            not isinstance(rolling_hit_rate, (int, float)) or not (0 <= float(rolling_hit_rate) <= 1)
+        ):
+            errors.append(f"{item_path}: `rolling_hit_rate` must be between 0 and 1 when present")
+        cumulative_roi = item.get("cumulative_roi")
+        if cumulative_roi is not None and not isinstance(cumulative_roi, (int, float)):
+            errors.append(f"{item_path}: `cumulative_roi` must be numeric when present")
+
+
+def validate_archive(payload: Any, errors: list[str]) -> None:
+    required_fields = {
+        "period_start",
+        "period_end",
+        "generated_at",
+        "source_file",
+        "published_run_id",
+        "total_picks",
+        "settled_picks",
+        "pending_picks",
+        "items",
+    }
+    if not isinstance(payload, dict):
+        errors.append("results_archive.json must contain a top-level object")
+        return
+    missing = sorted(required_fields - set(payload.keys()))
+    if missing:
+        errors.append(f"results_archive.json missing top-level fields: {missing}")
+        return
+    items = payload.get("items")
+    if not isinstance(items, list):
+        errors.append("results_archive.items must be an array")
+        return
+    for idx, item in enumerate(items):
+        item_path = f"results_archive.items[{idx}]"
+        if not isinstance(item, dict):
+            errors.append(f"{item_path}: must be an object")
+            continue
+        for key in (
+            "fixture_key",
+            "kickoff_time",
+            "league",
+            "home_team",
+            "away_team",
+            "market",
+            "pick",
+            "confidence_tier",
+            "premium_tier",
+            "result_status",
+            "profit_units",
+            "published_run_id",
+        ):
+            value = item.get(key)
+            if value is None or str(value).strip() == "":
+                errors.append(f"{item_path}: missing `{key}`")
+        if item.get("result_status") not in {"pending", "won", "lost", "void"}:
+            errors.append(f"{item_path}: invalid `result_status`")
+    walk_values(payload, "results_archive", errors)
+
+
 def main() -> int:
     errors: list[str] = []
 
     if not WEEKLY_RESULTS_PATH.exists():
         print(f"ERROR: missing required file: {WEEKLY_RESULTS_PATH.relative_to(ROOT)}")
         return 1
+    if not RESULTS_ARCHIVE_PATH.exists():
+        print(f"ERROR: missing required file: {RESULTS_ARCHIVE_PATH.relative_to(ROOT)}")
+        return 1
 
     payload = load_json(WEEKLY_RESULTS_PATH)
     if not isinstance(payload, dict):
         print("ERROR: weekly_results.json must contain a top-level object")
         return 1
+    archive_payload = load_json(RESULTS_ARCHIVE_PATH)
 
     keys = set(payload.keys())
     missing = sorted(REQUIRED_TOP_LEVEL_FIELDS - keys)
@@ -188,7 +323,12 @@ def main() -> int:
     total = payload.get("total_picks")
     settled = payload.get("settled_picks")
     pending = payload.get("pending_picks")
+    wins = payload.get("wins")
+    losses = payload.get("losses")
+    voids = payload.get("voids")
     overall_hit_rate = payload.get("overall_hit_rate")
+    overall_roi = payload.get("overall_roi")
+    overall_profit_units = payload.get("overall_profit_units")
 
     if not isinstance(total, int) or total < 0:
         errors.append("`total_picks` must be a non-negative integer")
@@ -196,14 +336,29 @@ def main() -> int:
         errors.append("`settled_picks` must be a non-negative integer")
     if not isinstance(pending, int) or pending < 0:
         errors.append("`pending_picks` must be a non-negative integer")
+    if not isinstance(wins, int) or wins < 0:
+        errors.append("`wins` must be a non-negative integer")
+    if not isinstance(losses, int) or losses < 0:
+        errors.append("`losses` must be a non-negative integer")
+    if not isinstance(voids, int) or voids < 0:
+        errors.append("`voids` must be a non-negative integer")
     if isinstance(total, int) and isinstance(settled, int) and settled > total:
         errors.append("`total_picks` must be greater than or equal to `settled_picks`")
+    if isinstance(settled, int) and isinstance(wins, int) and isinstance(losses, int) and isinstance(voids, int):
+        if wins + losses + voids != settled:
+            errors.append("`wins + losses + voids` must equal `settled_picks`")
     if overall_hit_rate is not None:
         if not isinstance(overall_hit_rate, (int, float)) or not (0 <= float(overall_hit_rate) <= 1):
             errors.append("`overall_hit_rate` must be between 0 and 1 when present")
+    if overall_roi is not None and not isinstance(overall_roi, (int, float)):
+        errors.append("`overall_roi` must be numeric when present")
+    if overall_profit_units is None or not isinstance(overall_profit_units, (int, float)):
+        errors.append("`overall_profit_units` must be numeric")
 
     validate_summary_blocks(payload.get("by_market"), "market", errors, "by_market")
     validate_summary_blocks(payload.get("by_tier"), "tier", errors, "by_tier")
+    validate_summary_blocks(payload.get("by_league"), "league", errors, "by_league")
+    validate_chart_points(payload.get("chart_points"), "chart_points", errors)
     validate_featured_rows(payload.get("featured_wins"), "featured_wins", errors)
     validate_featured_rows(payload.get("featured_misses"), "featured_misses", errors)
 
@@ -216,6 +371,7 @@ def main() -> int:
                 errors.append(f"notes[{idx}] must be a string")
 
     walk_values(payload, "weekly_results", errors)
+    validate_archive(archive_payload, errors)
 
     if errors:
         print("Weekly results validation failed.")
@@ -225,6 +381,7 @@ def main() -> int:
 
     print("Weekly results validation passed.")
     print(f"- file: {WEEKLY_RESULTS_PATH.relative_to(ROOT)}")
+    print(f"- archive: {RESULTS_ARCHIVE_PATH.relative_to(ROOT)}")
     print(f"- total picks: {payload['total_picks']}")
     print(f"- settled picks: {payload['settled_picks']}")
     print(f"- pending picks: {payload['pending_picks']}")

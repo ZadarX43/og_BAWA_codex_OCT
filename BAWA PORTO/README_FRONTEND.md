@@ -41,7 +41,7 @@ Current behavior:
 - `predictions.html` uses the public board
 - `premium.html` uses internal demo mode for static preview or the Worker premium route when configured and token-authenticated
 - `index.html` uses both boards plus publish summary metadata
-- `results.html` is currently a scaffold and does not require `weekly_results.json`
+- `results.html` currently reads `weekly_results.json` for proof rollups; the backend now also publishes `results_archive.json` for the next settled archive UI layer
 
 ## Frontend Worker Config
 

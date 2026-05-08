@@ -27,6 +27,8 @@ REQUIRED_FILES = [
     DATA / "public_predictions.json",
     DATA / "premium_predictions.json",
     DATA / "publish_summary.json",
+    DATA / "weekly_results.json",
+    DATA / "results_archive.json",
 ]
 
 FORBIDDEN_TERMS = [
