@@ -205,7 +205,7 @@ const redirect = (location, status = 303, extraHeaders = {}) =>
   });
 
 const clearCookieHeader = (name) =>
-  `${name}=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+  `${name}=; Path=/; HttpOnly; Secure; SameSite=None; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT`;
 
 const getCookieValue = (request, name) => {
   const cookieHeader = request.headers.get("cookie") || "";
@@ -266,7 +266,7 @@ const buildOpaqueToken = (bytes = 32) => {
 };
 
 const buildSessionCookieHeader = (token) =>
-  `${AUTH_SESSION_COOKIE}=${token}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${AUTH_SESSION_TTL_SECONDS}`;
+  `${AUTH_SESSION_COOKIE}=${token}; Path=/; HttpOnly; Secure; SameSite=None; Max-Age=${AUTH_SESSION_TTL_SECONDS}`;
 
 const putKvJson = async (store, key, payload, options = {}) => {
   if (options.expirationTtl) {

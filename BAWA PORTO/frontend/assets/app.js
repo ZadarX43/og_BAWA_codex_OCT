@@ -1268,7 +1268,7 @@
                 <ul class="feature-list">
                   <li>Checkout confirms billing, not identity.</li>
                   <li>Webhook-backed subscriber state remains the authority for premium access.</li>
-                  <li>Email verification unlocks this device once auth goes live.</li>
+                  <li>Email verification unlocks this device when your active membership is confirmed.</li>
                 </ul>
               </article>
             </section>
