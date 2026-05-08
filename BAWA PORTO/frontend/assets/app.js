@@ -1381,10 +1381,20 @@
       return;
     }
 
-    const { response, payload } = await fetchWorkerJson("/api/auth/session", {
-      method: "GET",
-      withToken: true,
-    });
+    let response;
+    let payload;
+    try {
+      ({ response, payload } = await fetchWorkerJson("/api/auth/session", {
+        method: "GET",
+        withToken: true,
+      }));
+    } catch (error) {
+      state.runtime.sessionStatus = "session_unavailable";
+      if (!state.runtime.authMessage) {
+        state.runtime.authMessage = "We could not confirm your account session yet. You can request a new sign-in link below.";
+      }
+      return;
+    }
 
     if (!response.ok || !payload?.ok) {
       state.runtime.sessionStatus = payload?.status || "session_unavailable";

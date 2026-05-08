@@ -85,6 +85,47 @@ const envSummary = (env) => ({
   has_auth_email_from: Boolean(env.AUTH_EMAIL_FROM),
 });
 
+const buildCorsHeaders = (request, env) => {
+  const origin = request.headers.get("origin") || "";
+  const siteOrigin = (() => {
+    try {
+      return env.SITE_URL ? new URL(env.SITE_URL).origin : "";
+    } catch {
+      return "";
+    }
+  })();
+
+  const allowOrigin =
+    origin && (origin === siteOrigin || origin === "http://localhost:8788" || origin === "http://127.0.0.1:8788")
+      ? origin
+      : siteOrigin;
+
+  if (!allowOrigin) {
+    return {};
+  }
+
+  return {
+    "access-control-allow-origin": allowOrigin,
+    "access-control-allow-credentials": "true",
+    "access-control-allow-methods": "GET,POST,OPTIONS",
+    "access-control-allow-headers": "content-type,authorization",
+    vary: "Origin",
+  };
+};
+
+const withCors = (response, request, env) => {
+  const headers = new Headers(response.headers);
+  const corsHeaders = buildCorsHeaders(request, env);
+  for (const [key, value] of Object.entries(corsHeaders)) {
+    headers.set(key, value);
+  }
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+};
+
 const placeholder = (route, nextStep, env, extras = {}) =>
   json({
     ok: false,
@@ -1388,12 +1429,18 @@ async function loadPremiumPredictions(request, env) {
 async function handleRequest(request, env) {
   const url = new URL(request.url);
   const { pathname } = url;
+  let response;
+
+  if (request.method === "OPTIONS") {
+    return withCors(new Response(null, { status: 204 }), request, env);
+  }
 
   if (pathname === "/health") {
     if (request.method !== "GET") {
-      return methodNotAllowed("GET");
+      response = methodNotAllowed("GET");
+      return withCors(response, request, env);
     }
-    return json({
+    response = json({
       ok: true,
       service: "odds-genius-worker",
       status: "placeholder_ready",
@@ -1411,55 +1458,69 @@ async function handleRequest(request, env) {
       ],
       env_summary: envSummary(env),
     });
+    return withCors(response, request, env);
   }
 
   if (pathname === "/api/stripe/checkout") {
     if (request.method !== "POST") {
-      return methodNotAllowed("POST");
+      response = methodNotAllowed("POST");
+      return withCors(response, request, env);
     }
-    return createCheckoutSession(request, env);
+    response = await createCheckoutSession(request, env);
+    return withCors(response, request, env);
   }
 
   if (pathname === "/api/auth/magic-link/request") {
     if (request.method !== "POST") {
-      return methodNotAllowed("POST");
+      response = methodNotAllowed("POST");
+      return withCors(response, request, env);
     }
-    return handleMagicLinkRequest(request, env);
+    response = await handleMagicLinkRequest(request, env);
+    return withCors(response, request, env);
   }
 
   if (pathname === "/api/auth/magic-link/verify") {
     if (request.method !== "GET") {
-      return methodNotAllowed("GET");
+      response = methodNotAllowed("GET");
+      return withCors(response, request, env);
     }
-    return handleMagicLinkVerify(request, env);
+    response = await handleMagicLinkVerify(request, env);
+    return withCors(response, request, env);
   }
 
   if (pathname === "/api/auth/session") {
     if (request.method !== "GET") {
-      return methodNotAllowed("GET");
+      response = methodNotAllowed("GET");
+      return withCors(response, request, env);
     }
-    return handleAuthSession(request, env);
+    response = await handleAuthSession(request, env);
+    return withCors(response, request, env);
   }
 
   if (pathname === "/api/auth/logout") {
     if (request.method !== "POST") {
-      return methodNotAllowed("POST");
+      response = methodNotAllowed("POST");
+      return withCors(response, request, env);
     }
-    return handleLogout(request, env);
+    response = await handleLogout(request, env);
+    return withCors(response, request, env);
   }
 
   if (pathname === "/api/premium/token") {
     if (request.method !== "POST") {
-      return methodNotAllowed("POST");
+      response = methodNotAllowed("POST");
+      return withCors(response, request, env);
     }
-    return handlePremiumTokenIssue(request, env);
+    response = await handlePremiumTokenIssue(request, env);
+    return withCors(response, request, env);
   }
 
   if (pathname === "/api/stripe/portal") {
     if (request.method !== "POST") {
-      return methodNotAllowed("POST");
+      response = methodNotAllowed("POST");
+      return withCors(response, request, env);
     }
-    return placeholder(
+    response = placeholder(
       pathname,
       "Verify subscriber identity and create a Stripe Customer Portal session.",
       env,
@@ -1467,23 +1528,29 @@ async function handleRequest(request, env) {
         security_note: "Portal access should require authenticated subscriber context.",
       }
     );
+    return withCors(response, request, env);
   }
 
   if (pathname === "/api/stripe/webhook") {
     if (request.method !== "POST") {
-      return methodNotAllowed("POST");
+      response = methodNotAllowed("POST");
+      return withCors(response, request, env);
     }
-    return handleStripeWebhook(request, env);
+    response = await handleStripeWebhook(request, env);
+    return withCors(response, request, env);
   }
 
   if (pathname === "/api/premium/predictions") {
     if (request.method !== "GET") {
-      return methodNotAllowed("GET");
+      response = methodNotAllowed("GET");
+      return withCors(response, request, env);
     }
-    return handlePremiumPredictions(request, env);
+    response = await handlePremiumPredictions(request, env);
+    return withCors(response, request, env);
   }
 
-  return notFound(pathname);
+  response = notFound(pathname);
+  return withCors(response, request, env);
 }
 
 export default {
