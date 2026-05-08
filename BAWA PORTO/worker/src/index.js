@@ -6,6 +6,8 @@ import {
 import { issuePremiumToken, verifyPremiumAccess } from "./auth.js";
 
 const STRIPE_WEBHOOK_TOLERANCE_SECONDS = 300;
+const PREMIUM_CACHE_TTL_SECONDS = 300;
+const PREMIUM_CACHE_VERSION = "v1";
 const PREMIUM_ALLOWED_FIELDS = [
   "fixture_id",
   "fixture_key",
@@ -134,6 +136,44 @@ const unauthorizedError = (message, details = null) =>
 
 const normalizeSiteUrl = (value) => String(value || "").replace(/\/+$/, "");
 const isFiniteNumber = (value) => typeof value === "number" && Number.isFinite(value);
+
+const resolvePremiumSourceUrl = (request, env) => {
+  const source = String(env.PREMIUM_DATA_SOURCE || "").trim();
+  if (!source) {
+    return {
+      ok: false,
+      status: "premium_source_missing",
+      message: "PREMIUM_DATA_SOURCE is not configured.",
+      recommendation: "Point PREMIUM_DATA_SOURCE at a protected JSON endpoint or same-origin asset path.",
+      http_status: 500,
+    };
+  }
+
+  if (/^https?:\/\//i.test(source)) {
+    return { ok: true, targetUrl: source };
+  }
+
+  if (source.startsWith("/")) {
+    return { ok: true, targetUrl: new URL(source, request.url).toString() };
+  }
+
+  return {
+    ok: false,
+    status: "premium_source_unsupported",
+    message: "PREMIUM_DATA_SOURCE must currently be an absolute URL or same-origin path.",
+    recommendation: "For production, use KV, R2, or a protected static asset fetch strategy rather than local filesystem paths.",
+    http_status: 501,
+  };
+};
+
+const buildPremiumCacheKey = (targetUrl) => {
+  const cacheUrl = new URL("https://og-premium-cache.invalid/premium-board");
+  cacheUrl.searchParams.set("v", PREMIUM_CACHE_VERSION);
+  cacheUrl.searchParams.set("source", targetUrl);
+  return new Request(cacheUrl.toString(), { method: "GET" });
+};
+
+const getPremiumCache = () => globalThis.caches?.default || null;
 
 const parseStripeSignatureHeader = (headerValue) => {
   const parsed = {
@@ -419,10 +459,13 @@ async function handlePremiumPredictions(request, env) {
       ok: true,
       generated_at: loaded.generated_at,
       subscriber_customer_id: access.customer_id,
-      count: loaded.rows.length,
+      count: loaded.count,
       predictions: loaded.rows,
     },
-    200
+    200,
+    {
+      "x-og-premium-cache": loaded.cache_status || "bypass",
+    }
   );
 }
 
@@ -511,32 +554,78 @@ const sanitizePremiumRow = (row) => {
   return sanitized;
 };
 
-async function fetchPremiumSource(request, env) {
-  const source = String(env.PREMIUM_DATA_SOURCE || "").trim();
-  if (!source) {
+const buildCachedPremiumPayload = (loaded) => ({
+  generated_at: loaded.generated_at,
+  count: loaded.rows.length,
+  predictions: loaded.rows,
+  source: loaded.source,
+});
+
+async function readCachedPremiumPayload(cacheKey) {
+  const cache = getPremiumCache();
+  if (!cache) {
+    return { ok: true, hit: false, cache_status: "bypass" };
+  }
+
+  const response = await cache.match(cacheKey);
+  if (!response) {
+    return { ok: true, hit: false, cache_status: "miss" };
+  }
+
+  let payload;
+  try {
+    payload = await response.json();
+  } catch (error) {
     return {
       ok: false,
-      status: "premium_source_missing",
-      message: "PREMIUM_DATA_SOURCE is not configured.",
-      recommendation: "Point PREMIUM_DATA_SOURCE at a protected JSON endpoint or same-origin asset path.",
+      status: "premium_cache_invalid_json",
+      message: "Cached premium payload could not be decoded.",
+      recommendation: error.message,
       http_status: 500,
     };
   }
 
-  let targetUrl;
-  if (/^https?:\/\//i.test(source)) {
-    targetUrl = source;
-  } else if (source.startsWith("/")) {
-    targetUrl = new URL(source, request.url).toString();
-  } else {
+  if (!payload || !Array.isArray(payload.predictions)) {
     return {
       ok: false,
-      status: "premium_source_unsupported",
-      message: "PREMIUM_DATA_SOURCE must currently be an absolute URL or same-origin path.",
-      recommendation: "For production, use KV, R2, or a protected static asset fetch strategy rather than local filesystem paths.",
-      http_status: 501,
+      status: "premium_cache_shape_invalid",
+      message: "Cached premium payload is missing the predictions array.",
+      recommendation: "Rebuild the cached payload from the published premium source.",
+      http_status: 500,
     };
   }
+
+  return {
+    ok: true,
+    hit: true,
+    cache_status: "hit",
+    payload,
+  };
+}
+
+async function writeCachedPremiumPayload(cacheKey, payload) {
+  const cache = getPremiumCache();
+  if (!cache) {
+    return;
+  }
+
+  const response = new Response(JSON.stringify(payload), {
+    status: 200,
+    headers: {
+      "content-type": "application/json; charset=utf-8",
+      "cache-control": `public, max-age=${PREMIUM_CACHE_TTL_SECONDS}`,
+    },
+  });
+
+  await cache.put(cacheKey, response);
+}
+
+async function fetchPremiumSource(request, env) {
+  const resolved = resolvePremiumSourceUrl(request, env);
+  if (!resolved.ok) {
+    return resolved;
+  }
+  const { targetUrl } = resolved;
 
   let response;
   try {
@@ -582,6 +671,30 @@ async function fetchPremiumSource(request, env) {
 }
 
 async function loadPremiumPredictions(request, env) {
+  const resolved = resolvePremiumSourceUrl(request, env);
+  if (!resolved.ok) {
+    return resolved;
+  }
+
+  const cacheKey = buildPremiumCacheKey(resolved.targetUrl);
+  const cached = await readCachedPremiumPayload(cacheKey);
+  if (!cached.ok) {
+    return cached;
+  }
+
+  if (cached.hit) {
+    return {
+      ok: true,
+      generated_at: typeof cached.payload.generated_at === "string" ? cached.payload.generated_at : null,
+      rows: cached.payload.predictions,
+      source: cached.payload.source || resolved.targetUrl,
+      count: Number.isFinite(Number(cached.payload.count))
+        ? Number(cached.payload.count)
+        : cached.payload.predictions.length,
+      cache_status: cached.cache_status,
+    };
+  }
+
   const fetched = await fetchPremiumSource(request, env);
   if (!fetched.ok) {
     return fetched;
@@ -608,12 +721,18 @@ async function loadPremiumPredictions(request, env) {
 
   const sanitizedRows = rows.map(sanitizePremiumRow).filter(Boolean);
 
-  return {
+  const loaded = {
     ok: true,
     generated_at: typeof payload?.generated_at === "string" ? payload.generated_at : null,
     rows: sanitizedRows,
     source: fetched.source,
+    count: sanitizedRows.length,
+    cache_status: cached.cache_status,
   };
+
+  await writeCachedPremiumPayload(cacheKey, buildCachedPremiumPayload(loaded));
+
+  return loaded;
 }
 
 async function handleRequest(request, env) {

@@ -38,7 +38,7 @@ Exception:
 - `POST /api/stripe/checkout` now attempts to create a real Stripe Checkout Session when the required env vars are present
 - `POST /api/stripe/webhook` now verifies Stripe signatures and persists subscriber-state records when the required secret and binding are present
 - `POST /api/premium/token` now issues a signed 7-day premium token after verified subscriber-state lookup
-- `GET /api/premium/predictions` now verifies a signed v1 premium token, loads premium data from the configured source, and returns only the approved premium schema
+- `GET /api/premium/predictions` now verifies a signed v1 premium token, edge-caches the sanitized shared premium payload, and returns only the approved premium schema
 
 ## Required Future Environment Variables
 

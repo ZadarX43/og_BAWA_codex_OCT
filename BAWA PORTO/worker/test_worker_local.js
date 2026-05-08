@@ -39,6 +39,34 @@ class MockKVStore {
   }
 }
 
+class MockCacheStore {
+  constructor() {
+    this.map = new Map();
+  }
+
+  async match(request) {
+    const key = typeof request === "string" ? request : request.url;
+    const entry = this.map.get(key);
+    if (!entry) {
+      return undefined;
+    }
+    return new Response(entry.body, {
+      status: entry.status,
+      headers: entry.headers,
+    });
+  }
+
+  async put(request, response) {
+    const key = typeof request === "string" ? request : request.url;
+    const body = await response.text();
+    this.map.set(key, {
+      body,
+      status: response.status,
+      headers: Object.fromEntries(response.headers.entries()),
+    });
+  }
+}
+
 const buildSubscriberRecord = (overrides = {}) => ({
   customer_id: "cus_test_active",
   subscription_id: "sub_test_active",
@@ -82,6 +110,22 @@ const premiumSourcePayload = {
   ],
 };
 
+const installMockCache = () => {
+  const originalCaches = globalThis.caches;
+  const store = new MockCacheStore();
+  globalThis.caches = {
+    default: store,
+  };
+  return {
+    clear: () => {
+      store.map.clear();
+    },
+    restore: () => {
+      globalThis.caches = originalCaches;
+    },
+  };
+};
+
 const createEnv = () => {
   const store = new MockKVStore();
   return {
@@ -114,10 +158,14 @@ const makeGetRequest = (url, headers = {}) =>
 
 const installMockFetch = () => {
   const originalFetch = globalThis.fetch;
+  const counters = {
+    premiumSourceFetches: 0,
+  };
 
   globalThis.fetch = async (input, init) => {
     const url = typeof input === "string" ? input : input.url;
     if (url === "http://localhost/premium-source.json") {
+      counters.premiumSourceFetches += 1;
       return new Response(JSON.stringify(premiumSourcePayload), {
         status: 200,
         headers: {
@@ -133,8 +181,11 @@ const installMockFetch = () => {
     return originalFetch(input, init);
   };
 
-  return () => {
-    globalThis.fetch = originalFetch;
+  return {
+    counters,
+    restore: () => {
+      globalThis.fetch = originalFetch;
+    },
   };
 };
 
@@ -187,6 +238,34 @@ const testProtectedRouteSuccess = async () => {
   assertPremiumRowAllowlist(payload.predictions[0]);
   assert.equal("gate_detail" in payload.predictions[0], false);
   assert.equal("model_path" in payload.predictions[0], false);
+};
+
+const testPremiumRouteCachesSharedPayload = async (counters) => {
+  const env = createEnv();
+  await writeSubscriberRecord(env, buildSubscriberRecord());
+  const token = await issueTokenThroughRoute(env, {
+    customer_id: "cus_test_active",
+    subscription_id: "sub_test_active",
+  });
+
+  const first = await worker.fetch(
+    makeGetRequest("http://localhost/api/premium/predictions", {
+      authorization: `Bearer ${token}`,
+    }),
+    env
+  );
+  assert.equal(first.status, 200);
+  assert.equal(first.headers.get("x-og-premium-cache"), "miss");
+
+  const second = await worker.fetch(
+    makeGetRequest("http://localhost/api/premium/predictions", {
+      authorization: `Bearer ${token}`,
+    }),
+    env
+  );
+  assert.equal(second.status, 200);
+  assert.equal(second.headers.get("x-og-premium-cache"), "hit");
+  assert.equal(counters.premiumSourceFetches, 1);
 };
 
 const buildExpiredToken = async (env) => {
@@ -295,19 +374,26 @@ const testInactiveSubscriber = async () => {
 };
 
 const main = async () => {
-  const restoreFetch = installMockFetch();
+  const cacheHarness = installMockCache();
+  const fetchHarness = installMockFetch();
   try {
+    await testPremiumRouteCachesSharedPayload(fetchHarness.counters);
+    cacheHarness.clear();
+    fetchHarness.counters.premiumSourceFetches = 0;
     await testProtectedRouteSuccess();
+    cacheHarness.clear();
     await testMissingToken();
     await testExpiredToken();
     await testInactiveSubscriber();
     console.log("Worker local harness passed.");
     console.log("- success route with valid token: passed");
+    console.log("- premium payload cache hit/miss path: passed");
     console.log("- missing token returns 401: passed");
     console.log("- expired token returns 401: passed");
     console.log("- inactive subscriber returns 401: passed");
   } finally {
-    restoreFetch();
+    fetchHarness.restore();
+    cacheHarness.restore();
   }
 };
 
