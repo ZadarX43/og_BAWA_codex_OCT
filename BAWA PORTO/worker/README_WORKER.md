@@ -28,7 +28,10 @@ Current status:
 
 - `GET /health`
 - `GET /api/account/state`
+- `GET /api/account/alerts`
 - `POST /api/account/preferences`
+- `POST /api/account/alerts/refresh`
+- `POST /api/account/alerts/dispatch`
 - `POST /api/account/telegram/link/start`
 - `POST /api/account/telegram/link/complete`
 - `POST /api/account/telegram/test-alert`
@@ -99,6 +102,7 @@ Current harness coverage:
 - session-authenticated account state can mirror into the optional D1 layer
 - Telegram link flow can issue a one-time code and complete a D1-backed account link when `ACCOUNT_DB` is present
 - Telegram bot webhook can consume `/start oglink_CODE` and complete the D1-backed account link when bot env vars are present
+- followed intelligence can now be queued into D1-backed account alerts and dispatched to Telegram from the published fixture feed
 - protected route returns only allowlisted premium fields
 - missing token returns `401`
 - expired token returns `401`
@@ -240,6 +244,26 @@ Current response metadata:
 - updates followed teams, leagues, markets, and fixtures
 - returns refreshed account state for the account page
 
+`GET /api/account/alerts`:
+
+- requires a verified premium session
+- requires `ACCOUNT_DB`
+- returns queued / delivered / failed followed alerts for the signed-in account
+
+`POST /api/account/alerts/refresh`:
+
+- requires a verified premium session
+- requires `ACCOUNT_DB`
+- rebuilds followed Telegram-eligible alerts from the current published `fixture_intelligence_public.json`
+- keeps lower-relevance market-only matches in the website feed instead of auto-queuing them for Telegram
+
+`POST /api/account/alerts/dispatch`:
+
+- requires a verified premium session
+- requires `ACCOUNT_DB`
+- processes due Telegram alerts for the signed-in account
+- delivers from the queued alert layer rather than directly from the dashboard card
+
 `POST /api/account/telegram/link/start`:
 
 - requires a verified premium session
@@ -288,6 +312,7 @@ Initial schema lives at:
 
 - `worker/migrations/0001_account_state.sql`
 - `worker/migrations/0002_notification_preferences_expansion.sql`
+- `worker/migrations/0003_notification_alert_queue.sql`
 
 Suggested setup once you create the D1 database in Cloudflare:
 
@@ -300,6 +325,7 @@ wrangler d1 migrations apply ACCOUNT_DB
 Important:
 
 - apply migrations before deploying Worker code that reads the expanded notification preference fields
+- apply `0003_notification_alert_queue.sql` before using the followed alert queue routes
 
 Then add the returned `database_id` to:
 
@@ -311,6 +337,22 @@ Current source strategy note:
 
 - Worker runtime cannot rely on local filesystem reads
 - final deployment should use KV, R2, or a protected static asset fetch strategy when direct same-origin fetch is not suitable
+
+## Cron Automation
+
+The Worker now exposes a `scheduled` handler that can:
+
+- rebuild followed Telegram-eligible alerts for linked premium users
+- dispatch due Telegram alerts from the D1-backed queue
+
+Recommended first trigger:
+
+```toml
+[triggers]
+crons = ["*/15 * * * *"]
+```
+
+Add that to your real `worker/wrangler.toml` and redeploy when you want unattended alert delivery.
 
 ## Architecture Boundary
 

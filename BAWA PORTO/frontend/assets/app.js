@@ -378,6 +378,8 @@
     }
     const fixture = payload.fixture || null;
     const reasons = Array.isArray(payload.reasons) ? payload.reasons : [];
+    const relevanceTier = String(payload.relevance_tier || alert.notification_priority || "normal");
+    const autoGate = String(payload.auto_gate || "").replace(/_/g, " ");
     const status = String(alert.status || "queued").toUpperCase();
     return `
       <article class="panel intelligence-card intelligence-card-${escapeHtml(String(alert.publish_class || "monitor").toLowerCase())}">
@@ -391,6 +393,7 @@
         <div class="intelligence-meta">
           <span class="chip">${escapeHtml(String(alert.publish_class || "MONITOR").toUpperCase())}</span>
           <span class="chip">${escapeHtml(alert.market_family || "INTEL")}</span>
+          <span class="chip">${escapeHtml(relevanceTier)}</span>
           ${reasons.length ? `<span class="chip">${escapeHtml(reasons.join(" • "))}</span>` : ""}
         </div>
         <p class="intelligence-headline">${escapeHtml(
@@ -398,6 +401,7 @@
             fixture?.signal_summary?.summary_text ||
             `${alert.alert_kind || "follow alert"} is queued from the published intelligence feed.`
         )}</p>
+        ${autoGate ? `<p class="muted">Auto route: ${escapeHtml(autoGate)}</p>` : ""}
         ${
           alert.delivered_at
             ? `<p class="muted">Delivered ${escapeHtml(formatDateTime(alert.delivered_at))}</p>`
@@ -1747,7 +1751,7 @@
               <article class="panel">
                 <h3>My alerts</h3>
                 <p class="muted">
-                  This queue is the first step from followed intelligence into automatic Telegram delivery. Refresh builds due alerts from the current published window. Dispatch processes anything already due.
+                  This queue is the first step from followed intelligence into automatic Telegram delivery. Team and fixture follows take priority. Lower-relevance market-only matches stay in the website feed instead of auto-sending to Telegram.
                 </p>
                 ${renderNotice(state.runtime.alertsMessage, state.runtime.alertsMessage ? "success" : "default")}
                 <div class="cta-row">
@@ -1954,7 +1958,7 @@
       <section class="section">
         <article class="panel">
           <h3>My alerts</h3>
-          <p class="muted">Queue followed alerts from the current intelligence window, then process anything already due for Telegram delivery.</p>
+          <p class="muted">Queue stronger followed alerts from the current intelligence window, then process anything already due for Telegram delivery.</p>
           <div class="cta-row">
             <button class="button" type="button" data-action="refresh-followed-alerts">Refresh followed alerts</button>
             <button class="ghost-button" type="button" data-action="dispatch-followed-alerts">Process due Telegram alerts</button>

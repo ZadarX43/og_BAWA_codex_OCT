@@ -1859,14 +1859,70 @@ function getFollowedFixtureMatches(accountState, fixtures) {
     .filter(Boolean);
 }
 
+function buildFollowMatchProfile(entry) {
+  const reasons = Array.isArray(entry?.reasons) ? entry.reasons : [];
+  const reasonSet = new Set(reasons);
+  const publishClass = String(entry?.fixture?.publish_class || entry?.fixture?.fixture_class || "MONITOR").toUpperCase();
+  const hasFixture = reasonSet.has("followed fixture");
+  const hasTeam = reasonSet.has("followed team");
+  const hasLeague = reasonSet.has("followed league");
+  const hasMarket = reasonSet.has("followed market");
+
+  let score = 0;
+  if (hasFixture) score += 100;
+  if (hasTeam) score += 80;
+  if (hasLeague) score += 35;
+  if (hasMarket) score += 10;
+
+  if (publishClass === "DEPLOY") score += 30;
+  else if (publishClass === "OBSERVE") score += 15;
+  else if (publishClass === "CONTEXT") score += 8;
+  else if (publishClass === "MONITOR") score += 4;
+
+  let telegramEligible = false;
+  let autoGate = "website_only";
+  if (hasFixture || hasTeam) {
+    telegramEligible = true;
+    autoGate = "direct_follow";
+  } else if (publishClass === "DEPLOY" && hasLeague && hasMarket) {
+    telegramEligible = true;
+    autoGate = "league_market_deploy";
+  }
+
+  const relevanceTier =
+    score >= 120 ? "critical" : score >= 80 ? "high" : score >= 45 ? "normal" : "low";
+
+  return {
+    reasons,
+    score,
+    relevance_tier: relevanceTier,
+    telegram_eligible: telegramEligible,
+    auto_gate: autoGate,
+    has_fixture: hasFixture,
+    has_team: hasTeam,
+    has_league: hasLeague,
+    has_market: hasMarket,
+    publish_class: publishClass,
+  };
+}
+
 function shouldQueueTelegramAlert(accountState, entry) {
   const prefs = accountState?.notification_preferences || null;
   if (!prefs || !prefs.telegram_enabled || prefs.website_only_mode) {
     return false;
   }
-  const publishClass = String(entry?.fixture?.publish_class || entry?.fixture?.fixture_class || "").toUpperCase();
+  const fixture = entry?.fixture || {};
+  const publishClass = String(fixture.publish_class || fixture.fixture_class || "").toUpperCase();
+  const profile = buildFollowMatchProfile(entry);
+  if (!profile.telegram_eligible) {
+    return false;
+  }
   if (publishClass === "DEPLOY") {
-    return Boolean(prefs.elite_alerts_enabled || prefs.standard_alerts_enabled);
+    const confidenceTier = String(fixture.confidence_tier || fixture.premium_tier || "").toUpperCase();
+    if (confidenceTier === "ELITE") {
+      return Boolean(prefs.elite_alerts_enabled);
+    }
+    return Boolean(prefs.standard_alerts_enabled);
   }
   if (publishClass === "OBSERVE" || publishClass === "CONTEXT" || publishClass === "MONITOR") {
     return Boolean(prefs.allow_non_signal_intelligence);
@@ -1890,6 +1946,7 @@ function computeScheduledFor(accountState, fixture) {
 function buildNotificationAlertRecord(accountState, entry) {
   const userId = String(accountState?.user?.id || "").trim();
   const fixture = entry.fixture;
+  const profile = buildFollowMatchProfile(entry);
   const publishClass = String(fixture?.publish_class || fixture?.fixture_class || "MONITOR").toUpperCase();
   const marketFamily = marketFamilyLabel(fixture?.signal_summary?.market_family);
   const kickoffTime = String(fixture?.kickoff_time || "").trim();
@@ -1919,9 +1976,15 @@ function buildNotificationAlertRecord(accountState, entry) {
     payload_json: JSON.stringify({
       fixture,
       reasons: entry.reasons || [],
+      relevance_score: profile.score,
+      relevance_tier: profile.relevance_tier,
+      auto_gate: profile.auto_gate,
+      telegram_eligible: profile.telegram_eligible,
     }),
     dedupe_key: dedupeKey,
-    notification_priority: String(fixture?.follow_relevance?.notification_priority || "normal"),
+    notification_priority: String(
+      fixture?.follow_relevance?.notification_priority || profile.relevance_tier || "normal"
+    ),
     scheduled_for: computeScheduledFor(accountState, fixture),
     status: "queued",
     created_at: timestamp,

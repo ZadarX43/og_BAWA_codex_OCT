@@ -6,6 +6,9 @@ workers_dev = true
 [observability]
 enabled = true
 
+[triggers]
+crons = ["*/15 * * * *"]
+
 [vars]
 SITE_URL = "https://example.com"
 PREMIUM_DATA_SOURCE = "https://example.com/public/data/premium_predictions.json"
