@@ -1,6 +1,7 @@
 const isoNow = () => new Date().toISOString();
 const normalizeEmail = (value) => String(value || "").trim().toLowerCase();
 const toJson = (value) => JSON.stringify(value ?? null);
+const toIntFlag = (value, fallback = 0) => (value ? 1 : fallback ? 1 : 0);
 const fromJson = (value, fallback) => {
   if (!value) {
     return fallback;
@@ -13,6 +14,63 @@ const fromJson = (value, fallback) => {
 };
 
 const buildId = (prefix) => `${prefix}_${crypto.randomUUID()}`;
+const normalizeStringList = (value, limit = 24) => {
+  const input = Array.isArray(value)
+    ? value
+    : String(value || "")
+        .split(",")
+        .map((item) => item.trim());
+  return Array.from(
+    new Set(
+      input
+        .map((item) => String(item || "").trim())
+        .filter(Boolean)
+        .slice(0, limit)
+    )
+  );
+};
+const normalizeQuietHours = (value) => {
+  if (!value || typeof value !== "object") {
+    return null;
+  }
+  const startHour = Math.max(0, Math.min(23, Number(value.start_hour ?? value.startHour)));
+  const endHour = Math.max(0, Math.min(23, Number(value.end_hour ?? value.endHour)));
+  if (!Number.isFinite(startHour) || !Number.isFinite(endHour)) {
+    return null;
+  }
+  return { start_hour: startHour, end_hour: endHour };
+};
+const buildDefaultNotificationPreferences = (userId, existing = {}) => {
+  const now = isoNow();
+  return {
+    id: existing.id || buildId("pref"),
+    user_id: userId,
+    email_enabled: existing.email_enabled ?? 1,
+    telegram_enabled: existing.telegram_enabled ?? 0,
+    elite_alerts_enabled: existing.elite_alerts_enabled ?? 1,
+    standard_alerts_enabled: existing.standard_alerts_enabled ?? 1,
+    acca_alerts_enabled: existing.acca_alerts_enabled ?? 0,
+    correct_score_alerts_enabled: existing.correct_score_alerts_enabled ?? 0,
+    injury_alerts_enabled: existing.injury_alerts_enabled ?? 1,
+    weather_alerts_enabled: existing.weather_alerts_enabled ?? 1,
+    market_movement_alerts_enabled: existing.market_movement_alerts_enabled ?? 1,
+    volatility_alerts_enabled: existing.volatility_alerts_enabled ?? 1,
+    team_news_alerts_enabled: existing.team_news_alerts_enabled ?? 1,
+    daily_digest_enabled: existing.daily_digest_enabled ?? 1,
+    results_digest_enabled: existing.results_digest_enabled ?? 1,
+    weekend_slate_digest_enabled: existing.weekend_slate_digest_enabled ?? 1,
+    website_only_mode: existing.website_only_mode ?? 0,
+    allow_non_signal_intelligence: existing.allow_non_signal_intelligence ?? 1,
+    alert_frequency_mode: existing.alert_frequency_mode || "mixed",
+    pre_match_window_minutes: existing.pre_match_window_minutes ?? 90,
+    favourite_markets_json: toJson(fromJson(existing.favourite_markets_json, [])),
+    favourite_leagues_json: toJson(fromJson(existing.favourite_leagues_json, [])),
+    favourite_teams_json: toJson(fromJson(existing.favourite_teams_json, [])),
+    followed_fixtures_json: toJson(fromJson(existing.followed_fixtures_json, [])),
+    quiet_hours_json: toJson(fromJson(existing.quiet_hours_json, null)),
+    updated_at: existing.updated_at || now,
+  };
+};
 
 const callMaybeMock = async (db, op, args, sqlRunner) => {
   if (db && typeof db.__ogCall === "function") {
@@ -244,33 +302,60 @@ export async function ensureNotificationPreferences(db, userId) {
   if (!db || !userId) {
     return null;
   }
-  const now = isoNow();
+  const defaults = buildDefaultNotificationPreferences(userId);
   await callMaybeMock(
     db,
     "ensure_notification_preferences",
-    {
-      id: buildId("pref"),
-      user_id: userId,
-      email_enabled: 1,
-      telegram_enabled: 0,
-      elite_alerts_enabled: 1,
-      acca_alerts_enabled: 0,
-      results_digest_enabled: 1,
-      favourite_markets_json: toJson([]),
-      favourite_leagues_json: toJson([]),
-      updated_at: now,
-    },
+    defaults,
     () =>
       run(
         db,
         `-- og:ensure_notification_preferences
         INSERT INTO notification_preferences (
-          id, user_id, email_enabled, telegram_enabled, elite_alerts_enabled, acca_alerts_enabled, results_digest_enabled,
-          favourite_markets_json, favourite_leagues_json, updated_at
+          id, user_id, email_enabled, telegram_enabled, elite_alerts_enabled, standard_alerts_enabled,
+          acca_alerts_enabled, correct_score_alerts_enabled, injury_alerts_enabled, weather_alerts_enabled,
+          market_movement_alerts_enabled, volatility_alerts_enabled, team_news_alerts_enabled, daily_digest_enabled,
+          results_digest_enabled, weekend_slate_digest_enabled, website_only_mode, allow_non_signal_intelligence,
+          alert_frequency_mode, pre_match_window_minutes, favourite_markets_json, favourite_leagues_json,
+          favourite_teams_json, followed_fixtures_json, quiet_hours_json, updated_at
         )
-        VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10)
+        VALUES (
+          ?1, ?2, ?3, ?4, ?5, ?6,
+          ?7, ?8, ?9, ?10,
+          ?11, ?12, ?13, ?14,
+          ?15, ?16, ?17, ?18,
+          ?19, ?20, ?21, ?22,
+          ?23, ?24, ?25, ?26
+        )
         ON CONFLICT(user_id) DO NOTHING`,
-        [buildId("pref"), userId, 1, 0, 1, 0, 1, toJson([]), toJson([]), now]
+        [
+          defaults.id,
+          defaults.user_id,
+          defaults.email_enabled,
+          defaults.telegram_enabled,
+          defaults.elite_alerts_enabled,
+          defaults.standard_alerts_enabled,
+          defaults.acca_alerts_enabled,
+          defaults.correct_score_alerts_enabled,
+          defaults.injury_alerts_enabled,
+          defaults.weather_alerts_enabled,
+          defaults.market_movement_alerts_enabled,
+          defaults.volatility_alerts_enabled,
+          defaults.team_news_alerts_enabled,
+          defaults.daily_digest_enabled,
+          defaults.results_digest_enabled,
+          defaults.weekend_slate_digest_enabled,
+          defaults.website_only_mode,
+          defaults.allow_non_signal_intelligence,
+          defaults.alert_frequency_mode,
+          defaults.pre_match_window_minutes,
+          defaults.favourite_markets_json,
+          defaults.favourite_leagues_json,
+          defaults.favourite_teams_json,
+          defaults.followed_fixtures_json,
+          defaults.quiet_hours_json,
+          defaults.updated_at,
+        ]
       )
   );
 }
@@ -383,8 +468,13 @@ export async function getAccountStateByEmail(db, email) {
       first(
         db,
         `-- og:get_notification_preferences
-        SELECT id, user_id, email_enabled, telegram_enabled, elite_alerts_enabled, acca_alerts_enabled, results_digest_enabled,
-               favourite_markets_json, favourite_leagues_json, updated_at
+        SELECT id, user_id, email_enabled, telegram_enabled, elite_alerts_enabled, standard_alerts_enabled,
+               acca_alerts_enabled, correct_score_alerts_enabled, injury_alerts_enabled, weather_alerts_enabled,
+               market_movement_alerts_enabled, volatility_alerts_enabled, team_news_alerts_enabled,
+               daily_digest_enabled, results_digest_enabled, weekend_slate_digest_enabled, website_only_mode,
+               allow_non_signal_intelligence, alert_frequency_mode, pre_match_window_minutes,
+               favourite_markets_json, favourite_leagues_json, favourite_teams_json, followed_fixtures_json,
+               quiet_hours_json, updated_at
         FROM notification_preferences
         WHERE user_id = ?1
         LIMIT 1`,
@@ -404,11 +494,163 @@ export async function getAccountStateByEmail(db, email) {
     notification_preferences: notificationPreferences
       ? {
           ...notificationPreferences,
+          standard_alerts_enabled: notificationPreferences.standard_alerts_enabled ?? 1,
+          correct_score_alerts_enabled: notificationPreferences.correct_score_alerts_enabled ?? 0,
+          injury_alerts_enabled: notificationPreferences.injury_alerts_enabled ?? 1,
+          weather_alerts_enabled: notificationPreferences.weather_alerts_enabled ?? 1,
+          market_movement_alerts_enabled: notificationPreferences.market_movement_alerts_enabled ?? 1,
+          volatility_alerts_enabled: notificationPreferences.volatility_alerts_enabled ?? 1,
+          team_news_alerts_enabled: notificationPreferences.team_news_alerts_enabled ?? 1,
+          daily_digest_enabled: notificationPreferences.daily_digest_enabled ?? 1,
+          weekend_slate_digest_enabled: notificationPreferences.weekend_slate_digest_enabled ?? 1,
+          website_only_mode: notificationPreferences.website_only_mode ?? 0,
+          allow_non_signal_intelligence: notificationPreferences.allow_non_signal_intelligence ?? 1,
+          alert_frequency_mode: notificationPreferences.alert_frequency_mode || "mixed",
+          pre_match_window_minutes: notificationPreferences.pre_match_window_minutes ?? 90,
           favourite_markets: fromJson(notificationPreferences.favourite_markets_json, []),
           favourite_leagues: fromJson(notificationPreferences.favourite_leagues_json, []),
+          favourite_teams: fromJson(notificationPreferences.favourite_teams_json, []),
+          followed_fixtures: fromJson(notificationPreferences.followed_fixtures_json, []),
+          quiet_hours: fromJson(notificationPreferences.quiet_hours_json, null),
         }
       : null,
   };
+}
+
+export async function updateNotificationPreferences(db, userId, input = {}) {
+  if (!db || !userId) {
+    return null;
+  }
+
+  const existing = await callMaybeMock(
+    db,
+    "get_notification_preferences",
+    { user_id: userId },
+    () =>
+      first(
+        db,
+        `-- og:get_notification_preferences
+        SELECT id, user_id, email_enabled, telegram_enabled, elite_alerts_enabled, standard_alerts_enabled,
+               acca_alerts_enabled, correct_score_alerts_enabled, injury_alerts_enabled, weather_alerts_enabled,
+               market_movement_alerts_enabled, volatility_alerts_enabled, team_news_alerts_enabled,
+               daily_digest_enabled, results_digest_enabled, weekend_slate_digest_enabled, website_only_mode,
+               allow_non_signal_intelligence, alert_frequency_mode, pre_match_window_minutes,
+               favourite_markets_json, favourite_leagues_json, favourite_teams_json, followed_fixtures_json,
+               quiet_hours_json, updated_at
+        FROM notification_preferences
+        WHERE user_id = ?1
+        LIMIT 1`,
+        [userId]
+      )
+  );
+
+  const base = buildDefaultNotificationPreferences(userId, existing || {});
+  const frequencyMode = ["immediate", "digest_only", "mixed"].includes(String(input.alert_frequency_mode || ""))
+    ? String(input.alert_frequency_mode)
+    : base.alert_frequency_mode;
+  const preMatchWindow = Math.max(0, Math.min(1440, Number(input.pre_match_window_minutes ?? base.pre_match_window_minutes)));
+  const quietHours = normalizeQuietHours(input.quiet_hours ?? fromJson(base.quiet_hours_json, null));
+  const payload = {
+    ...base,
+    email_enabled: toIntFlag(input.email_enabled ?? base.email_enabled),
+    telegram_enabled: toIntFlag(input.telegram_enabled ?? base.telegram_enabled),
+    elite_alerts_enabled: toIntFlag(input.elite_alerts_enabled ?? base.elite_alerts_enabled),
+    standard_alerts_enabled: toIntFlag(input.standard_alerts_enabled ?? base.standard_alerts_enabled),
+    acca_alerts_enabled: toIntFlag(input.acca_alerts_enabled ?? base.acca_alerts_enabled),
+    correct_score_alerts_enabled: toIntFlag(input.correct_score_alerts_enabled ?? base.correct_score_alerts_enabled),
+    injury_alerts_enabled: toIntFlag(input.injury_alerts_enabled ?? base.injury_alerts_enabled),
+    weather_alerts_enabled: toIntFlag(input.weather_alerts_enabled ?? base.weather_alerts_enabled),
+    market_movement_alerts_enabled: toIntFlag(
+      input.market_movement_alerts_enabled ?? base.market_movement_alerts_enabled
+    ),
+    volatility_alerts_enabled: toIntFlag(input.volatility_alerts_enabled ?? base.volatility_alerts_enabled),
+    team_news_alerts_enabled: toIntFlag(input.team_news_alerts_enabled ?? base.team_news_alerts_enabled),
+    daily_digest_enabled: toIntFlag(input.daily_digest_enabled ?? base.daily_digest_enabled),
+    results_digest_enabled: toIntFlag(input.results_digest_enabled ?? base.results_digest_enabled),
+    weekend_slate_digest_enabled: toIntFlag(
+      input.weekend_slate_digest_enabled ?? base.weekend_slate_digest_enabled
+    ),
+    website_only_mode: toIntFlag(input.website_only_mode ?? base.website_only_mode),
+    allow_non_signal_intelligence: toIntFlag(
+      input.allow_non_signal_intelligence ?? base.allow_non_signal_intelligence
+    ),
+    alert_frequency_mode: frequencyMode,
+    pre_match_window_minutes: Number.isFinite(preMatchWindow) ? preMatchWindow : base.pre_match_window_minutes,
+    favourite_markets_json: toJson(normalizeStringList(input.favourite_markets ?? fromJson(base.favourite_markets_json, []))),
+    favourite_leagues_json: toJson(normalizeStringList(input.favourite_leagues ?? fromJson(base.favourite_leagues_json, []))),
+    favourite_teams_json: toJson(normalizeStringList(input.favourite_teams ?? fromJson(base.favourite_teams_json, []))),
+    followed_fixtures_json: toJson(
+      normalizeStringList(input.followed_fixtures ?? fromJson(base.followed_fixtures_json, []), 40)
+    ),
+    quiet_hours_json: toJson(quietHours),
+    updated_at: isoNow(),
+  };
+
+  await callMaybeMock(
+    db,
+    "update_notification_preferences",
+    payload,
+    () =>
+      run(
+        db,
+        `-- og:update_notification_preferences
+        UPDATE notification_preferences
+        SET email_enabled = ?2,
+            telegram_enabled = ?3,
+            elite_alerts_enabled = ?4,
+            standard_alerts_enabled = ?5,
+            acca_alerts_enabled = ?6,
+            correct_score_alerts_enabled = ?7,
+            injury_alerts_enabled = ?8,
+            weather_alerts_enabled = ?9,
+            market_movement_alerts_enabled = ?10,
+            volatility_alerts_enabled = ?11,
+            team_news_alerts_enabled = ?12,
+            daily_digest_enabled = ?13,
+            results_digest_enabled = ?14,
+            weekend_slate_digest_enabled = ?15,
+            website_only_mode = ?16,
+            allow_non_signal_intelligence = ?17,
+            alert_frequency_mode = ?18,
+            pre_match_window_minutes = ?19,
+            favourite_markets_json = ?20,
+            favourite_leagues_json = ?21,
+            favourite_teams_json = ?22,
+            followed_fixtures_json = ?23,
+            quiet_hours_json = ?24,
+            updated_at = ?25
+        WHERE user_id = ?1`,
+        [
+          payload.user_id,
+          payload.email_enabled,
+          payload.telegram_enabled,
+          payload.elite_alerts_enabled,
+          payload.standard_alerts_enabled,
+          payload.acca_alerts_enabled,
+          payload.correct_score_alerts_enabled,
+          payload.injury_alerts_enabled,
+          payload.weather_alerts_enabled,
+          payload.market_movement_alerts_enabled,
+          payload.volatility_alerts_enabled,
+          payload.team_news_alerts_enabled,
+          payload.daily_digest_enabled,
+          payload.results_digest_enabled,
+          payload.weekend_slate_digest_enabled,
+          payload.website_only_mode,
+          payload.allow_non_signal_intelligence,
+          payload.alert_frequency_mode,
+          payload.pre_match_window_minutes,
+          payload.favourite_markets_json,
+          payload.favourite_leagues_json,
+          payload.favourite_teams_json,
+          payload.followed_fixtures_json,
+          payload.quiet_hours_json,
+          payload.updated_at,
+        ]
+      )
+  );
+
+  return payload;
 }
 
 export async function completeTelegramLink(db, payload) {

@@ -11,6 +11,7 @@ import {
   getAccountStateByEmail,
   mirrorSubscriptionFromRecord,
   recordAuthEvent,
+  updateNotificationPreferences,
 } from "./account_store.js";
 import { issuePremiumToken, verifyPremiumAccess } from "./auth.js";
 
@@ -1293,6 +1294,86 @@ async function handleAccountState(request, env) {
   });
 }
 
+async function handleAccountPreferencesUpdate(request, env) {
+  const sessionAccess = await verifySessionAccess(request, env);
+  if (!sessionAccess.ok) {
+    return json(
+      {
+        ok: false,
+        authenticated: false,
+        entitled: false,
+        status: sessionAccess.status || "unauthenticated",
+        message: sessionAccess.message || "Sign in to update account preferences.",
+      },
+      401
+    );
+  }
+
+  const accountDb = getAccountDb(env);
+  if (!accountDb) {
+    return configError("ACCOUNT_DB D1 binding is required for account preferences.", ["ACCOUNT_DB"]);
+  }
+
+  let payload;
+  try {
+    payload = await request.json();
+  } catch (error) {
+    return requestError("Account preferences body must be valid JSON.", error.message);
+  }
+
+  const accountState =
+    (await getAccountStateByEmail(accountDb, sessionAccess.email)) ||
+    (await mirrorSubscriptionFromRecord(
+      accountDb,
+      {
+        customer_id: sessionAccess.customer_id,
+        subscription_id: sessionAccess.subscription_id,
+        status: sessionAccess.subscription_status,
+        email: sessionAccess.email,
+      },
+      {
+        email: sessionAccess.email,
+        emailVerifiedAt: new Date().toISOString(),
+      }
+    ));
+
+  if (!accountState?.user?.id) {
+    return json(
+      {
+        ok: false,
+        status: "account_state_missing",
+        message: "Unable to update preferences for this account yet.",
+      },
+      500
+    );
+  }
+
+  await updateNotificationPreferences(accountDb, accountState.user.id, payload || {});
+  const refreshed = await getAccountStateByEmail(accountDb, sessionAccess.email);
+
+  try {
+    await recordAuthEvent(accountDb, {
+      user_id: accountState.user.id,
+      email_normalized: sessionAccess.email,
+      event_type: "notification_preferences_updated",
+      ip_hint: getRequestIp(request) || null,
+      user_agent_hint: getUserAgentHint(request),
+      metadata: {
+        alert_frequency_mode: refreshed?.notification_preferences?.alert_frequency_mode || null,
+      },
+    });
+  } catch {
+    // Best-effort audit trail only.
+  }
+
+  return json({
+    ok: true,
+    status: "notification_preferences_updated",
+    message: "Intelligence preferences saved.",
+    account: refreshed,
+  });
+}
+
 async function handleTelegramLinkStart(request, env) {
   const sessionAccess = await verifySessionAccess(request, env);
   if (!sessionAccess.ok) {
@@ -1983,6 +2064,7 @@ async function handleRequest(request, env) {
         "GET /api/auth/session",
         "POST /api/auth/logout",
         "GET /api/account/state",
+        "POST /api/account/preferences",
         "POST /api/account/telegram/link/start",
         "POST /api/account/telegram/link/complete",
         "POST /api/account/telegram/test-alert",
@@ -2049,6 +2131,15 @@ async function handleRequest(request, env) {
       return withCors(response, request, env);
     }
     response = await handleAccountState(request, env);
+    return withCors(response, request, env);
+  }
+
+  if (pathname === "/api/account/preferences") {
+    if (request.method !== "POST") {
+      response = methodNotAllowed("POST");
+      return withCors(response, request, env);
+    }
+    response = await handleAccountPreferencesUpdate(request, env);
     return withCors(response, request, env);
   }
 

@@ -152,6 +152,11 @@ class MockD1 {
         }
         return { success: true };
       }
+      case "update_notification_preferences":
+        this.notificationPreferences = this.notificationPreferences.map((row) =>
+          row.user_id === args.user_id ? { ...row, ...args } : row
+        );
+        return { success: true };
       case "insert_auth_event":
         this.authEvents.push({ ...args });
         return { success: true };
@@ -862,6 +867,77 @@ const testTelegramTestAlertRoute = async (fetchHarness) => {
   assert.match(fetchHarness.sentTelegramMessages.at(-1)?.text || "", /test premium alert/i);
 };
 
+const testAccountPreferencesUpdate = async (fetchHarness) => {
+  const env = createEnv();
+  await writeSubscriberRecord(
+    env,
+    buildSubscriberRecord({
+      email: "member@example.com",
+    })
+  );
+
+  const requestResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/auth/magic-link/request", "POST", {
+      email: "member@example.com",
+    }),
+    env
+  );
+  assert.equal(requestResponse.status, 200);
+  const emailBody = fetchHarness.sentEmails.at(-1);
+  const verifyMatch = String(emailBody?.html || "").match(/verify\?token=([^"&]+)/);
+  assert.ok(verifyMatch?.[1], "expected magic-link token in email body");
+  const token = decodeURIComponent(verifyMatch[1]);
+
+  const tokenResponse = await worker.fetch(
+    makeGetRequest(`http://localhost/api/auth/magic-link/verify?token=${encodeURIComponent(token)}`),
+    env
+  );
+  const sessionCookie = extractCookieValue(tokenResponse.headers.get("set-cookie"), "og_premium_session");
+  assert.ok(sessionCookie, "expected premium session cookie after verify");
+
+  const prefsResponse = await worker.fetch(
+    jsonRequest(
+      "http://localhost/api/account/preferences",
+      "POST",
+      {
+        telegram_enabled: true,
+        email_enabled: true,
+        elite_alerts_enabled: true,
+        standard_alerts_enabled: false,
+        acca_alerts_enabled: true,
+        correct_score_alerts_enabled: true,
+        injury_alerts_enabled: true,
+        weather_alerts_enabled: true,
+        market_movement_alerts_enabled: false,
+        volatility_alerts_enabled: true,
+        team_news_alerts_enabled: true,
+        daily_digest_enabled: true,
+        results_digest_enabled: true,
+        weekend_slate_digest_enabled: true,
+        website_only_mode: false,
+        allow_non_signal_intelligence: true,
+        alert_frequency_mode: "immediate",
+        pre_match_window_minutes: 120,
+        favourite_teams: "Arsenal, Porto",
+        favourite_leagues: "Premier League, Champions League",
+        favourite_markets: "BTTS, OU25",
+        followed_fixtures: "Arsenal v Chelsea, Porto v Benfica",
+      },
+      {
+        cookie: `og_premium_session=${sessionCookie}`,
+      }
+    ),
+    env
+  );
+  const prefsPayload = await prefsResponse.json();
+  assert.equal(prefsResponse.status, 200);
+  assert.equal(prefsPayload.status, "notification_preferences_updated");
+  assert.equal(prefsPayload.account.notification_preferences.alert_frequency_mode, "immediate");
+  assert.equal(prefsPayload.account.notification_preferences.standard_alerts_enabled, 0);
+  assert.deepEqual(prefsPayload.account.notification_preferences.favourite_teams, ["Arsenal", "Porto"]);
+  assert.deepEqual(prefsPayload.account.notification_preferences.favourite_markets, ["BTTS", "OU25"]);
+};
+
 const main = async () => {
   const cacheHarness = installMockCache();
   const fetchHarness = installMockFetch();
@@ -880,6 +956,7 @@ const main = async () => {
     await testAccountStateAndTelegramLinkFlow(fetchHarness);
     await testTelegramWebhookCompletesLinkFlow(fetchHarness);
     await testTelegramTestAlertRoute(fetchHarness);
+    await testAccountPreferencesUpdate(fetchHarness);
     await testLogoutSkeleton();
     console.log("Worker local harness passed.");
     console.log("- success route with valid token: passed");
@@ -893,6 +970,7 @@ const main = async () => {
     console.log("- D1-backed account state + Telegram link flow: passed");
     console.log("- Telegram bot webhook completion flow: passed");
     console.log("- Telegram test alert route: passed");
+    console.log("- Account preferences update route: passed");
     console.log("- logout skeleton: passed");
   } finally {
     fetchHarness.restore();

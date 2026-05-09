@@ -29,6 +29,7 @@
       checkoutMessage: "",
       accountMessage: "",
       authMessage: "",
+      preferencesMessage: "",
       telegramMessage: "",
       sessionAuthenticated: false,
       sessionEntitled: false,
@@ -182,6 +183,8 @@
     }
     return "Linked account";
   };
+
+  const joinPreferenceList = (value) => (Array.isArray(value) ? value.join(", ") : "");
 
   const formatProbability = (value) => {
     const numeric = Number(value);
@@ -1294,6 +1297,7 @@
         ${renderNotice(checkoutNotice, checkoutState === "success" ? "success" : "warning")}
         ${renderNotice(state.runtime.authMessage, state.runtime.authMessage ? "warning" : "default")}
         ${renderNotice(state.runtime.telegramMessage, state.runtime.telegramMessage ? "success" : "default")}
+        ${renderNotice(state.runtime.preferencesMessage, state.runtime.preferencesMessage ? "success" : "default")}
         ${debugMode ? renderNotice(state.runtime.accountMessage, state.runtime.accountMessage ? "warning" : "default") : ""}
       </section>
 
@@ -1400,6 +1404,75 @@
             </section>
             <section class="section">
               <div class="notice">Subscription management is coming soon.</div>
+            </section>
+            <section class="section">
+              <article class="panel">
+                <h3>Intelligence preferences</h3>
+                <p class="muted">
+                  Choose what kind of intelligence you want on the website and in Telegram. This is the first layer of personalised delivery.
+                </p>
+                <form id="preferences-form" class="stack-form">
+                  <div class="card-grid">
+                    <article class="panel">
+                      <h4>Channels</h4>
+                      <label class="checkbox-row"><input type="checkbox" name="telegram_enabled" ${notificationPreferences?.telegram_enabled ? "checked" : ""} /> Telegram alerts</label>
+                      <label class="checkbox-row"><input type="checkbox" name="email_enabled" ${notificationPreferences?.email_enabled ? "checked" : ""} /> Email digests</label>
+                      <label class="checkbox-row"><input type="checkbox" name="website_only_mode" ${notificationPreferences?.website_only_mode ? "checked" : ""} /> Website-first only</label>
+                    </article>
+                    <article class="panel">
+                      <h4>Signal alerts</h4>
+                      <label class="checkbox-row"><input type="checkbox" name="elite_alerts_enabled" ${notificationPreferences?.elite_alerts_enabled ? "checked" : ""} /> Elite deployments</label>
+                      <label class="checkbox-row"><input type="checkbox" name="standard_alerts_enabled" ${notificationPreferences?.standard_alerts_enabled ? "checked" : ""} /> Standard deployments</label>
+                      <label class="checkbox-row"><input type="checkbox" name="acca_alerts_enabled" ${notificationPreferences?.acca_alerts_enabled ? "checked" : ""} /> Acca drops</label>
+                      <label class="checkbox-row"><input type="checkbox" name="correct_score_alerts_enabled" ${notificationPreferences?.correct_score_alerts_enabled ? "checked" : ""} /> Correct score support</label>
+                    </article>
+                    <article class="panel">
+                      <h4>Intelligence alerts</h4>
+                      <label class="checkbox-row"><input type="checkbox" name="injury_alerts_enabled" ${notificationPreferences?.injury_alerts_enabled ? "checked" : ""} /> Injury news</label>
+                      <label class="checkbox-row"><input type="checkbox" name="team_news_alerts_enabled" ${notificationPreferences?.team_news_alerts_enabled ? "checked" : ""} /> Major team news</label>
+                      <label class="checkbox-row"><input type="checkbox" name="weather_alerts_enabled" ${notificationPreferences?.weather_alerts_enabled ? "checked" : ""} /> Weather alerts</label>
+                      <label class="checkbox-row"><input type="checkbox" name="market_movement_alerts_enabled" ${notificationPreferences?.market_movement_alerts_enabled ? "checked" : ""} /> Market movement</label>
+                      <label class="checkbox-row"><input type="checkbox" name="volatility_alerts_enabled" ${notificationPreferences?.volatility_alerts_enabled ? "checked" : ""} /> Volatility warnings</label>
+                      <label class="checkbox-row"><input type="checkbox" name="allow_non_signal_intelligence" ${notificationPreferences?.allow_non_signal_intelligence ? "checked" : ""} /> Non-signal intelligence updates</label>
+                    </article>
+                    <article class="panel">
+                      <h4>Digests and timing</h4>
+                      <label class="checkbox-row"><input type="checkbox" name="daily_digest_enabled" ${notificationPreferences?.daily_digest_enabled ? "checked" : ""} /> Daily digest</label>
+                      <label class="checkbox-row"><input type="checkbox" name="results_digest_enabled" ${notificationPreferences?.results_digest_enabled ? "checked" : ""} /> Results digest</label>
+                      <label class="checkbox-row"><input type="checkbox" name="weekend_slate_digest_enabled" ${notificationPreferences?.weekend_slate_digest_enabled ? "checked" : ""} /> Weekend slate digest</label>
+                      <label class="field-label" for="alert-frequency-mode">Alert frequency</label>
+                      <select id="alert-frequency-mode" name="alert_frequency_mode" class="text-input">
+                        <option value="mixed" ${notificationPreferences?.alert_frequency_mode === "mixed" ? "selected" : ""}>Mixed</option>
+                        <option value="immediate" ${notificationPreferences?.alert_frequency_mode === "immediate" ? "selected" : ""}>Immediate</option>
+                        <option value="digest_only" ${notificationPreferences?.alert_frequency_mode === "digest_only" ? "selected" : ""}>Digest only</option>
+                      </select>
+                      <label class="field-label" for="pre-match-window-minutes">Pre-match window (minutes)</label>
+                      <input id="pre-match-window-minutes" name="pre_match_window_minutes" class="text-input" type="number" min="0" max="1440" value="${escapeHtml(notificationPreferences?.pre_match_window_minutes ?? 90)}" />
+                    </article>
+                  </div>
+                  <div class="card-grid">
+                    <article class="panel">
+                      <h4>Followed teams</h4>
+                      <input name="favourite_teams" class="text-input" type="text" placeholder="Arsenal, Liverpool, Porto" value="${escapeHtml(joinPreferenceList(notificationPreferences?.favourite_teams))}" />
+                    </article>
+                    <article class="panel">
+                      <h4>Followed leagues</h4>
+                      <input name="favourite_leagues" class="text-input" type="text" placeholder="Premier League, UCL, MLS" value="${escapeHtml(joinPreferenceList(notificationPreferences?.favourite_leagues))}" />
+                    </article>
+                    <article class="panel">
+                      <h4>Followed markets</h4>
+                      <input name="favourite_markets" class="text-input" type="text" placeholder="BTTS, OU25, FTR" value="${escapeHtml(joinPreferenceList(notificationPreferences?.favourite_markets))}" />
+                    </article>
+                    <article class="panel">
+                      <h4>Followed fixtures</h4>
+                      <input name="followed_fixtures" class="text-input" type="text" placeholder="Arsenal v Chelsea, El Clasico" value="${escapeHtml(joinPreferenceList(notificationPreferences?.followed_fixtures))}" />
+                    </article>
+                  </div>
+                  <div class="cta-row">
+                    <button class="button" type="submit">Save intelligence preferences</button>
+                  </div>
+                </form>
+              </article>
             </section>
           `
       }
@@ -1654,6 +1727,63 @@
     render();
   };
 
+  const savePreferences = async (event) => {
+    event.preventDefault();
+    if (!workerConfigured() || !state.runtime.sessionAuthenticated) {
+      state.runtime.preferencesMessage = "Verify your email before saving intelligence preferences.";
+      render();
+      return;
+    }
+
+    const formData = new FormData(event.target);
+    const payload = {
+      telegram_enabled: formData.get("telegram_enabled") === "on",
+      email_enabled: formData.get("email_enabled") === "on",
+      website_only_mode: formData.get("website_only_mode") === "on",
+      elite_alerts_enabled: formData.get("elite_alerts_enabled") === "on",
+      standard_alerts_enabled: formData.get("standard_alerts_enabled") === "on",
+      acca_alerts_enabled: formData.get("acca_alerts_enabled") === "on",
+      correct_score_alerts_enabled: formData.get("correct_score_alerts_enabled") === "on",
+      injury_alerts_enabled: formData.get("injury_alerts_enabled") === "on",
+      team_news_alerts_enabled: formData.get("team_news_alerts_enabled") === "on",
+      weather_alerts_enabled: formData.get("weather_alerts_enabled") === "on",
+      market_movement_alerts_enabled: formData.get("market_movement_alerts_enabled") === "on",
+      volatility_alerts_enabled: formData.get("volatility_alerts_enabled") === "on",
+      allow_non_signal_intelligence: formData.get("allow_non_signal_intelligence") === "on",
+      daily_digest_enabled: formData.get("daily_digest_enabled") === "on",
+      results_digest_enabled: formData.get("results_digest_enabled") === "on",
+      weekend_slate_digest_enabled: formData.get("weekend_slate_digest_enabled") === "on",
+      alert_frequency_mode: String(formData.get("alert_frequency_mode") || "mixed"),
+      pre_match_window_minutes: Number(formData.get("pre_match_window_minutes") || 90),
+      favourite_teams: String(formData.get("favourite_teams") || ""),
+      favourite_leagues: String(formData.get("favourite_leagues") || ""),
+      favourite_markets: String(formData.get("favourite_markets") || ""),
+      followed_fixtures: String(formData.get("followed_fixtures") || ""),
+    };
+
+    state.runtime.preferencesMessage = "Saving intelligence preferences…";
+    render();
+
+    try {
+      const { response, payload: responsePayload } = await fetchWorkerJson("/api/account/preferences", {
+        method: "POST",
+        withToken: true,
+        body: payload,
+      });
+
+      if (!response.ok || !responsePayload?.ok) {
+        throw new Error(responsePayload?.message || "Unable to save intelligence preferences.");
+      }
+
+      state.runtime.accountState = responsePayload.account || state.runtime.accountState;
+      state.runtime.preferencesMessage = responsePayload.message || "Intelligence preferences saved.";
+    } catch (error) {
+      state.runtime.preferencesMessage = error.message || "Unable to save intelligence preferences.";
+    }
+
+    render();
+  };
+
   const sendTelegramTestAlert = async (event) => {
     event.preventDefault();
     if (!workerConfigured() || !state.runtime.sessionAuthenticated) {
@@ -1727,6 +1857,7 @@
     state.runtime.telegramBotUsername = "";
     state.runtime.telegramDeepLinkUrl = "";
     state.runtime.telegramMessage = "";
+    state.runtime.preferencesMessage = "";
     state.securePremiumPredictions = [];
     state.runtime.premiumFetchError = "";
     state.runtime.authMessage = "You have been signed out from this device.";
@@ -1779,6 +1910,11 @@
 
     if (event.target.id === "magic-link-form") {
       await requestMagicLink(event);
+      return;
+    }
+
+    if (event.target.id === "preferences-form") {
+      await savePreferences(event);
     }
   });
 

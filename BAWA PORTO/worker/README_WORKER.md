@@ -28,6 +28,7 @@ Current status:
 
 - `GET /health`
 - `GET /api/account/state`
+- `POST /api/account/preferences`
 - `POST /api/account/telegram/link/start`
 - `POST /api/account/telegram/link/complete`
 - `POST /api/account/telegram/test-alert`
@@ -230,6 +231,14 @@ Current response metadata:
 - includes D1-backed user/subscription/Telegram/preferences data when `ACCOUNT_DB` is configured
 - falls back to session-only metadata when D1 is not yet bound
 
+`POST /api/account/preferences`:
+
+- requires a verified premium session
+- requires `ACCOUNT_DB`
+- updates intelligence and notification preferences
+- updates followed teams, leagues, markets, and fixtures
+- returns refreshed account state for the account page
+
 `POST /api/account/telegram/link/start`:
 
 - requires a verified premium session
@@ -268,6 +277,7 @@ Current response metadata:
 Initial schema lives at:
 
 - `worker/migrations/0001_account_state.sql`
+- `worker/migrations/0002_notification_preferences_expansion.sql`
 
 Suggested setup once you create the D1 database in Cloudflare:
 
@@ -276,6 +286,10 @@ cd worker
 wrangler d1 create odds-genius-account-state
 wrangler d1 migrations apply ACCOUNT_DB
 ```
+
+Important:
+
+- apply migrations before deploying Worker code that reads the expanded notification preference fields
 
 Then add the returned `database_id` to:
 
