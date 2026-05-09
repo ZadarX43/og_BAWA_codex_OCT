@@ -35,6 +35,8 @@ The frontend reads:
 - `frontend/public/data/public_predictions.json`
 - `frontend/public/data/premium_predictions.json`
 - `frontend/public/data/publish_summary.json`
+- `frontend/public/data/fixture_intelligence_public.json`
+- `frontend/public/data/covered_fixture_universe.json`
 
 Current behavior:
 
@@ -110,7 +112,11 @@ This writes:
 - `frontend/public/data/public_predictions.json`
 - `frontend/public/data/premium_predictions.json`
 - `frontend/public/data/publish_summary.json`
+- `frontend/public/data/fixture_intelligence_public.json`
+- `frontend/public/data/covered_fixture_universe.json`
 - `reports/latest/PUBLISH_REPORT.md`
+- `reports/latest/FIXTURE_INTELLIGENCE_REPORT.md`
+- `reports/latest/COVERED_FIXTURE_UNIVERSE_REPORT.md`
 
 ## How To Validate Public Export
 
@@ -118,6 +124,8 @@ Run:
 
 ```bash
 python3 validate_public_export.py
+python3 validate_fixture_intelligence.py
+python3 validate_covered_fixture_universe.py
 ```
 
 This checks:
@@ -127,6 +135,8 @@ This checks:
 - suspicious paths or model references
 - NaN / Infinity
 - null critical IDs
+- fixture-intelligence schema and safe non-deploy language
+- covered-fixture universe counts, identity, and routed/non-routed status
 
 ## Frontend Static Smoke Check
 
