@@ -29,6 +29,7 @@ from publish_predictions import (
 
 OUTPUT_PATH = FRONTEND_DATA_DIR / "fixture_intelligence_public.json"
 REPORT_PATH = REPORTS_DIR / "FIXTURE_INTELLIGENCE_REPORT.md"
+COVERED_UNIVERSE_PATH = FRONTEND_DATA_DIR / "covered_fixture_universe.json"
 
 PUBLISH_CLASS_ORDER = {"DEPLOY": 0, "OBSERVE": 1, "CONTEXT": 2, "MONITOR": 3, "HIDDEN": 4}
 MARKET_PRIORITY = {"FTR": 0, "BTTS": 1, "OU25": 2, "CS": 3}
@@ -87,6 +88,13 @@ def parse_source_run_id(paths: list[Path]) -> str:
             if re.fullmatch(r"\d{4}-\d{2}-\d{2}", part):
                 return part
     return paths[0].parent.name if paths else "unknown"
+
+
+def load_json(path: Path) -> Any:
+    with path.open("r", encoding="utf-8") as handle:
+        import json
+
+        return json.load(handle)
 
 
 def expand_source_bundle(source_path: Path, counters: Counter[str]) -> list[Path]:
@@ -152,6 +160,23 @@ def parse_reason_codes(row: dict[str, str]) -> list[str]:
             if cleaned and cleaned not in tokens:
                 tokens.append(cleaned)
     return tokens
+
+
+def load_loss_report_index(path: Path) -> dict[str, dict[str, str]]:
+    if not path.exists():
+        return {}
+    return {str(row.get("league", "") or "").strip(): row for row in load_rows(path)}
+
+
+def load_loss_detail_index(path: Path) -> dict[str, list[dict[str, str]]]:
+    if not path.exists():
+        return {}
+    grouped: dict[str, list[dict[str, str]]] = defaultdict(list)
+    for row in load_rows(path):
+        fixture_key = str(row.get("fixture_key", "") or "").strip()
+        if fixture_key:
+            grouped[fixture_key].append(row)
+    return grouped
 
 
 def parse_boolish(value: Any) -> bool:
@@ -481,6 +506,107 @@ def notification_priority(publish_class: str, signal_strength: str, confidence_t
     return "none"
 
 
+def context_markets_label(markets: set[str]) -> str:
+    ordered = [market for market in ("FTR", "BTTS", "OU25") if market in markets]
+    if not ordered:
+        return "key markets"
+    if len(ordered) == 1:
+        return ordered[0]
+    if len(ordered) == 2:
+        return f"{ordered[0]} and {ordered[1]}"
+    return f"{ordered[0]}, {ordered[1]}, and {ordered[2]}"
+
+
+def classify_context_monitor_fixture(
+    universe_record: dict[str, Any],
+    loss_report_row: dict[str, str] | None,
+    loss_detail_rows: list[dict[str, str]],
+    generated_at: str,
+    counters: Counter[str],
+) -> dict[str, Any] | None:
+    if str(universe_record.get("routing_status", "") or "").strip() != "non_routed":
+        return None
+
+    severity = str((loss_report_row or {}).get("severity", "") or "").strip().upper()
+    notes = str((loss_report_row or {}).get("notes", "") or "").strip()
+    markets = {str(row.get("market", "") or "").strip().upper() for row in loss_detail_rows if str(row.get("market", "") or "").strip()}
+    market_label = context_markets_label(markets)
+
+    source_availability = dict(universe_record.get("source_availability", {}))
+    source_gaps = [
+        key
+        for key in ("goal_shape_base", "prematch_odds", "injuries", "lineups", "team_stats", "player_stats", "match_events")
+        if not source_availability.get(key)
+    ]
+    has_material_gap = severity == "CRITICAL" or len(source_gaps) >= 4 or "No ALLMARKETS rows emitted" in notes
+
+    publish_class = "CONTEXT" if has_material_gap else "MONITOR"
+    signal_state = "context_only" if publish_class == "CONTEXT" else "monitor_only"
+    summary_text = (
+        f"No deployable edge. Coverage remained incomplete across {market_label}, so this fixture stays in context view."
+        if publish_class == "CONTEXT"
+        else "Covered fixture. No strong routed signal is live at current state, but this match remains in the monitored universe."
+    )
+
+    context_summary: dict[str, str] = {}
+    if has_material_gap:
+        context_summary["market_movement_note"] = f"Source market coverage remained incomplete across {market_label}."
+    if "No ALLMARKETS rows emitted" in notes:
+        context_summary["volatility_note"] = "This fixture never reached the emitted all-markets layer for the active window."
+    elif notes:
+        context_summary["volatility_note"] = "Current source coverage remains incomplete, so this fixture stays informational only."
+
+    priority = "medium" if publish_class == "CONTEXT" else "low"
+    record = {
+        "fixture_id": universe_record["fixture_id"],
+        "fixture_key": universe_record["fixture_key"],
+        "publish_class": publish_class,
+        "coverage_status": universe_record.get("coverage_status", "covered"),
+        "kickoff_time": universe_record["kickoff_time"],
+        "league": universe_record["league"],
+        "league_logo_url": universe_record.get("league_logo_url", ""),
+        "league_flag_url": universe_record.get("league_flag_url", ""),
+        "home_team": universe_record["home_team"],
+        "home_team_logo_url": universe_record.get("home_team_logo_url", ""),
+        "away_team": universe_record["away_team"],
+        "away_team_logo_url": universe_record.get("away_team_logo_url", ""),
+        "logo_join_status": universe_record.get("logo_join_status", "NO_MATCH"),
+        "odds_summary": {
+            "home_win_odds": None,
+            "draw_odds": None,
+            "away_win_odds": None,
+            "btts_yes_odds": None,
+            "btts_no_odds": None,
+            "over25_odds": None,
+            "under25_odds": None,
+            "odds_snapshot_status": "missing",
+        },
+        "signal_summary": {
+            "signal_state": signal_state,
+            "market_family": "",
+            "signal_label": "",
+            "signal_strength": "none",
+            "confidence_tier": None,
+            "deploy_pick": None,
+            "premium_tier": None,
+            "summary_text": summary_text,
+            "context_tags": ["coverage_gap", "follow_only"] if publish_class == "MONITOR" else ["coverage_gap", "not_deployable"],
+        },
+        "context_summary": context_summary,
+        "follow_relevance": {
+            "team_follow_candidate": bool(universe_record.get("follow_candidates", {}).get("team_follow_candidate", True)),
+            "fixture_follow_candidate": bool(universe_record.get("follow_candidates", {}).get("fixture_follow_candidate", True)),
+            "league_follow_candidate": bool(universe_record.get("follow_candidates", {}).get("league_follow_candidate", True)),
+            "market_follow_candidate": False,
+            "notification_priority": priority,
+        },
+        "updated_at": generated_at,
+    }
+    counters[f"publish_class:{publish_class}"] += 1
+    counters[f"context_monitor:{publish_class.lower()}"] += 1
+    return record
+
+
 def select_primary_deploy(rows: list[dict[str, Any]]) -> dict[str, Any]:
     return sorted(
         rows,
@@ -619,6 +745,7 @@ def build_report(
     counters: Counter[str],
     source_run_id: str,
     source_window: dict[str, str],
+    universe_path: Path | None = None,
 ) -> str:
     class_counts = Counter(record["publish_class"] for record in fixture_records)
     market_counts = Counter(record["signal_summary"].get("market_family", "") for record in fixture_records)
@@ -636,6 +763,7 @@ def build_report(
             "",
             "## Source Files",
             *(f"- `{path.relative_to(ROOT)}`" for path in source_paths),
+            *( [f"- `covered_universe`: `{universe_path.relative_to(ROOT)}`"] if universe_path and universe_path.exists() else [] ),
             "",
             "## Counts",
             f"- Source rows read: `{source_rows}`",
@@ -653,7 +781,7 @@ def build_report(
             "## Notes",
             "- Exporter is additive only and does not alter deploy routing.",
             "- `OBSERVE` rows are translated into public-safe intelligence, never premium picks.",
-            "- Current first exporter covers routed fixtures present in the selected bundle.",
+            "- Non-routed fixtures are classified from the covered universe into `CONTEXT` or `MONITOR` using safe missing-coverage language.",
             "- Run `python3 validate_fixture_intelligence.py` after publishing.",
         ]
     )
@@ -696,6 +824,35 @@ def main() -> int:
         for fixture_rows in grouped.values()
         if (record := build_fixture_record(fixture_rows, generated_at, counters)) is not None
     ]
+
+    universe_path = COVERED_UNIVERSE_PATH
+    if universe_path.exists():
+        universe_payload = load_json(universe_path)
+        universe_fixtures = universe_payload.get("fixtures", []) if isinstance(universe_payload, dict) else []
+        loss_report_path = source_paths[0].parent / f"PRE_ALLMARKETS_FIXTURE_LOSS_REPORT_{source_window['date_from']}_to_{source_window['date_to']}.csv"
+        loss_details_path = source_paths[0].parent / f"PRE_ALLMARKETS_FIXTURE_LOSS_DETAILS_{source_window['date_from']}_to_{source_window['date_to']}.csv"
+        loss_report_index = load_loss_report_index(loss_report_path)
+        loss_detail_index = load_loss_detail_index(loss_details_path)
+        existing_keys = {record["fixture_key"] for record in fixture_records}
+        for universe_record in universe_fixtures:
+            if not isinstance(universe_record, dict):
+                continue
+            fixture_key = str(universe_record.get("fixture_key", "") or "").strip()
+            if not fixture_key or fixture_key in existing_keys:
+                continue
+            record = classify_context_monitor_fixture(
+                universe_record,
+                loss_report_index.get(str(universe_record.get("league", "") or "").strip()),
+                loss_detail_index.get(fixture_key, []),
+                generated_at,
+                counters,
+            )
+            if record is not None:
+                fixture_records.append(record)
+                existing_keys.add(fixture_key)
+    else:
+        counters["covered_universe:missing"] += 1
+
     fixture_records = sort_fixture_records(fixture_records)
 
     coverage_summary = {
@@ -717,7 +874,7 @@ def main() -> int:
     }
     write_json(OUTPUT_PATH, payload)
     REPORT_PATH.write_text(
-        build_report(source_paths, len(source_rows), fixture_records, counters, source_run_id, source_window) + "\n",
+        build_report(source_paths, len(source_rows), fixture_records, counters, source_run_id, source_window, universe_path) + "\n",
         encoding="utf-8",
     )
 

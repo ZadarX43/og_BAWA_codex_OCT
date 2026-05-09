@@ -1,6 +1,6 @@
 # FIXTURE_INTELLIGENCE_REPORT
 
-Generated: `2026-05-09T02:18:51+00:00`
+Generated: `2026-05-09T02:24:47+00:00`
 Source run id: `2026-05-09`
 Source window: `2026-05-09` to `2026-05-11`
 
@@ -8,12 +8,14 @@ Source window: `2026-05-09` to `2026-05-11`
 - `predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11__DEPLOY_TIER_ELITE__PRESET_V1__FTR_accuracy.csv`
 - `predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11__DEPLOY_TIER_STANDARD__PRESET_V1__FTR_accuracy.csv`
 - `predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11__DEPLOY_TIER_OBSERVE__PRESET_V1__FTR_accuracy.csv`
+- `covered_universe`: `frontend/public/data/covered_fixture_universe.json`
 
 ## Counts
 - Source rows read: `333`
-- Published fixtures written: `132`
+- Published fixtures written: `156`
 
 ## Publish Class Counts
+- `CONTEXT`: `24`
 - `DEPLOY`: `26`
 - `OBSERVE`: `106`
 
@@ -23,6 +25,7 @@ Source window: `2026-05-09` to `2026-05-11`
 - `OU25`: `39`
 
 ## Fallbacks And Drops
+- `context_monitor:context`: `24`
 - `kickoff_time:date_only`: `317`
 - `kickoff_time:match_date`: `333`
 - `logo_join:FULL_MATCH`: `246`
@@ -34,6 +37,7 @@ Source window: `2026-05-09` to `2026-05-11`
 - `logo_manifest:league_team_assets`: `1619`
 - `logo_manifest:loaded`: `1`
 - `logo_manifest:scoped_alias_assets`: `1753`
+- `publish_class:CONTEXT`: `24`
 - `publish_class:DEPLOY`: `26`
 - `publish_class:OBSERVE`: `106`
 - `source_bundle:expanded_from_preset`: `1`
@@ -45,5 +49,5 @@ Source window: `2026-05-09` to `2026-05-11`
 ## Notes
 - Exporter is additive only and does not alter deploy routing.
 - `OBSERVE` rows are translated into public-safe intelligence, never premium picks.
-- Current first exporter covers routed fixtures present in the selected bundle.
+- Non-routed fixtures are classified from the covered universe into `CONTEXT` or `MONITOR` using safe missing-coverage language.
 - Run `python3 validate_fixture_intelligence.py` after publishing.
