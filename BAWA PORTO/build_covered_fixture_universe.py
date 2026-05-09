@@ -27,6 +27,11 @@ from publish_predictions import (
 OUTPUT_PATH = FRONTEND_DATA_DIR / "covered_fixture_universe.json"
 REPORT_PATH = REPORTS_DIR / "COVERED_FIXTURE_UNIVERSE_REPORT.md"
 FIXTURES_MASTER_PATH = ROOT / "data_sources" / "api_football" / "normalized" / "fixtures_master.csv"
+INJURIES_PATH = ROOT / "data_sources" / "api_football" / "normalized" / "injuries.csv"
+LINEUPS_PATH = ROOT / "data_sources" / "api_football" / "normalized" / "lineups.csv"
+MATCH_TEAM_STATS_PATH = ROOT / "data_sources" / "api_football" / "normalized" / "match_team_stats.csv"
+MATCH_PLAYER_STATS_PATH = ROOT / "data_sources" / "api_football" / "normalized" / "match_player_stats.csv"
+MATCH_EVENTS_PATH = ROOT / "data_sources" / "api_football" / "normalized" / "match_events.csv"
 
 
 def parse_args() -> argparse.Namespace:
@@ -152,6 +157,67 @@ def load_fixtures_master_index() -> dict[tuple[str, str, str, str], dict[str, st
         return index
 
 
+def load_fixture_id_set(path: Path) -> set[str]:
+    if not path.exists():
+        return set()
+    rows = load_rows(path)
+    values: set[str] = set()
+    for row in rows:
+        fixture_id = str(row.get("fixture_id", "") or "").strip()
+        if fixture_id:
+            values.add(fixture_id)
+    return values
+
+
+def load_team_profile_index(path: Path) -> dict[str, dict[str, float]]:
+    if not path.exists():
+        return {}
+    rows = load_rows(path)
+    aggregates: dict[str, dict[str, float]] = {}
+    for row in rows:
+        team_name = str(row.get("team_name", "") or "").strip()
+        if not team_name:
+            continue
+        key = normalize_lookup_text(team_name)
+        agg = aggregates.setdefault(
+            key,
+            {
+                "matches": 0.0,
+                "shots_total_sum": 0.0,
+                "shots_on_goal_sum": 0.0,
+                "goals_for_sum": 0.0,
+                "goals_against_sum": 0.0,
+                "yellow_cards_sum": 0.0,
+            },
+        )
+        agg["matches"] += 1.0
+        for field, target in (
+            ("shots_total", "shots_total_sum"),
+            ("shots_on_goal", "shots_on_goal_sum"),
+            ("goals_for", "goals_for_sum"),
+            ("goals_against", "goals_against_sum"),
+            ("yellow_cards", "yellow_cards_sum"),
+        ):
+            try:
+                agg[target] += float(str(row.get(field, "") or "0").strip() or 0.0)
+            except ValueError:
+                continue
+    profiles: dict[str, dict[str, float]] = {}
+    for key, agg in aggregates.items():
+        matches = agg["matches"]
+        if matches <= 0:
+            continue
+        profiles[key] = {
+            "matches": matches,
+            "shots_total_avg": round(agg["shots_total_sum"] / matches, 2),
+            "shots_on_goal_avg": round(agg["shots_on_goal_sum"] / matches, 2),
+            "goals_for_avg": round(agg["goals_for_sum"] / matches, 2),
+            "goals_against_avg": round(agg["goals_against_sum"] / matches, 2),
+            "yellow_cards_avg": round(agg["yellow_cards_sum"] / matches, 2),
+        }
+    return profiles
+
+
 def read_fixture_keys(path: Path, key_fields: tuple[str, str, str, str] = ("league", "match_date", "home_team_name", "away_team_name")) -> dict[str, dict[str, str]]:
     if not path.exists():
         return {}
@@ -175,11 +241,18 @@ def build_base_record(
     logo_index: dict[str, Any],
     counters: Counter[str],
     fixtures_master_index: dict[tuple[str, str, str, str], dict[str, str]],
+    injuries_fixture_ids: set[str],
+    lineups_fixture_ids: set[str],
+    player_stats_fixture_ids: set[str],
+    match_events_fixture_ids: set[str],
+    team_profile_index: dict[str, dict[str, float]],
 ) -> dict[str, Any]:
     kickoff_time = normalize_kickoff(match_date)
     master_match = fixtures_master_index.get(fixture_record_key(league, match_date, home_team, away_team))
     logo_assets = logo_assets_for(logo_index, league, home_team, away_team, counters)
     fixture_id = str(master_match.get("fixture_id", "") or "").strip() if master_match else ""
+    home_profile = team_profile_index.get(normalize_lookup_text(home_team))
+    away_profile = team_profile_index.get(normalize_lookup_text(away_team))
     return {
         "fixture_id": fixture_id or fixture_key,
         "fixture_key": fixture_key,
@@ -197,16 +270,20 @@ def build_base_record(
             "routed_observe": False,
             "goal_shape_base": False,
             "prematch_odds": False,
-            "injuries": False,
-            "lineups": False,
-            "team_stats": False,
-            "player_stats": False,
-            "match_events": False,
+            "injuries": bool(fixture_id and fixture_id in injuries_fixture_ids),
+            "lineups": bool(fixture_id and fixture_id in lineups_fixture_ids),
+            "team_stats": bool(home_profile or away_profile),
+            "player_stats": bool(fixture_id and fixture_id in player_stats_fixture_ids),
+            "match_events": bool(fixture_id and fixture_id in match_events_fixture_ids),
         },
         "follow_candidates": {
             "team_follow_candidate": True,
             "fixture_follow_candidate": True,
             "league_follow_candidate": True,
+        },
+        "team_profile": {
+            "home": home_profile or {},
+            "away": away_profile or {},
         },
         "updated_at": utc_now_iso(),
     }
@@ -307,6 +384,11 @@ def main() -> int:
     )
     logo_index = load_logo_manifest(logo_manifest_path, counters)
     fixtures_master_index = load_fixtures_master_index()
+    injuries_fixture_ids = load_fixture_id_set(INJURIES_PATH)
+    lineups_fixture_ids = load_fixture_id_set(LINEUPS_PATH)
+    player_stats_fixture_ids = load_fixture_id_set(MATCH_PLAYER_STATS_PATH)
+    match_events_fixture_ids = load_fixture_id_set(MATCH_EVENTS_PATH)
+    team_profile_index = load_team_profile_index(MATCH_TEAM_STATS_PATH)
 
     allmarkets_rows = load_rows(related_paths["allmarkets"])
     counters["source_rows:allmarkets"] = len(allmarkets_rows)
@@ -333,6 +415,11 @@ def main() -> int:
                 logo_index,
                 counters,
                 fixtures_master_index,
+                injuries_fixture_ids,
+                lineups_fixture_ids,
+                player_stats_fixture_ids,
+                match_events_fixture_ids,
+                team_profile_index,
             )
             universe[fixture_key] = record
         mark_allmarkets_availability(record, row)
@@ -392,6 +479,11 @@ def main() -> int:
             logo_index,
             counters,
             fixtures_master_index,
+            injuries_fixture_ids,
+            lineups_fixture_ids,
+            player_stats_fixture_ids,
+            match_events_fixture_ids,
+            team_profile_index,
         )
         universe[fixture_key] = record
         counters["loss_details:fixture_added_to_universe"] += 1

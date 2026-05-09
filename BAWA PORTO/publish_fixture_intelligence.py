@@ -533,6 +533,9 @@ def classify_context_monitor_fixture(
     market_label = context_markets_label(markets)
 
     source_availability = dict(universe_record.get("source_availability", {}))
+    team_profile = universe_record.get("team_profile", {}) if isinstance(universe_record.get("team_profile"), dict) else {}
+    home_profile = team_profile.get("home", {}) if isinstance(team_profile.get("home"), dict) else {}
+    away_profile = team_profile.get("away", {}) if isinstance(team_profile.get("away"), dict) else {}
     source_gaps = [
         key
         for key in ("goal_shape_base", "prematch_odds", "injuries", "lineups", "team_stats", "player_stats", "match_events")
@@ -542,11 +545,9 @@ def classify_context_monitor_fixture(
 
     publish_class = "CONTEXT" if has_material_gap else "MONITOR"
     signal_state = "context_only" if publish_class == "CONTEXT" else "monitor_only"
-    summary_text = (
-        f"No deployable edge. Coverage remained incomplete across {market_label}, so this fixture stays in context view."
-        if publish_class == "CONTEXT"
-        else "Covered fixture. No strong routed signal is live at current state, but this match remains in the monitored universe."
-    )
+    summary_text = f"No deployable edge. Coverage remained incomplete across {market_label}, so this fixture stays in context view."
+    if publish_class == "MONITOR":
+        summary_text = "Covered fixture. No strong routed signal is live at current state, but this match remains in the monitored universe."
 
     context_summary: dict[str, str] = {}
     if has_material_gap:
@@ -555,6 +556,33 @@ def classify_context_monitor_fixture(
         context_summary["volatility_note"] = "This fixture never reached the emitted all-markets layer for the active window."
     elif notes:
         context_summary["volatility_note"] = "Current source coverage remains incomplete, so this fixture stays informational only."
+
+    if source_availability.get("injuries"):
+        context_summary["injury_note"] = "Approved injury source is present for this fixture."
+    if source_availability.get("lineups"):
+        context_summary["lineup_note"] = "Approved lineup source is present for this fixture."
+
+    if home_profile or away_profile:
+        home_shots = float(home_profile.get("shots_total_avg", 0.0) or 0.0)
+        away_shots = float(away_profile.get("shots_total_avg", 0.0) or 0.0)
+        home_goals = float(home_profile.get("goals_for_avg", 0.0) or 0.0)
+        away_goals = float(away_profile.get("goals_for_avg", 0.0) or 0.0)
+        if abs(home_shots - away_shots) >= 2.0:
+            stronger = "home side" if home_shots > away_shots else "away side"
+            context_summary["form_note"] = f"Historical team-stat profile shows stronger attacking volume from the {stronger}."
+        elif abs(home_goals - away_goals) >= 0.4:
+            stronger = "home side" if home_goals > away_goals else "away side"
+            context_summary["form_note"] = f"Historical scoring output remains stronger on the {stronger}."
+        else:
+            context_summary["form_note"] = "Historical team-stat profile remains fairly balanced between both sides."
+        if publish_class == "CONTEXT":
+            summary_text = (
+                f"No deployable edge. Coverage remained incomplete across {market_label}, "
+                "but historical team-stat context still makes this fixture worth monitoring."
+            )
+
+    if source_availability.get("player_stats") and publish_class == "CONTEXT":
+        context_summary["schedule_note"] = "Approved player-stat source is available for deeper overlay review."
 
     priority = "medium" if publish_class == "CONTEXT" else "low"
     record = {
