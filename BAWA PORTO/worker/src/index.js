@@ -1584,6 +1584,67 @@ async function sendTelegramMessage(env, chatId, text) {
   return response.ok;
 }
 
+async function loadFixtureIntelligenceArtifact(env) {
+  const siteUrl = normalizeSiteUrl(env.SITE_URL);
+  if (!siteUrl) {
+    throw new Error("SITE_URL is required to load fixture intelligence.");
+  }
+
+  const response = await fetch(`${siteUrl}/public/data/fixture_intelligence_public.json`, {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Fixture intelligence artifact unavailable (${response.status}).`);
+  }
+
+  const payload = await response.json();
+  return Array.isArray(payload?.fixtures) ? payload.fixtures : [];
+}
+
+function formatTelegramFixtureAlert(fixture, env) {
+  const publishClass = String(fixture?.publish_class || fixture?.fixture_class || "MONITOR").toUpperCase();
+  const marketFamily = String(fixture?.signal_summary?.market_family || "INTEL").toUpperCase();
+  const headline =
+    String(fixture?.signal_summary?.headline || fixture?.signal_summary?.summary_text || "").trim() ||
+    "Fixture intelligence update is available.";
+  const notes = Array.isArray(fixture?.context_summary?.notes)
+    ? fixture.context_summary.notes.filter(Boolean).slice(0, 2)
+    : [];
+  const kickoff = String(fixture?.kickoff_time || "").trim();
+  const siteUrl = normalizeSiteUrl(env.SITE_URL);
+  const fixtureHref =
+    siteUrl && fixture?.fixture_key
+      ? `${siteUrl}/fixture.html?fixture=${encodeURIComponent(String(fixture.fixture_key))}`
+      : "";
+
+  const lines = [
+    `Odds Genius ${publishClass} intelligence`,
+    "",
+    `${String(fixture?.home_team || "Home")} vs ${String(fixture?.away_team || "Away")}`,
+    `${String(fixture?.league || "League")} | ${marketFamily}`,
+  ];
+
+  if (kickoff) {
+    lines.push(`Kickoff: ${kickoff}`);
+  }
+
+  lines.push("", headline);
+
+  for (const note of notes) {
+    lines.push(`- ${String(note)}`);
+  }
+
+  if (fixtureHref) {
+    lines.push("", `Open fixture view: ${fixtureHref}`);
+  }
+
+  return lines.join("\n");
+}
+
 async function handleTelegramWebhook(request, env) {
   const botToken = getTelegramBotToken(env);
   const webhookSecret = getTelegramWebhookSecret(env);
@@ -1754,6 +1815,117 @@ async function handleTelegramTestAlert(request, env) {
     ok: true,
     status: "telegram_test_alert_sent",
     message: "Telegram test alert sent to your linked account.",
+  });
+}
+
+async function handleTelegramFixtureAlert(request, env) {
+  const sessionAccess = await verifySessionAccess(request, env);
+  if (!sessionAccess.ok) {
+    return json(
+      {
+        ok: false,
+        status: sessionAccess.status || "unauthenticated",
+        message: sessionAccess.message || "Verify your email before sending a fixture intelligence alert.",
+      },
+      401
+    );
+  }
+
+  const accountDb = getAccountDb(env);
+  if (!accountDb) {
+    return configError("ACCOUNT_DB D1 binding is required for Telegram fixture alerts.", ["ACCOUNT_DB"]);
+  }
+  if (!getTelegramBotToken(env)) {
+    return configError("TELEGRAM_BOT_TOKEN is required for Telegram fixture alerts.", ["TELEGRAM_BOT_TOKEN"]);
+  }
+
+  let payload;
+  try {
+    payload = await request.json();
+  } catch (error) {
+    return requestError("Telegram fixture alert body must be valid JSON.", error.message);
+  }
+
+  const fixtureKey = String(payload?.fixture_key || "").trim();
+  if (!fixtureKey) {
+    return requestError("`fixture_key` is required for Telegram fixture alerts.");
+  }
+
+  const accountState = await getAccountStateByEmail(accountDb, sessionAccess.email);
+  const telegramLink = accountState?.telegram_link || null;
+  const chatId = String(telegramLink?.telegram_chat_id || "").trim();
+  if (!telegramLink || telegramLink.link_status !== "linked" || !chatId) {
+    return json(
+      {
+        ok: false,
+        status: "telegram_not_linked",
+        message: "Link Telegram from your account page before sending a fixture alert.",
+      },
+      400
+    );
+  }
+
+  let fixture;
+  try {
+    const fixtures = await loadFixtureIntelligenceArtifact(env);
+    fixture = fixtures.find((row) => String(row?.fixture_key || "").trim() === fixtureKey) || null;
+  } catch (error) {
+    return json(
+      {
+        ok: false,
+        status: "fixture_intelligence_unavailable",
+        message: error.message || "Published fixture intelligence could not be loaded.",
+      },
+      502
+    );
+  }
+
+  if (!fixture) {
+    return json(
+      {
+        ok: false,
+        status: "fixture_not_found",
+        message: "That fixture is not present in the current published intelligence window.",
+      },
+      404
+    );
+  }
+
+  const delivered = await sendTelegramMessage(env, chatId, formatTelegramFixtureAlert(fixture, env));
+  if (!delivered) {
+    return json(
+      {
+        ok: false,
+        status: "telegram_delivery_failed",
+        message: "Fixture intelligence alert could not be delivered to Telegram.",
+      },
+      502
+    );
+  }
+
+  try {
+    await recordAuthEvent(accountDb, {
+      user_id: accountState?.user?.id || null,
+      email_normalized: sessionAccess.email,
+      event_type: "telegram_fixture_alert_sent",
+      ip_hint: getRequestIp(request) || null,
+      user_agent_hint: getUserAgentHint(request),
+      metadata: {
+        fixture_key: fixtureKey,
+        publish_class: String(fixture?.publish_class || fixture?.fixture_class || ""),
+        market_family: String(fixture?.signal_summary?.market_family || ""),
+        telegram_chat_id_hint: chatId.slice(-6),
+      },
+    });
+  } catch {
+    // Best-effort audit trail only.
+  }
+
+  return json({
+    ok: true,
+    status: "telegram_fixture_alert_sent",
+    message: "Fixture intelligence alert sent to your linked Telegram account.",
+    fixture_key: fixtureKey,
   });
 }
 
@@ -2068,6 +2240,7 @@ async function handleRequest(request, env) {
         "POST /api/account/telegram/link/start",
         "POST /api/account/telegram/link/complete",
         "POST /api/account/telegram/test-alert",
+        "POST /api/account/telegram/fixture-alert",
         "POST /api/telegram/webhook",
         "POST /api/stripe/checkout",
         "POST /api/premium/token",
@@ -2167,6 +2340,15 @@ async function handleRequest(request, env) {
       return withCors(response, request, env);
     }
     response = await handleTelegramTestAlert(request, env);
+    return withCors(response, request, env);
+  }
+
+  if (pathname === "/api/account/telegram/fixture-alert") {
+    if (request.method !== "POST") {
+      response = methodNotAllowed("POST");
+      return withCors(response, request, env);
+    }
+    response = await handleTelegramFixtureAlert(request, env);
     return withCors(response, request, env);
   }
 

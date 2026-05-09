@@ -33,6 +33,7 @@
       authMessage: "",
       preferencesMessage: "",
       telegramMessage: "",
+      fixtureAlertMessage: "",
       sessionAuthenticated: false,
       sessionEntitled: false,
       sessionStatus: "",
@@ -443,6 +444,7 @@
         </div>
         <div class="cta-row">
           <a class="button" href="${fixtureDetailHref(row)}">Open fixture view</a>
+          <button class="ghost-button" type="button" data-action="telegram-fixture-alert" data-fixture-key="${escapeHtml(String(row.fixture_key || ""))}">Send to Telegram</button>
         </div>
       </article>
     `;
@@ -1847,6 +1849,7 @@
       </section>
 
       <section class="section">
+        ${renderNotice(state.runtime.fixtureAlertMessage, state.runtime.fixtureAlertMessage ? "success" : "default")}
         <article class="panel">
           <h3>Filters</h3>
           <p class="muted">Start simple: filter by publish class and why the fixture is relevant to you.</p>
@@ -1929,6 +1932,7 @@
           <div class="cta-row">
             <a class="button" href="./dashboard.html">Back to dashboard</a>
             <a class="ghost-button" href="./premium.html">Open premium board</a>
+            <button class="ghost-button" type="button" data-action="telegram-fixture-alert" data-fixture-key="${escapeHtml(String(fixture.fixture_key || ""))}">Send to Telegram</button>
           </div>
         </article>
         <aside class="hero-side">
@@ -1948,6 +1952,7 @@
       </section>
 
       <section class="section split">
+        ${renderNotice(state.runtime.fixtureAlertMessage, state.runtime.fixtureAlertMessage ? "success" : "default")}
         <article class="panel">
           <h3>Signal frame</h3>
           <div class="prediction-meta-grid dashboard-odds-grid">
@@ -2361,6 +2366,45 @@
     render();
   };
 
+  const sendTelegramFixtureAlert = async (event, fixtureKey) => {
+    event.preventDefault();
+    if (!workerConfigured() || !state.runtime.sessionAuthenticated) {
+      state.runtime.fixtureAlertMessage = "Verify your email before sending a fixture intelligence alert.";
+      render();
+      return;
+    }
+
+    const key = String(fixtureKey || "").trim();
+    if (!key) {
+      state.runtime.fixtureAlertMessage = "No fixture key was supplied for this alert.";
+      render();
+      return;
+    }
+
+    state.runtime.fixtureAlertMessage = "Sending fixture intelligence to Telegram…";
+    render();
+
+    try {
+      const { response, payload } = await fetchWorkerJson("/api/account/telegram/fixture-alert", {
+        method: "POST",
+        withToken: true,
+        body: {
+          fixture_key: key,
+        },
+      });
+
+      if (!response.ok || !payload?.ok) {
+        throw new Error(payload?.message || "Unable to send fixture intelligence alert.");
+      }
+
+      state.runtime.fixtureAlertMessage = payload.message || "Fixture intelligence alert sent.";
+    } catch (error) {
+      state.runtime.fixtureAlertMessage = error.message || "Unable to send fixture intelligence alert.";
+    }
+
+    render();
+  };
+
   const handleTokenSave = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
@@ -2405,6 +2449,7 @@
     state.runtime.telegramBotUsername = "";
     state.runtime.telegramDeepLinkUrl = "";
     state.runtime.telegramMessage = "";
+    state.runtime.fixtureAlertMessage = "";
     state.runtime.preferencesMessage = "";
     state.securePremiumPredictions = [];
     state.runtime.premiumFetchError = "";
@@ -2463,6 +2508,12 @@
     const telegramTestTarget = event.target.closest("[data-action='telegram-test-alert']");
     if (telegramTestTarget) {
       await sendTelegramTestAlert(event);
+      return;
+    }
+
+    const telegramFixtureTarget = event.target.closest("[data-action='telegram-fixture-alert']");
+    if (telegramFixtureTarget) {
+      await sendTelegramFixtureAlert(event, telegramFixtureTarget.dataset.fixtureKey);
     }
   });
 

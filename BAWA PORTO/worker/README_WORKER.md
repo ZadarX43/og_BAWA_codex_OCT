@@ -32,6 +32,7 @@ Current status:
 - `POST /api/account/telegram/link/start`
 - `POST /api/account/telegram/link/complete`
 - `POST /api/account/telegram/test-alert`
+- `POST /api/account/telegram/fixture-alert`
 - `POST /api/telegram/webhook`
 - `POST /api/stripe/checkout`
 - `POST /api/premium/token`
@@ -260,6 +261,15 @@ Current response metadata:
 - requires a linked Telegram chat in D1
 - sends a live test alert through the configured Telegram bot
 - is useful for proving delivery before enabling real premium notifications
+
+`POST /api/account/telegram/fixture-alert`:
+
+- requires verified premium session
+- requires a linked Telegram chat in D1
+- accepts a public `fixture_key`
+- loads the published `fixture_intelligence_public.json` artifact from `SITE_URL`
+- formats a Telegram-safe message from the public fixture card only
+- sends the resulting intelligence alert through the configured Telegram bot
 
 `POST /api/telegram/webhook`:
 

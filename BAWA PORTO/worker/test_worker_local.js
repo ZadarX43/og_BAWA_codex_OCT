@@ -241,6 +241,31 @@ const premiumSourcePayload = {
   ],
 };
 
+const fixtureIntelligencePayload = {
+  generated_at: "2026-05-09T14:11:03+00:00",
+  fixtures: [
+    {
+      fixture_id: "2026_05_09_Luzern_Servette",
+      fixture_key: "2026_05_09_Luzern_Servette",
+      fixture_class: "OBSERVE",
+      publish_class: "OBSERVE",
+      coverage_status: "covered",
+      kickoff_time: "2026-05-09 19:30:00",
+      league: "Swiss Super League",
+      home_team: "Luzern",
+      away_team: "Servette",
+      signal_summary: {
+        market_family: "BTTS",
+        headline: "Observed BTTS lean based on attacking shape, but not enough stability for deployment.",
+        summary_text: "Observed BTTS lean based on attacking shape, but not enough stability for deployment.",
+      },
+      context_summary: {
+        notes: ["Team-intelligence caution remains active around this fixture."],
+      },
+    },
+  ],
+};
+
 const installMockCache = () => {
   const originalCaches = globalThis.caches;
   const store = new MockCacheStore();
@@ -311,6 +336,15 @@ const installMockFetch = () => {
     if (url === "http://localhost/premium-source.json") {
       counters.premiumSourceFetches += 1;
       return new Response(JSON.stringify(premiumSourcePayload), {
+        status: 200,
+        headers: {
+          "content-type": "application/json; charset=utf-8",
+        },
+      });
+    }
+
+    if (url === "http://localhost/public/data/fixture_intelligence_public.json") {
+      return new Response(JSON.stringify(fixtureIntelligencePayload), {
         status: 200,
         headers: {
           "content-type": "application/json; charset=utf-8",
@@ -867,6 +901,77 @@ const testTelegramTestAlertRoute = async (fetchHarness) => {
   assert.match(fetchHarness.sentTelegramMessages.at(-1)?.text || "", /test premium alert/i);
 };
 
+const testTelegramFixtureAlertRoute = async (fetchHarness) => {
+  const env = createEnv();
+  await writeSubscriberRecord(
+    env,
+    buildSubscriberRecord({
+      email: "member@example.com",
+    })
+  );
+
+  const requestResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/auth/magic-link/request", "POST", {
+      email: "member@example.com",
+    }),
+    env
+  );
+  assert.equal(requestResponse.status, 200);
+  const emailBody = fetchHarness.sentEmails.at(-1);
+  const verifyMatch = String(emailBody?.html || "").match(/verify\?token=([^"&]+)/);
+  assert.ok(verifyMatch?.[1], "expected magic-link token in email body");
+  const token = decodeURIComponent(verifyMatch[1]);
+
+  const tokenResponse = await worker.fetch(
+    makeGetRequest(`http://localhost/api/auth/magic-link/verify?token=${encodeURIComponent(token)}`),
+    env
+  );
+  const sessionCookie = extractCookieValue(tokenResponse.headers.get("set-cookie"), "og_premium_session");
+  assert.ok(sessionCookie, "expected premium session cookie after verify");
+
+  const startResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/account/telegram/link/start", "POST", null, {
+      cookie: `og_premium_session=${sessionCookie}`,
+    }),
+    env
+  );
+  const startPayload = await startResponse.json();
+  assert.equal(startResponse.status, 200);
+  assert.ok(startPayload.code);
+
+  const completeResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/account/telegram/link/complete", "POST", {
+      code: startPayload.code,
+      telegram_user_id: "tg_user_123",
+      telegram_username: "ogfounder",
+      telegram_chat_id: "chat_456",
+    }),
+    env
+  );
+  assert.equal(completeResponse.status, 200);
+
+  const beforeCount = fetchHarness.counters.telegramSendFetches;
+  const alertResponse = await worker.fetch(
+    jsonRequest(
+      "http://localhost/api/account/telegram/fixture-alert",
+      "POST",
+      {
+        fixture_key: "2026_05_09_Luzern_Servette",
+      },
+      {
+        cookie: `og_premium_session=${sessionCookie}`,
+      }
+    ),
+    env
+  );
+  const alertPayload = await alertResponse.json();
+  assert.equal(alertResponse.status, 200);
+  assert.equal(alertPayload.status, "telegram_fixture_alert_sent");
+  assert.equal(fetchHarness.counters.telegramSendFetches, beforeCount + 1);
+  assert.match(fetchHarness.sentTelegramMessages.at(-1)?.text || "", /Luzern vs Servette/i);
+  assert.match(fetchHarness.sentTelegramMessages.at(-1)?.text || "", /fixture\.html\?fixture=2026_05_09_Luzern_Servette/i);
+};
+
 const testAccountPreferencesUpdate = async (fetchHarness) => {
   const env = createEnv();
   await writeSubscriberRecord(
@@ -956,6 +1061,7 @@ const main = async () => {
     await testAccountStateAndTelegramLinkFlow(fetchHarness);
     await testTelegramWebhookCompletesLinkFlow(fetchHarness);
     await testTelegramTestAlertRoute(fetchHarness);
+    await testTelegramFixtureAlertRoute(fetchHarness);
     await testAccountPreferencesUpdate(fetchHarness);
     await testLogoutSkeleton();
     console.log("Worker local harness passed.");
@@ -970,6 +1076,7 @@ const main = async () => {
     console.log("- D1-backed account state + Telegram link flow: passed");
     console.log("- Telegram bot webhook completion flow: passed");
     console.log("- Telegram test alert route: passed");
+    console.log("- Telegram fixture alert route: passed");
     console.log("- Account preferences update route: passed");
     console.log("- logout skeleton: passed");
   } finally {
