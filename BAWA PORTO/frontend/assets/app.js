@@ -433,6 +433,37 @@
     });
   };
 
+  const dashboardPriorityProfile = (entry) => {
+    const reasons = Array.isArray(entry?.reasons) ? entry.reasons : [];
+    const publishClass = String(entry?.row?.publish_class || entry?.row?.fixture_class || "MONITOR").toUpperCase();
+    const reasonSet = new Set(reasons);
+    const hasFixture = reasonSet.has("followed fixture");
+    const hasTeam = reasonSet.has("followed team");
+    const hasLeague = reasonSet.has("followed league");
+    const hasMarket = reasonSet.has("followed market");
+
+    let score = 0;
+    if (hasFixture) score += 100;
+    if (hasTeam) score += 80;
+    if (hasLeague) score += 35;
+    if (hasMarket) score += 10;
+    if (publishClass === "DEPLOY") score += 30;
+    else if (publishClass === "OBSERVE") score += 15;
+    else if (publishClass === "CONTEXT") score += 8;
+    else if (publishClass === "MONITOR") score += 4;
+
+    if (hasFixture || hasTeam) {
+      return { label: "Send now", score, bucket: "send_now" };
+    }
+    if (publishClass === "DEPLOY" && hasLeague && hasMarket) {
+      return { label: "Watch closely", score, bucket: "watch_closely" };
+    }
+    if (hasLeague || hasMarket) {
+      return { label: "Website only", score, bucket: "website_only" };
+    }
+    return { label: "No edge", score, bucket: "no_edge" };
+  };
+
   const dashboardFixtureCard = (entry, telegramEnabled) => {
     const row = entry.row;
     const publishClass = String(row.publish_class || row.fixture_class || "MONITOR").toUpperCase();
@@ -881,14 +912,15 @@
       <div class="hero-main">
         <div class="hero-copy-stack">
           <p class="hero-kicker">Prediction intelligence system</p>
-          <h1>Identifying when the market is wrong.</h1>
+          <h1>Signal over noise.</h1>
           <p>
-            Validated across 139 rolling walk-forward windows, Odds Genius identifies high-conviction football
-            markets using league-calibrated model probability, bookmaker value, and goal-shape intelligence.
+            Odds Genius is a calm football intelligence surface built to help users think better under uncertainty.
+            It combines selective deployment, bookmaker value, and goal-shape reading without turning every fixture
+            into a forced bet.
           </p>
           <div class="pill-row">
-            <span class="stat-chip">28 competitions analysed</span>
-            <span class="stat-chip">Historical walk-forward validation</span>
+            <span class="stat-chip">Better decisions, not more bets</span>
+            <span class="stat-chip">Clarity under uncertainty</span>
             <span class="stat-chip">Selective deployment only</span>
           </div>
           <div class="hero-actions">
@@ -990,11 +1022,11 @@
         </ul>
       </article>
       <article class="panel">
-        <h3>Why it stands apart</h3>
+        <h3>No edge is also information</h3>
         <ul class="method-list">
-          <li>Typical public tipster products struggle to sustain even 50–60% with lower volume and weaker proof discipline.</li>
-          <li>Odds Genius combines a flagship selective layer with a weekly production engine delivering 65+ picks at scale.</li>
-          <li>Consolidated proof includes FTR, OU2.5, BTTS, premium value edge, acca formatting, and correct score support.</li>
+          <li>Restraint is part of the product, not a missing feature.</li>
+          <li>A pass state should still teach the user something about price, volatility, and uncertainty.</li>
+          <li>The goal is cleaner judgment, not constant stimulation.</li>
           <li>If the model doesn't beat the price, it doesn't deploy.</li>
         </ul>
       </article>
@@ -1865,6 +1897,10 @@
     );
     const baseMatches = getFollowedIntelligenceMatches(accountState, state.fixtureIntelligence);
     const matches = filteredFollowedIntelligence(baseMatches);
+    const sendNowEntries = matches.filter((entry) => dashboardPriorityProfile(entry).bucket === "send_now");
+    const watchEntries = matches.filter((entry) => dashboardPriorityProfile(entry).bucket === "watch_closely");
+    const websiteOnlyEntries = matches.filter((entry) => dashboardPriorityProfile(entry).bucket === "website_only");
+    const noEdgeEntries = matches.filter((entry) => dashboardPriorityProfile(entry).bucket === "no_edge");
     const classFilter = String(state.runtime.dashboardClassFilter || "ALL").toUpperCase();
     const reasonFilter = String(state.runtime.dashboardReasonFilter || "ALL").toUpperCase();
     const classOptions = ["ALL", "DEPLOY", "OBSERVE", "CONTEXT", "MONITOR"];
@@ -1907,7 +1943,7 @@
         <article class="hero-main">
           <p class="hero-kicker">Dashboard</p>
           <h1>Followed intelligence.</h1>
-          <p>This is the first dedicated dashboard surface for the intelligence layer. It combines saved follows, published fixture intelligence, and Telegram delivery posture into one working board.</p>
+          <p>This is your calm intelligence desk. It combines saved follows, published fixture intelligence, and Telegram delivery posture into a structure built for interpretation before action.</p>
           <div class="pill-row">
             <span class="stat-chip">${baseMatches.length} matched followed fixtures</span>
             <span class="stat-chip">${entitled ? "Premium active" : "Free / pending"}</span>
@@ -1935,7 +1971,7 @@
         ${renderNotice(state.runtime.alertsMessage, state.runtime.alertsMessage ? "success" : "default")}
         <article class="panel">
           <h3>Filters</h3>
-          <p class="muted">Start simple: filter by publish class and why the fixture is relevant to you.</p>
+          <p class="muted">Use filters to move from broad monitoring into clearer decision territory.</p>
           <div class="pill-row">
             ${classOptions
               .map(
@@ -1951,6 +1987,19 @@
                   `<button class="${reasonFilter === value ? "button" : "ghost-button"}" type="button" data-action="dashboard-reason-filter" data-value="${value}">${label}</button>`
               )
               .join("")}
+          </div>
+        </article>
+      </section>
+
+      <section class="section">
+        <article class="panel">
+          <h3>Priority map</h3>
+          <p class="muted">Telegram should interrupt only when relevance is strong. Everything else can still stay useful on the website.</p>
+          <div class="stats-grid">
+            ${statPanel("Send now", sendNowEntries.length, "Direct fixture or team relevance")}
+            ${statPanel("Watch closely", watchEntries.length, "Higher-quality deploy watchlist")}
+            ${statPanel("Website only", websiteOnlyEntries.length, "Useful without interruption")}
+            ${statPanel("No edge", noEdgeEntries.length, "Respectable pass or monitor states")}
           </div>
         </article>
       </section>
@@ -1976,16 +2025,58 @@
 
       <section class="section">
         <article class="panel">
-          <h3>Matched fixtures</h3>
-          <p class="muted">Each card is generated from the same published intelligence layer that will later drive Telegram alerts, mobile delivery, and deeper followed-team tracking.</p>
+          <h3>Send now</h3>
+          <p class="muted">These are the strongest followed signals for immediate attention: direct fixture follows, direct team follows, or the clearest high-relevance deploys.</p>
           ${
-            matches.length
-              ? `<div class="card-grid intelligence-grid dashboard-grid">${matches
+            sendNowEntries.length
+              ? `<div class="card-grid intelligence-grid dashboard-grid">${sendNowEntries
+                  .map((entry) => dashboardFixtureCard(entry, Boolean(notificationPreferences?.telegram_enabled)))
+                  .join("")}</div>`
+              : `<div class="notice">Nothing currently qualifies for immediate attention. That is a healthy state, not an empty one.</div>`
+          }
+        </article>
+      </section>
+
+      <section class="section">
+        <article class="panel">
+          <h3>Watch closely</h3>
+          <p class="muted">These are strong but less direct items worth interpreting carefully before action.</p>
+          ${
+            watchEntries.length
+              ? `<div class="card-grid intelligence-grid dashboard-grid">${watchEntries
+                  .map((entry) => dashboardFixtureCard(entry, Boolean(notificationPreferences?.telegram_enabled)))
+                  .join("")}</div>`
+              : `<div class="notice">No higher-priority watchlist items are active in the current filtered window.</div>`
+          }
+        </article>
+      </section>
+
+      <section class="section">
+        <article class="panel">
+          <h3>Website only</h3>
+          <p class="muted">These fixtures still carry value, but not enough personal relevance to justify interruption.</p>
+          ${
+            websiteOnlyEntries.length
+              ? `<div class="card-grid intelligence-grid dashboard-grid">${websiteOnlyEntries
+                  .map((entry) => dashboardFixtureCard(entry, Boolean(notificationPreferences?.telegram_enabled)))
+                  .join("")}</div>`
+              : `<div class="notice">No lower-priority website-only items are active in the current filtered window.</div>`
+          }
+        </article>
+      </section>
+
+      <section class="section">
+        <article class="panel">
+          <h3>No edge / monitor</h3>
+          <p class="muted">A pass state should still feel intelligent. If nothing belongs here right now, the system is simply not forcing noise into the board.</p>
+          ${
+            noEdgeEntries.length
+              ? `<div class="card-grid intelligence-grid dashboard-grid">${noEdgeEntries
                   .map((entry) => dashboardFixtureCard(entry, Boolean(notificationPreferences?.telegram_enabled)))
                   .join("")}</div>`
               : !followedSignalsConfigured
                 ? `<div class="notice">No followed teams, leagues, markets, or fixtures are saved yet. Add them on the account page, then save your intelligence preferences to start matching live cards.</div>`
-                : `<div class="notice">No fixtures match the current filter combination. Change the filters or expand your followed teams, leagues, markets, or fixtures on the account page.</div>`
+                : `<div class="notice">No fixtures currently sit in a clear pass / monitor state for this filtered view.</div>`
           }
         </article>
       </section>
