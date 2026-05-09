@@ -464,6 +464,75 @@
     return { label: "No edge", score, bucket: "no_edge" };
   };
 
+  const fixtureClarityProfile = (fixture, matchedEntry) => {
+    const publishClass = String(fixture?.publish_class || fixture?.fixture_class || "MONITOR").toUpperCase();
+    const reasons = Array.isArray(matchedEntry?.reasons) ? matchedEntry.reasons : [];
+    const notes = Array.isArray(fixture?.context_summary?.notes) ? fixture.context_summary.notes.filter(Boolean) : [];
+    const headline =
+      fixture?.signal_summary?.headline ||
+      fixture?.signal_summary?.summary_text ||
+      "Fixture intelligence update is available.";
+
+    if (publishClass === "DEPLOY") {
+      return {
+        action_label: "Deploy signal",
+        action_copy: "A deployable edge is live here, but it should still be read with discipline rather than urgency.",
+        meaning_title: "Why this is live",
+        meaning_copy: headline,
+        risk_title: "Why we may be wrong",
+        risk_points: notes.length ? notes : ["Market conditions can change quickly around team news, price movement, or fragility factors."],
+        decision_title: "What to do now",
+        decision_points: [
+          "Check whether the edge still makes sense at the current price.",
+          "Use stake discipline before acting.",
+          "If the setup feels rushed, wait and review again.",
+        ],
+        reflection_prompt: "Would you still take this without outside noise or social proof?",
+        feed_bucket: dashboardPriorityProfile({ row: fixture, reasons }).label,
+      };
+    }
+
+    if (publishClass === "OBSERVE") {
+      return {
+        action_label: "Observe, not deploy",
+        action_copy: "There is signal shape here, but not enough support for a disciplined deployment.",
+        meaning_title: "What this means",
+        meaning_copy: headline,
+        risk_title: "Why it stayed out",
+        risk_points: notes.length ? notes : ["Structural support remained too weak for deployment."],
+        decision_title: "What to do now",
+        decision_points: [
+          "Treat this as useful context, not a forced action.",
+          "Watch for confirming information rather than acting from interest alone.",
+          "No bet is a valid outcome here.",
+        ],
+        reflection_prompt: "Is this structure, or are you being pulled toward action by curiosity?",
+        feed_bucket: dashboardPriorityProfile({ row: fixture, reasons }).label,
+      };
+    }
+
+    return {
+      action_label: "No edge / monitor",
+      action_copy: "No deployable edge is visible here right now. That is information, not a gap in the product.",
+      meaning_title: "What this means",
+      meaning_copy:
+        headline ||
+        "Market appears efficiently priced or structurally incomplete for disciplined action.",
+      risk_title: "What weakens conviction",
+      risk_points: notes.length
+        ? notes
+        : ["Current information does not justify a deployable edge or stronger action state."],
+      decision_title: "What to do now",
+      decision_points: [
+        "Monitor only unless stronger structure appears.",
+        "Use this fixture for awareness, not urgency.",
+        "Passing is a respectable decision when edge is absent.",
+      ],
+      reflection_prompt: "Can you let this stay a pass without needing to manufacture a bet?",
+      feed_bucket: "No edge",
+    };
+  };
+
   const dashboardFixtureCard = (entry, telegramEnabled) => {
     const row = entry.row;
     const publishClass = String(row.publish_class || row.fixture_class || "MONITOR").toUpperCase();
@@ -2108,6 +2177,7 @@
     const accountState = state.runtime.accountState;
     const notificationPreferences = accountState?.notification_preferences || null;
     const matchedEntry = getFollowedIntelligenceMatches(accountState, [fixture])[0] || null;
+    const clarity = fixtureClarityProfile(fixture, matchedEntry);
     const relatedFixtures = state.fixtureIntelligence
       .filter((row) => row.fixture_key !== fixture.fixture_key && row.league === fixture.league)
       .slice(0, 4);
@@ -2117,12 +2187,13 @@
         <article class="hero-main">
           <p class="hero-kicker">Fixture Intelligence</p>
           <h1>${escapeHtml(fixture.home_team)} <span class="muted">vs</span> ${escapeHtml(fixture.away_team)}</h1>
-          <p>${escapeHtml(headline)}</p>
+          <p>${escapeHtml(clarity.action_copy)}</p>
           <div class="pill-row">
             <span class="pill">${escapeHtml(publishClass)}</span>
             <span class="chip">${escapeHtml(marketFamilyLabel(fixture.signal_summary?.market_family))}</span>
             <span class="chip">${escapeHtml(fixture.league)}</span>
             <span class="chip">${escapeHtml(formatKickoffLabel(fixture.kickoff_time))}</span>
+            <span class="chip">${escapeHtml(clarity.feed_bucket)}</span>
           </div>
           <div class="cta-row">
             <a class="button" href="./dashboard.html">Back to dashboard</a>
@@ -2131,6 +2202,10 @@
           </div>
         </article>
         <aside class="hero-side">
+          <div class="metric">
+            <span class="metric-label">Action state</span>
+            <span class="metric-value">${escapeHtml(clarity.action_label)}</span>
+          </div>
           <div class="metric">
             <span class="metric-label">Coverage</span>
             <span class="metric-value">${escapeHtml(String(fixture.coverage_status || "covered"))}</span>
@@ -2149,7 +2224,8 @@
       <section class="section split">
         ${renderNotice(state.runtime.fixtureAlertMessage, state.runtime.fixtureAlertMessage ? "success" : "default")}
         <article class="panel">
-          <h3>Signal frame</h3>
+          <h3>${escapeHtml(clarity.meaning_title)}</h3>
+          <p class="muted">${escapeHtml(clarity.meaning_copy)}</p>
           <div class="prediction-meta-grid dashboard-odds-grid">
             <div class="signal-cell">
               <span class="signal-label">1X2</span>
@@ -2188,10 +2264,10 @@
           </div>
         </article>
         <article class="panel">
-          <h3>Context notes</h3>
+          <h3>${escapeHtml(clarity.risk_title)}</h3>
           ${
-            notes.length
-              ? `<ul class="feature-list">${notes.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}</ul>`
+            clarity.risk_points.length
+              ? `<ul class="feature-list">${clarity.risk_points.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}</ul>`
               : `<div class="notice">No extra context notes are currently published for this fixture.</div>`
           }
           <div class="dashboard-telegram-preview">
@@ -2203,6 +2279,24 @@
               })
             )}</pre>
           </div>
+        </article>
+      </section>
+
+      <section class="section split">
+        <article class="panel">
+          <h3>${escapeHtml(clarity.decision_title)}</h3>
+          <ul class="feature-list">
+            ${clarity.decision_points.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}
+          </ul>
+        </article>
+        <article class="panel">
+          <h3>Decision companion</h3>
+          <ul class="feature-list">
+            <li>${escapeHtml(clarity.reflection_prompt)}</li>
+            <li>What could invalidate this read before kickoff?</li>
+            <li>Is this structure, or are you reacting to noise?</li>
+            <li>Would no action be the cleaner decision here?</li>
+          </ul>
         </article>
       </section>
 
