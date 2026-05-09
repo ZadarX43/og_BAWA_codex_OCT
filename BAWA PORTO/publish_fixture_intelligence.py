@@ -533,6 +533,7 @@ def classify_context_monitor_fixture(
     market_label = context_markets_label(markets)
 
     source_availability = dict(universe_record.get("source_availability", {}))
+    current_overlay_summary = universe_record.get("current_overlay_summary", {}) if isinstance(universe_record.get("current_overlay_summary"), dict) else {}
     team_profile = universe_record.get("team_profile", {}) if isinstance(universe_record.get("team_profile"), dict) else {}
     home_profile = team_profile.get("home", {}) if isinstance(team_profile.get("home"), dict) else {}
     away_profile = team_profile.get("away", {}) if isinstance(team_profile.get("away"), dict) else {}
@@ -587,6 +588,23 @@ def classify_context_monitor_fixture(
     if source_availability.get("player_stats") and publish_class == "CONTEXT":
         context_summary["schedule_note"] = "Approved player-stat source is available for deeper overlay review."
 
+    if current_overlay_summary:
+        if str(current_overlay_summary.get("injury_note", "") or "").strip():
+            context_summary["injury_note"] = str(current_overlay_summary["injury_note"]).strip()
+        if str(current_overlay_summary.get("lineup_note", "") or "").strip():
+            context_summary["lineup_note"] = str(current_overlay_summary["lineup_note"]).strip()
+        if str(current_overlay_summary.get("form_note", "") or "").strip():
+            context_summary["form_note"] = str(current_overlay_summary["form_note"]).strip()
+        if str(current_overlay_summary.get("style_note", "") or "").strip():
+            context_summary["style_note"] = str(current_overlay_summary["style_note"]).strip()
+        if str(current_overlay_summary.get("referee_note", "") or "").strip():
+            context_summary["referee_note"] = str(current_overlay_summary["referee_note"]).strip()
+        if publish_class == "CONTEXT":
+            summary_text = (
+                f"No deployable edge. Coverage remained incomplete across {market_label}, "
+                "but current match-week overlay context still makes this fixture worth monitoring."
+            )
+
     if overlay_home or overlay_away:
         home_ppg = float(overlay_home.get("ppg_l5_avg", 0.0) or 0.0)
         away_ppg = float(overlay_away.get("ppg_l5_avg", 0.0) or 0.0)
@@ -616,7 +634,7 @@ def classify_context_monitor_fixture(
         if max(home_style, away_style) >= 0.6:
             context_summary["style_note"] = "Historical goal-environment overlay has leaned lively around this fixture profile."
 
-        if publish_class == "CONTEXT":
+        if publish_class == "CONTEXT" and not current_overlay_summary:
             summary_text = (
                 f"No deployable edge. Coverage remained incomplete across {market_label}, "
                 "but historical overlay context still makes this fixture worth monitoring."

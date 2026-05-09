@@ -34,6 +34,7 @@ MATCH_PLAYER_STATS_PATH = ROOT / "data_sources" / "api_football" / "normalized" 
 MATCH_EVENTS_PATH = ROOT / "data_sources" / "api_football" / "normalized" / "match_events.csv"
 FEATURES_DIR = ROOT / "data_sources" / "api_football" / "features"
 PLAYER_EVENTS_FEATURES_DIR = FEATURES_DIR / "player_events"
+CURRENT_CONTEXT_OVERLAY_SUMMARY_PATH = ROOT / "reports" / "latest" / "api_current_context_overlay_window" / "CURRENT_CONTEXT_OVERLAY_SUMMARY.json"
 
 LEAGUE_TAG_ALIASES: dict[str, list[str]] = {
     "belgium pro": ["Belgium_Pro"],
@@ -440,6 +441,25 @@ def load_historical_overlay_profile_index() -> dict[str, dict[str, dict[str, flo
     return profiles_by_tag
 
 
+def load_current_context_overlay_index(path: Path) -> dict[str, dict[str, Any]]:
+    if not path.exists():
+        return {}
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(payload, dict):
+        return {}
+    rows = payload.get("fixtures", [])
+    if not isinstance(rows, list):
+        return {}
+    index: dict[str, dict[str, Any]] = {}
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        fixture_key = str(row.get("fixture_key", "") or "").strip()
+        if fixture_key:
+            index[fixture_key] = row
+    return index
+
+
 def read_fixture_keys(path: Path, key_fields: tuple[str, str, str, str] = ("league", "match_date", "home_team_name", "away_team_name")) -> dict[str, dict[str, str]]:
     if not path.exists():
         return {}
@@ -469,6 +489,7 @@ def build_base_record(
     match_events_fixture_ids: set[str],
     team_profile_index: dict[str, dict[str, float]],
     historical_overlay_profiles: dict[str, dict[str, dict[str, float]]],
+    current_overlay_index: dict[str, dict[str, Any]],
 ) -> dict[str, Any]:
     kickoff_time = normalize_kickoff(match_date)
     master_match = fixtures_master_index.get(fixture_record_key(league, match_date, home_team, away_team))
@@ -476,6 +497,8 @@ def build_base_record(
     fixture_id = str(master_match.get("fixture_id", "") or "").strip() if master_match else ""
     home_profile = team_profile_index.get(normalize_lookup_text(home_team))
     away_profile = team_profile_index.get(normalize_lookup_text(away_team))
+    current_overlay = current_overlay_index.get(fixture_key, {})
+    current_overlay_availability = current_overlay.get("availability", {}) if isinstance(current_overlay.get("availability"), dict) else {}
     overlay_home_profile: dict[str, float] = {}
     overlay_away_profile: dict[str, float] = {}
     for tag in league_tag_candidates(league):
@@ -502,13 +525,14 @@ def build_base_record(
             "routed_deploy": False,
             "routed_observe": False,
             "goal_shape_base": False,
-            "prematch_odds": False,
-            "injuries": bool(fixture_id and fixture_id in injuries_fixture_ids),
-            "lineups": bool(fixture_id and fixture_id in lineups_fixture_ids),
-            "team_stats": bool(home_profile or away_profile),
-            "player_stats": bool(fixture_id and fixture_id in player_stats_fixture_ids),
-            "match_events": bool(fixture_id and fixture_id in match_events_fixture_ids),
+            "prematch_odds": bool(current_overlay_availability.get("prematch_odds")),
+            "injuries": bool(fixture_id and fixture_id in injuries_fixture_ids) or bool(current_overlay_availability.get("injuries")),
+            "lineups": bool(fixture_id and fixture_id in lineups_fixture_ids) or bool(current_overlay_availability.get("lineups")),
+            "team_stats": bool(home_profile or away_profile) or bool(current_overlay_availability.get("team_stats")),
+            "player_stats": bool(fixture_id and fixture_id in player_stats_fixture_ids) or bool(current_overlay_availability.get("player_stats")),
+            "match_events": bool(fixture_id and fixture_id in match_events_fixture_ids) or bool(current_overlay_availability.get("match_events")),
             "historical_overlay": bool(overlay_home_profile or overlay_away_profile),
+            "current_overlay": bool(current_overlay_availability.get("current_overlay")),
         },
         "follow_candidates": {
             "team_follow_candidate": True,
@@ -523,6 +547,7 @@ def build_base_record(
             "home": overlay_home_profile or {},
             "away": overlay_away_profile or {},
         },
+        "current_overlay_summary": current_overlay.get("summary", {}) if isinstance(current_overlay.get("summary"), dict) else {},
         "updated_at": utc_now_iso(),
     }
 
@@ -628,6 +653,7 @@ def main() -> int:
     match_events_fixture_ids = load_fixture_id_set(MATCH_EVENTS_PATH)
     team_profile_index = load_team_profile_index(MATCH_TEAM_STATS_PATH)
     historical_overlay_profiles = load_historical_overlay_profile_index()
+    current_overlay_index = load_current_context_overlay_index(CURRENT_CONTEXT_OVERLAY_SUMMARY_PATH)
 
     allmarkets_rows = load_rows(related_paths["allmarkets"])
     counters["source_rows:allmarkets"] = len(allmarkets_rows)
@@ -660,6 +686,7 @@ def main() -> int:
                 match_events_fixture_ids,
                 team_profile_index,
                 historical_overlay_profiles,
+                current_overlay_index,
             )
             universe[fixture_key] = record
         mark_allmarkets_availability(record, row)
@@ -725,6 +752,7 @@ def main() -> int:
             match_events_fixture_ids,
             team_profile_index,
             historical_overlay_profiles,
+            current_overlay_index,
         )
         universe[fixture_key] = record
         counters["loss_details:fixture_added_to_universe"] += 1
