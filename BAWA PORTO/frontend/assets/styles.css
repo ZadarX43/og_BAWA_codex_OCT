@@ -813,6 +813,60 @@ tbody tr:hover {
   color: var(--muted);
 }
 
+.compact-list {
+  gap: 8px;
+}
+
+.compact-list li {
+  padding: 10px 12px;
+}
+
+.intelligence-grid {
+  align-items: stretch;
+}
+
+.intelligence-card {
+  flex: 1 1 320px;
+  display: grid;
+  gap: 14px;
+  min-width: min(100%, 320px);
+}
+
+.intelligence-card-deploy {
+  border-color: rgba(78, 222, 163, 0.28);
+  box-shadow:
+    var(--shadow),
+    0 0 28px rgba(78, 222, 163, 0.06);
+}
+
+.intelligence-card-observe {
+  border-color: rgba(92, 200, 232, 0.22);
+}
+
+.intelligence-card-context,
+.intelligence-card-monitor {
+  border-color: rgba(246, 179, 109, 0.18);
+}
+
+.intelligence-card-head,
+.intelligence-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.intelligence-card-fixture {
+  display: grid;
+  gap: 10px;
+}
+
+.intelligence-headline {
+  margin: 0;
+  line-height: 1.58;
+  color: var(--ink);
+}
+
 .pricing-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

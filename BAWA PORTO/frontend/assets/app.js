@@ -18,6 +18,7 @@
     publicPredictions: [],
     premiumPredictions: [],
     securePremiumPredictions: [],
+    fixtureIntelligence: [],
     weeklyResults: null,
     runtime: {
       workerApiBase,
@@ -185,6 +186,161 @@
   };
 
   const joinPreferenceList = (value) => (Array.isArray(value) ? value.join(", ") : "");
+
+  const normalizePreferenceText = (value) =>
+    String(value || "")
+      .normalize("NFKD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/&/g, " and ")
+      .replace(/[^a-z0-9]+/g, " ")
+      .trim()
+      .replace(/\s+/g, " ");
+
+  const parsePreferenceList = (value) => {
+    if (Array.isArray(value)) {
+      return value.map((entry) => String(entry || "").trim()).filter(Boolean);
+    }
+    return String(value || "")
+      .split(",")
+      .map((entry) => entry.trim())
+      .filter(Boolean);
+  };
+
+  const fixturePreferenceLabel = (row) => `${row.home_team} v ${row.away_team}`;
+
+  const marketFamilyLabel = (value) => {
+    const key = String(value || "").toUpperCase();
+    if (key === "FTR") return "FTR";
+    if (key === "BTTS") return "BTTS";
+    if (key === "OU25") return "OU25";
+    return key || "INTEL";
+  };
+
+  const publishClassRank = (value) => {
+    const key = String(value || "").toUpperCase();
+    if (key === "DEPLOY") return 4;
+    if (key === "OBSERVE") return 3;
+    if (key === "CONTEXT") return 2;
+    if (key === "MONITOR") return 1;
+    return 0;
+  };
+
+  const formatKickoffLabel = (value) => {
+    if (!value) {
+      return "Upcoming fixture";
+    }
+    const parsed = new Date(value);
+    if (Number.isNaN(parsed.getTime())) {
+      return String(value);
+    }
+    return parsed.toLocaleString("en-GB", {
+      weekday: "short",
+      day: "2-digit",
+      month: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  const getFollowedIntelligenceMatches = (accountState, fixtures) => {
+    const prefs = accountState?.notification_preferences || null;
+    if (!prefs || !Array.isArray(fixtures) || !fixtures.length) {
+      return [];
+    }
+
+    const teams = parsePreferenceList(prefs.favourite_teams).map(normalizePreferenceText);
+    const leagues = parsePreferenceList(prefs.favourite_leagues).map(normalizePreferenceText);
+    const markets = parsePreferenceList(prefs.favourite_markets).map((entry) => normalizePreferenceText(entry).replace(/\s+/g, ""));
+    const followedFixtures = parsePreferenceList(prefs.followed_fixtures).map(normalizePreferenceText);
+
+    return fixtures
+      .map((row) => {
+        const reasons = [];
+        const rowHome = normalizePreferenceText(row.home_team);
+        const rowAway = normalizePreferenceText(row.away_team);
+        const rowLeague = normalizePreferenceText(row.league);
+        const rowFixture = normalizePreferenceText(fixturePreferenceLabel(row));
+        const rowMarket = normalizePreferenceText(marketFamilyLabel(row.signal_summary?.market_family)).replace(/\s+/g, "");
+
+        if (teams.some((entry) => entry && (rowHome.includes(entry) || rowAway.includes(entry) || entry.includes(rowHome) || entry.includes(rowAway)))) {
+          reasons.push("followed team");
+        }
+        if (leagues.some((entry) => entry && (rowLeague.includes(entry) || entry.includes(rowLeague)))) {
+          reasons.push("followed league");
+        }
+        if (markets.some((entry) => entry && rowMarket === entry)) {
+          reasons.push("followed market");
+        }
+        if (followedFixtures.some((entry) => entry && (rowFixture.includes(entry) || entry.includes(rowFixture)))) {
+          reasons.push("followed fixture");
+        }
+
+        if (!reasons.length) {
+          return null;
+        }
+
+        return {
+          row,
+          reasons,
+          score: reasons.length * 10 + publishClassRank(row.publish_class),
+        };
+      })
+      .filter(Boolean)
+      .sort((left, right) => {
+        if (right.score !== left.score) {
+          return right.score - left.score;
+        }
+        const leftTime = Date.parse(left.row.kickoff_time || "") || Number.MAX_SAFE_INTEGER;
+        const rightTime = Date.parse(right.row.kickoff_time || "") || Number.MAX_SAFE_INTEGER;
+        return leftTime - rightTime;
+      })
+      .slice(0, 8);
+  };
+
+  const intelligenceCard = (entry, telegramEnabled) => {
+    const row = entry.row;
+    const reasons = entry.reasons.join(" • ");
+    const publishClass = String(row.publish_class || row.fixture_class || "MONITOR").toUpperCase();
+    const headline =
+      row.signal_summary?.headline ||
+      row.signal_summary?.summary_text ||
+      "This fixture is being monitored through the intelligence layer.";
+    const notes = Array.isArray(row.context_summary?.notes) ? row.context_summary.notes.slice(0, 3) : [];
+    const notificationPriority = row.follow_relevance?.notification_priority || "normal";
+    return `
+      <article class="panel intelligence-card intelligence-card-${publishClass.toLowerCase()}">
+        <div class="intelligence-card-head">
+          <span class="pill">${escapeHtml(publishClass)}</span>
+          <span class="muted">${escapeHtml(formatKickoffLabel(row.kickoff_time))}</span>
+        </div>
+        <div class="intelligence-card-fixture">
+          <span class="muted fixture-league">
+            ${safeLogoUrl(row.league_logo_url || row.league_flag_url) ? `<img class="league-badge" src="${escapeHtml(safeLogoUrl(row.league_logo_url || row.league_flag_url))}" alt="" loading="lazy" decoding="async" onerror="this.remove()" />` : ""}
+            <span>${escapeHtml(row.league)}</span>
+          </span>
+          <strong class="fixture-teamline">
+            ${badgeMarkup(row.home_team_logo_url, row.home_team)}
+            <span class="team-name">${escapeHtml(row.home_team)}</span>
+            <span class="versus">vs</span>
+            ${badgeMarkup(row.away_team_logo_url, row.away_team)}
+            <span class="team-name">${escapeHtml(row.away_team)}</span>
+          </strong>
+        </div>
+        <div class="intelligence-meta">
+          <span class="chip">${escapeHtml(marketFamilyLabel(row.signal_summary?.market_family))}</span>
+          <span class="chip">${escapeHtml(reasons)}</span>
+          <span class="chip">${telegramEnabled ? `Telegram ${escapeHtml(notificationPriority)}` : "Website preview"}</span>
+        </div>
+        <p class="intelligence-headline">${escapeHtml(headline)}</p>
+        ${
+          notes.length
+            ? `<ul class="feature-list compact-list">${notes.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}</ul>`
+            : `<p class="muted">No extra context note is published for this fixture yet.</p>`
+        }
+      </article>
+    `;
+  };
 
   const formatProbability = (value) => {
     const numeric = Number(value);
@@ -1256,6 +1412,13 @@
     const telegramReady = Boolean(state.runtime.telegramLinkCode);
     const subscriptionStatus = accountState?.subscription?.subscription_status || (entitled ? "active" : "pending");
     const displayEmail = accountState?.user?.email || "";
+    const followedIntelligence = getFollowedIntelligenceMatches(accountState, state.fixtureIntelligence);
+    const followedSignalsConfigured = Boolean(
+      parsePreferenceList(notificationPreferences?.favourite_teams).length ||
+        parsePreferenceList(notificationPreferences?.favourite_leagues).length ||
+        parsePreferenceList(notificationPreferences?.favourite_markets).length ||
+        parsePreferenceList(notificationPreferences?.followed_fixtures).length
+    );
 
     return `
       <section class="section split">
@@ -1404,6 +1567,25 @@
             </section>
             <section class="section">
               <div class="notice">Subscription management is coming soon.</div>
+            </section>
+            <section class="section">
+              <article class="panel">
+                <h3>Followed intelligence</h3>
+                <p class="muted">
+                  This is the first website surface for the intelligence layer. Saved teams, leagues, markets, and fixtures now pull in routed and non-routed cards from the published fixture intelligence feed.
+                </p>
+                ${
+                  !followedSignalsConfigured
+                    ? `<div class="notice">Add followed teams, leagues, markets, or fixtures below to start shaping your personal intelligence board.</div>`
+                    : followedIntelligence.length
+                      ? `
+                        <div class="card-grid intelligence-grid">
+                          ${followedIntelligence.map((entry) => intelligenceCard(entry, Boolean(notificationPreferences?.telegram_enabled))).join("")}
+                        </div>
+                      `
+                      : `<div class="notice">Your follow settings are saved, but no current published fixtures matched this window yet. That will change as covered-fixture and context publishing expands.</div>`
+                }
+              </article>
             </section>
             <section class="section">
               <article class="panel">
@@ -1941,10 +2123,12 @@
         premiumDemoMode ? fetchOptionalJson(`${DATA_ROOT}/premium_predictions.json`) : Promise.resolve([]),
       ]);
       const weeklyResults = await fetchOptionalJson(`${DATA_ROOT}/weekly_results.json`);
+      const fixtureIntelligence = await fetchOptionalJson(`${DATA_ROOT}/fixture_intelligence_public.json`);
       state.summary = summary;
       state.publicPredictions = publicPredictions;
       state.premiumPredictions = Array.isArray(premiumPredictions) ? premiumPredictions : [];
       state.weeklyResults = weeklyResults;
+      state.fixtureIntelligence = Array.isArray(fixtureIntelligence?.fixtures) ? fixtureIntelligence.fixtures : [];
       await loadProtectedPremiumPredictions();
       render();
     } catch (error) {
