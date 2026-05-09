@@ -29,6 +29,9 @@ database_id = "replace-with-real-d1-database-id"
 # PREMIUM_DATA_SOURCE = "https://oddsgenius.example.com/public/data/premium_predictions.json"
 # STRIPE_PRICE_ID = "price_live_replace_me"
 # TELEGRAM_BOT_USERNAME = "odds_genius_bot"
+# Set Telegram bot secrets with `wrangler secret put`:
+# - TELEGRAM_BOT_TOKEN
+# - TELEGRAM_WEBHOOK_SECRET
 #
 # [[env.production.kv_namespaces]]
 # binding = "SUBSCRIBER_STATE"

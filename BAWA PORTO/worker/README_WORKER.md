@@ -30,6 +30,7 @@ Current status:
 - `GET /api/account/state`
 - `POST /api/account/telegram/link/start`
 - `POST /api/account/telegram/link/complete`
+- `POST /api/telegram/webhook`
 - `POST /api/stripe/checkout`
 - `POST /api/premium/token`
 - `POST /api/stripe/portal`
@@ -58,7 +59,9 @@ Exception:
 - `AUTH_SESSION_SECRET` (optional but recommended)
 - `RESEND_API_KEY`
 - `AUTH_EMAIL_FROM`
+- `TELEGRAM_BOT_TOKEN`
 - `TELEGRAM_BOT_USERNAME` (optional)
+- `TELEGRAM_WEBHOOK_SECRET`
 
 Do not store real values in this repo.
 
@@ -92,6 +95,7 @@ Current harness coverage:
 - active subscriber can request a magic link, verify it, receive a session cookie, and open the premium route without a bearer token
 - session-authenticated account state can mirror into the optional D1 layer
 - Telegram link flow can issue a one-time code and complete a D1-backed account link when `ACCOUNT_DB` is present
+- Telegram bot webhook can consume `/start oglink_CODE` and complete the D1-backed account link when bot env vars are present
 - protected route returns only allowlisted premium fields
 - missing token returns `401`
 - expired token returns `401`
@@ -238,6 +242,17 @@ Current response metadata:
 - accepts `code` and Telegram identity fields
 - consumes the one-time KV code
 - writes the linked Telegram identity into D1
+- can still be used directly by trusted internal tooling if needed
+
+`POST /api/telegram/webhook`:
+
+- expects Telegram Bot API webhook updates
+- requires `TELEGRAM_BOT_TOKEN`
+- requires `TELEGRAM_WEBHOOK_SECRET`
+- validates the `x-telegram-bot-api-secret-token` header
+- accepts `/start oglink_CODE` or a pasted six-character link code
+- completes the same D1/KV link flow as the direct completion endpoint
+- replies in-chat with success or retry guidance
 - enables Telegram notifications in preferences
 
 ## D1 Migration

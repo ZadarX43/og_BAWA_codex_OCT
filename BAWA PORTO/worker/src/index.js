@@ -26,6 +26,7 @@ const AUTH_MAGIC_KEY_PREFIX = "auth_magic:";
 const AUTH_RATE_LIMIT_KEY_PREFIX = "auth_rl:";
 const TELEGRAM_LINK_KEY_PREFIX = "telegram_link:";
 const AUTH_SESSION_COOKIE = "og_premium_session";
+const TELEGRAM_WEBHOOK_SECRET_HEADER = "x-telegram-bot-api-secret-token";
 const PREMIUM_ALLOWED_FIELDS = [
   "fixture_id",
   "fixture_key",
@@ -98,7 +99,9 @@ const envSummary = (env) => ({
   has_resend_api_key: Boolean(env.RESEND_API_KEY),
   has_auth_email_from: Boolean(env.AUTH_EMAIL_FROM),
   has_account_db: Boolean(getAccountDb(env)),
+  has_telegram_bot_token: Boolean(getTelegramBotToken(env)),
   has_telegram_bot_username: Boolean(env.TELEGRAM_BOT_USERNAME),
+  has_telegram_webhook_secret: Boolean(getTelegramWebhookSecret(env)),
 });
 
 const buildCorsHeaders = (request, env) => {
@@ -255,7 +258,12 @@ const buildTelegramLinkCode = () =>
     .map((value) => "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"[value % 32])
     .join("");
 
+const TELEGRAM_LINK_CODE_PATTERN = /\b([A-HJ-NP-Z2-9]{6})\b/;
+
 const getSessionSecret = (env) => String(env.AUTH_SESSION_SECRET || env.AUTH_MAGIC_LINK_SECRET || "").trim();
+
+const getTelegramBotToken = (env) => String(env.TELEGRAM_BOT_TOKEN || "").trim();
+const getTelegramWebhookSecret = (env) => String(env.TELEGRAM_WEBHOOK_SECRET || "").trim();
 
 const bytesToBase64Url = (bytes) =>
   btoa(String.fromCharCode(...bytes))
@@ -1381,42 +1389,47 @@ async function handleTelegramLinkStart(request, env) {
   });
 }
 
-async function handleTelegramLinkComplete(request, env) {
-  let payload;
-  try {
-    payload = await request.json();
-  } catch (error) {
-    return requestError("Telegram link completion body must be valid JSON.", error.message);
-  }
-
+async function completeTelegramLinkFromCode(env, payload, context = {}) {
   const code = String(payload?.code || "").trim().toUpperCase();
   const telegramUserId = String(payload?.telegram_user_id || "").trim();
   const telegramUsername = String(payload?.telegram_username || "").trim();
   const telegramChatId = String(payload?.telegram_chat_id || "").trim();
 
   if (!code || !telegramUserId) {
-    return requestError("Both `code` and `telegram_user_id` are required.");
+    return {
+      ok: false,
+      response: requestError("Both `code` and `telegram_user_id` are required."),
+    };
   }
 
   const accountDb = getAccountDb(env);
   const store = getSubscriberStateStore(env);
   if (!accountDb) {
-    return configError("ACCOUNT_DB D1 binding is required for Telegram linking.", ["ACCOUNT_DB"]);
+    return {
+      ok: false,
+      response: configError("ACCOUNT_DB D1 binding is required for Telegram linking.", ["ACCOUNT_DB"]),
+    };
   }
   if (!store) {
-    return configError("SUBSCRIBER_STATE binding is required for Telegram linking.", ["SUBSCRIBER_STATE"]);
+    return {
+      ok: false,
+      response: configError("SUBSCRIBER_STATE binding is required for Telegram linking.", ["SUBSCRIBER_STATE"]),
+    };
   }
 
   const kvRecord = await getKvJson(store, `${TELEGRAM_LINK_KEY_PREFIX}${code}`);
   if (!kvRecord?.user_id || !kvRecord?.email) {
-    return json(
-      {
-        ok: false,
-        status: "invalid_link_code",
-        message: "Telegram link code is invalid or expired.",
-      },
-      400
-    );
+    return {
+      ok: false,
+      response: json(
+        {
+          ok: false,
+          status: "invalid_link_code",
+          message: "Telegram link code is invalid or expired.",
+        },
+        400
+      ),
+    };
   }
 
   await deleteKvKey(store, `${TELEGRAM_LINK_KEY_PREFIX}${code}`);
@@ -1434,8 +1447,8 @@ async function handleTelegramLinkComplete(request, env) {
       user_id: kvRecord.user_id,
       email_normalized: kvRecord.email,
       event_type: "telegram_link_completed",
-      ip_hint: getRequestIp(request) || null,
-      user_agent_hint: getUserAgentHint(request),
+      ip_hint: context.ip_hint || null,
+      user_agent_hint: context.user_agent_hint || null,
       metadata: {
         telegram_user_id: telegramUserId,
         telegram_username: telegramUsername || null,
@@ -1445,12 +1458,164 @@ async function handleTelegramLinkComplete(request, env) {
     // Best-effort audit trail only.
   }
 
+  return {
+    ok: true,
+    payload: {
+      ok: true,
+      status: "telegram_linked",
+      message: "Telegram has been linked to this Odds Genius account.",
+      account: accountState,
+    },
+  };
+}
+
+const extractTelegramLinkCode = (text) => {
+  const normalized = String(text || "").trim();
+  if (!normalized) {
+    return "";
+  }
+  const startMatch = normalized.match(/\/start(?:@\w+)?\s+oglink[_-]?([A-HJ-NP-Z2-9]{6})/i);
+  if (startMatch?.[1]) {
+    return startMatch[1].toUpperCase();
+  }
+  const directMatch = normalized.match(TELEGRAM_LINK_CODE_PATTERN);
+  return directMatch?.[1]?.toUpperCase() || "";
+};
+
+async function sendTelegramMessage(env, chatId, text) {
+  const botToken = getTelegramBotToken(env);
+  if (!botToken || !chatId || !text) {
+    return false;
+  }
+
+  const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json; charset=utf-8",
+    },
+    body: JSON.stringify({
+      chat_id: chatId,
+      text,
+      disable_web_page_preview: true,
+    }),
+  });
+
+  return response.ok;
+}
+
+async function handleTelegramWebhook(request, env) {
+  const botToken = getTelegramBotToken(env);
+  const webhookSecret = getTelegramWebhookSecret(env);
+  if (!botToken) {
+    return configError("TELEGRAM_BOT_TOKEN is required for Telegram bot webhook handling.", [
+      "TELEGRAM_BOT_TOKEN",
+    ]);
+  }
+  if (!webhookSecret) {
+    return configError("TELEGRAM_WEBHOOK_SECRET is required for Telegram bot webhook handling.", [
+      "TELEGRAM_WEBHOOK_SECRET",
+    ]);
+  }
+
+  const providedSecret = String(request.headers.get(TELEGRAM_WEBHOOK_SECRET_HEADER) || "").trim();
+  if (!providedSecret || providedSecret !== webhookSecret) {
+    return unauthorizedError("Telegram webhook secret did not match.");
+  }
+
+  let update;
+  try {
+    update = await request.json();
+  } catch (error) {
+    return requestError("Telegram webhook body must be valid JSON.", error.message);
+  }
+
+  const message = update?.message || update?.edited_message || null;
+  const chatId = message?.chat?.id ? String(message.chat.id) : "";
+  const telegramUserId = message?.from?.id ? String(message.from.id) : "";
+  const telegramUsername = String(message?.from?.username || "").trim();
+  const text = String(message?.text || "").trim();
+
+  if (!chatId || !telegramUserId) {
+    return json({
+      ok: true,
+      status: "telegram_webhook_ignored",
+      message: "Update did not contain a usable message payload.",
+    });
+  }
+
+  const code = extractTelegramLinkCode(text);
+  if (!code) {
+    await sendTelegramMessage(
+      env,
+      chatId,
+      "Send the one-time Odds Genius code from your account page, or open the Telegram deep link there to finish linking."
+    );
+    return json({
+      ok: true,
+      status: "telegram_webhook_processed",
+      action: "instructions_sent",
+    });
+  }
+
+  const completion = await completeTelegramLinkFromCode(
+    env,
+    {
+      code,
+      telegram_user_id: telegramUserId,
+      telegram_username: telegramUsername || null,
+      telegram_chat_id: chatId,
+    },
+    {
+      ip_hint: getRequestIp(request) || "telegram_webhook",
+      user_agent_hint: getUserAgentHint(request) || "telegram_webhook",
+    }
+  );
+
+  if (!completion.ok) {
+    const errorPayload = await completion.response.clone().json().catch(() => ({}));
+    const errorText =
+      errorPayload?.status === "invalid_link_code"
+        ? "That link code is invalid or expired. Generate a fresh Telegram link code from your Odds Genius account page and try again."
+        : "Odds Genius could not complete the Telegram link just now. Please generate a fresh code from your account page and try again.";
+    await sendTelegramMessage(env, chatId, errorText);
+    return json({
+      ok: false,
+      status: "telegram_link_failed",
+      upstream_status: errorPayload?.status || "unknown_error",
+    });
+  }
+
+  await sendTelegramMessage(
+    env,
+    chatId,
+    "Telegram is now linked to your Odds Genius premium account. Future premium alerts can be delivered here."
+  );
+
   return json({
     ok: true,
-    status: "telegram_linked",
-    message: "Telegram has been linked to this Odds Genius account.",
-    account: accountState,
+    status: "telegram_webhook_processed",
+    action: "telegram_link_completed",
+    account: completion.payload.account,
   });
+}
+
+async function handleTelegramLinkComplete(request, env) {
+  let payload;
+  try {
+    payload = await request.json();
+  } catch (error) {
+    return requestError("Telegram link completion body must be valid JSON.", error.message);
+  }
+
+  const completion = await completeTelegramLinkFromCode(env, payload, {
+    ip_hint: getRequestIp(request) || null,
+    user_agent_hint: getUserAgentHint(request),
+  });
+  if (!completion.ok) {
+    return completion.response;
+  }
+
+  return json(completion.payload);
 }
 
 async function handleLogout() {
@@ -1743,6 +1908,7 @@ async function handleRequest(request, env) {
         "GET /api/account/state",
         "POST /api/account/telegram/link/start",
         "POST /api/account/telegram/link/complete",
+        "POST /api/telegram/webhook",
         "POST /api/stripe/checkout",
         "POST /api/premium/token",
         "POST /api/stripe/portal",
@@ -1823,6 +1989,15 @@ async function handleRequest(request, env) {
       return withCors(response, request, env);
     }
     response = await handleTelegramLinkComplete(request, env);
+    return withCors(response, request, env);
+  }
+
+  if (pathname === "/api/telegram/webhook") {
+    if (request.method !== "POST") {
+      response = methodNotAllowed("POST");
+      return withCors(response, request, env);
+    }
+    response = await handleTelegramWebhook(request, env);
     return withCors(response, request, env);
   }
 

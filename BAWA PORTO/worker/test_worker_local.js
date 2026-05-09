@@ -260,6 +260,8 @@ const createEnv = () => {
     AUTH_SESSION_SECRET: "test_auth_session_secret",
     RESEND_API_KEY: "test_resend_api_key",
     AUTH_EMAIL_FROM: "Odds Genius <auth@oddsgenius.test>",
+    TELEGRAM_BOT_TOKEN: "telegram_bot_test_token",
+    TELEGRAM_WEBHOOK_SECRET: "telegram_webhook_secret_test",
     PREMIUM_DATA_SOURCE: "/premium-source.json",
     SITE_URL: "http://localhost",
     SUBSCRIBER_STATE: store,
@@ -294,8 +296,10 @@ const installMockFetch = () => {
   const counters = {
     premiumSourceFetches: 0,
     resendSendFetches: 0,
+    telegramSendFetches: 0,
   };
   const sentEmails = [];
+  const sentTelegramMessages = [];
 
   globalThis.fetch = async (input, init) => {
     const url = typeof input === "string" ? input : input.url;
@@ -320,6 +324,17 @@ const installMockFetch = () => {
       });
     }
 
+    if (url === "https://api.telegram.org/bottelegram_bot_test_token/sendMessage") {
+      counters.telegramSendFetches += 1;
+      sentTelegramMessages.push(JSON.parse(init?.body || "{}"));
+      return new Response(JSON.stringify({ ok: true, result: { message_id: 1 } }), {
+        status: 200,
+        headers: {
+          "content-type": "application/json; charset=utf-8",
+        },
+      });
+    }
+
     if (url.includes("api.stripe.com")) {
       throw new Error("Stripe should not be called during local Worker harness tests.");
     }
@@ -330,6 +345,7 @@ const installMockFetch = () => {
   return {
     counters,
     sentEmails,
+    sentTelegramMessages,
     restore: () => {
       globalThis.fetch = originalFetch;
     },
@@ -716,6 +732,73 @@ const testAccountStateAndTelegramLinkFlow = async (fetchHarness) => {
   assert.equal(completePayload.account.notification_preferences.telegram_enabled, 1);
 };
 
+const testTelegramWebhookCompletesLinkFlow = async (fetchHarness) => {
+  const env = createEnv();
+  await writeSubscriberRecord(
+    env,
+    buildSubscriberRecord({
+      email: "member@example.com",
+    })
+  );
+
+  const requestResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/auth/magic-link/request", "POST", {
+      email: "member@example.com",
+    }),
+    env
+  );
+  assert.equal(requestResponse.status, 200);
+  const emailBody = fetchHarness.sentEmails.at(-1);
+  const verifyMatch = String(emailBody?.html || "").match(/verify\?token=([^"&]+)/);
+  assert.ok(verifyMatch?.[1], "expected magic-link token in email body");
+  const token = decodeURIComponent(verifyMatch[1]);
+
+  const tokenResponse = await worker.fetch(
+    makeGetRequest(`http://localhost/api/auth/magic-link/verify?token=${encodeURIComponent(token)}`),
+    env
+  );
+  const sessionCookie = extractCookieValue(tokenResponse.headers.get("set-cookie"), "og_premium_session");
+  assert.ok(sessionCookie, "expected premium session cookie after verify");
+
+  const startResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/account/telegram/link/start", "POST", null, {
+      cookie: `og_premium_session=${sessionCookie}`,
+    }),
+    env
+  );
+  const startPayload = await startResponse.json();
+  assert.equal(startResponse.status, 200);
+  assert.ok(startPayload.code);
+
+  const webhookResponse = await worker.fetch(
+    jsonRequest(
+      "http://localhost/api/telegram/webhook",
+      "POST",
+      {
+        update_id: 123456,
+        message: {
+          message_id: 42,
+          text: `/start oglink_${startPayload.code}`,
+          chat: { id: 99887766, type: "private" },
+          from: { id: 123123123, username: "ogfounder" },
+        },
+      },
+      {
+        [ "x-telegram-bot-api-secret-token" ]: env.TELEGRAM_WEBHOOK_SECRET,
+      }
+    ),
+    env
+  );
+  const webhookPayload = await webhookResponse.json();
+  assert.equal(webhookResponse.status, 200);
+  assert.equal(webhookPayload.status, "telegram_webhook_processed");
+  assert.equal(webhookPayload.action, "telegram_link_completed");
+  assert.equal(webhookPayload.account.telegram_link.telegram_user_id, "123123123");
+  assert.equal(webhookPayload.account.notification_preferences.telegram_enabled, 1);
+  assert.equal(fetchHarness.counters.telegramSendFetches >= 1, true);
+  assert.match(fetchHarness.sentTelegramMessages.at(-1)?.text || "", /now linked/i);
+};
+
 const main = async () => {
   const cacheHarness = installMockCache();
   const fetchHarness = installMockFetch();
@@ -732,6 +815,7 @@ const main = async () => {
     await testAuthSessionSkeleton();
     await testMagicLinkVerifyAndSessionFlow(fetchHarness);
     await testAccountStateAndTelegramLinkFlow(fetchHarness);
+    await testTelegramWebhookCompletesLinkFlow(fetchHarness);
     await testLogoutSkeleton();
     console.log("Worker local harness passed.");
     console.log("- success route with valid token: passed");
@@ -743,6 +827,7 @@ const main = async () => {
     console.log("- auth session flow: passed");
     console.log("- magic-link verify + session premium flow: passed");
     console.log("- D1-backed account state + Telegram link flow: passed");
+    console.log("- Telegram bot webhook completion flow: passed");
     console.log("- logout skeleton: passed");
   } finally {
     fetchHarness.restore();
