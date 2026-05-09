@@ -475,6 +475,25 @@ def build_context_summary(rows: list[dict[str, Any]]) -> dict[str, str]:
     return summary
 
 
+def finalize_context_summary(summary: dict[str, str]) -> dict[str, Any]:
+    ordered_keys = [
+        "market_movement_note",
+        "volatility_note",
+        "injury_note",
+        "lineup_note",
+        "form_note",
+        "style_note",
+        "schedule_note",
+        "fatigue_note",
+        "referee_note",
+        "h2h_note",
+    ]
+    notes = [str(summary[key]).strip() for key in ordered_keys if str(summary.get(key, "") or "").strip()]
+    finalized: dict[str, Any] = dict(summary)
+    finalized["notes"] = notes
+    return finalized
+
+
 def build_odds_summary(rows: list[dict[str, Any]]) -> dict[str, Any]:
     odds = {
         "home_win_odds": None,
@@ -644,6 +663,7 @@ def classify_context_monitor_fixture(
     record = {
         "fixture_id": universe_record["fixture_id"],
         "fixture_key": universe_record["fixture_key"],
+        "fixture_class": publish_class,
         "publish_class": publish_class,
         "coverage_status": universe_record.get("coverage_status", "covered"),
         "kickoff_time": universe_record["kickoff_time"],
@@ -673,10 +693,11 @@ def classify_context_monitor_fixture(
             "confidence_tier": None,
             "deploy_pick": None,
             "premium_tier": None,
+            "headline": summary_text,
             "summary_text": summary_text,
             "context_tags": ["coverage_gap", "follow_only"] if publish_class == "MONITOR" else ["coverage_gap", "not_deployable"],
         },
-        "context_summary": context_summary,
+        "context_summary": finalize_context_summary(context_summary),
         "follow_relevance": {
             "team_follow_candidate": bool(universe_record.get("follow_candidates", {}).get("team_follow_candidate", True)),
             "fixture_follow_candidate": bool(universe_record.get("follow_candidates", {}).get("fixture_follow_candidate", True)),
@@ -724,13 +745,14 @@ def build_fixture_record(
 ) -> dict[str, Any] | None:
     deploy_rows = [row for row in fixture_rows if row["tier"] in {"ELITE", "STANDARD"}]
     observe_rows = [row for row in fixture_rows if row["tier"] == "OBSERVE"]
-    context_summary = build_context_summary(fixture_rows)
+    context_summary = finalize_context_summary(build_context_summary(fixture_rows))
     odds_summary = build_odds_summary(fixture_rows)
 
     base = fixture_rows[0]
     record: dict[str, Any] = {
         "fixture_id": base["fixture_id"],
         "fixture_key": base["fixture_key"],
+        "fixture_class": "",
         "publish_class": "",
         "coverage_status": "covered",
         "kickoff_time": base["kickoff_time"],
@@ -752,6 +774,7 @@ def build_fixture_record(
     if deploy_rows:
         primary = select_primary_deploy(deploy_rows)
         record["publish_class"] = "DEPLOY"
+        record["fixture_class"] = "DEPLOY"
         record["signal_summary"] = {
             "signal_state": "deploy",
             "market_family": primary["market"],
@@ -760,6 +783,7 @@ def build_fixture_record(
             "confidence_tier": primary["tier"],
             "deploy_pick": primary["pick"],
             "premium_tier": primary["tier"],
+            "headline": deploy_signal_summary(primary),
             "summary_text": deploy_signal_summary(primary),
             "context_tags": [],
         }
@@ -777,6 +801,7 @@ def build_fixture_record(
             counters["hidden:observe_only"] += 1
             return None
         record["publish_class"] = publish_class
+        record["fixture_class"] = publish_class
         record["signal_summary"] = {
             "signal_state": translated["signal_state"],
             "market_family": primary["market"],
@@ -785,6 +810,7 @@ def build_fixture_record(
             "confidence_tier": None,
             "deploy_pick": None,
             "premium_tier": None,
+            "headline": translated["summary_text"],
             "summary_text": translated["summary_text"],
             "context_tags": translated["context_tags"],
         }

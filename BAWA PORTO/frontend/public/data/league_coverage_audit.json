@@ -1,0 +1,1177 @@
+{
+  "generated_at": "2026-05-09T14:11:03+00:00",
+  "source_run_id": "2026-05-09",
+  "source_window": {
+    "date_from": "2026-05-09",
+    "date_to": "2026-05-11"
+  },
+  "coverage_summary": {
+    "total_leagues": 26,
+    "full_coverage_count": 7,
+    "partial_coverage_count": 17,
+    "context_only_count": 0,
+    "blind_spot_count": 2
+  },
+  "leagues": [
+    {
+      "league": "Australia A-League",
+      "window_from": "2026-05-09",
+      "window_to": "2026-05-11",
+      "fixture_counts": {
+        "covered_total": 2,
+        "routed_total": 2,
+        "non_routed_total": 0,
+        "deploy_total": 0,
+        "observe_total": 2,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "market_output": {
+        "ftr_present": true,
+        "btts_present": false,
+        "ou25_present": false
+      },
+      "routing_presence": {
+        "allmarkets_present": true,
+        "observe_present": true,
+        "deploy_present": false,
+        "loss_report_presence": false
+      },
+      "overlay_support": {
+        "historical_overlay": false,
+        "current_odds": false,
+        "current_injuries": false,
+        "current_lineups": false,
+        "current_team_stats": false,
+        "current_player_stats": false,
+        "current_match_events": false
+      },
+      "source_counts": {
+        "overlay_fixture_rows": 0,
+        "intelligence_fixture_rows": 2
+      },
+      "classification": "partial_coverage",
+      "notes": [
+        "League has fixtures entering the ALLMARKETS intake base.",
+        "League routed observe intelligence but no deployable fixture in the active window."
+      ]
+    },
+    {
+      "league": "Austria Bundesliga",
+      "window_from": "2026-05-09",
+      "window_to": "2026-05-11",
+      "fixture_counts": {
+        "covered_total": 6,
+        "routed_total": 6,
+        "non_routed_total": 0,
+        "deploy_total": 0,
+        "observe_total": 6,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "market_output": {
+        "ftr_present": false,
+        "btts_present": true,
+        "ou25_present": true
+      },
+      "routing_presence": {
+        "allmarkets_present": true,
+        "observe_present": true,
+        "deploy_present": false,
+        "loss_report_presence": false
+      },
+      "overlay_support": {
+        "historical_overlay": false,
+        "current_odds": false,
+        "current_injuries": false,
+        "current_lineups": false,
+        "current_team_stats": false,
+        "current_player_stats": false,
+        "current_match_events": false
+      },
+      "source_counts": {
+        "overlay_fixture_rows": 0,
+        "intelligence_fixture_rows": 6
+      },
+      "classification": "partial_coverage",
+      "notes": [
+        "League has fixtures entering the ALLMARKETS intake base.",
+        "League routed observe intelligence but no deployable fixture in the active window."
+      ]
+    },
+    {
+      "league": "Belgium Pro",
+      "window_from": "2026-05-09",
+      "window_to": "2026-05-11",
+      "fixture_counts": {
+        "covered_total": 7,
+        "routed_total": 7,
+        "non_routed_total": 0,
+        "deploy_total": 5,
+        "observe_total": 2,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "market_output": {
+        "ftr_present": true,
+        "btts_present": false,
+        "ou25_present": false
+      },
+      "routing_presence": {
+        "allmarkets_present": true,
+        "observe_present": true,
+        "deploy_present": true,
+        "loss_report_presence": false
+      },
+      "overlay_support": {
+        "historical_overlay": true,
+        "current_odds": true,
+        "current_injuries": true,
+        "current_lineups": true,
+        "current_team_stats": true,
+        "current_player_stats": false,
+        "current_match_events": true
+      },
+      "source_counts": {
+        "overlay_fixture_rows": 1,
+        "intelligence_fixture_rows": 7
+      },
+      "classification": "partial_coverage",
+      "notes": [
+        "League has fixtures entering the ALLMARKETS intake base.",
+        "League routed at least one deployable fixture in the active window.",
+        "Historical overlay support exists for this league.",
+        "Current-window overlay refresh produced 5 live support families."
+      ]
+    },
+    {
+      "league": "Brazil Serie A",
+      "window_from": "2026-05-09",
+      "window_to": "2026-05-11",
+      "fixture_counts": {
+        "covered_total": 10,
+        "routed_total": 10,
+        "non_routed_total": 0,
+        "deploy_total": 1,
+        "observe_total": 9,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "market_output": {
+        "ftr_present": true,
+        "btts_present": false,
+        "ou25_present": true
+      },
+      "routing_presence": {
+        "allmarkets_present": true,
+        "observe_present": true,
+        "deploy_present": true,
+        "loss_report_presence": false
+      },
+      "overlay_support": {
+        "historical_overlay": true,
+        "current_odds": true,
+        "current_injuries": true,
+        "current_lineups": true,
+        "current_team_stats": true,
+        "current_player_stats": false,
+        "current_match_events": true
+      },
+      "source_counts": {
+        "overlay_fixture_rows": 8,
+        "intelligence_fixture_rows": 10
+      },
+      "classification": "full_coverage",
+      "notes": [
+        "League has fixtures entering the ALLMARKETS intake base.",
+        "League routed at least one deployable fixture in the active window.",
+        "Historical overlay support exists for this league.",
+        "Current-window overlay refresh produced 5 live support families."
+      ]
+    },
+    {
+      "league": "Denmark Superliga",
+      "window_from": "2026-05-09",
+      "window_to": "2026-05-11",
+      "fixture_counts": {
+        "covered_total": 5,
+        "routed_total": 5,
+        "non_routed_total": 0,
+        "deploy_total": 0,
+        "observe_total": 5,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "market_output": {
+        "ftr_present": true,
+        "btts_present": true,
+        "ou25_present": false
+      },
+      "routing_presence": {
+        "allmarkets_present": true,
+        "observe_present": true,
+        "deploy_present": false,
+        "loss_report_presence": false
+      },
+      "overlay_support": {
+        "historical_overlay": false,
+        "current_odds": false,
+        "current_injuries": false,
+        "current_lineups": false,
+        "current_team_stats": false,
+        "current_player_stats": false,
+        "current_match_events": false
+      },
+      "source_counts": {
+        "overlay_fixture_rows": 0,
+        "intelligence_fixture_rows": 5
+      },
+      "classification": "partial_coverage",
+      "notes": [
+        "League has fixtures entering the ALLMARKETS intake base.",
+        "League routed observe intelligence but no deployable fixture in the active window."
+      ]
+    },
+    {
+      "league": "England Championship",
+      "window_from": "2026-05-09",
+      "window_to": "2026-05-11",
+      "fixture_counts": {
+        "covered_total": 1,
+        "routed_total": 1,
+        "non_routed_total": 0,
+        "deploy_total": 0,
+        "observe_total": 1,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "market_output": {
+        "ftr_present": true,
+        "btts_present": false,
+        "ou25_present": false
+      },
+      "routing_presence": {
+        "allmarkets_present": true,
+        "observe_present": true,
+        "deploy_present": false,
+        "loss_report_presence": false
+      },
+      "overlay_support": {
+        "historical_overlay": true,
+        "current_odds": false,
+        "current_injuries": false,
+        "current_lineups": false,
+        "current_team_stats": false,
+        "current_player_stats": false,
+        "current_match_events": false
+      },
+      "source_counts": {
+        "overlay_fixture_rows": 0,
+        "intelligence_fixture_rows": 1
+      },
+      "classification": "partial_coverage",
+      "notes": [
+        "League has fixtures entering the ALLMARKETS intake base.",
+        "League routed observe intelligence but no deployable fixture in the active window.",
+        "Historical overlay support exists for this league."
+      ]
+    },
+    {
+      "league": "England EFL League 1",
+      "window_from": "2026-05-09",
+      "window_to": "2026-05-11",
+      "fixture_counts": {
+        "covered_total": 2,
+        "routed_total": 2,
+        "non_routed_total": 0,
+        "deploy_total": 0,
+        "observe_total": 2,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "market_output": {
+        "ftr_present": false,
+        "btts_present": true,
+        "ou25_present": false
+      },
+      "routing_presence": {
+        "allmarkets_present": true,
+        "observe_present": true,
+        "deploy_present": false,
+        "loss_report_presence": false
+      },
+      "overlay_support": {
+        "historical_overlay": false,
+        "current_odds": false,
+        "current_injuries": false,
+        "current_lineups": false,
+        "current_team_stats": false,
+        "current_player_stats": false,
+        "current_match_events": false
+      },
+      "source_counts": {
+        "overlay_fixture_rows": 0,
+        "intelligence_fixture_rows": 2
+      },
+      "classification": "partial_coverage",
+      "notes": [
+        "League has fixtures entering the ALLMARKETS intake base.",
+        "League routed observe intelligence but no deployable fixture in the active window."
+      ]
+    },
+    {
+      "league": "England Premier League",
+      "window_from": "2026-05-09",
+      "window_to": "2026-05-11",
+      "fixture_counts": {
+        "covered_total": 10,
+        "routed_total": 10,
+        "non_routed_total": 0,
+        "deploy_total": 0,
+        "observe_total": 10,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "market_output": {
+        "ftr_present": true,
+        "btts_present": true,
+        "ou25_present": true
+      },
+      "routing_presence": {
+        "allmarkets_present": true,
+        "observe_present": true,
+        "deploy_present": false,
+        "loss_report_presence": false
+      },
+      "overlay_support": {
+        "historical_overlay": true,
+        "current_odds": false,
+        "current_injuries": false,
+        "current_lineups": false,
+        "current_team_stats": false,
+        "current_player_stats": false,
+        "current_match_events": false
+      },
+      "source_counts": {
+        "overlay_fixture_rows": 0,
+        "intelligence_fixture_rows": 10
+      },
+      "classification": "partial_coverage",
+      "notes": [
+        "League has fixtures entering the ALLMARKETS intake base.",
+        "League routed observe intelligence but no deployable fixture in the active window.",
+        "Historical overlay support exists for this league."
+      ]
+    },
+    {
+      "league": "France Ligue 1",
+      "window_from": "2026-05-09",
+      "window_to": "2026-05-11",
+      "fixture_counts": {
+        "covered_total": 8,
+        "routed_total": 8,
+        "non_routed_total": 0,
+        "deploy_total": 1,
+        "observe_total": 7,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "market_output": {
+        "ftr_present": true,
+        "btts_present": true,
+        "ou25_present": false
+      },
+      "routing_presence": {
+        "allmarkets_present": true,
+        "observe_present": true,
+        "deploy_present": true,
+        "loss_report_presence": false
+      },
+      "overlay_support": {
+        "historical_overlay": true,
+        "current_odds": false,
+        "current_injuries": false,
+        "current_lineups": false,
+        "current_team_stats": false,
+        "current_player_stats": false,
+        "current_match_events": false
+      },
+      "source_counts": {
+        "overlay_fixture_rows": 0,
+        "intelligence_fixture_rows": 8
+      },
+      "classification": "full_coverage",
+      "notes": [
+        "League has fixtures entering the ALLMARKETS intake base.",
+        "League routed at least one deployable fixture in the active window.",
+        "Historical overlay support exists for this league."
+      ]
+    },
+    {
+      "league": "Germany Bundesliga",
+      "window_from": "2026-05-09",
+      "window_to": "2026-05-11",
+      "fixture_counts": {
+        "covered_total": 8,
+        "routed_total": 8,
+        "non_routed_total": 0,
+        "deploy_total": 2,
+        "observe_total": 6,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "market_output": {
+        "ftr_present": true,
+        "btts_present": true,
+        "ou25_present": true
+      },
+      "routing_presence": {
+        "allmarkets_present": true,
+        "observe_present": true,
+        "deploy_present": true,
+        "loss_report_presence": false
+      },
+      "overlay_support": {
+        "historical_overlay": true,
+        "current_odds": false,
+        "current_injuries": false,
+        "current_lineups": false,
+        "current_team_stats": false,
+        "current_player_stats": false,
+        "current_match_events": false
+      },
+      "source_counts": {
+        "overlay_fixture_rows": 0,
+        "intelligence_fixture_rows": 8
+      },
+      "classification": "full_coverage",
+      "notes": [
+        "League has fixtures entering the ALLMARKETS intake base.",
+        "League routed at least one deployable fixture in the active window.",
+        "Historical overlay support exists for this league."
+      ]
+    },
+    {
+      "league": "Germany Bundesliga 2",
+      "window_from": "2026-05-09",
+      "window_to": "2026-05-11",
+      "fixture_counts": {
+        "covered_total": 7,
+        "routed_total": 0,
+        "non_routed_total": 7,
+        "deploy_total": 0,
+        "observe_total": 0,
+        "context_total": 7,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "market_output": {
+        "ftr_present": false,
+        "btts_present": false,
+        "ou25_present": false
+      },
+      "routing_presence": {
+        "allmarkets_present": false,
+        "observe_present": false,
+        "deploy_present": false,
+        "loss_report_presence": true
+      },
+      "overlay_support": {
+        "historical_overlay": false,
+        "current_odds": false,
+        "current_injuries": false,
+        "current_lineups": false,
+        "current_team_stats": false,
+        "current_player_stats": false,
+        "current_match_events": false
+      },
+      "source_counts": {
+        "overlay_fixture_rows": 0,
+        "intelligence_fixture_rows": 7
+      },
+      "classification": "blind_spot",
+      "notes": [
+        "League did not reach the ALLMARKETS intake base in this window.",
+        "League is currently represented through non-routed context coverage."
+      ]
+    },
+    {
+      "league": "Italy Serie A",
+      "window_from": "2026-05-09",
+      "window_to": "2026-05-11",
+      "fixture_counts": {
+        "covered_total": 9,
+        "routed_total": 9,
+        "non_routed_total": 0,
+        "deploy_total": 0,
+        "observe_total": 9,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "market_output": {
+        "ftr_present": true,
+        "btts_present": true,
+        "ou25_present": false
+      },
+      "routing_presence": {
+        "allmarkets_present": true,
+        "observe_present": true,
+        "deploy_present": false,
+        "loss_report_presence": false
+      },
+      "overlay_support": {
+        "historical_overlay": true,
+        "current_odds": false,
+        "current_injuries": false,
+        "current_lineups": false,
+        "current_team_stats": false,
+        "current_player_stats": false,
+        "current_match_events": false
+      },
+      "source_counts": {
+        "overlay_fixture_rows": 0,
+        "intelligence_fixture_rows": 9
+      },
+      "classification": "partial_coverage",
+      "notes": [
+        "League has fixtures entering the ALLMARKETS intake base.",
+        "League routed observe intelligence but no deployable fixture in the active window.",
+        "Historical overlay support exists for this league."
+      ]
+    },
+    {
+      "league": "Jupiler Pro League",
+      "window_from": "2026-05-09",
+      "window_to": "2026-05-11",
+      "fixture_counts": {
+        "covered_total": 0,
+        "routed_total": 0,
+        "non_routed_total": 0,
+        "deploy_total": 0,
+        "observe_total": 0,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "market_output": {
+        "ftr_present": false,
+        "btts_present": false,
+        "ou25_present": false
+      },
+      "routing_presence": {
+        "allmarkets_present": false,
+        "observe_present": false,
+        "deploy_present": false,
+        "loss_report_presence": false
+      },
+      "overlay_support": {
+        "historical_overlay": false,
+        "current_odds": true,
+        "current_injuries": true,
+        "current_lineups": true,
+        "current_team_stats": true,
+        "current_player_stats": false,
+        "current_match_events": true
+      },
+      "source_counts": {
+        "overlay_fixture_rows": 8,
+        "intelligence_fixture_rows": 0
+      },
+      "classification": "partial_coverage",
+      "notes": [
+        "League did not reach the ALLMARKETS intake base in this window.",
+        "Current-window overlay refresh produced 5 live support families."
+      ]
+    },
+    {
+      "league": "Major League Soccer",
+      "window_from": "2026-05-09",
+      "window_to": "2026-05-11",
+      "fixture_counts": {
+        "covered_total": 0,
+        "routed_total": 0,
+        "non_routed_total": 0,
+        "deploy_total": 0,
+        "observe_total": 0,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "market_output": {
+        "ftr_present": false,
+        "btts_present": false,
+        "ou25_present": false
+      },
+      "routing_presence": {
+        "allmarkets_present": false,
+        "observe_present": false,
+        "deploy_present": false,
+        "loss_report_presence": false
+      },
+      "overlay_support": {
+        "historical_overlay": false,
+        "current_odds": true,
+        "current_injuries": true,
+        "current_lineups": true,
+        "current_team_stats": true,
+        "current_player_stats": false,
+        "current_match_events": true
+      },
+      "source_counts": {
+        "overlay_fixture_rows": 15,
+        "intelligence_fixture_rows": 0
+      },
+      "classification": "partial_coverage",
+      "notes": [
+        "League did not reach the ALLMARKETS intake base in this window.",
+        "Current-window overlay refresh produced 5 live support families."
+      ]
+    },
+    {
+      "league": "Netherlands Eredivisie",
+      "window_from": "2026-05-09",
+      "window_to": "2026-05-11",
+      "fixture_counts": {
+        "covered_total": 9,
+        "routed_total": 9,
+        "non_routed_total": 0,
+        "deploy_total": 6,
+        "observe_total": 3,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "market_output": {
+        "ftr_present": false,
+        "btts_present": true,
+        "ou25_present": true
+      },
+      "routing_presence": {
+        "allmarkets_present": true,
+        "observe_present": true,
+        "deploy_present": true,
+        "loss_report_presence": false
+      },
+      "overlay_support": {
+        "historical_overlay": true,
+        "current_odds": false,
+        "current_injuries": false,
+        "current_lineups": false,
+        "current_team_stats": false,
+        "current_player_stats": false,
+        "current_match_events": false
+      },
+      "source_counts": {
+        "overlay_fixture_rows": 0,
+        "intelligence_fixture_rows": 9
+      },
+      "classification": "full_coverage",
+      "notes": [
+        "League has fixtures entering the ALLMARKETS intake base.",
+        "League routed at least one deployable fixture in the active window.",
+        "Historical overlay support exists for this league."
+      ]
+    },
+    {
+      "league": "Norway Eliteserien",
+      "window_from": "2026-05-09",
+      "window_to": "2026-05-11",
+      "fixture_counts": {
+        "covered_total": 5,
+        "routed_total": 5,
+        "non_routed_total": 0,
+        "deploy_total": 0,
+        "observe_total": 5,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "market_output": {
+        "ftr_present": true,
+        "btts_present": true,
+        "ou25_present": false
+      },
+      "routing_presence": {
+        "allmarkets_present": true,
+        "observe_present": true,
+        "deploy_present": false,
+        "loss_report_presence": false
+      },
+      "overlay_support": {
+        "historical_overlay": false,
+        "current_odds": false,
+        "current_injuries": false,
+        "current_lineups": false,
+        "current_team_stats": false,
+        "current_player_stats": false,
+        "current_match_events": false
+      },
+      "source_counts": {
+        "overlay_fixture_rows": 0,
+        "intelligence_fixture_rows": 5
+      },
+      "classification": "partial_coverage",
+      "notes": [
+        "League has fixtures entering the ALLMARKETS intake base.",
+        "League routed observe intelligence but no deployable fixture in the active window."
+      ]
+    },
+    {
+      "league": "Portugal Liga",
+      "window_from": "2026-05-09",
+      "window_to": "2026-05-11",
+      "fixture_counts": {
+        "covered_total": 9,
+        "routed_total": 2,
+        "non_routed_total": 7,
+        "deploy_total": 1,
+        "observe_total": 1,
+        "context_total": 7,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "market_output": {
+        "ftr_present": true,
+        "btts_present": false,
+        "ou25_present": false
+      },
+      "routing_presence": {
+        "allmarkets_present": true,
+        "observe_present": true,
+        "deploy_present": true,
+        "loss_report_presence": true
+      },
+      "overlay_support": {
+        "historical_overlay": true,
+        "current_odds": true,
+        "current_injuries": true,
+        "current_lineups": true,
+        "current_team_stats": true,
+        "current_player_stats": false,
+        "current_match_events": true
+      },
+      "source_counts": {
+        "overlay_fixture_rows": 1,
+        "intelligence_fixture_rows": 9
+      },
+      "classification": "partial_coverage",
+      "notes": [
+        "League has fixtures entering the ALLMARKETS intake base.",
+        "League routed at least one deployable fixture in the active window.",
+        "Historical overlay support exists for this league.",
+        "Current-window overlay refresh produced 5 live support families."
+      ]
+    },
+    {
+      "league": "Primeira Liga",
+      "window_from": "2026-05-09",
+      "window_to": "2026-05-11",
+      "fixture_counts": {
+        "covered_total": 0,
+        "routed_total": 0,
+        "non_routed_total": 0,
+        "deploy_total": 0,
+        "observe_total": 0,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "market_output": {
+        "ftr_present": false,
+        "btts_present": false,
+        "ou25_present": false
+      },
+      "routing_presence": {
+        "allmarkets_present": false,
+        "observe_present": false,
+        "deploy_present": false,
+        "loss_report_presence": false
+      },
+      "overlay_support": {
+        "historical_overlay": false,
+        "current_odds": true,
+        "current_injuries": true,
+        "current_lineups": true,
+        "current_team_stats": true,
+        "current_player_stats": false,
+        "current_match_events": true
+      },
+      "source_counts": {
+        "overlay_fixture_rows": 9,
+        "intelligence_fixture_rows": 0
+      },
+      "classification": "partial_coverage",
+      "notes": [
+        "League did not reach the ALLMARKETS intake base in this window.",
+        "Current-window overlay refresh produced 5 live support families."
+      ]
+    },
+    {
+      "league": "Saudi Pro League",
+      "window_from": "2026-05-09",
+      "window_to": "2026-05-11",
+      "fixture_counts": {
+        "covered_total": 7,
+        "routed_total": 7,
+        "non_routed_total": 0,
+        "deploy_total": 1,
+        "observe_total": 6,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "market_output": {
+        "ftr_present": true,
+        "btts_present": true,
+        "ou25_present": true
+      },
+      "routing_presence": {
+        "allmarkets_present": true,
+        "observe_present": true,
+        "deploy_present": true,
+        "loss_report_presence": false
+      },
+      "overlay_support": {
+        "historical_overlay": false,
+        "current_odds": false,
+        "current_injuries": false,
+        "current_lineups": false,
+        "current_team_stats": false,
+        "current_player_stats": false,
+        "current_match_events": false
+      },
+      "source_counts": {
+        "overlay_fixture_rows": 0,
+        "intelligence_fixture_rows": 7
+      },
+      "classification": "full_coverage",
+      "notes": [
+        "League has fixtures entering the ALLMARKETS intake base.",
+        "League routed at least one deployable fixture in the active window."
+      ]
+    },
+    {
+      "league": "Scotland Premiership",
+      "window_from": "2026-05-09",
+      "window_to": "2026-05-11",
+      "fixture_counts": {
+        "covered_total": 6,
+        "routed_total": 6,
+        "non_routed_total": 0,
+        "deploy_total": 0,
+        "observe_total": 6,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "market_output": {
+        "ftr_present": true,
+        "btts_present": false,
+        "ou25_present": true
+      },
+      "routing_presence": {
+        "allmarkets_present": true,
+        "observe_present": true,
+        "deploy_present": false,
+        "loss_report_presence": false
+      },
+      "overlay_support": {
+        "historical_overlay": true,
+        "current_odds": false,
+        "current_injuries": false,
+        "current_lineups": false,
+        "current_team_stats": false,
+        "current_player_stats": false,
+        "current_match_events": false
+      },
+      "source_counts": {
+        "overlay_fixture_rows": 0,
+        "intelligence_fixture_rows": 6
+      },
+      "classification": "partial_coverage",
+      "notes": [
+        "League has fixtures entering the ALLMARKETS intake base.",
+        "League routed observe intelligence but no deployable fixture in the active window.",
+        "Historical overlay support exists for this league."
+      ]
+    },
+    {
+      "league": "Serie A",
+      "window_from": "2026-05-09",
+      "window_to": "2026-05-11",
+      "fixture_counts": {
+        "covered_total": 0,
+        "routed_total": 0,
+        "non_routed_total": 0,
+        "deploy_total": 0,
+        "observe_total": 0,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "market_output": {
+        "ftr_present": false,
+        "btts_present": false,
+        "ou25_present": false
+      },
+      "routing_presence": {
+        "allmarkets_present": false,
+        "observe_present": false,
+        "deploy_present": false,
+        "loss_report_presence": false
+      },
+      "overlay_support": {
+        "historical_overlay": false,
+        "current_odds": true,
+        "current_injuries": true,
+        "current_lineups": true,
+        "current_team_stats": true,
+        "current_player_stats": false,
+        "current_match_events": true
+      },
+      "source_counts": {
+        "overlay_fixture_rows": 10,
+        "intelligence_fixture_rows": 0
+      },
+      "classification": "partial_coverage",
+      "notes": [
+        "League did not reach the ALLMARKETS intake base in this window.",
+        "Current-window overlay refresh produced 5 live support families."
+      ]
+    },
+    {
+      "league": "South Korea K League",
+      "window_from": "2026-05-09",
+      "window_to": "2026-05-11",
+      "fixture_counts": {
+        "covered_total": 6,
+        "routed_total": 6,
+        "non_routed_total": 0,
+        "deploy_total": 0,
+        "observe_total": 6,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "market_output": {
+        "ftr_present": true,
+        "btts_present": false,
+        "ou25_present": true
+      },
+      "routing_presence": {
+        "allmarkets_present": true,
+        "observe_present": true,
+        "deploy_present": false,
+        "loss_report_presence": false
+      },
+      "overlay_support": {
+        "historical_overlay": false,
+        "current_odds": false,
+        "current_injuries": false,
+        "current_lineups": false,
+        "current_team_stats": false,
+        "current_player_stats": false,
+        "current_match_events": false
+      },
+      "source_counts": {
+        "overlay_fixture_rows": 0,
+        "intelligence_fixture_rows": 6
+      },
+      "classification": "partial_coverage",
+      "notes": [
+        "League has fixtures entering the ALLMARKETS intake base.",
+        "League routed observe intelligence but no deployable fixture in the active window."
+      ]
+    },
+    {
+      "league": "Spain La Liga",
+      "window_from": "2026-05-09",
+      "window_to": "2026-05-11",
+      "fixture_counts": {
+        "covered_total": 9,
+        "routed_total": 9,
+        "non_routed_total": 0,
+        "deploy_total": 2,
+        "observe_total": 7,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "market_output": {
+        "ftr_present": true,
+        "btts_present": true,
+        "ou25_present": true
+      },
+      "routing_presence": {
+        "allmarkets_present": true,
+        "observe_present": true,
+        "deploy_present": true,
+        "loss_report_presence": false
+      },
+      "overlay_support": {
+        "historical_overlay": true,
+        "current_odds": false,
+        "current_injuries": false,
+        "current_lineups": false,
+        "current_team_stats": false,
+        "current_player_stats": false,
+        "current_match_events": false
+      },
+      "source_counts": {
+        "overlay_fixture_rows": 0,
+        "intelligence_fixture_rows": 9
+      },
+      "classification": "full_coverage",
+      "notes": [
+        "League has fixtures entering the ALLMARKETS intake base.",
+        "League routed at least one deployable fixture in the active window.",
+        "Historical overlay support exists for this league."
+      ]
+    },
+    {
+      "league": "Swiss Super League",
+      "window_from": "2026-05-09",
+      "window_to": "2026-05-11",
+      "fixture_counts": {
+        "covered_total": 6,
+        "routed_total": 6,
+        "non_routed_total": 0,
+        "deploy_total": 0,
+        "observe_total": 6,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "market_output": {
+        "ftr_present": true,
+        "btts_present": true,
+        "ou25_present": false
+      },
+      "routing_presence": {
+        "allmarkets_present": true,
+        "observe_present": true,
+        "deploy_present": false,
+        "loss_report_presence": false
+      },
+      "overlay_support": {
+        "historical_overlay": false,
+        "current_odds": false,
+        "current_injuries": false,
+        "current_lineups": false,
+        "current_team_stats": false,
+        "current_player_stats": false,
+        "current_match_events": false
+      },
+      "source_counts": {
+        "overlay_fixture_rows": 0,
+        "intelligence_fixture_rows": 6
+      },
+      "classification": "partial_coverage",
+      "notes": [
+        "League has fixtures entering the ALLMARKETS intake base.",
+        "League routed observe intelligence but no deployable fixture in the active window."
+      ]
+    },
+    {
+      "league": "Turkey Super Lig",
+      "window_from": "2026-05-09",
+      "window_to": "2026-05-11",
+      "fixture_counts": {
+        "covered_total": 9,
+        "routed_total": 0,
+        "non_routed_total": 9,
+        "deploy_total": 0,
+        "observe_total": 0,
+        "context_total": 9,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "market_output": {
+        "ftr_present": false,
+        "btts_present": false,
+        "ou25_present": false
+      },
+      "routing_presence": {
+        "allmarkets_present": false,
+        "observe_present": false,
+        "deploy_present": false,
+        "loss_report_presence": true
+      },
+      "overlay_support": {
+        "historical_overlay": false,
+        "current_odds": false,
+        "current_injuries": false,
+        "current_lineups": false,
+        "current_team_stats": false,
+        "current_player_stats": false,
+        "current_match_events": false
+      },
+      "source_counts": {
+        "overlay_fixture_rows": 0,
+        "intelligence_fixture_rows": 9
+      },
+      "classification": "blind_spot",
+      "notes": [
+        "League did not reach the ALLMARKETS intake base in this window.",
+        "League is currently represented through non-routed context coverage."
+      ]
+    },
+    {
+      "league": "USA MLS",
+      "window_from": "2026-05-09",
+      "window_to": "2026-05-11",
+      "fixture_counts": {
+        "covered_total": 15,
+        "routed_total": 14,
+        "non_routed_total": 1,
+        "deploy_total": 7,
+        "observe_total": 7,
+        "context_total": 1,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "market_output": {
+        "ftr_present": true,
+        "btts_present": true,
+        "ou25_present": true
+      },
+      "routing_presence": {
+        "allmarkets_present": true,
+        "observe_present": true,
+        "deploy_present": true,
+        "loss_report_presence": true
+      },
+      "overlay_support": {
+        "historical_overlay": true,
+        "current_odds": true,
+        "current_injuries": true,
+        "current_lineups": true,
+        "current_team_stats": true,
+        "current_player_stats": false,
+        "current_match_events": true
+      },
+      "source_counts": {
+        "overlay_fixture_rows": 7,
+        "intelligence_fixture_rows": 15
+      },
+      "classification": "full_coverage",
+      "notes": [
+        "League has fixtures entering the ALLMARKETS intake base.",
+        "League routed at least one deployable fixture in the active window.",
+        "Historical overlay support exists for this league.",
+        "Current-window overlay refresh produced 5 live support families."
+      ]
+    }
+  ]
+}

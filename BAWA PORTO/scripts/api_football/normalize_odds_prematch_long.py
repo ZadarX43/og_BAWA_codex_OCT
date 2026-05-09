@@ -58,8 +58,8 @@ def build_odds_prematch_long(odds_raw: str | None = None, output_csv: str = str(
                     market_name = bet.get('name') or ''
                     market_code = MARKET_MAP.get(market_name, market_name.upper().replace(' ', '_'))
                     for value in bet.get('values', []) or []:
-                        selection_name = value.get('value') or ''
-                        line_value = value.get('handicap') or value.get('main') or ''
+                        selection_name = str(value.get('value') or '').strip()
+                        line_value = str(value.get('handicap') or value.get('main') or '').strip()
                         rows.append({
                             'fixture_id': fixture_id,
                             'bookmaker_id': bookmaker_id,
