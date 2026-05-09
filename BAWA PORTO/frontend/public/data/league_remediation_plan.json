@@ -1,0 +1,585 @@
+{
+  "generated_at": "2026-05-09T14:11:03+00:00",
+  "source_run_id": "2026-05-09",
+  "source_window": {
+    "date_from": "2026-05-09",
+    "date_to": "2026-05-11"
+  },
+  "coverage_summary": {
+    "total_weak_leagues": 15,
+    "blind_spot_count": 2,
+    "partial_coverage_count": 13,
+    "model_expansion_count": 2,
+    "routing_expansion_count": 7,
+    "overlay_context_enhancement_count": 6
+  },
+  "leagues": [
+    {
+      "league": "Portugal Liga",
+      "current_classification": "partial_coverage",
+      "target_classification": "full_coverage",
+      "primary_issue": "routing_expansion",
+      "secondary_issue": "overlay_context_enhancement",
+      "market_gaps": {
+        "ftr": false,
+        "btts": true,
+        "ou25": true
+      },
+      "fixture_counts": {
+        "covered_total": 9,
+        "routed_total": 2,
+        "non_routed_total": 7,
+        "deploy_total": 1,
+        "observe_total": 1,
+        "context_total": 7,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "overlay_support": {
+        "historical_overlay": true,
+        "current_odds": true,
+        "current_injuries": true,
+        "current_lineups": true,
+        "current_team_stats": true,
+        "current_player_stats": false,
+        "current_match_events": true
+      },
+      "recommended_actions": [
+        "Use Portugal Liga as the first partial-coverage strengthening target.",
+        "Audit pre-ALLMARKETS fixture loss for the non-routed tail.",
+        "Audit why BTTS rows are not surviving routed publish for this league.",
+        "Audit why OU25 rows are not surviving routed publish for this league.",
+        "Prefer widening observe-safe routed coverage before forcing new deploys."
+      ],
+      "priority_rank": 1
+    },
+    {
+      "league": "Germany Bundesliga 2",
+      "current_classification": "blind_spot",
+      "target_classification": "hidden_for_now",
+      "primary_issue": "model_expansion",
+      "secondary_issue": null,
+      "market_gaps": {
+        "ftr": true,
+        "btts": true,
+        "ou25": true
+      },
+      "fixture_counts": {
+        "covered_total": 7,
+        "routed_total": 0,
+        "non_routed_total": 7,
+        "deploy_total": 0,
+        "observe_total": 0,
+        "context_total": 7,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "overlay_support": {
+        "historical_overlay": false,
+        "current_odds": false,
+        "current_injuries": false,
+        "current_lineups": false,
+        "current_team_stats": false,
+        "current_player_stats": false,
+        "current_match_events": false
+      },
+      "recommended_actions": [
+        "Decide explicitly whether Bundesliga 2 should recover to context-only or stay hidden.",
+        "Audit whether FootyStats-era goal-market models exist for this league.",
+        "Audit whether bookmaker coverage should be feeding ALLMARKETS for this league.",
+        "If no usable model estate exists, keep the league hidden until a minimal observe-safe base exists."
+      ],
+      "priority_rank": 2
+    },
+    {
+      "league": "Turkey Super Lig",
+      "current_classification": "blind_spot",
+      "target_classification": "hidden_for_now",
+      "primary_issue": "model_expansion",
+      "secondary_issue": null,
+      "market_gaps": {
+        "ftr": true,
+        "btts": true,
+        "ou25": true
+      },
+      "fixture_counts": {
+        "covered_total": 9,
+        "routed_total": 0,
+        "non_routed_total": 9,
+        "deploy_total": 0,
+        "observe_total": 0,
+        "context_total": 9,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "overlay_support": {
+        "historical_overlay": false,
+        "current_odds": false,
+        "current_injuries": false,
+        "current_lineups": false,
+        "current_team_stats": false,
+        "current_player_stats": false,
+        "current_match_events": false
+      },
+      "recommended_actions": [
+        "Decide whether Turkey Super Lig is worth active recovery or deliberate deprioritisation.",
+        "Audit whether FootyStats-era goal-market models exist for this league.",
+        "Audit whether bookmaker coverage should be feeding ALLMARKETS for this league.",
+        "If no usable model estate exists, keep the league hidden until a minimal observe-safe base exists."
+      ],
+      "priority_rank": 3
+    },
+    {
+      "league": "Belgium Pro",
+      "current_classification": "partial_coverage",
+      "target_classification": "full_coverage",
+      "primary_issue": "routing_expansion",
+      "secondary_issue": null,
+      "market_gaps": {
+        "ftr": false,
+        "btts": true,
+        "ou25": true
+      },
+      "fixture_counts": {
+        "covered_total": 7,
+        "routed_total": 7,
+        "non_routed_total": 0,
+        "deploy_total": 5,
+        "observe_total": 2,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "overlay_support": {
+        "historical_overlay": true,
+        "current_odds": true,
+        "current_injuries": true,
+        "current_lineups": true,
+        "current_team_stats": true,
+        "current_player_stats": false,
+        "current_match_events": true
+      },
+      "recommended_actions": [
+        "Audit why BTTS rows are not surviving routed publish for this league.",
+        "Audit why OU25 rows are not surviving routed publish for this league.",
+        "Prefer widening observe-safe routed coverage before forcing new deploys."
+      ],
+      "priority_rank": 4
+    },
+    {
+      "league": "England Premier League",
+      "current_classification": "partial_coverage",
+      "target_classification": "full_coverage",
+      "primary_issue": "routing_expansion",
+      "secondary_issue": null,
+      "market_gaps": {
+        "ftr": false,
+        "btts": false,
+        "ou25": false
+      },
+      "fixture_counts": {
+        "covered_total": 10,
+        "routed_total": 10,
+        "non_routed_total": 0,
+        "deploy_total": 0,
+        "observe_total": 10,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "overlay_support": {
+        "historical_overlay": true,
+        "current_odds": false,
+        "current_injuries": false,
+        "current_lineups": false,
+        "current_team_stats": false,
+        "current_player_stats": false,
+        "current_match_events": false
+      },
+      "recommended_actions": [
+        "Prefer widening observe-safe routed coverage before forcing new deploys."
+      ],
+      "priority_rank": 5
+    },
+    {
+      "league": "Italy Serie A",
+      "current_classification": "partial_coverage",
+      "target_classification": "full_coverage",
+      "primary_issue": "routing_expansion",
+      "secondary_issue": null,
+      "market_gaps": {
+        "ftr": false,
+        "btts": false,
+        "ou25": true
+      },
+      "fixture_counts": {
+        "covered_total": 9,
+        "routed_total": 9,
+        "non_routed_total": 0,
+        "deploy_total": 0,
+        "observe_total": 9,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "overlay_support": {
+        "historical_overlay": true,
+        "current_odds": false,
+        "current_injuries": false,
+        "current_lineups": false,
+        "current_team_stats": false,
+        "current_player_stats": false,
+        "current_match_events": false
+      },
+      "recommended_actions": [
+        "Audit why OU25 rows are not surviving routed publish for this league.",
+        "Prefer widening observe-safe routed coverage before forcing new deploys."
+      ],
+      "priority_rank": 6
+    },
+    {
+      "league": "Scotland Premiership",
+      "current_classification": "partial_coverage",
+      "target_classification": "full_coverage",
+      "primary_issue": "routing_expansion",
+      "secondary_issue": null,
+      "market_gaps": {
+        "ftr": false,
+        "btts": true,
+        "ou25": false
+      },
+      "fixture_counts": {
+        "covered_total": 6,
+        "routed_total": 6,
+        "non_routed_total": 0,
+        "deploy_total": 0,
+        "observe_total": 6,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "overlay_support": {
+        "historical_overlay": true,
+        "current_odds": false,
+        "current_injuries": false,
+        "current_lineups": false,
+        "current_team_stats": false,
+        "current_player_stats": false,
+        "current_match_events": false
+      },
+      "recommended_actions": [
+        "Audit why BTTS rows are not surviving routed publish for this league.",
+        "Prefer widening observe-safe routed coverage before forcing new deploys."
+      ],
+      "priority_rank": 7
+    },
+    {
+      "league": "England Championship",
+      "current_classification": "partial_coverage",
+      "target_classification": "full_coverage",
+      "primary_issue": "routing_expansion",
+      "secondary_issue": null,
+      "market_gaps": {
+        "ftr": false,
+        "btts": true,
+        "ou25": true
+      },
+      "fixture_counts": {
+        "covered_total": 1,
+        "routed_total": 1,
+        "non_routed_total": 0,
+        "deploy_total": 0,
+        "observe_total": 1,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "overlay_support": {
+        "historical_overlay": true,
+        "current_odds": false,
+        "current_injuries": false,
+        "current_lineups": false,
+        "current_team_stats": false,
+        "current_player_stats": false,
+        "current_match_events": false
+      },
+      "recommended_actions": [
+        "Audit why BTTS rows are not surviving routed publish for this league.",
+        "Audit why OU25 rows are not surviving routed publish for this league.",
+        "Prefer widening observe-safe routed coverage before forcing new deploys."
+      ],
+      "priority_rank": 8
+    },
+    {
+      "league": "Australia A-League",
+      "current_classification": "partial_coverage",
+      "target_classification": "full_coverage",
+      "primary_issue": "routing_expansion",
+      "secondary_issue": null,
+      "market_gaps": {
+        "ftr": false,
+        "btts": true,
+        "ou25": true
+      },
+      "fixture_counts": {
+        "covered_total": 2,
+        "routed_total": 2,
+        "non_routed_total": 0,
+        "deploy_total": 0,
+        "observe_total": 2,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "overlay_support": {
+        "historical_overlay": false,
+        "current_odds": false,
+        "current_injuries": false,
+        "current_lineups": false,
+        "current_team_stats": false,
+        "current_player_stats": false,
+        "current_match_events": false
+      },
+      "recommended_actions": [
+        "Audit why BTTS rows are not surviving routed publish for this league.",
+        "Audit why OU25 rows are not surviving routed publish for this league.",
+        "Prefer widening observe-safe routed coverage before forcing new deploys."
+      ],
+      "priority_rank": 9
+    },
+    {
+      "league": "Austria Bundesliga",
+      "current_classification": "partial_coverage",
+      "target_classification": "partial_coverage",
+      "primary_issue": "overlay_context_enhancement",
+      "secondary_issue": null,
+      "market_gaps": {
+        "ftr": true,
+        "btts": false,
+        "ou25": false
+      },
+      "fixture_counts": {
+        "covered_total": 6,
+        "routed_total": 6,
+        "non_routed_total": 0,
+        "deploy_total": 0,
+        "observe_total": 6,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "overlay_support": {
+        "historical_overlay": false,
+        "current_odds": false,
+        "current_injuries": false,
+        "current_lineups": false,
+        "current_team_stats": false,
+        "current_player_stats": false,
+        "current_match_events": false
+      },
+      "recommended_actions": [
+        "Improve CONTEXT note richness for non-routed fixtures in this league.",
+        "Feed current-window prematch odds into the context lane.",
+        "Add current-window injury overlay support for this league.",
+        "Add current-window lineup overlay support for this league.",
+        "Ensure followed-team and followed-fixture users still receive useful non-pick intelligence."
+      ],
+      "priority_rank": 10
+    },
+    {
+      "league": "South Korea K League",
+      "current_classification": "partial_coverage",
+      "target_classification": "partial_coverage",
+      "primary_issue": "overlay_context_enhancement",
+      "secondary_issue": null,
+      "market_gaps": {
+        "ftr": false,
+        "btts": true,
+        "ou25": false
+      },
+      "fixture_counts": {
+        "covered_total": 6,
+        "routed_total": 6,
+        "non_routed_total": 0,
+        "deploy_total": 0,
+        "observe_total": 6,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "overlay_support": {
+        "historical_overlay": false,
+        "current_odds": false,
+        "current_injuries": false,
+        "current_lineups": false,
+        "current_team_stats": false,
+        "current_player_stats": false,
+        "current_match_events": false
+      },
+      "recommended_actions": [
+        "Improve CONTEXT note richness for non-routed fixtures in this league.",
+        "Feed current-window prematch odds into the context lane.",
+        "Add current-window injury overlay support for this league.",
+        "Add current-window lineup overlay support for this league.",
+        "Ensure followed-team and followed-fixture users still receive useful non-pick intelligence."
+      ],
+      "priority_rank": 11
+    },
+    {
+      "league": "Swiss Super League",
+      "current_classification": "partial_coverage",
+      "target_classification": "partial_coverage",
+      "primary_issue": "overlay_context_enhancement",
+      "secondary_issue": null,
+      "market_gaps": {
+        "ftr": false,
+        "btts": false,
+        "ou25": true
+      },
+      "fixture_counts": {
+        "covered_total": 6,
+        "routed_total": 6,
+        "non_routed_total": 0,
+        "deploy_total": 0,
+        "observe_total": 6,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "overlay_support": {
+        "historical_overlay": false,
+        "current_odds": false,
+        "current_injuries": false,
+        "current_lineups": false,
+        "current_team_stats": false,
+        "current_player_stats": false,
+        "current_match_events": false
+      },
+      "recommended_actions": [
+        "Improve CONTEXT note richness for non-routed fixtures in this league.",
+        "Feed current-window prematch odds into the context lane.",
+        "Add current-window injury overlay support for this league.",
+        "Add current-window lineup overlay support for this league.",
+        "Ensure followed-team and followed-fixture users still receive useful non-pick intelligence."
+      ],
+      "priority_rank": 12
+    },
+    {
+      "league": "Denmark Superliga",
+      "current_classification": "partial_coverage",
+      "target_classification": "partial_coverage",
+      "primary_issue": "overlay_context_enhancement",
+      "secondary_issue": null,
+      "market_gaps": {
+        "ftr": false,
+        "btts": false,
+        "ou25": true
+      },
+      "fixture_counts": {
+        "covered_total": 5,
+        "routed_total": 5,
+        "non_routed_total": 0,
+        "deploy_total": 0,
+        "observe_total": 5,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "overlay_support": {
+        "historical_overlay": false,
+        "current_odds": false,
+        "current_injuries": false,
+        "current_lineups": false,
+        "current_team_stats": false,
+        "current_player_stats": false,
+        "current_match_events": false
+      },
+      "recommended_actions": [
+        "Improve CONTEXT note richness for non-routed fixtures in this league.",
+        "Feed current-window prematch odds into the context lane.",
+        "Add current-window injury overlay support for this league.",
+        "Add current-window lineup overlay support for this league.",
+        "Ensure followed-team and followed-fixture users still receive useful non-pick intelligence."
+      ],
+      "priority_rank": 13
+    },
+    {
+      "league": "Norway Eliteserien",
+      "current_classification": "partial_coverage",
+      "target_classification": "partial_coverage",
+      "primary_issue": "overlay_context_enhancement",
+      "secondary_issue": null,
+      "market_gaps": {
+        "ftr": false,
+        "btts": false,
+        "ou25": true
+      },
+      "fixture_counts": {
+        "covered_total": 5,
+        "routed_total": 5,
+        "non_routed_total": 0,
+        "deploy_total": 0,
+        "observe_total": 5,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "overlay_support": {
+        "historical_overlay": false,
+        "current_odds": false,
+        "current_injuries": false,
+        "current_lineups": false,
+        "current_team_stats": false,
+        "current_player_stats": false,
+        "current_match_events": false
+      },
+      "recommended_actions": [
+        "Improve CONTEXT note richness for non-routed fixtures in this league.",
+        "Feed current-window prematch odds into the context lane.",
+        "Add current-window injury overlay support for this league.",
+        "Add current-window lineup overlay support for this league.",
+        "Ensure followed-team and followed-fixture users still receive useful non-pick intelligence."
+      ],
+      "priority_rank": 14
+    },
+    {
+      "league": "England EFL League 1",
+      "current_classification": "partial_coverage",
+      "target_classification": "partial_coverage",
+      "primary_issue": "overlay_context_enhancement",
+      "secondary_issue": null,
+      "market_gaps": {
+        "ftr": true,
+        "btts": false,
+        "ou25": true
+      },
+      "fixture_counts": {
+        "covered_total": 2,
+        "routed_total": 2,
+        "non_routed_total": 0,
+        "deploy_total": 0,
+        "observe_total": 2,
+        "context_total": 0,
+        "monitor_total": 0,
+        "hidden_total": 0
+      },
+      "overlay_support": {
+        "historical_overlay": false,
+        "current_odds": false,
+        "current_injuries": false,
+        "current_lineups": false,
+        "current_team_stats": false,
+        "current_player_stats": false,
+        "current_match_events": false
+      },
+      "recommended_actions": [
+        "Improve CONTEXT note richness for non-routed fixtures in this league.",
+        "Feed current-window prematch odds into the context lane.",
+        "Add current-window injury overlay support for this league.",
+        "Add current-window lineup overlay support for this league.",
+        "Ensure followed-team and followed-fixture users still receive useful non-pick intelligence."
+      ],
+      "priority_rank": 15
+    }
+  ]
+}

@@ -30,6 +30,7 @@ REQUIRED_FILES = [
     DATA / "fixture_intelligence_public.json",
     DATA / "covered_fixture_universe.json",
     DATA / "league_coverage_audit.json",
+    DATA / "league_remediation_plan.json",
     DATA / "weekly_results.json",
     DATA / "results_archive.json",
 ]
