@@ -89,6 +89,10 @@ export const getAccountDb = (env) => {
 
 const first = async (db, sql, binds = []) => db.prepare(sql).bind(...binds).first();
 const run = async (db, sql, binds = []) => db.prepare(sql).bind(...binds).run();
+const all = async (db, sql, binds = []) => {
+  const result = await db.prepare(sql).bind(...binds).all();
+  return Array.isArray(result?.results) ? result.results : [];
+};
 
 export async function upsertUserByEmail(db, email, options = {}) {
   if (!db) {
@@ -741,4 +745,252 @@ export async function completeTelegramLink(db, payload) {
   );
 
   return getAccountStateByEmail(db, payload.email || "");
+}
+
+export async function listUsersEligibleForTelegramAlerts(db) {
+  if (!db) {
+    return [];
+  }
+  return callMaybeMock(
+    db,
+    "list_users_eligible_for_telegram_alerts",
+    {},
+    () =>
+      all(
+        db,
+        `-- og:list_users_eligible_for_telegram_alerts
+        SELECT DISTINCT
+          u.id,
+          u.email,
+          u.email_normalized,
+          t.telegram_chat_id
+        FROM users u
+        JOIN notification_preferences p ON p.user_id = u.id
+        JOIN telegram_links t ON t.user_id = u.id
+        LEFT JOIN subscriptions s ON s.user_id = u.id
+        WHERE p.telegram_enabled = 1
+          AND p.website_only_mode = 0
+          AND t.link_status = 'linked'
+          AND COALESCE(t.telegram_chat_id, '') != ''
+          AND (
+            s.subscription_status IS NULL OR
+            s.subscription_status IN ('active', 'trialing')
+          )
+        ORDER BY u.email_normalized ASC`
+      )
+  );
+}
+
+export async function upsertNotificationAlerts(db, alerts = []) {
+  if (!db || !Array.isArray(alerts) || !alerts.length) {
+    return { attempted: 0, queued: 0 };
+  }
+
+  let queued = 0;
+  for (const alert of alerts) {
+    if (!alert?.user_id || !alert?.dedupe_key || !alert?.payload_json) {
+      continue;
+    }
+    let touched = false;
+    await callMaybeMock(
+      db,
+      "upsert_notification_alert",
+      alert,
+      async () => {
+        const existing = await first(
+          db,
+          `-- og:get_notification_alert_by_dedupe
+          SELECT id, status, delivered_at
+          FROM notification_alerts
+          WHERE dedupe_key = ?1
+          LIMIT 1`,
+          [alert.dedupe_key]
+        );
+
+        if (existing?.id) {
+          if (existing.status === "delivered") {
+            return;
+          }
+          await run(
+            db,
+            `-- og:update_notification_alert
+            UPDATE notification_alerts
+            SET fixture_id = ?2,
+                fixture_label = ?3,
+                league = ?4,
+                market_family = ?5,
+                publish_class = ?6,
+                reasons_json = ?7,
+                payload_json = ?8,
+                notification_priority = ?9,
+                scheduled_for = ?10,
+                last_error = NULL,
+                updated_at = ?11
+            WHERE dedupe_key = ?1`,
+            [
+              alert.dedupe_key,
+              alert.fixture_id || null,
+              alert.fixture_label,
+              alert.league || null,
+              alert.market_family || null,
+              alert.publish_class || null,
+              alert.reasons_json || null,
+              alert.payload_json,
+              alert.notification_priority || "normal",
+              alert.scheduled_for,
+              alert.updated_at,
+            ]
+          );
+          touched = true;
+          return;
+        }
+
+        await run(
+          db,
+          `-- og:insert_notification_alert
+          INSERT INTO notification_alerts (
+            id, user_id, channel, alert_kind, fixture_key, fixture_id, fixture_label,
+            league, market_family, publish_class, reasons_json, payload_json, dedupe_key,
+            notification_priority, scheduled_for, status, delivered_at, last_error, created_at, updated_at
+          )
+          VALUES (
+            ?1, ?2, ?3, ?4, ?5, ?6, ?7,
+            ?8, ?9, ?10, ?11, ?12, ?13,
+            ?14, ?15, ?16, NULL, NULL, ?17, ?18
+          )`,
+          [
+            alert.id,
+            alert.user_id,
+            alert.channel,
+            alert.alert_kind,
+            alert.fixture_key,
+            alert.fixture_id || null,
+            alert.fixture_label,
+            alert.league || null,
+            alert.market_family || null,
+            alert.publish_class || null,
+            alert.reasons_json || null,
+            alert.payload_json,
+            alert.dedupe_key,
+            alert.notification_priority || "normal",
+            alert.scheduled_for,
+            alert.status || "queued",
+            alert.created_at,
+            alert.updated_at,
+          ]
+        );
+        touched = true;
+      }
+    );
+    if (touched || (db && typeof db.__ogCall === "function")) {
+      queued += 1;
+    }
+  }
+
+  return {
+    attempted: alerts.length,
+    queued,
+  };
+}
+
+export async function listNotificationAlertsByUser(db, userId, options = {}) {
+  if (!db || !userId) {
+    return [];
+  }
+  const limit = Math.max(1, Math.min(200, Number(options.limit || 50)));
+  return callMaybeMock(
+    db,
+    "list_notification_alerts_by_user",
+    { user_id: userId, limit },
+    () =>
+      all(
+        db,
+        `-- og:list_notification_alerts_by_user
+        SELECT id, user_id, channel, alert_kind, fixture_key, fixture_id, fixture_label,
+               league, market_family, publish_class, reasons_json, payload_json, dedupe_key,
+               notification_priority, scheduled_for, status, delivered_at, last_error, created_at, updated_at
+        FROM notification_alerts
+        WHERE user_id = ?1
+        ORDER BY scheduled_for ASC, created_at DESC
+        LIMIT ?2`,
+        [userId, limit]
+      )
+  );
+}
+
+export async function listDueNotificationAlerts(db, options = {}) {
+  if (!db) {
+    return [];
+  }
+  const limit = Math.max(1, Math.min(200, Number(options.limit || 25)));
+  const nowIso = String(options.nowIso || isoNow());
+  const userId = String(options.userId || "").trim();
+  return callMaybeMock(
+    db,
+    "list_due_notification_alerts",
+    { now_iso: nowIso, limit, user_id: userId },
+    () =>
+      all(
+        db,
+        `-- og:list_due_notification_alerts
+        SELECT id, user_id, channel, alert_kind, fixture_key, fixture_id, fixture_label,
+               league, market_family, publish_class, reasons_json, payload_json, dedupe_key,
+               notification_priority, scheduled_for, status, delivered_at, last_error, created_at, updated_at
+        FROM notification_alerts
+        WHERE channel = 'telegram'
+          AND status = 'queued'
+          AND scheduled_for <= ?1
+          AND (?2 = '' OR user_id = ?2)
+        ORDER BY scheduled_for ASC, created_at ASC
+        LIMIT ?3`,
+        [nowIso, userId, limit]
+      )
+  );
+}
+
+export async function markNotificationAlertDelivered(db, alertId) {
+  if (!db || !alertId) {
+    return;
+  }
+  const now = isoNow();
+  await callMaybeMock(
+    db,
+    "mark_notification_alert_delivered",
+    { id: alertId, delivered_at: now, updated_at: now },
+    () =>
+      run(
+        db,
+        `-- og:mark_notification_alert_delivered
+        UPDATE notification_alerts
+        SET status = 'delivered',
+            delivered_at = ?2,
+            last_error = NULL,
+            updated_at = ?3
+        WHERE id = ?1`,
+        [alertId, now, now]
+      )
+  );
+}
+
+export async function markNotificationAlertFailed(db, alertId, errorMessage) {
+  if (!db || !alertId) {
+    return;
+  }
+  const now = isoNow();
+  await callMaybeMock(
+    db,
+    "mark_notification_alert_failed",
+    { id: alertId, last_error: String(errorMessage || "").slice(0, 500), updated_at: now },
+    () =>
+      run(
+        db,
+        `-- og:mark_notification_alert_failed
+        UPDATE notification_alerts
+        SET status = 'failed',
+            last_error = ?2,
+            updated_at = ?3
+        WHERE id = ?1`,
+        [alertId, String(errorMessage || "").slice(0, 500), now]
+      )
+  );
 }

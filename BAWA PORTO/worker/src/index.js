@@ -9,8 +9,14 @@ import {
   completeTelegramLink,
   getAccountDb,
   getAccountStateByEmail,
+  listDueNotificationAlerts,
+  listNotificationAlertsByUser,
+  listUsersEligibleForTelegramAlerts,
+  markNotificationAlertDelivered,
+  markNotificationAlertFailed,
   mirrorSubscriptionFromRecord,
   recordAuthEvent,
+  upsertNotificationAlerts,
   updateNotificationPreferences,
 } from "./account_store.js";
 import { issuePremiumToken, verifyPremiumAccess } from "./auth.js";
@@ -212,6 +218,32 @@ const normalizeSiteUrl = (value) => String(value || "").replace(/\/+$/, "");
 const isFiniteNumber = (value) => typeof value === "number" && Number.isFinite(value);
 const isLikelyEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || "").trim());
 const normalizeEmail = (value) => String(value || "").trim().toLowerCase();
+const normalizePreferenceText = (value) =>
+  String(value || "")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim()
+    .replace(/\s+/g, " ");
+const parsePreferenceList = (value) =>
+  Array.isArray(value)
+    ? value.map((entry) => String(entry || "").trim()).filter(Boolean)
+    : String(value || "")
+        .split(",")
+        .map((entry) => entry.trim())
+        .filter(Boolean);
+const marketFamilyLabel = (value) => {
+  const key = String(value || "").toUpperCase();
+  if (key === "FTR") return "FTR";
+  if (key === "BTTS") return "BTTS";
+  if (key === "OU25") return "OU25";
+  return key || "INTEL";
+};
+const fixturePreferenceLabel = (fixture) =>
+  `${String(fixture?.home_team || "Home").trim()} v ${String(fixture?.away_team || "Away").trim()}`;
+const nowIso = () => new Date().toISOString();
 const textEncoder = new TextEncoder();
 const textDecoder = new TextDecoder();
 
@@ -1374,6 +1406,138 @@ async function handleAccountPreferencesUpdate(request, env) {
   });
 }
 
+async function handleAccountAlertsState(request, env) {
+  const sessionAccess = await verifySessionAccess(request, env);
+  if (!sessionAccess.ok) {
+    return json(
+      {
+        ok: false,
+        authenticated: false,
+        entitled: false,
+        status: sessionAccess.status || "unauthenticated",
+        message: sessionAccess.message || "Sign in to view alert state.",
+      },
+      401
+    );
+  }
+
+  const accountDb = getAccountDb(env);
+  if (!accountDb) {
+    return configError("ACCOUNT_DB D1 binding is required for account alerts.", ["ACCOUNT_DB"]);
+  }
+
+  const accountState = await getAccountStateByEmail(accountDb, sessionAccess.email);
+  if (!accountState?.user?.id) {
+    return json(
+      {
+        ok: false,
+        status: "account_state_missing",
+        message: "Unable to load alert state for this account yet.",
+      },
+      500
+    );
+  }
+
+  const alerts = await listNotificationAlertsByUser(accountDb, accountState.user.id, { limit: 24 });
+  return json({
+    ok: true,
+    status: "account_alerts_loaded",
+    alerts,
+  });
+}
+
+async function handleAccountAlertsRefresh(request, env) {
+  const sessionAccess = await verifySessionAccess(request, env);
+  if (!sessionAccess.ok) {
+    return json(
+      {
+        ok: false,
+        authenticated: false,
+        entitled: false,
+        status: sessionAccess.status || "unauthenticated",
+        message: sessionAccess.message || "Sign in to refresh alerts.",
+      },
+      401
+    );
+  }
+
+  const accountDb = getAccountDb(env);
+  if (!accountDb) {
+    return configError("ACCOUNT_DB D1 binding is required for account alerts.", ["ACCOUNT_DB"]);
+  }
+
+  const accountState = await getAccountStateByEmail(accountDb, sessionAccess.email);
+  if (!accountState?.user?.id) {
+    return json(
+      {
+        ok: false,
+        status: "account_state_missing",
+        message: "Unable to refresh alerts for this account yet.",
+      },
+      500
+    );
+  }
+
+  const queueResult = await queueFollowedTelegramAlertsForAccount(accountDb, env, accountState);
+  const alerts = await listNotificationAlertsByUser(accountDb, accountState.user.id, { limit: 24 });
+  return json({
+    ok: true,
+    status: "account_alerts_refreshed",
+    message: "Followed alerts refreshed from the current intelligence window.",
+    matched_fixtures: queueResult.matched,
+    queued_alerts: queueResult.queued,
+    attempted_alerts: queueResult.attempted,
+    alerts,
+  });
+}
+
+async function handleAccountAlertsDispatch(request, env) {
+  const sessionAccess = await verifySessionAccess(request, env);
+  if (!sessionAccess.ok) {
+    return json(
+      {
+        ok: false,
+        authenticated: false,
+        entitled: false,
+        status: sessionAccess.status || "unauthenticated",
+        message: sessionAccess.message || "Sign in to dispatch alerts.",
+      },
+      401
+    );
+  }
+
+  const accountDb = getAccountDb(env);
+  if (!accountDb) {
+    return configError("ACCOUNT_DB D1 binding is required for account alerts.", ["ACCOUNT_DB"]);
+  }
+
+  const accountState = await getAccountStateByEmail(accountDb, sessionAccess.email);
+  if (!accountState?.user?.id) {
+    return json(
+      {
+        ok: false,
+        status: "account_state_missing",
+        message: "Unable to dispatch alerts for this account yet.",
+      },
+      500
+    );
+  }
+
+  await queueFollowedTelegramAlertsForAccount(accountDb, env, accountState);
+  const dispatchResult = await dispatchDueTelegramAlerts(accountDb, env, {
+    userId: accountState.user.id,
+    userEmailMap: new Map([[accountState.user.id, accountState.user.email_normalized]]),
+  });
+  const alerts = await listNotificationAlertsByUser(accountDb, accountState.user.id, { limit: 24 });
+  return json({
+    ok: true,
+    status: "account_alerts_dispatched",
+    message: "Due Telegram alerts processed for this account.",
+    ...dispatchResult,
+    alerts,
+  });
+}
+
 async function handleTelegramLinkStart(request, env) {
   const sessionAccess = await verifySessionAccess(request, env);
   if (!sessionAccess.ok) {
@@ -1643,6 +1807,195 @@ function formatTelegramFixtureAlert(fixture, env) {
   }
 
   return lines.join("\n");
+}
+
+function getFollowedFixtureMatches(accountState, fixtures) {
+  const prefs = accountState?.notification_preferences || null;
+  if (!prefs || !Array.isArray(fixtures) || !fixtures.length) {
+    return [];
+  }
+
+  const teams = parsePreferenceList(prefs.favourite_teams).map(normalizePreferenceText);
+  const leagues = parsePreferenceList(prefs.favourite_leagues).map(normalizePreferenceText);
+  const markets = parsePreferenceList(prefs.favourite_markets).map((entry) =>
+    normalizePreferenceText(entry).replace(/\s+/g, "")
+  );
+  const followedFixtures = parsePreferenceList(prefs.followed_fixtures).map(normalizePreferenceText);
+
+  return fixtures
+    .map((fixture) => {
+      const reasons = [];
+      const rowHome = normalizePreferenceText(fixture.home_team);
+      const rowAway = normalizePreferenceText(fixture.away_team);
+      const rowLeague = normalizePreferenceText(fixture.league);
+      const rowFixture = normalizePreferenceText(fixturePreferenceLabel(fixture));
+      const rowMarket = normalizePreferenceText(marketFamilyLabel(fixture.signal_summary?.market_family)).replace(
+        /\s+/g,
+        ""
+      );
+
+      if (teams.some((entry) => entry && (rowHome.includes(entry) || rowAway.includes(entry) || entry.includes(rowHome) || entry.includes(rowAway)))) {
+        reasons.push("followed team");
+      }
+      if (leagues.some((entry) => entry && (rowLeague.includes(entry) || entry.includes(rowLeague)))) {
+        reasons.push("followed league");
+      }
+      if (markets.some((entry) => entry && rowMarket === entry)) {
+        reasons.push("followed market");
+      }
+      if (followedFixtures.some((entry) => entry && (rowFixture.includes(entry) || entry.includes(rowFixture)))) {
+        reasons.push("followed fixture");
+      }
+
+      if (!reasons.length) {
+        return null;
+      }
+
+      return {
+        fixture,
+        reasons,
+      };
+    })
+    .filter(Boolean);
+}
+
+function shouldQueueTelegramAlert(accountState, entry) {
+  const prefs = accountState?.notification_preferences || null;
+  if (!prefs || !prefs.telegram_enabled || prefs.website_only_mode) {
+    return false;
+  }
+  const publishClass = String(entry?.fixture?.publish_class || entry?.fixture?.fixture_class || "").toUpperCase();
+  if (publishClass === "DEPLOY") {
+    return Boolean(prefs.elite_alerts_enabled || prefs.standard_alerts_enabled);
+  }
+  if (publishClass === "OBSERVE" || publishClass === "CONTEXT" || publishClass === "MONITOR") {
+    return Boolean(prefs.allow_non_signal_intelligence);
+  }
+  return false;
+}
+
+function computeScheduledFor(accountState, fixture) {
+  const prefs = accountState?.notification_preferences || null;
+  const preMatchWindowMinutes = Math.max(0, Math.min(1440, Number(prefs?.pre_match_window_minutes ?? 90)));
+  const kickoffRaw = String(fixture?.kickoff_time || "").trim();
+  const kickoffDate = kickoffRaw ? new Date(kickoffRaw) : null;
+  if (!kickoffDate || Number.isNaN(kickoffDate.getTime())) {
+    return nowIso();
+  }
+  const scheduled = new Date(kickoffDate.getTime() - preMatchWindowMinutes * 60 * 1000);
+  const nowDate = new Date();
+  return scheduled.getTime() < nowDate.getTime() ? nowDate.toISOString() : scheduled.toISOString();
+}
+
+function buildNotificationAlertRecord(accountState, entry) {
+  const userId = String(accountState?.user?.id || "").trim();
+  const fixture = entry.fixture;
+  const publishClass = String(fixture?.publish_class || fixture?.fixture_class || "MONITOR").toUpperCase();
+  const marketFamily = marketFamilyLabel(fixture?.signal_summary?.market_family);
+  const kickoffTime = String(fixture?.kickoff_time || "").trim();
+  const updatedAt = String(fixture?.updated_at || "").trim();
+  const dedupeKey = [
+    userId,
+    "telegram",
+    String(fixture?.fixture_key || "").trim(),
+    publishClass,
+    marketFamily,
+    kickoffTime,
+    updatedAt,
+  ].join(":");
+  const timestamp = nowIso();
+  return {
+    id: `alert_${crypto.randomUUID()}`,
+    user_id: userId,
+    channel: "telegram",
+    alert_kind: publishClass === "DEPLOY" ? "follow_deploy" : "follow_intelligence",
+    fixture_key: String(fixture?.fixture_key || "").trim(),
+    fixture_id: String(fixture?.fixture_id || "").trim() || null,
+    fixture_label: fixturePreferenceLabel(fixture),
+    league: String(fixture?.league || "").trim() || null,
+    market_family: marketFamily,
+    publish_class: publishClass,
+    reasons_json: JSON.stringify(entry.reasons || []),
+    payload_json: JSON.stringify({
+      fixture,
+      reasons: entry.reasons || [],
+    }),
+    dedupe_key: dedupeKey,
+    notification_priority: String(fixture?.follow_relevance?.notification_priority || "normal"),
+    scheduled_for: computeScheduledFor(accountState, fixture),
+    status: "queued",
+    created_at: timestamp,
+    updated_at: timestamp,
+  };
+}
+
+async function queueFollowedTelegramAlertsForAccount(accountDb, env, accountState) {
+  if (!accountDb || !accountState?.user?.id) {
+    return { attempted: 0, queued: 0, matched: 0 };
+  }
+  const fixtures = await loadFixtureIntelligenceArtifact(env);
+  const matches = getFollowedFixtureMatches(accountState, fixtures);
+  const alerts = matches
+    .filter((entry) => shouldQueueTelegramAlert(accountState, entry))
+    .map((entry) => buildNotificationAlertRecord(accountState, entry))
+    .filter((entry) => entry.fixture_key && entry.user_id);
+  const result = await upsertNotificationAlerts(accountDb, alerts);
+  return {
+    ...result,
+    matched: matches.length,
+  };
+}
+
+async function dispatchDueTelegramAlerts(accountDb, env, options = {}) {
+  if (!accountDb || !getTelegramBotToken(env)) {
+    return { attempted: 0, delivered: 0, failed: 0 };
+  }
+  const dueAlerts = await listDueNotificationAlerts(accountDb, {
+    nowIso: nowIso(),
+    limit: Number(options.limit || 25),
+    userId: options.userId || "",
+  });
+
+  let delivered = 0;
+  let failed = 0;
+  for (const alert of dueAlerts) {
+    let payload = {};
+    try {
+      payload = JSON.parse(alert.payload_json || "{}");
+    } catch {
+      payload = {};
+    }
+    const fixture = payload.fixture || null;
+    if (!fixture) {
+      await markNotificationAlertFailed(accountDb, alert.id, "Missing fixture payload.");
+      failed += 1;
+      continue;
+    }
+    const userEmail = String(options.userEmailMap?.get?.(alert.user_id) || "").trim();
+    const accountState = userEmail ? await getAccountStateByEmail(accountDb, userEmail) : null;
+    const chatId = String(accountState?.telegram_link?.telegram_chat_id || "").trim();
+    if (!chatId) {
+      await markNotificationAlertFailed(accountDb, alert.id, "Telegram chat is no longer linked.");
+      failed += 1;
+      continue;
+    }
+
+    const deliveredOk = await sendTelegramMessage(env, chatId, formatTelegramFixtureAlert(fixture, env));
+    if (!deliveredOk) {
+      await markNotificationAlertFailed(accountDb, alert.id, "Telegram delivery failed.");
+      failed += 1;
+      continue;
+    }
+
+    await markNotificationAlertDelivered(accountDb, alert.id);
+    delivered += 1;
+  }
+
+  return {
+    attempted: dueAlerts.length,
+    delivered,
+    failed,
+  };
 }
 
 async function handleTelegramWebhook(request, env) {
@@ -1926,6 +2279,33 @@ async function handleTelegramFixtureAlert(request, env) {
     status: "telegram_fixture_alert_sent",
     message: "Fixture intelligence alert sent to your linked Telegram account.",
     fixture_key: fixtureKey,
+  });
+}
+
+async function handleScheduledAlertTick(env) {
+  const accountDb = getAccountDb(env);
+  if (!accountDb || !getTelegramBotToken(env)) {
+    return;
+  }
+
+  const eligibleUsers = await listUsersEligibleForTelegramAlerts(accountDb);
+  const userEmailMap = new Map();
+  for (const user of eligibleUsers) {
+    const email = String(user?.email_normalized || user?.email || "").trim().toLowerCase();
+    if (!email) {
+      continue;
+    }
+    const accountState = await getAccountStateByEmail(accountDb, email);
+    if (!accountState?.user?.id) {
+      continue;
+    }
+    userEmailMap.set(accountState.user.id, email);
+    await queueFollowedTelegramAlertsForAccount(accountDb, env, accountState);
+  }
+
+  await dispatchDueTelegramAlerts(accountDb, env, {
+    limit: 100,
+    userEmailMap,
   });
 }
 
@@ -2237,6 +2617,9 @@ async function handleRequest(request, env) {
         "POST /api/auth/logout",
         "GET /api/account/state",
         "POST /api/account/preferences",
+        "GET /api/account/alerts",
+        "POST /api/account/alerts/refresh",
+        "POST /api/account/alerts/dispatch",
         "POST /api/account/telegram/link/start",
         "POST /api/account/telegram/link/complete",
         "POST /api/account/telegram/test-alert",
@@ -2313,6 +2696,33 @@ async function handleRequest(request, env) {
       return withCors(response, request, env);
     }
     response = await handleAccountPreferencesUpdate(request, env);
+    return withCors(response, request, env);
+  }
+
+  if (pathname === "/api/account/alerts") {
+    if (request.method !== "GET") {
+      response = methodNotAllowed("GET");
+      return withCors(response, request, env);
+    }
+    response = await handleAccountAlertsState(request, env);
+    return withCors(response, request, env);
+  }
+
+  if (pathname === "/api/account/alerts/refresh") {
+    if (request.method !== "POST") {
+      response = methodNotAllowed("POST");
+      return withCors(response, request, env);
+    }
+    response = await handleAccountAlertsRefresh(request, env);
+    return withCors(response, request, env);
+  }
+
+  if (pathname === "/api/account/alerts/dispatch") {
+    if (request.method !== "POST") {
+      response = methodNotAllowed("POST");
+      return withCors(response, request, env);
+    }
+    response = await handleAccountAlertsDispatch(request, env);
     return withCors(response, request, env);
   }
 
@@ -2410,4 +2820,7 @@ async function handleRequest(request, env) {
 
 export default {
   fetch: handleRequest,
+  scheduled: async (_controller, env) => {
+    await handleScheduledAlertTick(env);
+  },
 };

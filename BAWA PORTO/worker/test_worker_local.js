@@ -92,6 +92,7 @@ class MockD1 {
     this.telegramLinks = [];
     this.notificationPreferences = [];
     this.authEvents = [];
+    this.notificationAlerts = [];
   }
 
   prepare() {
@@ -190,6 +191,86 @@ class MockD1 {
       case "enable_telegram_notifications":
         this.notificationPreferences = this.notificationPreferences.map((row) =>
           row.user_id === args.user_id ? { ...row, telegram_enabled: 1, updated_at: args.updated_at } : row
+        );
+        return { success: true };
+      case "list_users_eligible_for_telegram_alerts":
+        return this.users
+          .map((user) => {
+            const prefs = this.notificationPreferences.find((row) => row.user_id === user.id);
+            const link = this.telegramLinks.find(
+              (row) => row.user_id === user.id && row.link_status === "linked" && row.telegram_chat_id
+            );
+            const sub = this.subscriptions.find((row) => row.user_id === user.id);
+            if (!prefs || !link) {
+              return null;
+            }
+            if (!prefs.telegram_enabled || prefs.website_only_mode) {
+              return null;
+            }
+            if (sub && !["active", "trialing"].includes(String(sub.subscription_status || ""))) {
+              return null;
+            }
+            return {
+              id: user.id,
+              email: user.email,
+              email_normalized: user.email_normalized,
+              telegram_chat_id: link.telegram_chat_id,
+            };
+          })
+          .filter(Boolean);
+      case "upsert_notification_alert": {
+        const existing = this.notificationAlerts.find((row) => row.dedupe_key === args.dedupe_key);
+        if (existing) {
+          if (existing.status !== "delivered") {
+            Object.assign(existing, {
+              fixture_id: args.fixture_id,
+              fixture_label: args.fixture_label,
+              league: args.league,
+              market_family: args.market_family,
+              publish_class: args.publish_class,
+              reasons_json: args.reasons_json,
+              payload_json: args.payload_json,
+              notification_priority: args.notification_priority,
+              scheduled_for: args.scheduled_for,
+              last_error: null,
+              updated_at: args.updated_at,
+            });
+          }
+        } else {
+          this.notificationAlerts.push({ ...args });
+        }
+        return { success: true };
+      }
+      case "list_notification_alerts_by_user":
+        return this.notificationAlerts
+          .filter((row) => row.user_id === args.user_id)
+          .sort((a, b) => String(a.scheduled_for).localeCompare(String(b.scheduled_for)))
+          .slice(0, args.limit);
+      case "list_due_notification_alerts":
+        return this.notificationAlerts
+          .filter((row) => {
+            if (row.channel !== "telegram" || row.status !== "queued") {
+              return false;
+            }
+            if (args.user_id && row.user_id !== args.user_id) {
+              return false;
+            }
+            return String(row.scheduled_for) <= String(args.now_iso);
+          })
+          .sort((a, b) => String(a.scheduled_for).localeCompare(String(b.scheduled_for)))
+          .slice(0, args.limit);
+      case "mark_notification_alert_delivered":
+        this.notificationAlerts = this.notificationAlerts.map((row) =>
+          row.id === args.id
+            ? { ...row, status: "delivered", delivered_at: args.delivered_at, last_error: null, updated_at: args.updated_at }
+            : row
+        );
+        return { success: true };
+      case "mark_notification_alert_failed":
+        this.notificationAlerts = this.notificationAlerts.map((row) =>
+          row.id === args.id
+            ? { ...row, status: "failed", last_error: args.last_error, updated_at: args.updated_at }
+            : row
         );
         return { success: true };
       default:
@@ -1043,6 +1124,119 @@ const testAccountPreferencesUpdate = async (fetchHarness) => {
   assert.deepEqual(prefsPayload.account.notification_preferences.favourite_markets, ["BTTS", "OU25"]);
 };
 
+const testAccountAlertsQueueAndDispatch = async (fetchHarness) => {
+  const env = createEnv();
+  await writeSubscriberRecord(
+    env,
+    buildSubscriberRecord({
+      email: "member@example.com",
+    })
+  );
+
+  const requestResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/auth/magic-link/request", "POST", {
+      email: "member@example.com",
+    }),
+    env
+  );
+  assert.equal(requestResponse.status, 200);
+  const emailBody = fetchHarness.sentEmails.at(-1);
+  const verifyMatch = String(emailBody?.html || "").match(/verify\?token=([^"&]+)/);
+  assert.ok(verifyMatch?.[1], "expected magic-link token in email body");
+  const token = decodeURIComponent(verifyMatch[1]);
+
+  const tokenResponse = await worker.fetch(
+    makeGetRequest(`http://localhost/api/auth/magic-link/verify?token=${encodeURIComponent(token)}`),
+    env
+  );
+  const sessionCookie = extractCookieValue(tokenResponse.headers.get("set-cookie"), "og_premium_session");
+  assert.ok(sessionCookie, "expected premium session cookie after verify");
+
+  const startResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/account/telegram/link/start", "POST", null, {
+      cookie: `og_premium_session=${sessionCookie}`,
+    }),
+    env
+  );
+  const startPayload = await startResponse.json();
+  assert.equal(startResponse.status, 200);
+
+  const completeResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/account/telegram/link/complete", "POST", {
+      code: startPayload.code,
+      telegram_user_id: "tg_user_123",
+      telegram_username: "ogfounder",
+      telegram_chat_id: "chat_456",
+    }),
+    env
+  );
+  assert.equal(completeResponse.status, 200);
+
+  const prefsResponse = await worker.fetch(
+    jsonRequest(
+      "http://localhost/api/account/preferences",
+      "POST",
+      {
+        telegram_enabled: true,
+        website_only_mode: false,
+        allow_non_signal_intelligence: true,
+        favourite_teams: "Luzern",
+        favourite_leagues: "Swiss Super League",
+        favourite_markets: "BTTS",
+        followed_fixtures: "Luzern v Servette",
+      },
+      {
+        cookie: `og_premium_session=${sessionCookie}`,
+      }
+    ),
+    env
+  );
+  assert.equal(prefsResponse.status, 200);
+
+  const refreshResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/account/alerts/refresh", "POST", null, {
+      cookie: `og_premium_session=${sessionCookie}`,
+    }),
+    env
+  );
+  const refreshPayload = await refreshResponse.json();
+  assert.equal(refreshResponse.status, 200);
+  assert.equal(refreshPayload.status, "account_alerts_refreshed");
+  assert.equal(refreshPayload.matched_fixtures >= 1, true);
+  assert.equal(refreshPayload.queued_alerts >= 1, true);
+
+  const alertsStateResponse = await worker.fetch(
+    makeGetRequest("http://localhost/api/account/alerts", {
+      cookie: `og_premium_session=${sessionCookie}`,
+    }),
+    env
+  );
+  const alertsStatePayload = await alertsStateResponse.json();
+  assert.equal(alertsStateResponse.status, 200);
+  assert.equal(alertsStatePayload.status, "account_alerts_loaded");
+  assert.equal(Array.isArray(alertsStatePayload.alerts), true);
+  assert.equal(alertsStatePayload.alerts.length >= 1, true);
+
+  env.ACCOUNT_DB.notificationAlerts = env.ACCOUNT_DB.notificationAlerts.map((alert) => ({
+    ...alert,
+    scheduled_for: "2000-01-01T00:00:00.000Z",
+  }));
+
+  const beforeCount = fetchHarness.counters.telegramSendFetches;
+  const dispatchResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/account/alerts/dispatch", "POST", null, {
+      cookie: `og_premium_session=${sessionCookie}`,
+    }),
+    env
+  );
+  const dispatchPayload = await dispatchResponse.json();
+  assert.equal(dispatchResponse.status, 200);
+  assert.equal(dispatchPayload.status, "account_alerts_dispatched");
+  assert.equal(dispatchPayload.delivered >= 1, true);
+  assert.equal(fetchHarness.counters.telegramSendFetches >= beforeCount + 1, true);
+  assert.match(fetchHarness.sentTelegramMessages.at(-1)?.text || "", /Luzern vs Servette/i);
+};
+
 const main = async () => {
   const cacheHarness = installMockCache();
   const fetchHarness = installMockFetch();
@@ -1063,6 +1257,7 @@ const main = async () => {
     await testTelegramTestAlertRoute(fetchHarness);
     await testTelegramFixtureAlertRoute(fetchHarness);
     await testAccountPreferencesUpdate(fetchHarness);
+    await testAccountAlertsQueueAndDispatch(fetchHarness);
     await testLogoutSkeleton();
     console.log("Worker local harness passed.");
     console.log("- success route with valid token: passed");
@@ -1078,6 +1273,7 @@ const main = async () => {
     console.log("- Telegram test alert route: passed");
     console.log("- Telegram fixture alert route: passed");
     console.log("- Account preferences update route: passed");
+    console.log("- account alerts queue + dispatch routes: passed");
     console.log("- logout skeleton: passed");
   } finally {
     fetchHarness.restore();

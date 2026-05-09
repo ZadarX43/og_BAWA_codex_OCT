@@ -34,6 +34,7 @@
       preferencesMessage: "",
       telegramMessage: "",
       fixtureAlertMessage: "",
+      alertsMessage: "",
       sessionAuthenticated: false,
       sessionEntitled: false,
       sessionStatus: "",
@@ -41,6 +42,7 @@
       sessionCustomerId: "",
       sessionSubscriptionId: "",
       accountState: null,
+      accountAlerts: [],
       accountStateError: "",
       dashboardClassFilter: "ALL",
       dashboardReasonFilter: "ALL",
@@ -365,6 +367,51 @@
       lines.push(firstNote);
     }
     return lines.join("\n");
+  };
+
+  const notificationAlertCard = (alert) => {
+    let payload = {};
+    try {
+      payload = JSON.parse(alert.payload_json || "{}");
+    } catch {
+      payload = {};
+    }
+    const fixture = payload.fixture || null;
+    const reasons = Array.isArray(payload.reasons) ? payload.reasons : [];
+    const status = String(alert.status || "queued").toUpperCase();
+    return `
+      <article class="panel intelligence-card intelligence-card-${escapeHtml(String(alert.publish_class || "monitor").toLowerCase())}">
+        <div class="intelligence-card-head">
+          <span class="pill">${escapeHtml(status)}</span>
+          <span class="muted">${escapeHtml(formatKickoffLabel(alert.scheduled_for))}</span>
+        </div>
+        <strong class="fixture-teamline">
+          <span class="team-name">${escapeHtml(alert.fixture_label || "Followed fixture")}</span>
+        </strong>
+        <div class="intelligence-meta">
+          <span class="chip">${escapeHtml(String(alert.publish_class || "MONITOR").toUpperCase())}</span>
+          <span class="chip">${escapeHtml(alert.market_family || "INTEL")}</span>
+          ${reasons.length ? `<span class="chip">${escapeHtml(reasons.join(" • "))}</span>` : ""}
+        </div>
+        <p class="intelligence-headline">${escapeHtml(
+          fixture?.signal_summary?.headline ||
+            fixture?.signal_summary?.summary_text ||
+            `${alert.alert_kind || "follow alert"} is queued from the published intelligence feed.`
+        )}</p>
+        ${
+          alert.delivered_at
+            ? `<p class="muted">Delivered ${escapeHtml(formatDateTime(alert.delivered_at))}</p>`
+            : alert.last_error
+              ? `<p class="muted">Last error: ${escapeHtml(alert.last_error)}</p>`
+              : `<p class="muted">Scheduled ${escapeHtml(formatDateTime(alert.scheduled_for))}</p>`
+        }
+        ${
+          fixture?.fixture_key
+            ? `<div class="cta-row"><a class="ghost-button" href="${fixtureDetailHref(fixture)}">Open fixture intelligence</a></div>`
+            : ""
+        }
+      </article>
+    `;
   };
 
   const filteredFollowedIntelligence = (entries) => {
@@ -1698,6 +1745,27 @@
             </section>
             <section class="section">
               <article class="panel">
+                <h3>My alerts</h3>
+                <p class="muted">
+                  This queue is the first step from followed intelligence into automatic Telegram delivery. Refresh builds due alerts from the current published window. Dispatch processes anything already due.
+                </p>
+                ${renderNotice(state.runtime.alertsMessage, state.runtime.alertsMessage ? "success" : "default")}
+                <div class="cta-row">
+                  <button class="button" type="button" data-action="refresh-followed-alerts">Refresh followed alerts</button>
+                  <button class="ghost-button" type="button" data-action="dispatch-followed-alerts">Process due Telegram alerts</button>
+                </div>
+                ${
+                  state.runtime.accountAlerts.length
+                    ? `<div class="card-grid intelligence-grid">${state.runtime.accountAlerts
+                        .slice(0, 6)
+                        .map((alert) => notificationAlertCard(alert))
+                        .join("")}</div>`
+                    : `<div class="notice">No queued or delivered alerts are stored for this account yet.</div>`
+                }
+              </article>
+            </section>
+            <section class="section">
+              <article class="panel">
                 <h3>Intelligence preferences</h3>
                 <p class="muted">
                   Choose what kind of intelligence you want on the website and in Telegram. This is the first layer of personalised delivery.
@@ -1744,19 +1812,23 @@
                   <div class="card-grid">
                     <article class="panel">
                       <h4>Followed teams</h4>
-                      <input name="favourite_teams" class="text-input" type="text" placeholder="Arsenal, Liverpool, Porto" value="${escapeHtml(joinPreferenceList(notificationPreferences?.favourite_teams))}" />
+                      <input name="favourite_teams" class="text-input" type="text" placeholder="Comma-separated teams you want to monitor" value="${escapeHtml(joinPreferenceList(notificationPreferences?.favourite_teams))}" />
+                      <p class="muted">Example: Arsenal, Liverpool, Porto</p>
                     </article>
                     <article class="panel">
                       <h4>Followed leagues</h4>
-                      <input name="favourite_leagues" class="text-input" type="text" placeholder="Premier League, UCL, MLS" value="${escapeHtml(joinPreferenceList(notificationPreferences?.favourite_leagues))}" />
+                      <input name="favourite_leagues" class="text-input" type="text" placeholder="Comma-separated leagues you want to monitor" value="${escapeHtml(joinPreferenceList(notificationPreferences?.favourite_leagues))}" />
+                      <p class="muted">Example: Premier League, Portugal Liga, MLS</p>
                     </article>
                     <article class="panel">
                       <h4>Followed markets</h4>
-                      <input name="favourite_markets" class="text-input" type="text" placeholder="BTTS, OU25, FTR" value="${escapeHtml(joinPreferenceList(notificationPreferences?.favourite_markets))}" />
+                      <input name="favourite_markets" class="text-input" type="text" placeholder="Comma-separated market families" value="${escapeHtml(joinPreferenceList(notificationPreferences?.favourite_markets))}" />
+                      <p class="muted">Example: BTTS, OU25, FTR</p>
                     </article>
                     <article class="panel">
                       <h4>Followed fixtures</h4>
-                      <input name="followed_fixtures" class="text-input" type="text" placeholder="Arsenal v Chelsea, El Clasico" value="${escapeHtml(joinPreferenceList(notificationPreferences?.followed_fixtures))}" />
+                      <input name="followed_fixtures" class="text-input" type="text" placeholder="Comma-separated fixture labels" value="${escapeHtml(joinPreferenceList(notificationPreferences?.followed_fixtures))}" />
+                      <p class="muted">Example: Arsenal v Chelsea, Benfica v Braga</p>
                     </article>
                   </div>
                   <div class="cta-row">
@@ -1781,6 +1853,12 @@
     const entitled = state.runtime.sessionEntitled;
     const accountState = state.runtime.accountState;
     const notificationPreferences = accountState?.notification_preferences || null;
+    const followedSignalsConfigured = Boolean(
+      parsePreferenceList(notificationPreferences?.favourite_teams).length ||
+        parsePreferenceList(notificationPreferences?.favourite_leagues).length ||
+        parsePreferenceList(notificationPreferences?.favourite_markets).length ||
+        parsePreferenceList(notificationPreferences?.followed_fixtures).length
+    );
     const baseMatches = getFollowedIntelligenceMatches(accountState, state.fixtureIntelligence);
     const matches = filteredFollowedIntelligence(baseMatches);
     const classFilter = String(state.runtime.dashboardClassFilter || "ALL").toUpperCase();
@@ -1850,6 +1928,7 @@
 
       <section class="section">
         ${renderNotice(state.runtime.fixtureAlertMessage, state.runtime.fixtureAlertMessage ? "success" : "default")}
+        ${renderNotice(state.runtime.alertsMessage, state.runtime.alertsMessage ? "success" : "default")}
         <article class="panel">
           <h3>Filters</h3>
           <p class="muted">Start simple: filter by publish class and why the fixture is relevant to you.</p>
@@ -1874,6 +1953,25 @@
 
       <section class="section">
         <article class="panel">
+          <h3>My alerts</h3>
+          <p class="muted">Queue followed alerts from the current intelligence window, then process anything already due for Telegram delivery.</p>
+          <div class="cta-row">
+            <button class="button" type="button" data-action="refresh-followed-alerts">Refresh followed alerts</button>
+            <button class="ghost-button" type="button" data-action="dispatch-followed-alerts">Process due Telegram alerts</button>
+          </div>
+          ${
+            state.runtime.accountAlerts.length
+              ? `<div class="card-grid intelligence-grid">${state.runtime.accountAlerts
+                  .slice(0, 4)
+                  .map((alert) => notificationAlertCard(alert))
+                  .join("")}</div>`
+              : `<div class="notice">No queued or delivered alerts are stored for this account yet.</div>`
+          }
+        </article>
+      </section>
+
+      <section class="section">
+        <article class="panel">
           <h3>Matched fixtures</h3>
           <p class="muted">Each card is generated from the same published intelligence layer that will later drive Telegram alerts, mobile delivery, and deeper followed-team tracking.</p>
           ${
@@ -1881,7 +1979,9 @@
               ? `<div class="card-grid intelligence-grid dashboard-grid">${matches
                   .map((entry) => dashboardFixtureCard(entry, Boolean(notificationPreferences?.telegram_enabled)))
                   .join("")}</div>`
-              : `<div class="notice">No fixtures match the current filter combination. Change the filters or expand your followed teams, leagues, markets, or fixtures on the account page.</div>`
+              : !followedSignalsConfigured
+                ? `<div class="notice">No followed teams, leagues, markets, or fixtures are saved yet. Add them on the account page, then save your intelligence preferences to start matching live cards.</div>`
+                : `<div class="notice">No fixtures match the current filter combination. Change the filters or expand your followed teams, leagues, markets, or fixtures on the account page.</div>`
           }
         </article>
       </section>
@@ -2094,6 +2194,7 @@
     state.runtime.sessionCustomerId = "";
     state.runtime.sessionSubscriptionId = "";
     state.runtime.accountState = null;
+    state.runtime.accountAlerts = [];
     state.runtime.accountStateError = "";
 
     const notice = authNoticeFromQuery();
@@ -2153,6 +2254,26 @@
       state.runtime.accountState = payload.account || null;
     } catch (error) {
       state.runtime.accountStateError = error.message || "Unable to load account state.";
+    }
+  };
+
+  const loadAccountAlerts = async () => {
+    state.runtime.accountAlerts = [];
+    if (!workerConfigured() || !state.runtime.sessionAuthenticated) {
+      return;
+    }
+
+    try {
+      const { response, payload } = await fetchWorkerJson("/api/account/alerts", {
+        method: "GET",
+        withToken: true,
+      });
+      if (!response.ok || !payload?.ok) {
+        return;
+      }
+      state.runtime.accountAlerts = Array.isArray(payload.alerts) ? payload.alerts : [];
+    } catch {
+      return;
     }
   };
 
@@ -2330,6 +2451,7 @@
 
       state.runtime.accountState = responsePayload.account || state.runtime.accountState;
       state.runtime.preferencesMessage = responsePayload.message || "Intelligence preferences saved.";
+      await loadAccountAlerts();
     } catch (error) {
       state.runtime.preferencesMessage = error.message || "Unable to save intelligence preferences.";
     }
@@ -2405,6 +2527,66 @@
     render();
   };
 
+  const refreshFollowedAlerts = async (event) => {
+    event.preventDefault();
+    if (!workerConfigured() || !state.runtime.sessionAuthenticated) {
+      state.runtime.alertsMessage = "Verify your email before refreshing followed alerts.";
+      render();
+      return;
+    }
+
+    state.runtime.alertsMessage = "Refreshing followed alerts from the current intelligence window…";
+    render();
+
+    try {
+      const { response, payload } = await fetchWorkerJson("/api/account/alerts/refresh", {
+        method: "POST",
+        withToken: true,
+      });
+
+      if (!response.ok || !payload?.ok) {
+        throw new Error(payload?.message || "Unable to refresh followed alerts.");
+      }
+
+      state.runtime.accountAlerts = Array.isArray(payload.alerts) ? payload.alerts : [];
+      state.runtime.alertsMessage = payload.message || "Followed alerts refreshed.";
+    } catch (error) {
+      state.runtime.alertsMessage = error.message || "Unable to refresh followed alerts.";
+    }
+
+    render();
+  };
+
+  const dispatchFollowedAlerts = async (event) => {
+    event.preventDefault();
+    if (!workerConfigured() || !state.runtime.sessionAuthenticated) {
+      state.runtime.alertsMessage = "Verify your email before dispatching alerts.";
+      render();
+      return;
+    }
+
+    state.runtime.alertsMessage = "Processing due Telegram alerts…";
+    render();
+
+    try {
+      const { response, payload } = await fetchWorkerJson("/api/account/alerts/dispatch", {
+        method: "POST",
+        withToken: true,
+      });
+
+      if (!response.ok || !payload?.ok) {
+        throw new Error(payload?.message || "Unable to dispatch followed alerts.");
+      }
+
+      state.runtime.accountAlerts = Array.isArray(payload.alerts) ? payload.alerts : [];
+      state.runtime.alertsMessage = payload.message || "Due Telegram alerts processed.";
+    } catch (error) {
+      state.runtime.alertsMessage = error.message || "Unable to dispatch followed alerts.";
+    }
+
+    render();
+  };
+
   const handleTokenSave = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
@@ -2450,6 +2632,7 @@
     state.runtime.telegramDeepLinkUrl = "";
     state.runtime.telegramMessage = "";
     state.runtime.fixtureAlertMessage = "";
+    state.runtime.alertsMessage = "";
     state.runtime.preferencesMessage = "";
     state.securePremiumPredictions = [];
     state.runtime.premiumFetchError = "";
@@ -2514,6 +2697,18 @@
     const telegramFixtureTarget = event.target.closest("[data-action='telegram-fixture-alert']");
     if (telegramFixtureTarget) {
       await sendTelegramFixtureAlert(event, telegramFixtureTarget.dataset.fixtureKey);
+      return;
+    }
+
+    const refreshAlertsTarget = event.target.closest("[data-action='refresh-followed-alerts']");
+    if (refreshAlertsTarget) {
+      await refreshFollowedAlerts(event);
+      return;
+    }
+
+    const dispatchAlertsTarget = event.target.closest("[data-action='dispatch-followed-alerts']");
+    if (dispatchAlertsTarget) {
+      await dispatchFollowedAlerts(event);
     }
   });
 
@@ -2550,6 +2745,7 @@
     state.runtime.premiumToken = readStoredPremiumToken();
     await loadAuthSession();
     await loadAccountState();
+    await loadAccountAlerts();
 
     try {
       const [summary, publicPredictions, premiumPredictions] = await Promise.all([
