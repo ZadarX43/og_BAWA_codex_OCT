@@ -32,6 +32,23 @@ LINEUPS_PATH = ROOT / "data_sources" / "api_football" / "normalized" / "lineups.
 MATCH_TEAM_STATS_PATH = ROOT / "data_sources" / "api_football" / "normalized" / "match_team_stats.csv"
 MATCH_PLAYER_STATS_PATH = ROOT / "data_sources" / "api_football" / "normalized" / "match_player_stats.csv"
 MATCH_EVENTS_PATH = ROOT / "data_sources" / "api_football" / "normalized" / "match_events.csv"
+FEATURES_DIR = ROOT / "data_sources" / "api_football" / "features"
+PLAYER_EVENTS_FEATURES_DIR = FEATURES_DIR / "player_events"
+
+LEAGUE_TAG_ALIASES: dict[str, list[str]] = {
+    "belgium pro": ["Belgium_Pro"],
+    "brazil serie a": ["Brazil_Serie_A"],
+    "england premier league": ["England_Premier_League"],
+    "england championship": ["England_Championship"],
+    "france ligue 1": ["France_Ligue_1"],
+    "germany bundesliga": ["Germany_Bundesliga"],
+    "italy serie a": ["Italy_Serie_A"],
+    "netherlands eredivisie": ["Netherlands_Eredivisie"],
+    "portugal liga": ["Portugal_Liga"],
+    "scotland premiership": ["Scotland_Premiership"],
+    "spain la liga": ["Spain_La_Liga"],
+    "usa mls": ["USA_MLS"],
+}
 
 
 def parse_args() -> argparse.Namespace:
@@ -218,6 +235,211 @@ def load_team_profile_index(path: Path) -> dict[str, dict[str, float]]:
     return profiles
 
 
+def league_tag_candidates(league: str) -> list[str]:
+    normalized = normalize_lookup_text(league)
+    tags = list(LEAGUE_TAG_ALIASES.get(normalized, []))
+    fallback = re.sub(r"[^A-Za-z0-9]+", "_", str(league or "").strip()).strip("_")
+    if fallback:
+        tags.append(fallback)
+    seen: set[str] = set()
+    ordered: list[str] = []
+    for tag in tags:
+        if tag and tag not in seen:
+            seen.add(tag)
+            ordered.append(tag)
+    return ordered
+
+
+def _accumulate_overlay_side(
+    aggregates: dict[str, dict[str, float]],
+    team_name: str,
+    *,
+    injury_count: float = 0.0,
+    suspended_count: float = 0.0,
+    missing_attackers: float = 0.0,
+    missing_defenders: float = 0.0,
+    ppg_l5: float = 0.0,
+    ppg_season: float = 0.0,
+    win_rate_l5: float = 0.0,
+    attacking_shape: float = 0.0,
+    defensive_shape: float = 0.0,
+    shots_l5: float = 0.0,
+    shots_on_goal_l5: float = 0.0,
+    fouls_l5: float = 0.0,
+    tackles_l5: float = 0.0,
+    goal_environment_score: float = 0.0,
+    battle_on_score: float = 0.0,
+) -> None:
+    if not team_name:
+        return
+    key = normalize_lookup_text(team_name)
+    agg = aggregates.setdefault(
+        key,
+        {
+            "matches": 0.0,
+            "injury_count_sum": 0.0,
+            "suspended_count_sum": 0.0,
+            "missing_attackers_sum": 0.0,
+            "missing_defenders_sum": 0.0,
+            "ppg_l5_sum": 0.0,
+            "ppg_season_sum": 0.0,
+            "win_rate_l5_sum": 0.0,
+            "attacking_shape_sum": 0.0,
+            "defensive_shape_sum": 0.0,
+            "shots_l5_sum": 0.0,
+            "shots_on_goal_l5_sum": 0.0,
+            "fouls_l5_sum": 0.0,
+            "tackles_l5_sum": 0.0,
+            "goal_environment_sum": 0.0,
+            "battle_on_sum": 0.0,
+        },
+    )
+    agg["matches"] += 1.0
+    agg["injury_count_sum"] += injury_count
+    agg["suspended_count_sum"] += suspended_count
+    agg["missing_attackers_sum"] += missing_attackers
+    agg["missing_defenders_sum"] += missing_defenders
+    agg["ppg_l5_sum"] += ppg_l5
+    agg["ppg_season_sum"] += ppg_season
+    agg["win_rate_l5_sum"] += win_rate_l5
+    agg["attacking_shape_sum"] += attacking_shape
+    agg["defensive_shape_sum"] += defensive_shape
+    agg["shots_l5_sum"] += shots_l5
+    agg["shots_on_goal_l5_sum"] += shots_on_goal_l5
+    agg["fouls_l5_sum"] += fouls_l5
+    agg["tackles_l5_sum"] += tackles_l5
+    agg["goal_environment_sum"] += goal_environment_score
+    agg["battle_on_sum"] += battle_on_score
+
+
+def _safe_float(row: dict[str, Any], key: str) -> float:
+    try:
+        return float(str(row.get(key, "") or "0").strip() or 0.0)
+    except ValueError:
+        return 0.0
+
+
+def load_historical_overlay_profile_index() -> dict[str, dict[str, dict[str, float]]]:
+    profiles_by_tag: dict[str, dict[str, dict[str, float]]] = {}
+    for tag in sorted({tag for tags in LEAGUE_TAG_ALIASES.values() for tag in tags}):
+        aggregates: dict[str, dict[str, float]] = {}
+        injury_path = FEATURES_DIR / f"api_injury_features__{tag}__2024.csv"
+        lineup_path = FEATURES_DIR / f"api_lineup_features__{tag}__2024.csv"
+        rolling_path = FEATURES_DIR / f"api_team_rolling_features__{tag}__2024.csv"
+        style_path = PLAYER_EVENTS_FEATURES_DIR / f"fixture_style_overlay__{tag}__2024.csv"
+        goal_env_path = PLAYER_EVENTS_FEATURES_DIR / f"og_goal_environment_overlay__{tag}__2024.csv"
+
+        for path in (injury_path, lineup_path, rolling_path, style_path, goal_env_path):
+            if not path.exists():
+                continue
+            for row in load_rows(path):
+                home_team = str(row.get("home_team_name", "") or "").strip()
+                away_team = str(row.get("away_team_name", "") or "").strip()
+                if path == injury_path:
+                    _accumulate_overlay_side(
+                        aggregates,
+                        home_team,
+                        injury_count=_safe_float(row, "home_injured_players_count"),
+                        suspended_count=_safe_float(row, "home_suspended_players_count"),
+                        missing_attackers=_safe_float(row, "home_missing_attackers_count"),
+                        missing_defenders=_safe_float(row, "home_missing_defenders_count"),
+                    )
+                    _accumulate_overlay_side(
+                        aggregates,
+                        away_team,
+                        injury_count=_safe_float(row, "away_injured_players_count"),
+                        suspended_count=_safe_float(row, "away_suspended_players_count"),
+                        missing_attackers=_safe_float(row, "away_missing_attackers_count"),
+                        missing_defenders=_safe_float(row, "away_missing_defenders_count"),
+                    )
+                elif path == lineup_path:
+                    _accumulate_overlay_side(
+                        aggregates,
+                        home_team,
+                        attacking_shape=_safe_float(row, "home_attacking_shape_score"),
+                        defensive_shape=_safe_float(row, "home_defensive_shape_score"),
+                    )
+                    _accumulate_overlay_side(
+                        aggregates,
+                        away_team,
+                        attacking_shape=_safe_float(row, "away_attacking_shape_score"),
+                        defensive_shape=_safe_float(row, "away_defensive_shape_score"),
+                    )
+                elif path == rolling_path:
+                    _accumulate_overlay_side(
+                        aggregates,
+                        home_team,
+                        ppg_l5=_safe_float(row, "home_team_ppg_l5"),
+                        ppg_season=_safe_float(row, "home_team_ppg_season"),
+                        win_rate_l5=_safe_float(row, "home_team_win_rate_l5"),
+                    )
+                    _accumulate_overlay_side(
+                        aggregates,
+                        away_team,
+                        ppg_l5=_safe_float(row, "away_team_ppg_l5"),
+                        ppg_season=_safe_float(row, "away_team_ppg_season"),
+                        win_rate_l5=_safe_float(row, "away_team_win_rate_l5"),
+                    )
+                elif path == style_path:
+                    _accumulate_overlay_side(
+                        aggregates,
+                        home_team,
+                        shots_l5=_safe_float(row, "home_team_shots_l5"),
+                        shots_on_goal_l5=_safe_float(row, "home_team_shots_on_goal_l5"),
+                        fouls_l5=_safe_float(row, "home_team_fouls_l5"),
+                        tackles_l5=_safe_float(row, "home_team_tackles_l5"),
+                    )
+                    _accumulate_overlay_side(
+                        aggregates,
+                        away_team,
+                        shots_l5=_safe_float(row, "away_team_shots_l5"),
+                        shots_on_goal_l5=_safe_float(row, "away_team_shots_on_goal_l5"),
+                        fouls_l5=_safe_float(row, "away_team_fouls_l5"),
+                        tackles_l5=_safe_float(row, "away_team_tackles_l5"),
+                    )
+                elif path == goal_env_path:
+                    goal_environment_score = _safe_float(row, "og_goal_environment_score")
+                    battle_on_score = _safe_float(row, "og_battle_on_score")
+                    _accumulate_overlay_side(
+                        aggregates,
+                        home_team,
+                        goal_environment_score=goal_environment_score,
+                        battle_on_score=battle_on_score,
+                    )
+                    _accumulate_overlay_side(
+                        aggregates,
+                        away_team,
+                        goal_environment_score=goal_environment_score,
+                        battle_on_score=battle_on_score,
+                    )
+
+        profiles: dict[str, dict[str, float]] = {}
+        for key, agg in aggregates.items():
+            matches = agg["matches"]
+            if matches <= 0:
+                continue
+            profiles[key] = {
+                "matches": matches,
+                "injury_count_avg": round(agg["injury_count_sum"] / matches, 2),
+                "suspended_count_avg": round(agg["suspended_count_sum"] / matches, 2),
+                "missing_attackers_avg": round(agg["missing_attackers_sum"] / matches, 2),
+                "missing_defenders_avg": round(agg["missing_defenders_sum"] / matches, 2),
+                "ppg_l5_avg": round(agg["ppg_l5_sum"] / matches, 2),
+                "ppg_season_avg": round(agg["ppg_season_sum"] / matches, 2),
+                "win_rate_l5_avg": round(agg["win_rate_l5_sum"] / matches, 2),
+                "attacking_shape_avg": round(agg["attacking_shape_sum"] / matches, 2),
+                "defensive_shape_avg": round(agg["defensive_shape_sum"] / matches, 2),
+                "shots_l5_avg": round(agg["shots_l5_sum"] / matches, 2),
+                "shots_on_goal_l5_avg": round(agg["shots_on_goal_l5_sum"] / matches, 2),
+                "fouls_l5_avg": round(agg["fouls_l5_sum"] / matches, 2),
+                "tackles_l5_avg": round(agg["tackles_l5_sum"] / matches, 2),
+                "goal_environment_score_avg": round(agg["goal_environment_sum"] / matches, 2),
+                "battle_on_score_avg": round(agg["battle_on_sum"] / matches, 2),
+            }
+        profiles_by_tag[tag] = profiles
+    return profiles_by_tag
+
+
 def read_fixture_keys(path: Path, key_fields: tuple[str, str, str, str] = ("league", "match_date", "home_team_name", "away_team_name")) -> dict[str, dict[str, str]]:
     if not path.exists():
         return {}
@@ -246,6 +468,7 @@ def build_base_record(
     player_stats_fixture_ids: set[str],
     match_events_fixture_ids: set[str],
     team_profile_index: dict[str, dict[str, float]],
+    historical_overlay_profiles: dict[str, dict[str, dict[str, float]]],
 ) -> dict[str, Any]:
     kickoff_time = normalize_kickoff(match_date)
     master_match = fixtures_master_index.get(fixture_record_key(league, match_date, home_team, away_team))
@@ -253,6 +476,16 @@ def build_base_record(
     fixture_id = str(master_match.get("fixture_id", "") or "").strip() if master_match else ""
     home_profile = team_profile_index.get(normalize_lookup_text(home_team))
     away_profile = team_profile_index.get(normalize_lookup_text(away_team))
+    overlay_home_profile: dict[str, float] = {}
+    overlay_away_profile: dict[str, float] = {}
+    for tag in league_tag_candidates(league):
+        profile_index = historical_overlay_profiles.get(tag, {})
+        if not overlay_home_profile:
+            overlay_home_profile = profile_index.get(normalize_lookup_text(home_team), {})
+        if not overlay_away_profile:
+            overlay_away_profile = profile_index.get(normalize_lookup_text(away_team), {})
+        if overlay_home_profile or overlay_away_profile:
+            break
     return {
         "fixture_id": fixture_id or fixture_key,
         "fixture_key": fixture_key,
@@ -275,6 +508,7 @@ def build_base_record(
             "team_stats": bool(home_profile or away_profile),
             "player_stats": bool(fixture_id and fixture_id in player_stats_fixture_ids),
             "match_events": bool(fixture_id and fixture_id in match_events_fixture_ids),
+            "historical_overlay": bool(overlay_home_profile or overlay_away_profile),
         },
         "follow_candidates": {
             "team_follow_candidate": True,
@@ -284,6 +518,10 @@ def build_base_record(
         "team_profile": {
             "home": home_profile or {},
             "away": away_profile or {},
+        },
+        "historical_overlay_profile": {
+            "home": overlay_home_profile or {},
+            "away": overlay_away_profile or {},
         },
         "updated_at": utc_now_iso(),
     }
@@ -389,6 +627,7 @@ def main() -> int:
     player_stats_fixture_ids = load_fixture_id_set(MATCH_PLAYER_STATS_PATH)
     match_events_fixture_ids = load_fixture_id_set(MATCH_EVENTS_PATH)
     team_profile_index = load_team_profile_index(MATCH_TEAM_STATS_PATH)
+    historical_overlay_profiles = load_historical_overlay_profile_index()
 
     allmarkets_rows = load_rows(related_paths["allmarkets"])
     counters["source_rows:allmarkets"] = len(allmarkets_rows)
@@ -420,6 +659,7 @@ def main() -> int:
                 player_stats_fixture_ids,
                 match_events_fixture_ids,
                 team_profile_index,
+                historical_overlay_profiles,
             )
             universe[fixture_key] = record
         mark_allmarkets_availability(record, row)
@@ -484,6 +724,7 @@ def main() -> int:
             player_stats_fixture_ids,
             match_events_fixture_ids,
             team_profile_index,
+            historical_overlay_profiles,
         )
         universe[fixture_key] = record
         counters["loss_details:fixture_added_to_universe"] += 1

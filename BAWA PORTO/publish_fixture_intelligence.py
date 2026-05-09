@@ -536,6 +536,9 @@ def classify_context_monitor_fixture(
     team_profile = universe_record.get("team_profile", {}) if isinstance(universe_record.get("team_profile"), dict) else {}
     home_profile = team_profile.get("home", {}) if isinstance(team_profile.get("home"), dict) else {}
     away_profile = team_profile.get("away", {}) if isinstance(team_profile.get("away"), dict) else {}
+    overlay_profile = universe_record.get("historical_overlay_profile", {}) if isinstance(universe_record.get("historical_overlay_profile"), dict) else {}
+    overlay_home = overlay_profile.get("home", {}) if isinstance(overlay_profile.get("home"), dict) else {}
+    overlay_away = overlay_profile.get("away", {}) if isinstance(overlay_profile.get("away"), dict) else {}
     source_gaps = [
         key
         for key in ("goal_shape_base", "prematch_odds", "injuries", "lineups", "team_stats", "player_stats", "match_events")
@@ -583,6 +586,41 @@ def classify_context_monitor_fixture(
 
     if source_availability.get("player_stats") and publish_class == "CONTEXT":
         context_summary["schedule_note"] = "Approved player-stat source is available for deeper overlay review."
+
+    if overlay_home or overlay_away:
+        home_ppg = float(overlay_home.get("ppg_l5_avg", 0.0) or 0.0)
+        away_ppg = float(overlay_away.get("ppg_l5_avg", 0.0) or 0.0)
+        home_injuries = float(overlay_home.get("injury_count_avg", 0.0) or 0.0) + float(overlay_home.get("suspended_count_avg", 0.0) or 0.0)
+        away_injuries = float(overlay_away.get("injury_count_avg", 0.0) or 0.0) + float(overlay_away.get("suspended_count_avg", 0.0) or 0.0)
+        home_shape = float(overlay_home.get("attacking_shape_avg", 0.0) or 0.0)
+        away_shape = float(overlay_away.get("attacking_shape_avg", 0.0) or 0.0)
+        home_style = float(overlay_home.get("goal_environment_score_avg", 0.0) or 0.0)
+        away_style = float(overlay_away.get("goal_environment_score_avg", 0.0) or 0.0)
+
+        if abs(home_injuries - away_injuries) >= 1.0:
+            heavier = "home side" if home_injuries > away_injuries else "away side"
+            context_summary["injury_note"] = f"Historical injury overlay has carried a heavier availability burden on the {heavier}."
+        elif not context_summary.get("injury_note") and max(home_injuries, away_injuries) >= 1.5:
+            context_summary["injury_note"] = "Historical injury overlay has shown meaningful availability drag around this fixture profile."
+
+        if abs(home_shape - away_shape) >= 0.5:
+            stronger = "home side" if home_shape > away_shape else "away side"
+            context_summary["lineup_note"] = f"Historical lineup overlay has shown a more aggressive attacking shape from the {stronger}."
+
+        if abs(home_ppg - away_ppg) >= 0.35:
+            stronger = "home side" if home_ppg > away_ppg else "away side"
+            context_summary["form_note"] = f"Historical rolling-form overlay remains stronger on the {stronger}."
+        elif not context_summary.get("form_note") and (home_ppg > 0 or away_ppg > 0):
+            context_summary["form_note"] = "Historical rolling-form overlay remains fairly balanced between both sides."
+
+        if max(home_style, away_style) >= 0.6:
+            context_summary["style_note"] = "Historical goal-environment overlay has leaned lively around this fixture profile."
+
+        if publish_class == "CONTEXT":
+            summary_text = (
+                f"No deployable edge. Coverage remained incomplete across {market_label}, "
+                "but historical overlay context still makes this fixture worth monitoring."
+            )
 
     priority = "medium" if publish_class == "CONTEXT" else "low"
     record = {

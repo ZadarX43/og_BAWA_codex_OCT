@@ -1,6 +1,6 @@
 # COVERED_FIXTURE_UNIVERSE_REPORT
 
-Generated: `2026-05-09T02:33:05+00:00`
+Generated: `2026-05-09T02:45:18+00:00`
 Source run id: `2026-05-09`
 Source window: `2026-05-09` to `2026-05-11`
 
@@ -23,6 +23,7 @@ Source window: `2026-05-09` to `2026-05-11`
 
 ## Availability Counters
 - `availability:goal_shape_base`: `132`
+- `availability:historical_overlay`: `80`
 - `availability:prematch_odds`: `132`
 - `availability:routed_deploy`: `26`
 - `availability:routed_observe`: `131`
