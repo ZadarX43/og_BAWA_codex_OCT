@@ -29,12 +29,19 @@
       checkoutMessage: "",
       accountMessage: "",
       authMessage: "",
+      telegramMessage: "",
       sessionAuthenticated: false,
       sessionEntitled: false,
       sessionStatus: "",
       sessionAuthMode: "",
       sessionCustomerId: "",
       sessionSubscriptionId: "",
+      accountState: null,
+      accountStateError: "",
+      telegramLinkCode: "",
+      telegramLinkExpiresAt: "",
+      telegramBotUsername: "",
+      telegramDeepLinkUrl: "",
     },
   };
 
@@ -143,6 +150,23 @@
 
   const renderNotice = (message, tone = "default") =>
     message ? `<div class="notice notice-${escapeHtml(tone)}">${escapeHtml(message)}</div>` : "";
+
+  const formatDateTime = (value) => {
+    if (!value) {
+      return "";
+    }
+    const parsed = new Date(value);
+    if (Number.isNaN(parsed.getTime())) {
+      return String(value);
+    }
+    return parsed.toLocaleString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
 
   const formatProbability = (value) => {
     const numeric = Number(value);
@@ -1207,6 +1231,13 @@
     const accountCopy = entitled
       ? "This device is verified for your membership. Open the premium board or return to proof while subscription management catches up."
       : "Use the same email you used for checkout. Once verified, premium unlocks automatically on this device.";
+    const accountState = state.runtime.accountState;
+    const telegramLink = accountState?.telegram_link || null;
+    const notificationPreferences = accountState?.notification_preferences || null;
+    const telegramLinked = telegramLink?.link_status === "linked";
+    const telegramReady = Boolean(state.runtime.telegramLinkCode);
+    const subscriptionStatus = accountState?.subscription?.subscription_status || (entitled ? "active" : "pending");
+    const displayEmail = accountState?.user?.email || "";
 
     return `
       <section class="section split">
@@ -1237,12 +1268,17 @@
             <span class="metric-label">Membership</span>
             <span class="metric-value">${entitled ? "Premium active" : "Premium pending"}</span>
           </div>
+          <div class="metric">
+            <span class="metric-label">Telegram</span>
+            <span class="metric-value">${telegramLinked ? "Linked" : signedIn ? "Available" : "Locked"}</span>
+          </div>
         </aside>
       </section>
 
       <section class="section">
         ${renderNotice(checkoutNotice, checkoutState === "success" ? "success" : "warning")}
         ${renderNotice(state.runtime.authMessage, state.runtime.authMessage ? "warning" : "default")}
+        ${renderNotice(state.runtime.telegramMessage, state.runtime.telegramMessage ? "success" : "default")}
         ${debugMode ? renderNotice(state.runtime.accountMessage, state.runtime.accountMessage ? "warning" : "default") : ""}
       </section>
 
@@ -1304,6 +1340,46 @@
             </section>
           `
           : `
+            <section class="section split">
+              <article class="panel">
+                <h3>Account state</h3>
+                <ul class="feature-list">
+                  <li>Verified email: ${displayEmail ? escapeHtml(displayEmail) : "Signed in"}</li>
+                  <li>Membership status: ${escapeHtml(subscriptionStatus)}</li>
+                  <li>D1 profile state: ${accountState ? "Active" : state.runtime.accountStateError ? "Unavailable" : "Pending"}</li>
+                </ul>
+              </article>
+              <article class="panel">
+                <h3>Telegram premium access</h3>
+                <p class="muted">
+                  Link Telegram when you want premium comms, elite deployment alerts, and future acca drops beyond the website shell.
+                </p>
+                ${
+                  telegramLinked
+                    ? `
+                      <ul class="feature-list">
+                        <li>Telegram linked: @${escapeHtml(telegramLink.telegram_username || "linked_user")}</li>
+                        <li>Linked at: ${escapeHtml(formatDateTime(telegramLink.linked_at) || "Recently linked")}</li>
+                        <li>Telegram alerts: ${notificationPreferences?.telegram_enabled ? "Enabled" : "Ready to enable"}</li>
+                      </ul>
+                    `
+                    : `
+                      <div class="cta-row">
+                        <button class="button" type="button" data-action="telegram-link-start">Generate Telegram link code</button>
+                      </div>
+                      ${
+                        telegramReady
+                          ? `<div class="notice">Link code: <strong>${escapeHtml(state.runtime.telegramLinkCode)}</strong>${
+                              state.runtime.telegramDeepLinkUrl
+                                ? ` · <a href="${escapeHtml(state.runtime.telegramDeepLinkUrl)}" target="_blank" rel="noreferrer">Open Telegram bot</a>`
+                                : ""
+                            }<br><span class="muted">Expires ${escapeHtml(formatDateTime(state.runtime.telegramLinkExpiresAt))}</span></div>`
+                          : ""
+                      }
+                    `
+                }
+              </article>
+            </section>
             <section class="section">
               <div class="notice">Subscription management is coming soon.</div>
             </section>
@@ -1373,6 +1449,8 @@
     state.runtime.sessionAuthMode = "";
     state.runtime.sessionCustomerId = "";
     state.runtime.sessionSubscriptionId = "";
+    state.runtime.accountState = null;
+    state.runtime.accountStateError = "";
 
     const notice = authNoticeFromQuery();
     state.runtime.authMessage = notice.message;
@@ -1407,6 +1485,31 @@
     state.runtime.sessionAuthMode = String(payload.auth_mode || "");
     state.runtime.sessionCustomerId = String(payload.customer_id || "");
     state.runtime.sessionSubscriptionId = String(payload.subscription_id || "");
+  };
+
+  const loadAccountState = async () => {
+    state.runtime.accountState = null;
+    state.runtime.accountStateError = "";
+
+    if (!workerConfigured() || !state.runtime.sessionAuthenticated) {
+      return;
+    }
+
+    try {
+      const { response, payload } = await fetchWorkerJson("/api/account/state", {
+        method: "GET",
+        withToken: true,
+      });
+
+      if (!response.ok || !payload?.ok) {
+        state.runtime.accountStateError = payload?.message || "Unable to load account state.";
+        return;
+      }
+
+      state.runtime.accountState = payload.account || null;
+    } catch (error) {
+      state.runtime.accountStateError = error.message || "Unable to load account state.";
+    }
   };
 
   const loadProtectedPremiumPredictions = async () => {
@@ -1499,6 +1602,40 @@
     render();
   };
 
+  const startTelegramLink = async (event) => {
+    event.preventDefault();
+    if (!workerConfigured() || !state.runtime.sessionAuthenticated) {
+      state.runtime.telegramMessage = "Verify your email before linking Telegram.";
+      render();
+      return;
+    }
+
+    state.runtime.telegramMessage = "Preparing Telegram link…";
+    render();
+
+    try {
+      const { response, payload } = await fetchWorkerJson("/api/account/telegram/link/start", {
+        method: "POST",
+        withToken: true,
+      });
+
+      if (!response.ok || !payload?.ok) {
+        throw new Error(payload?.message || "Unable to prepare Telegram link.");
+      }
+
+      state.runtime.telegramLinkCode = String(payload.code || "");
+      state.runtime.telegramLinkExpiresAt = String(payload.expires_at || "");
+      state.runtime.telegramBotUsername = String(payload.bot_username || "");
+      state.runtime.telegramDeepLinkUrl = String(payload.deep_link_url || "");
+      state.runtime.telegramMessage =
+        payload.message || "Telegram link code generated. Open the bot or use the code to complete linking.";
+    } catch (error) {
+      state.runtime.telegramMessage = error.message || "Unable to prepare Telegram link.";
+    }
+
+    render();
+  };
+
   const handleTokenSave = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
@@ -1536,6 +1673,13 @@
     state.runtime.sessionAuthMode = "";
     state.runtime.sessionCustomerId = "";
     state.runtime.sessionSubscriptionId = "";
+    state.runtime.accountState = null;
+    state.runtime.accountStateError = "";
+    state.runtime.telegramLinkCode = "";
+    state.runtime.telegramLinkExpiresAt = "";
+    state.runtime.telegramBotUsername = "";
+    state.runtime.telegramDeepLinkUrl = "";
+    state.runtime.telegramMessage = "";
     state.securePremiumPredictions = [];
     state.runtime.premiumFetchError = "";
     state.runtime.authMessage = "You have been signed out from this device.";
@@ -1565,6 +1709,12 @@
     const logoutTarget = event.target.closest("[data-action='auth-logout']");
     if (logoutTarget) {
       await handleLogout(event);
+      return;
+    }
+
+    const telegramTarget = event.target.closest("[data-action='telegram-link-start']");
+    if (telegramTarget) {
+      await startTelegramLink(event);
     }
   });
 
@@ -1593,6 +1743,7 @@
     syncActiveNav();
     state.runtime.premiumToken = readStoredPremiumToken();
     await loadAuthSession();
+    await loadAccountState();
 
     try {
       const [summary, publicPredictions, premiumPredictions] = await Promise.all([
