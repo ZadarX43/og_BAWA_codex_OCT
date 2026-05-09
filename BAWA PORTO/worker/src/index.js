@@ -1599,6 +1599,83 @@ async function handleTelegramWebhook(request, env) {
   });
 }
 
+async function handleTelegramTestAlert(request, env) {
+  const sessionAccess = await verifySessionAccess(request, env);
+  if (!sessionAccess.ok) {
+    return json(
+      {
+        ok: false,
+        status: sessionAccess.status || "unauthenticated",
+        message: sessionAccess.message || "Verify your email before sending a Telegram test alert.",
+      },
+      401
+    );
+  }
+
+  const accountDb = getAccountDb(env);
+  if (!accountDb) {
+    return configError("ACCOUNT_DB D1 binding is required for Telegram alert testing.", ["ACCOUNT_DB"]);
+  }
+  if (!getTelegramBotToken(env)) {
+    return configError("TELEGRAM_BOT_TOKEN is required for Telegram alert testing.", ["TELEGRAM_BOT_TOKEN"]);
+  }
+
+  const accountState = await getAccountStateByEmail(accountDb, sessionAccess.email);
+  const telegramLink = accountState?.telegram_link || null;
+  const chatId = String(telegramLink?.telegram_chat_id || "").trim();
+  if (!telegramLink || telegramLink.link_status !== "linked" || !chatId) {
+    return json(
+      {
+        ok: false,
+        status: "telegram_not_linked",
+        message: "Link Telegram from your account page before sending a test alert.",
+      },
+      400
+    );
+  }
+
+  const messageLines = [
+    "Odds Genius Telegram delivery is live.",
+    "",
+    "This is a test premium alert from your linked account.",
+    `Membership: ${sessionAccess.subscription_status || "active"}`,
+    "Future use: elite deployment alerts, premium comms, and controlled acca drops.",
+  ];
+
+  const delivered = await sendTelegramMessage(env, chatId, messageLines.join("\n"));
+  if (!delivered) {
+    return json(
+      {
+        ok: false,
+        status: "telegram_delivery_failed",
+        message: "Telegram test alert could not be delivered.",
+      },
+      502
+    );
+  }
+
+  try {
+    await recordAuthEvent(accountDb, {
+      user_id: accountState?.user?.id || null,
+      email_normalized: sessionAccess.email,
+      event_type: "telegram_test_alert_sent",
+      ip_hint: getRequestIp(request) || null,
+      user_agent_hint: getUserAgentHint(request),
+      metadata: {
+        telegram_chat_id_hint: chatId.slice(-6),
+      },
+    });
+  } catch {
+    // Best-effort audit trail only.
+  }
+
+  return json({
+    ok: true,
+    status: "telegram_test_alert_sent",
+    message: "Telegram test alert sent to your linked account.",
+  });
+}
+
 async function handleTelegramLinkComplete(request, env) {
   let payload;
   try {
@@ -1908,6 +1985,7 @@ async function handleRequest(request, env) {
         "GET /api/account/state",
         "POST /api/account/telegram/link/start",
         "POST /api/account/telegram/link/complete",
+        "POST /api/account/telegram/test-alert",
         "POST /api/telegram/webhook",
         "POST /api/stripe/checkout",
         "POST /api/premium/token",
@@ -1989,6 +2067,15 @@ async function handleRequest(request, env) {
       return withCors(response, request, env);
     }
     response = await handleTelegramLinkComplete(request, env);
+    return withCors(response, request, env);
+  }
+
+  if (pathname === "/api/account/telegram/test-alert") {
+    if (request.method !== "POST") {
+      response = methodNotAllowed("POST");
+      return withCors(response, request, env);
+    }
+    response = await handleTelegramTestAlert(request, env);
     return withCors(response, request, env);
   }
 

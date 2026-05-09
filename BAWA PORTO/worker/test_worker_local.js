@@ -799,6 +799,69 @@ const testTelegramWebhookCompletesLinkFlow = async (fetchHarness) => {
   assert.match(fetchHarness.sentTelegramMessages.at(-1)?.text || "", /now linked/i);
 };
 
+const testTelegramTestAlertRoute = async (fetchHarness) => {
+  const env = createEnv();
+  await writeSubscriberRecord(
+    env,
+    buildSubscriberRecord({
+      email: "member@example.com",
+    })
+  );
+
+  const requestResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/auth/magic-link/request", "POST", {
+      email: "member@example.com",
+    }),
+    env
+  );
+  assert.equal(requestResponse.status, 200);
+  const emailBody = fetchHarness.sentEmails.at(-1);
+  const verifyMatch = String(emailBody?.html || "").match(/verify\?token=([^"&]+)/);
+  assert.ok(verifyMatch?.[1], "expected magic-link token in email body");
+  const token = decodeURIComponent(verifyMatch[1]);
+
+  const tokenResponse = await worker.fetch(
+    makeGetRequest(`http://localhost/api/auth/magic-link/verify?token=${encodeURIComponent(token)}`),
+    env
+  );
+  const sessionCookie = extractCookieValue(tokenResponse.headers.get("set-cookie"), "og_premium_session");
+  assert.ok(sessionCookie, "expected premium session cookie after verify");
+
+  const startResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/account/telegram/link/start", "POST", null, {
+      cookie: `og_premium_session=${sessionCookie}`,
+    }),
+    env
+  );
+  const startPayload = await startResponse.json();
+  assert.equal(startResponse.status, 200);
+  assert.ok(startPayload.code);
+
+  const completeResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/account/telegram/link/complete", "POST", {
+      code: startPayload.code,
+      telegram_user_id: "tg_user_123",
+      telegram_username: "ogfounder",
+      telegram_chat_id: "chat_456",
+    }),
+    env
+  );
+  assert.equal(completeResponse.status, 200);
+
+  const beforeCount = fetchHarness.counters.telegramSendFetches;
+  const alertResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/account/telegram/test-alert", "POST", null, {
+      cookie: `og_premium_session=${sessionCookie}`,
+    }),
+    env
+  );
+  const alertPayload = await alertResponse.json();
+  assert.equal(alertResponse.status, 200);
+  assert.equal(alertPayload.status, "telegram_test_alert_sent");
+  assert.equal(fetchHarness.counters.telegramSendFetches, beforeCount + 1);
+  assert.match(fetchHarness.sentTelegramMessages.at(-1)?.text || "", /test premium alert/i);
+};
+
 const main = async () => {
   const cacheHarness = installMockCache();
   const fetchHarness = installMockFetch();
@@ -816,6 +879,7 @@ const main = async () => {
     await testMagicLinkVerifyAndSessionFlow(fetchHarness);
     await testAccountStateAndTelegramLinkFlow(fetchHarness);
     await testTelegramWebhookCompletesLinkFlow(fetchHarness);
+    await testTelegramTestAlertRoute(fetchHarness);
     await testLogoutSkeleton();
     console.log("Worker local harness passed.");
     console.log("- success route with valid token: passed");
@@ -828,6 +892,7 @@ const main = async () => {
     console.log("- magic-link verify + session premium flow: passed");
     console.log("- D1-backed account state + Telegram link flow: passed");
     console.log("- Telegram bot webhook completion flow: passed");
+    console.log("- Telegram test alert route: passed");
     console.log("- logout skeleton: passed");
   } finally {
     fetchHarness.restore();

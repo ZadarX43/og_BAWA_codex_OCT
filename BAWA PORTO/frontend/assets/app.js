@@ -168,6 +168,21 @@
     });
   };
 
+  const formatTelegramIdentity = (telegramLink) => {
+    if (!telegramLink) {
+      return "";
+    }
+    const username = String(telegramLink.telegram_username || "").trim();
+    if (username) {
+      return `@${username}`;
+    }
+    const chatId = String(telegramLink.telegram_chat_id || "").trim();
+    if (chatId) {
+      return `Linked chat • ${chatId.slice(-4)}`;
+    }
+    return "Linked account";
+  };
+
   const formatProbability = (value) => {
     const numeric = Number(value);
     if (!Number.isFinite(numeric)) {
@@ -1358,10 +1373,13 @@
                   telegramLinked
                     ? `
                       <ul class="feature-list">
-                        <li>Telegram linked: @${escapeHtml(telegramLink.telegram_username || "linked_user")}</li>
+                        <li>Telegram linked: ${escapeHtml(formatTelegramIdentity(telegramLink) || "Linked account")}</li>
                         <li>Linked at: ${escapeHtml(formatDateTime(telegramLink.linked_at) || "Recently linked")}</li>
                         <li>Telegram alerts: ${notificationPreferences?.telegram_enabled ? "Enabled" : "Ready to enable"}</li>
                       </ul>
+                      <div class="cta-row">
+                        <button class="button button-secondary" type="button" data-action="telegram-test-alert">Send test Telegram alert</button>
+                      </div>
                     `
                     : `
                       <div class="cta-row">
@@ -1636,6 +1654,35 @@
     render();
   };
 
+  const sendTelegramTestAlert = async (event) => {
+    event.preventDefault();
+    if (!workerConfigured() || !state.runtime.sessionAuthenticated) {
+      state.runtime.telegramMessage = "Verify your email before sending a Telegram test alert.";
+      render();
+      return;
+    }
+
+    state.runtime.telegramMessage = "Sending Telegram test alert…";
+    render();
+
+    try {
+      const { response, payload } = await fetchWorkerJson("/api/account/telegram/test-alert", {
+        method: "POST",
+        withToken: true,
+      });
+
+      if (!response.ok || !payload?.ok) {
+        throw new Error(payload?.message || "Unable to send Telegram test alert.");
+      }
+
+      state.runtime.telegramMessage = payload.message || "Telegram test alert sent.";
+    } catch (error) {
+      state.runtime.telegramMessage = error.message || "Unable to send Telegram test alert.";
+    }
+
+    render();
+  };
+
   const handleTokenSave = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
@@ -1715,6 +1762,12 @@
     const telegramTarget = event.target.closest("[data-action='telegram-link-start']");
     if (telegramTarget) {
       await startTelegramLink(event);
+      return;
+    }
+
+    const telegramTestTarget = event.target.closest("[data-action='telegram-test-alert']");
+    if (telegramTestTarget) {
+      await sendTelegramTestAlert(event);
     }
   });
 

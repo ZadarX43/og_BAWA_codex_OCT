@@ -30,6 +30,7 @@ Current status:
 - `GET /api/account/state`
 - `POST /api/account/telegram/link/start`
 - `POST /api/account/telegram/link/complete`
+- `POST /api/account/telegram/test-alert`
 - `POST /api/telegram/webhook`
 - `POST /api/stripe/checkout`
 - `POST /api/premium/token`
@@ -243,6 +244,13 @@ Current response metadata:
 - consumes the one-time KV code
 - writes the linked Telegram identity into D1
 - can still be used directly by trusted internal tooling if needed
+
+`POST /api/account/telegram/test-alert`:
+
+- requires verified premium session
+- requires a linked Telegram chat in D1
+- sends a live test alert through the configured Telegram bot
+- is useful for proving delivery before enabling real premium notifications
 
 `POST /api/telegram/webhook`:
 
