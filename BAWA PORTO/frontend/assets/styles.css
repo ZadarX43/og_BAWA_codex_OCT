@@ -867,6 +867,62 @@ tbody tr:hover {
   color: var(--ink);
 }
 
+.dashboard-grid {
+  align-items: stretch;
+}
+
+.dashboard-card {
+  flex: 1 1 420px;
+  min-width: min(100%, 420px);
+  display: grid;
+  gap: 16px;
+}
+
+.dashboard-card-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: start;
+}
+
+.dashboard-teamline {
+  margin-top: 12px;
+}
+
+.dashboard-card-priority {
+  min-width: 120px;
+  padding: 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(123, 154, 184, 0.12);
+}
+
+.dashboard-route {
+  margin-top: 8px;
+  font-size: 1.05rem;
+}
+
+.dashboard-odds-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.dashboard-telegram-preview {
+  display: grid;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(123, 154, 184, 0.12);
+  background: linear-gradient(180deg, rgba(11, 18, 29, 0.75), rgba(9, 16, 26, 0.82));
+}
+
+.dashboard-telegram-preview pre {
+  margin: 0;
+  white-space: pre-wrap;
+  font: inherit;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
 .pricing-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1543,11 +1599,16 @@ code {
   .prediction-call,
   .detail-row,
   .prediction-footer,
+  .dashboard-card-top,
   .dashboard-head,
   .sample-board-head,
   .board-toolbar {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .dashboard-odds-grid {
+    grid-template-columns: 1fr;
   }
 
   .chart-x-labels {

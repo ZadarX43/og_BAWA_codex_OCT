@@ -40,6 +40,8 @@
       sessionSubscriptionId: "",
       accountState: null,
       accountStateError: "",
+      dashboardClassFilter: "ALL",
+      dashboardReasonFilter: "ALL",
       telegramLinkCode: "",
       telegramLinkExpiresAt: "",
       telegramBotUsername: "",
@@ -128,6 +130,7 @@
   const syncActiveNav = () => {
     const pageHrefMap = {
       home: "./index.html",
+      dashboard: "./dashboard.html",
       predictions: "./predictions.html",
       premium: "./premium.html",
       results: "./results.html",
@@ -338,6 +341,100 @@
             ? `<ul class="feature-list compact-list">${notes.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}</ul>`
             : `<p class="muted">No extra context note is published for this fixture yet.</p>`
         }
+      </article>
+    `;
+  };
+
+  const telegramAlertPreview = (entry) => {
+    const row = entry.row;
+    const publishClass = String(row.publish_class || row.fixture_class || "MONITOR").toUpperCase();
+    const headline =
+      row.signal_summary?.headline ||
+      row.signal_summary?.summary_text ||
+      "Intelligence update available.";
+    const firstNote = Array.isArray(row.context_summary?.notes) && row.context_summary.notes.length ? row.context_summary.notes[0] : "";
+    const lines = [`${publishClass} | ${row.league}`, `${row.home_team} vs ${row.away_team}`, headline];
+    if (firstNote) {
+      lines.push(firstNote);
+    }
+    return lines.join("\n");
+  };
+
+  const filteredFollowedIntelligence = (entries) => {
+    const classFilter = String(state.runtime.dashboardClassFilter || "ALL").toUpperCase();
+    const reasonFilter = String(state.runtime.dashboardReasonFilter || "ALL").toLowerCase();
+    return entries.filter((entry) => {
+      const publishClass = String(entry.row.publish_class || entry.row.fixture_class || "MONITOR").toUpperCase();
+      if (classFilter !== "ALL" && publishClass !== classFilter) {
+        return false;
+      }
+      if (reasonFilter !== "all" && !entry.reasons.includes(reasonFilter.replace(/_/g, " "))) {
+        return false;
+      }
+      return true;
+    });
+  };
+
+  const dashboardFixtureCard = (entry, telegramEnabled) => {
+    const row = entry.row;
+    const publishClass = String(row.publish_class || row.fixture_class || "MONITOR").toUpperCase();
+    const notes = Array.isArray(row.context_summary?.notes) ? row.context_summary.notes.slice(0, 3) : [];
+    const odds = row.odds_summary || {};
+    return `
+      <article class="panel dashboard-card dashboard-card-${publishClass.toLowerCase()}">
+        <div class="dashboard-card-top">
+          <div>
+            <div class="intelligence-card-head">
+              <span class="pill">${escapeHtml(publishClass)}</span>
+              <span class="chip">${escapeHtml(marketFamilyLabel(row.signal_summary?.market_family))}</span>
+              <span class="chip">${escapeHtml(entry.reasons.join(" • "))}</span>
+            </div>
+            <strong class="fixture-teamline dashboard-teamline">
+              ${badgeMarkup(row.home_team_logo_url, row.home_team)}
+              <span class="team-name">${escapeHtml(row.home_team)}</span>
+              <span class="versus">vs</span>
+              ${badgeMarkup(row.away_team_logo_url, row.away_team)}
+              <span class="team-name">${escapeHtml(row.away_team)}</span>
+            </strong>
+            <p class="muted">${escapeHtml(row.league)} • ${escapeHtml(formatKickoffLabel(row.kickoff_time))}</p>
+          </div>
+          <div class="dashboard-card-priority">
+            <span class="metric-label">Telegram route</span>
+            <span class="metric-value dashboard-route">${telegramEnabled ? escapeHtml(row.follow_relevance?.notification_priority || "ready") : "Website"}</span>
+          </div>
+        </div>
+        <p class="intelligence-headline">${escapeHtml(row.signal_summary?.headline || row.signal_summary?.summary_text || "Monitoring update published.")}</p>
+        <div class="prediction-meta-grid dashboard-odds-grid">
+          <div class="signal-cell">
+            <span class="signal-label">1X2</span>
+            <span class="signal-value">${escapeHtml(
+              odds.home_win_odds && odds.draw_odds && odds.away_win_odds
+                ? `${odds.home_win_odds} / ${odds.draw_odds} / ${odds.away_win_odds}`
+                : "N/A"
+            )}</span>
+          </div>
+          <div class="signal-cell">
+            <span class="signal-label">OU25</span>
+            <span class="signal-value">${escapeHtml(
+              odds.over25_odds && odds.under25_odds ? `${odds.over25_odds} / ${odds.under25_odds}` : "N/A"
+            )}</span>
+          </div>
+          <div class="signal-cell">
+            <span class="signal-label">BTTS</span>
+            <span class="signal-value">${escapeHtml(
+              odds.btts_yes_odds && odds.btts_no_odds ? `${odds.btts_yes_odds} / ${odds.btts_no_odds}` : "N/A"
+            )}</span>
+          </div>
+        </div>
+        ${
+          notes.length
+            ? `<ul class="feature-list compact-list">${notes.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}</ul>`
+            : `<p class="muted">No additional context notes have been published for this fixture yet.</p>`
+        }
+        <div class="dashboard-telegram-preview">
+          <span class="metric-label">Telegram alert preview</span>
+          <pre>${escapeHtml(telegramAlertPreview(entry))}</pre>
+        </div>
       </article>
     `;
   };
@@ -1430,6 +1527,7 @@
             <a class="button" href="${entitled ? "./premium.html" : "./pricing.html"}">${
               entitled ? "Open premium board" : "See founding plan"
             }</a>
+            ${signedIn ? `<a class="ghost-button" href="./dashboard.html">Open dashboard</a>` : ""}
             <a class="ghost-button" href="${entitled ? "./results.html" : "./premium.html"}">${
               entitled ? "Go to results" : "Open premium page"
             }</a>
@@ -1667,9 +1765,121 @@
     return parts.length > 2 ? parts.slice(-3, -1).join(" / ") : source;
   };
 
+  const dashboardView = () => {
+    const signedIn = state.runtime.sessionAuthenticated;
+    const entitled = state.runtime.sessionEntitled;
+    const accountState = state.runtime.accountState;
+    const notificationPreferences = accountState?.notification_preferences || null;
+    const baseMatches = getFollowedIntelligenceMatches(accountState, state.fixtureIntelligence);
+    const matches = filteredFollowedIntelligence(baseMatches);
+    const classFilter = String(state.runtime.dashboardClassFilter || "ALL").toUpperCase();
+    const reasonFilter = String(state.runtime.dashboardReasonFilter || "ALL").toUpperCase();
+    const classOptions = ["ALL", "DEPLOY", "OBSERVE", "CONTEXT", "MONITOR"];
+    const reasonOptions = [
+      ["ALL", "All follows"],
+      ["FOLLOWED TEAM", "Team"],
+      ["FOLLOWED FIXTURE", "Fixture"],
+      ["FOLLOWED LEAGUE", "League"],
+      ["FOLLOWED MARKET", "Market"],
+    ];
+
+    if (!signedIn) {
+      return `
+        <section class="section split">
+          <article class="hero-main">
+            <p class="hero-kicker">Dashboard</p>
+            <h1>Personal intelligence hub.</h1>
+            <p>Sign in to turn followed teams, followed fixtures, and premium intelligence preferences into a real working board.</p>
+            <div class="cta-row">
+              <a class="button" href="./account.html">Verify email</a>
+              <a class="ghost-button" href="./pricing.html">See founding plan</a>
+            </div>
+          </article>
+          <aside class="hero-side">
+            <div class="metric">
+              <span class="metric-label">Access</span>
+              <span class="metric-value">Locked</span>
+            </div>
+            <div class="metric">
+              <span class="metric-label">Intelligence feed</span>
+              <span class="metric-value">${state.fixtureIntelligence.length}</span>
+            </div>
+          </aside>
+        </section>
+      `;
+    }
+
+    return `
+      <section class="section split">
+        <article class="hero-main">
+          <p class="hero-kicker">Dashboard</p>
+          <h1>Followed intelligence.</h1>
+          <p>This is the first dedicated dashboard surface for the intelligence layer. It combines saved follows, published fixture intelligence, and Telegram delivery posture into one working board.</p>
+          <div class="pill-row">
+            <span class="stat-chip">${baseMatches.length} matched followed fixtures</span>
+            <span class="stat-chip">${entitled ? "Premium active" : "Free / pending"}</span>
+            <span class="stat-chip">${notificationPreferences?.telegram_enabled ? "Telegram enabled" : "Website-first mode"}</span>
+          </div>
+        </article>
+        <aside class="hero-side">
+          <div class="metric">
+            <span class="metric-label">Deploy</span>
+            <span class="metric-value">${baseMatches.filter((entry) => String(entry.row.publish_class).toUpperCase() === "DEPLOY").length}</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Observe</span>
+            <span class="metric-value">${baseMatches.filter((entry) => String(entry.row.publish_class).toUpperCase() === "OBSERVE").length}</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Context</span>
+            <span class="metric-value">${baseMatches.filter((entry) => String(entry.row.publish_class).toUpperCase() === "CONTEXT").length}</span>
+          </div>
+        </aside>
+      </section>
+
+      <section class="section">
+        <article class="panel">
+          <h3>Filters</h3>
+          <p class="muted">Start simple: filter by publish class and why the fixture is relevant to you.</p>
+          <div class="pill-row">
+            ${classOptions
+              .map(
+                (option) =>
+                  `<button class="${classFilter === option ? "button" : "ghost-button"}" type="button" data-action="dashboard-class-filter" data-value="${option}">${option}</button>`
+              )
+              .join("")}
+          </div>
+          <div class="pill-row">
+            ${reasonOptions
+              .map(
+                ([value, label]) =>
+                  `<button class="${reasonFilter === value ? "button" : "ghost-button"}" type="button" data-action="dashboard-reason-filter" data-value="${value}">${label}</button>`
+              )
+              .join("")}
+          </div>
+        </article>
+      </section>
+
+      <section class="section">
+        <article class="panel">
+          <h3>Matched fixtures</h3>
+          <p class="muted">Each card is generated from the same published intelligence layer that will later drive Telegram alerts, mobile delivery, and deeper followed-team tracking.</p>
+          ${
+            matches.length
+              ? `<div class="card-grid intelligence-grid dashboard-grid">${matches
+                  .map((entry) => dashboardFixtureCard(entry, Boolean(notificationPreferences?.telegram_enabled)))
+                  .join("")}</div>`
+              : `<div class="notice">No fixtures match the current filter combination. Change the filters or expand your followed teams, leagues, markets, or fixtures on the account page.</div>`
+          }
+        </article>
+      </section>
+    `;
+  };
+
   const render = () => {
     const views = {
       home: homeView,
+      dashboard: dashboardView,
       predictions: predictionsView,
       premium: premiumView,
       results: resultsView,
@@ -2072,6 +2282,22 @@
       return;
     }
 
+    const dashboardClassTarget = event.target.closest("[data-action='dashboard-class-filter']");
+    if (dashboardClassTarget) {
+      event.preventDefault();
+      state.runtime.dashboardClassFilter = String(dashboardClassTarget.dataset.value || "ALL").toUpperCase();
+      render();
+      return;
+    }
+
+    const dashboardReasonTarget = event.target.closest("[data-action='dashboard-reason-filter']");
+    if (dashboardReasonTarget) {
+      event.preventDefault();
+      state.runtime.dashboardReasonFilter = String(dashboardReasonTarget.dataset.value || "ALL").toUpperCase();
+      render();
+      return;
+    }
+
     const telegramTarget = event.target.closest("[data-action='telegram-link-start']");
     if (telegramTarget) {
       await startTelegramLink(event);
@@ -2102,11 +2328,13 @@
 
   const boot = async () => {
     let loadingMessage = "Loading published board…";
-    if (page === "account") {
+    if (page === "account" || page === "dashboard") {
       loadingMessage =
         checkoutState === "success"
           ? "Membership confirmed. Please verify your email to continue…"
-          : "Loading your account access…";
+          : page === "dashboard"
+            ? "Loading your intelligence dashboard…"
+            : "Loading your account access…";
     } else if (page === "premium") {
       loadingMessage = "Checking premium access…";
     }

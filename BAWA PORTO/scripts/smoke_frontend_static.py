@@ -13,6 +13,7 @@ DATA = FRONTEND / "public" / "data"
 
 HTML_FILES = [
     FRONTEND / "index.html",
+    FRONTEND / "dashboard.html",
     FRONTEND / "predictions.html",
     FRONTEND / "premium.html",
     FRONTEND / "results.html",
