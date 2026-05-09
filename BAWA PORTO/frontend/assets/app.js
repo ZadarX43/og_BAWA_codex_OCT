@@ -9,6 +9,7 @@
   const accountIntent = query.get("intent") || "";
   const checkoutState = query.get("checkout") || "";
   const authState = query.get("auth") || "";
+  const selectedFixtureKey = query.get("fixture") || "";
   const runtimeConfig = window.OG_CONFIG || {};
   const workerApiBase = String(runtimeConfig.WORKER_API_BASE || "").replace(/\/+$/, "");
   const checkoutPlaceholderHref = "./account.html?intent=checkout";
@@ -131,6 +132,7 @@
     const pageHrefMap = {
       home: "./index.html",
       dashboard: "./dashboard.html",
+      fixture: "./dashboard.html",
       predictions: "./predictions.html",
       premium: "./premium.html",
       results: "./results.html",
@@ -211,6 +213,7 @@
   };
 
   const fixturePreferenceLabel = (row) => `${row.home_team} v ${row.away_team}`;
+  const fixtureDetailHref = (row) => `./fixture.html?fixture=${encodeURIComponent(String(row.fixture_key || ""))}`;
 
   const marketFamilyLabel = (value) => {
     const key = String(value || "").toUpperCase();
@@ -341,6 +344,9 @@
             ? `<ul class="feature-list compact-list">${notes.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}</ul>`
             : `<p class="muted">No extra context note is published for this fixture yet.</p>`
         }
+        <div class="cta-row">
+          <a class="ghost-button" href="${fixtureDetailHref(row)}">Open fixture intelligence</a>
+        </div>
       </article>
     `;
   };
@@ -434,6 +440,9 @@
         <div class="dashboard-telegram-preview">
           <span class="metric-label">Telegram alert preview</span>
           <pre>${escapeHtml(telegramAlertPreview(entry))}</pre>
+        </div>
+        <div class="cta-row">
+          <a class="button" href="${fixtureDetailHref(row)}">Open fixture view</a>
         </div>
       </article>
     `;
@@ -1876,10 +1885,157 @@
     `;
   };
 
+  const fixtureView = () => {
+    const fixture = state.fixtureIntelligence.find((row) => String(row.fixture_key || "") === String(selectedFixtureKey || ""));
+    if (!fixture) {
+      return `
+        <section class="section split">
+          <article class="hero-main">
+            <p class="hero-kicker">Fixture Intelligence</p>
+            <h1>Fixture not found.</h1>
+            <p>The published intelligence feed does not currently contain the fixture you requested. It may have rolled out of the active window.</p>
+            <div class="cta-row">
+              <a class="button" href="./dashboard.html">Back to dashboard</a>
+              <a class="ghost-button" href="./account.html">Open account</a>
+            </div>
+          </article>
+        </section>
+      `;
+    }
+
+    const publishClass = String(fixture.publish_class || fixture.fixture_class || "MONITOR").toUpperCase();
+    const headline = fixture.signal_summary?.headline || fixture.signal_summary?.summary_text || "Monitoring update published.";
+    const notes = Array.isArray(fixture.context_summary?.notes) ? fixture.context_summary.notes : [];
+    const odds = fixture.odds_summary || {};
+    const accountState = state.runtime.accountState;
+    const notificationPreferences = accountState?.notification_preferences || null;
+    const matchedEntry = getFollowedIntelligenceMatches(accountState, [fixture])[0] || null;
+    const relatedFixtures = state.fixtureIntelligence
+      .filter((row) => row.fixture_key !== fixture.fixture_key && row.league === fixture.league)
+      .slice(0, 4);
+
+    return `
+      <section class="section split">
+        <article class="hero-main">
+          <p class="hero-kicker">Fixture Intelligence</p>
+          <h1>${escapeHtml(fixture.home_team)} <span class="muted">vs</span> ${escapeHtml(fixture.away_team)}</h1>
+          <p>${escapeHtml(headline)}</p>
+          <div class="pill-row">
+            <span class="pill">${escapeHtml(publishClass)}</span>
+            <span class="chip">${escapeHtml(marketFamilyLabel(fixture.signal_summary?.market_family))}</span>
+            <span class="chip">${escapeHtml(fixture.league)}</span>
+            <span class="chip">${escapeHtml(formatKickoffLabel(fixture.kickoff_time))}</span>
+          </div>
+          <div class="cta-row">
+            <a class="button" href="./dashboard.html">Back to dashboard</a>
+            <a class="ghost-button" href="./premium.html">Open premium board</a>
+          </div>
+        </article>
+        <aside class="hero-side">
+          <div class="metric">
+            <span class="metric-label">Coverage</span>
+            <span class="metric-value">${escapeHtml(String(fixture.coverage_status || "covered"))}</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Telegram</span>
+            <span class="metric-value">${notificationPreferences?.telegram_enabled ? escapeHtml(fixture.follow_relevance?.notification_priority || "ready") : "Preview"}</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Follow match</span>
+            <span class="metric-value">${matchedEntry ? escapeHtml(matchedEntry.reasons.join(" / ")) : "Not followed"}</span>
+          </div>
+        </aside>
+      </section>
+
+      <section class="section split">
+        <article class="panel">
+          <h3>Signal frame</h3>
+          <div class="prediction-meta-grid dashboard-odds-grid">
+            <div class="signal-cell">
+              <span class="signal-label">1X2</span>
+              <span class="signal-value">${escapeHtml(
+                odds.home_win_odds && odds.draw_odds && odds.away_win_odds
+                  ? `${odds.home_win_odds} / ${odds.draw_odds} / ${odds.away_win_odds}`
+                  : "N/A"
+              )}</span>
+            </div>
+            <div class="signal-cell">
+              <span class="signal-label">OU25</span>
+              <span class="signal-value">${escapeHtml(
+                odds.over25_odds && odds.under25_odds ? `${odds.over25_odds} / ${odds.under25_odds}` : "N/A"
+              )}</span>
+            </div>
+            <div class="signal-cell">
+              <span class="signal-label">BTTS</span>
+              <span class="signal-value">${escapeHtml(
+                odds.btts_yes_odds && odds.btts_no_odds ? `${odds.btts_yes_odds} / ${odds.btts_no_odds}` : "N/A"
+              )}</span>
+            </div>
+          </div>
+          <div class="card-grid">
+            <article class="panel">
+              <h4>Published summary</h4>
+              <p class="muted">${escapeHtml(fixture.signal_summary?.summary_text || headline)}</p>
+            </article>
+            <article class="panel">
+              <h4>Context tags</h4>
+              <div class="pill-row">
+                ${(fixture.signal_summary?.context_tags || []).length
+                  ? fixture.signal_summary.context_tags.map((tag) => `<span class="chip">${escapeHtml(String(tag).replace(/_/g, " "))}</span>`).join("")
+                  : `<span class="muted">No published context tags</span>`}
+              </div>
+            </article>
+          </div>
+        </article>
+        <article class="panel">
+          <h3>Context notes</h3>
+          ${
+            notes.length
+              ? `<ul class="feature-list">${notes.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}</ul>`
+              : `<div class="notice">No extra context notes are currently published for this fixture.</div>`
+          }
+          <div class="dashboard-telegram-preview">
+            <span class="metric-label">Telegram alert preview</span>
+            <pre>${escapeHtml(
+              telegramAlertPreview({
+                row: fixture,
+                reasons: matchedEntry?.reasons || ["fixture intelligence"],
+              })
+            )}</pre>
+          </div>
+        </article>
+      </section>
+
+      <section class="section">
+        <article class="panel">
+          <h3>Related league fixtures</h3>
+          ${
+            relatedFixtures.length
+              ? `<div class="card-grid intelligence-grid">
+                  ${relatedFixtures
+                    .map((row) =>
+                      intelligenceCard(
+                        {
+                          row,
+                          reasons: [row.league === fixture.league ? "same league" : "related"],
+                        },
+                        Boolean(notificationPreferences?.telegram_enabled)
+                      )
+                    )
+                    .join("")}
+                </div>`
+              : `<div class="notice">No related fixtures are available from the current published intelligence window.</div>`
+          }
+        </article>
+      </section>
+    `;
+  };
+
   const render = () => {
     const views = {
       home: homeView,
       dashboard: dashboardView,
+      fixture: fixtureView,
       predictions: predictionsView,
       premium: premiumView,
       results: resultsView,
