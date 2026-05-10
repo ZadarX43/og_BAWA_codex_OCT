@@ -82,12 +82,12 @@ body::after {
 
 .topbar {
   display: flex;
-  gap: 18px;
+  gap: 14px;
   align-items: center;
   justify-content: space-between;
   margin: 0 auto 24px;
   max-width: 1380px;
-  padding: 16px 20px;
+  padding: 14px 18px;
   border: 1px solid rgba(123, 154, 184, 0.16);
   border-radius: 24px;
   background:
@@ -140,27 +140,31 @@ body::after {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .nav-main {
   flex: 1;
   justify-content: center;
   min-width: 0;
-  gap: 4px;
+  gap: 2px;
 }
 
 .nav-utility {
   justify-content: flex-end;
+  gap: 2px;
+  padding-left: 12px;
+  margin-left: 6px;
+  border-left: 1px solid rgba(123, 154, 184, 0.12);
 }
 
 .nav a {
-  padding: 10px 12px;
+  padding: 10px 13px;
   border-radius: 999px;
   color: var(--muted);
   text-decoration: none;
   font-weight: 700;
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   transition: 180ms ease;
   white-space: nowrap;
 }
@@ -172,15 +176,37 @@ body::after {
   box-shadow: none;
 }
 
+.nav-main a {
+  color: rgba(232, 245, 255, 0.82);
+}
+
+.nav-main a:hover {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-main a.is-active {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.08);
+}
+
 .nav-utility a {
   color: var(--muted-2);
   background: transparent;
+  padding: 8px 10px;
+  font-size: 0.8rem;
+  letter-spacing: 0.01em;
 }
 
-.nav-utility a:hover,
+.nav-utility a:hover {
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.03);
+  box-shadow: none;
+}
+
 .nav-utility a.is-active {
   color: var(--ink);
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.045);
   box-shadow: none;
 }
 
@@ -2426,6 +2452,12 @@ code {
     width: 100%;
     flex-wrap: wrap;
     justify-content: flex-start;
+  }
+
+  .nav-utility {
+    padding-left: 0;
+    margin-left: 0;
+    border-left: 0;
   }
 
   .hero-main,
