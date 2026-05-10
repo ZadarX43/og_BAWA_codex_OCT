@@ -6,16 +6,21 @@ import {
   persistSubscriberRecord,
 } from "./subscriber_store.js";
 import {
+  createAccountSession,
   completeTelegramLink,
   getAccountDb,
+  getAccountSessionById,
   getAccountStateByEmail,
   listDueNotificationAlerts,
+  listActiveAccountSessionsByUser,
   listNotificationAlertsByUser,
   listUsersEligibleForTelegramAlerts,
   markNotificationAlertDelivered,
   markNotificationAlertFailed,
   mirrorSubscriptionFromRecord,
   recordAuthEvent,
+  revokeAccountSession,
+  touchAccountSessionSeen,
   upsertNotificationAlerts,
   updateNotificationPreferences,
 } from "./account_store.js";
@@ -244,6 +249,7 @@ const marketFamilyLabel = (value) => {
 const fixturePreferenceLabel = (fixture) =>
   `${String(fixture?.home_team || "Home").trim()} v ${String(fixture?.away_team || "Away").trim()}`;
 const nowIso = () => new Date().toISOString();
+const buildId = (prefix) => `${prefix}_${crypto.randomUUID()}`;
 const textEncoder = new TextEncoder();
 const textDecoder = new TextDecoder();
 const normalizeStylePreset = (value) => {
@@ -357,6 +363,21 @@ const buildOpaqueToken = (bytes = 32) => {
 const buildSessionCookieHeader = (token) =>
   `${AUTH_SESSION_COOKIE}=${token}; Path=/; HttpOnly; Secure; SameSite=None; Max-Age=${AUTH_SESSION_TTL_SECONDS}`;
 
+const shouldClearSessionCookie = (status) =>
+  [
+    "invalid_session",
+    "expired_session",
+    "revoked_session",
+    "session_not_found",
+    "session_mismatch",
+    "session_email_mismatch",
+    "subscriber_state_missing",
+    "inactive_subscription",
+  ].includes(String(status || ""));
+
+const sessionFailureHeaders = (status) =>
+  shouldClearSessionCookie(status) ? { "set-cookie": clearCookieHeader(AUTH_SESSION_COOKIE) } : {};
+
 const putKvJson = async (store, key, payload, options = {}) => {
   if (options.expirationTtl) {
     await store.put(key, JSON.stringify(payload), { expirationTtl: options.expirationTtl });
@@ -397,6 +418,34 @@ const signText = async (secret, value) => {
   );
   const signature = await crypto.subtle.sign("HMAC", key, textEncoder.encode(value));
   return new Uint8Array(signature);
+};
+
+const buildHashedOpaqueValue = async (secret, value, prefix = "hash") =>
+  bytesToBase64Url(await signText(secret, `${prefix}:${String(value || "")}`));
+
+const deriveDeviceLabel = (request) => {
+  const userAgent = String(request.headers.get("user-agent") || "");
+  const browser = /edg\//i.test(userAgent)
+    ? "Edge"
+    : /chrome\//i.test(userAgent)
+      ? "Chrome"
+      : /firefox\//i.test(userAgent)
+        ? "Firefox"
+        : /safari\//i.test(userAgent) && !/chrome\//i.test(userAgent)
+          ? "Safari"
+          : "Browser";
+  const platform = /iphone|ipad|ios/i.test(userAgent)
+    ? "iPhone"
+    : /android/i.test(userAgent)
+      ? "Android"
+      : /mac os x|macintosh/i.test(userAgent)
+        ? "Mac"
+        : /windows/i.test(userAgent)
+          ? "Windows"
+          : /linux/i.test(userAgent)
+            ? "Linux"
+            : "device";
+  return `${browser} on ${platform}`;
 };
 
 const buildSignedJsonToken = async (payload, secret) => {
@@ -820,7 +869,8 @@ async function handlePremiumPredictions(request, env) {
         locked: true,
         data_note: "Premium predictions remain unavailable until verified session-backed or token-backed entitlement is live.",
       },
-      401
+      401,
+      sessionFailureHeaders(access.status)
     );
   }
 
@@ -922,6 +972,8 @@ async function verifySessionAccess(request, env) {
   const customerId = String(parsed.payload?.customer_id || "").trim();
   const subscriptionId = String(parsed.payload?.subscription_id || "").trim();
   const exp = Number(parsed.payload?.exp);
+  const sessionId = String(parsed.payload?.sid || "").trim();
+  const opaqueSessionToken = String(parsed.payload?.st || "").trim();
 
   if (!email || !customerId || !subscriptionId || !Number.isFinite(exp)) {
     return {
@@ -939,6 +991,50 @@ async function verifySessionAccess(request, env) {
       message: "Premium session has expired.",
       recommendation: "Request a fresh sign-in link to restore premium access.",
     };
+  }
+
+  const accountDb = getAccountDb(env);
+  if (accountDb && sessionId && opaqueSessionToken) {
+    const sessionRow = await getAccountSessionById(accountDb, sessionId);
+    if (!sessionRow?.id) {
+      return {
+        ok: false,
+        status: "session_not_found",
+        message: "Tracked account session was not found.",
+        recommendation: "Verify email again to establish a fresh session on this device.",
+      };
+    }
+
+    if (Number(sessionRow.is_revoked || 0) === 1 || sessionRow.revoked_at) {
+      return {
+        ok: false,
+        status: "revoked_session",
+        message: "This account session has been revoked.",
+        recommendation: "Verify email again to restore access on this device.",
+      };
+    }
+
+    if (Date.parse(String(sessionRow.expires_at || "")) <= Date.now()) {
+      await revokeAccountSession(accountDb, sessionRow.id, "expired");
+      return {
+        ok: false,
+        status: "expired_session",
+        message: "Premium session has expired.",
+        recommendation: "Request a fresh sign-in link to restore premium access.",
+      };
+    }
+
+    const expectedTokenHash = await buildHashedOpaqueValue(sessionSecret, opaqueSessionToken, "session");
+    if (expectedTokenHash !== String(sessionRow.session_token_hash || "")) {
+      return {
+        ok: false,
+        status: "invalid_session",
+        message: "Tracked account session token did not validate.",
+        recommendation: "Verify email again to receive a fresh sign-in session.",
+      };
+    }
+
+    await touchAccountSessionSeen(accountDb, sessionRow.id, nowIso());
   }
 
   const store = getSubscriberStateStore(env);
@@ -1007,6 +1103,7 @@ async function verifySessionAccess(request, env) {
     customer_id: record.customer_id,
     subscription_id: record.subscription_id,
     subscription_status: record.status,
+    session_id: sessionId || null,
   };
 }
 
@@ -1229,12 +1326,42 @@ async function handleMagicLinkVerify(request, env) {
   }
 
   const accountDb = getAccountDb(env);
+  let trackedSessionId = "";
+  let trackedSessionToken = "";
   if (accountDb) {
     try {
       const accountState = await mirrorSubscriptionFromRecord(accountDb, subscriberRecord, {
         email,
         emailVerifiedAt: new Date().toISOString(),
       });
+      if (accountState?.user?.id) {
+        const now = nowIso();
+        trackedSessionId = buildId("sess");
+        trackedSessionToken = buildOpaqueToken(32);
+        const activeSessions = await listActiveAccountSessionsByUser(accountDb, accountState.user.id);
+        await createAccountSession(accountDb, {
+          id: trackedSessionId,
+          user_id: accountState.user.id,
+          session_token_hash: await buildHashedOpaqueValue(sessionSecret, trackedSessionToken, "session"),
+          device_label: deriveDeviceLabel(request),
+          user_agent_hash: getUserAgentHint(request)
+            ? await buildHashedOpaqueValue(sessionSecret, getUserAgentHint(request), "ua")
+            : null,
+          ip_hash: getRequestIp(request)
+            ? await buildHashedOpaqueValue(sessionSecret, getRequestIp(request), "ip")
+            : null,
+          session_kind: "browser",
+          is_primary: activeSessions.length ? 0 : 1,
+          is_revoked: 0,
+          issued_at: now,
+          last_seen_at: now,
+          expires_at: new Date((Math.floor(Date.now() / 1000) + AUTH_SESSION_TTL_SECONDS) * 1000).toISOString(),
+          revoked_at: null,
+          revoke_reason: null,
+          created_at: now,
+          updated_at: now,
+        });
+      }
       await recordAuthEvent(accountDb, {
         user_id: accountState?.user?.id || null,
         email_normalized: email,
@@ -1256,6 +1383,8 @@ async function handleMagicLinkVerify(request, env) {
     customer_id: customerId,
     subscription_id: subscriptionId,
     exp: Math.floor(Date.now() / 1000) + AUTH_SESSION_TTL_SECONDS,
+    sid: trackedSessionId || undefined,
+    st: trackedSessionToken || undefined,
   };
   const sessionToken = await buildSignedJsonToken(sessionPayload, sessionSecret);
   return redirect(`${siteUrl}/account.html?auth=success`, 303, {
@@ -1291,20 +1420,28 @@ async function handleAuthSession(request, env) {
         subscription_status: "active",
       });
     }
-    return json({
+    return json(
+      {
+        ok: true,
+        authenticated: false,
+        entitled: false,
+        status: access.status || "unauthenticated",
+      },
+      200,
+      sessionFailureHeaders(sessionAccess.status)
+    );
+  }
+
+  return json(
+    {
       ok: true,
       authenticated: false,
       entitled: false,
-      status: access.status || "unauthenticated",
-    });
-  }
-
-  return json({
-    ok: true,
-    authenticated: false,
-    entitled: false,
-    status: sessionAccess.status === "missing_session" ? "" : sessionAccess.status,
-  });
+      status: sessionAccess.status === "missing_session" ? "" : sessionAccess.status,
+    },
+    200,
+    sessionFailureHeaders(sessionAccess.status)
+  );
 }
 
 async function handleAccountState(request, env) {
@@ -1318,7 +1455,8 @@ async function handleAccountState(request, env) {
         status: sessionAccess.status || "unauthenticated",
         message: sessionAccess.message || "Sign in to view account state.",
       },
-      401
+      401,
+      sessionFailureHeaders(sessionAccess.status)
     );
   }
 
@@ -1363,7 +1501,8 @@ async function handleAccountPreferencesUpdate(request, env) {
         status: sessionAccess.status || "unauthenticated",
         message: sessionAccess.message || "Sign in to update account preferences.",
       },
-      401
+      401,
+      sessionFailureHeaders(sessionAccess.status)
     );
   }
 
@@ -1443,7 +1582,8 @@ async function handleAccountAlertsState(request, env) {
         status: sessionAccess.status || "unauthenticated",
         message: sessionAccess.message || "Sign in to view alert state.",
       },
-      401
+      401,
+      sessionFailureHeaders(sessionAccess.status)
     );
   }
 
@@ -1483,7 +1623,8 @@ async function handleAccountAlertsRefresh(request, env) {
         status: sessionAccess.status || "unauthenticated",
         message: sessionAccess.message || "Sign in to refresh alerts.",
       },
-      401
+      401,
+      sessionFailureHeaders(sessionAccess.status)
     );
   }
 
@@ -1528,7 +1669,8 @@ async function handleAccountAlertsDispatch(request, env) {
         status: sessionAccess.status || "unauthenticated",
         message: sessionAccess.message || "Sign in to dispatch alerts.",
       },
-      401
+      401,
+      sessionFailureHeaders(sessionAccess.status)
     );
   }
 
@@ -1573,7 +1715,8 @@ async function handleTelegramLinkStart(request, env) {
         status: sessionAccess.status || "unauthenticated",
         message: sessionAccess.message || "Verify your email before linking Telegram.",
       },
-      401
+      401,
+      sessionFailureHeaders(sessionAccess.status)
     );
   }
 
@@ -2237,7 +2380,8 @@ async function handleTelegramTestAlert(request, env) {
         status: sessionAccess.status || "unauthenticated",
         message: sessionAccess.message || "Verify your email before sending a Telegram test alert.",
       },
-      401
+      401,
+      sessionFailureHeaders(sessionAccess.status)
     );
   }
 
@@ -2314,7 +2458,8 @@ async function handleTelegramFixtureAlert(request, env) {
         status: sessionAccess.status || "unauthenticated",
         message: sessionAccess.message || "Verify your email before sending a fixture intelligence alert.",
       },
-      401
+      401,
+      sessionFailureHeaders(sessionAccess.status)
     );
   }
 

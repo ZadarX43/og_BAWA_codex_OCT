@@ -417,6 +417,141 @@ export async function recordAuthEvent(db, event) {
   );
 }
 
+export async function listActiveAccountSessionsByUser(db, userId) {
+  if (!db || !userId) {
+    return [];
+  }
+  return callMaybeMock(
+    db,
+    "list_active_account_sessions_by_user",
+    { user_id: userId },
+    () =>
+      all(
+        db,
+        `-- og:list_active_account_sessions_by_user
+        SELECT id, user_id, session_token_hash, device_label, user_agent_hash, ip_hash, session_kind,
+               is_primary, is_revoked, issued_at, last_seen_at, expires_at, revoked_at, revoke_reason,
+               created_at, updated_at
+        FROM account_sessions
+        WHERE user_id = ?1
+          AND is_revoked = 0
+          AND expires_at > ?2
+        ORDER BY issued_at ASC`,
+        [userId, isoNow()]
+      )
+  );
+}
+
+export async function getAccountSessionById(db, sessionId) {
+  if (!db || !sessionId) {
+    return null;
+  }
+  return callMaybeMock(
+    db,
+    "get_account_session_by_id",
+    { id: sessionId },
+    () =>
+      first(
+        db,
+        `-- og:get_account_session_by_id
+        SELECT id, user_id, session_token_hash, device_label, user_agent_hash, ip_hash, session_kind,
+               is_primary, is_revoked, issued_at, last_seen_at, expires_at, revoked_at, revoke_reason,
+               created_at, updated_at
+        FROM account_sessions
+        WHERE id = ?1
+        LIMIT 1`,
+        [sessionId]
+      )
+  );
+}
+
+export async function createAccountSession(db, session) {
+  if (!db || !session?.id || !session?.user_id || !session?.session_token_hash) {
+    return null;
+  }
+  await callMaybeMock(
+    db,
+    "insert_account_session",
+    { ...session },
+    () =>
+      run(
+        db,
+        `-- og:insert_account_session
+        INSERT INTO account_sessions (
+          id, user_id, session_token_hash, device_label, user_agent_hash, ip_hash,
+          session_kind, is_primary, is_revoked, issued_at, last_seen_at, expires_at,
+          revoked_at, revoke_reason, created_at, updated_at
+        )
+        VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16)`,
+        [
+          session.id,
+          session.user_id,
+          session.session_token_hash,
+          session.device_label || null,
+          session.user_agent_hash || null,
+          session.ip_hash || null,
+          session.session_kind || "browser",
+          toIntFlag(session.is_primary),
+          toIntFlag(session.is_revoked),
+          session.issued_at,
+          session.last_seen_at,
+          session.expires_at,
+          session.revoked_at || null,
+          session.revoke_reason || null,
+          session.created_at,
+          session.updated_at,
+        ]
+      )
+  );
+  return getAccountSessionById(db, session.id);
+}
+
+export async function touchAccountSessionSeen(db, sessionId, now = isoNow()) {
+  if (!db || !sessionId) {
+    return false;
+  }
+  await callMaybeMock(
+    db,
+    "touch_account_session_seen",
+    { id: sessionId, last_seen_at: now, updated_at: now },
+    () =>
+      run(
+        db,
+        `-- og:touch_account_session_seen
+        UPDATE account_sessions
+        SET last_seen_at = ?2,
+            updated_at = ?3
+        WHERE id = ?1`,
+        [sessionId, now, now]
+      )
+  );
+  return true;
+}
+
+export async function revokeAccountSession(db, sessionId, revokeReason = "revoked", revokedAt = isoNow()) {
+  if (!db || !sessionId) {
+    return false;
+  }
+  await callMaybeMock(
+    db,
+    "revoke_account_session",
+    { id: sessionId, revoke_reason: revokeReason, revoked_at: revokedAt, updated_at: revokedAt },
+    () =>
+      run(
+        db,
+        `-- og:revoke_account_session
+        UPDATE account_sessions
+        SET is_revoked = 1,
+            revoked_at = ?2,
+            revoke_reason = ?3,
+            updated_at = ?4
+        WHERE id = ?1`,
+        [sessionId, revokedAt, revokeReason, revokedAt]
+      )
+  );
+  return true;
+}
+
 export async function getAccountStateByEmail(db, email) {
   if (!db) {
     return null;

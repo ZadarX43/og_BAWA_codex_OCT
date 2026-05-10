@@ -93,6 +93,7 @@ class MockD1 {
     this.notificationPreferences = [];
     this.authEvents = [];
     this.notificationAlerts = [];
+    this.accountSessions = [];
   }
 
   prepare() {
@@ -160,6 +161,27 @@ class MockD1 {
         return { success: true };
       case "insert_auth_event":
         this.authEvents.push({ ...args });
+        return { success: true };
+      case "list_active_account_sessions_by_user":
+        return this.accountSessions
+          .filter((row) => row.user_id === args.user_id && !row.is_revoked && String(row.expires_at) > new Date().toISOString())
+          .sort((a, b) => String(a.issued_at).localeCompare(String(b.issued_at)));
+      case "get_account_session_by_id":
+        return this.accountSessions.find((row) => row.id === args.id) || null;
+      case "insert_account_session":
+        this.accountSessions.push({ ...args });
+        return { success: true };
+      case "touch_account_session_seen":
+        this.accountSessions = this.accountSessions.map((row) =>
+          row.id === args.id ? { ...row, last_seen_at: args.last_seen_at, updated_at: args.updated_at } : row
+        );
+        return { success: true };
+      case "revoke_account_session":
+        this.accountSessions = this.accountSessions.map((row) =>
+          row.id === args.id
+            ? { ...row, is_revoked: 1, revoked_at: args.revoked_at, revoke_reason: args.revoke_reason, updated_at: args.updated_at }
+            : row
+        );
         return { success: true };
       case "get_subscription_by_user":
         return this.subscriptions.find((row) => row.user_id === args.user_id) || null;
@@ -767,6 +789,8 @@ const testMagicLinkVerifyAndSessionFlow = async (fetchHarness) => {
   );
   const sessionCookie = extractCookieValue(tokenResponse.headers.get("set-cookie"), "og_premium_session");
   assert.ok(sessionCookie, "expected premium session cookie after verify");
+  assert.equal(env.ACCOUNT_DB.accountSessions.length, 1);
+  assert.equal(env.ACCOUNT_DB.accountSessions[0].session_kind, "browser");
 
   const sessionResponse = await worker.fetch(
     makeGetRequest("http://localhost/api/auth/session", {
@@ -791,6 +815,19 @@ const testMagicLinkVerifyAndSessionFlow = async (fetchHarness) => {
   assert.equal(premiumResponse.status, 200);
   assert.equal(premiumPayload.ok, true);
   assert.equal(premiumPayload.auth_mode, "session");
+
+  env.ACCOUNT_DB.accountSessions = [];
+  const missingTrackedSessionResponse = await worker.fetch(
+    makeGetRequest("http://localhost/api/auth/session", {
+      cookie: `og_premium_session=${sessionCookie}`,
+    }),
+    env
+  );
+  const missingTrackedSessionPayload = await missingTrackedSessionResponse.json();
+  assert.equal(missingTrackedSessionResponse.status, 200);
+  assert.equal(missingTrackedSessionPayload.authenticated, false);
+  assert.equal(missingTrackedSessionPayload.status, "session_not_found");
+  assert.match(String(missingTrackedSessionResponse.headers.get("set-cookie") || ""), /og_premium_session=;/);
 };
 
 const testLogoutSkeleton = async () => {
