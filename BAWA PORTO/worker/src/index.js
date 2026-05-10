@@ -734,32 +734,128 @@ const proxyWidgetStandingsResponse = async (request, env) => {
     }
   }
 
-  const upstreamUrl = new URL("https://v3.football.api-sports.io/standings");
-  upstreamUrl.searchParams.set("league", String(league));
-  upstreamUrl.searchParams.set("season", String(season));
+  const candidateSeasons = Array.from(
+    new Set([season, season - 1, season - 2, season - 3].filter((value) => Number.isInteger(value) && value > 0))
+  );
+  let selectedSeason = season;
+  let selectedStatus = 502;
+  let selectedStatusText = "Bad Gateway";
+  let selectedBody = "";
+  let selectedPayload = null;
+  let selectedContentType = "application/json; charset=utf-8";
+
+  for (const candidateSeason of candidateSeasons) {
+    const upstreamUrl = new URL("https://v3.football.api-sports.io/standings");
+    upstreamUrl.searchParams.set("league", String(league));
+    upstreamUrl.searchParams.set("season", String(candidateSeason));
+    const upstreamResponse = await fetch(upstreamUrl.toString(), {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        "x-apisports-key": footballKey,
+      },
+    });
+    const bodyText = await upstreamResponse.text();
+    selectedSeason = candidateSeason;
+    selectedStatus = upstreamResponse.status;
+    selectedStatusText = upstreamResponse.statusText;
+    selectedBody = bodyText;
+    selectedContentType = upstreamResponse.headers.get("content-type") || selectedContentType;
+    if (!upstreamResponse.ok) {
+      continue;
+    }
+    try {
+      const payload = JSON.parse(bodyText);
+      selectedPayload = payload;
+      const responseRows = Array.isArray(payload?.response) ? payload.response : [];
+      if (responseRows.length) {
+        break;
+      }
+    } catch (error) {
+      selectedPayload = null;
+      break;
+    }
+  }
+
+  const headers = new Headers();
+  headers.set("content-type", selectedContentType);
+  headers.set("x-og-widget-proxy", "football-standings");
+  headers.set("x-og-widget-standings-requested-season", String(season));
+  headers.set("x-og-widget-standings-selected-season", String(selectedSeason));
+  headers.set("cache-control", `public, max-age=${WIDGET_FOOTBALL_STANDINGS_CACHE_TTL_SECONDS}`);
+
+  const response = new Response(selectedBody, {
+    status: selectedStatus,
+    statusText: selectedStatusText,
+    headers,
+  });
+
+  if (selectedStatus >= 200 && selectedStatus < 300 && cache) {
+    await cache.put(cacheKey, response.clone());
+  }
+
+  return response;
+};
+
+const proxyGenericWidgetFootballResponse = async (request, env) => {
+  const footballKey = getApiSportsFootballKey(env);
+  if (!footballKey) {
+    return configError("API_SPORTS_FOOTBALL_KEY is required for the football widget proxy.", [
+      "API_SPORTS_FOOTBALL_KEY",
+    ]);
+  }
+  if (request.method !== "GET") {
+    return methodNotAllowed("GET");
+  }
+  const requestUrl = new URL(request.url);
+  const pathname = requestUrl.pathname || "";
+  const prefix = "/api/widgets/football/";
+  const widgetPath = pathname.startsWith(prefix) ? pathname.slice(prefix.length) : "";
+  if (!widgetPath) {
+    return requestError("Football widget proxy requires an upstream endpoint path.");
+  }
+
+  const cache = getPremiumCache();
+  const cacheKey = buildWidgetFootballCacheKey("football-generic", {
+    path: widgetPath,
+    query: requestUrl.searchParams.toString(),
+  });
+  if (cache) {
+    const cached = await cache.match(cacheKey);
+    if (cached) {
+      return new Response(cached.body, {
+        status: cached.status,
+        statusText: cached.statusText,
+        headers: new Headers(cached.headers),
+      });
+    }
+  }
+
+  const upstreamUrl = new URL(`https://v3.football.api-sports.io/${widgetPath}`);
+  requestUrl.searchParams.forEach((value, key) => {
+    upstreamUrl.searchParams.append(key, value);
+  });
   const upstreamResponse = await fetch(upstreamUrl.toString(), {
     method: "GET",
     headers: {
-      accept: "application/json",
+      accept: request.headers.get("accept") || "application/json, text/plain, */*",
       "x-apisports-key": footballKey,
     },
   });
   const bodyText = await upstreamResponse.text();
   const headers = new Headers();
   headers.set("content-type", upstreamResponse.headers.get("content-type") || "application/json; charset=utf-8");
-  headers.set("x-og-widget-proxy", "football-standings");
-  headers.set("cache-control", `public, max-age=${WIDGET_FOOTBALL_STANDINGS_CACHE_TTL_SECONDS}`);
+  headers.set("x-og-widget-proxy", `football-${widgetPath}`);
+  headers.set("cache-control", "public, max-age=300");
 
   const response = new Response(bodyText, {
     status: upstreamResponse.status,
     statusText: upstreamResponse.statusText,
     headers,
   });
-
   if (upstreamResponse.ok && cache) {
     await cache.put(cacheKey, response.clone());
   }
-
   return response;
 };
 
@@ -4666,6 +4762,11 @@ async function handleRequest(request, env) {
 
   if (pathname === "/api/widgets/football/fixture-lookup") {
     response = await lookupWidgetFixtureResponse(request, env);
+    return withCors(response, request, env);
+  }
+
+  if (pathname.startsWith("/api/widgets/football/")) {
+    response = await proxyGenericWidgetFootballResponse(request, env);
     return withCors(response, request, env);
   }
 
