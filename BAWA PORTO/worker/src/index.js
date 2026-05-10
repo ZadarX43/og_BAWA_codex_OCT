@@ -253,6 +253,25 @@ const normalizeStylePreset = (value) => {
   }
   return "disciplined_bettor";
 };
+const kickoffTimestamp = (value) => {
+  const parsed = Date.parse(String(value || "").trim());
+  return Number.isFinite(parsed) ? parsed : Number.MAX_SAFE_INTEGER;
+};
+const kickoffMinutesAway = (value) => {
+  const timestamp = kickoffTimestamp(value);
+  if (!Number.isFinite(timestamp) || timestamp === Number.MAX_SAFE_INTEGER) {
+    return Number.POSITIVE_INFINITY;
+  }
+  return Math.round((timestamp - Date.now()) / 60000);
+};
+const isNearKickoffWindow = (value, minutes = 240) => {
+  const diff = kickoffMinutesAway(value);
+  return diff >= 0 && diff <= minutes;
+};
+const isEliteFixture = (fixture) => {
+  const tier = String(fixture?.confidence_tier || fixture?.premium_tier || "").toUpperCase();
+  return tier === "ELITE";
+};
 
 const redirect = (location, status = 303, extraHeaders = {}) =>
   new Response(null, {
@@ -1871,6 +1890,8 @@ function buildFollowMatchProfile(entry) {
   const reasonSet = new Set(reasons);
   const publishClass = String(entry?.fixture?.publish_class || entry?.fixture?.fixture_class || "MONITOR").toUpperCase();
   const stylePreset = normalizeStylePreset(entry?.accountState?.notification_preferences?.user_style_preset);
+  const kickoffNear = isNearKickoffWindow(entry?.fixture?.kickoff_time, 240);
+  const eliteFixture = isEliteFixture(entry?.fixture);
   const hasFixture = reasonSet.has("followed fixture");
   const hasTeam = reasonSet.has("followed team");
   const hasLeague = reasonSet.has("followed league");
@@ -1892,11 +1913,11 @@ function buildFollowMatchProfile(entry) {
     if (hasMarket && !hasTeam && !hasFixture) score -= 10;
   } else if (stylePreset === "disciplined_bettor") {
     if (publishClass === "DEPLOY") score += 18;
-    if (publishClass === "OBSERVE") score -= 8;
-    if (publishClass === "CONTEXT" || publishClass === "MONITOR") score -= 18;
+    if (publishClass === "OBSERVE") score -= 12;
+    if (publishClass === "CONTEXT" || publishClass === "MONITOR") score -= 22;
   } else if (stylePreset === "tactical_reader") {
     if (hasTeam || hasFixture) score += 12;
-    if (publishClass === "CONTEXT") score += 14;
+    if (publishClass === "CONTEXT") score += 10;
     if (hasMarket && !hasLeague && !hasTeam && !hasFixture) score -= 8;
   } else if (stylePreset === "researcher") {
     if (publishClass === "OBSERVE" || publishClass === "CONTEXT" || publishClass === "MONITOR") score += 10;
@@ -1912,10 +1933,15 @@ function buildFollowMatchProfile(entry) {
   } else if (hasTeam && publishClass === "DEPLOY") {
     telegramEligible = true;
     autoGate = "direct_team_deploy";
-  } else if (hasTeam && publishClass === "OBSERVE" && (stylePreset === "disciplined_bettor" || stylePreset === "tactical_reader")) {
+  } else if (hasTeam && publishClass === "OBSERVE" && stylePreset === "tactical_reader" && kickoffNear) {
     telegramEligible = true;
     autoGate = "direct_team_observe";
-  } else if (publishClass === "DEPLOY" && hasLeague && hasMarket && (stylePreset === "disciplined_bettor" || stylePreset === "tactical_reader")) {
+  } else if (
+    publishClass === "DEPLOY" &&
+    hasLeague &&
+    hasMarket &&
+    ((stylePreset === "disciplined_bettor" && (eliteFixture || kickoffNear)) || (stylePreset === "tactical_reader" && (eliteFixture || kickoffNear)))
+  ) {
     telegramEligible = true;
     autoGate = "league_market_deploy";
   }
@@ -1926,7 +1952,7 @@ function buildFollowMatchProfile(entry) {
       autoGate = "website_depth_preferred";
     }
   }
-  if (stylePreset === "tactical_reader" && publishClass === "CONTEXT" && (hasTeam || hasFixture)) {
+  if (stylePreset === "tactical_reader" && publishClass === "CONTEXT" && (hasTeam || hasFixture) && kickoffNear) {
     telegramEligible = true;
     autoGate = "team_context_follow";
   }

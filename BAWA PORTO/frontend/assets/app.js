@@ -462,8 +462,7 @@
         const leftTime = Date.parse(left.row.kickoff_time || "") || Number.MAX_SAFE_INTEGER;
         const rightTime = Date.parse(right.row.kickoff_time || "") || Number.MAX_SAFE_INTEGER;
         return leftTime - rightTime;
-      })
-      .slice(0, 8);
+      });
   };
 
   const intelligenceCard = (entry, telegramEnabled) => {
@@ -601,6 +600,8 @@
     const hasTeam = reasonSet.has("followed team");
     const hasLeague = reasonSet.has("followed league");
     const hasMarket = reasonSet.has("followed market");
+    const kickoffNear = isNearKickoffWindow(entry?.row?.kickoff_time, 240);
+    const eliteFixture = isEliteFixture(entry?.row);
 
     let score = 0;
     if (hasFixture) score += 100;
@@ -617,11 +618,11 @@
       if (hasMarket && !hasTeam && !hasFixture) score -= 10;
     } else if (stylePreset === "disciplined_bettor") {
       if (publishClass === "DEPLOY") score += 18;
-      if (publishClass === "OBSERVE") score -= 8;
-      if (publishClass === "CONTEXT" || publishClass === "MONITOR") score -= 18;
+      if (publishClass === "OBSERVE") score -= 12;
+      if (publishClass === "CONTEXT" || publishClass === "MONITOR") score -= 22;
     } else if (stylePreset === "tactical_reader") {
       if (hasTeam || hasFixture) score += 12;
-      if (publishClass === "CONTEXT") score += 14;
+      if (publishClass === "CONTEXT") score += 10;
       if (hasMarket && !hasLeague && !hasTeam && !hasFixture) score -= 8;
     } else if (stylePreset === "researcher") {
       if (publishClass === "OBSERVE" || publishClass === "CONTEXT" || publishClass === "MONITOR") score += 10;
@@ -636,25 +637,58 @@
       return { label: "Send now", score, bucket: "send_now" };
     }
     if (hasTeam && publishClass === "OBSERVE") {
-      return { label: "Watch closely", score, bucket: "watch_closely" };
+      if (stylePreset === "tactical_reader") {
+        return { label: "Watch closely", score, bucket: "watch_closely" };
+      }
+      if (stylePreset === "disciplined_bettor") {
+        return {
+          label: kickoffNear ? "Watch closely" : "Website only",
+          score,
+          bucket: kickoffNear ? "watch_closely" : "website_only",
+        };
+      }
+      return { label: "Website only", score, bucket: "website_only" };
     }
     if (hasTeam && publishClass === "CONTEXT") {
-      if (stylePreset === "tactical_reader" || stylePreset === "analyst") {
+      if (stylePreset === "tactical_reader") {
         return { label: "Watch closely", score, bucket: "watch_closely" };
+      }
+      if (stylePreset === "analyst") {
+        return {
+          label: kickoffNear ? "Watch closely" : "Website only",
+          score,
+          bucket: kickoffNear ? "watch_closely" : "website_only",
+        };
+      }
+      if (stylePreset === "disciplined_bettor") {
+        return { label: "No edge", score, bucket: "no_edge" };
       }
       return { label: "Website only", score, bucket: "website_only" };
     }
     if (hasTeam && publishClass === "MONITOR") {
+      if (stylePreset === "analyst") {
+        return { label: "Website only", score, bucket: "website_only" };
+      }
       return { label: "No edge", score, bucket: "no_edge" };
     }
     if (publishClass === "DEPLOY" && hasLeague && hasMarket) {
-      if (stylePreset === "disciplined_bettor" || stylePreset === "tactical_reader") {
+      if (stylePreset === "tactical_reader") {
         return { label: "Watch closely", score, bucket: "watch_closely" };
+      }
+      if (stylePreset === "disciplined_bettor") {
+        return {
+          label: eliteFixture || kickoffNear ? "Watch closely" : "Website only",
+          score,
+          bucket: eliteFixture || kickoffNear ? "watch_closely" : "website_only",
+        };
       }
       return { label: "Website only", score, bucket: "website_only" };
     }
     if (publishClass === "OBSERVE" && (hasLeague || hasMarket)) {
       if (stylePreset === "researcher" || stylePreset === "analyst") {
+        return { label: "Website only", score, bucket: "website_only" };
+      }
+      if (stylePreset === "tactical_reader" && hasLeague && kickoffNear) {
         return { label: "Website only", score, bucket: "website_only" };
       }
       return { label: "No edge", score, bucket: "no_edge" };
@@ -740,19 +774,133 @@
     };
   };
 
+  const kickoffTimestamp = (value) => {
+    const parsed = Date.parse(value || "");
+    return Number.isFinite(parsed) ? parsed : Number.MAX_SAFE_INTEGER;
+  };
+
+  const kickoffMinutesAway = (value) => {
+    const timestamp = kickoffTimestamp(value);
+    if (!Number.isFinite(timestamp) || timestamp === Number.MAX_SAFE_INTEGER) {
+      return Number.POSITIVE_INFINITY;
+    }
+    return Math.round((timestamp - Date.now()) / 60000);
+  };
+
+  const isNearKickoffWindow = (value, minutes = 240) => {
+    const diff = kickoffMinutesAway(value);
+    return diff >= 0 && diff <= minutes;
+  };
+
+  const isEliteFixture = (row) => {
+    const tier = String(row?.confidence_tier || row?.premium_tier || "").toUpperCase();
+    return tier === "ELITE";
+  };
+
+  const fixtureDeskState = (entry) => {
+    const publishClass = String(entry?.row?.publish_class || entry?.row?.fixture_class || "MONITOR").toUpperCase();
+    const priority = dashboardPriorityProfile(entry);
+    if (publishClass === "DEPLOY") {
+      return {
+        label: "DEPLOY",
+        tone: "deploy",
+        support_title: "Why this reached deployment",
+      };
+    }
+    if (priority.bucket === "no_edge") {
+      return {
+        label: "PASS",
+        tone: "pass",
+        support_title: "Why this stays a pass",
+      };
+    }
+    if (publishClass === "OBSERVE") {
+      return {
+        label: "OBSERVE",
+        tone: "observe",
+        support_title: "Why this stays in observe",
+      };
+    }
+    return {
+      label: "MONITOR",
+      tone: "monitor",
+      support_title: "What keeps this in monitor",
+    };
+  };
+
+  const publicDeskState = (row) => {
+    const publishClass = String(row?.publish_class || row?.fixture_class || "MONITOR").toUpperCase();
+    if (publishClass === "DEPLOY") {
+      return { label: "DEPLOY", tone: "deploy" };
+    }
+    if (publishClass === "OBSERVE") {
+      return { label: "OBSERVE", tone: "observe" };
+    }
+    return { label: "MONITOR", tone: "monitor" };
+  };
+
+  const groupItemsByLeague = (items, getRow = (item) => item) => {
+    const sorted = [...items].sort((left, right) => {
+      const leftRow = getRow(left);
+      const rightRow = getRow(right);
+      const timeDiff = kickoffTimestamp(leftRow?.kickoff_time) - kickoffTimestamp(rightRow?.kickoff_time);
+      if (timeDiff !== 0) {
+        return timeDiff;
+      }
+      return publishClassRank(rightRow?.publish_class) - publishClassRank(leftRow?.publish_class);
+    });
+
+    const groups = [];
+    const groupMap = new Map();
+    sorted.forEach((item) => {
+      const row = getRow(item);
+      const key = String(row?.league || "Other fixtures");
+      if (!groupMap.has(key)) {
+        const group = { league: key, items: [] };
+        groupMap.set(key, group);
+        groups.push(group);
+      }
+      groupMap.get(key).items.push(item);
+    });
+    return groups;
+  };
+
+  const leagueGroupTimingLabel = (group, getRow = (item) => item) => {
+    const first = group.items[0] ? getRow(group.items[0]) : null;
+    if (!first) {
+      return "Upcoming fixtures";
+    }
+    if (group.items.length === 1) {
+      return formatKickoffLabel(first.kickoff_time);
+    }
+    return `${group.items.length} fixtures • from ${formatKickoffLabel(first.kickoff_time)}`;
+  };
+
   const dashboardFixtureCard = (entry, telegramEnabled) => {
     const row = entry.row;
     const publishClass = String(row.publish_class || row.fixture_class || "MONITOR").toUpperCase();
+    const priority = dashboardPriorityProfile(entry);
+    const deskState = fixtureDeskState(entry);
     const notes = Array.isArray(row.context_summary?.notes) ? row.context_summary.notes.slice(0, 3) : [];
     const odds = row.odds_summary || {};
+    const routeValue =
+      priority.bucket === "website_only" || priority.bucket === "no_edge"
+        ? "Website only"
+        : telegramEnabled
+          ? row.follow_relevance?.notification_priority || "high"
+          : "Website first";
+    const reasonLabel = entry.reasons.length ? entry.reasons.join(" • ") : "current intelligence window";
+    const supportCopy =
+      row.signal_summary?.headline || row.signal_summary?.summary_text || "Monitoring update published.";
     return `
-      <article class="panel dashboard-card dashboard-card-${publishClass.toLowerCase()}">
-        <div class="dashboard-card-top">
-          <div>
+      <details class="panel fixture-stream-card fixture-stream-card-${escapeHtml(deskState.tone)}" ${priority.bucket === "send_now" ? "open" : ""}>
+        <summary class="fixture-stream-summary">
+          <div class="fixture-stream-summary-main">
             <div class="intelligence-card-head">
-              <span class="pill">${escapeHtml(publishClass)}</span>
+              <span class="fixture-state-pill fixture-state-pill-${escapeHtml(deskState.tone)}">${escapeHtml(deskState.label)}</span>
               <span class="chip">${escapeHtml(marketFamilyLabel(row.signal_summary?.market_family))}</span>
-              <span class="chip">${escapeHtml(entry.reasons.join(" • "))}</span>
+              <span class="chip">${escapeHtml(reasonLabel)}</span>
+              <span class="muted">${escapeHtml(formatKickoffLabel(row.kickoff_time))}</span>
             </div>
             <strong class="fixture-teamline dashboard-teamline">
               ${badgeMarkup(row.home_team_logo_url, row.home_team)}
@@ -761,51 +909,165 @@
               ${badgeMarkup(row.away_team_logo_url, row.away_team)}
               <span class="team-name">${escapeHtml(row.away_team)}</span>
             </strong>
-            <p class="muted">${escapeHtml(row.league)} • ${escapeHtml(formatKickoffLabel(row.kickoff_time))}</p>
+            <p class="fixture-stream-headline">${escapeHtml(supportCopy)}</p>
           </div>
-          <div class="dashboard-card-priority">
-            <span class="metric-label">Telegram route</span>
-            <span class="metric-value dashboard-route">${telegramEnabled ? escapeHtml(row.follow_relevance?.notification_priority || "ready") : "Website"}</span>
+          <div class="fixture-stream-summary-side">
+            <span class="metric-label">${escapeHtml(priority.label)}</span>
+            <span class="metric-value dashboard-route">${escapeHtml(routeValue)}</span>
+            <span class="muted fixture-stream-expand">Open intelligence</span>
+          </div>
+        </summary>
+        <div class="fixture-stream-body">
+          <div class="fixture-stream-body-grid">
+            <article class="panel">
+              <span class="metric-label">${escapeHtml(deskState.support_title)}</span>
+              <p class="intelligence-headline">${escapeHtml(supportCopy)}</p>
+            </article>
+            <article class="panel">
+              <span class="metric-label">Why this matches you</span>
+              <p class="intelligence-headline">${escapeHtml(
+                `This fixture is on your desk because it matched ${reasonLabel}.`
+              )}</p>
+            </article>
+          </div>
+          <div class="prediction-meta-grid dashboard-odds-grid">
+            <div class="signal-cell">
+              <span class="signal-label">1X2</span>
+              <span class="signal-value">${escapeHtml(
+                odds.home_win_odds && odds.draw_odds && odds.away_win_odds
+                  ? `${odds.home_win_odds} / ${odds.draw_odds} / ${odds.away_win_odds}`
+                  : "N/A"
+              )}</span>
+            </div>
+            <div class="signal-cell">
+              <span class="signal-label">OU25</span>
+              <span class="signal-value">${escapeHtml(
+                odds.over25_odds && odds.under25_odds ? `${odds.over25_odds} / ${odds.under25_odds}` : "N/A"
+              )}</span>
+            </div>
+            <div class="signal-cell">
+              <span class="signal-label">BTTS</span>
+              <span class="signal-value">${escapeHtml(
+                odds.btts_yes_odds && odds.btts_no_odds ? `${odds.btts_yes_odds} / ${odds.btts_no_odds}` : "N/A"
+              )}</span>
+            </div>
+          </div>
+          ${
+            notes.length
+              ? `<ul class="feature-list compact-list">${notes.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}</ul>`
+              : `<p class="muted">No additional context notes have been published for this fixture yet.</p>`
+          }
+          <p class="fixture-stream-route">${escapeHtml(routeExplanation(entry))}</p>
+          <div class="dashboard-telegram-preview">
+            <span class="metric-label">Telegram alert preview</span>
+            <pre>${escapeHtml(telegramAlertPreview(entry))}</pre>
+          </div>
+          <div class="cta-row">
+            <a class="button" href="${fixtureDetailHref(row)}">Open fixture view</a>
+            <button class="ghost-button" type="button" data-action="telegram-fixture-alert" data-fixture-key="${escapeHtml(String(row.fixture_key || ""))}">Send to Telegram</button>
           </div>
         </div>
-        <p class="intelligence-headline">${escapeHtml(row.signal_summary?.headline || row.signal_summary?.summary_text || "Monitoring update published.")}</p>
-        <div class="prediction-meta-grid dashboard-odds-grid">
-          <div class="signal-cell">
-            <span class="signal-label">1X2</span>
-            <span class="signal-value">${escapeHtml(
-              odds.home_win_odds && odds.draw_odds && odds.away_win_odds
-                ? `${odds.home_win_odds} / ${odds.draw_odds} / ${odds.away_win_odds}`
-                : "N/A"
-            )}</span>
+      </details>
+    `;
+  };
+
+  const renderDashboardFixtureGroups = (entries, telegramEnabled, emptyCopy) => {
+    if (!entries.length) {
+      return `<div class="notice">${escapeHtml(emptyCopy)}</div>`;
+    }
+    const groups = groupItemsByLeague(entries, (entry) => entry.row);
+    return `
+      <div class="fixture-stream">
+        ${groups
+          .map(
+            (group) => `
+              <article class="panel fixture-league-group">
+                <div class="fixture-league-group-head">
+                  <div class="fixture-league-group-meta">
+                    <span class="league-badge">${escapeHtml(group.league)}</span>
+                    <p class="muted">${escapeHtml(leagueGroupTimingLabel(group, (entry) => entry.row))}</p>
+                  </div>
+                </div>
+                <div class="fixture-stream-list">
+                  ${group.items.map((entry) => dashboardFixtureCard(entry, telegramEnabled)).join("")}
+                </div>
+              </article>
+            `
+          )
+          .join("")}
+      </div>
+    `;
+  };
+
+  const publicDeskFixtureCard = (row) => {
+    const publishClass = String(row.publish_class || row.fixture_class || "MONITOR").toUpperCase();
+    const deskState = publicDeskState(row);
+    const notes = Array.isArray(row.context_summary?.notes) ? row.context_summary.notes.slice(0, 2) : [];
+    return `
+      <details class="panel fixture-stream-card fixture-stream-card-${escapeHtml(deskState.tone)}">
+        <summary class="fixture-stream-summary">
+          <div class="fixture-stream-summary-main">
+            <div class="intelligence-card-head">
+              <span class="fixture-state-pill fixture-state-pill-${escapeHtml(deskState.tone)}">${escapeHtml(deskState.label)}</span>
+              <span class="chip">${escapeHtml(marketFamilyLabel(row.signal_summary?.market_family))}</span>
+              <span class="muted">${escapeHtml(formatKickoffLabel(row.kickoff_time))}</span>
+            </div>
+            <strong class="fixture-teamline dashboard-teamline">
+              ${badgeMarkup(row.home_team_logo_url, row.home_team)}
+              <span class="team-name">${escapeHtml(row.home_team)}</span>
+              <span class="versus">vs</span>
+              ${badgeMarkup(row.away_team_logo_url, row.away_team)}
+              <span class="team-name">${escapeHtml(row.away_team)}</span>
+            </strong>
+            <p class="fixture-stream-headline">${escapeHtml(
+              row.signal_summary?.headline || row.signal_summary?.summary_text || "Fixture intelligence update available."
+            )}</p>
           </div>
-          <div class="signal-cell">
-            <span class="signal-label">OU25</span>
-            <span class="signal-value">${escapeHtml(
-              odds.over25_odds && odds.under25_odds ? `${odds.over25_odds} / ${odds.under25_odds}` : "N/A"
-            )}</span>
+          <div class="fixture-stream-summary-side">
+            <span class="metric-label">${escapeHtml(publishClass === "DEPLOY" ? "Deployable" : "Read first")}</span>
+            <span class="metric-value dashboard-route">${escapeHtml(deskState.label === "DEPLOY" ? "Actionable" : "Interpretive")}</span>
+            <span class="muted fixture-stream-expand">Open intelligence</span>
           </div>
-          <div class="signal-cell">
-            <span class="signal-label">BTTS</span>
-            <span class="signal-value">${escapeHtml(
-              odds.btts_yes_odds && odds.btts_no_odds ? `${odds.btts_yes_odds} / ${odds.btts_no_odds}` : "N/A"
-            )}</span>
+        </summary>
+        <div class="fixture-stream-body">
+          ${
+            notes.length
+              ? `<ul class="feature-list compact-list">${notes.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}</ul>`
+              : `<p class="muted">This fixture currently carries a concise public-safe intelligence summary only.</p>`
+          }
+          <div class="cta-row">
+            <a class="button" href="${fixtureDetailHref(row)}">Open fixture view</a>
           </div>
         </div>
-        ${
-          notes.length
-            ? `<ul class="feature-list compact-list">${notes.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}</ul>`
-            : `<p class="muted">No additional context notes have been published for this fixture yet.</p>`
-        }
-        <div class="dashboard-telegram-preview">
-          <span class="metric-label">Telegram alert preview</span>
-          <pre>${escapeHtml(telegramAlertPreview(entry))}</pre>
-        </div>
-        <p class="muted">${escapeHtml(routeExplanation(entry))}</p>
-        <div class="cta-row">
-          <a class="button" href="${fixtureDetailHref(row)}">Open fixture view</a>
-          <button class="ghost-button" type="button" data-action="telegram-fixture-alert" data-fixture-key="${escapeHtml(String(row.fixture_key || ""))}">Send to Telegram</button>
-        </div>
-      </article>
+      </details>
+    `;
+  };
+
+  const renderPublicFixtureGroups = (rows) => {
+    if (!rows.length) {
+      return `<div class="notice">No public fixture intelligence is available for the current window yet.</div>`;
+    }
+    const groups = groupItemsByLeague(rows);
+    return `
+      <div class="fixture-stream">
+        ${groups
+          .map(
+            (group) => `
+              <article class="panel fixture-league-group">
+                <div class="fixture-league-group-head">
+                  <div class="fixture-league-group-meta">
+                    <span class="league-badge">${escapeHtml(group.league)}</span>
+                    <p class="muted">${escapeHtml(leagueGroupTimingLabel(group))}</p>
+                  </div>
+                </div>
+                <div class="fixture-stream-list">
+                  ${group.items.map((row) => publicDeskFixtureCard(row)).join("")}
+                </div>
+              </article>
+            `
+          )
+          .join("")}
+      </div>
     `;
   };
 
@@ -1184,7 +1446,18 @@
       workerConfigured() ? "Unlock founding membership" : "Open checkout placeholder"
     }</a>`;
 
-  const homeView = () => `
+  const homeView = () => {
+    const publicDeskRows = [...state.fixtureIntelligence]
+      .sort((left, right) => {
+        const timeDiff = kickoffTimestamp(left.kickoff_time) - kickoffTimestamp(right.kickoff_time);
+        if (timeDiff !== 0) {
+          return timeDiff;
+        }
+        return publishClassRank(right.publish_class) - publishClassRank(left.publish_class);
+      })
+      .slice(0, 12);
+
+    return `
     <section class="hero">
       <div class="hero-main">
         <div class="hero-copy-stack">
@@ -1265,25 +1538,25 @@
       <div>
         <div class="section-head">
           <div>
-            <h2>Live public board</h2>
+            <h2>Today on the desk</h2>
             <p class="section-copy">
-              A compact look at the current free board. Premium members unlock the full deployable set, richer
-              reasons, shortlist support, and Worker-protected access.
+              Fixtures are grouped by competition first so you can orient fast, then expand only the ones worth reading more closely.
             </p>
           </div>
-          <a class="ghost-button" href="./predictions.html">Open full board</a>
+          <a class="ghost-button" href="./dashboard.html">Open dashboard</a>
         </div>
-        <div class="card-grid">
-          ${state.publicPredictions.slice(0, 3).map((row) => predictionCard(row, true)).join("")}
-        </div>
+        ${renderPublicFixtureGroups(publicDeskRows)}
       </div>
       <article class="panel">
-        <h3>Why this wins</h3>
+        <h3>How to read it</h3>
         <ul class="method-list">
-          <li>Most betting products predict every match. Odds Genius does the opposite.</li>
-          <li>It scans broadly, filters aggressively, and only deploys when independent systems agree that the price is wrong and the signal is stable enough to act on.</li>
-          <li>The edge is not just prediction accuracy. The edge is knowing when not to bet.</li>
+          <li>Start with the league group, not a flat prediction table.</li>
+          <li>Expand a fixture only when the state, market, or timing makes it worth more attention.</li>
+          <li>Deploy is actionable. Observe is interpretive. Monitor keeps awareness high without forcing a bet.</li>
         </ul>
+        <div class="cta-row">
+          <a class="button" href="./predictions.html">Open predictions board</a>
+        </div>
       </article>
     </section>
 
@@ -1309,6 +1582,7 @@
       </article>
     </section>
   `;
+  };
 
   const predictionsView = () => `
     <section class="section">
@@ -2168,7 +2442,10 @@
                     : followedIntelligence.length
                       ? `
                         <div class="card-grid intelligence-grid">
-                          ${followedIntelligence.map((entry) => intelligenceCard(entry, Boolean(notificationPreferences?.telegram_enabled))).join("")}
+                          ${followedIntelligence
+                            .slice(0, 8)
+                            .map((entry) => intelligenceCard(entry, Boolean(notificationPreferences?.telegram_enabled)))
+                            .join("")}
                         </div>
                       `
                       : `<div class="notice">Your follow settings are saved, but no current published fixtures matched this window yet. That will change as covered-fixture and context publishing expands.</div>`
@@ -2594,7 +2871,7 @@
         <article class="hero-main">
           <p class="hero-kicker">Dashboard</p>
           <h1>Followed intelligence.</h1>
-          <p>This is your calm intelligence desk. It combines saved follows, published fixture intelligence, and Telegram delivery posture into a structure built for interpretation before action.</p>
+          <p>This is your calm intelligence desk. Fixtures are grouped by league first, then opened only when the signal, timing, or follow relevance makes deeper reading worthwhile.</p>
           <div class="pill-row">
             <span class="stat-chip">${baseMatches.length} matched followed fixtures</span>
             <span class="stat-chip">${entitled ? "Premium active" : "Free / pending"}</span>
@@ -2645,7 +2922,7 @@
       <section class="section">
         <article class="panel">
           <h3>Priority map</h3>
-          <p class="muted">${escapeHtml(feedRoutingExplanation(stylePreset))}</p>
+          <p class="muted">${escapeHtml(feedRoutingExplanation(stylePreset))} The buckets below are now meant to feel like a fixture workspace rather than a flat alert list.</p>
           <div class="stats-grid">
             ${statPanel("Send now", sendNowEntries.length, "Direct fixture or team relevance")}
             ${statPanel("Watch closely", watchEntries.length, "Higher-quality deploy watchlist")}
@@ -2677,54 +2954,50 @@
       <section class="section">
         <article class="panel">
           <h3>Send now</h3>
-          <p class="muted">These are the strongest followed signals for immediate attention: direct fixture follows, direct team follows, or the clearest high-relevance deploys.</p>
-          ${
-            sendNowEntries.length
-              ? `<div class="card-grid intelligence-grid dashboard-grid">${sendNowEntries
-                  .map((entry) => dashboardFixtureCard(entry, Boolean(notificationPreferences?.telegram_enabled)))
-                  .join("")}</div>`
-              : `<div class="notice">Nothing currently qualifies for immediate attention. That is a healthy state, not an empty one.</div>`
-          }
+          <p class="muted">These are the clearest fixtures for active attention right now: direct fixture follows, direct team follows, or the strongest deploys with personal relevance.</p>
+          ${renderDashboardFixtureGroups(
+            sendNowEntries,
+            Boolean(notificationPreferences?.telegram_enabled),
+            "Nothing currently qualifies for immediate attention. That is a healthy state, not an empty one."
+          )}
         </article>
       </section>
 
       <section class="section">
         <article class="panel">
           <h3>Watch closely</h3>
-          <p class="muted">These are strong but less direct items worth interpreting carefully before action.</p>
-          ${
-            watchEntries.length
-              ? `<div class="card-grid intelligence-grid dashboard-grid">${watchEntries
-                  .map((entry) => dashboardFixtureCard(entry, Boolean(notificationPreferences?.telegram_enabled)))
-                  .join("")}</div>`
-              : `<div class="notice">No higher-priority watchlist items are active in the current filtered window.</div>`
-          }
+          <p class="muted">These fixtures deserve careful reading, but not urgency. Expand them for reasoning, context, and the cleaner interpretation layer.</p>
+          ${renderDashboardFixtureGroups(
+            watchEntries,
+            Boolean(notificationPreferences?.telegram_enabled),
+            "No higher-priority watchlist items are active in the current filtered window."
+          )}
         </article>
       </section>
 
       <section class="section">
         <article class="panel">
           <h3>Website only</h3>
-          <p class="muted">These fixtures still carry value, but not enough personal relevance to justify interruption.</p>
-          ${
-            websiteOnlyEntries.length
-              ? `<div class="card-grid intelligence-grid dashboard-grid">${websiteOnlyEntries
-                  .map((entry) => dashboardFixtureCard(entry, Boolean(notificationPreferences?.telegram_enabled)))
-                  .join("")}</div>`
-              : `<div class="notice">No lower-priority website-only items are active in the current filtered window.</div>`
-          }
+          <p class="muted">These fixtures still carry value, but the calmer choice is to leave them on-site and keep Telegram quiet.</p>
+          ${renderDashboardFixtureGroups(
+            websiteOnlyEntries,
+            Boolean(notificationPreferences?.telegram_enabled),
+            "No lower-priority website-only items are active in the current filtered window."
+          )}
         </article>
       </section>
 
       <section class="section">
         <article class="panel">
           <h3>No edge / monitor</h3>
-          <p class="muted">A pass state should still feel intelligent. If nothing belongs here right now, the system is simply not forcing noise into the board.</p>
+          <p class="muted">A pass state should still feel intelligent. These fixtures are here to help you leave something alone with more clarity, not less.</p>
           ${
             noEdgeEntries.length
-              ? `<div class="card-grid intelligence-grid dashboard-grid">${noEdgeEntries
-                  .map((entry) => dashboardFixtureCard(entry, Boolean(notificationPreferences?.telegram_enabled)))
-                  .join("")}</div>`
+              ? renderDashboardFixtureGroups(
+                  noEdgeEntries,
+                  Boolean(notificationPreferences?.telegram_enabled),
+                  "No fixtures currently sit in a clear pass / monitor state for this filtered view."
+                )
               : !followedSignalsConfigured
                 ? `<div class="notice">No followed teams, leagues, markets, or fixtures are saved yet. Add them on the account page, then save your intelligence preferences to start matching live cards.</div>`
                 : `<div class="notice">No fixtures currently sit in a clear pass / monitor state for this filtered view.</div>`

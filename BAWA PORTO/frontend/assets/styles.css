@@ -871,6 +871,161 @@ tbody tr:hover {
   align-items: stretch;
 }
 
+.fixture-stream {
+  display: grid;
+  gap: 16px;
+}
+
+.fixture-league-group {
+  display: grid;
+  gap: 14px;
+}
+
+.fixture-league-group-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: start;
+}
+
+.fixture-league-group-meta {
+  display: grid;
+  gap: 6px;
+}
+
+.fixture-stream-list {
+  display: grid;
+  gap: 12px;
+}
+
+.fixture-stream-card {
+  padding: 0;
+  overflow: hidden;
+  border-color: rgba(123, 154, 184, 0.14);
+  background:
+    linear-gradient(180deg, rgba(16, 24, 35, 0.98), rgba(10, 16, 25, 0.98)),
+    radial-gradient(circle at top right, rgba(48, 199, 255, 0.06), transparent 28%);
+}
+
+.fixture-stream-card[open] {
+  border-color: rgba(123, 154, 184, 0.22);
+  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.18);
+}
+
+.fixture-stream-card-deploy {
+  border-color: rgba(78, 222, 163, 0.24);
+}
+
+.fixture-stream-card-observe {
+  border-color: rgba(92, 200, 232, 0.22);
+}
+
+.fixture-stream-card-monitor {
+  border-color: rgba(246, 179, 109, 0.18);
+}
+
+.fixture-stream-card-pass {
+  border-color: rgba(184, 193, 204, 0.18);
+}
+
+.fixture-stream-card summary {
+  list-style: none;
+  cursor: pointer;
+  display: grid;
+  padding: 18px;
+}
+
+.fixture-stream-card summary::-webkit-details-marker {
+  display: none;
+}
+
+.fixture-stream-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: start;
+}
+
+.fixture-stream-summary-main {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+
+.fixture-stream-summary-side {
+  min-width: 144px;
+  display: grid;
+  justify-items: end;
+  gap: 8px;
+  text-align: right;
+}
+
+.fixture-state-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: 1px solid rgba(123, 154, 184, 0.16);
+}
+
+.fixture-state-pill-deploy {
+  color: var(--mint);
+  background: rgba(78, 222, 163, 0.12);
+  border-color: rgba(78, 222, 163, 0.24);
+}
+
+.fixture-state-pill-observe {
+  color: var(--sky);
+  background: rgba(48, 199, 255, 0.11);
+  border-color: rgba(48, 199, 255, 0.2);
+}
+
+.fixture-state-pill-monitor {
+  color: var(--sand);
+  background: rgba(246, 179, 109, 0.1);
+  border-color: rgba(246, 179, 109, 0.18);
+}
+
+.fixture-state-pill-pass {
+  color: var(--muted);
+  background: rgba(184, 193, 204, 0.08);
+  border-color: rgba(184, 193, 204, 0.18);
+}
+
+.fixture-stream-headline {
+  margin: 0;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.fixture-stream-expand {
+  font-size: 0.8rem;
+}
+
+.fixture-stream-body {
+  display: grid;
+  gap: 14px;
+  padding: 0 18px 18px;
+  border-top: 1px solid rgba(123, 154, 184, 0.1);
+}
+
+.fixture-stream-body-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.fixture-stream-route {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
 .dashboard-card {
   flex: 1 1 420px;
   min-width: min(100%, 420px);
@@ -1547,6 +1702,10 @@ code {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .fixture-stream-body-grid {
+    grid-template-columns: 1fr;
+  }
+
   .hero-main h1 {
     max-width: none;
   }
@@ -1602,13 +1761,24 @@ code {
   .dashboard-card-top,
   .dashboard-head,
   .sample-board-head,
-  .board-toolbar {
+  .board-toolbar,
+  .fixture-league-group-head {
     flex-direction: column;
     align-items: flex-start;
   }
 
   .dashboard-odds-grid {
     grid-template-columns: 1fr;
+  }
+
+  .fixture-stream-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .fixture-stream-summary-side {
+    min-width: 0;
+    justify-items: start;
+    text-align: left;
   }
 
   .chart-x-labels {

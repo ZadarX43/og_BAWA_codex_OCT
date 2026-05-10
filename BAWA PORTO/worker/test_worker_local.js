@@ -344,6 +344,27 @@ const fixtureIntelligencePayload = {
         notes: ["Team-intelligence caution remains active around this fixture."],
       },
     },
+    {
+      fixture_id: "2026_05_09_Atlanta_United_FC_LA_Galaxy",
+      fixture_key: "2026_05_09_Atlanta_United_FC_LA_Galaxy",
+      fixture_class: "DEPLOY",
+      publish_class: "DEPLOY",
+      coverage_status: "covered",
+      kickoff_time: "2099-05-09 19:30:00",
+      league: "USA MLS",
+      home_team: "Atlanta United FC",
+      away_team: "LA Galaxy",
+      confidence_tier: "ELITE",
+      premium_tier: "ELITE",
+      signal_summary: {
+        market_family: "BTTS",
+        headline: "Elite BTTS deployment remained live on Yes.",
+        summary_text: "Elite BTTS deployment remained live on Yes.",
+      },
+      context_summary: {
+        notes: ["Home-side scoring context remains active around this fixture."],
+      },
+    },
   ],
 };
 
@@ -1323,6 +1344,86 @@ const testMarketOnlyObserveDoesNotAutoQueue = async (fetchHarness) => {
   assert.equal(refreshPayload.queued_alerts, 0);
 };
 
+const testAnalystLeagueMarketDeployStaysWebsiteOnly = async (fetchHarness) => {
+  const env = createEnv();
+  await writeSubscriberRecord(
+    env,
+    buildSubscriberRecord({
+      email: "member@example.com",
+    })
+  );
+
+  const requestResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/auth/magic-link/request", "POST", {
+      email: "member@example.com",
+    }),
+    env
+  );
+  assert.equal(requestResponse.status, 200);
+  const emailBody = fetchHarness.sentEmails.at(-1);
+  const verifyMatch = String(emailBody?.html || "").match(/verify\?token=([^"&]+)/);
+  assert.ok(verifyMatch?.[1], "expected magic-link token in email body");
+  const token = decodeURIComponent(verifyMatch[1]);
+
+  const tokenResponse = await worker.fetch(
+    makeGetRequest(`http://localhost/api/auth/magic-link/verify?token=${encodeURIComponent(token)}`),
+    env
+  );
+  const sessionCookie = extractCookieValue(tokenResponse.headers.get("set-cookie"), "og_premium_session");
+  assert.ok(sessionCookie, "expected premium session cookie after verify");
+
+  const startResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/account/telegram/link/start", "POST", null, {
+      cookie: `og_premium_session=${sessionCookie}`,
+    }),
+    env
+  );
+  const startPayload = await startResponse.json();
+  assert.equal(startResponse.status, 200);
+
+  const completeResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/account/telegram/link/complete", "POST", {
+      code: startPayload.code,
+      telegram_user_id: "tg_user_123",
+      telegram_username: "ogfounder",
+      telegram_chat_id: "chat_456",
+    }),
+    env
+  );
+  assert.equal(completeResponse.status, 200);
+
+  const prefsResponse = await worker.fetch(
+    jsonRequest(
+      "http://localhost/api/account/preferences",
+      "POST",
+      {
+        telegram_enabled: true,
+        website_only_mode: false,
+        allow_non_signal_intelligence: true,
+        user_style_preset: "analyst",
+        favourite_leagues: "USA MLS",
+        favourite_markets: "BTTS",
+      },
+      {
+        cookie: `og_premium_session=${sessionCookie}`,
+      }
+    ),
+    env
+  );
+  assert.equal(prefsResponse.status, 200);
+
+  const refreshResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/account/alerts/refresh", "POST", null, {
+      cookie: `og_premium_session=${sessionCookie}`,
+    }),
+    env
+  );
+  const refreshPayload = await refreshResponse.json();
+  assert.equal(refreshResponse.status, 200);
+  assert.equal(refreshPayload.matched_fixtures >= 1, true);
+  assert.equal(refreshPayload.queued_alerts, 0);
+};
+
 const main = async () => {
   const cacheHarness = installMockCache();
   const fetchHarness = installMockFetch();
@@ -1345,6 +1446,7 @@ const main = async () => {
     await testAccountPreferencesUpdate(fetchHarness);
     await testAccountAlertsQueueAndDispatch(fetchHarness);
     await testMarketOnlyObserveDoesNotAutoQueue(fetchHarness);
+    await testAnalystLeagueMarketDeployStaysWebsiteOnly(fetchHarness);
     await testLogoutSkeleton();
     console.log("Worker local harness passed.");
     console.log("- success route with valid token: passed");
@@ -1362,6 +1464,7 @@ const main = async () => {
     console.log("- Account preferences update route: passed");
     console.log("- account alerts queue + dispatch routes: passed");
     console.log("- market-only observe suppression: passed");
+    console.log("- analyst league+market deploy stays website-only: passed");
     console.log("- logout skeleton: passed");
   } finally {
     fetchHarness.restore();
