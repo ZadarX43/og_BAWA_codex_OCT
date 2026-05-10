@@ -53,6 +53,7 @@
       dashboardReasonFilter: "ALL",
       internalFlagSeverityFilter: "ALL",
       internalFlagStatusFilter: "ALL",
+      internalTimelineSourceFilter: "ALL",
       telegramLinkCode: "",
       telegramLinkExpiresAt: "",
       telegramBotUsername: "",
@@ -2927,8 +2928,16 @@
     const operatorId = String(state.runtime.internalOperatorId || "").trim();
     const severityFilter = String(state.runtime.internalFlagSeverityFilter || "ALL").toUpperCase();
     const statusFilter = String(state.runtime.internalFlagStatusFilter || "ALL").toUpperCase();
+    const timelineSourceFilter = String(state.runtime.internalTimelineSourceFilter || "ALL").toUpperCase();
     const severityOptions = ["ALL", "CRITICAL", "HIGH", "MEDIUM", "LOW"];
     const statusOptions = ["ALL", "OPEN", "RESOLVED", "DISMISSED"];
+    const timelineSourceOptions = [
+      ["ALL", "All activity"],
+      ["AUTH_EVENT", "Auth events"],
+      ["RISK_FLAG", "Risk flags"],
+      ["ADMIN_NOTE", "Admin notes"],
+      ["ENFORCEMENT", "Enforcement"],
+    ];
     const severityCounts = severityOptions.reduce((accumulator, option) => {
       if (option === "ALL") {
         accumulator[option] = flags.length;
@@ -2966,6 +2975,29 @@
         );
       })
       .slice(0, 10);
+    const timelineSourceCounts = timelineSourceOptions.reduce((accumulator, [value]) => {
+      if (value === "ALL") {
+        accumulator[value] = timeline.length;
+      } else if (value === "ENFORCEMENT") {
+        accumulator[value] = timeline.filter((item) =>
+          String(item?.event_type || "").startsWith("internal_account_")
+        ).length;
+      } else {
+        accumulator[value] = timeline.filter(
+          (item) => String(item?.source_type || "").trim().toUpperCase() === value
+        ).length;
+      }
+      return accumulator;
+    }, {});
+    const filteredTimeline = timeline.filter((item) => {
+      if (timelineSourceFilter === "ALL") {
+        return true;
+      }
+      if (timelineSourceFilter === "ENFORCEMENT") {
+        return String(item?.event_type || "").startsWith("internal_account_");
+      }
+      return String(item?.source_type || "").trim().toUpperCase() === timelineSourceFilter;
+    });
     const restrictedEvent = timeline.find((item) => String(item?.event_type || "") === "internal_account_restricted");
     const suspendedEvent = timeline.find((item) => String(item?.event_type || "") === "internal_account_suspended");
     const reinstatedEvent = timeline.find((item) => String(item?.event_type || "") === "internal_account_reinstated");
@@ -3008,6 +3040,19 @@
       .filter(Boolean)
       .sort((left, right) => String(right.when || "").localeCompare(String(left.when || "")))
       .slice(0, 5);
+    const primaryDeviceMismatch =
+      Number(summary?.session_summary?.distinct_device_count ?? 0) > 1 &&
+      Number(summary?.session_summary?.active_session_count ?? 0) > 1 &&
+      !(summary?.session_summary?.primary_device_label || "");
+    const caseBadges = [
+      summary?.risk_state?.account_status &&
+      String(summary.risk_state.account_status).toLowerCase() !== "active"
+        ? titleCase(String(summary.risk_state.account_status).replaceAll("_", " "))
+        : null,
+      summary?.risk_state?.risk_level ? `${titleCase(String(summary.risk_state.risk_level))} risk` : null,
+      Number(summary?.open_flags_count ?? 0) > 0 ? `${summary.open_flags_count} open flags` : null,
+      primaryDeviceMismatch ? "Primary device mismatch" : null,
+    ].filter(Boolean);
 
     if (!hasKey) {
       return `
@@ -3054,6 +3099,13 @@
           <p class="hero-kicker">Operator review</p>
           <h1>Account review desk.</h1>
           <p>Use this internal page to inspect account posture, review flags, read timeline evidence, and leave operator notes before stronger actions go live.</p>
+          ${
+            caseBadges.length
+              ? `<div class="pill-row">${caseBadges
+                  .map((badge) => `<span class="stat-chip">${escapeHtml(badge)}</span>`)
+                  .join("")}</div>`
+              : ""
+          }
           <div class="cta-row">
             <button class="ghost-button" type="button" data-action="clear-internal-admin-key">Clear key</button>
           </div>
@@ -3305,9 +3357,26 @@
               </article>
               <article class="panel">
                 <h3>Timeline</h3>
+                <div class="filter-row">
+                  ${timelineSourceOptions
+                    .map(
+                      ([value, label]) => `
+                        <button
+                          class="${timelineSourceFilter === value ? "button" : "ghost-button"}"
+                          type="button"
+                          data-action="internal-timeline-filter"
+                          data-value="${escapeHtml(value)}"
+                        >
+                          ${escapeHtml(label)}
+                          ${escapeHtml(` (${timelineSourceCounts[value] || 0})`)}
+                        </button>
+                      `
+                    )
+                    .join("")}
+                </div>
                 ${
-                  timeline.length
-                    ? `<div class="card-grid">${timeline
+                  filteredTimeline.length
+                    ? `<div class="card-grid">${filteredTimeline
                         .slice(0, 18)
                         .map(
                           (item) => `
@@ -3325,7 +3394,11 @@
                           `
                         )
                         .join("")}</div>`
-                    : `<div class="notice">No timeline items are available for this account yet.</div>`
+                    : `<div class="notice">${
+                        timeline.length
+                          ? "No timeline items match the current source filter."
+                          : "No timeline items are available for this account yet."
+                      }</div>`
                 }
               </article>
               <article class="panel">
@@ -5041,6 +5114,15 @@
     if (internalFlagStatusFilterTarget) {
       state.runtime.internalFlagStatusFilter = String(
         internalFlagStatusFilterTarget.dataset.value || "ALL"
+      ).toUpperCase();
+      render();
+      return;
+    }
+
+    const internalTimelineFilterTarget = event.target.closest("[data-action='internal-timeline-filter']");
+    if (internalTimelineFilterTarget) {
+      state.runtime.internalTimelineSourceFilter = String(
+        internalTimelineFilterTarget.dataset.value || "ALL"
       ).toUpperCase();
       render();
     }
