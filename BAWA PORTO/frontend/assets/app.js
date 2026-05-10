@@ -215,6 +215,10 @@
   const syncActiveNav = () => {
     const pageHrefMap = {
       home: "./index.html",
+      matches: "./matches.html",
+      live: "./live.html",
+      competitions: "./competitions.html",
+      teams: "./teams.html",
       dashboard: "./dashboard.html",
       fixture: "./dashboard.html",
       onboarding: "./account.html",
@@ -1311,7 +1315,7 @@
     return `
       <div
         class="widget-reference-shell"
-        data-role="fixture-lineups-widget"
+        data-role="fixture-lineups-reference"
         data-date="${escapeHtml(kickoffDate)}"
         data-home="${escapeHtml(fixture.home_team)}"
         data-away="${escapeHtml(fixture.away_team)}"
@@ -1328,7 +1332,7 @@
         </div>
         <p class="muted">This sits beside the custom intelligence layer so confirmed teams and shape can support the read without taking over the page.</p>
         <div class="widget-reference-frame">
-          <div class="notice">Resolving fixture reference…</div>
+          <div class="notice">Loading confirmed lineups and formations…</div>
         </div>
       </div>
     `;
@@ -1347,6 +1351,69 @@
     }
     params.set("tab", String(tabKey || "intelligence"));
     return `./fixture.html?${params.toString()}#fixture-tab-${encodeURIComponent(String(tabKey || "intelligence"))}`;
+  };
+
+  const formatKickoffClock = (value) => {
+    if (!value) {
+      return "Time pending";
+    }
+    const parsed = new Date(value);
+    if (Number.isNaN(parsed.getTime())) {
+      return String(value);
+    }
+    return parsed.toLocaleString("en-GB", {
+      weekday: "short",
+      day: "2-digit",
+      month: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  const fixtureTimeState = (value) => {
+    const timestamp = kickoffTimestamp(value);
+    if (!Number.isFinite(timestamp)) {
+      return {
+        label: "Scheduled",
+        detail: "Kickoff time pending",
+        tone: "scheduled",
+      };
+    }
+    const now = Date.now();
+    const diff = timestamp - now;
+    if (diff <= -3 * 60 * 60 * 1000) {
+      return {
+        label: "Final window",
+        detail: formatKickoffClock(value),
+        tone: "final",
+      };
+    }
+    if (diff <= 30 * 60 * 1000) {
+      return {
+        label: "Kickoff window",
+        detail: formatKickoffClock(value),
+        tone: "live",
+      };
+    }
+    return {
+      label: "Upcoming",
+      detail: formatKickoffClock(value),
+      tone: "scheduled",
+    };
+  };
+
+  const formatFixtureResultChip = (fixtureRow, teamSide) => {
+    const goals = fixtureRow?.goals || {};
+    const home = Number(goals.home);
+    const away = Number(goals.away);
+    if (!Number.isFinite(home) || !Number.isFinite(away)) {
+      return { label: "PENDING", tone: "pending" };
+    }
+    if (home === away) {
+      return { label: "DRAW", tone: "draw" };
+    }
+    const teamWon = teamSide === "home" ? home > away : away > home;
+    return teamWon ? { label: "WIN", tone: "win" } : { label: "LOSS", tone: "loss" };
   };
 
   const teamInitials = (name) => {
@@ -1374,6 +1441,53 @@
         ${safeUrl ? `<img src="${escapeHtml(safeUrl)}" alt="" loading="lazy" decoding="async" onerror="this.remove()" />` : ""}
       </span>
       <span class="sr-only">${label}</span>
+    `;
+  };
+
+  const renderFixtureHeroScoreboard = (fixture) => {
+    const leagueBadge = safeLogoUrl(fixture.league_logo_url || fixture.league_flag_url);
+    const timing = fixtureTimeState(fixture.kickoff_time);
+    const homeTeamId = String(fixture.api_home_team_id || "").trim() || extractTeamIdFromLogoUrl(fixture.home_team_logo_url);
+    const awayTeamId = String(fixture.api_away_team_id || "").trim() || extractTeamIdFromLogoUrl(fixture.away_team_logo_url);
+    return `
+      <div
+        class="fixture-hero-scoreboard"
+        data-role="fixture-scoreboard"
+        data-api-fixture-id="${escapeHtml(String(fixture.api_fixture_id || ""))}"
+        data-kickoff-time="${escapeHtml(String(fixture.kickoff_time || ""))}"
+        data-date="${escapeHtml(String(fixture.kickoff_time || "").slice(0, 10))}"
+        data-home="${escapeHtml(fixture.home_team || "")}"
+        data-away="${escapeHtml(fixture.away_team || "")}"
+        data-home-team-id="${escapeHtml(homeTeamId)}"
+        data-away-team-id="${escapeHtml(awayTeamId)}"
+      >
+        <div class="fixture-hero-meta">
+          <span class="fixture-competition-mark">
+            ${
+              leagueBadge
+                ? `<img class="league-badge" src="${escapeHtml(leagueBadge)}" alt="" loading="lazy" decoding="async" onerror="this.remove()" />`
+                : ""
+            }
+            <span>${escapeHtml(fixture.league || "Competition")}</span>
+          </span>
+          <span class="fixture-status-badge fixture-status-badge-${escapeHtml(timing.tone)}">${escapeHtml(timing.label)}</span>
+        </div>
+        <div class="fixture-hero-score-row">
+          <div class="fixture-hero-side">
+            ${badgeMarkup(fixture.home_team_logo_url, fixture.home_team, "fixture-hero-badge")}
+            <strong>${escapeHtml(fixture.home_team)}</strong>
+          </div>
+          <div class="fixture-hero-center">
+            <span class="metric-label">Kickoff strip</span>
+            <strong class="fixture-hero-score">vs</strong>
+            <span class="muted">${escapeHtml(timing.detail)}</span>
+          </div>
+          <div class="fixture-hero-side fixture-hero-side-end">
+            ${badgeMarkup(fixture.away_team_logo_url, fixture.away_team, "fixture-hero-badge")}
+            <strong>${escapeHtml(fixture.away_team)}</strong>
+          </div>
+        </div>
+      </div>
     `;
   };
 
@@ -1725,7 +1839,7 @@
             <span class="stat-chip">Selective deployment only</span>
           </div>
           <div class="hero-actions">
-            <a class="button" href="./predictions.html">View live board</a>
+            <a class="button" href="./matches.html">Open matches desk</a>
             <a class="ghost-button" href="./results.html">See proof</a>
             <a class="ghost-button" href="./premium.html">Unlock premium</a>
           </div>
@@ -1832,7 +1946,189 @@
         </ul>
       </article>
     </section>
-  `;
+    `;
+  };
+
+  const orderedFixtureRows = (rows = state.fixtureIntelligence) =>
+    [...rows].sort((left, right) => {
+      const timeDiff = kickoffTimestamp(left.kickoff_time) - kickoffTimestamp(right.kickoff_time);
+      if (timeDiff !== 0) {
+        return timeDiff;
+      }
+      return publishClassRank(right.publish_class) - publishClassRank(left.publish_class);
+    });
+
+  const matchesView = () => {
+    const rows = orderedFixtureRows();
+    return `
+      <section class="hero">
+        <article class="hero-main">
+          <p class="hero-kicker">Matches</p>
+          <h1>Fixture-first football intelligence.</h1>
+          <p>Browse the current window by league and fixture, then drop into a match-level intelligence page when a row deserves deeper reading.</p>
+          <div class="pill-row">
+            <span class="stat-chip">Competition grouped</span>
+            <span class="stat-chip">Fixture first</span>
+            <span class="stat-chip">Calm public orientation</span>
+          </div>
+        </article>
+        <aside class="hero-side">
+          <div class="metric">
+            <span class="metric-label">Current window</span>
+            <span class="metric-value">${escapeHtml(rows.length)}</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Competitions</span>
+            <span class="metric-value">${escapeHtml(new Set(rows.map((row) => row.league)).size)}</span>
+          </div>
+        </aside>
+      </section>
+      <section class="section">
+        ${renderPublicFixtureGroups(rows)}
+      </section>
+    `;
+  };
+
+  const liveView = () => {
+    const now = Date.now();
+    const rows = orderedFixtureRows().filter((row) => {
+      const ts = kickoffTimestamp(row.kickoff_time);
+      return Number.isFinite(ts) && ts >= now - 4 * 60 * 60 * 1000 && ts <= now + 8 * 60 * 60 * 1000;
+    });
+    const fallbackRows = rows.length ? rows : orderedFixtureRows().slice(0, 12);
+    return `
+      <section class="hero">
+        <article class="hero-main">
+          <p class="hero-kicker">Live</p>
+          <h1>Current and near-kickoff desk.</h1>
+          <p>This is the calmer live-state surface. It focuses on fixtures in or near the current football window rather than the full board.</p>
+          <div class="pill-row">
+            <span class="stat-chip">Near kickoff</span>
+            <span class="stat-chip">Current window</span>
+            <span class="stat-chip">Reduced clutter</span>
+          </div>
+        </article>
+        <aside class="hero-side">
+          <div class="metric">
+            <span class="metric-label">Live desk size</span>
+            <span class="metric-value">${escapeHtml(fallbackRows.length)}</span>
+          </div>
+        </aside>
+      </section>
+      <section class="section">
+        ${renderPublicFixtureGroups(fallbackRows)}
+      </section>
+    `;
+  };
+
+  const competitionsView = () => {
+    const groups = groupItemsByLeague(orderedFixtureRows());
+    return `
+      <section class="hero">
+        <article class="hero-main">
+          <p class="hero-kicker">Competitions</p>
+          <h1>League-first orientation.</h1>
+          <p>Use this surface to understand which competitions are active in the current window before drilling into fixtures.</p>
+        </article>
+        <aside class="hero-side">
+          <div class="metric">
+            <span class="metric-label">Active competitions</span>
+            <span class="metric-value">${escapeHtml(groups.length)}</span>
+          </div>
+        </aside>
+      </section>
+      <section class="section">
+        <div class="card-grid">
+          ${groups
+            .map((group) => {
+              const first = group.items[0];
+              return `
+                <article class="panel">
+                  <h3>${escapeHtml(group.league)}</h3>
+                  <p class="muted">${escapeHtml(leagueGroupTimingLabel(group))}</p>
+                  <ul class="feature-list compact-list">
+                    <li>Fixtures in window: ${escapeHtml(group.items.length)}</li>
+                    <li>Leading state: ${escapeHtml(String(first.publish_class || first.fixture_class || "MONITOR"))}</li>
+                    <li>First fixture: ${escapeHtml(`${first.home_team} vs ${first.away_team}`)}</li>
+                  </ul>
+                  <div class="cta-row">
+                    <a class="ghost-button" href="${fixtureDetailHref(first)}">Open sample fixture</a>
+                  </div>
+                </article>
+              `;
+            })
+            .join("")}
+        </div>
+      </section>
+    `;
+  };
+
+  const teamsView = () => {
+    const teamMap = new Map();
+    orderedFixtureRows().forEach((row) => {
+      [
+        { name: row.home_team, logo: row.home_team_logo_url, opponent: row.away_team, fixture: row },
+        { name: row.away_team, logo: row.away_team_logo_url, opponent: row.home_team, fixture: row },
+      ].forEach((entry) => {
+        if (!teamMap.has(entry.name)) {
+          teamMap.set(entry.name, {
+            name: entry.name,
+            logo: entry.logo,
+            nextFixture: entry.fixture,
+            opponent: entry.opponent,
+            count: 0,
+          });
+        }
+        teamMap.get(entry.name).count += 1;
+      });
+    });
+    const rows = Array.from(teamMap.values())
+      .sort((left, right) => {
+        const countDiff = right.count - left.count;
+        if (countDiff !== 0) return countDiff;
+        return kickoffTimestamp(left.nextFixture?.kickoff_time) - kickoffTimestamp(right.nextFixture?.kickoff_time);
+      })
+      .slice(0, 12);
+    return `
+      <section class="hero">
+        <article class="hero-main">
+          <p class="hero-kicker">Teams</p>
+          <h1>Team-led entry into the board.</h1>
+          <p>This is the first team layer: current-window teams, their next visible fixture, and a quick route into fixture intelligence.</p>
+        </article>
+        <aside class="hero-side">
+          <div class="metric">
+            <span class="metric-label">Teams in window</span>
+            <span class="metric-value">${escapeHtml(rows.length)}</span>
+          </div>
+        </aside>
+      </section>
+      <section class="section">
+        <div class="card-grid">
+          ${rows
+            .map(
+              (team) => `
+                <article class="panel">
+                  <div class="fixture-teamline">
+                    ${badgeMarkup(team.logo, team.name)}
+                    <span class="team-name">${escapeHtml(team.name)}</span>
+                  </div>
+                  <p class="muted">Next visible fixture: ${escapeHtml(team.nextFixture?.home_team)} vs ${escapeHtml(team.nextFixture?.away_team)}</p>
+                  <ul class="feature-list compact-list">
+                    <li>League: ${escapeHtml(team.nextFixture?.league || "Unknown")}</li>
+                    <li>Kickoff: ${escapeHtml(formatKickoffLabel(team.nextFixture?.kickoff_time))}</li>
+                    <li>Window mentions: ${escapeHtml(team.count)}</li>
+                  </ul>
+                  <div class="cta-row">
+                    <a class="ghost-button" href="${fixtureDetailHref(team.nextFixture)}">Open fixture intelligence</a>
+                  </div>
+                </article>
+              `
+            )
+            .join("")}
+        </div>
+      </section>
+    `;
   };
 
   const predictionsView = () => `
@@ -4276,9 +4572,42 @@
         return `
           <section class="section">
             ${fixtureSummaryNotice}
+            <div class="fixture-detail-grid">
+              <article class="panel">
+                <div
+                  class="fixture-form-shell"
+                  data-role="fixture-form-reference"
+                  data-league-id="${escapeHtml(String(fixture.api_league_id || ""))}"
+                  data-season="${escapeHtml(String(fixture.api_season || ""))}"
+                  data-home-team-id="${escapeHtml(String(fixture.api_home_team_id || "").trim() || extractTeamIdFromLogoUrl(fixture.home_team_logo_url))}"
+                  data-away-team-id="${escapeHtml(String(fixture.api_away_team_id || "").trim() || extractTeamIdFromLogoUrl(fixture.away_team_logo_url))}"
+                >
+                  <h3>Team rhythm</h3>
+                  <p class="muted">Current league form, position, and recent rhythm for both sides. This is the first true form layer for the fixture page.</p>
+                  <div class="card-grid">
+                    <article class="panel">
+                      <h4>${escapeHtml(fixture.home_team)}</h4>
+                      <div class="notice">Loading home form…</div>
+                    </article>
+                    <article class="panel">
+                      <h4>${escapeHtml(fixture.away_team)}</h4>
+                      <div class="notice">Loading away form…</div>
+                    </article>
+                  </div>
+                </div>
+              </article>
+              <article class="panel">
+                <h3>Context support</h3>
+                ${
+                  notes.length
+                    ? `<ul class="feature-list">${notes.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}</ul>`
+                    : `<div class="notice">No extra form support notes are currently published for this fixture.</div>`
+                }
+              </article>
+            </div>
             <article class="panel">
               <h3>League rhythm around this fixture</h3>
-              <p class="muted">This is the first pass of the form layer. It keeps nearby same-league intelligence visible until a fuller recent-form guide becomes part of the custom fixture stack.</p>
+              <p class="muted">Nearby same-league fixtures remain visible underneath the direct team-form layer so the broader slate still has context.</p>
               ${relatedFixturesMarkup}
             </article>
           </section>
@@ -4377,6 +4706,7 @@
       <section class="section split">
         <article class="hero-main">
           <p class="hero-kicker">Fixture Intelligence</p>
+          ${renderFixtureHeroScoreboard(fixture)}
           <h1>${escapeHtml(fixture.home_team)} <span class="muted">vs</span> ${escapeHtml(fixture.away_team)}</h1>
           <p>${escapeHtml(clarity.action_copy)}</p>
           <div class="pill-row">
@@ -4393,22 +4723,32 @@
           </div>
         </article>
         <aside class="hero-side">
-          <div class="metric">
-            <span class="metric-label">Action state</span>
-            <span class="metric-value">${escapeHtml(clarity.action_label)}</span>
-          </div>
-          <div class="metric">
-            <span class="metric-label">Coverage</span>
-            <span class="metric-value">${escapeHtml(String(fixture.coverage_status || "covered"))}</span>
-          </div>
-          <div class="metric">
-            <span class="metric-label">Alert priority</span>
-            <span class="metric-value">${notificationPreferences?.telegram_enabled ? escapeHtml(fixture.follow_relevance?.notification_priority || "website only") : "Preview"}</span>
-          </div>
-          <div class="metric">
-            <span class="metric-label">Follow match</span>
-            <span class="metric-value">${matchedEntry ? escapeHtml(matchedEntry.reasons.join(" / ")) : "Not followed"}</span>
-          </div>
+          <article class="panel compact-panel">
+            <span class="metric-label">Match state</span>
+            <div class="metric-stack">
+              <strong class="metric-value">${escapeHtml(clarity.action_label)}</strong>
+              <ul class="feature-list compact-list">
+                <li>Coverage: ${escapeHtml(String(fixture.coverage_status || "covered"))}</li>
+                <li>Alert priority: ${
+                  notificationPreferences?.telegram_enabled
+                    ? escapeHtml(fixture.follow_relevance?.notification_priority || "website only")
+                    : "Preview"
+                }</li>
+                <li>Feed bucket: ${escapeHtml(clarity.feed_bucket)}</li>
+              </ul>
+            </div>
+          </article>
+          <article class="panel compact-panel">
+            <span class="metric-label">Relevance</span>
+            <div class="metric-stack">
+              <strong class="metric-value">${matchedEntry ? escapeHtml(matchedEntry.reasons.join(" / ")) : "Not followed"}</strong>
+              <p class="muted">Direct team, fixture, league, and market relevance determine whether this page stays website-first or deserves interruption.</p>
+              <div class="pill-row">
+                <span class="chip">${escapeHtml(marketFamilyLabel(fixture.signal_summary?.market_family))}</span>
+                <span class="chip">${escapeHtml(publishClass)}</span>
+              </div>
+            </div>
+          </article>
         </aside>
       </section>
       <section class="section section-tight">
@@ -4437,6 +4777,10 @@
   const render = () => {
     const views = {
       home: homeView,
+      matches: matchesView,
+      live: liveView,
+      competitions: competitionsView,
+      teams: teamsView,
       dashboard: dashboardView,
       fixture: fixtureView,
       predictions: predictionsView,
@@ -4457,11 +4801,15 @@
 
   const hydrateFixtureReferenceWidgets = async () => {
     const standingsRoots = Array.from(document.querySelectorAll("[data-role='fixture-standings-reference']"));
-    const roots = Array.from(document.querySelectorAll("[data-role='fixture-lineups-widget']"));
-    if ((!roots.length && !standingsRoots.length) || !workerConfigured()) {
+    const lineupRoots = Array.from(document.querySelectorAll("[data-role='fixture-lineups-reference']"));
+    const scoreboardRoots = Array.from(document.querySelectorAll("[data-role='fixture-scoreboard']"));
+    const formRoots = Array.from(document.querySelectorAll("[data-role='fixture-form-reference']"));
+    if ((!lineupRoots.length && !standingsRoots.length && !scoreboardRoots.length && !formRoots.length) || !workerConfigured()) {
       return;
     }
     const fixtureLookupCache = new Map();
+    const fixtureDetailsCache = new Map();
+    const standingsCache = new Map();
     const resolveFixtureReference = async (root) => {
       const params = new URLSearchParams({
         date: root.dataset.date || "",
@@ -4482,6 +4830,62 @@
         );
       }
       return fixtureLookupCache.get(cacheKey);
+    };
+    const fetchFixtureDetails = async (fixtureId) => {
+      const id = String(fixtureId || "").trim();
+      if (!id) {
+        return null;
+      }
+      if (!fixtureDetailsCache.has(id)) {
+        fixtureDetailsCache.set(
+          id,
+          fetchWorkerJson(`/api/widgets/football/fixtures?id=${encodeURIComponent(id)}`, { method: "GET" })
+        );
+      }
+      const result = await fixtureDetailsCache.get(id);
+      return result?.payload?.response?.[0] || null;
+    };
+    const fetchStandingsRows = async (leagueId, season) => {
+      const cacheKey = `${leagueId}:${season}`;
+      if (!standingsCache.has(cacheKey)) {
+        const params = new URLSearchParams({ league: String(leagueId || ""), season: String(season || "") });
+        standingsCache.set(
+          cacheKey,
+          fetchWorkerJson(`/api/widgets/football/standings?${params.toString()}`, { method: "GET" })
+        );
+      }
+      const { response, payload } = await standingsCache.get(cacheKey);
+      if (!response.ok || !payload?.response?.length) {
+        return [];
+      }
+      const groups = payload.response?.[0]?.league?.standings || [];
+      return Array.isArray(groups) && groups.length ? groups[0] : [];
+    };
+    const renderLineupSquad = (players, emptyCopy) => {
+      const list = Array.isArray(players) ? players : [];
+      if (!list.length) {
+        return `<div class="notice">${escapeHtml(emptyCopy)}</div>`;
+      }
+      return `
+        <div class="lineup-player-list">
+          ${list
+            .map((entry) => {
+              const player = entry?.player || {};
+              const jersey = player.number ? `#${player.number}` : "Squad";
+              const role = player.pos || player.grid || "Player";
+              return `
+                <article class="lineup-player-card">
+                  <span class="lineup-player-number">${escapeHtml(jersey)}</span>
+                  <div>
+                    <strong>${escapeHtml(player.name || "Unnamed player")}</strong>
+                    <span class="muted">${escapeHtml(role)}</span>
+                  </div>
+                </article>
+              `;
+            })
+            .join("")}
+        </div>
+      `;
     };
     await Promise.all(
       standingsRoots.map(async (root) => {
@@ -4550,7 +4954,53 @@
       })
     );
     await Promise.all(
-      roots.map(async (root) => {
+      scoreboardRoots.map(async (root) => {
+        try {
+          let fixtureId = String(root.dataset.apiFixtureId || "").trim();
+          if (!fixtureId) {
+            const fixtureLookup = await resolveFixtureReference(root);
+            if (fixtureLookup?.response?.ok && fixtureLookup?.payload?.fixture_id) {
+              fixtureId = String(fixtureLookup.payload.fixture_id || "").trim();
+            }
+          }
+          const fixtureDetails = await fetchFixtureDetails(fixtureId);
+          if (!fixtureDetails) {
+            return;
+          }
+          const status = fixtureDetails?.fixture?.status || {};
+          const goals = fixtureDetails?.goals || {};
+          const hasScore = Number.isFinite(Number(goals.home)) && Number.isFinite(Number(goals.away));
+          const centerLabel = hasScore ? `${goals.home} : ${goals.away}` : "vs";
+          const statusLabel = String(status.short || status.long || "").trim() || fixtureTimeState(root.dataset.kickoffTime).label;
+          const detailLabel =
+            status.elapsed != null
+              ? `${status.elapsed}'`
+              : status.long || fixtureTimeState(root.dataset.kickoffTime).detail;
+          const centerTone = /FT|AET|PEN|CANC|PST/i.test(statusLabel)
+            ? "final"
+            : /1H|2H|HT|LIVE|ET|BT/i.test(statusLabel)
+              ? "live"
+              : "scheduled";
+          const centerNode = root.querySelector(".fixture-hero-center");
+          if (centerNode) {
+            centerNode.innerHTML = `
+              <span class="metric-label">${escapeHtml(statusLabel)}</span>
+              <strong class="fixture-hero-score">${escapeHtml(centerLabel)}</strong>
+              <span class="muted">${escapeHtml(detailLabel)}</span>
+            `;
+          }
+          const badge = root.querySelector(".fixture-status-badge");
+          if (badge) {
+            badge.textContent = statusLabel;
+            badge.className = `fixture-status-badge fixture-status-badge-${centerTone}`;
+          }
+        } catch {
+          return;
+        }
+      })
+    );
+    await Promise.all(
+      lineupRoots.map(async (root) => {
         const frame = root.querySelector(".widget-reference-frame");
         if (!frame) {
           return;
@@ -4567,32 +5017,97 @@
           if (!fixtureId) {
             throw new Error(fixtureLookup?.payload?.message || "Unable to resolve fixture lineups for this page.");
           }
-          const proxyBase = `${workerApiUrl("/api/widgets/football/").replace(/\/+$/, "")}/`;
+          const { response, payload } = await fetchWorkerJson(
+            `/api/widgets/football/fixtures/lineups?fixture=${encodeURIComponent(fixtureId)}`,
+            { method: "GET" }
+          );
+          const rows = response.ok && Array.isArray(payload?.response) ? payload.response : [];
+          if (!rows.length) {
+            throw new Error("Confirmed lineups are not available from the upstream provider for this fixture yet. Keep the intelligence read, table, and context layers visible while team sheets remain unavailable.");
+          }
           frame.innerHTML = `
-            <api-sports-widget
-              data-type="config"
-              data-sport="football"
-              data-key=""
-              data-url-football="${escapeHtml(proxyBase)}"
-              data-logo-url="https://media.api-sports.io"
-              data-theme="grey"
-              data-lang="en"
-              data-show-error="true"
-              data-show-logos="true"
-              data-player-injuries="true"
-              data-team-squad="true"
-              data-game-tab="lineups"
-              data-refresh="300"
-            ></api-sports-widget>
-            <api-sports-widget
-              data-type="game"
-              data-game-id="${escapeHtml(fixtureId)}"
-            ></api-sports-widget>
+            <div class="lineup-reference-grid">
+              ${rows
+                .slice(0, 2)
+                .map((team) => {
+                  const teamInfo = team?.team || {};
+                  const coach = team?.coach || {};
+                  return `
+                    <article class="panel lineup-team-panel">
+                      <div class="lineup-team-head">
+                        <div class="lineup-team-title">
+                          ${badgeMarkup(teamInfo.logo, teamInfo.name, "fixture-hero-badge")}
+                          <div>
+                            <h4>${escapeHtml(teamInfo.name || "Team")}</h4>
+                            <p class="muted">Formation ${escapeHtml(team?.formation || "TBC")} • Coach ${escapeHtml(coach.name || "TBC")}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="lineup-section">
+                        <span class="metric-label">Starting XI</span>
+                        ${renderLineupSquad(team?.startXI, "Starting XI not available yet.")}
+                      </div>
+                      <div class="lineup-section">
+                        <span class="metric-label">Bench</span>
+                        ${renderLineupSquad(team?.substitutes, "Substitutes list not available yet.")}
+                      </div>
+                    </article>
+                  `;
+                })
+                .join("")}
+            </div>
           `;
         } catch (error) {
           frame.innerHTML = `<div class="notice">${escapeHtml(
             error.message || "Lineups and formations are not available for this fixture yet."
           )}</div>`;
+        }
+      })
+    );
+    await Promise.all(
+      formRoots.map(async (root) => {
+        try {
+          let leagueId = String(root.dataset.leagueId || "").trim();
+          let season = String(root.dataset.season || "").trim();
+          if (!leagueId || !season) {
+            return;
+          }
+          const standingsRows = await fetchStandingsRows(leagueId, season);
+          if (!standingsRows.length) {
+            return;
+          }
+          const homeTeamId = String(root.dataset.homeTeamId || "").trim();
+          const awayTeamId = String(root.dataset.awayTeamId || "").trim();
+          const matchByTeam = (teamId) =>
+            standingsRows.find((row) => String(row?.team?.id || "").trim() === teamId) || null;
+          const homeRow = matchByTeam(homeTeamId);
+          const awayRow = matchByTeam(awayTeamId);
+          const cards = Array.from(root.querySelectorAll(".card-grid > article"));
+          [homeRow, awayRow].forEach((row, index) => {
+            const card = cards[index];
+            if (!card || !row) {
+              return;
+            }
+            card.innerHTML = `
+              <h4>${escapeHtml(row.team?.name || "Team")}</h4>
+              <div class="form-summary-strip">
+                <span class="stat-chip">Pos ${escapeHtml(row.rank ?? "—")}</span>
+                <span class="stat-chip">${escapeHtml(row.points ?? "—")} pts</span>
+                <span class="stat-chip">GD ${escapeHtml(row.goalsDiff ?? "—")}</span>
+              </div>
+              <div class="form-sequence">
+                ${String(row.form || "")
+                  .split("")
+                  .filter(Boolean)
+                  .slice(0, 5)
+                  .map((letter) => `<span class="form-pill form-pill-${escapeHtml(letter.toLowerCase())}">${escapeHtml(letter)}</span>`)
+                  .join("") || `<span class="muted">No current form string</span>`}
+              </div>
+              <p class="muted">League rhythm from the current standings reference layer.</p>
+            `;
+          });
+        } catch {
+          return;
         }
       })
     );
