@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-10T17:13:54+00:00",
+  "generated_at": "2026-05-10T17:28:22+00:00",
   "source_run_id": "2026-05-09",
   "source_window": {
     "date_from": "2026-05-09",
@@ -14,13 +14,13 @@
   },
   "fixtures": [
     {
-      "fixture_id": "2026_05_09_Luzern_Servette",
+      "fixture_id": "1538476",
       "fixture_key": "2026_05_09_Luzern_Servette",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1538476,
+      "api_league_id": 207,
+      "api_season": 2025,
+      "api_home_team_id": 644,
+      "api_away_team_id": 2184,
       "kickoff_time": "2026-05-09 00:00:00",
       "league": "Swiss Super League",
       "home_team": "Luzern",
@@ -34,7 +34,7 @@
       "routing_status": "routed",
       "identity_source": "allmarkets",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": true,
         "goal_shape_base": true,
@@ -61,16 +61,16 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_09_Winterthur_Lausanne_Sport",
+      "fixture_id": "1538474",
       "fixture_key": "2026_05_09_Winterthur_Lausanne_Sport",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1538474,
+      "api_league_id": 207,
+      "api_season": 2025,
+      "api_home_team_id": 2180,
+      "api_away_team_id": 1014,
       "kickoff_time": "2026-05-09 00:00:00",
       "league": "Swiss Super League",
       "home_team": "Winterthur",
@@ -84,7 +84,7 @@
       "routing_status": "routed",
       "identity_source": "allmarkets",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": true,
         "goal_shape_base": true,
@@ -111,16 +111,16 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_09_Z_rich_Grasshopper",
+      "fixture_id": "1538475",
       "fixture_key": "2026_05_09_Z_rich_Grasshopper",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1538475,
+      "api_league_id": 207,
+      "api_season": 2025,
+      "api_home_team_id": 783,
+      "api_away_team_id": 1013,
       "kickoff_time": "2026-05-09 00:00:00",
       "league": "Swiss Super League",
       "home_team": "Zürich",
@@ -134,7 +134,7 @@
       "routing_status": "routed",
       "identity_source": "allmarkets",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": true,
         "goal_shape_base": true,
@@ -161,7 +161,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_09_Auckland_Adelaide_United",
@@ -211,7 +211,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_09_Sydney_FC_Newcastle_Jets_FC",
@@ -261,16 +261,16 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_09_Grazer_AK_Rheindorf_Altach",
+      "fixture_id": "1531281",
       "fixture_key": "2026_05_09_Grazer_AK_Rheindorf_Altach",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1531281,
+      "api_league_id": 218,
+      "api_season": 2025,
+      "api_home_team_id": 4256,
+      "api_away_team_id": 618,
       "kickoff_time": "2026-05-09T00:00:00Z",
       "league": "Austria Bundesliga",
       "home_team": "Grazer AK",
@@ -284,7 +284,7 @@
       "routing_status": "routed",
       "identity_source": "allmarkets",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": true,
         "goal_shape_base": true,
@@ -311,16 +311,16 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_09_Ried_Wolfsberger_AC",
+      "fixture_id": "1531282",
       "fixture_key": "2026_05_09_Ried_Wolfsberger_AC",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1531282,
+      "api_league_id": 218,
+      "api_season": 2025,
+      "api_home_team_id": 1028,
+      "api_away_team_id": 1025,
       "kickoff_time": "2026-05-09T00:00:00Z",
       "league": "Austria Bundesliga",
       "home_team": "Ried",
@@ -334,7 +334,7 @@
       "routing_status": "routed",
       "identity_source": "allmarkets",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": true,
         "goal_shape_base": true,
@@ -361,16 +361,16 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_09_Wattens_Blau_Wei_Linz",
+      "fixture_id": "1531283",
       "fixture_key": "2026_05_09_Wattens_Blau_Wei_Linz",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1531283,
+      "api_league_id": 218,
+      "api_season": 2025,
+      "api_home_team_id": 1398,
+      "api_away_team_id": 1394,
       "kickoff_time": "2026-05-09T00:00:00Z",
       "league": "Austria Bundesliga",
       "home_team": "Wattens",
@@ -384,7 +384,7 @@
       "routing_status": "routed",
       "identity_source": "allmarkets",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": true,
         "goal_shape_base": true,
@@ -411,7 +411,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_09_Club_Brugge_Sint_Truiden",
@@ -461,7 +461,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1536977",
@@ -528,7 +528,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1536976",
@@ -578,7 +578,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1492253",
@@ -645,7 +645,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1492254",
@@ -729,7 +729,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_09_Middlesbrough_Southampton",
@@ -803,7 +803,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_09_Bolton_Wanderers_Bradford_City",
@@ -853,7 +853,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_09_Stevenage_Stockport_County",
@@ -903,7 +903,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_09_Brighton_Hove_Albion_Wolverhampton_Wanderers",
@@ -953,7 +953,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1379322",
@@ -1027,7 +1027,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1379323",
@@ -1125,7 +1125,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1379324",
@@ -1223,7 +1223,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1379326",
@@ -1297,7 +1297,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_09_Augsburg_Borussia_M_gladbach",
@@ -1347,7 +1347,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_09_Hoffenheim_Werder_Bremen",
@@ -1414,7 +1414,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1388602",
@@ -1481,7 +1481,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1388603",
@@ -1548,7 +1548,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1388604",
@@ -1615,16 +1615,16 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_09_Bochum_Hannover_96",
+      "fixture_id": "1388902",
       "fixture_key": "2026_05_09_Bochum_Hannover_96",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1388902,
+      "api_league_id": 79,
+      "api_season": 2025,
+      "api_home_team_id": 176,
+      "api_away_team_id": 166,
       "kickoff_time": "2026-05-09T00:00:00Z",
       "league": "Germany Bundesliga 2",
       "home_team": "Bochum",
@@ -1638,7 +1638,7 @@
       "routing_status": "non_routed",
       "identity_source": "pre_allmarkets_loss_details",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": false,
         "goal_shape_base": false,
@@ -1665,16 +1665,16 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_09_Eintracht_Braunschweig_Dynamo_Dresden",
+      "fixture_id": "1388903",
       "fixture_key": "2026_05_09_Eintracht_Braunschweig_Dynamo_Dresden",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1388903,
+      "api_league_id": 79,
+      "api_season": 2025,
+      "api_home_team_id": 744,
+      "api_away_team_id": 183,
       "kickoff_time": "2026-05-09T00:00:00Z",
       "league": "Germany Bundesliga 2",
       "home_team": "Eintracht Braunschweig",
@@ -1688,7 +1688,7 @@
       "routing_status": "non_routed",
       "identity_source": "pre_allmarkets_loss_details",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": false,
         "goal_shape_base": false,
@@ -1715,16 +1715,16 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_09_Holstein_Kiel_Magdeburg",
+      "fixture_id": "1388906",
       "fixture_key": "2026_05_09_Holstein_Kiel_Magdeburg",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1388906,
+      "api_league_id": 79,
+      "api_season": 2025,
+      "api_home_team_id": 191,
+      "api_away_team_id": 179,
       "kickoff_time": "2026-05-09T00:00:00Z",
       "league": "Germany Bundesliga 2",
       "home_team": "Holstein Kiel",
@@ -1738,7 +1738,7 @@
       "routing_status": "non_routed",
       "identity_source": "pre_allmarkets_loss_details",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": false,
         "goal_shape_base": false,
@@ -1765,16 +1765,16 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_09_N_rnberg_Schalke_04",
+      "fixture_id": "1388908",
       "fixture_key": "2026_05_09_N_rnberg_Schalke_04",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1388908,
+      "api_league_id": 79,
+      "api_season": 2025,
+      "api_home_team_id": 171,
+      "api_away_team_id": 174,
       "kickoff_time": "2026-05-09T00:00:00Z",
       "league": "Germany Bundesliga 2",
       "home_team": "Nürnberg",
@@ -1788,7 +1788,7 @@
       "routing_status": "non_routed",
       "identity_source": "pre_allmarkets_loss_details",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": false,
         "goal_shape_base": false,
@@ -1815,7 +1815,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1378214",
@@ -1899,7 +1899,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_09_Lazio_Inter_Milan",
@@ -1966,7 +1966,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1378218",
@@ -2050,7 +2050,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_09_Sarpsborg_08_Fredrikstad",
@@ -2100,16 +2100,16 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_09_Al_Feiha_Al_Quadisiya",
+      "fixture_id": "1436198",
       "fixture_key": "2026_05_09_Al_Feiha_Al_Quadisiya",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1436198,
+      "api_league_id": 307,
+      "api_season": 2025,
+      "api_home_team_id": 2944,
+      "api_away_team_id": 2933,
       "kickoff_time": "2026-05-09T00:00:00Z",
       "league": "Saudi Pro League",
       "home_team": "Al Feiha",
@@ -2123,7 +2123,7 @@
       "routing_status": "routed",
       "identity_source": "allmarkets",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": true,
         "goal_shape_base": true,
@@ -2150,16 +2150,16 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_09_Al_Khaleej_Al_Ittifaq",
+      "fixture_id": "1436196",
       "fixture_key": "2026_05_09_Al_Khaleej_Al_Ittifaq",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1436196,
+      "api_league_id": 307,
+      "api_season": 2025,
+      "api_home_team_id": 2928,
+      "api_away_team_id": 2934,
       "kickoff_time": "2026-05-09T00:00:00Z",
       "league": "Saudi Pro League",
       "home_team": "Al Khaleej",
@@ -2173,7 +2173,7 @@
       "routing_status": "routed",
       "identity_source": "allmarkets",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": true,
         "goal_shape_base": true,
@@ -2200,16 +2200,16 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_09_Al_Najma_Al_Hazm",
+      "fixture_id": "1436192",
       "fixture_key": "2026_05_09_Al_Najma_Al_Hazm",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1436192,
+      "api_league_id": 307,
+      "api_season": 2025,
+      "api_home_team_id": 2992,
+      "api_away_team_id": 2945,
       "kickoff_time": "2026-05-09T00:00:00Z",
       "league": "Saudi Pro League",
       "home_team": "Al Najma",
@@ -2223,7 +2223,7 @@
       "routing_status": "routed",
       "identity_source": "allmarkets",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": true,
         "goal_shape_base": true,
@@ -2250,16 +2250,16 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_09_Aberdeen_Dundee_United",
+      "fixture_id": "1540011",
       "fixture_key": "2026_05_09_Aberdeen_Dundee_United",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1540011,
+      "api_league_id": 179,
+      "api_season": 2025,
+      "api_home_team_id": 252,
+      "api_away_team_id": 1386,
       "kickoff_time": "2026-05-09T00:00:00Z",
       "league": "Scotland Premiership",
       "home_team": "Aberdeen",
@@ -2273,7 +2273,7 @@
       "routing_status": "routed",
       "identity_source": "allmarkets",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": true,
         "goal_shape_base": true,
@@ -2317,16 +2317,16 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_09_Dundee_Livingston",
+      "fixture_id": "1540012",
       "fixture_key": "2026_05_09_Dundee_Livingston",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1540012,
+      "api_league_id": 179,
+      "api_season": 2025,
+      "api_home_team_id": 253,
+      "api_away_team_id": 255,
       "kickoff_time": "2026-05-09T00:00:00Z",
       "league": "Scotland Premiership",
       "home_team": "Dundee",
@@ -2340,7 +2340,7 @@
       "routing_status": "routed",
       "identity_source": "allmarkets",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": true,
         "goal_shape_base": true,
@@ -2401,16 +2401,16 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_09_Falkirk_Hibernian",
+      "fixture_id": "1540026",
       "fixture_key": "2026_05_09_Falkirk_Hibernian",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1540026,
+      "api_league_id": 179,
+      "api_season": 2025,
+      "api_home_team_id": 1389,
+      "api_away_team_id": 249,
       "kickoff_time": "2026-05-09T00:00:00Z",
       "league": "Scotland Premiership",
       "home_team": "Falkirk",
@@ -2424,7 +2424,7 @@
       "routing_status": "routed",
       "identity_source": "allmarkets",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": true,
         "goal_shape_base": true,
@@ -2468,16 +2468,16 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_09_Motherwell_Hearts",
+      "fixture_id": "1540027",
       "fixture_key": "2026_05_09_Motherwell_Hearts",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1540027,
+      "api_league_id": 179,
+      "api_season": 2025,
+      "api_home_team_id": 256,
+      "api_away_team_id": 254,
       "kickoff_time": "2026-05-09T00:00:00Z",
       "league": "Scotland Premiership",
       "home_team": "Motherwell",
@@ -2491,7 +2491,7 @@
       "routing_status": "routed",
       "identity_source": "allmarkets",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": true,
         "goal_shape_base": true,
@@ -2535,16 +2535,16 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_09_St_Mirren_Kilmarnock",
+      "fixture_id": "1540013",
       "fixture_key": "2026_05_09_St_Mirren_Kilmarnock",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1540013,
+      "api_league_id": 179,
+      "api_season": 2025,
+      "api_home_team_id": 251,
+      "api_away_team_id": 250,
       "kickoff_time": "2026-05-09T00:00:00Z",
       "league": "Scotland Premiership",
       "home_team": "St. Mirren",
@@ -2558,7 +2558,7 @@
       "routing_status": "routed",
       "identity_source": "allmarkets",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": true,
         "goal_shape_base": true,
@@ -2619,7 +2619,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_09_Daejeon_Citizen_Pohang_Steelers",
@@ -2669,7 +2669,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_09_Gwangju_Gangwon",
@@ -2719,7 +2719,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_09_Jeju_United_FC_Seoul",
@@ -2769,7 +2769,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_09_Sangju_Sangmu_Incheon_United",
@@ -2819,7 +2819,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_09_Atl_tico_Madrid_Celta_de_Vigo",
@@ -2886,7 +2886,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_09_Elche_CF_Deportivo_Alav_s",
@@ -2936,7 +2936,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1391166",
@@ -3020,7 +3020,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1391168",
@@ -3070,16 +3070,16 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_09_Atlanta_United_FC_LA_Galaxy",
+      "fixture_id": "1490269",
       "fixture_key": "2026_05_09_Atlanta_United_FC_LA_Galaxy",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1490269,
+      "api_league_id": 253,
+      "api_season": 2026,
+      "api_home_team_id": 1608,
+      "api_away_team_id": 1605,
       "kickoff_time": "2026-05-09T00:00:00Z",
       "league": "USA MLS",
       "home_team": "Atlanta United FC",
@@ -3093,7 +3093,7 @@
       "routing_status": "routed",
       "identity_source": "allmarkets",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": true,
         "routed_observe": true,
         "goal_shape_base": true,
@@ -3137,7 +3137,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1490270",
@@ -3221,16 +3221,16 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_09_Chicago_Fire_New_York_RB",
+      "fixture_id": "1490266",
       "fixture_key": "2026_05_09_Chicago_Fire_New_York_RB",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1490266,
+      "api_league_id": 253,
+      "api_season": 2026,
+      "api_home_team_id": 1607,
+      "api_away_team_id": 1602,
       "kickoff_time": "2026-05-09T00:00:00Z",
       "league": "USA MLS",
       "home_team": "Chicago Fire",
@@ -3244,7 +3244,7 @@
       "routing_status": "routed",
       "identity_source": "allmarkets",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": true,
         "goal_shape_base": true,
@@ -3288,7 +3288,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_09_Montreal_Impact_Orlando_City",
@@ -3338,7 +3338,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1490271",
@@ -3422,7 +3422,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1490267",
@@ -3489,16 +3489,16 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_10_Lugano_St_Gallen",
+      "fixture_id": "1538489",
       "fixture_key": "2026_05_10_Lugano_St_Gallen",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1538489,
+      "api_league_id": 207,
+      "api_season": 2025,
+      "api_home_team_id": 606,
+      "api_away_team_id": 1011,
       "kickoff_time": "2026-05-10 00:00:00",
       "league": "Swiss Super League",
       "home_team": "Lugano",
@@ -3512,7 +3512,7 @@
       "routing_status": "routed",
       "identity_source": "allmarkets",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": true,
         "goal_shape_base": true,
@@ -3539,16 +3539,16 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_10_Sion_Thun",
+      "fixture_id": "1538490",
       "fixture_key": "2026_05_10_Sion_Thun",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1538490,
+      "api_league_id": 207,
+      "api_season": 2025,
+      "api_home_team_id": 630,
+      "api_away_team_id": 1012,
       "kickoff_time": "2026-05-10 00:00:00",
       "league": "Swiss Super League",
       "home_team": "Sion",
@@ -3562,7 +3562,7 @@
       "routing_status": "routed",
       "identity_source": "allmarkets",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": true,
         "goal_shape_base": true,
@@ -3589,16 +3589,16 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_10_Young_Boys_Basel",
+      "fixture_id": "1538491",
       "fixture_key": "2026_05_10_Young_Boys_Basel",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1538491,
+      "api_league_id": 207,
+      "api_season": 2025,
+      "api_home_team_id": 565,
+      "api_away_team_id": 551,
       "kickoff_time": "2026-05-10 00:00:00",
       "league": "Swiss Super League",
       "home_team": "Young Boys",
@@ -3612,7 +3612,7 @@
       "routing_status": "routed",
       "identity_source": "allmarkets",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": true,
         "goal_shape_base": true,
@@ -3639,16 +3639,16 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_10_Hartberg_Sturm_Graz",
+      "fixture_id": "1531254",
       "fixture_key": "2026_05_10_Hartberg_Sturm_Graz",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1531254,
+      "api_league_id": 218,
+      "api_season": 2025,
+      "api_home_team_id": 1072,
+      "api_away_team_id": 637,
       "kickoff_time": "2026-05-10T00:00:00Z",
       "league": "Austria Bundesliga",
       "home_team": "Hartberg",
@@ -3662,7 +3662,7 @@
       "routing_status": "routed",
       "identity_source": "allmarkets",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": true,
         "goal_shape_base": true,
@@ -3689,16 +3689,16 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_10_LASK_Linz_Salzburg",
+      "fixture_id": "1531255",
       "fixture_key": "2026_05_10_LASK_Linz_Salzburg",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1531255,
+      "api_league_id": 218,
+      "api_season": 2025,
+      "api_home_team_id": 1026,
+      "api_away_team_id": 571,
       "kickoff_time": "2026-05-10T00:00:00Z",
       "league": "Austria Bundesliga",
       "home_team": "LASK Linz",
@@ -3712,7 +3712,7 @@
       "routing_status": "routed",
       "identity_source": "allmarkets",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": true,
         "goal_shape_base": true,
@@ -3739,16 +3739,16 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_10_Rapid_Wien_Austria_Wien",
+      "fixture_id": "1531256",
       "fixture_key": "2026_05_10_Rapid_Wien_Austria_Wien",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1531256,
+      "api_league_id": 218,
+      "api_season": 2025,
+      "api_home_team_id": 781,
+      "api_away_team_id": 601,
       "kickoff_time": "2026-05-10T00:00:00Z",
       "league": "Austria Bundesliga",
       "home_team": "Rapid Wien",
@@ -3762,7 +3762,7 @@
       "routing_status": "routed",
       "identity_source": "allmarkets",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": true,
         "goal_shape_base": true,
@@ -3789,7 +3789,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_10_KAA_Gent_RSC_Anderlecht",
@@ -3839,7 +3839,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_10_KRC_Genk_KVC_Westerlo",
@@ -3906,7 +3906,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_10_Royal_Antwerp_FC_Sporting_Charleroi",
@@ -3956,7 +3956,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_10_Union_Saint_Gilloise_KV_Mechelen",
@@ -4023,16 +4023,16 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_10_Atl_tico_Mineiro_Botafogo",
+      "fixture_id": "1492250",
       "fixture_key": "2026_05_10_Atl_tico_Mineiro_Botafogo",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1492250,
+      "api_league_id": 71,
+      "api_season": 2026,
+      "api_home_team_id": 1062,
+      "api_away_team_id": 120,
       "kickoff_time": "2026-05-10T00:00:00Z",
       "league": "Brazil Serie A",
       "home_team": "Atlético Mineiro",
@@ -4046,7 +4046,7 @@
       "routing_status": "routed",
       "identity_source": "allmarkets",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": true,
         "goal_shape_base": true,
@@ -4090,7 +4090,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1492251",
@@ -4174,7 +4174,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1492252",
@@ -4258,7 +4258,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1492255",
@@ -4342,7 +4342,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1492256",
@@ -4392,7 +4392,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1492257",
@@ -4459,16 +4459,16 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_10_Santos_Bragantino",
+      "fixture_id": "1492258",
       "fixture_key": "2026_05_10_Santos_Bragantino",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1492258,
+      "api_league_id": 71,
+      "api_season": 2026,
+      "api_home_team_id": 128,
+      "api_away_team_id": 794,
       "kickoff_time": "2026-05-10T00:00:00Z",
       "league": "Brazil Serie A",
       "home_team": "Santos",
@@ -4482,7 +4482,7 @@
       "routing_status": "routed",
       "identity_source": "allmarkets",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": true,
         "goal_shape_base": true,
@@ -4509,16 +4509,16 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_10_Vasco_da_Gama_Atl_tico_PR",
+      "fixture_id": "1492259",
       "fixture_key": "2026_05_10_Vasco_da_Gama_Atl_tico_PR",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1492259,
+      "api_league_id": 71,
+      "api_season": 2026,
+      "api_home_team_id": 133,
+      "api_away_team_id": 134,
       "kickoff_time": "2026-05-10T00:00:00Z",
       "league": "Brazil Serie A",
       "home_team": "Vasco da Gama",
@@ -4532,7 +4532,7 @@
       "routing_status": "routed",
       "identity_source": "allmarkets",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": true,
         "goal_shape_base": true,
@@ -4576,7 +4576,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_10_Br_ndby_AGF",
@@ -4626,7 +4626,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_10_Nordsj_lland_Midtjylland",
@@ -4676,7 +4676,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_10_Silkeborg_K_benhavn",
@@ -4726,7 +4726,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_10_Vejle_Fredericia",
@@ -4776,7 +4776,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1379320",
@@ -4850,7 +4850,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1379321",
@@ -4948,7 +4948,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_10_Nottingham_Forest_Newcastle_United",
@@ -5022,7 +5022,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_10_West_Ham_United_Arsenal",
@@ -5096,7 +5096,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_10_Angers_SCO_Strasbourg",
@@ -5163,7 +5163,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1387987",
@@ -5247,7 +5247,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_10_Le_Havre_Olympique_Marseille",
@@ -5314,7 +5314,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1387990",
@@ -5381,7 +5381,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1387991",
@@ -5465,7 +5465,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1387992",
@@ -5515,7 +5515,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1387993",
@@ -5582,7 +5582,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_10_Toulouse_Olympique_Lyonnais",
@@ -5649,7 +5649,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1388599",
@@ -5699,7 +5699,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_10_K_ln_Heidenheim",
@@ -5749,7 +5749,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_10_Mainz_05_Union_Berlin",
@@ -5816,16 +5816,16 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_10_Fortuna_D_sseldorf_Elversberg",
+      "fixture_id": "1388904",
       "fixture_key": "2026_05_10_Fortuna_D_sseldorf_Elversberg",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1388904,
+      "api_league_id": 79,
+      "api_season": 2025,
+      "api_home_team_id": 158,
+      "api_away_team_id": 1660,
       "kickoff_time": "2026-05-10T00:00:00Z",
       "league": "Germany Bundesliga 2",
       "home_team": "Fortuna Düsseldorf",
@@ -5839,7 +5839,7 @@
       "routing_status": "non_routed",
       "identity_source": "pre_allmarkets_loss_details",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": false,
         "goal_shape_base": false,
@@ -5866,16 +5866,16 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_10_Hertha_BSC_Greuther_F_rth",
+      "fixture_id": "1388905",
       "fixture_key": "2026_05_10_Hertha_BSC_Greuther_F_rth",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1388905,
+      "api_league_id": 79,
+      "api_season": 2025,
+      "api_home_team_id": 159,
+      "api_away_team_id": 178,
       "kickoff_time": "2026-05-10T00:00:00Z",
       "league": "Germany Bundesliga 2",
       "home_team": "Hertha BSC",
@@ -5889,7 +5889,7 @@
       "routing_status": "non_routed",
       "identity_source": "pre_allmarkets_loss_details",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": false,
         "goal_shape_base": false,
@@ -5916,16 +5916,16 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_10_Preu_en_M_nster_Darmstadt_98",
+      "fixture_id": "1388910",
       "fixture_key": "2026_05_10_Preu_en_M_nster_Darmstadt_98",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1388910,
+      "api_league_id": 79,
+      "api_season": 2025,
+      "api_home_team_id": 1313,
+      "api_away_team_id": 181,
       "kickoff_time": "2026-05-10T00:00:00Z",
       "league": "Germany Bundesliga 2",
       "home_team": "Preußen Münster",
@@ -5939,7 +5939,7 @@
       "routing_status": "non_routed",
       "identity_source": "pre_allmarkets_loss_details",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": false,
         "goal_shape_base": false,
@@ -5966,7 +5966,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1378219",
@@ -6050,7 +6050,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1378215",
@@ -6100,7 +6100,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1378216",
@@ -6184,7 +6184,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1378223",
@@ -6268,7 +6268,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_10_Parma_Roma",
@@ -6335,7 +6335,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1381155",
@@ -6419,7 +6419,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1381156",
@@ -6469,7 +6469,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1381157",
@@ -6536,7 +6536,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1381161",
@@ -6620,7 +6620,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1381158",
@@ -6687,7 +6687,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1381159",
@@ -6754,7 +6754,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1381160",
@@ -6838,7 +6838,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1381162",
@@ -6922,7 +6922,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1381163",
@@ -7006,7 +7006,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_10_KFUM_Viking",
@@ -7056,7 +7056,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_10_Rosenborg_Lillestr_m",
@@ -7106,7 +7106,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_10_Sandefjord_Kristiansund",
@@ -7156,7 +7156,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_10_Troms_Molde",
@@ -7206,7 +7206,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1396525",
@@ -7273,7 +7273,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_10_Alverca_GD_Estoril_Praia",
@@ -7323,7 +7323,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1396527",
@@ -7390,7 +7390,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1396532",
@@ -7440,7 +7440,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_10_Estrela_Amadora_Famalic_o",
@@ -7507,7 +7507,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1396529",
@@ -7574,7 +7574,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1396530",
@@ -7641,7 +7641,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1396531",
@@ -7708,7 +7708,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_10_Vit_ria_Guimar_es_Casa_Pia",
@@ -7775,16 +7775,16 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_10_Al_Ittihad_Dhamk",
+      "fixture_id": "1436193",
       "fixture_key": "2026_05_10_Al_Ittihad_Dhamk",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1436193,
+      "api_league_id": 307,
+      "api_season": 2025,
+      "api_home_team_id": 2938,
+      "api_away_team_id": 2956,
       "kickoff_time": "2026-05-10T00:00:00Z",
       "league": "Saudi Pro League",
       "home_team": "Al Ittihad",
@@ -7798,7 +7798,7 @@
       "routing_status": "routed",
       "identity_source": "allmarkets",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": true,
         "routed_observe": true,
         "goal_shape_base": true,
@@ -7825,16 +7825,16 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_10_Al_Riyadh_Al_Fateh",
+      "fixture_id": "1436195",
       "fixture_key": "2026_05_10_Al_Riyadh_Al_Fateh",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1436195,
+      "api_league_id": 307,
+      "api_season": 2025,
+      "api_home_team_id": 10511,
+      "api_away_team_id": 2931,
       "kickoff_time": "2026-05-10T00:00:00Z",
       "league": "Saudi Pro League",
       "home_team": "Al Riyadh",
@@ -7848,7 +7848,7 @@
       "routing_status": "routed",
       "identity_source": "allmarkets",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": true,
         "goal_shape_base": true,
@@ -7875,16 +7875,16 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_10_Celtic_Rangers",
+      "fixture_id": "1540028",
       "fixture_key": "2026_05_10_Celtic_Rangers",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1540028,
+      "api_league_id": 179,
+      "api_season": 2025,
+      "api_home_team_id": 247,
+      "api_away_team_id": 257,
       "kickoff_time": "2026-05-10T00:00:00Z",
       "league": "Scotland Premiership",
       "home_team": "Celtic",
@@ -7898,7 +7898,7 @@
       "routing_status": "routed",
       "identity_source": "allmarkets",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": true,
         "goal_shape_base": true,
@@ -7959,7 +7959,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_10_Anyang_Jeonbuk_Motors",
@@ -8009,7 +8009,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_10_Ulsan_Bucheon_1995",
@@ -8059,7 +8059,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_10_Athletic_Club_Bilbao_Valencia_CF",
@@ -8109,7 +8109,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1391161",
@@ -8176,7 +8176,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1391164",
@@ -8243,7 +8243,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_10_Real_Oviedo_Getafe_CF",
@@ -8293,7 +8293,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1394721",
@@ -8343,7 +8343,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1394723",
@@ -8393,7 +8393,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1394724",
@@ -8443,7 +8443,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1394725",
@@ -8493,7 +8493,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_10_Gen_lerbirli_i_Kas_mpa_a",
@@ -8543,7 +8543,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1394727",
@@ -8593,7 +8593,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1394728",
@@ -8643,7 +8643,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1394729",
@@ -8693,7 +8693,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_10_stanbul_Ba_ak_ehir_Samsunspor",
@@ -8743,7 +8743,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1490274",
@@ -8827,7 +8827,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1490272",
@@ -8911,7 +8911,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1490279",
@@ -8978,7 +8978,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1490273",
@@ -9062,7 +9062,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1490278",
@@ -9129,16 +9129,16 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_10_Portland_Timbers_Sporting_KC",
+      "fixture_id": "1490277",
       "fixture_key": "2026_05_10_Portland_Timbers_Sporting_KC",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1490277,
+      "api_league_id": 253,
+      "api_season": 2026,
+      "api_home_team_id": 1617,
+      "api_away_team_id": 1611,
       "kickoff_time": "2026-05-10T00:00:00Z",
       "league": "USA MLS",
       "home_team": "Portland Timbers",
@@ -9152,7 +9152,7 @@
       "routing_status": "routed",
       "identity_source": "allmarkets",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": true,
         "goal_shape_base": true,
@@ -9196,16 +9196,16 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_10_SJ_Earthquakes_Vancouver_Whitecaps",
+      "fixture_id": "1490276",
       "fixture_key": "2026_05_10_SJ_Earthquakes_Vancouver_Whitecaps",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1490276,
+      "api_league_id": 253,
+      "api_season": 2026,
+      "api_home_team_id": 1596,
+      "api_away_team_id": 1603,
       "kickoff_time": "2026-05-10T00:00:00Z",
       "league": "USA MLS",
       "home_team": "SJ Earthquakes",
@@ -9219,7 +9219,7 @@
       "routing_status": "routed",
       "identity_source": "allmarkets",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": true,
         "goal_shape_base": true,
@@ -9263,7 +9263,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1490275",
@@ -9330,7 +9330,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_11_Randers_OB",
@@ -9380,7 +9380,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "2026_05_11_Tottenham_Hotspur_Leeds_United",
@@ -9430,7 +9430,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1378220",
@@ -9514,16 +9514,16 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_11_Al_Taawon_Al_Ahli",
+      "fixture_id": "1436199",
       "fixture_key": "2026_05_11_Al_Taawon_Al_Ahli",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1436199,
+      "api_league_id": 307,
+      "api_season": 2025,
+      "api_home_team_id": 2936,
+      "api_away_team_id": 2929,
       "kickoff_time": "2026-05-11T00:00:00Z",
       "league": "Saudi Pro League",
       "home_team": "Al Taawon",
@@ -9537,7 +9537,7 @@
       "routing_status": "routed",
       "identity_source": "allmarkets",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": true,
         "goal_shape_base": true,
@@ -9564,16 +9564,16 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
-      "fixture_id": "2026_05_11_Neom_SC_Al_Shabab",
+      "fixture_id": "1436191",
       "fixture_key": "2026_05_11_Neom_SC_Al_Shabab",
-      "api_fixture_id": null,
-      "api_league_id": null,
-      "api_season": null,
-      "api_home_team_id": null,
-      "api_away_team_id": null,
+      "api_fixture_id": 1436191,
+      "api_league_id": 307,
+      "api_season": 2025,
+      "api_home_team_id": 10513,
+      "api_away_team_id": 2940,
       "kickoff_time": "2026-05-11T00:00:00Z",
       "league": "Saudi Pro League",
       "home_team": "Neom SC",
@@ -9587,7 +9587,7 @@
       "routing_status": "routed",
       "identity_source": "allmarkets",
       "source_availability": {
-        "fixtures_master": false,
+        "fixtures_master": true,
         "routed_deploy": false,
         "routed_observe": true,
         "goal_shape_base": true,
@@ -9614,7 +9614,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1391165",
@@ -9681,7 +9681,7 @@
         "away": {}
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     },
     {
       "fixture_id": "1490280",
@@ -9765,7 +9765,7 @@
         }
       },
       "current_overlay_summary": {},
-      "updated_at": "2026-05-10T17:13:54+00:00"
+      "updated_at": "2026-05-10T17:28:22+00:00"
     }
   ]
 }
