@@ -1679,6 +1679,12 @@
         parsePreferenceList(notificationPreferences?.favourite_markets).length ||
         parsePreferenceList(notificationPreferences?.followed_fixtures).length
     );
+    const onboardingStageCount =
+      Number(Boolean(parsePreferenceList(notificationPreferences?.favourite_leagues).length)) +
+      Number(Boolean(parsePreferenceList(notificationPreferences?.favourite_markets).length)) +
+      Number(Boolean(parsePreferenceList(notificationPreferences?.favourite_teams).length)) +
+      Number(Boolean(parsePreferenceList(notificationPreferences?.followed_fixtures).length)) +
+      Number(Boolean(notificationPreferences?.telegram_enabled));
 
     return `
       <section class="section split">
@@ -1732,7 +1738,7 @@
               <article class="panel">
                 <h3>Verify your email</h3>
                 <p class="muted">
-                  Use the same email you used for checkout. If the address is eligible, a sign-in link will be sent.
+                  Use the same email you used for checkout. If the address is eligible, a sign-in link will be sent so you can open your calm intelligence dashboard on this device.
                 </p>
                 <form id="magic-link-form" class="stack-form">
                   <label class="field-label" for="magic-link-email">Email</label>
@@ -1743,11 +1749,11 @@
                 </form>
               </article>
               <article class="panel">
-                <h3>${accountIntent === "checkout" ? "Checkout handoff" : "Access status"}</h3>
+                <h3>${accountIntent === "checkout" ? "Getting started" : "Why this matters"}</h3>
                 <ul class="feature-list">
                   <li>Checkout confirms billing, not identity.</li>
-                  <li>Webhook-backed subscriber state remains the authority for premium access.</li>
                   <li>Email verification unlocks this device when your active membership is confirmed.</li>
+                  <li>Odds Genius is built to help you think better before you bet, not to rush you into action.</li>
                 </ul>
               </article>
             </section>
@@ -1831,6 +1837,26 @@
             </section>
             <section class="section">
               <article class="panel">
+                <h3>Calm setup</h3>
+                <p class="muted">
+                  Build your account like an analyst desk, not a noisy feed. Start with what you care about most, then choose how much interruption you actually want.
+                </p>
+                <div class="stats-grid">
+                  ${statPanel("Setup progress", `${onboardingStageCount}/5`, "Leagues, markets, teams, fixtures, Telegram")}
+                  ${statPanel("Style", followedSignalsConfigured ? "Selective" : "Starting clean", followedSignalsConfigured ? "Your board is beginning to take shape" : "No saved follows yet")}
+                  ${statPanel("Default principle", "Signal over noise", "No edge is also information")}
+                </div>
+                <ul class="feature-list">
+                  <li>1. Choose leagues you genuinely care about.</li>
+                  <li>2. Choose markets you can interpret calmly.</li>
+                  <li>3. Follow teams or fixtures that matter to you.</li>
+                  <li>4. Keep Telegram for stronger interruptions only.</li>
+                  <li>5. Use the dashboard as a briefing surface, not a pressure feed.</li>
+                </ul>
+              </article>
+            </section>
+            <section class="section">
+              <article class="panel">
                 <h3>Followed intelligence</h3>
                 <p class="muted">
                   This is the first website surface for the intelligence layer. Saved teams, leagues, markets, and fixtures now pull in routed and non-routed cards from the published fixture intelligence feed.
@@ -1879,25 +1905,25 @@
                   <div class="card-grid">
                     <article class="panel">
                       <h4>Channels</h4>
-                      <label class="checkbox-row"><input type="checkbox" name="telegram_enabled" ${notificationPreferences?.telegram_enabled ? "checked" : ""} /> Telegram alerts</label>
+                      <label class="checkbox-row"><input type="checkbox" name="telegram_enabled" ${notificationPreferences?.telegram_enabled ? "checked" : ""} /> Telegram interruptions</label>
                       <label class="checkbox-row"><input type="checkbox" name="email_enabled" ${notificationPreferences?.email_enabled ? "checked" : ""} /> Email digests</label>
-                      <label class="checkbox-row"><input type="checkbox" name="website_only_mode" ${notificationPreferences?.website_only_mode ? "checked" : ""} /> Website-first only</label>
+                      <label class="checkbox-row"><input type="checkbox" name="website_only_mode" ${notificationPreferences?.website_only_mode ? "checked" : ""} /> Website-first mode</label>
                     </article>
                     <article class="panel">
                       <h4>Signal alerts</h4>
                       <label class="checkbox-row"><input type="checkbox" name="elite_alerts_enabled" ${notificationPreferences?.elite_alerts_enabled ? "checked" : ""} /> Elite deployments</label>
                       <label class="checkbox-row"><input type="checkbox" name="standard_alerts_enabled" ${notificationPreferences?.standard_alerts_enabled ? "checked" : ""} /> Standard deployments</label>
-                      <label class="checkbox-row"><input type="checkbox" name="acca_alerts_enabled" ${notificationPreferences?.acca_alerts_enabled ? "checked" : ""} /> Acca drops</label>
+                      <label class="checkbox-row"><input type="checkbox" name="acca_alerts_enabled" ${notificationPreferences?.acca_alerts_enabled ? "checked" : ""} /> Acca summaries</label>
                       <label class="checkbox-row"><input type="checkbox" name="correct_score_alerts_enabled" ${notificationPreferences?.correct_score_alerts_enabled ? "checked" : ""} /> Correct score support</label>
                     </article>
                     <article class="panel">
                       <h4>Intelligence alerts</h4>
                       <label class="checkbox-row"><input type="checkbox" name="injury_alerts_enabled" ${notificationPreferences?.injury_alerts_enabled ? "checked" : ""} /> Injury news</label>
                       <label class="checkbox-row"><input type="checkbox" name="team_news_alerts_enabled" ${notificationPreferences?.team_news_alerts_enabled ? "checked" : ""} /> Major team news</label>
-                      <label class="checkbox-row"><input type="checkbox" name="weather_alerts_enabled" ${notificationPreferences?.weather_alerts_enabled ? "checked" : ""} /> Weather alerts</label>
+                      <label class="checkbox-row"><input type="checkbox" name="weather_alerts_enabled" ${notificationPreferences?.weather_alerts_enabled ? "checked" : ""} /> Weather disruption</label>
                       <label class="checkbox-row"><input type="checkbox" name="market_movement_alerts_enabled" ${notificationPreferences?.market_movement_alerts_enabled ? "checked" : ""} /> Market movement</label>
                       <label class="checkbox-row"><input type="checkbox" name="volatility_alerts_enabled" ${notificationPreferences?.volatility_alerts_enabled ? "checked" : ""} /> Volatility warnings</label>
-                      <label class="checkbox-row"><input type="checkbox" name="allow_non_signal_intelligence" ${notificationPreferences?.allow_non_signal_intelligence ? "checked" : ""} /> Non-signal intelligence updates</label>
+                      <label class="checkbox-row"><input type="checkbox" name="allow_non_signal_intelligence" ${notificationPreferences?.allow_non_signal_intelligence ? "checked" : ""} /> Observe and monitor updates</label>
                     </article>
                     <article class="panel">
                       <h4>Digests and timing</h4>
@@ -1906,8 +1932,8 @@
                       <label class="checkbox-row"><input type="checkbox" name="weekend_slate_digest_enabled" ${notificationPreferences?.weekend_slate_digest_enabled ? "checked" : ""} /> Weekend slate digest</label>
                       <label class="field-label" for="alert-frequency-mode">Alert frequency</label>
                       <select id="alert-frequency-mode" name="alert_frequency_mode" class="text-input">
-                        <option value="mixed" ${notificationPreferences?.alert_frequency_mode === "mixed" ? "selected" : ""}>Mixed</option>
-                        <option value="immediate" ${notificationPreferences?.alert_frequency_mode === "immediate" ? "selected" : ""}>Immediate</option>
+                        <option value="mixed" ${notificationPreferences?.alert_frequency_mode === "mixed" ? "selected" : ""}>Balanced</option>
+                        <option value="immediate" ${notificationPreferences?.alert_frequency_mode === "immediate" ? "selected" : ""}>Interrupt when strong</option>
                         <option value="digest_only" ${notificationPreferences?.alert_frequency_mode === "digest_only" ? "selected" : ""}>Digest only</option>
                       </select>
                       <label class="field-label" for="pre-match-window-minutes">Pre-match window (minutes)</label>
