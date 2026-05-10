@@ -13,6 +13,10 @@
   const authState = query.get("auth") || "";
   const selectedFixtureKey = query.get("fixture") || "";
   const selectedFixtureTab = String(query.get("tab") || "intelligence").toLowerCase();
+  const selectedTeam = query.get("team") || "";
+  const selectedTeamTab = String(query.get("tab") || "overview").toLowerCase();
+  const selectedCompetition = query.get("competition") || "";
+  const selectedCompetitionTab = String(query.get("tab") || "overview").toLowerCase();
   const runtimeConfig = window.OG_CONFIG || {};
   const workerApiBase = String(runtimeConfig.WORKER_API_BASE || "").replace(/\/+$/, "");
   const checkoutPlaceholderHref = "./account.html?intent=checkout";
@@ -517,6 +521,12 @@
 
   const fixturePreferenceLabel = (row) => `${row.home_team} v ${row.away_team}`;
   const fixtureDetailHref = (row) => `./fixture.html?fixture=${encodeURIComponent(String(row.fixture_key || ""))}`;
+  const teamPageHref = (teamName, tab = "overview") =>
+    `./teams.html?team=${encodeURIComponent(String(teamName || ""))}&tab=${encodeURIComponent(String(tab || "overview"))}`;
+  const competitionPageHref = (competitionName, tab = "overview") =>
+    `./competitions.html?competition=${encodeURIComponent(String(competitionName || ""))}&tab=${encodeURIComponent(
+      String(tab || "overview")
+    )}`;
 
   const marketFamilyLabel = (value) => {
     const key = String(value || "").toUpperCase();
@@ -2096,6 +2106,166 @@
       return publishClassRank(right.publish_class) - publishClassRank(left.publish_class);
     });
 
+  const isCompletedWindowFixture = (row) => {
+    const scoreline = String(row?.scoreline || "").trim();
+    if (scoreline) {
+      return true;
+    }
+    const ts = kickoffTimestamp(row?.kickoff_time);
+    return Number.isFinite(ts) ? ts < Date.now() : false;
+  };
+
+  const splitFixtureWindow = (rows) => {
+    const ordered = orderedFixtureRows(rows);
+    return {
+      results: ordered.filter((row) => isCompletedWindowFixture(row)),
+      upcoming: ordered.filter((row) => !isCompletedWindowFixture(row)),
+    };
+  };
+
+  const collectTeamRows = (teamName) => {
+    const target = normalizePreferenceText(teamName);
+    return orderedFixtureRows().filter((row) => {
+      return normalizePreferenceText(row.home_team) === target || normalizePreferenceText(row.away_team) === target;
+    });
+  };
+
+  const collectCompetitionRows = (competitionName) => {
+    const target = normalizePreferenceText(competitionName);
+    return orderedFixtureRows().filter((row) => normalizePreferenceText(row.league) === target);
+  };
+
+  const collectTeamEntity = (teamName) => {
+    const rows = collectTeamRows(teamName);
+    if (!rows.length) {
+      return null;
+    }
+    const teamNormalized = normalizePreferenceText(teamName);
+    const logo =
+      rows.find((row) => normalizePreferenceText(row.home_team) === teamNormalized)?.home_team_logo_url ||
+      rows.find((row) => normalizePreferenceText(row.away_team) === teamNormalized)?.away_team_logo_url ||
+      "";
+    const apiTeamId =
+      rows.find((row) => normalizePreferenceText(row.home_team) === teamNormalized)?.api_home_team_id ||
+      rows.find((row) => normalizePreferenceText(row.away_team) === teamNormalized)?.api_away_team_id ||
+      "";
+    const relatedCompetitions = Array.from(new Set(rows.map((row) => row.league).filter(Boolean)));
+    return {
+      name: teamName,
+      logo,
+      apiTeamId: String(apiTeamId || "").trim(),
+      rows,
+      fixtures: splitFixtureWindow(rows),
+      relatedCompetitions,
+      deployCount: rows.filter((row) => String(row.publish_class || row.fixture_class || "").toUpperCase() === "DEPLOY").length,
+      observeCount: rows.filter((row) => String(row.publish_class || row.fixture_class || "").toUpperCase() === "OBSERVE").length,
+      contextCount: rows.filter((row) => {
+        const key = String(row.publish_class || row.fixture_class || "").toUpperCase();
+        return key === "CONTEXT" || key === "MONITOR";
+      }).length,
+    };
+  };
+
+  const collectCompetitionEntity = (competitionName) => {
+    const rows = collectCompetitionRows(competitionName);
+    if (!rows.length) {
+      return null;
+    }
+    const teams = new Set();
+    rows.forEach((row) => {
+      if (row.home_team) teams.add(row.home_team);
+      if (row.away_team) teams.add(row.away_team);
+    });
+    return {
+      name: competitionName,
+      logo: rows[0]?.league_logo_url || "",
+      rows,
+      fixtures: splitFixtureWindow(rows),
+      teamCount: teams.size,
+      deployCount: rows.filter((row) => String(row.publish_class || row.fixture_class || "").toUpperCase() === "DEPLOY").length,
+      observeCount: rows.filter((row) => String(row.publish_class || row.fixture_class || "").toUpperCase() === "OBSERVE").length,
+      apiLeagueId: String(rows[0]?.api_league_id || "").trim(),
+      apiSeason: String(rows[0]?.api_season || "").trim(),
+    };
+  };
+
+  const renderEntitySubnav = (items, label) => `
+    <section class="section section-tight">
+      <nav class="page-subnav" aria-label="${escapeHtml(label)}">
+        <div class="page-subnav-scroll">
+          ${items
+            .map(
+              ([text, href, active]) => `
+                <a class="page-subnav-link ${active ? "is-active" : ""}" href="${href}">
+                  ${escapeHtml(text)}
+                </a>
+              `
+            )
+            .join("")}
+        </div>
+      </nav>
+    </section>
+  `;
+
+  const renderDirectoryCard = ({ title, badgeUrl, badgeName, href, metaLines = [], summary = "", ctaLabel = "Open" }) => `
+    <article class="panel entity-directory-card">
+      <div class="entity-directory-head">
+        ${badgeMarkup(badgeUrl, badgeName || title, "fixture-hero-badge")}
+        <div>
+          <h3>${escapeHtml(title)}</h3>
+          ${summary ? `<p class="muted">${escapeHtml(summary)}</p>` : ""}
+        </div>
+      </div>
+      <ul class="feature-list compact-list">
+        ${metaLines.map((line) => `<li>${escapeHtml(line)}</li>`).join("")}
+      </ul>
+      <div class="cta-row">
+        <a class="ghost-button" href="${href}">${escapeHtml(ctaLabel)}</a>
+      </div>
+    </article>
+  `;
+
+  const entityFixtureCard = (row) => {
+    const deskState = publicDeskState(row);
+    const notes = Array.isArray(row.context_summary?.notes) ? row.context_summary.notes.slice(0, 2) : [];
+    return `
+      <article class="panel entity-fixture-card entity-fixture-card-${escapeHtml(deskState.tone)}">
+        <div class="fixture-stream-summary-main">
+          <div class="intelligence-card-head">
+            <span class="fixture-state-pill fixture-state-pill-${escapeHtml(deskState.tone)}">${escapeHtml(deskState.label)}</span>
+            <span class="chip chip-market">${escapeHtml(marketFamilyLabel(row.signal_summary?.market_family))}</span>
+            <span class="chip chip-reference">${escapeHtml(formatKickoffLabel(row.kickoff_time))}</span>
+          </div>
+          <strong class="fixture-teamline dashboard-teamline">
+            ${badgeMarkup(row.home_team_logo_url, row.home_team)}
+            <span class="team-name">${escapeHtml(row.home_team)}</span>
+            <span class="versus">vs</span>
+            ${badgeMarkup(row.away_team_logo_url, row.away_team)}
+            <span class="team-name">${escapeHtml(row.away_team)}</span>
+          </strong>
+          <p class="fixture-stream-headline">${escapeHtml(
+            row.signal_summary?.headline || row.signal_summary?.summary_text || "Fixture intelligence is available."
+          )}</p>
+        </div>
+        ${
+          notes.length
+            ? `<ul class="feature-list compact-list">${notes.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}</ul>`
+            : `<p class="muted">This row currently carries a concise public-safe read only.</p>`
+        }
+        <div class="cta-row">
+          <a class="ghost-button" href="${fixtureDetailHref(row)}">Open fixture intelligence</a>
+        </div>
+      </article>
+    `;
+  };
+
+  const renderEntityFixtureSection = (rows, emptyCopy) => {
+    if (!rows.length) {
+      return `<div class="notice">${escapeHtml(emptyCopy)}</div>`;
+    }
+    return `<div class="card-grid">${rows.map((row) => entityFixtureCard(row)).join("")}</div>`;
+  };
+
   const matchesView = () => {
     const rows = orderedFixtureRows();
     return `
@@ -2159,19 +2329,28 @@
     `;
   };
 
-  const competitionsView = () => {
+  const competitionDirectoryView = () => {
     const groups = groupItemsByLeague(orderedFixtureRows());
     return `
       <section class="hero">
         <article class="hero-main">
           <p class="hero-kicker">Competitions</p>
           <h1>League-first orientation.</h1>
-          <p>Use this surface to understand which competitions are active in the current window before drilling into fixtures.</p>
+          <p>Browse the active competitions first, then drop into a competition page when you want fixtures, results, standings, and current signal posture in one place.</p>
+          <div class="pill-row">
+            <span class="stat-chip">Standings aware</span>
+            <span class="stat-chip">Current window fixtures</span>
+            <span class="stat-chip">Calm context first</span>
+          </div>
         </article>
         <aside class="hero-side">
           <div class="metric">
             <span class="metric-label">Active competitions</span>
             <span class="metric-value">${escapeHtml(groups.length)}</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Window fixtures</span>
+            <span class="metric-value">${escapeHtml(orderedFixtureRows().length)}</span>
           </div>
         </aside>
       </section>
@@ -2180,20 +2359,19 @@
           ${groups
             .map((group) => {
               const first = group.items[0];
-              return `
-                <article class="panel">
-                  <h3>${escapeHtml(group.league)}</h3>
-                  <p class="muted">${escapeHtml(leagueGroupTimingLabel(group))}</p>
-                  <ul class="feature-list compact-list">
-                    <li>Fixtures in window: ${escapeHtml(group.items.length)}</li>
-                    <li>Leading state: ${escapeHtml(String(first.publish_class || first.fixture_class || "MONITOR"))}</li>
-                    <li>First fixture: ${escapeHtml(`${first.home_team} vs ${first.away_team}`)}</li>
-                  </ul>
-                  <div class="cta-row">
-                    <a class="ghost-button" href="${fixtureDetailHref(first)}">Open sample fixture</a>
-                  </div>
-                </article>
-              `;
+              return renderDirectoryCard({
+                title: group.league,
+                badgeUrl: first?.league_logo_url || "",
+                badgeName: group.league,
+                href: competitionPageHref(group.league),
+                summary: "Current-window competition desk",
+                metaLines: [
+                  `Fixtures in window: ${group.items.length}`,
+                  `Active teams: ${new Set(group.items.flatMap((row) => [row.home_team, row.away_team]).filter(Boolean)).size}`,
+                  `Earliest fixture: ${formatKickoffLabel(first?.kickoff_time || "")}`,
+                ],
+                ctaLabel: "Open competition desk",
+              });
             })
             .join("")}
         </div>
@@ -2201,38 +2379,219 @@
     `;
   };
 
-  const teamsView = () => {
+  const competitionEntityView = (competition) => {
+    const tabs = [
+      ["Overview", competitionPageHref(competition.name, "overview"), selectedCompetitionTab === "overview"],
+      ["Fixtures", competitionPageHref(competition.name, "fixtures"), selectedCompetitionTab === "fixtures"],
+      ["Results", competitionPageHref(competition.name, "results"), selectedCompetitionTab === "results"],
+      ["Table", competitionPageHref(competition.name, "table"), selectedCompetitionTab === "table"],
+      ["Context", competitionPageHref(competition.name, "context"), selectedCompetitionTab === "context"],
+    ];
+    const overviewContent = `
+      <section class="section">
+        <div class="split">
+          <article class="panel">
+            <h3>Competition overview</h3>
+            <ul class="feature-list compact-list">
+              <li>Fixtures in current window: ${escapeHtml(competition.rows.length)}</li>
+              <li>Active teams in view: ${escapeHtml(competition.teamCount)}</li>
+              <li>Deploy rows: ${escapeHtml(competition.deployCount)}</li>
+              <li>Observe rows: ${escapeHtml(competition.observeCount)}</li>
+            </ul>
+          </article>
+          <article class="panel">
+            <h3>Ownership of this page</h3>
+            <ul class="feature-list compact-list">
+              <li>Competition pages orient the slate across fixtures and standings.</li>
+              <li>Full decision logic, caution framing, and Telegram-ready language stay on fixture pages.</li>
+              <li>Use this desk to scan the competition, then drop into a fixture when the row deserves the full intelligence treatment.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>Featured window fixtures</h2>
+            <p class="section-copy">This is the current competition slice that is active in the published window.</p>
+          </div>
+        </div>
+        ${renderEntityFixtureSection(competition.rows.slice(0, 6), "No fixtures are visible for this competition in the current window yet.")}
+      </section>
+    `;
+    const fixturesContent = `
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>Upcoming fixtures</h2>
+            <p class="section-copy">Use the competition desk to scan what is still ahead, then step into fixture pages for the full verdict stack.</p>
+          </div>
+        </div>
+        ${renderEntityFixtureSection(
+          competition.fixtures.upcoming,
+          "No upcoming fixtures from this competition are currently visible in the published window."
+        )}
+      </section>
+    `;
+    const resultsContent = `
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>Recent results in view</h2>
+            <p class="section-copy">These are competition fixtures in the current published window that already look settled or complete.</p>
+          </div>
+        </div>
+        ${renderEntityFixtureSection(
+          competition.fixtures.results,
+          "No completed fixtures from this competition are currently visible in the published window."
+        )}
+      </section>
+    `;
+    const tableContent = `
+      <section class="section">
+        <article class="panel widget-reference-shell">
+          <div class="widget-reference-head">
+            <div>
+              <span class="metric-label">Standings desk</span>
+              <h4>${escapeHtml(competition.name)} table</h4>
+            </div>
+          </div>
+          <p class="section-copy">Reference standings stay here at competition level, while fixture pages keep the direct match-level read.</p>
+          <div
+            class="widget-reference-frame"
+            data-role="competition-standings-reference"
+            data-competition="${escapeHtml(competition.name)}"
+            data-league-id="${escapeHtml(competition.apiLeagueId)}"
+            data-season="${escapeHtml(competition.apiSeason)}"
+          >
+            <div class="reference-loading">Loading competition table…</div>
+          </div>
+        </article>
+      </section>
+    `;
+    const contextContent = `
+      <section class="section">
+        <div class="split">
+          <article class="panel">
+            <h3>Deploy posture inside this competition</h3>
+            <div class="pill-row">
+              <span class="chip chip-signal">Deploy rows: ${escapeHtml(competition.deployCount)}</span>
+              <span class="chip chip-observe">Observe rows: ${escapeHtml(competition.observeCount)}</span>
+              <span class="chip chip-reference">Teams: ${escapeHtml(competition.teamCount)}</span>
+            </div>
+            <p class="section-copy">This is the competition-level read: how much of the current slate is actionable, watch-only, or context-driven.</p>
+          </article>
+          <article class="panel">
+            <h3>Competition context in view</h3>
+            <ul class="feature-list compact-list">
+              <li>Competition pages keep the slate shape visible.</li>
+              <li>Fixture pages carry the final decision framing and caution language.</li>
+              <li>Tables, results, and current-window deploy posture belong here.</li>
+            </ul>
+          </article>
+        </div>
+        <div class="section-head">
+          <div>
+            <h2>Competition intelligence stream</h2>
+            <p class="section-copy">Current public fixture cards from this competition, kept together as a league-first desk.</p>
+          </div>
+        </div>
+        ${renderEntityFixtureSection(competition.rows, "No current public fixture cards are visible for this competition yet.")}
+      </section>
+    `;
+    const tabContent = {
+      overview: overviewContent,
+      fixtures: fixturesContent,
+      results: resultsContent,
+      table: tableContent,
+      context: contextContent,
+    };
+    return `
+      <section class="hero">
+        <article class="hero-main">
+          <div class="entity-directory-head">
+            ${badgeMarkup(competition.logo, competition.name, "fixture-hero-badge")}
+            <div>
+              <p class="hero-kicker">Competition desk</p>
+              <h1>${escapeHtml(competition.name)}</h1>
+            </div>
+          </div>
+          <p>Competition pages own standings, slate-level context, and grouped fixtures. Fixture pages still own the final deploy read.</p>
+          <div class="pill-row">
+            <span class="stat-chip">Fixtures ${escapeHtml(competition.rows.length)}</span>
+            <span class="stat-chip">Teams ${escapeHtml(competition.teamCount)}</span>
+            <span class="stat-chip">Deploy ${escapeHtml(competition.deployCount)}</span>
+          </div>
+        </article>
+        <aside class="hero-side">
+          <div class="metric">
+            <span class="metric-label">Current window</span>
+            <span class="metric-value">${escapeHtml(competition.rows.length)}</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Completed</span>
+            <span class="metric-value">${escapeHtml(competition.fixtures.results.length)}</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Upcoming</span>
+            <span class="metric-value">${escapeHtml(competition.fixtures.upcoming.length)}</span>
+          </div>
+        </aside>
+      </section>
+      ${renderEntitySubnav(tabs, "Competition sections")}
+      ${tabContent[selectedCompetitionTab] || overviewContent}
+    `;
+  };
+
+  const competitionsView = () => {
+    const competition = selectedCompetition ? collectCompetitionEntity(selectedCompetition) : null;
+    if (selectedCompetition && competition) {
+      return competitionEntityView(competition);
+    }
+    if (selectedCompetition && !competition) {
+      return `
+        <section class="section">
+          <div class="empty-state">
+            <strong>Competition not found in this window.</strong>
+            <p>The selected competition is not part of the current published fixture-intelligence window yet.</p>
+            <a class="button" href="./competitions.html">Back to competitions</a>
+          </div>
+        </section>
+      `;
+    }
+    return competitionDirectoryView();
+  };
+
+  const teamDirectoryView = () => {
     const teamMap = new Map();
     orderedFixtureRows().forEach((row) => {
       [
-        { name: row.home_team, logo: row.home_team_logo_url, opponent: row.away_team, fixture: row },
-        { name: row.away_team, logo: row.away_team_logo_url, opponent: row.home_team, fixture: row },
+        { name: row.home_team, logo: row.home_team_logo_url, fixture: row },
+        { name: row.away_team, logo: row.away_team_logo_url, fixture: row },
       ].forEach((entry) => {
-        if (!teamMap.has(entry.name)) {
-          teamMap.set(entry.name, {
-            name: entry.name,
-            logo: entry.logo,
-            nextFixture: entry.fixture,
-            opponent: entry.opponent,
-            count: 0,
-          });
+        if (!entry.name) {
+          return;
         }
-        teamMap.get(entry.name).count += 1;
+        if (!teamMap.has(entry.name)) {
+          teamMap.set(entry.name, { name: entry.name, logo: entry.logo, rows: [] });
+        }
+        teamMap.get(entry.name).rows.push(entry.fixture);
       });
     });
     const rows = Array.from(teamMap.values())
-      .sort((left, right) => {
-        const countDiff = right.count - left.count;
-        if (countDiff !== 0) return countDiff;
-        return kickoffTimestamp(left.nextFixture?.kickoff_time) - kickoffTimestamp(right.nextFixture?.kickoff_time);
-      })
-      .slice(0, 12);
+      .sort((left, right) => right.rows.length - left.rows.length || left.name.localeCompare(right.name))
+      .slice(0, 16);
     return `
       <section class="hero">
         <article class="hero-main">
           <p class="hero-kicker">Teams</p>
           <h1>Team-led entry into the board.</h1>
-          <p>This is the first team layer: current-window teams, their next visible fixture, and a quick route into fixture intelligence.</p>
+          <p>Team pages own the current window team story: fixtures, results, current form, and where the model is seeing signal around that side.</p>
+          <div class="pill-row">
+            <span class="stat-chip">Fixtures</span>
+            <span class="stat-chip">Results</span>
+            <span class="stat-chip">Form and intelligence</span>
+          </div>
         </article>
         <aside class="hero-side">
           <div class="metric">
@@ -2244,29 +2603,195 @@
       <section class="section">
         <div class="card-grid">
           ${rows
-            .map(
-              (team) => `
-                <article class="panel">
-                  <div class="fixture-teamline">
-                    ${badgeMarkup(team.logo, team.name)}
-                    <span class="team-name">${escapeHtml(team.name)}</span>
-                  </div>
-                  <p class="muted">Next visible fixture: ${escapeHtml(team.nextFixture?.home_team)} vs ${escapeHtml(team.nextFixture?.away_team)}</p>
-                  <ul class="feature-list compact-list">
-                    <li>League: ${escapeHtml(team.nextFixture?.league || "Unknown")}</li>
-                    <li>Kickoff: ${escapeHtml(formatKickoffLabel(team.nextFixture?.kickoff_time))}</li>
-                    <li>Window mentions: ${escapeHtml(team.count)}</li>
-                  </ul>
-                  <div class="cta-row">
-                    <a class="ghost-button" href="${fixtureDetailHref(team.nextFixture)}">Open fixture intelligence</a>
-                  </div>
-                </article>
-              `
+            .map((team) =>
+              renderDirectoryCard({
+                title: team.name,
+                badgeUrl: team.logo,
+                badgeName: team.name,
+                href: teamPageHref(team.name),
+                summary: "Current-window team desk",
+                metaLines: [
+                  `Window mentions: ${team.rows.length}`,
+                  `Competitions: ${new Set(team.rows.map((row) => row.league).filter(Boolean)).size}`,
+                  `Next visible fixture: ${team.rows[0] ? `${team.rows[0].home_team} vs ${team.rows[0].away_team}` : "—"}`,
+                ],
+                ctaLabel: "Open team desk",
+              })
             )
             .join("")}
         </div>
       </section>
     `;
+  };
+
+  const teamEntityView = (team) => {
+    const tabs = [
+      ["Overview", teamPageHref(team.name, "overview"), selectedTeamTab === "overview"],
+      ["Fixtures", teamPageHref(team.name, "fixtures"), selectedTeamTab === "fixtures"],
+      ["Results", teamPageHref(team.name, "results"), selectedTeamTab === "results"],
+      ["Form", teamPageHref(team.name, "form"), selectedTeamTab === "form"],
+      ["Intelligence", teamPageHref(team.name, "intelligence"), selectedTeamTab === "intelligence"],
+    ];
+    const overviewContent = `
+      <section class="section">
+        <div class="split">
+          <article class="panel">
+            <h3>Team overview</h3>
+            <ul class="feature-list compact-list">
+              <li>Fixtures in current window: ${escapeHtml(team.rows.length)}</li>
+              <li>Deploy rows: ${escapeHtml(team.deployCount)}</li>
+              <li>Observe rows: ${escapeHtml(team.observeCount)}</li>
+              <li>Context / monitor rows: ${escapeHtml(team.contextCount)}</li>
+            </ul>
+          </article>
+          <article class="panel">
+            <h3>Competitions in view</h3>
+            <div class="pill-row">
+              ${team.relatedCompetitions
+                .map(
+                  (league) =>
+                    `<a class="chip chip-reference" href="${competitionPageHref(league)}">${escapeHtml(league)}</a>`
+                )
+                .join("")}
+            </div>
+            <p class="section-copy">Team pages keep the broader team story visible. Final market verdicts and discipline language stay on the fixture page itself.</p>
+          </article>
+        </div>
+      </section>
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>Featured current-window fixtures</h2>
+            <p class="section-copy">The strongest team-linked fixture cards stay close to the top of the desk.</p>
+          </div>
+        </div>
+        ${renderEntityFixtureSection(team.rows.slice(0, 6), "No published fixtures are currently visible for this team.")}
+      </section>
+    `;
+    const fixturesContent = `
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>Upcoming fixtures</h2>
+            <p class="section-copy">Use the team desk to orient around what is ahead, then open the fixture page when you want the full intelligence read.</p>
+          </div>
+        </div>
+        ${renderEntityFixtureSection(
+          team.fixtures.upcoming,
+          "No upcoming fixtures for this team are currently visible in the published window."
+        )}
+      </section>
+    `;
+    const resultsContent = `
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>Recent results in view</h2>
+            <p class="section-copy">These are current-window team fixtures that already look settled or complete.</p>
+          </div>
+        </div>
+        ${renderEntityFixtureSection(
+          team.fixtures.results,
+          "No completed fixtures for this team are currently visible in the published window."
+        )}
+      </section>
+    `;
+    const formContent = `
+      <section class="section">
+        <div class="split">
+          <article
+            class="panel"
+            data-role="team-form-reference"
+            data-team="${escapeHtml(team.name)}"
+            data-team-id="${escapeHtml(team.apiTeamId)}"
+          >
+            <h3>Recent team rhythm</h3>
+            <p class="section-copy">This is the live form layer for the selected team: recent finished results, current scoring rhythm, and near-term shape.</p>
+            <div class="reference-loading">Loading recent team form…</div>
+          </article>
+          <article class="panel">
+            <h3>Context support</h3>
+            <ul class="feature-list compact-list">
+              <li>Form stays team-level here rather than competition-level.</li>
+              <li>The broader league rhythm still matters, but the team page should foreground this side’s recent shape first.</li>
+              <li>If a single fixture matters most, the fixture page still owns the direct deployment call.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+    `;
+    const intelligenceContent = `
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>Team-linked intelligence stream</h2>
+            <p class="section-copy">This is where the current window model output connected to this team stays grouped together.</p>
+          </div>
+        </div>
+        ${renderEntityFixtureSection(team.rows, "No team-linked intelligence cards are visible in the current window yet.")}
+      </section>
+    `;
+    const tabContent = {
+      overview: overviewContent,
+      fixtures: fixturesContent,
+      results: resultsContent,
+      form: formContent,
+      intelligence: intelligenceContent,
+    };
+    return `
+      <section class="hero">
+        <article class="hero-main">
+          <div class="entity-directory-head">
+            ${badgeMarkup(team.logo, team.name, "fixture-hero-badge")}
+            <div>
+              <p class="hero-kicker">Team desk</p>
+              <h1>${escapeHtml(team.name)}</h1>
+            </div>
+          </div>
+          <p>Team pages own the current team story: fixtures, results, recent form, and grouped intelligence. Match verdicts stay inside fixture pages.</p>
+          <div class="pill-row">
+            <span class="stat-chip">Window fixtures ${escapeHtml(team.rows.length)}</span>
+            <span class="stat-chip">Deploy ${escapeHtml(team.deployCount)}</span>
+            <span class="stat-chip">Observe ${escapeHtml(team.observeCount)}</span>
+          </div>
+        </article>
+        <aside class="hero-side">
+          <div class="metric">
+            <span class="metric-label">Competitions</span>
+            <span class="metric-value">${escapeHtml(team.relatedCompetitions.length)}</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Completed</span>
+            <span class="metric-value">${escapeHtml(team.fixtures.results.length)}</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Upcoming</span>
+            <span class="metric-value">${escapeHtml(team.fixtures.upcoming.length)}</span>
+          </div>
+        </aside>
+      </section>
+      ${renderEntitySubnav(tabs, "Team sections")}
+      ${tabContent[selectedTeamTab] || overviewContent}
+    `;
+  };
+
+  const teamsView = () => {
+    const team = selectedTeam ? collectTeamEntity(selectedTeam) : null;
+    if (selectedTeam && team) {
+      return teamEntityView(team);
+    }
+    if (selectedTeam && !team) {
+      return `
+        <section class="section">
+          <div class="empty-state">
+            <strong>Team not found in this window.</strong>
+            <p>The selected team is not part of the current published fixture-intelligence window yet.</p>
+            <a class="button" href="./teams.html">Back to teams</a>
+          </div>
+        </section>
+      `;
+    }
+    return teamDirectoryView();
   };
 
   const predictionsView = () => `
@@ -4977,7 +5502,7 @@
     };
     const view = views[page] || homeView;
     app.innerHTML = view();
-    if (page === "fixture") {
+    if (page === "fixture" || page === "teams" || page === "competitions") {
       hydrateFixtureReferenceWidgets();
     }
   };
@@ -4987,7 +5512,17 @@
     const lineupRoots = Array.from(document.querySelectorAll("[data-role='fixture-lineups-reference']"));
     const scoreboardRoots = Array.from(document.querySelectorAll("[data-role='fixture-scoreboard']"));
     const formRoots = Array.from(document.querySelectorAll("[data-role='fixture-form-reference']"));
-    if ((!lineupRoots.length && !standingsRoots.length && !scoreboardRoots.length && !formRoots.length) || !workerConfigured()) {
+    const competitionStandingsRoots = Array.from(document.querySelectorAll("[data-role='competition-standings-reference']"));
+    const teamFormRoots = Array.from(document.querySelectorAll("[data-role='team-form-reference']"));
+    if (
+      (!lineupRoots.length &&
+        !standingsRoots.length &&
+        !scoreboardRoots.length &&
+        !formRoots.length &&
+        !competitionStandingsRoots.length &&
+        !teamFormRoots.length) ||
+      !workerConfigured()
+    ) {
       return;
     }
     const fixtureLookupCache = new Map();
@@ -5339,6 +5874,85 @@
                 </article>
               </div>
             </div>
+          `;
+        }
+      })
+    );
+    await Promise.all(
+      competitionStandingsRoots.map(async (root) => {
+        try {
+          const frame = root.querySelector(".widget-reference-frame") || root;
+          const leagueId = String(root.dataset.leagueId || "").trim();
+          const season = String(root.dataset.season || "").trim();
+          if (!leagueId || !season) {
+            throw new Error("Competition table is not available for this league yet.");
+          }
+          const rows = await fetchStandingsRows(leagueId, season);
+          if (!rows.length) {
+            throw new Error("Competition table is not available from the upstream source yet.");
+          }
+          frame.innerHTML = `
+            <div class="standings-table">
+              <div class="standings-table-head">
+                <span>Pos</span>
+                <span>Team</span>
+                <span>P</span>
+                <span>GD</span>
+                <span>Pts</span>
+                <span>Form</span>
+              </div>
+              ${rows
+                .slice(0, 10)
+                .map((row) => {
+                  const formDots = String(row?.form || "")
+                    .split("")
+                    .filter(Boolean)
+                    .slice(0, 5)
+                    .map((letter) => {
+                      const tone = letter === "W" ? "w" : letter === "L" ? "l" : "d";
+                      return `<span class="form-pill form-pill-${escapeHtml(tone)}">${escapeHtml(letter)}</span>`;
+                    })
+                    .join("");
+                  return `
+                    <div class="standings-row">
+                      <span>${escapeHtml(row.rank ?? "—")}</span>
+                      <span class="standings-team">
+                        ${badgeMarkup(row?.team?.logo, row?.team?.name || "Team")}
+                        <strong>${escapeHtml(row?.team?.name || "Team")}</strong>
+                      </span>
+                      <span>${escapeHtml(row.all?.played ?? row.played ?? "—")}</span>
+                      <span>${escapeHtml(row.goalsDiff ?? "—")}</span>
+                      <span>${escapeHtml(row.points ?? "—")}</span>
+                      <span class="form-sequence">${formDots || `<span class="muted">—</span>`}</span>
+                    </div>
+                  `;
+                })
+                .join("")}
+            </div>
+          `;
+        } catch (error) {
+          root.innerHTML = `<div class="notice">${escapeHtml(error.message || "Competition table unavailable.")}</div>`;
+        }
+      })
+    );
+    await Promise.all(
+      teamFormRoots.map(async (root) => {
+        try {
+          const teamId = String(root.dataset.teamId || "").trim();
+          if (!teamId) {
+            throw new Error("Recent team form is not available for this side yet.");
+          }
+          const fixtures = await fetchRecentTeamFixtures(teamId);
+          root.innerHTML = `
+            <h3>Recent team rhythm</h3>
+            <p class="section-copy">Live recent-results reference for this side. This gives the team page a cleaner form layer without replacing fixture-level deployment logic.</p>
+            <p class="muted">${escapeHtml(formScoringSummary(fixtures, teamId))}</p>
+            ${renderRecentResults(fixtures, teamId)}
+          `;
+        } catch (error) {
+          root.innerHTML = `
+            <h3>Recent team rhythm</h3>
+            <div class="notice">${escapeHtml(error.message || "Recent team form is not available yet.")}</div>
           `;
         }
       })
