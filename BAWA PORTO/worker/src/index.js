@@ -2297,6 +2297,22 @@ async function handleInternalAccountTimelineRead(request, env, userId) {
   });
 }
 
+function normalizeInternalActionReason(input) {
+  return String(input || "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function validateInternalActionReason(reason, label = "reason") {
+  if (!reason) {
+    return `${label} is required.`;
+  }
+  if (reason.length < 12) {
+    return `${label} must be at least 12 characters so the review trail is meaningful.`;
+  }
+  return null;
+}
+
 async function handleInternalAccountRestrict(request, env, userId) {
   const adminAccess = verifyInternalAdminRequest(request, env);
   if (!adminAccess.ok) {
@@ -2312,7 +2328,11 @@ async function handleInternalAccountRestrict(request, env, userId) {
   } catch (error) {
     return requestError("Restrict body must be valid JSON.", error.message);
   }
-  const reason = String(payload?.reason || "Internal review restriction applied.").trim();
+  const reason = normalizeInternalActionReason(payload?.reason);
+  const reasonError = validateInternalActionReason(reason, "Restriction reason");
+  if (reasonError) {
+    return json({ ok: false, status: "internal_restriction_reason_required", message: reasonError }, 400);
+  }
   const actor = String(payload?.author_id || "internal:operator").trim();
 
   await updateAccountRiskState(accountDb, userId, {
@@ -2360,7 +2380,22 @@ async function handleInternalAccountSuspend(request, env, userId) {
   } catch (error) {
     return requestError("Suspend body must be valid JSON.", error.message);
   }
-  const reason = String(payload?.reason || "Internal suspension applied.").trim();
+  const reason = normalizeInternalActionReason(payload?.reason);
+  const reasonError = validateInternalActionReason(reason, "Suspension reason");
+  if (reasonError) {
+    return json({ ok: false, status: "internal_suspension_reason_required", message: reasonError }, 400);
+  }
+  const confirmation = String(payload?.confirmation || "").trim().toUpperCase();
+  if (confirmation !== "SUSPEND") {
+    return json(
+      {
+        ok: false,
+        status: "internal_suspension_confirmation_required",
+        message: "Type SUSPEND to confirm this action.",
+      },
+      400
+    );
+  }
   const actor = String(payload?.author_id || "internal:operator").trim();
   const sessions = await listAccountSessionsByUser(accountDb, userId, { limit: 24 });
   const revokedAt = nowIso();
@@ -2416,7 +2451,11 @@ async function handleInternalAccountReinstate(request, env, userId) {
   } catch (error) {
     return requestError("Reinstate body must be valid JSON.", error.message);
   }
-  const reason = String(payload?.reason || "Internal reinstatement applied.").trim();
+  const reason = normalizeInternalActionReason(payload?.reason);
+  const reasonError = validateInternalActionReason(reason, "Reinstatement reason");
+  if (reasonError) {
+    return json({ ok: false, status: "internal_reinstatement_reason_required", message: reasonError }, 400);
+  }
   const actor = String(payload?.author_id || "internal:operator").trim();
   const now = nowIso();
   await updateAccountRiskState(accountDb, userId, {
@@ -2469,12 +2508,26 @@ async function handleInternalFlagStatusUpdate(request, env, userId, flagId, next
     return requestError("Flag update body must be valid JSON.", error.message);
   }
   const actor = String(payload?.author_id || "internal:operator").trim();
-  const note = String(payload?.resolution_note || payload?.reason || "").trim();
+  const note = normalizeInternalActionReason(payload?.resolution_note || payload?.reason);
+  const noteError = validateInternalActionReason(
+    note,
+    nextStatus === "dismissed" ? "Dismissal note" : "Resolution note"
+  );
+  if (noteError) {
+    return json(
+      {
+        ok: false,
+        status: nextStatus === "dismissed" ? "internal_flag_dismissal_note_required" : "internal_flag_resolution_note_required",
+        message: noteError,
+      },
+      400
+    );
+  }
   await updateAccountRiskFlagStatus(accountDb, flagId, {
     flag_status: nextStatus,
     resolved_at: nowIso(),
     resolved_by: actor,
-    resolution_note: note || `${nextStatus} by internal review.`,
+    resolution_note: note,
   });
   await recordAuthEvent(accountDb, {
     user_id: userId,
@@ -2483,18 +2536,16 @@ async function handleInternalFlagStatusUpdate(request, env, userId, flagId, next
       flag_id: flagId,
       status: nextStatus,
       author_id: actor,
-      resolution_note: note || null,
+      resolution_note: note,
     },
   });
-  if (note) {
-    await addAccountAdminNote(accountDb, {
-      user_id: userId,
-      note_type: "risk_note",
-      visibility: "internal",
-      author_id: actor,
-      content: `${nextStatus === "dismissed" ? "Flag dismissed" : "Flag resolved"}: ${note}`,
-    });
-  }
+  await addAccountAdminNote(accountDb, {
+    user_id: userId,
+    note_type: "risk_note",
+    visibility: "internal",
+    author_id: actor,
+    content: `${nextStatus === "dismissed" ? "Flag dismissed" : "Flag resolved"}: ${note}`,
+  });
   return json({
     ok: true,
     status: nextStatus === "dismissed" ? "internal_flag_dismissed" : "internal_flag_resolved",

@@ -1472,6 +1472,19 @@ const testInternalAccountReviewActions = async (fetchHarness) => {
   assert.equal(restrictPayload.status, "internal_account_restricted");
   assert.equal(restrictPayload.account_summary.risk_state.account_status, "restricted");
 
+  const badRestrictResponse = await worker.fetch(
+    jsonRequest(
+      `http://localhost/internal/accounts/${encodeURIComponent(userId)}/restrict`,
+      "POST",
+      { reason: "too short", author_id: "internal:test" },
+      { "x-og-internal-admin": env.INTERNAL_ADMIN_SECRET }
+    ),
+    env
+  );
+  const badRestrictPayload = await badRestrictResponse.json();
+  assert.equal(badRestrictResponse.status, 400);
+  assert.equal(badRestrictPayload.status, "internal_restriction_reason_required");
+
   const resolveResponse = await worker.fetch(
     jsonRequest(
       `http://localhost/internal/accounts/${encodeURIComponent(userId)}/flags/${encodeURIComponent(targetFlagId)}/resolve`,
@@ -1507,7 +1520,11 @@ const testInternalAccountReviewActions = async (fetchHarness) => {
     jsonRequest(
       `http://localhost/internal/accounts/${encodeURIComponent(userId)}/suspend`,
       "POST",
-      { reason: "Confirmed misuse", author_id: "internal:test" },
+      {
+        reason: "Confirmed misuse after manual review.",
+        confirmation: "SUSPEND",
+        author_id: "internal:test",
+      },
       { "x-og-internal-admin": env.INTERNAL_ADMIN_SECRET }
     ),
     env
@@ -1529,6 +1546,19 @@ const testInternalAccountReviewActions = async (fetchHarness) => {
   assert.equal(suspendedSessionResponse.status, 200);
   assert.equal(suspendedSessionPayload.authenticated, false);
   assert.equal(suspendedSessionPayload.status, "revoked_session");
+
+  const badSuspendResponse = await worker.fetch(
+    jsonRequest(
+      `http://localhost/internal/accounts/${encodeURIComponent(userId)}/suspend`,
+      "POST",
+      { reason: "Confirmed misuse after manual review.", author_id: "internal:test" },
+      { "x-og-internal-admin": env.INTERNAL_ADMIN_SECRET }
+    ),
+    env
+  );
+  const badSuspendPayload = await badSuspendResponse.json();
+  assert.equal(badSuspendResponse.status, 400);
+  assert.equal(badSuspendPayload.status, "internal_suspension_confirmation_required");
 
   const reinstateResponse = await worker.fetch(
     jsonRequest(

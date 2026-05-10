@@ -4237,6 +4237,18 @@
     state.runtime.internalReviewMessage = payload.message || successMessage;
   };
 
+  const promptInternalActionReason = (title, defaultText) => {
+    const response = window.prompt(title, defaultText || "") || "";
+    const reason = response.replace(/\s+/g, " ").trim();
+    if (!reason) {
+      return { ok: false, message: "A short review reason is required." };
+    }
+    if (reason.length < 12) {
+      return { ok: false, message: "Use at least 12 characters so the review trail stays useful." };
+    }
+    return { ok: true, reason };
+  };
+
   const restrictInternalAccount = async (event) => {
     event.preventDefault();
     if (!state.runtime.internalSelectedUserId) {
@@ -4244,8 +4256,13 @@
       render();
       return;
     }
-    const reason = window.prompt("Restriction reason", "Account moved into restricted review state.") || "";
-    if (!reason.trim()) {
+    const reasonPrompt = promptInternalActionReason(
+      "Restriction reason",
+      "Account moved into restricted review state pending further review."
+    );
+    if (!reasonPrompt.ok) {
+      state.runtime.internalLookupMessage = reasonPrompt.message;
+      render();
       return;
     }
     state.runtime.internalLookupMessage = "";
@@ -4255,7 +4272,7 @@
       await runInternalAccountAction(
         `/internal/accounts/${encodeURIComponent(state.runtime.internalSelectedUserId)}/restrict`,
         "Account restricted.",
-        { reason, author_id: "internal:web-shell" }
+        { reason: reasonPrompt.reason, author_id: "internal:web-shell" }
       );
     } catch (error) {
       state.runtime.internalLookupMessage = error.message || "Unable to restrict this account.";
@@ -4271,8 +4288,19 @@
       render();
       return;
     }
-    const reason = window.prompt("Suspension reason", "Account suspended after internal review.") || "";
-    if (!reason.trim()) {
+    const reasonPrompt = promptInternalActionReason(
+      "Suspension reason",
+      "Confirmed misuse after internal review."
+    );
+    if (!reasonPrompt.ok) {
+      state.runtime.internalLookupMessage = reasonPrompt.message;
+      render();
+      return;
+    }
+    const confirmation = (window.prompt("Type SUSPEND to confirm", "") || "").trim().toUpperCase();
+    if (confirmation !== "SUSPEND") {
+      state.runtime.internalLookupMessage = "Suspension cancelled. Type SUSPEND exactly to continue.";
+      render();
       return;
     }
     state.runtime.internalLookupMessage = "";
@@ -4282,7 +4310,7 @@
       await runInternalAccountAction(
         `/internal/accounts/${encodeURIComponent(state.runtime.internalSelectedUserId)}/suspend`,
         "Account suspended.",
-        { reason, author_id: "internal:web-shell" }
+        { reason: reasonPrompt.reason, confirmation, author_id: "internal:web-shell" }
       );
     } catch (error) {
       state.runtime.internalLookupMessage = error.message || "Unable to suspend this account.";
@@ -4298,8 +4326,13 @@
       render();
       return;
     }
-    const reason = window.prompt("Reinstatement reason", "Account reinstated after internal review.") || "";
-    if (!reason.trim()) {
+    const reasonPrompt = promptInternalActionReason(
+      "Reinstatement reason",
+      "Ownership and account standing verified after review."
+    );
+    if (!reasonPrompt.ok) {
+      state.runtime.internalLookupMessage = reasonPrompt.message;
+      render();
       return;
     }
     state.runtime.internalLookupMessage = "";
@@ -4309,7 +4342,7 @@
       await runInternalAccountAction(
         `/internal/accounts/${encodeURIComponent(state.runtime.internalSelectedUserId)}/reinstate`,
         "Account reinstated.",
-        { reason, author_id: "internal:web-shell" }
+        { reason: reasonPrompt.reason, author_id: "internal:web-shell" }
       );
     } catch (error) {
       state.runtime.internalLookupMessage = error.message || "Unable to reinstate this account.";
@@ -4331,7 +4364,15 @@
         : `Resolve ${flagType || "this flag"}`,
       status === "dismiss" ? "False positive or no further action needed." : "Review completed and resolved."
     ) || "";
-    if (!reason.trim()) {
+    const normalizedReason = reason.replace(/\s+/g, " ").trim();
+    if (!normalizedReason) {
+      state.runtime.internalLookupMessage = "A short review note is required.";
+      render();
+      return;
+    }
+    if (normalizedReason.length < 12) {
+      state.runtime.internalLookupMessage = "Use at least 12 characters so the review trail stays useful.";
+      render();
       return;
     }
     state.runtime.internalLookupMessage = "";
@@ -4342,7 +4383,7 @@
       await runInternalAccountAction(
         `/internal/accounts/${encodeURIComponent(state.runtime.internalSelectedUserId)}/flags/${encodeURIComponent(flagId)}/${status === "dismiss" ? "dismiss" : "resolve"}`,
         status === "dismiss" ? "Flag dismissed." : "Flag resolved.",
-        { resolution_note: reason, author_id: "internal:web-shell" }
+        { resolution_note: normalizedReason, author_id: "internal:web-shell" }
       );
     } catch (error) {
       state.runtime.internalLookupMessage = error.message || "Unable to update the flag.";
