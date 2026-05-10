@@ -1,6 +1,7 @@
 (function () {
   const DATA_ROOT = "./public/data";
   const PREMIUM_TOKEN_STORAGE_KEY = "og_premium_token";
+  const INTERNAL_ADMIN_KEY_STORAGE_KEY = "og_internal_admin_key";
   const app = document.getElementById("app");
   const page = document.body.dataset.page || "home";
   const query = new URLSearchParams(window.location.search);
@@ -53,6 +54,15 @@
       telegramLinkExpiresAt: "",
       telegramBotUsername: "",
       telegramDeepLinkUrl: "",
+      internalAdminKey: "",
+      internalLookupMessage: "",
+      internalReviewMessage: "",
+      internalSelectedUserId: "",
+      internalLookupEmail: "",
+      internalAccountSummary: null,
+      internalFlags: [],
+      internalNotes: [],
+      internalTimeline: [],
     },
   };
 
@@ -99,6 +109,24 @@
       return;
     }
   };
+  const readStoredInternalAdminKey = () => {
+    try {
+      return window.localStorage.getItem(INTERNAL_ADMIN_KEY_STORAGE_KEY) || "";
+    } catch {
+      return "";
+    }
+  };
+  const writeStoredInternalAdminKey = (value) => {
+    try {
+      if (value) {
+        window.localStorage.setItem(INTERNAL_ADMIN_KEY_STORAGE_KEY, value);
+      } else {
+        window.localStorage.removeItem(INTERNAL_ADMIN_KEY_STORAGE_KEY);
+      }
+    } catch {
+      return;
+    }
+  };
 
   const workerConfigured = () => Boolean(state.runtime.workerApiBase);
   const premiumTokenPresent = () => Boolean(state.runtime.premiumToken);
@@ -118,6 +146,29 @@
     }
     if (options.withToken && state.runtime.premiumToken) {
       headers.set("authorization", `Bearer ${state.runtime.premiumToken}`);
+    }
+    const response = await fetch(workerApiUrl(path), {
+      method: options.method || "GET",
+      headers,
+      body: options.body ? JSON.stringify(options.body) : undefined,
+      credentials: "include",
+    });
+    let payload = null;
+    try {
+      payload = await response.json();
+    } catch {
+      payload = null;
+    }
+    return { response, payload };
+  };
+  const fetchInternalWorkerJson = async (path, options = {}) => {
+    const headers = new Headers(options.headers || {});
+    headers.set("accept", "application/json");
+    if (options.body && !headers.has("content-type")) {
+      headers.set("content-type", "application/json");
+    }
+    if (state.runtime.internalAdminKey) {
+      headers.set("x-og-internal-admin", state.runtime.internalAdminKey);
     }
     const response = await fetch(workerApiUrl(path), {
       method: options.method || "GET",
@@ -2845,6 +2896,232 @@
     `;
   };
 
+  const internalReviewView = () => {
+    const hasKey = Boolean(state.runtime.internalAdminKey);
+    const summary = state.runtime.internalAccountSummary;
+    const flags = Array.isArray(state.runtime.internalFlags) ? state.runtime.internalFlags : [];
+    const notes = Array.isArray(state.runtime.internalNotes) ? state.runtime.internalNotes : [];
+    const timeline = Array.isArray(state.runtime.internalTimeline) ? state.runtime.internalTimeline : [];
+
+    if (!hasKey) {
+      return `
+        <section class="section split">
+          <article class="hero-main">
+            <p class="hero-kicker">Operator review</p>
+            <h1>Open the private account review desk.</h1>
+            <p>This page is for internal account review only. Add the operator key locally on this device to load the review surface.</p>
+          </article>
+          <aside class="hero-side">
+            <div class="metric">
+              <span class="metric-label">Access</span>
+              <span class="metric-value">Locked</span>
+            </div>
+            <div class="metric">
+              <span class="metric-label">Use</span>
+              <span class="metric-value">Internal only</span>
+            </div>
+          </aside>
+        </section>
+        <section class="section">
+          ${renderNotice(state.runtime.internalLookupMessage, state.runtime.internalLookupMessage ? "warning" : "default")}
+          <article class="panel">
+            <h3>Operator key</h3>
+            <p class="muted">Store the operator key only on this browser if you are actively using the review desk.</p>
+            <form id="internal-admin-form" class="stack-form">
+              <label class="field-label" for="internal-admin-key">Operator key</label>
+              <input id="internal-admin-key" name="internal_admin_key" class="text-input" type="password" placeholder="Paste operator key" autocomplete="off" />
+              <div class="cta-row">
+                <button class="button" type="submit">Save operator key</button>
+              </div>
+            </form>
+          </article>
+        </section>
+      `;
+    }
+
+    return `
+      <section class="section split">
+        <article class="hero-main">
+          <p class="hero-kicker">Operator review</p>
+          <h1>Account review desk.</h1>
+          <p>Use this internal page to inspect account posture, review flags, read timeline evidence, and leave operator notes before stronger actions go live.</p>
+          <div class="cta-row">
+            <button class="ghost-button" type="button" data-action="clear-internal-admin-key">Clear key</button>
+          </div>
+        </article>
+        <aside class="hero-side">
+          <div class="metric">
+            <span class="metric-label">Review state</span>
+            <span class="metric-value">${summary?.risk_state?.review_status ? escapeHtml(titleCase(String(summary.risk_state.review_status).replaceAll("_", " "))) : "Waiting"}</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Risk level</span>
+            <span class="metric-value">${summary?.risk_state?.risk_level ? escapeHtml(titleCase(summary.risk_state.risk_level)) : "Unknown"}</span>
+          </div>
+        </aside>
+      </section>
+      <section class="section">
+        ${renderNotice(state.runtime.internalLookupMessage, state.runtime.internalLookupMessage ? "warning" : "default")}
+        ${renderNotice(state.runtime.internalReviewMessage, state.runtime.internalReviewMessage ? "success" : "default")}
+        <article class="panel">
+          <h3>Find account</h3>
+          <form id="internal-account-lookup-form" class="stack-form">
+            <div class="card-grid">
+              <article class="panel">
+                <label class="field-label" for="internal-lookup-email">Account email</label>
+                <input id="internal-lookup-email" name="internal_lookup_email" class="text-input" type="email" placeholder="member@example.com" value="${escapeHtml(state.runtime.internalLookupEmail || "")}" />
+                <p class="muted">Use email for the first lookup, then the desk will hold the account id for follow-on reads.</p>
+              </article>
+              <article class="panel">
+                <label class="field-label" for="internal-lookup-user-id">Account id</label>
+                <input id="internal-lookup-user-id" name="internal_lookup_user_id" class="text-input" type="text" placeholder="user_..." value="${escapeHtml(state.runtime.internalSelectedUserId || "")}" />
+                <p class="muted">Direct id lookup is useful when you already know the account you want to review.</p>
+              </article>
+            </div>
+            <div class="cta-row">
+              <button class="button" type="submit">Load account</button>
+              ${
+                summary?.user?.id
+                  ? `<button class="ghost-button" type="button" data-action="refresh-internal-account">Refresh desk</button>`
+                  : ""
+              }
+            </div>
+          </form>
+        </article>
+      </section>
+      ${
+        summary?.user?.id
+          ? `
+            <section class="section split">
+              <article class="panel">
+                <h3>Account summary</h3>
+                <ul class="feature-list">
+                  <li>Email: ${escapeHtml(summary.user.email || "Unknown")}</li>
+                  <li>Account id: ${escapeHtml(summary.user.id || "Unknown")}</li>
+                  <li>Membership: ${escapeHtml(summary.subscription?.subscription_status || "Unknown")}</li>
+                  <li>Account status: ${escapeHtml(summary.risk_state?.account_status || summary.user.account_status || "Unknown")}</li>
+                  <li>Risk level: ${escapeHtml(summary.risk_state?.risk_level || "Unknown")}</li>
+                  <li>Risk score: ${escapeHtml(summary.risk_state?.risk_score ?? "0")}</li>
+                  <li>Review status: ${escapeHtml(summary.risk_state?.review_status || "clear")}</li>
+                  <li>Open flags: ${escapeHtml(summary.open_flags_count ?? 0)}</li>
+                </ul>
+              </article>
+              <article class="panel">
+                <h3>Session view</h3>
+                <ul class="feature-list">
+                  <li>Active sessions: ${escapeHtml(summary.session_summary?.active_session_count ?? 0)}</li>
+                  <li>Recent sessions: ${escapeHtml(summary.session_summary?.recent_session_count ?? 0)}</li>
+                  <li>Distinct devices: ${escapeHtml(summary.session_summary?.distinct_device_count ?? 0)}</li>
+                  <li>Distinct IP hashes: ${escapeHtml(summary.session_summary?.distinct_ip_hash_count ?? 0)}</li>
+                  <li>Primary device: ${escapeHtml(summary.session_summary?.primary_device_label || "None")}</li>
+                  <li>Telegram: ${escapeHtml(summary.telegram_link?.link_status || "Not linked")}</li>
+                </ul>
+              </article>
+            </section>
+            <section class="section split">
+              <article class="panel">
+                <h3>Open flags</h3>
+                ${
+                  flags.length
+                    ? `<div class="card-grid">${flags
+                        .map(
+                          (flag) => `
+                            <article class="panel">
+                              <div class="pill-row">
+                                <span class="stat-chip">${escapeHtml(flag.severity || "unknown")}</span>
+                                <span class="stat-chip">${escapeHtml(flag.flag_status || "open")}</span>
+                              </div>
+                              <strong>${escapeHtml(flag.flag_type || "flag")}</strong>
+                              <p class="muted">${escapeHtml(flag.summary || "")}</p>
+                              <ul class="feature-list">
+                                <li>Source: ${escapeHtml(flag.source || "system")}</li>
+                                <li>Opened: ${escapeHtml(formatDateTime(flag.opened_at) || "Unknown")}</li>
+                              </ul>
+                            </article>
+                          `
+                        )
+                        .join("")}</div>`
+                    : `<div class="notice">No risk flags are open for this account.</div>`
+                }
+              </article>
+              <article class="panel">
+                <h3>Actions</h3>
+                <p class="muted">Enforcement is intentionally not live in this shell yet. This first pass is for review visibility and note capture.</p>
+                <div class="cta-row">
+                  <button class="ghost-button" type="button" disabled>Restrict soon</button>
+                  <button class="ghost-button" type="button" disabled>Suspend soon</button>
+                  <button class="ghost-button" type="button" disabled>Reinstate soon</button>
+                </div>
+              </article>
+            </section>
+            <section class="section split">
+              <article class="panel">
+                <h3>Timeline</h3>
+                ${
+                  timeline.length
+                    ? `<div class="card-grid">${timeline
+                        .slice(0, 18)
+                        .map(
+                          (item) => `
+                            <article class="panel">
+                              <div class="pill-row">
+                                <span class="stat-chip">${escapeHtml(item.source_type || "event")}</span>
+                              </div>
+                              <strong>${escapeHtml(item.event_type || "event")}</strong>
+                              <p class="muted">${escapeHtml(item.summary || "")}</p>
+                              <ul class="feature-list">
+                                <li>When: ${escapeHtml(formatDateTime(item.timestamp) || "Unknown")}</li>
+                                ${item.device_label ? `<li>Device: ${escapeHtml(item.device_label)}</li>` : ""}
+                              </ul>
+                            </article>
+                          `
+                        )
+                        .join("")}</div>`
+                    : `<div class="notice">No timeline items are available for this account yet.</div>`
+                }
+              </article>
+              <article class="panel">
+                <h3>Notes</h3>
+                <form id="internal-note-form" class="stack-form">
+                  <label class="field-label" for="internal-note-type">Note type</label>
+                  <select id="internal-note-type" name="internal_note_type" class="text-input">
+                    <option value="support_note">Support note</option>
+                    <option value="billing_note">Billing note</option>
+                    <option value="risk_note">Risk note</option>
+                    <option value="reinstatement_note">Reinstatement note</option>
+                  </select>
+                  <label class="field-label" for="internal-note-content">Note</label>
+                  <textarea id="internal-note-content" name="internal_note_content" class="text-input" rows="5" placeholder="Add an internal review note"></textarea>
+                  <div class="cta-row">
+                    <button class="button" type="submit">Add note</button>
+                  </div>
+                </form>
+                ${
+                  notes.length
+                    ? `<div class="card-grid">${notes
+                        .slice(0, 12)
+                        .map(
+                          (note) => `
+                            <article class="panel">
+                              <div class="pill-row">
+                                <span class="stat-chip">${escapeHtml(note.note_type || "note")}</span>
+                              </div>
+                              <p>${escapeHtml(note.content || "")}</p>
+                              <p class="muted">${escapeHtml(formatDateTime(note.created_at) || "Unknown")} ${note.author_id ? `· ${escapeHtml(note.author_id)}` : ""}</p>
+                            </article>
+                          `
+                        )
+                        .join("")}</div>`
+                    : `<div class="notice">No internal notes exist for this account yet.</div>`
+                }
+              </article>
+            </section>
+          `
+          : ""
+      }
+    `;
+  };
+
   const sourceWindowLabel = () => {
     const source = state.summary?.selected_source_csv || "";
     const parts = source.split("/");
@@ -3269,6 +3546,7 @@
       methodology: methodologyView,
       account: accountView,
       onboarding: onboardingView,
+      "internal-review": internalReviewView,
     };
     const view = views[page] || homeView;
     app.innerHTML = view();
@@ -3755,6 +4033,186 @@
     render();
   };
 
+  const loadInternalAccountBundle = async (userId) => {
+    const targetUserId = String(userId || state.runtime.internalSelectedUserId || "").trim();
+    if (!workerConfigured() || !targetUserId || !state.runtime.internalAdminKey) {
+      return;
+    }
+    state.runtime.internalAccountSummary = null;
+    state.runtime.internalFlags = [];
+    state.runtime.internalNotes = [];
+    state.runtime.internalTimeline = [];
+
+    const [summaryResult, flagsResult, notesResult, timelineResult] = await Promise.all([
+      fetchInternalWorkerJson(`/internal/accounts/${encodeURIComponent(targetUserId)}`),
+      fetchInternalWorkerJson(`/internal/accounts/${encodeURIComponent(targetUserId)}/flags`),
+      fetchInternalWorkerJson(`/internal/accounts/${encodeURIComponent(targetUserId)}/notes`),
+      fetchInternalWorkerJson(`/internal/accounts/${encodeURIComponent(targetUserId)}/timeline`),
+    ]);
+
+    if (!summaryResult.response.ok || !summaryResult.payload?.ok) {
+      throw new Error(summaryResult.payload?.message || "Unable to load account summary.");
+    }
+    if (!flagsResult.response.ok || !flagsResult.payload?.ok) {
+      throw new Error(flagsResult.payload?.message || "Unable to load account flags.");
+    }
+    if (!notesResult.response.ok || !notesResult.payload?.ok) {
+      throw new Error(notesResult.payload?.message || "Unable to load account notes.");
+    }
+    if (!timelineResult.response.ok || !timelineResult.payload?.ok) {
+      throw new Error(timelineResult.payload?.message || "Unable to load account timeline.");
+    }
+
+    state.runtime.internalAccountSummary = summaryResult.payload.account_summary || null;
+    state.runtime.internalFlags = Array.isArray(flagsResult.payload.flags) ? flagsResult.payload.flags : [];
+    state.runtime.internalNotes = Array.isArray(notesResult.payload.notes) ? notesResult.payload.notes : [];
+    state.runtime.internalTimeline = Array.isArray(timelineResult.payload.timeline) ? timelineResult.payload.timeline : [];
+    state.runtime.internalSelectedUserId = targetUserId;
+  };
+
+  const saveInternalAdminKey = async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const key = String(formData.get("internal_admin_key") || "").trim();
+    if (!key) {
+      state.runtime.internalLookupMessage = "Add the operator key before opening the review desk.";
+      render();
+      return;
+    }
+    writeStoredInternalAdminKey(key);
+    state.runtime.internalAdminKey = key;
+    state.runtime.internalLookupMessage = "";
+    state.runtime.internalReviewMessage = "Operator key saved for this browser.";
+    render();
+  };
+
+  const clearInternalAdminKey = async (event) => {
+    event.preventDefault();
+    writeStoredInternalAdminKey("");
+    state.runtime.internalAdminKey = "";
+    state.runtime.internalSelectedUserId = "";
+    state.runtime.internalLookupEmail = "";
+    state.runtime.internalAccountSummary = null;
+    state.runtime.internalFlags = [];
+    state.runtime.internalNotes = [];
+    state.runtime.internalTimeline = [];
+    state.runtime.internalLookupMessage = "";
+    state.runtime.internalReviewMessage = "Operator key cleared from this browser.";
+    render();
+  };
+
+  const lookupInternalAccount = async (event) => {
+    event.preventDefault();
+    if (!workerConfigured() || !state.runtime.internalAdminKey) {
+      state.runtime.internalLookupMessage = "Save the operator key first.";
+      render();
+      return;
+    }
+    const formData = new FormData(event.target);
+    const email = String(formData.get("internal_lookup_email") || "").trim();
+    const userId = String(formData.get("internal_lookup_user_id") || "").trim();
+    if (!email && !userId) {
+      state.runtime.internalLookupMessage = "Add an account email or account id to continue.";
+      render();
+      return;
+    }
+
+    state.runtime.internalLookupMessage = "";
+    state.runtime.internalReviewMessage = "Loading account review desk…";
+    render();
+
+    try {
+      if (userId) {
+        state.runtime.internalLookupEmail = email;
+        await loadInternalAccountBundle(userId);
+      } else {
+        const { response, payload } = await fetchInternalWorkerJson(
+          `/internal/accounts/lookup?email=${encodeURIComponent(email)}`
+        );
+        if (!response.ok || !payload?.ok) {
+          throw new Error(payload?.message || "Unable to find that account.");
+        }
+        const resolvedUserId = String(payload.account_summary?.user?.id || "").trim();
+        state.runtime.internalLookupEmail = email;
+        state.runtime.internalSelectedUserId = resolvedUserId;
+        state.runtime.internalAccountSummary = payload.account_summary || null;
+        await loadInternalAccountBundle(resolvedUserId);
+      }
+      state.runtime.internalReviewMessage = "Account review desk loaded.";
+    } catch (error) {
+      state.runtime.internalLookupMessage = error.message || "Unable to load the account review desk.";
+      state.runtime.internalReviewMessage = "";
+    }
+
+    render();
+  };
+
+  const refreshInternalAccount = async (event) => {
+    event.preventDefault();
+    if (!state.runtime.internalSelectedUserId) {
+      state.runtime.internalLookupMessage = "Load an account first.";
+      render();
+      return;
+    }
+    state.runtime.internalLookupMessage = "";
+    state.runtime.internalReviewMessage = "Refreshing account review desk…";
+    render();
+    try {
+      await loadInternalAccountBundle(state.runtime.internalSelectedUserId);
+      state.runtime.internalReviewMessage = "Account review desk refreshed.";
+    } catch (error) {
+      state.runtime.internalLookupMessage = error.message || "Unable to refresh the account review desk.";
+      state.runtime.internalReviewMessage = "";
+    }
+    render();
+  };
+
+  const addInternalNote = async (event) => {
+    event.preventDefault();
+    if (!workerConfigured() || !state.runtime.internalAdminKey || !state.runtime.internalSelectedUserId) {
+      state.runtime.internalLookupMessage = "Load an account before adding a note.";
+      render();
+      return;
+    }
+    const formData = new FormData(event.target);
+    const noteType = String(formData.get("internal_note_type") || "support_note").trim();
+    const content = String(formData.get("internal_note_content") || "").trim();
+    if (!content) {
+      state.runtime.internalLookupMessage = "Write the note before saving it.";
+      render();
+      return;
+    }
+
+    state.runtime.internalLookupMessage = "";
+    state.runtime.internalReviewMessage = "Saving note…";
+    render();
+
+    try {
+      const { response, payload } = await fetchInternalWorkerJson(
+        `/internal/accounts/${encodeURIComponent(state.runtime.internalSelectedUserId)}/notes`,
+        {
+          method: "POST",
+          body: {
+            note_type: noteType,
+            content,
+            author_id: "internal:web-shell",
+          },
+        }
+      );
+      if (!response.ok || !payload?.ok) {
+        throw new Error(payload?.message || "Unable to add the note.");
+      }
+      await loadInternalAccountBundle(state.runtime.internalSelectedUserId);
+      state.runtime.internalReviewMessage = "Note added to the account review desk.";
+      event.target.reset();
+    } catch (error) {
+      state.runtime.internalLookupMessage = error.message || "Unable to add the note.";
+      state.runtime.internalReviewMessage = "";
+    }
+
+    render();
+  };
+
   const revokeAccountSession = async (event, sessionId, sessionLabel) => {
     event.preventDefault();
     if (!workerConfigured() || !state.runtime.sessionAuthenticated) {
@@ -4022,6 +4480,18 @@
         makePrimaryTarget.dataset.sessionId,
         makePrimaryTarget.dataset.sessionLabel
       );
+      return;
+    }
+
+    const clearInternalAdminKeyTarget = event.target.closest("[data-action='clear-internal-admin-key']");
+    if (clearInternalAdminKeyTarget) {
+      await clearInternalAdminKey(event);
+      return;
+    }
+
+    const refreshInternalAccountTarget = event.target.closest("[data-action='refresh-internal-account']");
+    if (refreshInternalAccountTarget) {
+      await refreshInternalAccount(event);
     }
   });
 
@@ -4038,12 +4508,27 @@
 
     if (event.target.id === "preferences-form" || event.target.id === "onboarding-form") {
       await savePreferences(event);
+      return;
+    }
+
+    if (event.target.id === "internal-admin-form") {
+      await saveInternalAdminKey(event);
+      return;
+    }
+
+    if (event.target.id === "internal-account-lookup-form") {
+      await lookupInternalAccount(event);
+      return;
+    }
+
+    if (event.target.id === "internal-note-form") {
+      await addInternalNote(event);
     }
   });
 
   const boot = async () => {
     let loadingMessage = "Loading published board…";
-    if (page === "account" || page === "dashboard" || page === "onboarding") {
+    if (page === "account" || page === "dashboard" || page === "onboarding" || page === "internal-review") {
       loadingMessage =
         checkoutState === "success"
           ? "Membership confirmed. Please verify your email to continue…"
@@ -4051,6 +4536,8 @@
             ? "Loading your intelligence dashboard…"
             : page === "onboarding"
               ? "Loading your onboarding flow…"
+              : page === "internal-review"
+                ? "Loading operator review desk…"
               : "Loading your account access…";
     } else if (page === "premium") {
       loadingMessage = "Checking premium access…";
@@ -4058,6 +4545,7 @@
     app.innerHTML = `<div class="loading">${escapeHtml(loadingMessage)}</div>`;
     syncActiveNav();
     state.runtime.premiumToken = readStoredPremiumToken();
+    state.runtime.internalAdminKey = readStoredInternalAdminKey();
     await loadAuthSession();
     await loadAccountState();
     await loadAccountSessions();
