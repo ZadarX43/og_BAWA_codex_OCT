@@ -3037,6 +3037,10 @@
                                 <li>Source: ${escapeHtml(flag.source || "system")}</li>
                                 <li>Opened: ${escapeHtml(formatDateTime(flag.opened_at) || "Unknown")}</li>
                               </ul>
+                              <div class="cta-row">
+                                <button class="ghost-button" type="button" data-action="internal-resolve-flag" data-flag-id="${escapeHtml(flag.id)}" data-flag-type="${escapeHtml(flag.flag_type || "flag")}">Resolve</button>
+                                <button class="ghost-button" type="button" data-action="internal-dismiss-flag" data-flag-id="${escapeHtml(flag.id)}" data-flag-type="${escapeHtml(flag.flag_type || "flag")}">Dismiss</button>
+                              </div>
                             </article>
                           `
                         )
@@ -3046,11 +3050,11 @@
               </article>
               <article class="panel">
                 <h3>Actions</h3>
-                <p class="muted">Enforcement is intentionally not live in this shell yet. This first pass is for review visibility and note capture.</p>
+                <p class="muted">Use these controls carefully. This shell now writes real backend review state and suspension decisions.</p>
                 <div class="cta-row">
-                  <button class="ghost-button" type="button" disabled>Restrict soon</button>
-                  <button class="ghost-button" type="button" disabled>Suspend soon</button>
-                  <button class="ghost-button" type="button" disabled>Reinstate soon</button>
+                  <button class="ghost-button" type="button" data-action="internal-restrict-account">Restrict</button>
+                  <button class="ghost-button" type="button" data-action="internal-suspend-account">Suspend</button>
+                  <button class="ghost-button" type="button" data-action="internal-reinstate-account">Reinstate</button>
                 </div>
               </article>
             </section>
@@ -4213,6 +4217,140 @@
     render();
   };
 
+  const runInternalAccountAction = async (path, successMessage, body = {}) => {
+    const { response, payload } = await fetchInternalWorkerJson(path, {
+      method: "POST",
+      body,
+    });
+    if (!response.ok || !payload?.ok) {
+      throw new Error(payload?.message || "Unable to update internal review state.");
+    }
+    if (payload.account_summary) {
+      state.runtime.internalAccountSummary = payload.account_summary;
+    }
+    if (Array.isArray(payload.flags)) {
+      state.runtime.internalFlags = payload.flags;
+    }
+    if (state.runtime.internalSelectedUserId) {
+      await loadInternalAccountBundle(state.runtime.internalSelectedUserId);
+    }
+    state.runtime.internalReviewMessage = payload.message || successMessage;
+  };
+
+  const restrictInternalAccount = async (event) => {
+    event.preventDefault();
+    if (!state.runtime.internalSelectedUserId) {
+      state.runtime.internalLookupMessage = "Load an account before applying review actions.";
+      render();
+      return;
+    }
+    const reason = window.prompt("Restriction reason", "Account moved into restricted review state.") || "";
+    if (!reason.trim()) {
+      return;
+    }
+    state.runtime.internalLookupMessage = "";
+    state.runtime.internalReviewMessage = "Applying restriction…";
+    render();
+    try {
+      await runInternalAccountAction(
+        `/internal/accounts/${encodeURIComponent(state.runtime.internalSelectedUserId)}/restrict`,
+        "Account restricted.",
+        { reason, author_id: "internal:web-shell" }
+      );
+    } catch (error) {
+      state.runtime.internalLookupMessage = error.message || "Unable to restrict this account.";
+      state.runtime.internalReviewMessage = "";
+    }
+    render();
+  };
+
+  const suspendInternalAccount = async (event) => {
+    event.preventDefault();
+    if (!state.runtime.internalSelectedUserId) {
+      state.runtime.internalLookupMessage = "Load an account before applying review actions.";
+      render();
+      return;
+    }
+    const reason = window.prompt("Suspension reason", "Account suspended after internal review.") || "";
+    if (!reason.trim()) {
+      return;
+    }
+    state.runtime.internalLookupMessage = "";
+    state.runtime.internalReviewMessage = "Suspending account…";
+    render();
+    try {
+      await runInternalAccountAction(
+        `/internal/accounts/${encodeURIComponent(state.runtime.internalSelectedUserId)}/suspend`,
+        "Account suspended.",
+        { reason, author_id: "internal:web-shell" }
+      );
+    } catch (error) {
+      state.runtime.internalLookupMessage = error.message || "Unable to suspend this account.";
+      state.runtime.internalReviewMessage = "";
+    }
+    render();
+  };
+
+  const reinstateInternalAccount = async (event) => {
+    event.preventDefault();
+    if (!state.runtime.internalSelectedUserId) {
+      state.runtime.internalLookupMessage = "Load an account before applying review actions.";
+      render();
+      return;
+    }
+    const reason = window.prompt("Reinstatement reason", "Account reinstated after internal review.") || "";
+    if (!reason.trim()) {
+      return;
+    }
+    state.runtime.internalLookupMessage = "";
+    state.runtime.internalReviewMessage = "Reinstating account…";
+    render();
+    try {
+      await runInternalAccountAction(
+        `/internal/accounts/${encodeURIComponent(state.runtime.internalSelectedUserId)}/reinstate`,
+        "Account reinstated.",
+        { reason, author_id: "internal:web-shell" }
+      );
+    } catch (error) {
+      state.runtime.internalLookupMessage = error.message || "Unable to reinstate this account.";
+      state.runtime.internalReviewMessage = "";
+    }
+    render();
+  };
+
+  const updateInternalFlagStatus = async (event, flagId, flagType, status) => {
+    event.preventDefault();
+    if (!state.runtime.internalSelectedUserId) {
+      state.runtime.internalLookupMessage = "Load an account before updating flags.";
+      render();
+      return;
+    }
+    const reason = window.prompt(
+      status === "dismiss"
+        ? `Dismiss ${flagType || "this flag"}`
+        : `Resolve ${flagType || "this flag"}`,
+      status === "dismiss" ? "False positive or no further action needed." : "Review completed and resolved."
+    ) || "";
+    if (!reason.trim()) {
+      return;
+    }
+    state.runtime.internalLookupMessage = "";
+    state.runtime.internalReviewMessage =
+      status === "dismiss" ? "Dismissing flag…" : "Resolving flag…";
+    render();
+    try {
+      await runInternalAccountAction(
+        `/internal/accounts/${encodeURIComponent(state.runtime.internalSelectedUserId)}/flags/${encodeURIComponent(flagId)}/${status === "dismiss" ? "dismiss" : "resolve"}`,
+        status === "dismiss" ? "Flag dismissed." : "Flag resolved.",
+        { resolution_note: reason, author_id: "internal:web-shell" }
+      );
+    } catch (error) {
+      state.runtime.internalLookupMessage = error.message || "Unable to update the flag.";
+      state.runtime.internalReviewMessage = "";
+    }
+    render();
+  };
+
   const revokeAccountSession = async (event, sessionId, sessionLabel) => {
     event.preventDefault();
     if (!workerConfigured() || !state.runtime.sessionAuthenticated) {
@@ -4492,6 +4630,46 @@
     const refreshInternalAccountTarget = event.target.closest("[data-action='refresh-internal-account']");
     if (refreshInternalAccountTarget) {
       await refreshInternalAccount(event);
+      return;
+    }
+
+    const restrictInternalAccountTarget = event.target.closest("[data-action='internal-restrict-account']");
+    if (restrictInternalAccountTarget) {
+      await restrictInternalAccount(event);
+      return;
+    }
+
+    const suspendInternalAccountTarget = event.target.closest("[data-action='internal-suspend-account']");
+    if (suspendInternalAccountTarget) {
+      await suspendInternalAccount(event);
+      return;
+    }
+
+    const reinstateInternalAccountTarget = event.target.closest("[data-action='internal-reinstate-account']");
+    if (reinstateInternalAccountTarget) {
+      await reinstateInternalAccount(event);
+      return;
+    }
+
+    const resolveInternalFlagTarget = event.target.closest("[data-action='internal-resolve-flag']");
+    if (resolveInternalFlagTarget) {
+      await updateInternalFlagStatus(
+        event,
+        resolveInternalFlagTarget.dataset.flagId,
+        resolveInternalFlagTarget.dataset.flagType,
+        "resolve"
+      );
+      return;
+    }
+
+    const dismissInternalFlagTarget = event.target.closest("[data-action='internal-dismiss-flag']");
+    if (dismissInternalFlagTarget) {
+      await updateInternalFlagStatus(
+        event,
+        dismissInternalFlagTarget.dataset.flagId,
+        dismissInternalFlagTarget.dataset.flagType,
+        "dismiss"
+      );
     }
   });
 

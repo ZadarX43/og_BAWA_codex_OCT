@@ -32,6 +32,7 @@ import {
   revokeAccountSession,
   revokeOtherAccountSessions,
   updateAccountRiskState,
+  updateAccountRiskFlagStatus,
   setPrimaryAccountSession,
   touchAccountSessionSeen,
   upsertNotificationAlerts,
@@ -386,10 +387,15 @@ const shouldClearSessionCookie = (status) =>
     "session_email_mismatch",
     "subscriber_state_missing",
     "inactive_subscription",
+    "suspended_account",
   ].includes(String(status || ""));
 
 const sessionFailureHeaders = (status) =>
   shouldClearSessionCookie(status) ? { "set-cookie": clearCookieHeader(AUTH_SESSION_COOKIE) } : {};
+
+const blockedAccountHeaders = () => ({
+  "set-cookie": clearCookieHeader(AUTH_SESSION_COOKIE),
+});
 
 const getInternalAdminSecret = (env) => String(env.INTERNAL_ADMIN_SECRET || "").trim();
 
@@ -1296,6 +1302,18 @@ async function verifySessionAccess(request, env) {
     }
 
     await touchAccountSessionSeen(accountDb, sessionRow.id, nowIso());
+
+    const accountState = await getAccountStateByEmail(accountDb, email);
+    const riskState = accountState?.user?.id ? await getAccountRiskState(accountDb, accountState.user.id) : null;
+    const accountStatus = String(riskState?.account_status || "").trim().toLowerCase();
+    if (accountStatus === "suspended") {
+      return {
+        ok: false,
+        status: "suspended_account",
+        message: "This account is currently suspended.",
+        recommendation: "Contact support if you think this is an error.",
+      };
+    }
   }
 
   const store = getSubscriberStateStore(env);
@@ -2276,6 +2294,220 @@ async function handleInternalAccountTimelineRead(request, env, userId) {
     ok: true,
     status: "internal_account_timeline_loaded",
     timeline: await buildInternalTimeline(accountDb, userId),
+  });
+}
+
+async function handleInternalAccountRestrict(request, env, userId) {
+  const adminAccess = verifyInternalAdminRequest(request, env);
+  if (!adminAccess.ok) {
+    return json({ ok: false, status: adminAccess.status, message: adminAccess.message }, adminAccess.code);
+  }
+  const accountDb = getAccountDb(env);
+  if (!accountDb) {
+    return configError("ACCOUNT_DB D1 binding is required for internal review routes.", ["ACCOUNT_DB"]);
+  }
+  let payload;
+  try {
+    payload = await request.json();
+  } catch (error) {
+    return requestError("Restrict body must be valid JSON.", error.message);
+  }
+  const reason = String(payload?.reason || "Internal review restriction applied.").trim();
+  const actor = String(payload?.author_id || "internal:operator").trim();
+
+  await updateAccountRiskState(accountDb, userId, {
+    account_status: "restricted",
+    review_status: "restricted",
+    risk_level: "high",
+    risk_score: 60,
+    last_reviewed_at: nowIso(),
+    last_reviewed_by: actor,
+    last_risk_event_at: nowIso(),
+  });
+  await addAccountAdminNote(accountDb, {
+    user_id: userId,
+    note_type: "risk_note",
+    visibility: "internal",
+    author_id: actor,
+    content: `Restriction applied. ${reason}`,
+  });
+  await recordAuthEvent(accountDb, {
+    user_id: userId,
+    event_type: "internal_account_restricted",
+    metadata: { reason, author_id: actor },
+  });
+
+  return json({
+    ok: true,
+    status: "internal_account_restricted",
+    message: "Account moved into restricted review state.",
+    account_summary: await summarizeInternalAccount(accountDb, userId),
+  });
+}
+
+async function handleInternalAccountSuspend(request, env, userId) {
+  const adminAccess = verifyInternalAdminRequest(request, env);
+  if (!adminAccess.ok) {
+    return json({ ok: false, status: adminAccess.status, message: adminAccess.message }, adminAccess.code);
+  }
+  const accountDb = getAccountDb(env);
+  if (!accountDb) {
+    return configError("ACCOUNT_DB D1 binding is required for internal review routes.", ["ACCOUNT_DB"]);
+  }
+  let payload;
+  try {
+    payload = await request.json();
+  } catch (error) {
+    return requestError("Suspend body must be valid JSON.", error.message);
+  }
+  const reason = String(payload?.reason || "Internal suspension applied.").trim();
+  const actor = String(payload?.author_id || "internal:operator").trim();
+  const sessions = await listAccountSessionsByUser(accountDb, userId, { limit: 24 });
+  const revokedAt = nowIso();
+  for (const session of sessions) {
+    if (!(Number(session.is_revoked || 0) === 1 || session.revoked_at)) {
+      await revokeAccountSession(accountDb, session.id, "suspended_account", revokedAt);
+    }
+  }
+  await updateAccountRiskState(accountDb, userId, {
+    account_status: "suspended",
+    review_status: "suspended",
+    risk_level: "critical",
+    risk_score: 90,
+    suspended_at: revokedAt,
+    suspension_reason: reason,
+    last_reviewed_at: revokedAt,
+    last_reviewed_by: actor,
+    last_risk_event_at: revokedAt,
+  });
+  await addAccountAdminNote(accountDb, {
+    user_id: userId,
+    note_type: "risk_note",
+    visibility: "internal",
+    author_id: actor,
+    content: `Suspension applied. ${reason}`,
+  });
+  await recordAuthEvent(accountDb, {
+    user_id: userId,
+    event_type: "internal_account_suspended",
+    metadata: { reason, author_id: actor, revoked_session_count: sessions.length },
+  });
+
+  return json({
+    ok: true,
+    status: "internal_account_suspended",
+    message: "Account suspended and active sessions revoked.",
+    account_summary: await summarizeInternalAccount(accountDb, userId),
+  });
+}
+
+async function handleInternalAccountReinstate(request, env, userId) {
+  const adminAccess = verifyInternalAdminRequest(request, env);
+  if (!adminAccess.ok) {
+    return json({ ok: false, status: adminAccess.status, message: adminAccess.message }, adminAccess.code);
+  }
+  const accountDb = getAccountDb(env);
+  if (!accountDb) {
+    return configError("ACCOUNT_DB D1 binding is required for internal review routes.", ["ACCOUNT_DB"]);
+  }
+  let payload;
+  try {
+    payload = await request.json();
+  } catch (error) {
+    return requestError("Reinstate body must be valid JSON.", error.message);
+  }
+  const reason = String(payload?.reason || "Internal reinstatement applied.").trim();
+  const actor = String(payload?.author_id || "internal:operator").trim();
+  const now = nowIso();
+  await updateAccountRiskState(accountDb, userId, {
+    account_status: "active",
+    review_status: "clear",
+    risk_level: "low",
+    risk_score: 0,
+    suspended_at: null,
+    suspension_reason: null,
+    reinstated_at: now,
+    reinstatement_reason: reason,
+    last_reviewed_at: now,
+    last_reviewed_by: actor,
+    last_risk_event_at: now,
+  });
+  await addAccountAdminNote(accountDb, {
+    user_id: userId,
+    note_type: "reinstatement_note",
+    visibility: "internal",
+    author_id: actor,
+    content: `Reinstatement applied. ${reason}`,
+  });
+  await recordAuthEvent(accountDb, {
+    user_id: userId,
+    event_type: "internal_account_reinstated",
+    metadata: { reason, author_id: actor },
+  });
+
+  return json({
+    ok: true,
+    status: "internal_account_reinstated",
+    message: "Account reinstated and review state cleared.",
+    account_summary: await summarizeInternalAccount(accountDb, userId),
+  });
+}
+
+async function handleInternalFlagStatusUpdate(request, env, userId, flagId, nextStatus) {
+  const adminAccess = verifyInternalAdminRequest(request, env);
+  if (!adminAccess.ok) {
+    return json({ ok: false, status: adminAccess.status, message: adminAccess.message }, adminAccess.code);
+  }
+  const accountDb = getAccountDb(env);
+  if (!accountDb) {
+    return configError("ACCOUNT_DB D1 binding is required for internal review routes.", ["ACCOUNT_DB"]);
+  }
+  let payload;
+  try {
+    payload = await request.json();
+  } catch (error) {
+    return requestError("Flag update body must be valid JSON.", error.message);
+  }
+  const actor = String(payload?.author_id || "internal:operator").trim();
+  const note = String(payload?.resolution_note || payload?.reason || "").trim();
+  await updateAccountRiskFlagStatus(accountDb, flagId, {
+    flag_status: nextStatus,
+    resolved_at: nowIso(),
+    resolved_by: actor,
+    resolution_note: note || `${nextStatus} by internal review.`,
+  });
+  await recordAuthEvent(accountDb, {
+    user_id: userId,
+    event_type: nextStatus === "dismissed" ? "internal_flag_dismissed" : "internal_flag_resolved",
+    metadata: {
+      flag_id: flagId,
+      status: nextStatus,
+      author_id: actor,
+      resolution_note: note || null,
+    },
+  });
+  if (note) {
+    await addAccountAdminNote(accountDb, {
+      user_id: userId,
+      note_type: "risk_note",
+      visibility: "internal",
+      author_id: actor,
+      content: `${nextStatus === "dismissed" ? "Flag dismissed" : "Flag resolved"}: ${note}`,
+    });
+  }
+  return json({
+    ok: true,
+    status: nextStatus === "dismissed" ? "internal_flag_dismissed" : "internal_flag_resolved",
+    flags: (await listAccountRiskFlagsByUser(accountDb, userId, { limit: 30 })).map((flag) => ({
+      ...flag,
+      evidence: (() => {
+        try {
+          return JSON.parse(flag.evidence_json || "{}");
+        } catch {
+          return {};
+        }
+      })(),
+    })),
   });
 }
 
@@ -3694,6 +3926,11 @@ async function handleRequest(request, env) {
         "GET /internal/accounts/:user_id/notes",
         "POST /internal/accounts/:user_id/notes",
         "GET /internal/accounts/:user_id/timeline",
+        "POST /internal/accounts/:user_id/restrict",
+        "POST /internal/accounts/:user_id/suspend",
+        "POST /internal/accounts/:user_id/reinstate",
+        "POST /internal/accounts/:user_id/flags/:flag_id/resolve",
+        "POST /internal/accounts/:user_id/flags/:flag_id/dismiss",
         "POST /api/account/preferences",
         "GET /api/account/alerts",
         "POST /api/account/alerts/refresh",
@@ -3857,6 +4094,47 @@ async function handleRequest(request, env) {
       response = await handleInternalAccountTimelineRead(request, env, userId);
       return withCors(response, request, env);
     }
+  }
+
+  const internalAccountActionMatch = pathname.match(/^\/internal\/accounts\/([^/]+)\/(restrict|suspend|reinstate)$/);
+  if (internalAccountActionMatch) {
+    const userId = decodeURIComponent(internalAccountActionMatch[1] || "").trim();
+    const action = String(internalAccountActionMatch[2] || "").trim();
+    if (request.method !== "POST") {
+      response = methodNotAllowed("POST");
+      return withCors(response, request, env);
+    }
+    if (action === "restrict") {
+      response = await handleInternalAccountRestrict(request, env, userId);
+      return withCors(response, request, env);
+    }
+    if (action === "suspend") {
+      response = await handleInternalAccountSuspend(request, env, userId);
+      return withCors(response, request, env);
+    }
+    if (action === "reinstate") {
+      response = await handleInternalAccountReinstate(request, env, userId);
+      return withCors(response, request, env);
+    }
+  }
+
+  const internalFlagActionMatch = pathname.match(/^\/internal\/accounts\/([^/]+)\/flags\/([^/]+)\/(resolve|dismiss)$/);
+  if (internalFlagActionMatch) {
+    const userId = decodeURIComponent(internalFlagActionMatch[1] || "").trim();
+    const flagId = decodeURIComponent(internalFlagActionMatch[2] || "").trim();
+    const action = String(internalFlagActionMatch[3] || "").trim();
+    if (request.method !== "POST") {
+      response = methodNotAllowed("POST");
+      return withCors(response, request, env);
+    }
+    response = await handleInternalFlagStatusUpdate(
+      request,
+      env,
+      userId,
+      flagId,
+      action === "dismiss" ? "dismissed" : "resolved"
+    );
+    return withCors(response, request, env);
   }
 
   if (pathname === "/api/account/preferences") {

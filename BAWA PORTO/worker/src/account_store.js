@@ -696,6 +696,47 @@ export async function createAccountRiskFlag(db, flag) {
   return payload;
 }
 
+export async function updateAccountRiskFlagStatus(db, flagId, input = {}) {
+  if (!db || !flagId) {
+    return null;
+  }
+  const now = isoNow();
+  const payload = {
+    id: flagId,
+    flag_status: input.flag_status || "resolved",
+    resolved_at: Object.prototype.hasOwnProperty.call(input, "resolved_at") ? input.resolved_at : now,
+    resolved_by: input.resolved_by || null,
+    resolution_note: input.resolution_note || null,
+    updated_at: now,
+  };
+  await callMaybeMock(
+    db,
+    "update_account_risk_flag_status",
+    payload,
+    () =>
+      run(
+        db,
+        `-- og:update_account_risk_flag_status
+        UPDATE account_risk_flags
+        SET flag_status = ?2,
+            resolved_at = ?3,
+            resolved_by = ?4,
+            resolution_note = ?5,
+            updated_at = ?6
+        WHERE id = ?1`,
+        [
+          payload.id,
+          payload.flag_status,
+          payload.resolved_at,
+          payload.resolved_by,
+          payload.resolution_note,
+          payload.updated_at,
+        ]
+      )
+  );
+  return payload;
+}
+
 export async function addAccountAdminNote(db, note) {
   if (!db || !note?.user_id || !note?.note_type || !note?.content) {
     return null;

@@ -189,6 +189,20 @@ class MockD1 {
       case "insert_account_risk_flag":
         this.accountRiskFlags.push({ ...args });
         return { success: true };
+      case "update_account_risk_flag_status":
+        this.accountRiskFlags = this.accountRiskFlags.map((row) =>
+          row.id === args.id
+            ? {
+                ...row,
+                flag_status: args.flag_status,
+                resolved_at: args.resolved_at,
+                resolved_by: args.resolved_by,
+                resolution_note: args.resolution_note,
+                updated_at: args.updated_at,
+              }
+            : row
+        );
+        return { success: true };
       case "insert_account_admin_note":
         this.accountAdminNotes.push({ ...args });
         return { success: true };
@@ -1372,6 +1386,165 @@ const testInternalAccountReviewReadApis = async (fetchHarness) => {
   assert.equal(unauthorizedPayload.status, "internal_admin_unauthorized");
 };
 
+const testInternalAccountReviewActions = async (fetchHarness) => {
+  const env = createEnv();
+  await writeSubscriberRecord(
+    env,
+    buildSubscriberRecord({
+      email: "member@example.com",
+    })
+  );
+
+  const requestResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/auth/magic-link/request", "POST", {
+      email: "member@example.com",
+    }),
+    env
+  );
+  assert.equal(requestResponse.status, 200);
+  const emailBody = fetchHarness.sentEmails.at(-1);
+  const verifyMatch = String(emailBody?.html || "").match(/verify\?token=([^"&]+)/);
+  assert.ok(verifyMatch?.[1], "expected magic-link token in email body");
+  const token = decodeURIComponent(verifyMatch[1]);
+
+  const verifyResponse = await worker.fetch(
+    makeGetRequest(`http://localhost/api/auth/magic-link/verify?token=${encodeURIComponent(token)}`),
+    env
+  );
+  assert.equal(verifyResponse.status, 303);
+  const userId = env.ACCOUNT_DB.accountSessions[0].user_id;
+  env.ACCOUNT_DB.accountRiskFlags.push({
+    id: "riskflag_test_resolve",
+    user_id: userId,
+    flag_type: "manual_support_concern",
+    severity: "medium",
+    flag_status: "open",
+    source: "support_manual",
+    summary: "Support requested a manual review.",
+    evidence_json: "{}",
+    opened_at: "2026-05-10T10:00:00.000Z",
+    resolved_at: null,
+    resolved_by: null,
+    resolution_note: null,
+    created_at: "2026-05-10T10:00:00.000Z",
+    updated_at: "2026-05-10T10:00:00.000Z",
+  });
+  env.ACCOUNT_DB.accountRiskFlags.push({
+    id: "riskflag_test_dismiss",
+    user_id: userId,
+    flag_type: "false_positive_check",
+    severity: "low",
+    flag_status: "open",
+    source: "support_manual",
+    summary: "Manual dismissal path test.",
+    evidence_json: "{}",
+    opened_at: "2026-05-10T10:05:00.000Z",
+    resolved_at: null,
+    resolved_by: null,
+    resolution_note: null,
+    created_at: "2026-05-10T10:05:00.000Z",
+    updated_at: "2026-05-10T10:05:00.000Z",
+  });
+
+  const flag = await worker.fetch(
+    makeGetRequest(`http://localhost/internal/accounts/${encodeURIComponent(userId)}/flags`, {
+      "x-og-internal-admin": env.INTERNAL_ADMIN_SECRET,
+    }),
+    env
+  );
+  const flagPayload = await flag.json();
+  assert.equal(flag.status, 200);
+  assert.equal(flagPayload.status, "internal_account_flags_loaded");
+  const targetFlagId = flagPayload.flags.find((row) => row.id === "riskflag_test_resolve")?.id;
+  assert.equal(targetFlagId, "riskflag_test_resolve");
+
+  const restrictResponse = await worker.fetch(
+    jsonRequest(
+      `http://localhost/internal/accounts/${encodeURIComponent(userId)}/restrict`,
+      "POST",
+      { reason: "Manual restriction for review", author_id: "internal:test" },
+      { "x-og-internal-admin": env.INTERNAL_ADMIN_SECRET }
+    ),
+    env
+  );
+  const restrictPayload = await restrictResponse.json();
+  assert.equal(restrictResponse.status, 200);
+  assert.equal(restrictPayload.status, "internal_account_restricted");
+  assert.equal(restrictPayload.account_summary.risk_state.account_status, "restricted");
+
+  const resolveResponse = await worker.fetch(
+    jsonRequest(
+      `http://localhost/internal/accounts/${encodeURIComponent(userId)}/flags/${encodeURIComponent(targetFlagId)}/resolve`,
+      "POST",
+      { resolution_note: "Reviewed and understood", author_id: "internal:test" },
+      { "x-og-internal-admin": env.INTERNAL_ADMIN_SECRET }
+    ),
+    env
+  );
+  const resolvePayload = await resolveResponse.json();
+  assert.equal(resolveResponse.status, 200);
+  assert.equal(resolvePayload.status, "internal_flag_resolved");
+  assert.equal(resolvePayload.flags.find((row) => row.id === targetFlagId)?.flag_status, "resolved");
+
+  const dismissResponse = await worker.fetch(
+    jsonRequest(
+      `http://localhost/internal/accounts/${encodeURIComponent(userId)}/flags/riskflag_test_dismiss/dismiss`,
+      "POST",
+      { resolution_note: "False positive", author_id: "internal:test" },
+      { "x-og-internal-admin": env.INTERNAL_ADMIN_SECRET }
+    ),
+    env
+  );
+  const dismissPayload = await dismissResponse.json();
+  assert.equal(dismissResponse.status, 200);
+  assert.equal(dismissPayload.status, "internal_flag_dismissed");
+  assert.equal(
+    dismissPayload.flags.find((row) => row.id === "riskflag_test_dismiss")?.flag_status,
+    "dismissed"
+  );
+
+  const suspendResponse = await worker.fetch(
+    jsonRequest(
+      `http://localhost/internal/accounts/${encodeURIComponent(userId)}/suspend`,
+      "POST",
+      { reason: "Confirmed misuse", author_id: "internal:test" },
+      { "x-og-internal-admin": env.INTERNAL_ADMIN_SECRET }
+    ),
+    env
+  );
+  const suspendPayload = await suspendResponse.json();
+  assert.equal(suspendResponse.status, 200);
+  assert.equal(suspendPayload.status, "internal_account_suspended");
+  assert.equal(suspendPayload.account_summary.risk_state.account_status, "suspended");
+  assert.equal(env.ACCOUNT_DB.accountSessions.every((row) => Number(row.is_revoked || 0) === 1), true);
+
+  const suspendedSessionCookie = extractCookieValue(verifyResponse.headers.get("set-cookie"), "og_premium_session");
+  const suspendedSessionResponse = await worker.fetch(
+    makeGetRequest("http://localhost/api/auth/session", {
+      cookie: `og_premium_session=${suspendedSessionCookie}`,
+    }),
+    env
+  );
+  const suspendedSessionPayload = await suspendedSessionResponse.json();
+  assert.equal(suspendedSessionResponse.status, 200);
+  assert.equal(suspendedSessionPayload.authenticated, false);
+  assert.equal(suspendedSessionPayload.status, "revoked_session");
+
+  const reinstateResponse = await worker.fetch(
+    jsonRequest(
+      `http://localhost/internal/accounts/${encodeURIComponent(userId)}/reinstate`,
+      "POST",
+      { reason: "Support verified ownership", author_id: "internal:test" },
+      { "x-og-internal-admin": env.INTERNAL_ADMIN_SECRET }
+    ),
+    env
+  );
+  const reinstatePayload = await reinstateResponse.json();
+  assert.equal(reinstateResponse.status, 200);
+  assert.equal(reinstatePayload.status, "internal_account_reinstated");
+  assert.equal(reinstatePayload.account_summary.risk_state.account_status, "active");
+};
+
 const testTelegramWebhookCompletesLinkFlow = async (fetchHarness) => {
   const env = createEnv();
   await writeSubscriberRecord(
@@ -1943,6 +2116,7 @@ const main = async () => {
     await testAccountSessionActions(fetchHarness);
     await testAccountRiskFlaggingFromSessionSpread(fetchHarness);
     await testInternalAccountReviewReadApis(fetchHarness);
+    await testInternalAccountReviewActions(fetchHarness);
     await testTelegramWebhookCompletesLinkFlow(fetchHarness);
     await testTelegramTestAlertRoute(fetchHarness);
     await testTelegramFixtureAlertRoute(fetchHarness);
@@ -1965,6 +2139,7 @@ const main = async () => {
     console.log("- account device actions: passed");
     console.log("- account risk state and flag recording: passed");
     console.log("- internal account review read APIs: passed");
+    console.log("- internal account review actions: passed");
     console.log("- Telegram bot webhook completion flow: passed");
     console.log("- Telegram test alert route: passed");
     console.log("- Telegram fixture alert route: passed");
