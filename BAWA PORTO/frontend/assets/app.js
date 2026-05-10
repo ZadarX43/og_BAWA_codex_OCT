@@ -2247,41 +2247,45 @@
           `
           : ""
       }
-      <section class="section split">
-        <article class="hero-main">
-          <p class="hero-kicker">Account</p>
-          <h1>${accountHeadline}</h1>
-          <p>${accountCopy}</p>
-          <div class="cta-row">
-            <a class="button" href="${entitled ? "./premium.html" : "./pricing.html"}">${
-              entitled ? "Open premium board" : "See founding plan"
-            }</a>
-            ${signedIn ? `<a class="ghost-button" href="./dashboard.html">Open dashboard</a>` : ""}
-            <a class="ghost-button" href="${entitled ? "./results.html" : "./premium.html"}">${
-              entitled ? "Go to results" : "Open premium page"
-            }</a>
-            ${signedIn ? `<button class="ghost-button" type="button" data-action="auth-logout">Log out</button>` : ""}
-          </div>
-        </article>
-        <aside class="hero-side">
-          <div class="metric">
-            <span class="metric-label">Worker</span>
-            <span class="metric-value">${workerConfigured() ? "Configured" : "Placeholder"}</span>
-          </div>
-          <div class="metric">
-            <span class="metric-label">Identity</span>
-            <span class="metric-value">${signedIn ? "Verified" : "Not verified"}</span>
-          </div>
-          <div class="metric">
-            <span class="metric-label">Membership</span>
-            <span class="metric-value">${entitled ? "Premium active" : "Premium pending"}</span>
-          </div>
-          <div class="metric">
-            <span class="metric-label">Telegram</span>
-            <span class="metric-value">${telegramLinked ? "Linked" : signedIn ? "Available" : "Locked"}</span>
-          </div>
-        </aside>
-      </section>
+      ${
+        !signedIn
+          ? `
+            <section class="section split">
+              <article class="hero-main">
+                <p class="hero-kicker">Account</p>
+                <h1>${accountHeadline}</h1>
+                <p>${accountCopy}</p>
+                <div class="cta-row">
+                  <a class="button" href="${entitled ? "./premium.html" : "./pricing.html"}">${
+                    entitled ? "Open premium board" : "See founding plan"
+                  }</a>
+                  <a class="ghost-button" href="${entitled ? "./results.html" : "./premium.html"}">${
+                    entitled ? "Go to results" : "Open premium page"
+                  }</a>
+                </div>
+              </article>
+              <aside class="hero-side">
+                <div class="metric">
+                  <span class="metric-label">Worker</span>
+                  <span class="metric-value">${workerConfigured() ? "Configured" : "Placeholder"}</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">Identity</span>
+                  <span class="metric-value">Not verified</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">Membership</span>
+                  <span class="metric-value">${entitled ? "Premium active" : "Premium pending"}</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">Telegram</span>
+                  <span class="metric-value">Locked</span>
+                </div>
+              </aside>
+            </section>
+          `
+          : ""
+      }
 
       <section class="section">
         ${renderNotice(checkoutNotice, checkoutState === "success" ? "success" : "warning")}
@@ -2352,8 +2356,8 @@
           : `
             <section class="section">
               <article class="panel">
-                <h3>Account shell</h3>
-                <p class="muted">This signed-in area is now structured like a product home rather than a simple access page.</p>
+                <h3>Account navigation</h3>
+                <p class="muted">Use this as the stable navigation layer for account state, delivery posture, preferences, billing, and help.</p>
                 <div class="pill-row">
                   <a class="ghost-button" href="#account-overview">Account</a>
                   <a class="ghost-button" href="#settings">Settings</a>
@@ -2408,33 +2412,10 @@
               </article>
             </section>
             <section class="section">
-              <div class="notice">Subscription management is coming soon.</div>
-            </section>
-            <section class="section">
-              <article class="panel">
-                <h3>Calm setup</h3>
-                <p class="muted">
-                  Build your account like an analyst desk, not a noisy feed. Start with what you care about most, then choose how much interruption you actually want.
-                </p>
-                <div class="stats-grid">
-                  ${statPanel("Setup progress", `${onboardingStageCount}/5`, "Leagues, markets, teams, fixtures, Telegram")}
-                  ${statPanel("Style", stylePresetLabel(userStylePreset), stylePresetSummary(userStylePreset))}
-                  ${statPanel("Default principle", "Signal over noise", "No edge is also information")}
-                </div>
-                <ul class="feature-list">
-                  <li>1. Choose leagues you genuinely care about.</li>
-                  <li>2. Choose markets you can interpret calmly.</li>
-                  <li>3. Follow teams or fixtures that matter to you.</li>
-                  <li>4. Keep Telegram for stronger interruptions only.</li>
-                  <li>5. Use the dashboard as a briefing surface, not a pressure feed.</li>
-                </ul>
-              </article>
-            </section>
-            <section class="section">
               <article class="panel">
                 <h3>Followed intelligence</h3>
                 <p class="muted">
-                  This is the first website surface for the intelligence layer. Saved teams, leagues, markets, and fixtures now pull in routed and non-routed cards from the published fixture intelligence feed.
+                  This is the account preview of your followed intelligence. Use the dashboard for the fuller grouped fixture workspace.
                 </p>
                 ${
                   !followedSignalsConfigured
