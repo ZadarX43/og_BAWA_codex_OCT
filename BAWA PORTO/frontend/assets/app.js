@@ -55,6 +55,7 @@
       internalFlagStatusFilter: "ALL",
       internalTimelineSourceFilter: "ALL",
       internalReviewPreset: "CUSTOM",
+      internalReviewOutcome: "AUTO",
       telegramLinkCode: "",
       telegramLinkExpiresAt: "",
       telegramBotUsername: "",
@@ -2931,6 +2932,7 @@
     const statusFilter = String(state.runtime.internalFlagStatusFilter || "ALL").toUpperCase();
     const timelineSourceFilter = String(state.runtime.internalTimelineSourceFilter || "ALL").toUpperCase();
     const reviewPreset = String(state.runtime.internalReviewPreset || "CUSTOM").toUpperCase();
+    const reviewOutcome = String(state.runtime.internalReviewOutcome || "AUTO").toUpperCase();
     const severityOptions = ["ALL", "CRITICAL", "HIGH", "MEDIUM", "LOW"];
     const statusOptions = ["ALL", "OPEN", "RESOLVED", "DISMISSED"];
     const timelineSourceOptions = [
@@ -2945,6 +2947,13 @@
       ["SUSPENSION_REVIEW", "Suspension review"],
       ["SHARING_RISK", "Sharing risk"],
       ["BILLING_CONCERN", "Billing concern"],
+    ];
+    const reviewOutcomes = [
+      ["AUTO", "Auto"],
+      ["MONITOR_ONLY", "Monitor only"],
+      ["RESTRICT_FOR_REVIEW", "Restrict for review"],
+      ["SUSPEND", "Suspend"],
+      ["REINSTATE_READY", "Reinstate ready"],
     ];
     const severityCounts = severityOptions.reduce((accumulator, option) => {
       if (option === "ALL") {
@@ -3103,8 +3112,33 @@
         ],
       },
     };
-    const presetTemplate =
-      reviewPresetTemplates[reviewPreset] || reviewPresetTemplates.CUSTOM;
+    const outcomeTemplates = {
+      AUTO: null,
+      MONITOR_ONLY: {
+        noteTitle: "Monitor-only outcome note",
+        noteBody:
+          "Review outcome: Monitor only\n- Why stronger action is not justified yet:\n- Evidence to keep watching:\n- Next review trigger:",
+      },
+      RESTRICT_FOR_REVIEW: {
+        noteTitle: "Restrict-for-review outcome note",
+        noteBody:
+          "Review outcome: Restrict for review\n- Evidence supporting restriction:\n- What is still unconfirmed:\n- Conditions for escalation or release:",
+      },
+      SUSPEND: {
+        noteTitle: "Suspend outcome note",
+        noteBody:
+          "Review outcome: Suspend\n- Core evidence supporting suspension:\n- Risk if access remains active:\n- What would be needed for reinstatement:",
+      },
+      REINSTATE_READY: {
+        noteTitle: "Reinstate-ready outcome note",
+        noteBody:
+          "Review outcome: Reinstate ready\n- Why reinstatement now looks justified:\n- Evidence checked:\n- Any remaining watchpoints after reinstatement:",
+      },
+    };
+    const presetTemplate = {
+      ...(reviewPresetTemplates[reviewPreset] || reviewPresetTemplates.CUSTOM),
+      ...(outcomeTemplates[reviewOutcome] || {}),
+    };
     const caseBadges = [
       summary?.risk_state?.account_status &&
       String(summary.risk_state.account_status).toLowerCase() !== "active"
@@ -3115,6 +3149,50 @@
       primaryDeviceMismatch ? "Primary device mismatch" : null,
     ].filter(Boolean);
     const recommendedNextAction = (() => {
+      if (reviewOutcome === "MONITOR_ONLY") {
+        return {
+          title: "Hold the account in monitoring only.",
+          note: "The selected operator outcome is to avoid stronger enforcement for now and keep the account under observation.",
+          bullets: [
+            "Leave a clear monitoring note explaining why action is being deferred.",
+            "Set the next evidence trigger that would justify reopening the case.",
+            "Keep the desk in website-first review mode unless new risk evidence appears.",
+          ],
+        };
+      }
+      if (reviewOutcome === "RESTRICT_FOR_REVIEW") {
+        return {
+          title: "Move toward restriction for review.",
+          note: "The selected operator outcome is a controlled restriction rather than immediate suspension.",
+          bullets: [
+            "Confirm the restriction rationale is captured in a note before acting.",
+            "Use restriction when the case is concerning but still incomplete.",
+            "Define what evidence would move the account toward suspension or release.",
+          ],
+        };
+      }
+      if (reviewOutcome === "SUSPEND") {
+        return {
+          title: "Prepare for suspension.",
+          note: "The selected operator outcome is suspension, so the desk should now support a high-confidence enforcement review.",
+          bullets: [
+            "Confirm the suspension evidence is specific enough to defend later.",
+            "Make sure the enforcement trail and reason are recorded cleanly.",
+            "Document what would be required before reinstatement becomes possible.",
+          ],
+        };
+      }
+      if (reviewOutcome === "REINSTATE_READY") {
+        return {
+          title: "Prepare for reinstatement.",
+          note: "The selected operator outcome is to move the account back toward active standing.",
+          bullets: [
+            "Capture the evidence that now supports reinstatement.",
+            "Record any remaining monitoring conditions after reinstatement.",
+            "Make sure prior suspension or restriction notes are resolved cleanly.",
+          ],
+        };
+      }
       if (String(summary?.risk_state?.account_status || "").toLowerCase() === "suspended") {
         return {
           title: "Hold suspension and verify ownership evidence.",
@@ -3255,6 +3333,22 @@
                     class="${reviewPreset === value ? "button" : "ghost-button"}"
                     type="button"
                     data-action="internal-review-preset"
+                    data-value="${escapeHtml(value)}"
+                  >
+                    ${escapeHtml(label)}
+                  </button>
+                `
+              )
+              .join("")}
+          </div>
+          <div class="filter-row">
+            ${reviewOutcomes
+              .map(
+                ([value, label]) => `
+                  <button
+                    class="${reviewOutcome === value ? "button" : "ghost-button"}"
+                    type="button"
+                    data-action="internal-review-outcome"
                     data-value="${escapeHtml(value)}"
                   >
                     ${escapeHtml(label)}
@@ -4665,6 +4759,14 @@
     state.runtime.internalReviewMessage = "Custom review mode restored.";
   };
 
+  const applyInternalReviewOutcome = (outcome) => {
+    state.runtime.internalReviewOutcome = String(outcome || "AUTO").toUpperCase();
+    state.runtime.internalReviewMessage =
+      state.runtime.internalReviewOutcome === "AUTO"
+        ? "Automatic review outcome restored."
+        : `${titleCase(state.runtime.internalReviewOutcome.toLowerCase().replaceAll("_", " "))} outcome selected.`;
+  };
+
   const applyInternalNoteTemplate = (noteType, noteBody) => {
     const noteTypeElement = document.getElementById("internal-note-type");
     const noteContentElement = document.getElementById("internal-note-content");
@@ -5354,6 +5456,14 @@
     if (internalReviewPresetTarget) {
       state.runtime.internalLookupMessage = "";
       applyInternalReviewPreset(internalReviewPresetTarget.dataset.value || "CUSTOM");
+      render();
+      return;
+    }
+
+    const internalReviewOutcomeTarget = event.target.closest("[data-action='internal-review-outcome']");
+    if (internalReviewOutcomeTarget) {
+      state.runtime.internalLookupMessage = "";
+      applyInternalReviewOutcome(internalReviewOutcomeTarget.dataset.value || "AUTO");
       render();
       return;
     }
