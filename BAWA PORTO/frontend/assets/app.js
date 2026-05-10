@@ -1235,6 +1235,66 @@
     }
   };
 
+  const extractLeagueIdFromLogoUrl = (value) => {
+    const raw = String(value || "").trim();
+    const match = raw.match(/\/football\/leagues\/(\d+)\.(?:png|svg|webp)(?:\?.*)?$/i);
+    return match ? match[1] : "";
+  };
+
+  const inferFootballSeason = (kickoffTime) => {
+    const parsed = kickoffTime ? new Date(kickoffTime) : null;
+    if (!parsed || Number.isNaN(parsed.getTime())) {
+      return "";
+    }
+    const year = parsed.getUTCFullYear();
+    const month = parsed.getUTCMonth() + 1;
+    return String(month <= 6 ? year - 1 : year);
+  };
+
+  const fixtureStandingsWidgetMarkup = (fixture) => {
+    const leagueId = extractLeagueIdFromLogoUrl(fixture.league_logo_url);
+    const season = inferFootballSeason(fixture.kickoff_time);
+    if (!leagueId || !season) {
+      return `<div class="notice">League table reference is not available for this fixture yet because the widget identity mapping is incomplete.</div>`;
+    }
+    if (!workerConfigured()) {
+      return `<div class="notice">League table reference needs the Worker proxy so the widget can stay branded and keep the API key off the page.</div>`;
+    }
+    const proxyBase = `${workerApiUrl("/api/widgets/football/").replace(/\/+$/, "")}/`;
+    return `
+      <div class="widget-reference-shell">
+        <div class="widget-reference-head">
+          <div>
+            <span class="metric-label">Reference layer</span>
+            <h4>League table</h4>
+          </div>
+          <span class="pill">Prototype</span>
+        </div>
+        <p class="muted">Reference context for this fixture. Use this as orientation, not as the decision layer. If the fit is strong, lineups and formations can sit beside it later.</p>
+        <div class="widget-reference-frame">
+          <api-sports-widget
+            data-type="config"
+            data-sport="football"
+            data-key=""
+            data-url-football="${escapeHtml(proxyBase)}"
+            data-logo-url="https://media.api-sports.io"
+            data-theme="grey"
+            data-lang="en"
+            data-show-error="true"
+            data-show-logos="true"
+            data-standings="true"
+            data-refresh="600"
+          ></api-sports-widget>
+          <api-sports-widget
+            data-type="standings"
+            data-league="${escapeHtml(leagueId)}"
+            data-season="${escapeHtml(season)}"
+          ></api-sports-widget>
+        </div>
+      </div>
+    `;
+  };
+
   const teamInitials = (name) => {
     const words = String(name || "")
       .replace(/[^A-Za-z0-9\s-]/g, " ")
@@ -4122,6 +4182,12 @@
             <li>Is this structure, or are you reacting to noise?</li>
             <li>Would no action be the cleaner decision here?</li>
           </ul>
+        </article>
+      </section>
+
+      <section class="section">
+        <article class="panel">
+          ${fixtureStandingsWidgetMarkup(fixture)}
         </article>
       </section>
 

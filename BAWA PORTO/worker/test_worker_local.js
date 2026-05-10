@@ -515,6 +515,7 @@ const createEnv = () => {
     AUTH_EMAIL_FROM: "Odds Genius <auth@oddsgenius.test>",
     TELEGRAM_BOT_TOKEN: "telegram_bot_test_token",
     TELEGRAM_WEBHOOK_SECRET: "telegram_webhook_secret_test",
+    API_SPORTS_FOOTBALL_KEY: "api_sports_test_key",
     PREMIUM_DATA_SOURCE: "/premium-source.json",
     SITE_URL: "http://localhost",
     SUBSCRIBER_STATE: store,
@@ -550,6 +551,7 @@ const installMockFetch = () => {
     premiumSourceFetches: 0,
     resendSendFetches: 0,
     telegramSendFetches: 0,
+    widgetStandingsFetches: 0,
   };
   const sentEmails = [];
   const sentTelegramMessages = [];
@@ -595,6 +597,32 @@ const installMockFetch = () => {
           "content-type": "application/json; charset=utf-8",
         },
       });
+    }
+
+    if (url === "https://v3.football.api-sports.io/standings?league=140&season=2025") {
+      counters.widgetStandingsFetches += 1;
+      return new Response(
+        JSON.stringify({
+          get: "standings",
+          parameters: { league: "140", season: "2025" },
+          response: [
+            {
+              league: {
+                id: 140,
+                name: "La Liga",
+                season: 2025,
+                standings: [[{ rank: 1, team: { id: 529, name: "Barcelona" }, points: 88 }]],
+              },
+            },
+          ],
+        }),
+        {
+          status: 200,
+          headers: {
+            "content-type": "application/json; charset=utf-8",
+          },
+        }
+      );
     }
 
     if (url.includes("api.stripe.com")) {
@@ -2088,6 +2116,27 @@ const testMarketOnlyObserveDoesNotAutoQueue = async (fetchHarness) => {
   assert.equal(refreshPayload.queued_alerts, 0);
 };
 
+const testWidgetStandingsProxy = async (fetchHarness) => {
+  const env = createEnv();
+  const firstResponse = await worker.fetch(
+    makeGetRequest("http://localhost/api/widgets/football/standings?league=140&season=2025"),
+    env
+  );
+  const firstPayload = await firstResponse.json();
+  assert.equal(firstResponse.status, 200);
+  assert.equal(firstPayload.response?.[0]?.league?.id, 140);
+  assert.equal(fetchHarness.counters.widgetStandingsFetches, 1);
+
+  const secondResponse = await worker.fetch(
+    makeGetRequest("http://localhost/api/widgets/football/standings?league=140&season=2025"),
+    env
+  );
+  const secondPayload = await secondResponse.json();
+  assert.equal(secondResponse.status, 200);
+  assert.equal(secondPayload.response?.[0]?.league?.season, 2025);
+  assert.equal(fetchHarness.counters.widgetStandingsFetches, 1);
+};
+
 const testAnalystLeagueMarketDeployStaysWebsiteOnly = async (fetchHarness) => {
   const env = createEnv();
   await writeSubscriberRecord(
@@ -2194,6 +2243,7 @@ const main = async () => {
     await testTelegramFixtureAlertRoute(fetchHarness);
     await testAccountPreferencesUpdate(fetchHarness);
     await testAccountAlertsQueueAndDispatch(fetchHarness);
+    await testWidgetStandingsProxy(fetchHarness);
     await testMarketOnlyObserveDoesNotAutoQueue(fetchHarness);
     await testAnalystLeagueMarketDeployStaysWebsiteOnly(fetchHarness);
     await testLogoutSkeleton();
@@ -2217,6 +2267,7 @@ const main = async () => {
     console.log("- Telegram fixture alert route: passed");
     console.log("- Account preferences update route: passed");
     console.log("- account alerts queue + dispatch routes: passed");
+    console.log("- widget standings proxy cache path: passed");
     console.log("- market-only observe suppression: passed");
     console.log("- analyst league+market deploy stays website-only: passed");
     console.log("- logout skeleton: passed");

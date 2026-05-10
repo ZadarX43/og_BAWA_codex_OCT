@@ -821,6 +821,41 @@ tbody tr:hover {
   padding: 10px 12px;
 }
 
+.widget-reference-shell {
+  display: grid;
+  gap: 14px;
+}
+
+.widget-reference-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.widget-reference-head h4 {
+  margin: 4px 0 0;
+  font-size: 1.05rem;
+  letter-spacing: -0.02em;
+}
+
+.widget-reference-frame {
+  padding: 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(123, 154, 184, 0.16);
+  background: linear-gradient(180deg, rgba(10, 18, 29, 0.84), rgba(9, 16, 24, 0.72));
+  overflow: hidden;
+}
+
+.widget-reference-frame api-sports-widget[data-type="config"] {
+  display: none;
+}
+
+.widget-reference-frame api-sports-widget[data-type="standings"] {
+  display: block;
+  min-height: 360px;
+}
+
 .intelligence-grid {
   align-items: stretch;
 }

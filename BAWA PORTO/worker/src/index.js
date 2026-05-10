@@ -43,6 +43,8 @@ import { issuePremiumToken, verifyPremiumAccess } from "./auth.js";
 const STRIPE_WEBHOOK_TOLERANCE_SECONDS = 300;
 const PREMIUM_CACHE_TTL_SECONDS = 300;
 const PREMIUM_CACHE_VERSION = "v1";
+const WIDGET_FOOTBALL_PROXY_VERSION = "v1";
+const WIDGET_FOOTBALL_STANDINGS_CACHE_TTL_SECONDS = 600;
 const AUTH_MAGIC_LINK_TTL_SECONDS = 15 * 60;
 const AUTH_SESSION_TTL_SECONDS = 7 * 24 * 60 * 60;
 const AUTH_REQUEST_IP_COOLDOWN_SECONDS = 60;
@@ -644,6 +646,90 @@ const buildPremiumCacheKey = (targetUrl) => {
 };
 
 const getPremiumCache = () => globalThis.caches?.default || null;
+const getApiSportsFootballKey = (env) => String(env.API_SPORTS_FOOTBALL_KEY || "").trim();
+
+const buildWidgetFootballCacheKey = (endpoint, params = {}) => {
+  const cacheUrl = new URL(`https://og-widget-cache.invalid/${endpoint}`);
+  cacheUrl.searchParams.set("v", WIDGET_FOOTBALL_PROXY_VERSION);
+  Object.entries(params)
+    .filter(([, value]) => value != null && value !== "")
+    .sort(([left], [right]) => left.localeCompare(right))
+    .forEach(([key, value]) => {
+      cacheUrl.searchParams.set(key, String(value));
+    });
+  return new Request(cacheUrl.toString(), { method: "GET" });
+};
+
+const positiveIntegerParam = (value) => {
+  const text = String(value || "").trim();
+  if (!/^\d+$/.test(text)) {
+    return null;
+  }
+  const numeric = Number(text);
+  if (!Number.isInteger(numeric) || numeric <= 0) {
+    return null;
+  }
+  return numeric;
+};
+
+const proxyWidgetStandingsResponse = async (request, env) => {
+  const footballKey = getApiSportsFootballKey(env);
+  if (!footballKey) {
+    return configError("API_SPORTS_FOOTBALL_KEY is required for the widget standings prototype.", [
+      "API_SPORTS_FOOTBALL_KEY",
+    ]);
+  }
+  if (request.method !== "GET") {
+    return methodNotAllowed("GET");
+  }
+  const requestUrl = new URL(request.url);
+  const league = positiveIntegerParam(requestUrl.searchParams.get("league"));
+  const season = positiveIntegerParam(requestUrl.searchParams.get("season"));
+  if (!league || !season) {
+    return requestError("Widget standings prototype requires numeric league and season query parameters.");
+  }
+
+  const cache = getPremiumCache();
+  const cacheKey = buildWidgetFootballCacheKey("football-standings", { league, season });
+  if (cache) {
+    const cached = await cache.match(cacheKey);
+    if (cached) {
+      return new Response(cached.body, {
+        status: cached.status,
+        statusText: cached.statusText,
+        headers: new Headers(cached.headers),
+      });
+    }
+  }
+
+  const upstreamUrl = new URL("https://v3.football.api-sports.io/standings");
+  upstreamUrl.searchParams.set("league", String(league));
+  upstreamUrl.searchParams.set("season", String(season));
+  const upstreamResponse = await fetch(upstreamUrl.toString(), {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+      "x-apisports-key": footballKey,
+    },
+  });
+  const bodyText = await upstreamResponse.text();
+  const headers = new Headers();
+  headers.set("content-type", upstreamResponse.headers.get("content-type") || "application/json; charset=utf-8");
+  headers.set("x-og-widget-proxy", "football-standings");
+  headers.set("cache-control", `public, max-age=${WIDGET_FOOTBALL_STANDINGS_CACHE_TTL_SECONDS}`);
+
+  const response = new Response(bodyText, {
+    status: upstreamResponse.status,
+    statusText: upstreamResponse.statusText,
+    headers,
+  });
+
+  if (upstreamResponse.ok && cache) {
+    await cache.put(cacheKey, response.clone());
+  }
+
+  return response;
+};
 
 const parseStripeSignatureHeader = (headerValue) => {
   const parsed = {
@@ -4131,6 +4217,7 @@ async function handleRequest(request, env) {
         "POST /api/account/telegram/link/complete",
         "POST /api/account/telegram/test-alert",
         "POST /api/account/telegram/fixture-alert",
+        "GET /api/widgets/football/standings",
         "POST /api/telegram/webhook",
         "POST /api/stripe/checkout",
         "POST /api/premium/token",
@@ -4409,6 +4496,11 @@ async function handleRequest(request, env) {
       return withCors(response, request, env);
     }
     response = await handleTelegramFixtureAlert(request, env);
+    return withCors(response, request, env);
+  }
+
+  if (pathname === "/api/widgets/football/standings") {
+    response = await proxyWidgetStandingsResponse(request, env);
     return withCors(response, request, env);
   }
 
