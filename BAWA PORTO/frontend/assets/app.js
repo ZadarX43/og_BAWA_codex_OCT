@@ -1600,7 +1600,7 @@
         </div>
         <div class="fixture-hero-score-row">
           <div class="fixture-hero-side">
-            ${badgeMarkup(fixture.home_team_logo_url, fixture.home_team, "fixture-hero-badge")}
+            ${badgeMarkup(fixture.home_team_logo_url, fixture.home_team, "match-hero-badge")}
             <a class="fixture-entity-link" href="${teamPageHref(fixture.home_team)}"><strong>${escapeHtml(fixture.home_team)}</strong></a>
           </div>
           <div class="fixture-hero-center">
@@ -1609,7 +1609,7 @@
             <span class="muted">${escapeHtml(timing.detail)}</span>
           </div>
           <div class="fixture-hero-side fixture-hero-side-end">
-            ${badgeMarkup(fixture.away_team_logo_url, fixture.away_team, "fixture-hero-badge")}
+            ${badgeMarkup(fixture.away_team_logo_url, fixture.away_team, "match-hero-badge")}
             <a class="fixture-entity-link" href="${teamPageHref(fixture.away_team)}"><strong>${escapeHtml(fixture.away_team)}</strong></a>
           </div>
         </div>
@@ -2210,7 +2210,7 @@
   const renderDirectoryCard = ({ title, badgeUrl, badgeName, href, metaLines = [], summary = "", ctaLabel = "Open" }) => `
     <article class="panel entity-directory-card">
       <div class="entity-directory-head">
-        ${badgeMarkup(badgeUrl, badgeName || title, "fixture-hero-badge")}
+        ${badgeMarkup(badgeUrl, badgeName || title, "entity-mark")}
         <div>
           <h3>${escapeHtml(title)}</h3>
           ${summary ? `<p class="muted">${escapeHtml(summary)}</p>` : ""}
@@ -2302,7 +2302,7 @@
     const rows = orderedFixtureRows();
     return `
       <section class="hero">
-        <article class="hero-main">
+        <article class="hero-main entity-hero">
           <p class="hero-kicker">Matches</p>
           <h1>Fixture-first football intelligence.</h1>
           <p>Browse the current window by league and fixture, then drop into a match-level intelligence page when a row deserves deeper reading.</p>
@@ -2453,7 +2453,7 @@
     `;
     const fixturesContent = `
       <section class="section">
-        <article class="panel widget-reference-shell">
+        <article class="panel widget-reference-shell archive-layer">
           <div class="widget-reference-head">
             <div>
               <span class="metric-label">Broader schedule</span>
@@ -2473,21 +2473,24 @@
         </article>
       </section>
       <section class="section">
-        <div class="section-head">
-          <div>
-            <h2>Current-window fixtures</h2>
-            <p class="section-copy">These are the fixtures this competition currently contributes to the active Odds Genius public window.</p>
+        <article class="panel current-window-layer">
+          <div class="widget-reference-head">
+            <div>
+              <span class="metric-label">OG current window</span>
+              <h4>Current-window fixtures</h4>
+            </div>
           </div>
-        </div>
-        ${renderEntityFixtureSection(
-          competition.fixtures.upcoming,
-          "No upcoming fixtures from this competition are currently visible in the published window."
-        )}
+          <p class="section-copy">These are the fixtures this competition currently contributes to the active Odds Genius public window.</p>
+          ${renderEntityFixtureSection(
+            competition.fixtures.upcoming,
+            "No upcoming fixtures from this competition are currently visible in the published window."
+          )}
+        </article>
       </section>
     `;
     const resultsContent = `
       <section class="section">
-        <article class="panel widget-reference-shell">
+        <article class="panel widget-reference-shell archive-layer">
           <div class="widget-reference-head">
             <div>
               <span class="metric-label">Broader results</span>
@@ -2507,16 +2510,19 @@
         </article>
       </section>
       <section class="section">
-        <div class="section-head">
-          <div>
-            <h2>Current-window settled fixtures</h2>
-            <p class="section-copy">These are competition fixtures in the current published window that already look settled or complete.</p>
+        <article class="panel current-window-layer">
+          <div class="widget-reference-head">
+            <div>
+              <span class="metric-label">OG current window</span>
+              <h4>Current-window settled fixtures</h4>
+            </div>
           </div>
-        </div>
-        ${renderEntityFixtureSection(
-          competition.fixtures.results,
-          "No completed fixtures from this competition are currently visible in the published window."
-        )}
+          <p class="section-copy">These are competition fixtures in the current published window that already look settled or complete.</p>
+          ${renderEntityFixtureSection(
+            competition.fixtures.results,
+            "No completed fixtures from this competition are currently visible in the published window."
+          )}
+        </article>
       </section>
     `;
     const tableContent = `
@@ -2580,9 +2586,9 @@
     };
     return `
       <section class="hero">
-        <article class="hero-main">
+        <article class="hero-main entity-hero entity-hero-competition">
           <div class="entity-directory-head">
-            ${badgeMarkup(competition.logo, competition.name, "fixture-hero-badge")}
+            ${badgeMarkup(competition.logo, competition.name, "entity-mark entity-mark-lg entity-mark-competition")}
             <div>
               <p class="hero-kicker">Competition desk</p>
               <h1>${escapeHtml(competition.name)}</h1>
@@ -2655,7 +2661,7 @@
       .slice(0, 16);
     return `
       <section class="hero">
-        <article class="hero-main">
+        <article class="hero-main entity-hero">
           <p class="hero-kicker">Teams</p>
           <h1>Team-led entry into the board.</h1>
           <p>Team pages own the current window team story: fixtures, results, current form, and where the model is seeing signal around that side.</p>
@@ -2834,9 +2840,9 @@
     };
     return `
       <section class="hero">
-        <article class="hero-main">
+        <article class="hero-main entity-hero">
           <div class="entity-directory-head">
-            ${badgeMarkup(team.logo, team.name, "fixture-hero-badge")}
+            ${badgeMarkup(team.logo, team.name, "entity-mark entity-mark-lg")}
             <div>
               <p class="hero-kicker">Team desk</p>
               <h1>${escapeHtml(team.name)}</h1>
@@ -5782,10 +5788,14 @@
               const goals = fixtureRow?.goals || {};
               const fixtureMeta = fixtureRow?.fixture || {};
               const status = fixtureMeta?.status || {};
-              const score =
-                Number.isFinite(Number(goals.home)) && Number.isFinite(Number(goals.away))
-                  ? `${goals.home}-${goals.away}`
-                  : "vs";
+              const hasListedScore =
+                goals.home !== null &&
+                goals.home !== undefined &&
+                goals.away !== null &&
+                goals.away !== undefined &&
+                Number.isFinite(Number(goals.home)) &&
+                Number.isFinite(Number(goals.away));
+              const score = hasListedScore ? `${goals.home}-${goals.away}` : "vs";
               const statusText =
                 scope === "results"
                   ? String(status.short || status.long || "FT").trim() || "FT"
@@ -6003,7 +6013,7 @@
                     <article class="panel lineup-team-panel">
                       <div class="lineup-team-head">
                         <div class="lineup-team-title">
-                          ${badgeMarkup(teamInfo.logo, teamInfo.name, "fixture-hero-badge")}
+                          ${badgeMarkup(teamInfo.logo, teamInfo.name, "lineup-team-badge")}
                           <div>
                             <h4>${escapeHtml(teamInfo.name || "Team")}</h4>
                             <p class="muted">Formation ${escapeHtml(team?.formation || "TBC")} • Coach ${escapeHtml(coach.name || "TBC")}</p>
