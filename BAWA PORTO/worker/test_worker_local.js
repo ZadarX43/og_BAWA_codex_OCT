@@ -123,6 +123,8 @@ class MockD1 {
         }
         return { success: true };
       }
+      case "get_user_by_id":
+        return this.users.find((row) => row.id === args.id) || null;
       case "get_user_by_subscription_identity": {
         const sub = this.subscriptions.find(
           (row) =>
@@ -190,6 +192,21 @@ class MockD1 {
       case "insert_account_admin_note":
         this.accountAdminNotes.push({ ...args });
         return { success: true };
+      case "list_account_risk_flags_by_user":
+        return this.accountRiskFlags
+          .filter((row) => row.user_id === args.user_id && (!args.status || row.flag_status === args.status))
+          .sort((a, b) => String(b.opened_at).localeCompare(String(a.opened_at)))
+          .slice(0, args.limit);
+      case "list_account_admin_notes_by_user":
+        return this.accountAdminNotes
+          .filter((row) => row.user_id === args.user_id)
+          .sort((a, b) => String(b.created_at).localeCompare(String(a.created_at)))
+          .slice(0, args.limit);
+      case "list_auth_events_by_user":
+        return this.authEvents
+          .filter((row) => row.user_id === args.user_id)
+          .sort((a, b) => String(b.created_at).localeCompare(String(a.created_at)))
+          .slice(0, args.limit);
       case "list_active_account_sessions_by_user":
         return this.accountSessions
           .filter((row) => row.user_id === args.user_id && !row.is_revoked && String(row.expires_at) > new Date().toISOString())
@@ -479,6 +496,7 @@ const createEnv = () => {
     PREMIUM_TOKEN_SECRET: "test_premium_token_secret",
     AUTH_MAGIC_LINK_SECRET: "test_auth_magic_link_secret",
     AUTH_SESSION_SECRET: "test_auth_session_secret",
+    INTERNAL_ADMIN_SECRET: "test_internal_admin_secret",
     RESEND_API_KEY: "test_resend_api_key",
     AUTH_EMAIL_FROM: "Odds Genius <auth@oddsgenius.test>",
     TELEGRAM_BOT_TOKEN: "telegram_bot_test_token",
@@ -1247,6 +1265,113 @@ const testAccountRiskFlaggingFromSessionSpread = async (fetchHarness) => {
   assert.equal(env.ACCOUNT_DB.accountAdminNotes[0].note_type, "risk_note");
 };
 
+const testInternalAccountReviewReadApis = async (fetchHarness) => {
+  const env = createEnv();
+  await writeSubscriberRecord(
+    env,
+    buildSubscriberRecord({
+      email: "member@example.com",
+    })
+  );
+
+  const requestResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/auth/magic-link/request", "POST", {
+      email: "member@example.com",
+    }),
+    env
+  );
+  assert.equal(requestResponse.status, 200);
+  const emailBody = fetchHarness.sentEmails.at(-1);
+  const verifyMatch = String(emailBody?.html || "").match(/verify\?token=([^"&]+)/);
+  assert.ok(verifyMatch?.[1], "expected magic-link token in email body");
+  const token = decodeURIComponent(verifyMatch[1]);
+
+  const verifyResponse = await worker.fetch(
+    makeGetRequest(`http://localhost/api/auth/magic-link/verify?token=${encodeURIComponent(token)}`),
+    env
+  );
+  assert.equal(verifyResponse.status, 303);
+  const userId = env.ACCOUNT_DB.accountSessions[0].user_id;
+
+  await worker.fetch(
+    jsonRequest(
+      `http://localhost/internal/accounts/${encodeURIComponent(userId)}/notes`,
+      "POST",
+      {
+        note_type: "support_note",
+        content: "Customer confirmed recent travel between devices.",
+        author_id: "internal:test",
+      },
+      {
+        "x-og-internal-admin": env.INTERNAL_ADMIN_SECRET,
+      }
+    ),
+    env
+  );
+
+  const summaryResponse = await worker.fetch(
+    makeGetRequest(`http://localhost/internal/accounts/${encodeURIComponent(userId)}`, {
+      "x-og-internal-admin": env.INTERNAL_ADMIN_SECRET,
+    }),
+    env
+  );
+  const summaryPayload = await summaryResponse.json();
+  assert.equal(summaryResponse.status, 200);
+  assert.equal(summaryPayload.status, "internal_account_loaded");
+  assert.equal(summaryPayload.account_summary.user.id, userId);
+
+  const lookupResponse = await worker.fetch(
+    makeGetRequest(`http://localhost/internal/accounts/lookup?email=${encodeURIComponent("member@example.com")}`, {
+      "x-og-internal-admin": env.INTERNAL_ADMIN_SECRET,
+    }),
+    env
+  );
+  const lookupPayload = await lookupResponse.json();
+  assert.equal(lookupResponse.status, 200);
+  assert.equal(lookupPayload.account_summary.user.id, userId);
+
+  const notesResponse = await worker.fetch(
+    makeGetRequest(`http://localhost/internal/accounts/${encodeURIComponent(userId)}/notes`, {
+      "x-og-internal-admin": env.INTERNAL_ADMIN_SECRET,
+    }),
+    env
+  );
+  const notesPayload = await notesResponse.json();
+  assert.equal(notesResponse.status, 200);
+  assert.equal(notesPayload.status, "internal_account_notes_loaded");
+  assert.equal(notesPayload.notes.length >= 1, true);
+
+  const flagsResponse = await worker.fetch(
+    makeGetRequest(`http://localhost/internal/accounts/${encodeURIComponent(userId)}/flags`, {
+      "x-og-internal-admin": env.INTERNAL_ADMIN_SECRET,
+    }),
+    env
+  );
+  const flagsPayload = await flagsResponse.json();
+  assert.equal(flagsResponse.status, 200);
+  assert.equal(flagsPayload.status, "internal_account_flags_loaded");
+
+  const timelineResponse = await worker.fetch(
+    makeGetRequest(`http://localhost/internal/accounts/${encodeURIComponent(userId)}/timeline`, {
+      "x-og-internal-admin": env.INTERNAL_ADMIN_SECRET,
+    }),
+    env
+  );
+  const timelinePayload = await timelineResponse.json();
+  assert.equal(timelineResponse.status, 200);
+  assert.equal(timelinePayload.status, "internal_account_timeline_loaded");
+  assert.equal(Array.isArray(timelinePayload.timeline), true);
+  assert.equal(timelinePayload.timeline.length >= 1, true);
+
+  const unauthorizedResponse = await worker.fetch(
+    makeGetRequest(`http://localhost/internal/accounts/${encodeURIComponent(userId)}`),
+    env
+  );
+  const unauthorizedPayload = await unauthorizedResponse.json();
+  assert.equal(unauthorizedResponse.status, 401);
+  assert.equal(unauthorizedPayload.status, "internal_admin_unauthorized");
+};
+
 const testTelegramWebhookCompletesLinkFlow = async (fetchHarness) => {
   const env = createEnv();
   await writeSubscriberRecord(
@@ -1817,6 +1942,7 @@ const main = async () => {
     await testAccountSessionsState(fetchHarness);
     await testAccountSessionActions(fetchHarness);
     await testAccountRiskFlaggingFromSessionSpread(fetchHarness);
+    await testInternalAccountReviewReadApis(fetchHarness);
     await testTelegramWebhookCompletesLinkFlow(fetchHarness);
     await testTelegramTestAlertRoute(fetchHarness);
     await testTelegramFixtureAlertRoute(fetchHarness);
@@ -1838,6 +1964,7 @@ const main = async () => {
     console.log("- account devices session surface: passed");
     console.log("- account device actions: passed");
     console.log("- account risk state and flag recording: passed");
+    console.log("- internal account review read APIs: passed");
     console.log("- Telegram bot webhook completion flow: passed");
     console.log("- Telegram test alert route: passed");
     console.log("- Telegram fixture alert route: passed");

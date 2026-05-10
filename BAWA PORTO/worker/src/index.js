@@ -12,11 +12,15 @@ import {
   completeTelegramLink,
   ensureAccountRiskState,
   getAccountDb,
+  getAccountStateByUserId,
   getOpenAccountRiskFlagByType,
   getAccountRiskState,
   getAccountSessionById,
   getAccountStateByEmail,
+  listAccountAdminNotesByUser,
   listAccountSessionsByUser,
+  listAccountRiskFlagsByUser,
+  listAuthEventsByUser,
   listDueNotificationAlerts,
   listActiveAccountSessionsByUser,
   listNotificationAlertsByUser,
@@ -386,6 +390,32 @@ const shouldClearSessionCookie = (status) =>
 
 const sessionFailureHeaders = (status) =>
   shouldClearSessionCookie(status) ? { "set-cookie": clearCookieHeader(AUTH_SESSION_COOKIE) } : {};
+
+const getInternalAdminSecret = (env) => String(env.INTERNAL_ADMIN_SECRET || "").trim();
+
+const verifyInternalAdminRequest = (request, env) => {
+  const configured = getInternalAdminSecret(env);
+  if (!configured) {
+    return {
+      ok: false,
+      status: "internal_admin_not_wired",
+      message: "INTERNAL_ADMIN_SECRET is required for internal review routes.",
+      code: 501,
+    };
+  }
+  const supplied = String(
+    request.headers.get("x-og-internal-admin") || request.headers.get("authorization")?.replace(/^Bearer\s+/i, "") || ""
+  ).trim();
+  if (!supplied || supplied !== configured) {
+    return {
+      ok: false,
+      status: "internal_admin_unauthorized",
+      message: "Internal admin authorization failed.",
+      code: 401,
+    };
+  }
+  return { ok: true };
+};
 
 const putKvJson = async (store, key, payload, options = {}) => {
   if (options.expirationTtl) {
@@ -1026,6 +1056,147 @@ async function recordSessionSpreadRiskIfNeeded(accountDb, accountState, request,
 
   return getAccountRiskState(accountDb, userId);
 }
+
+const summarizeInternalAccount = async (accountDb, userId) => {
+  const account = await getAccountStateByUserId(accountDb, userId);
+  if (!account?.user?.id) {
+    return null;
+  }
+  const riskState = (await getAccountRiskState(accountDb, userId)) || (await ensureAccountRiskState(accountDb, userId));
+  const sessions = await listAccountSessionsByUser(accountDb, userId, { limit: 12 });
+  const openFlags = await listAccountRiskFlagsByUser(accountDb, userId, { status: "open", limit: 20 });
+  const activeSessions = sessions.filter(
+    (session) =>
+      !(Number(session.is_revoked || 0) === 1 || session.revoked_at) &&
+      Date.parse(String(session.expires_at || "")) > Date.now()
+  );
+  const deviceLabels = Array.from(
+    new Set(
+      activeSessions
+        .map((session) => String(session.device_label || "").trim())
+        .filter(Boolean)
+    )
+  );
+  const ipHashes = Array.from(
+    new Set(
+      activeSessions
+        .map((session) => String(session.ip_hash || "").trim())
+        .filter(Boolean)
+    )
+  );
+  const primarySession = sessions.find((session) => Number(session.is_primary || 0) === 1) || null;
+
+  return {
+    user: account.user,
+    subscription: account.subscription,
+    telegram_link: account.telegram_link,
+    risk_state: riskState,
+    session_summary: {
+      active_session_count: activeSessions.length,
+      recent_session_count: sessions.length,
+      distinct_device_count: deviceLabels.length,
+      distinct_ip_hash_count: ipHashes.length,
+      primary_device_label: primarySession?.device_label || null,
+    },
+    open_flags_count: openFlags.length,
+  };
+};
+
+const buildInternalTimeline = async (accountDb, userId) => {
+  const [authEvents, sessions, flags, notes] = await Promise.all([
+    listAuthEventsByUser(accountDb, userId, { limit: 40 }),
+    listAccountSessionsByUser(accountDb, userId, { limit: 20 }),
+    listAccountRiskFlagsByUser(accountDb, userId, { limit: 20 }),
+    listAccountAdminNotesByUser(accountDb, userId, { limit: 20 }),
+  ]);
+
+  const items = [];
+
+  for (const event of authEvents) {
+    let metadata = {};
+    try {
+      metadata = JSON.parse(event.metadata_json || "{}");
+    } catch {
+      metadata = {};
+    }
+    items.push({
+      source_type: "auth_event",
+      id: event.id,
+      timestamp: event.created_at,
+      event_type: event.event_type,
+      summary: event.event_type.replaceAll("_", " "),
+      device_label: metadata.target_device_label || metadata.primary_device_label || null,
+      ip_hint: event.ip_hint || null,
+      user_agent_hint: event.user_agent_hint || null,
+      metadata,
+    });
+  }
+
+  for (const session of sessions) {
+    items.push({
+      source_type: "session",
+      id: session.id,
+      timestamp: session.last_seen_at || session.issued_at,
+      event_type: Number(session.is_revoked || 0) === 1 || session.revoked_at ? "session_revoked_state" : "session_seen",
+      summary:
+        Number(session.is_revoked || 0) === 1 || session.revoked_at
+          ? "Session revoked"
+          : "Session active",
+      device_label: session.device_label || null,
+      ip_hint: session.ip_hash || null,
+      user_agent_hint: session.user_agent_hash || null,
+      metadata: {
+        session_kind: session.session_kind || "browser",
+        expires_at: session.expires_at || null,
+        revoked_at: session.revoked_at || null,
+      },
+    });
+  }
+
+  for (const flag of flags) {
+    let evidence = {};
+    try {
+      evidence = JSON.parse(flag.evidence_json || "{}");
+    } catch {
+      evidence = {};
+    }
+    items.push({
+      source_type: "risk_flag",
+      id: flag.id,
+      timestamp: flag.opened_at,
+      event_type: `risk_flag_${flag.flag_type}`,
+      summary: flag.summary,
+      device_label: null,
+      ip_hint: null,
+      user_agent_hint: null,
+      metadata: {
+        severity: flag.severity,
+        flag_status: flag.flag_status,
+        source: flag.source,
+        evidence,
+      },
+    });
+  }
+
+  for (const note of notes) {
+    items.push({
+      source_type: "admin_note",
+      id: note.id,
+      timestamp: note.created_at,
+      event_type: `admin_note_${note.note_type}`,
+      summary: note.content,
+      device_label: null,
+      ip_hint: null,
+      user_agent_hint: null,
+      metadata: {
+        note_type: note.note_type,
+        author_id: note.author_id || null,
+      },
+    });
+  }
+
+  return items.sort((a, b) => String(b.timestamp || "").localeCompare(String(a.timestamp || ""))).slice(0, 80);
+};
 
 async function verifySessionAccess(request, env) {
   const sessionToken = getSessionCookieToken(request);
@@ -1936,6 +2107,175 @@ async function handleAccountSessionMakePrimary(request, env) {
       revoked_at: session.revoked_at || null,
       revoke_reason: session.revoke_reason || null,
     })),
+  });
+}
+
+async function handleInternalAccountLookup(request, env) {
+  const adminAccess = verifyInternalAdminRequest(request, env);
+  if (!adminAccess.ok) {
+    return json({ ok: false, status: adminAccess.status, message: adminAccess.message }, adminAccess.code);
+  }
+
+  const accountDb = getAccountDb(env);
+  if (!accountDb) {
+    return configError("ACCOUNT_DB D1 binding is required for internal review routes.", ["ACCOUNT_DB"]);
+  }
+
+  const url = new URL(request.url);
+  const userId = String(url.searchParams.get("user_id") || "").trim();
+  const email = normalizeEmail(url.searchParams.get("email") || "");
+  const account = userId
+    ? await getAccountStateByUserId(accountDb, userId)
+    : email
+      ? await getAccountStateByEmail(accountDb, email)
+      : null;
+
+  if (!account?.user?.id) {
+    return json(
+      {
+        ok: false,
+        status: "account_not_found",
+        message: "No account matched that internal lookup.",
+      },
+      404
+    );
+  }
+
+  return json({
+    ok: true,
+    status: "internal_account_lookup_loaded",
+    account_summary: await summarizeInternalAccount(accountDb, account.user.id),
+  });
+}
+
+async function handleInternalAccountRead(request, env, userId) {
+  const adminAccess = verifyInternalAdminRequest(request, env);
+  if (!adminAccess.ok) {
+    return json({ ok: false, status: adminAccess.status, message: adminAccess.message }, adminAccess.code);
+  }
+
+  const accountDb = getAccountDb(env);
+  if (!accountDb) {
+    return configError("ACCOUNT_DB D1 binding is required for internal review routes.", ["ACCOUNT_DB"]);
+  }
+
+  const summary = await summarizeInternalAccount(accountDb, userId);
+  if (!summary?.user?.id) {
+    return json(
+      {
+        ok: false,
+        status: "account_not_found",
+        message: "No account matched that internal account id.",
+      },
+      404
+    );
+  }
+
+  return json({
+    ok: true,
+    status: "internal_account_loaded",
+    account_summary: summary,
+  });
+}
+
+async function handleInternalAccountFlagsRead(request, env, userId) {
+  const adminAccess = verifyInternalAdminRequest(request, env);
+  if (!adminAccess.ok) {
+    return json({ ok: false, status: adminAccess.status, message: adminAccess.message }, adminAccess.code);
+  }
+
+  const accountDb = getAccountDb(env);
+  if (!accountDb) {
+    return configError("ACCOUNT_DB D1 binding is required for internal review routes.", ["ACCOUNT_DB"]);
+  }
+
+  const flags = await listAccountRiskFlagsByUser(accountDb, userId, { limit: 30 });
+  return json({
+    ok: true,
+    status: "internal_account_flags_loaded",
+    flags: flags.map((flag) => ({
+      ...flag,
+      evidence: (() => {
+        try {
+          return JSON.parse(flag.evidence_json || "{}");
+        } catch {
+          return {};
+        }
+      })(),
+    })),
+  });
+}
+
+async function handleInternalAccountNotesRead(request, env, userId) {
+  const adminAccess = verifyInternalAdminRequest(request, env);
+  if (!adminAccess.ok) {
+    return json({ ok: false, status: adminAccess.status, message: adminAccess.message }, adminAccess.code);
+  }
+
+  const accountDb = getAccountDb(env);
+  if (!accountDb) {
+    return configError("ACCOUNT_DB D1 binding is required for internal review routes.", ["ACCOUNT_DB"]);
+  }
+
+  const notes = await listAccountAdminNotesByUser(accountDb, userId, { limit: 30 });
+  return json({
+    ok: true,
+    status: "internal_account_notes_loaded",
+    notes,
+  });
+}
+
+async function handleInternalAccountNoteCreate(request, env, userId) {
+  const adminAccess = verifyInternalAdminRequest(request, env);
+  if (!adminAccess.ok) {
+    return json({ ok: false, status: adminAccess.status, message: adminAccess.message }, adminAccess.code);
+  }
+
+  const accountDb = getAccountDb(env);
+  if (!accountDb) {
+    return configError("ACCOUNT_DB D1 binding is required for internal review routes.", ["ACCOUNT_DB"]);
+  }
+
+  let payload;
+  try {
+    payload = await request.json();
+  } catch (error) {
+    return requestError("Internal note body must be valid JSON.", error.message);
+  }
+
+  const note = await addAccountAdminNote(accountDb, {
+    user_id: userId,
+    note_type: String(payload?.note_type || "").trim() || "support_note",
+    visibility: String(payload?.visibility || "internal").trim() || "internal",
+    content: String(payload?.content || "").trim(),
+    author_id: String(payload?.author_id || "").trim() || "internal:operator",
+  });
+  if (!note?.id) {
+    return requestError("A note_type and content are required to add an internal note.");
+  }
+
+  return json({
+    ok: true,
+    status: "internal_account_note_created",
+    note,
+  });
+}
+
+async function handleInternalAccountTimelineRead(request, env, userId) {
+  const adminAccess = verifyInternalAdminRequest(request, env);
+  if (!adminAccess.ok) {
+    return json({ ok: false, status: adminAccess.status, message: adminAccess.message }, adminAccess.code);
+  }
+
+  const accountDb = getAccountDb(env);
+  if (!accountDb) {
+    return configError("ACCOUNT_DB D1 binding is required for internal review routes.", ["ACCOUNT_DB"]);
+  }
+
+  return json({
+    ok: true,
+    status: "internal_account_timeline_loaded",
+    timeline: await buildInternalTimeline(accountDb, userId),
   });
 }
 
@@ -3348,6 +3688,12 @@ async function handleRequest(request, env) {
         "POST /api/account/sessions/revoke",
         "POST /api/account/sessions/revoke-others",
         "POST /api/account/sessions/make-primary",
+        "GET /internal/accounts/lookup",
+        "GET /internal/accounts/:user_id",
+        "GET /internal/accounts/:user_id/flags",
+        "GET /internal/accounts/:user_id/notes",
+        "POST /internal/accounts/:user_id/notes",
+        "GET /internal/accounts/:user_id/timeline",
         "POST /api/account/preferences",
         "GET /api/account/alerts",
         "POST /api/account/alerts/refresh",
@@ -3456,6 +3802,61 @@ async function handleRequest(request, env) {
     }
     response = await handleAccountSessionMakePrimary(request, env);
     return withCors(response, request, env);
+  }
+
+  if (pathname === "/internal/accounts/lookup") {
+    if (request.method !== "GET") {
+      response = methodNotAllowed("GET");
+      return withCors(response, request, env);
+    }
+    response = await handleInternalAccountLookup(request, env);
+    return withCors(response, request, env);
+  }
+
+  const internalAccountMatch = pathname.match(/^\/internal\/accounts\/([^/]+)(?:\/(flags|notes|timeline))?$/);
+  if (internalAccountMatch) {
+    const userId = decodeURIComponent(internalAccountMatch[1] || "").trim();
+    const subroute = String(internalAccountMatch[2] || "").trim();
+    if (!userId) {
+      response = requestError("Internal account id is required.");
+      return withCors(response, request, env);
+    }
+    if (!subroute) {
+      if (request.method !== "GET") {
+        response = methodNotAllowed("GET");
+        return withCors(response, request, env);
+      }
+      response = await handleInternalAccountRead(request, env, userId);
+      return withCors(response, request, env);
+    }
+    if (subroute === "flags") {
+      if (request.method !== "GET") {
+        response = methodNotAllowed("GET");
+        return withCors(response, request, env);
+      }
+      response = await handleInternalAccountFlagsRead(request, env, userId);
+      return withCors(response, request, env);
+    }
+    if (subroute === "notes") {
+      if (request.method === "GET") {
+        response = await handleInternalAccountNotesRead(request, env, userId);
+        return withCors(response, request, env);
+      }
+      if (request.method === "POST") {
+        response = await handleInternalAccountNoteCreate(request, env, userId);
+        return withCors(response, request, env);
+      }
+      response = methodNotAllowed("GET,POST");
+      return withCors(response, request, env);
+    }
+    if (subroute === "timeline") {
+      if (request.method !== "GET") {
+        response = methodNotAllowed("GET");
+        return withCors(response, request, env);
+      }
+      response = await handleInternalAccountTimelineRead(request, env, userId);
+      return withCors(response, request, env);
+    }
   }
 
   if (pathname === "/api/account/preferences") {

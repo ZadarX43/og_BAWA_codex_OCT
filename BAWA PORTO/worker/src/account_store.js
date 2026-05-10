@@ -440,6 +440,32 @@ export async function getAccountRiskState(db, userId) {
   );
 }
 
+export async function listAccountRiskFlagsByUser(db, userId, options = {}) {
+  if (!db || !userId) {
+    return [];
+  }
+  const limit = Math.max(1, Math.min(50, Number(options.limit || 20)));
+  const status = String(options.status || "").trim().toLowerCase();
+  return callMaybeMock(
+    db,
+    "list_account_risk_flags_by_user",
+    { user_id: userId, limit, status },
+    () =>
+      all(
+        db,
+        `-- og:list_account_risk_flags_by_user
+        SELECT id, user_id, flag_type, severity, flag_status, source, summary, evidence_json,
+               opened_at, resolved_at, resolved_by, resolution_note, created_at, updated_at
+        FROM account_risk_flags
+        WHERE user_id = ?1
+          AND (?2 = '' OR flag_status = ?2)
+        ORDER BY opened_at DESC, created_at DESC
+        LIMIT ?3`,
+        [userId, status, limit]
+      )
+  );
+}
+
 export async function ensureAccountRiskState(db, userId) {
   if (!db || !userId) {
     return null;
@@ -710,6 +736,52 @@ export async function addAccountAdminNote(db, note) {
       )
   );
   return payload;
+}
+
+export async function listAccountAdminNotesByUser(db, userId, options = {}) {
+  if (!db || !userId) {
+    return [];
+  }
+  const limit = Math.max(1, Math.min(50, Number(options.limit || 20)));
+  return callMaybeMock(
+    db,
+    "list_account_admin_notes_by_user",
+    { user_id: userId, limit },
+    () =>
+      all(
+        db,
+        `-- og:list_account_admin_notes_by_user
+        SELECT id, user_id, note_type, visibility, content, author_id, created_at, updated_at
+        FROM account_admin_notes
+        WHERE user_id = ?1
+        ORDER BY created_at DESC
+        LIMIT ?2`,
+        [userId, limit]
+      )
+  );
+}
+
+export async function listAuthEventsByUser(db, userId, options = {}) {
+  if (!db || !userId) {
+    return [];
+  }
+  const limit = Math.max(1, Math.min(100, Number(options.limit || 40)));
+  return callMaybeMock(
+    db,
+    "list_auth_events_by_user",
+    { user_id: userId, limit },
+    () =>
+      all(
+        db,
+        `-- og:list_auth_events_by_user
+        SELECT id, user_id, email_normalized, event_type, ip_hint, user_agent_hint, created_at, metadata_json
+        FROM auth_events
+        WHERE user_id = ?1
+        ORDER BY created_at DESC
+        LIMIT ?2`,
+        [userId, limit]
+      )
+  );
 }
 
 export async function listActiveAccountSessionsByUser(db, userId) {
@@ -1063,6 +1135,32 @@ export async function getAccountStateByEmail(db, email) {
         }
       : null,
   };
+}
+
+export async function getAccountStateByUserId(db, userId) {
+  if (!db || !userId) {
+    return null;
+  }
+
+  const user = await callMaybeMock(
+    db,
+    "get_user_by_id",
+    { id: userId },
+    () =>
+      first(
+        db,
+        `-- og:get_user_by_id
+        SELECT id, email, email_normalized, email_verified_at, created_at, updated_at, account_status
+        FROM users
+        WHERE id = ?1
+        LIMIT 1`,
+        [userId]
+      )
+  );
+  if (!user?.id) {
+    return null;
+  }
+  return getAccountStateByEmail(db, user.email_normalized);
 }
 
 export async function updateNotificationPreferences(db, userId, input = {}) {
