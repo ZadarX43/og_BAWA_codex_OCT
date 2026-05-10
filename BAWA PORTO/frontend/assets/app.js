@@ -2453,10 +2453,30 @@
     `;
     const fixturesContent = `
       <section class="section">
+        <article class="panel widget-reference-shell">
+          <div class="widget-reference-head">
+            <div>
+              <span class="metric-label">Broader schedule</span>
+              <h4>Competition fixtures archive</h4>
+            </div>
+          </div>
+          <p class="section-copy">This is the wider league schedule from the upstream feed, so the competition page can feel like a real destination instead of only a current-window slice.</p>
+          <div
+            class="widget-reference-frame"
+            data-role="competition-fixtures-reference"
+            data-competition="${escapeHtml(competition.name)}"
+            data-league-id="${escapeHtml(competition.apiLeagueId)}"
+            data-season="${escapeHtml(competition.apiSeason)}"
+          >
+            <div class="reference-loading">Loading broader competition fixtures…</div>
+          </div>
+        </article>
+      </section>
+      <section class="section">
         <div class="section-head">
           <div>
-            <h2>Upcoming fixtures</h2>
-            <p class="section-copy">Use the competition desk to scan what is still ahead, then step into fixture pages for the full verdict stack.</p>
+            <h2>Current-window fixtures</h2>
+            <p class="section-copy">These are the fixtures this competition currently contributes to the active Odds Genius public window.</p>
           </div>
         </div>
         ${renderEntityFixtureSection(
@@ -2467,9 +2487,29 @@
     `;
     const resultsContent = `
       <section class="section">
+        <article class="panel widget-reference-shell">
+          <div class="widget-reference-head">
+            <div>
+              <span class="metric-label">Broader results</span>
+              <h4>Competition results archive</h4>
+            </div>
+          </div>
+          <p class="section-copy">This pulls a wider recent-results layer from the upstream feed so the competition page carries a real archive feel, not just today’s public slice.</p>
+          <div
+            class="widget-reference-frame"
+            data-role="competition-results-reference"
+            data-competition="${escapeHtml(competition.name)}"
+            data-league-id="${escapeHtml(competition.apiLeagueId)}"
+            data-season="${escapeHtml(competition.apiSeason)}"
+          >
+            <div class="reference-loading">Loading broader competition results…</div>
+          </div>
+        </article>
+      </section>
+      <section class="section">
         <div class="section-head">
           <div>
-            <h2>Recent results in view</h2>
+            <h2>Current-window settled fixtures</h2>
             <p class="section-copy">These are competition fixtures in the current published window that already look settled or complete.</p>
           </div>
         </div>
@@ -5567,6 +5607,8 @@
     const scoreboardRoots = Array.from(document.querySelectorAll("[data-role='fixture-scoreboard']"));
     const formRoots = Array.from(document.querySelectorAll("[data-role='fixture-form-reference']"));
     const competitionStandingsRoots = Array.from(document.querySelectorAll("[data-role='competition-standings-reference']"));
+    const competitionFixturesRoots = Array.from(document.querySelectorAll("[data-role='competition-fixtures-reference']"));
+    const competitionResultsRoots = Array.from(document.querySelectorAll("[data-role='competition-results-reference']"));
     const teamFormRoots = Array.from(document.querySelectorAll("[data-role='team-form-reference']"));
     if (
       (!lineupRoots.length &&
@@ -5574,6 +5616,8 @@
         !scoreboardRoots.length &&
         !formRoots.length &&
         !competitionStandingsRoots.length &&
+        !competitionFixturesRoots.length &&
+        !competitionResultsRoots.length &&
         !teamFormRoots.length) ||
       !workerConfigured()
     ) {
@@ -5583,6 +5627,7 @@
     const fixtureDetailsCache = new Map();
     const standingsCache = new Map();
     const teamFixturesCache = new Map();
+    const competitionFixturesCache = new Map();
     const resolveFixtureReference = async (root) => {
       const params = new URLSearchParams({
         date: root.dataset.date || "",
@@ -5633,6 +5678,25 @@
       }
       const groups = payload.response?.[0]?.league?.standings || [];
       return Array.isArray(groups) && groups.length ? groups[0] : [];
+    };
+    const fetchCompetitionFixtures = async (leagueId, season, scope) => {
+      const cacheKey = `${leagueId}:${season}:${scope}`;
+      if (!competitionFixturesCache.has(cacheKey)) {
+        const params = new URLSearchParams({
+          league: String(leagueId || ""),
+          season: String(season || ""),
+          [scope === "results" ? "last" : "next"]: scope === "results" ? "12" : "10",
+        });
+        competitionFixturesCache.set(
+          cacheKey,
+          fetchWorkerJson(`/api/widgets/football/fixtures?${params.toString()}`, { method: "GET" })
+        );
+      }
+      const { response, payload } = await competitionFixturesCache.get(cacheKey);
+      if (!response.ok || !Array.isArray(payload?.response)) {
+        return [];
+      }
+      return payload.response;
     };
     const isFinishedStatus = (statusShort) => /FT|AET|PEN/i.test(String(statusShort || "").trim());
     const fetchRecentTeamFixtures = async (teamId) => {
@@ -5704,6 +5768,48 @@
         { scored: 0, conceded: 0 }
       );
       return `${summary.scored} scored • ${summary.conceded} conceded`;
+    };
+    const renderCompetitionArchiveCards = (fixtures, scope) => {
+      const list = Array.isArray(fixtures) ? fixtures : [];
+      if (!list.length) {
+        return `<div class="notice">No ${scope === "results" ? "recent results" : "upcoming fixtures"} are available from the upstream feed yet.</div>`;
+      }
+      return `
+        <div class="card-grid archive-grid">
+          ${list
+            .map((fixtureRow) => {
+              const teams = fixtureRow?.teams || {};
+              const goals = fixtureRow?.goals || {};
+              const fixtureMeta = fixtureRow?.fixture || {};
+              const status = fixtureMeta?.status || {};
+              const score =
+                Number.isFinite(Number(goals.home)) && Number.isFinite(Number(goals.away))
+                  ? `${goals.home}-${goals.away}`
+                  : "vs";
+              const statusText =
+                scope === "results"
+                  ? String(status.short || status.long || "FT").trim() || "FT"
+                  : formatKickoffLabel(fixtureMeta?.date || "");
+              return `
+                <article class="panel archive-fixture-card">
+                  <div class="intelligence-card-head">
+                    <span class="chip chip-reference">${escapeHtml(statusText)}</span>
+                    ${fixtureRow?.league?.round ? `<span class="chip chip-reference">${escapeHtml(fixtureRow.league.round)}</span>` : ""}
+                  </div>
+                  <strong class="fixture-teamline dashboard-teamline">
+                    ${badgeMarkup(teams?.home?.logo, teams?.home?.name || "Home")}
+                    <span class="team-name">${escapeHtml(teams?.home?.name || "Home")}</span>
+                    <span class="versus">${escapeHtml(score)}</span>
+                    ${badgeMarkup(teams?.away?.logo, teams?.away?.name || "Away")}
+                    <span class="team-name">${escapeHtml(teams?.away?.name || "Away")}</span>
+                  </strong>
+                  <p class="muted">${escapeHtml(formatKickoffLabel(fixtureMeta?.date || ""))}</p>
+                </article>
+              `;
+            })
+            .join("")}
+        </div>
+      `;
     };
     const renderLineupSquad = (players, emptyCopy) => {
       const list = Array.isArray(players) ? players : [];
@@ -5986,6 +6092,38 @@
           `;
         } catch (error) {
           root.innerHTML = `<div class="notice">${escapeHtml(error.message || "Competition table unavailable.")}</div>`;
+        }
+      })
+    );
+    await Promise.all(
+      competitionFixturesRoots.map(async (root) => {
+        try {
+          const frame = root.querySelector(".widget-reference-frame") || root;
+          const leagueId = String(root.dataset.leagueId || "").trim();
+          const season = String(root.dataset.season || "").trim();
+          if (!leagueId || !season) {
+            throw new Error("Broader competition fixtures are not available for this league yet.");
+          }
+          const fixtures = await fetchCompetitionFixtures(leagueId, season, "fixtures");
+          frame.innerHTML = renderCompetitionArchiveCards(fixtures, "fixtures");
+        } catch (error) {
+          root.innerHTML = `<div class="notice">${escapeHtml(error.message || "Competition fixtures unavailable.")}</div>`;
+        }
+      })
+    );
+    await Promise.all(
+      competitionResultsRoots.map(async (root) => {
+        try {
+          const frame = root.querySelector(".widget-reference-frame") || root;
+          const leagueId = String(root.dataset.leagueId || "").trim();
+          const season = String(root.dataset.season || "").trim();
+          if (!leagueId || !season) {
+            throw new Error("Broader competition results are not available for this league yet.");
+          }
+          const fixtures = await fetchCompetitionFixtures(leagueId, season, "results");
+          frame.innerHTML = renderCompetitionArchiveCards(fixtures, "results");
+        } catch (error) {
+          root.innerHTML = `<div class="notice">${escapeHtml(error.message || "Competition results unavailable.")}</div>`;
         }
       })
     );

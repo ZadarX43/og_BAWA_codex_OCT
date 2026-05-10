@@ -1155,6 +1155,24 @@ tbody tr:hover {
   white-space: nowrap;
 }
 
+.archive-grid {
+  align-items: start;
+}
+
+.archive-fixture-card {
+  display: grid;
+  gap: 12px;
+}
+
+.archive-fixture-card .fixture-teamline {
+  align-items: center;
+}
+
+.archive-fixture-card .versus {
+  min-width: 42px;
+  text-align: center;
+}
+
 .fixture-detail-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
