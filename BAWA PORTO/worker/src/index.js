@@ -672,6 +672,21 @@ const positiveIntegerParam = (value) => {
   return numeric;
 };
 
+const normalizeWidgetLookupText = (value) =>
+  normalizePreferenceText(value)
+    .replace(/\b(fc|cf|ac|sc|afc|club)\b/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+const widgetTeamNamesMatch = (left, right) => {
+  const a = normalizeWidgetLookupText(left);
+  const b = normalizeWidgetLookupText(right);
+  if (!a || !b) {
+    return false;
+  }
+  return a === b || a.includes(b) || b.includes(a);
+};
+
 const proxyWidgetStandingsResponse = async (request, env) => {
   const footballKey = getApiSportsFootballKey(env);
   if (!footballKey) {
@@ -728,6 +743,117 @@ const proxyWidgetStandingsResponse = async (request, env) => {
     await cache.put(cacheKey, response.clone());
   }
 
+  return response;
+};
+
+const lookupWidgetFixtureResponse = async (request, env) => {
+  const footballKey = getApiSportsFootballKey(env);
+  if (!footballKey) {
+    return configError("API_SPORTS_FOOTBALL_KEY is required for the widget fixture lookup prototype.", [
+      "API_SPORTS_FOOTBALL_KEY",
+    ]);
+  }
+  if (request.method !== "GET") {
+    return methodNotAllowed("GET");
+  }
+  const requestUrl = new URL(request.url);
+  const league = positiveIntegerParam(requestUrl.searchParams.get("league"));
+  const season = positiveIntegerParam(requestUrl.searchParams.get("season"));
+  const date = String(requestUrl.searchParams.get("date") || "").trim();
+  const home = String(requestUrl.searchParams.get("home") || "").trim();
+  const away = String(requestUrl.searchParams.get("away") || "").trim();
+  if (!league || !season || !date || !home || !away) {
+    return requestError(
+      "Widget fixture lookup requires league, season, date, home, and away query parameters."
+    );
+  }
+
+  const cache = getPremiumCache();
+  const cacheKey = buildWidgetFootballCacheKey("football-fixture-lookup", {
+    league,
+    season,
+    date,
+    home,
+    away,
+  });
+  if (cache) {
+    const cached = await cache.match(cacheKey);
+    if (cached) {
+      return new Response(cached.body, {
+        status: cached.status,
+        statusText: cached.statusText,
+        headers: new Headers(cached.headers),
+      });
+    }
+  }
+
+  const upstreamUrl = new URL("https://v3.football.api-sports.io/fixtures");
+  upstreamUrl.searchParams.set("league", String(league));
+  upstreamUrl.searchParams.set("season", String(season));
+  upstreamUrl.searchParams.set("date", date);
+  const upstreamResponse = await fetch(upstreamUrl.toString(), {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+      "x-apisports-key": footballKey,
+    },
+  });
+  let payload;
+  try {
+    payload = await upstreamResponse.json();
+  } catch (error) {
+    return requestError("Widget fixture lookup could not parse the upstream fixture response.", error.message, 502);
+  }
+  if (!upstreamResponse.ok) {
+    return json(
+      {
+        ok: false,
+        status: "widget_fixture_lookup_upstream_failed",
+        message: "The upstream fixture lookup request failed.",
+        upstream_status: upstreamResponse.status,
+        upstream_payload: payload,
+      },
+      502
+    );
+  }
+
+  const fixtures = Array.isArray(payload?.response) ? payload.response : [];
+  const matched = fixtures.find((entry) => {
+    const fixtureHome = entry?.teams?.home?.name || "";
+    const fixtureAway = entry?.teams?.away?.name || "";
+    return widgetTeamNamesMatch(fixtureHome, home) && widgetTeamNamesMatch(fixtureAway, away);
+  });
+  if (!matched?.fixture?.id) {
+    return json(
+      {
+        ok: false,
+        status: "widget_fixture_lookup_not_found",
+        message: "No matching upstream fixture id was found for this fixture yet.",
+      },
+      404
+    );
+  }
+
+  const response = json(
+    {
+      ok: true,
+      status: "widget_fixture_lookup_ready",
+      fixture_id: matched.fixture.id,
+      fixture_status: matched.fixture?.status?.short || "",
+      league_id: matched.league?.id || league,
+      season: matched.league?.season || season,
+      home_team: matched.teams?.home?.name || home,
+      away_team: matched.teams?.away?.name || away,
+    },
+    200,
+    {
+      "cache-control": "public, max-age=300",
+      "x-og-widget-proxy": "football-fixture-lookup",
+    }
+  );
+  if (cache) {
+    await cache.put(cacheKey, response.clone());
+  }
   return response;
 };
 
@@ -4218,6 +4344,7 @@ async function handleRequest(request, env) {
         "POST /api/account/telegram/test-alert",
         "POST /api/account/telegram/fixture-alert",
         "GET /api/widgets/football/standings",
+        "GET /api/widgets/football/fixture-lookup",
         "POST /api/telegram/webhook",
         "POST /api/stripe/checkout",
         "POST /api/premium/token",
@@ -4501,6 +4628,11 @@ async function handleRequest(request, env) {
 
   if (pathname === "/api/widgets/football/standings") {
     response = await proxyWidgetStandingsResponse(request, env);
+    return withCors(response, request, env);
+  }
+
+  if (pathname === "/api/widgets/football/fixture-lookup") {
+    response = await lookupWidgetFixtureResponse(request, env);
     return withCors(response, request, env);
   }
 

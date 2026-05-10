@@ -37,6 +37,7 @@ Current status:
 - `POST /api/account/telegram/test-alert`
 - `POST /api/account/telegram/fixture-alert`
 - `GET /api/widgets/football/standings`
+- `GET /api/widgets/football/fixture-lookup`
 - `POST /api/telegram/webhook`
 - `POST /api/stripe/checkout`
 - `POST /api/premium/token`
@@ -106,6 +107,7 @@ Current harness coverage:
 - Telegram bot webhook can consume `/start oglink_CODE` and complete the D1-backed account link when bot env vars are present
 - followed intelligence can now be queued into D1-backed account alerts and dispatched to Telegram from the published fixture feed
 - fixture-detail standings prototype can now proxy/caches a safe API-SPORTS standings response through the Worker
+- fixture-detail lineups/formation prototype can now resolve upstream fixture ids safely through the Worker before rendering the widget
 - protected route returns only allowlisted premium fields
 - missing token returns `401`
 - expired token returns `401`

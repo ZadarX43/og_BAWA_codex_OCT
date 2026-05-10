@@ -552,6 +552,7 @@ const installMockFetch = () => {
     resendSendFetches: 0,
     telegramSendFetches: 0,
     widgetStandingsFetches: 0,
+    widgetFixtureLookupFetches: 0,
   };
   const sentEmails = [];
   const sentTelegramMessages = [];
@@ -612,6 +613,32 @@ const installMockFetch = () => {
                 name: "La Liga",
                 season: 2025,
                 standings: [[{ rank: 1, team: { id: 529, name: "Barcelona" }, points: 88 }]],
+              },
+            },
+          ],
+        }),
+        {
+          status: 200,
+          headers: {
+            "content-type": "application/json; charset=utf-8",
+          },
+        }
+      );
+    }
+
+    if (url === "https://v3.football.api-sports.io/fixtures?league=140&season=2025&date=2026-05-10") {
+      counters.widgetFixtureLookupFetches += 1;
+      return new Response(
+        JSON.stringify({
+          get: "fixtures",
+          parameters: { league: "140", season: "2025", date: "2026-05-10" },
+          response: [
+            {
+              fixture: { id: 120001, status: { short: "NS" } },
+              league: { id: 140, season: 2025 },
+              teams: {
+                home: { name: "FC Barcelona" },
+                away: { name: "Real Madrid" },
               },
             },
           ],
@@ -2137,6 +2164,31 @@ const testWidgetStandingsProxy = async (fetchHarness) => {
   assert.equal(fetchHarness.counters.widgetStandingsFetches, 1);
 };
 
+const testWidgetFixtureLookupProxy = async (fetchHarness) => {
+  const env = createEnv();
+  const firstResponse = await worker.fetch(
+    makeGetRequest(
+      "http://localhost/api/widgets/football/fixture-lookup?league=140&season=2025&date=2026-05-10&home=Barcelona&away=Real%20Madrid"
+    ),
+    env
+  );
+  const firstPayload = await firstResponse.json();
+  assert.equal(firstResponse.status, 200);
+  assert.equal(firstPayload.fixture_id, 120001);
+  assert.equal(fetchHarness.counters.widgetFixtureLookupFetches, 1);
+
+  const secondResponse = await worker.fetch(
+    makeGetRequest(
+      "http://localhost/api/widgets/football/fixture-lookup?league=140&season=2025&date=2026-05-10&home=Barcelona&away=Real%20Madrid"
+    ),
+    env
+  );
+  const secondPayload = await secondResponse.json();
+  assert.equal(secondResponse.status, 200);
+  assert.equal(secondPayload.league_id, 140);
+  assert.equal(fetchHarness.counters.widgetFixtureLookupFetches, 1);
+};
+
 const testAnalystLeagueMarketDeployStaysWebsiteOnly = async (fetchHarness) => {
   const env = createEnv();
   await writeSubscriberRecord(
@@ -2244,6 +2296,7 @@ const main = async () => {
     await testAccountPreferencesUpdate(fetchHarness);
     await testAccountAlertsQueueAndDispatch(fetchHarness);
     await testWidgetStandingsProxy(fetchHarness);
+    await testWidgetFixtureLookupProxy(fetchHarness);
     await testMarketOnlyObserveDoesNotAutoQueue(fetchHarness);
     await testAnalystLeagueMarketDeployStaysWebsiteOnly(fetchHarness);
     await testLogoutSkeleton();
@@ -2268,6 +2321,7 @@ const main = async () => {
     console.log("- Account preferences update route: passed");
     console.log("- account alerts queue + dispatch routes: passed");
     console.log("- widget standings proxy cache path: passed");
+    console.log("- widget fixture lookup proxy cache path: passed");
     console.log("- market-only observe suppression: passed");
     console.log("- analyst league+market deploy stays website-only: passed");
     console.log("- logout skeleton: passed");

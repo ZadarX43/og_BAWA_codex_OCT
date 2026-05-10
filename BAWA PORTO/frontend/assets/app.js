@@ -1295,6 +1295,41 @@
     `;
   };
 
+  const fixtureLineupsWidgetMarkup = (fixture) => {
+    const leagueId = extractLeagueIdFromLogoUrl(fixture.league_logo_url);
+    const season = inferFootballSeason(fixture.kickoff_time);
+    const kickoffDate = String(fixture.kickoff_time || "").slice(0, 10);
+    if (!leagueId || !season || !kickoffDate) {
+      return `<div class="notice">Lineups and formations are not available for this fixture yet because the widget identity mapping is incomplete.</div>`;
+    }
+    if (!workerConfigured()) {
+      return `<div class="notice">Lineups and formations need the Worker proxy so the fixture resolver and widget API key stay off the page.</div>`;
+    }
+    return `
+      <div
+        class="widget-reference-shell"
+        data-role="fixture-lineups-widget"
+        data-league="${escapeHtml(leagueId)}"
+        data-season="${escapeHtml(season)}"
+        data-date="${escapeHtml(kickoffDate)}"
+        data-home="${escapeHtml(fixture.home_team)}"
+        data-away="${escapeHtml(fixture.away_team)}"
+      >
+        <div class="widget-reference-head">
+          <div>
+            <span class="metric-label">Reference layer</span>
+            <h4>Lineups & formations</h4>
+          </div>
+          <span class="pill">Prototype</span>
+        </div>
+        <p class="muted">This sits beside the custom intelligence layer so confirmed teams and shape can support the read without taking over the page.</p>
+        <div class="widget-reference-frame">
+          <div class="notice">Resolving fixture reference…</div>
+        </div>
+      </div>
+    `;
+  };
+
   const teamInitials = (name) => {
     const words = String(name || "")
       .replace(/[^A-Za-z0-9\s-]/g, " ")
@@ -4193,6 +4228,12 @@
 
       <section class="section">
         <article class="panel">
+          ${fixtureLineupsWidgetMarkup(fixture)}
+        </article>
+      </section>
+
+      <section class="section">
+        <article class="panel">
           <h3>Related league fixtures</h3>
           ${
             relatedFixtures.length
@@ -4232,6 +4273,66 @@
     };
     const view = views[page] || homeView;
     app.innerHTML = view();
+    if (page === "fixture") {
+      hydrateFixtureReferenceWidgets();
+    }
+  };
+
+  const hydrateFixtureReferenceWidgets = async () => {
+    const roots = Array.from(document.querySelectorAll("[data-role='fixture-lineups-widget']"));
+    if (!roots.length || !workerConfigured()) {
+      return;
+    }
+    await Promise.all(
+      roots.map(async (root) => {
+        const frame = root.querySelector(".widget-reference-frame");
+        if (!frame) {
+          return;
+        }
+        const params = new URLSearchParams({
+          league: root.dataset.league || "",
+          season: root.dataset.season || "",
+          date: root.dataset.date || "",
+          home: root.dataset.home || "",
+          away: root.dataset.away || "",
+        });
+        try {
+          const { response, payload } = await fetchWorkerJson(
+            `/api/widgets/football/fixture-lookup?${params.toString()}`,
+            { method: "GET" }
+          );
+          if (!response.ok || !payload?.ok || !payload.fixture_id) {
+            throw new Error(payload?.message || "Unable to resolve fixture lineups for this page.");
+          }
+          const proxyBase = `${workerApiUrl("/api/widgets/football/").replace(/\/+$/, "")}/`;
+          frame.innerHTML = `
+            <api-sports-widget
+              data-type="config"
+              data-sport="football"
+              data-key=""
+              data-url-football="${escapeHtml(proxyBase)}"
+              data-logo-url="https://media.api-sports.io"
+              data-theme="grey"
+              data-lang="en"
+              data-show-error="true"
+              data-show-logos="true"
+              data-player-injuries="true"
+              data-team-squad="true"
+              data-game-tab="lineups"
+              data-refresh="300"
+            ></api-sports-widget>
+            <api-sports-widget
+              data-type="game"
+              data-game-id="${escapeHtml(String(payload.fixture_id))}"
+            ></api-sports-widget>
+          `;
+        } catch (error) {
+          frame.innerHTML = `<div class="notice">${escapeHtml(
+            error.message || "Lineups and formations are not available for this fixture yet."
+          )}</div>`;
+        }
+      })
+    );
   };
 
   const renderError = (error) => {
