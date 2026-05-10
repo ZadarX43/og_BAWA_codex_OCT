@@ -2344,6 +2344,13 @@ const ALLOWED_INTERNAL_REVIEW_OUTCOMES = new Set([
   "reinstate_ready",
 ]);
 
+const ALLOWED_INTERNAL_REVIEW_PRESETS = new Set([
+  "custom",
+  "suspension_review",
+  "sharing_risk",
+  "billing_concern",
+]);
+
 async function handleInternalAccountRestrict(request, env, userId) {
   const adminAccess = verifyInternalAdminRequest(request, env);
   if (!adminAccess.ok) {
@@ -2647,12 +2654,26 @@ async function handleInternalReviewOutcomeUpdate(request, env, userId) {
   if (noteError) {
     return json({ ok: false, status: "internal_review_outcome_note_required", message: noteError }, 400);
   }
+  const preset = String(payload?.review_preset || "")
+    .trim()
+    .toLowerCase();
+  if (!ALLOWED_INTERNAL_REVIEW_PRESETS.has(preset)) {
+    return json(
+      {
+        ok: false,
+        status: "internal_review_preset_invalid",
+        message: "Choose a valid review preset before saving the operator decision.",
+      },
+      400
+    );
+  }
   const now = nowIso();
   await updateAccountRiskState(accountDb, userId, {
     last_review_outcome: outcome,
     last_review_outcome_note: note,
     last_review_outcome_at: now,
     last_review_outcome_by: actor,
+    last_review_preset: preset,
     last_reviewed_at: now,
     last_reviewed_by: actor,
   });
@@ -2669,6 +2690,7 @@ async function handleInternalReviewOutcomeUpdate(request, env, userId) {
     metadata: {
       review_outcome: outcome,
       review_outcome_note: note,
+      review_preset: preset,
       author_id: actor,
     },
   });

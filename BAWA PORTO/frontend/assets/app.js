@@ -3366,15 +3366,16 @@
             placeholder="Why does this outcome fit the current evidence?"
             data-role="internal-review-outcome-note"
           >${escapeHtml(state.runtime.internalReviewOutcomeNote || "")}</textarea>
-          <p class="muted">
-            Last saved outcome:
-            ${escapeHtml(
-              summary?.risk_state?.last_review_outcome
-                ? titleCase(String(summary.risk_state.last_review_outcome).replaceAll("_", " "))
-                : "None yet"
-            )}
-            ${summary?.risk_state?.last_review_outcome_at ? `· ${escapeHtml(formatDateTime(summary.risk_state.last_review_outcome_at) || "Unknown")}` : ""}
-          </p>
+          <article class="panel subtle-panel">
+            <h4>Last operator decision</h4>
+            <ul class="feature-list compact-list">
+              <li>Outcome: ${escapeHtml(summary?.risk_state?.last_review_outcome ? titleCase(String(summary.risk_state.last_review_outcome).replaceAll("_", " ")) : "None yet")}</li>
+              <li>Preset: ${escapeHtml(summary?.risk_state?.last_review_preset ? titleCase(String(summary.risk_state.last_review_preset).replaceAll("_", " ")) : "Not saved")}</li>
+              <li>Operator: ${escapeHtml(summary?.risk_state?.last_review_outcome_by || "Unknown")}</li>
+              <li>Timestamp: ${escapeHtml(formatDateTime(summary?.risk_state?.last_review_outcome_at) || "Unknown")}</li>
+              <li>Note: ${escapeHtml(summary?.risk_state?.last_review_outcome_note || "No saved note yet")}</li>
+            </ul>
+          </article>
           <div class="cta-row">
             <button class="ghost-button" type="button" data-action="internal-save-review-outcome">
               Save review outcome
@@ -3475,6 +3476,7 @@
                   <li>Last reviewed at: ${escapeHtml(formatDateTime(summary.risk_state?.last_reviewed_at) || "Unknown")}</li>
                   <li>Last reviewed by: ${escapeHtml(summary.risk_state?.last_reviewed_by || "Unknown")}</li>
                   <li>Last chosen outcome: ${escapeHtml(summary.risk_state?.last_review_outcome ? titleCase(String(summary.risk_state.last_review_outcome).replaceAll("_", " ")) : "None")}</li>
+                  <li>Last saved preset: ${escapeHtml(summary.risk_state?.last_review_preset ? titleCase(String(summary.risk_state.last_review_preset).replaceAll("_", " ")) : "None")}</li>
                   <li>Last risk event: ${escapeHtml(formatDateTime(summary.risk_state?.last_risk_event_at) || "Unknown")}</li>
                   <li>Open flags now: ${escapeHtml(summary.open_flags_count ?? 0)}</li>
                   <li>Risk score: ${escapeHtml(summary.risk_state?.risk_score ?? "0")}</li>
@@ -4682,6 +4684,9 @@
     state.runtime.internalNotes = Array.isArray(notesResult.payload.notes) ? notesResult.payload.notes : [];
     state.runtime.internalTimeline = Array.isArray(timelineResult.payload.timeline) ? timelineResult.payload.timeline : [];
     state.runtime.internalSelectedUserId = targetUserId;
+    state.runtime.internalReviewPreset = String(
+      summaryResult.payload.account_summary?.risk_state?.last_review_preset || "CUSTOM"
+    ).toUpperCase();
     state.runtime.internalReviewOutcome = String(
       summaryResult.payload.account_summary?.risk_state?.last_review_outcome || "AUTO"
     ).toUpperCase();
@@ -4840,6 +4845,7 @@
           body: {
             review_outcome: outcome.toLowerCase(),
             review_outcome_note: note,
+            review_preset: String(state.runtime.internalReviewPreset || "CUSTOM").toLowerCase(),
             author_id: operatorIdentity.operatorId,
           },
         }
@@ -4849,6 +4855,9 @@
       }
       if (payload.account_summary) {
         state.runtime.internalAccountSummary = payload.account_summary;
+        state.runtime.internalReviewPreset = String(
+          payload.account_summary?.risk_state?.last_review_preset || state.runtime.internalReviewPreset || "CUSTOM"
+        ).toUpperCase();
         state.runtime.internalReviewOutcome = String(
           payload.account_summary?.risk_state?.last_review_outcome || outcome
         ).toUpperCase();

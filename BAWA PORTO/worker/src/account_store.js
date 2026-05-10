@@ -432,7 +432,7 @@ export async function getAccountRiskState(db, userId) {
         SELECT user_id, account_status, risk_level, risk_score, review_status, last_risk_event_at,
                last_reviewed_at, last_reviewed_by, suspended_at, suspension_reason, reinstated_at,
                reinstatement_reason, last_review_outcome, last_review_outcome_note,
-               last_review_outcome_at, last_review_outcome_by, created_at, updated_at
+               last_review_outcome_at, last_review_outcome_by, last_review_preset, created_at, updated_at
         FROM account_risk_state
         WHERE user_id = ?1
         LIMIT 1`,
@@ -493,6 +493,7 @@ export async function ensureAccountRiskState(db, userId) {
     last_review_outcome_note: null,
     last_review_outcome_at: null,
     last_review_outcome_by: null,
+    last_review_preset: null,
     created_at: now,
     updated_at: now,
   };
@@ -508,9 +509,9 @@ export async function ensureAccountRiskState(db, userId) {
           user_id, account_status, risk_level, risk_score, review_status, last_risk_event_at,
           last_reviewed_at, last_reviewed_by, suspended_at, suspension_reason, reinstated_at,
           reinstatement_reason, last_review_outcome, last_review_outcome_note,
-          last_review_outcome_at, last_review_outcome_by, created_at, updated_at
+          last_review_outcome_at, last_review_outcome_by, last_review_preset, created_at, updated_at
         )
-        VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18)`,
+        VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19)`,
         [
           payload.user_id,
           payload.account_status,
@@ -528,6 +529,7 @@ export async function ensureAccountRiskState(db, userId) {
           payload.last_review_outcome_note,
           payload.last_review_outcome_at,
           payload.last_review_outcome_by,
+          payload.last_review_preset,
           payload.created_at,
           payload.updated_at,
         ]
@@ -598,6 +600,10 @@ export async function updateAccountRiskState(db, userId, input = {}) {
       Object.prototype.hasOwnProperty.call(input, "last_review_outcome_by")
         ? input.last_review_outcome_by
         : base.last_review_outcome_by,
+    last_review_preset:
+      Object.prototype.hasOwnProperty.call(input, "last_review_preset")
+        ? input.last_review_preset
+        : base.last_review_preset,
     updated_at: now,
   };
   await callMaybeMock(
@@ -624,7 +630,8 @@ export async function updateAccountRiskState(db, userId, input = {}) {
             last_review_outcome_note = ?14,
             last_review_outcome_at = ?15,
             last_review_outcome_by = ?16,
-            updated_at = ?17
+            last_review_preset = ?17,
+            updated_at = ?18
         WHERE user_id = ?1`,
         [
           payload.user_id,
@@ -643,6 +650,7 @@ export async function updateAccountRiskState(db, userId, input = {}) {
           payload.last_review_outcome_note,
           payload.last_review_outcome_at,
           payload.last_review_outcome_by,
+          payload.last_review_preset,
           payload.updated_at,
         ]
       )

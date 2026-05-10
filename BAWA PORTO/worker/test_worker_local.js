@@ -1581,6 +1581,7 @@ const testInternalAccountReviewActions = async (fetchHarness) => {
       {
         review_outcome: "reinstate_ready",
         review_outcome_note: "Ownership and payment standing now support reinstatement.",
+        review_preset: "billing_concern",
         author_id: "internal:test",
       },
       { "x-og-internal-admin": env.INTERNAL_ADMIN_SECRET }
@@ -1591,6 +1592,7 @@ const testInternalAccountReviewActions = async (fetchHarness) => {
   assert.equal(reviewOutcomeResponse.status, 200);
   assert.equal(reviewOutcomePayload.status, "internal_review_outcome_saved");
   assert.equal(reviewOutcomePayload.account_summary.risk_state.last_review_outcome, "reinstate_ready");
+  assert.equal(reviewOutcomePayload.account_summary.risk_state.last_review_preset, "billing_concern");
   assert.equal(
     reviewOutcomePayload.account_summary.risk_state.last_review_outcome_note,
     "Ownership and payment standing now support reinstatement."
@@ -1603,6 +1605,7 @@ const testInternalAccountReviewActions = async (fetchHarness) => {
       {
         review_outcome: "auto",
         review_outcome_note: "too short",
+        review_preset: "custom",
         author_id: "internal:test",
       },
       { "x-og-internal-admin": env.INTERNAL_ADMIN_SECRET }
