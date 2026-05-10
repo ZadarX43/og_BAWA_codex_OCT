@@ -687,6 +687,15 @@ const widgetTeamNamesMatch = (left, right) => {
   return a === b || a.includes(b) || b.includes(a);
 };
 
+const shiftIsoDate = (dateText, deltaDays) => {
+  const parsed = new Date(`${dateText}T00:00:00Z`);
+  if (Number.isNaN(parsed.getTime())) {
+    return "";
+  }
+  parsed.setUTCDate(parsed.getUTCDate() + deltaDays);
+  return parsed.toISOString().slice(0, 10);
+};
+
 const proxyWidgetStandingsResponse = async (request, env) => {
   const footballKey = getApiSportsFootballKey(env);
   if (!footballKey) {
@@ -787,42 +796,50 @@ const lookupWidgetFixtureResponse = async (request, env) => {
     }
   }
 
-  const upstreamUrl = new URL("https://v3.football.api-sports.io/fixtures");
-  upstreamUrl.searchParams.set("league", String(league));
-  upstreamUrl.searchParams.set("season", String(season));
-  upstreamUrl.searchParams.set("date", date);
-  const upstreamResponse = await fetch(upstreamUrl.toString(), {
-    method: "GET",
-    headers: {
-      accept: "application/json",
-      "x-apisports-key": footballKey,
-    },
-  });
-  let payload;
-  try {
-    payload = await upstreamResponse.json();
-  } catch (error) {
-    return requestError("Widget fixture lookup could not parse the upstream fixture response.", error.message, 502);
-  }
-  if (!upstreamResponse.ok) {
-    return json(
-      {
+  const candidateDates = Array.from(new Set([date, shiftIsoDate(date, -1), shiftIsoDate(date, 1)].filter(Boolean)));
+  let matched = null;
+  let upstreamFailure = null;
+  for (const candidateDate of candidateDates) {
+    const upstreamUrl = new URL("https://v3.football.api-sports.io/fixtures");
+    upstreamUrl.searchParams.set("league", String(league));
+    upstreamUrl.searchParams.set("season", String(season));
+    upstreamUrl.searchParams.set("date", candidateDate);
+    const upstreamResponse = await fetch(upstreamUrl.toString(), {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        "x-apisports-key": footballKey,
+      },
+    });
+    let payload;
+    try {
+      payload = await upstreamResponse.json();
+    } catch (error) {
+      return requestError("Widget fixture lookup could not parse the upstream fixture response.", error.message, 502);
+    }
+    if (!upstreamResponse.ok) {
+      upstreamFailure = {
         ok: false,
         status: "widget_fixture_lookup_upstream_failed",
         message: "The upstream fixture lookup request failed.",
         upstream_status: upstreamResponse.status,
         upstream_payload: payload,
-      },
-      502
-    );
+      };
+      continue;
+    }
+    const fixtures = Array.isArray(payload?.response) ? payload.response : [];
+    matched = fixtures.find((entry) => {
+      const fixtureHome = entry?.teams?.home?.name || "";
+      const fixtureAway = entry?.teams?.away?.name || "";
+      return widgetTeamNamesMatch(fixtureHome, home) && widgetTeamNamesMatch(fixtureAway, away);
+    });
+    if (matched?.fixture?.id) {
+      break;
+    }
   }
-
-  const fixtures = Array.isArray(payload?.response) ? payload.response : [];
-  const matched = fixtures.find((entry) => {
-    const fixtureHome = entry?.teams?.home?.name || "";
-    const fixtureAway = entry?.teams?.away?.name || "";
-    return widgetTeamNamesMatch(fixtureHome, home) && widgetTeamNamesMatch(fixtureAway, away);
-  });
+  if (!matched?.fixture?.id && upstreamFailure) {
+    return json(upstreamFailure, 502);
+  }
   if (!matched?.fixture?.id) {
     return json(
       {

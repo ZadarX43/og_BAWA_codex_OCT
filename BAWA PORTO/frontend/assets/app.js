@@ -1260,9 +1260,8 @@
     if (!workerConfigured()) {
       return `<div class="notice">League table reference needs the Worker proxy so the widget can stay branded and keep the API key off the page.</div>`;
     }
-    const proxyBase = `${workerApiUrl("/api/widgets/football/").replace(/\/+$/, "")}/`;
     return `
-      <div class="widget-reference-shell">
+      <div class="widget-reference-shell" data-role="fixture-standings-reference" data-league="${escapeHtml(leagueId)}" data-season="${escapeHtml(season)}">
         <div class="widget-reference-head">
           <div>
             <span class="metric-label">Reference layer</span>
@@ -1272,24 +1271,7 @@
         </div>
         <p class="muted">Reference context for this fixture. Use this as orientation, not as the decision layer. If the fit is strong, lineups and formations can sit beside it later.</p>
         <div class="widget-reference-frame">
-          <api-sports-widget
-            data-type="config"
-            data-sport="football"
-            data-key=""
-            data-url-football="${escapeHtml(proxyBase)}"
-            data-logo-url="https://media.api-sports.io"
-            data-theme="grey"
-            data-lang="en"
-            data-show-error="true"
-            data-show-logos="true"
-            data-standings="true"
-            data-refresh="600"
-          ></api-sports-widget>
-          <api-sports-widget
-            data-type="standings"
-            data-league="${escapeHtml(leagueId)}"
-            data-season="${escapeHtml(season)}"
-          ></api-sports-widget>
+          <div class="notice">Loading league table…</div>
         </div>
       </div>
     `;
@@ -4279,10 +4261,68 @@
   };
 
   const hydrateFixtureReferenceWidgets = async () => {
+    const standingsRoots = Array.from(document.querySelectorAll("[data-role='fixture-standings-reference']"));
     const roots = Array.from(document.querySelectorAll("[data-role='fixture-lineups-widget']"));
-    if (!roots.length || !workerConfigured()) {
+    if ((!roots.length && !standingsRoots.length) || !workerConfigured()) {
       return;
     }
+    await Promise.all(
+      standingsRoots.map(async (root) => {
+        const frame = root.querySelector(".widget-reference-frame");
+        if (!frame) {
+          return;
+        }
+        const params = new URLSearchParams({
+          league: root.dataset.league || "",
+          season: root.dataset.season || "",
+        });
+        try {
+          const { response, payload } = await fetchWorkerJson(
+            `/api/widgets/football/standings?${params.toString()}`,
+            { method: "GET" }
+          );
+          if (!response.ok || !payload?.response?.length) {
+            throw new Error(payload?.message || "League table reference could not be loaded for this fixture.");
+          }
+          const groups = payload.response?.[0]?.league?.standings || [];
+          const tableRows = Array.isArray(groups) && groups.length ? groups[0] : [];
+          if (!Array.isArray(tableRows) || !tableRows.length) {
+            throw new Error("League table reference is not available for this competition yet.");
+          }
+          frame.innerHTML = `
+            <div class="standings-reference-table">
+              <div class="standings-reference-head">
+                <span>Pos</span>
+                <span>Team</span>
+                <span>P</span>
+                <span>GD</span>
+                <span>Pts</span>
+                <span>Form</span>
+              </div>
+              ${tableRows
+                .slice(0, 8)
+                .map(
+                  (row) => `
+                    <div class="standings-reference-row">
+                      <span>${escapeHtml(row.rank ?? "")}</span>
+                      <strong>${escapeHtml(row.team?.name || "")}</strong>
+                      <span>${escapeHtml(row.all?.played ?? "")}</span>
+                      <span>${escapeHtml(row.goalsDiff ?? "")}</span>
+                      <span>${escapeHtml(row.points ?? "")}</span>
+                      <span>${escapeHtml(row.form || "—")}</span>
+                    </div>
+                  `
+                )
+                .join("")}
+            </div>
+          `;
+        } catch (error) {
+          frame.innerHTML = `<div class="notice">${escapeHtml(
+            error.message || "League table reference could not be loaded for this fixture."
+          )}</div>`;
+        }
+      })
+    );
     await Promise.all(
       roots.map(async (root) => {
         const frame = root.querySelector(".widget-reference-frame");
