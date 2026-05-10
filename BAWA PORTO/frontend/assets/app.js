@@ -1588,20 +1588,20 @@
         data-away-team-id="${escapeHtml(awayTeamId)}"
       >
         <div class="fixture-hero-meta">
-          <span class="fixture-competition-mark">
+          <a class="fixture-competition-mark" href="${competitionPageHref(fixture.league)}">
             ${
               leagueBadge
                 ? `<img class="league-badge" src="${escapeHtml(leagueBadge)}" alt="" loading="lazy" decoding="async" onerror="this.remove()" />`
                 : ""
             }
             <span>${escapeHtml(fixture.league || "Competition")}</span>
-          </span>
+          </a>
           <span class="fixture-status-badge fixture-status-badge-${escapeHtml(timing.tone)}">${escapeHtml(timing.label)}</span>
         </div>
         <div class="fixture-hero-score-row">
           <div class="fixture-hero-side">
             ${badgeMarkup(fixture.home_team_logo_url, fixture.home_team, "fixture-hero-badge")}
-            <strong>${escapeHtml(fixture.home_team)}</strong>
+            <a class="fixture-entity-link" href="${teamPageHref(fixture.home_team)}"><strong>${escapeHtml(fixture.home_team)}</strong></a>
           </div>
           <div class="fixture-hero-center">
             <span class="metric-label">Kickoff strip</span>
@@ -1610,7 +1610,7 @@
           </div>
           <div class="fixture-hero-side fixture-hero-side-end">
             ${badgeMarkup(fixture.away_team_logo_url, fixture.away_team, "fixture-hero-badge")}
-            <strong>${escapeHtml(fixture.away_team)}</strong>
+            <a class="fixture-entity-link" href="${teamPageHref(fixture.away_team)}"><strong>${escapeHtml(fixture.away_team)}</strong></a>
           </div>
         </div>
         <div class="hero-verdict-strip">
@@ -2266,6 +2266,38 @@
     return `<div class="card-grid">${rows.map((row) => entityFixtureCard(row)).join("")}</div>`;
   };
 
+  const renderTeamIntelligenceBuckets = (team) => {
+    const deployRows = team.rows.filter((row) => String(row.publish_class || row.fixture_class || "").toUpperCase() === "DEPLOY");
+    const observeRows = team.rows.filter((row) => String(row.publish_class || row.fixture_class || "").toUpperCase() === "OBSERVE");
+    const contextRows = team.rows.filter((row) => {
+      const key = String(row.publish_class || row.fixture_class || "").toUpperCase();
+      return key === "CONTEXT" || key === "MONITOR";
+    });
+    return `
+      <section class="section">
+        <div class="split">
+          <article class="panel">
+            <h3>Deployable team reads</h3>
+            <p class="section-copy">These are the current-window rows where this team is part of an active deploy posture.</p>
+            ${renderEntityFixtureSection(deployRows, "No deployable team-linked rows are visible in the current window yet.")}
+          </article>
+          <article class="panel">
+            <h3>Watch-first team reads</h3>
+            <p class="section-copy">These are the rows worth tracking, but not treating as direct deployment calls yet.</p>
+            ${renderEntityFixtureSection(observeRows, "No observe-level team-linked rows are visible in the current window yet.")}
+          </article>
+        </div>
+      </section>
+      <section class="section">
+        <article class="panel">
+          <h3>Context and monitor layer</h3>
+          <p class="section-copy">This is the softer context around the team: useful shape, caution, or slate-awareness without a direct deploy call.</p>
+          ${renderEntityFixtureSection(contextRows, "No context or monitor rows are visible for this team in the current window.")}
+        </article>
+      </section>
+    `;
+  };
+
   const matchesView = () => {
     const rows = orderedFixtureRows();
     return `
@@ -2659,6 +2691,26 @@
         </div>
       </section>
       <section class="section">
+        <div class="split">
+          <article class="panel">
+            <h3>Next visible fixture</h3>
+            <p class="section-copy">The next current-window match stays near the top of the team desk so you can jump straight into the active read.</p>
+            ${renderEntityFixtureSection(
+              team.fixtures.upcoming.slice(0, 1),
+              "No upcoming current-window fixture is visible for this team right now."
+            )}
+          </article>
+          <article class="panel">
+            <h3>Latest visible result</h3>
+            <p class="section-copy">The latest settled current-window result helps anchor the desk before you move into deeper form and signal layers.</p>
+            ${renderEntityFixtureSection(
+              team.fixtures.results.slice(0, 1),
+              "No current-window settled result is visible for this team right now."
+            )}
+          </article>
+        </div>
+      </section>
+      <section class="section">
         <div class="section-head">
           <div>
             <h2>Featured current-window fixtures</h2>
@@ -2710,26 +2762,28 @@
             <div class="reference-loading">Loading recent team form…</div>
           </article>
           <article class="panel">
-            <h3>Context support</h3>
-            <ul class="feature-list compact-list">
-              <li>Form stays team-level here rather than competition-level.</li>
-              <li>The broader league rhythm still matters, but the team page should foreground this side’s recent shape first.</li>
-              <li>If a single fixture matters most, the fixture page still owns the direct deployment call.</li>
-            </ul>
+            <h3>Published window results</h3>
+            <p class="section-copy">This keeps the live upstream recent-form reference separate from the results we already have in the current published window.</p>
+            ${renderEntityFixtureSection(
+              team.fixtures.results.slice(0, 4),
+              "No current-window settled fixtures are visible for this team yet."
+            )}
           </article>
         </div>
       </section>
+      <section class="section">
+        <article class="panel">
+          <h3>Form ownership on team pages</h3>
+          <ul class="feature-list compact-list">
+            <li>Form stays team-level here rather than competition-level.</li>
+            <li>The broader league rhythm still matters, but the team desk should foreground this side’s recent shape first.</li>
+            <li>If a single match matters most, the fixture page still owns the direct deployment call.</li>
+          </ul>
+        </article>
+      </section>
     `;
     const intelligenceContent = `
-      <section class="section">
-        <div class="section-head">
-          <div>
-            <h2>Team-linked intelligence stream</h2>
-            <p class="section-copy">This is where the current window model output connected to this team stays grouped together.</p>
-          </div>
-        </div>
-        ${renderEntityFixtureSection(team.rows, "No team-linked intelligence cards are visible in the current window yet.")}
-      </section>
+      ${renderTeamIntelligenceBuckets(team)}
     `;
     const tabContent = {
       overview: overviewContent,
