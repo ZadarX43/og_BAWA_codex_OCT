@@ -1179,6 +1179,26 @@ tbody tr:hover {
   gap: 10px;
 }
 
+.team-form-results {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.team-form-card {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(107, 122, 143, 0.16);
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.team-form-card strong {
+  font-size: 1rem;
+  letter-spacing: -0.03em;
+}
+
 .form-pill {
   display: inline-flex;
   align-items: center;
@@ -2170,6 +2190,7 @@ code {
   .lineup-reference-grid,
   .lineup-empty-grid,
   .hero-verdict-strip,
+  .team-form-results,
   .fixture-hero-score-row {
     grid-template-columns: 1fr;
   }

@@ -4959,6 +4959,7 @@
     const fixtureLookupCache = new Map();
     const fixtureDetailsCache = new Map();
     const standingsCache = new Map();
+    const teamFixturesCache = new Map();
     const resolveFixtureReference = async (root) => {
       const params = new URLSearchParams({
         date: root.dataset.date || "",
@@ -5009,6 +5010,77 @@
       }
       const groups = payload.response?.[0]?.league?.standings || [];
       return Array.isArray(groups) && groups.length ? groups[0] : [];
+    };
+    const isFinishedStatus = (statusShort) => /FT|AET|PEN/i.test(String(statusShort || "").trim());
+    const fetchRecentTeamFixtures = async (teamId) => {
+      const id = String(teamId || "").trim();
+      if (!id) {
+        return [];
+      }
+      if (!teamFixturesCache.has(id)) {
+        teamFixturesCache.set(
+          id,
+          fetchWorkerJson(`/api/widgets/football/fixtures?team=${encodeURIComponent(id)}&last=8`, { method: "GET" })
+        );
+      }
+      const { response, payload } = await teamFixturesCache.get(id);
+      if (!response.ok || !Array.isArray(payload?.response)) {
+        return [];
+      }
+      return payload.response.filter((entry) => isFinishedStatus(entry?.fixture?.status?.short)).slice(0, 5);
+    };
+    const renderRecentResults = (fixtures, teamId) => {
+      const fixtureList = Array.isArray(fixtures) ? fixtures : [];
+      if (!fixtureList.length) {
+        return `<div class="notice">Recent finished fixtures are not available from the upstream feed yet.</div>`;
+      }
+      return `
+        <div class="team-form-results">
+          ${fixtureList
+            .map((fixtureRow) => {
+              const teams = fixtureRow?.teams || {};
+              const homeId = String(teams?.home?.id || "").trim();
+              const isHome = homeId === String(teamId || "").trim();
+              const opponent = isHome ? teams?.away?.name : teams?.home?.name;
+              const result = formatFixtureResultChip(fixtureRow, isHome ? "home" : "away");
+              const resultClass =
+                result.label === "WIN" ? "w" : result.label === "LOSS" ? "l" : "d";
+              const goals = fixtureRow?.goals || {};
+              const scored = isHome ? goals.home : goals.away;
+              const conceded = isHome ? goals.away : goals.home;
+              return `
+                <article class="team-form-card">
+                  <span class="form-pill form-pill-${escapeHtml(result.tone === "pending" ? "d" : resultClass)}">${escapeHtml(result.label)}</span>
+                  <strong>${escapeHtml(`${scored ?? "—"}-${conceded ?? "—"}`)}</strong>
+                  <span class="muted">${escapeHtml(opponent || "Opponent")}</span>
+                  <span class="muted">${escapeHtml(formatKickoffLabel(fixtureRow?.fixture?.date || ""))}</span>
+                </article>
+              `;
+            })
+            .join("")}
+        </div>
+      `;
+    };
+    const formScoringSummary = (fixtures, teamId) => {
+      const summary = (Array.isArray(fixtures) ? fixtures : []).reduce(
+        (acc, fixtureRow) => {
+          const teams = fixtureRow?.teams || {};
+          const homeId = String(teams?.home?.id || "").trim();
+          const isHome = homeId === String(teamId || "").trim();
+          const goals = fixtureRow?.goals || {};
+          const scored = Number(isHome ? goals.home : goals.away);
+          const conceded = Number(isHome ? goals.away : goals.home);
+          if (Number.isFinite(scored)) {
+            acc.scored += scored;
+          }
+          if (Number.isFinite(conceded)) {
+            acc.conceded += conceded;
+          }
+          return acc;
+        },
+        { scored: 0, conceded: 0 }
+      );
+      return `${summary.scored} scored • ${summary.conceded} conceded`;
     };
     const renderLineupSquad = (players, emptyCopy) => {
       const list = Array.isArray(players) ? players : [];
@@ -5251,12 +5323,16 @@
           }
           const homeTeamId = String(root.dataset.homeTeamId || "").trim();
           const awayTeamId = String(root.dataset.awayTeamId || "").trim();
+          const [homeFixtures, awayFixtures] = await Promise.all([
+            fetchRecentTeamFixtures(homeTeamId),
+            fetchRecentTeamFixtures(awayTeamId),
+          ]);
           const matchByTeam = (teamId) =>
             standingsRows.find((row) => String(row?.team?.id || "").trim() === teamId) || null;
           const homeRow = matchByTeam(homeTeamId);
           const awayRow = matchByTeam(awayTeamId);
           const cards = Array.from(root.querySelectorAll(".card-grid > article"));
-          [homeRow, awayRow].forEach((row, index) => {
+          [[homeRow, homeFixtures, homeTeamId], [awayRow, awayFixtures, awayTeamId]].forEach(([row, fixtures, teamId], index) => {
             const card = cards[index];
             if (!card || !row) {
               return;
@@ -5276,7 +5352,8 @@
                   .map((letter) => `<span class="form-pill form-pill-${escapeHtml(letter.toLowerCase())}">${escapeHtml(letter)}</span>`)
                   .join("") || `<span class="muted">No current form string</span>`}
               </div>
-              <p class="muted">League rhythm from the current standings reference layer.</p>
+              <p class="muted">${escapeHtml(formScoringSummary(fixtures, teamId))}</p>
+              ${renderRecentResults(fixtures, teamId)}
             `;
           });
         } catch {
