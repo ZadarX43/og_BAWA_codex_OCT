@@ -4318,15 +4318,10 @@
         try {
           let leagueId = String(root.dataset.apiLeagueId || "").trim();
           let season = String(root.dataset.apiSeason || "").trim();
-          if (!leagueId || !season) {
-            const fixtureLookup = await resolveFixtureReference(root);
-            if (!fixtureLookup?.response?.ok || !fixtureLookup?.payload?.ok) {
-              throw new Error(
-                fixtureLookup?.payload?.message || "League table reference could not be loaded for this fixture."
-              );
-            }
-            leagueId = String(fixtureLookup.payload.league_id || "").trim();
-            season = String(fixtureLookup.payload.season || "").trim();
+          const fixtureLookup = await resolveFixtureReference(root);
+          if (fixtureLookup?.response?.ok && fixtureLookup?.payload?.ok) {
+            leagueId = String(fixtureLookup.payload.league_id || leagueId).trim();
+            season = String(fixtureLookup.payload.season || season).trim();
           }
           if (!leagueId || !season) {
             throw new Error("League table reference is not available for this fixture yet.");
@@ -4386,12 +4381,12 @@
         }
         try {
           let fixtureId = String(root.dataset.apiFixtureId || "").trim();
+          const { response, payload } = await resolveFixtureReference(root);
+          if (response.ok && payload?.ok && payload.fixture_id) {
+            fixtureId = String(payload.fixture_id || fixtureId).trim();
+          }
           if (!fixtureId) {
-            const { response, payload } = await resolveFixtureReference(root);
-            if (!response.ok || !payload?.ok || !payload.fixture_id) {
-              throw new Error(payload?.message || "Unable to resolve fixture lineups for this page.");
-            }
-            fixtureId = String(payload.fixture_id || "").trim();
+            throw new Error(payload?.message || "Unable to resolve fixture lineups for this page.");
           }
           const proxyBase = `${workerApiUrl("/api/widgets/football/").replace(/\/+$/, "")}/`;
           frame.innerHTML = `
