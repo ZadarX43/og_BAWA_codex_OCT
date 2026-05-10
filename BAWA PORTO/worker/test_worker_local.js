@@ -94,6 +94,9 @@ class MockD1 {
     this.authEvents = [];
     this.notificationAlerts = [];
     this.accountSessions = [];
+    this.accountRiskStates = [];
+    this.accountRiskFlags = [];
+    this.accountAdminNotes = [];
   }
 
   prepare() {
@@ -161,6 +164,31 @@ class MockD1 {
         return { success: true };
       case "insert_auth_event":
         this.authEvents.push({ ...args });
+        return { success: true };
+      case "get_account_risk_state":
+        return this.accountRiskStates.find((row) => row.user_id === args.user_id) || null;
+      case "insert_account_risk_state":
+        this.accountRiskStates.push({ ...args });
+        return { success: true };
+      case "update_account_risk_state":
+        this.accountRiskStates = this.accountRiskStates.map((row) =>
+          row.user_id === args.user_id ? { ...row, ...args } : row
+        );
+        return { success: true };
+      case "get_open_account_risk_flag_by_type":
+        return (
+          this.accountRiskFlags.find(
+            (row) =>
+              row.user_id === args.user_id &&
+              row.flag_type === args.flag_type &&
+              row.flag_status === "open"
+          ) || null
+        );
+      case "insert_account_risk_flag":
+        this.accountRiskFlags.push({ ...args });
+        return { success: true };
+      case "insert_account_admin_note":
+        this.accountAdminNotes.push({ ...args });
         return { success: true };
       case "list_active_account_sessions_by_user":
         return this.accountSessions
@@ -830,6 +858,9 @@ const testMagicLinkVerifyAndSessionFlow = async (fetchHarness) => {
   assert.ok(sessionCookie, "expected premium session cookie after verify");
   assert.equal(env.ACCOUNT_DB.accountSessions.length, 1);
   assert.equal(env.ACCOUNT_DB.accountSessions[0].session_kind, "browser");
+  assert.equal(env.ACCOUNT_DB.accountRiskStates.length, 1);
+  assert.equal(env.ACCOUNT_DB.accountRiskStates[0].risk_level, "low");
+  assert.equal(env.ACCOUNT_DB.accountRiskFlags.length, 0);
 
   const sessionResponse = await worker.fetch(
     makeGetRequest("http://localhost/api/auth/session", {
@@ -1126,6 +1157,94 @@ const testAccountSessionActions = async (fetchHarness) => {
   assert.equal(revokeCurrentPayload.status, "account_current_session_revoked");
   assert.match(String(revokeCurrentResponse.headers.get("set-cookie") || ""), /og_premium_session=;/);
   assert.equal(env.ACCOUNT_DB.accountSessions.find((row) => row.id === currentSession.id)?.is_revoked, 1);
+};
+
+const testAccountRiskFlaggingFromSessionSpread = async (fetchHarness) => {
+  const env = createEnv();
+  await writeSubscriberRecord(
+    env,
+    buildSubscriberRecord({
+      email: "member@example.com",
+    })
+  );
+
+  const requestResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/auth/magic-link/request", "POST", {
+      email: "member@example.com",
+    }),
+    env
+  );
+  assert.equal(requestResponse.status, 200);
+  const emailBody = fetchHarness.sentEmails.at(-1);
+  const verifyMatch = String(emailBody?.html || "").match(/verify\?token=([^"&]+)/);
+  assert.ok(verifyMatch?.[1], "expected magic-link token in email body");
+  const token = decodeURIComponent(verifyMatch[1]);
+
+  const firstVerifyResponse = await worker.fetch(
+    makeGetRequest(`http://localhost/api/auth/magic-link/verify?token=${encodeURIComponent(token)}`),
+    env
+  );
+  assert.equal(firstVerifyResponse.status, 303);
+  const primarySession = env.ACCOUNT_DB.accountSessions[0];
+  const userId = primarySession.user_id;
+
+  env.ACCOUNT_DB.accountSessions.push(
+    {
+      ...primarySession,
+      id: "sess_risk_alpha",
+      device_label: "Safari on iPhone",
+      is_primary: 0,
+      issued_at: "2026-05-02T09:00:00.000Z",
+      last_seen_at: "2026-05-08T09:00:00.000Z",
+      expires_at: "2026-05-20T09:00:00.000Z",
+      created_at: "2026-05-02T09:00:00.000Z",
+      updated_at: "2026-05-08T09:00:00.000Z",
+    },
+    {
+      ...primarySession,
+      id: "sess_risk_beta",
+      device_label: "Chrome on Windows",
+      is_primary: 0,
+      issued_at: "2026-05-03T09:00:00.000Z",
+      last_seen_at: "2026-05-09T09:00:00.000Z",
+      expires_at: "2026-05-20T09:00:00.000Z",
+      created_at: "2026-05-03T09:00:00.000Z",
+      updated_at: "2026-05-09T09:00:00.000Z",
+    }
+  );
+
+  await env.SUBSCRIBER_STATE.delete("auth_rl:ip:unknown");
+  await env.SUBSCRIBER_STATE.delete("auth_rl:email:member@example.com");
+
+  const secondRequestResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/auth/magic-link/request", "POST", {
+      email: "member@example.com",
+    }),
+    env
+  );
+  assert.equal(secondRequestResponse.status, 200);
+  const secondEmailBody = fetchHarness.sentEmails.at(-1);
+  const secondVerifyMatch = String(secondEmailBody?.html || "").match(/verify\?token=([^"&]+)/);
+  assert.ok(secondVerifyMatch?.[1], "expected second magic-link token in email body");
+  const secondToken = decodeURIComponent(secondVerifyMatch[1]);
+
+  const secondVerifyResponse = await worker.fetch(
+    makeGetRequest(`http://localhost/api/auth/magic-link/verify?token=${encodeURIComponent(secondToken)}`, {
+      "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/124.0.0.0",
+    }),
+    env
+  );
+  assert.equal(secondVerifyResponse.status, 303);
+
+  const riskState = env.ACCOUNT_DB.accountRiskStates.find((row) => row.user_id === userId);
+  assert.ok(riskState);
+  assert.equal(riskState.risk_level, "high");
+  assert.equal(riskState.review_status, "manual_review");
+  assert.ok(Number(riskState.risk_score) >= 45);
+  assert.equal(env.ACCOUNT_DB.accountRiskFlags.length, 1);
+  assert.equal(env.ACCOUNT_DB.accountRiskFlags[0].flag_type, "shared_access_pattern");
+  assert.equal(env.ACCOUNT_DB.accountAdminNotes.length, 1);
+  assert.equal(env.ACCOUNT_DB.accountAdminNotes[0].note_type, "risk_note");
 };
 
 const testTelegramWebhookCompletesLinkFlow = async (fetchHarness) => {
@@ -1697,6 +1816,7 @@ const main = async () => {
     await testAccountStateAndTelegramLinkFlow(fetchHarness);
     await testAccountSessionsState(fetchHarness);
     await testAccountSessionActions(fetchHarness);
+    await testAccountRiskFlaggingFromSessionSpread(fetchHarness);
     await testTelegramWebhookCompletesLinkFlow(fetchHarness);
     await testTelegramTestAlertRoute(fetchHarness);
     await testTelegramFixtureAlertRoute(fetchHarness);
@@ -1717,6 +1837,7 @@ const main = async () => {
     console.log("- D1-backed account state + Telegram link flow: passed");
     console.log("- account devices session surface: passed");
     console.log("- account device actions: passed");
+    console.log("- account risk state and flag recording: passed");
     console.log("- Telegram bot webhook completion flow: passed");
     console.log("- Telegram test alert route: passed");
     console.log("- Telegram fixture alert route: passed");

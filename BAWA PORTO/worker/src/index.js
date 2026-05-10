@@ -6,9 +6,14 @@ import {
   persistSubscriberRecord,
 } from "./subscriber_store.js";
 import {
+  addAccountAdminNote,
+  createAccountRiskFlag,
   createAccountSession,
   completeTelegramLink,
+  ensureAccountRiskState,
   getAccountDb,
+  getOpenAccountRiskFlagByType,
+  getAccountRiskState,
   getAccountSessionById,
   getAccountStateByEmail,
   listAccountSessionsByUser,
@@ -22,6 +27,7 @@ import {
   recordAuthEvent,
   revokeAccountSession,
   revokeOtherAccountSessions,
+  updateAccountRiskState,
   setPrimaryAccountSession,
   touchAccountSessionSeen,
   upsertNotificationAlerts,
@@ -940,6 +946,87 @@ async function handlePremiumTokenIssue(request, env) {
   });
 }
 
+async function recordSessionSpreadRiskIfNeeded(accountDb, accountState, request, context = {}) {
+  if (!accountDb || !accountState?.user?.id) {
+    return null;
+  }
+
+  const userId = accountState.user.id;
+  const riskState = await ensureAccountRiskState(accountDb, userId);
+  const activeSessions = await listActiveAccountSessionsByUser(accountDb, userId);
+  const distinctDeviceLabels = Array.from(
+    new Set(
+      activeSessions
+        .map((session) => String(session.device_label || "").trim())
+        .filter(Boolean)
+    )
+  );
+  const activeSessionCount = activeSessions.length;
+  const deviceCount = distinctDeviceLabels.length;
+
+  if (activeSessionCount < 3 || deviceCount < 3) {
+    return riskState;
+  }
+
+  const openFlag = await getOpenAccountRiskFlagByType(accountDb, userId, "shared_access_pattern");
+  if (!openFlag?.id) {
+    await createAccountRiskFlag(accountDb, {
+      user_id: userId,
+      flag_type: "shared_access_pattern",
+      severity: activeSessionCount >= 4 ? "high" : "medium",
+      source: "session_heuristic",
+      summary:
+        activeSessionCount >= 4
+          ? "Account session spread is unusually high across multiple devices."
+          : "Account is active across several recent device sessions.",
+      evidence: {
+        active_session_count: activeSessionCount,
+        distinct_device_count: deviceCount,
+        device_labels: distinctDeviceLabels.slice(0, 6),
+        trigger: context.trigger || "session_verify",
+        session_id: context.session_id || null,
+      },
+    });
+    await addAccountAdminNote(accountDb, {
+      user_id: userId,
+      note_type: "risk_note",
+      visibility: "internal",
+      author_id: "system:risk",
+      content:
+        activeSessionCount >= 4
+          ? "Automatic review note: account session spread reached a high threshold across multiple device labels."
+          : "Automatic review note: account session spread reached a watch threshold across multiple device labels.",
+    });
+  }
+
+  await updateAccountRiskState(accountDb, userId, {
+    risk_level: activeSessionCount >= 4 ? "high" : "medium",
+    review_status: activeSessionCount >= 4 ? "manual_review" : "watch",
+    risk_score: Math.max(Number(riskState?.risk_score || 0), activeSessionCount >= 4 ? 45 : 25),
+    last_risk_event_at: nowIso(),
+  });
+
+  try {
+    await recordAuthEvent(accountDb, {
+      user_id: userId,
+      email_normalized: accountState.user.email_normalized || "",
+      event_type: "account_risk_flagged_shared_access_pattern",
+      ip_hint: getRequestIp(request) || null,
+      user_agent_hint: getUserAgentHint(request),
+      metadata: {
+        active_session_count: activeSessionCount,
+        distinct_device_count: deviceCount,
+        trigger: context.trigger || "session_verify",
+        session_id: context.session_id || null,
+      },
+    });
+  } catch {
+    // Best-effort audit trail only.
+  }
+
+  return getAccountRiskState(accountDb, userId);
+}
+
 async function verifySessionAccess(request, env) {
   const sessionToken = getSessionCookieToken(request);
   if (!sessionToken) {
@@ -1363,6 +1450,11 @@ async function handleMagicLinkVerify(request, env) {
           revoke_reason: null,
           created_at: now,
           updated_at: now,
+        });
+        await ensureAccountRiskState(accountDb, accountState.user.id);
+        await recordSessionSpreadRiskIfNeeded(accountDb, accountState, request, {
+          trigger: "magic_link_verify",
+          session_id: trackedSessionId,
         });
       }
       await recordAuthEvent(accountDb, {

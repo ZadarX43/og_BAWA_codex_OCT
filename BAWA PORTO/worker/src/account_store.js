@@ -417,6 +417,301 @@ export async function recordAuthEvent(db, event) {
   );
 }
 
+export async function getAccountRiskState(db, userId) {
+  if (!db || !userId) {
+    return null;
+  }
+  return callMaybeMock(
+    db,
+    "get_account_risk_state",
+    { user_id: userId },
+    () =>
+      first(
+        db,
+        `-- og:get_account_risk_state
+        SELECT user_id, account_status, risk_level, risk_score, review_status, last_risk_event_at,
+               last_reviewed_at, last_reviewed_by, suspended_at, suspension_reason, reinstated_at,
+               reinstatement_reason, created_at, updated_at
+        FROM account_risk_state
+        WHERE user_id = ?1
+        LIMIT 1`,
+        [userId]
+      )
+  );
+}
+
+export async function ensureAccountRiskState(db, userId) {
+  if (!db || !userId) {
+    return null;
+  }
+  const existing = await getAccountRiskState(db, userId);
+  if (existing?.user_id) {
+    return existing;
+  }
+  const now = isoNow();
+  const payload = {
+    user_id: userId,
+    account_status: "active",
+    risk_level: "low",
+    risk_score: 0,
+    review_status: "clear",
+    last_risk_event_at: null,
+    last_reviewed_at: null,
+    last_reviewed_by: null,
+    suspended_at: null,
+    suspension_reason: null,
+    reinstated_at: null,
+    reinstatement_reason: null,
+    created_at: now,
+    updated_at: now,
+  };
+  await callMaybeMock(
+    db,
+    "insert_account_risk_state",
+    payload,
+    () =>
+      run(
+        db,
+        `-- og:insert_account_risk_state
+        INSERT INTO account_risk_state (
+          user_id, account_status, risk_level, risk_score, review_status, last_risk_event_at,
+          last_reviewed_at, last_reviewed_by, suspended_at, suspension_reason, reinstated_at,
+          reinstatement_reason, created_at, updated_at
+        )
+        VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14)`,
+        [
+          payload.user_id,
+          payload.account_status,
+          payload.risk_level,
+          payload.risk_score,
+          payload.review_status,
+          payload.last_risk_event_at,
+          payload.last_reviewed_at,
+          payload.last_reviewed_by,
+          payload.suspended_at,
+          payload.suspension_reason,
+          payload.reinstated_at,
+          payload.reinstatement_reason,
+          payload.created_at,
+          payload.updated_at,
+        ]
+      )
+  );
+  return getAccountRiskState(db, userId);
+}
+
+export async function updateAccountRiskState(db, userId, input = {}) {
+  if (!db || !userId) {
+    return null;
+  }
+  const base = await ensureAccountRiskState(db, userId);
+  if (!base?.user_id) {
+    return null;
+  }
+  const now = isoNow();
+  const delta = Number(input.risk_score_delta || 0);
+  const explicitScore = input.risk_score;
+  const nextScore = Number.isFinite(Number(explicitScore))
+    ? Math.max(0, Number(explicitScore))
+    : Math.max(0, Number(base.risk_score || 0) + (Number.isFinite(delta) ? delta : 0));
+  const payload = {
+    user_id: userId,
+    account_status: input.account_status || base.account_status || "active",
+    risk_level: input.risk_level || base.risk_level || "low",
+    risk_score: nextScore,
+    review_status: input.review_status || base.review_status || "clear",
+    last_risk_event_at:
+      Object.prototype.hasOwnProperty.call(input, "last_risk_event_at")
+        ? input.last_risk_event_at
+        : base.last_risk_event_at,
+    last_reviewed_at:
+      Object.prototype.hasOwnProperty.call(input, "last_reviewed_at")
+        ? input.last_reviewed_at
+        : base.last_reviewed_at,
+    last_reviewed_by:
+      Object.prototype.hasOwnProperty.call(input, "last_reviewed_by")
+        ? input.last_reviewed_by
+        : base.last_reviewed_by,
+    suspended_at:
+      Object.prototype.hasOwnProperty.call(input, "suspended_at") ? input.suspended_at : base.suspended_at,
+    suspension_reason:
+      Object.prototype.hasOwnProperty.call(input, "suspension_reason")
+        ? input.suspension_reason
+        : base.suspension_reason,
+    reinstated_at:
+      Object.prototype.hasOwnProperty.call(input, "reinstated_at")
+        ? input.reinstated_at
+        : base.reinstated_at,
+    reinstatement_reason:
+      Object.prototype.hasOwnProperty.call(input, "reinstatement_reason")
+        ? input.reinstatement_reason
+        : base.reinstatement_reason,
+    updated_at: now,
+  };
+  await callMaybeMock(
+    db,
+    "update_account_risk_state",
+    payload,
+    () =>
+      run(
+        db,
+        `-- og:update_account_risk_state
+        UPDATE account_risk_state
+        SET account_status = ?2,
+            risk_level = ?3,
+            risk_score = ?4,
+            review_status = ?5,
+            last_risk_event_at = ?6,
+            last_reviewed_at = ?7,
+            last_reviewed_by = ?8,
+            suspended_at = ?9,
+            suspension_reason = ?10,
+            reinstated_at = ?11,
+            reinstatement_reason = ?12,
+            updated_at = ?13
+        WHERE user_id = ?1`,
+        [
+          payload.user_id,
+          payload.account_status,
+          payload.risk_level,
+          payload.risk_score,
+          payload.review_status,
+          payload.last_risk_event_at,
+          payload.last_reviewed_at,
+          payload.last_reviewed_by,
+          payload.suspended_at,
+          payload.suspension_reason,
+          payload.reinstated_at,
+          payload.reinstatement_reason,
+          payload.updated_at,
+        ]
+      )
+  );
+  return getAccountRiskState(db, userId);
+}
+
+export async function getOpenAccountRiskFlagByType(db, userId, flagType) {
+  if (!db || !userId || !flagType) {
+    return null;
+  }
+  return callMaybeMock(
+    db,
+    "get_open_account_risk_flag_by_type",
+    { user_id: userId, flag_type: flagType },
+    () =>
+      first(
+        db,
+        `-- og:get_open_account_risk_flag_by_type
+        SELECT id, user_id, flag_type, severity, flag_status, source, summary, evidence_json,
+               opened_at, resolved_at, resolved_by, resolution_note, created_at, updated_at
+        FROM account_risk_flags
+        WHERE user_id = ?1
+          AND flag_type = ?2
+          AND flag_status = 'open'
+        ORDER BY opened_at DESC
+        LIMIT 1`,
+        [userId, flagType]
+      )
+  );
+}
+
+export async function createAccountRiskFlag(db, flag) {
+  if (!db || !flag?.user_id || !flag?.flag_type || !flag?.severity || !flag?.source || !flag?.summary) {
+    return null;
+  }
+  const now = isoNow();
+  const payload = {
+    id: buildId("riskflag"),
+    user_id: flag.user_id,
+    flag_type: flag.flag_type,
+    severity: flag.severity,
+    flag_status: flag.flag_status || "open",
+    source: flag.source,
+    summary: flag.summary,
+    evidence_json: toJson(flag.evidence || {}),
+    opened_at: flag.opened_at || now,
+    resolved_at: flag.resolved_at || null,
+    resolved_by: flag.resolved_by || null,
+    resolution_note: flag.resolution_note || null,
+    created_at: now,
+    updated_at: now,
+  };
+  await callMaybeMock(
+    db,
+    "insert_account_risk_flag",
+    payload,
+    () =>
+      run(
+        db,
+        `-- og:insert_account_risk_flag
+        INSERT INTO account_risk_flags (
+          id, user_id, flag_type, severity, flag_status, source, summary, evidence_json,
+          opened_at, resolved_at, resolved_by, resolution_note, created_at, updated_at
+        )
+        VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14)`,
+        [
+          payload.id,
+          payload.user_id,
+          payload.flag_type,
+          payload.severity,
+          payload.flag_status,
+          payload.source,
+          payload.summary,
+          payload.evidence_json,
+          payload.opened_at,
+          payload.resolved_at,
+          payload.resolved_by,
+          payload.resolution_note,
+          payload.created_at,
+          payload.updated_at,
+        ]
+      )
+  );
+  return payload;
+}
+
+export async function addAccountAdminNote(db, note) {
+  if (!db || !note?.user_id || !note?.note_type || !note?.content) {
+    return null;
+  }
+  const now = isoNow();
+  const payload = {
+    id: buildId("adminnote"),
+    user_id: note.user_id,
+    note_type: note.note_type,
+    visibility: note.visibility || "internal",
+    content: String(note.content || "").trim(),
+    author_id: note.author_id || null,
+    created_at: now,
+    updated_at: now,
+  };
+  await callMaybeMock(
+    db,
+    "insert_account_admin_note",
+    payload,
+    () =>
+      run(
+        db,
+        `-- og:insert_account_admin_note
+        INSERT INTO account_admin_notes (
+          id, user_id, note_type, visibility, content, author_id, created_at, updated_at
+        )
+        VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)`,
+        [
+          payload.id,
+          payload.user_id,
+          payload.note_type,
+          payload.visibility,
+          payload.content,
+          payload.author_id,
+          payload.created_at,
+          payload.updated_at,
+        ]
+      )
+  );
+  return payload;
+}
+
 export async function listActiveAccountSessionsByUser(db, userId) {
   if (!db || !userId) {
     return [];
