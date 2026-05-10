@@ -190,6 +190,38 @@ class MockD1 {
             : row
         );
         return { success: true };
+      case "revoke_other_account_sessions": {
+        let changes = 0;
+        this.accountSessions = this.accountSessions.map((row) => {
+          if (
+            row.user_id === args.user_id &&
+            row.id !== args.current_session_id &&
+            !row.is_revoked
+          ) {
+            changes += 1;
+            return {
+              ...row,
+              is_revoked: 1,
+              revoked_at: args.revoked_at,
+              revoke_reason: args.revoke_reason,
+              updated_at: args.updated_at,
+            };
+          }
+          return row;
+        });
+        return changes;
+      }
+      case "set_primary_account_session":
+        this.accountSessions = this.accountSessions.map((row) =>
+          row.user_id === args.user_id
+            ? {
+                ...row,
+                is_primary: row.id === args.session_id ? 1 : 0,
+                updated_at: args.updated_at,
+              }
+            : row
+        );
+        return { success: true };
       case "get_subscription_by_user":
         return this.subscriptions.find((row) => row.user_id === args.user_id) || null;
       case "get_telegram_link_by_user":
@@ -978,6 +1010,124 @@ const testAccountSessionsState = async (fetchHarness) => {
   assert.equal(sessionsPayload.sessions[1].is_current, false);
 };
 
+const testAccountSessionActions = async (fetchHarness) => {
+  const env = createEnv();
+  await writeSubscriberRecord(
+    env,
+    buildSubscriberRecord({
+      email: "member@example.com",
+    })
+  );
+
+  const requestResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/auth/magic-link/request", "POST", {
+      email: "member@example.com",
+    }),
+    env
+  );
+  assert.equal(requestResponse.status, 200);
+  const emailBody = fetchHarness.sentEmails.at(-1);
+  const verifyMatch = String(emailBody?.html || "").match(/verify\?token=([^"&]+)/);
+  assert.ok(verifyMatch?.[1], "expected magic-link token in email body");
+  const token = decodeURIComponent(verifyMatch[1]);
+
+  const tokenResponse = await worker.fetch(
+    makeGetRequest(`http://localhost/api/auth/magic-link/verify?token=${encodeURIComponent(token)}`),
+    env
+  );
+  const sessionCookie = extractCookieValue(tokenResponse.headers.get("set-cookie"), "og_premium_session");
+  assert.ok(sessionCookie, "expected premium session cookie after verify");
+
+  const currentSession = env.ACCOUNT_DB.accountSessions[0];
+  env.ACCOUNT_DB.accountSessions.push(
+    {
+      ...currentSession,
+      id: "sess_other_alpha",
+      device_label: "Safari on iPhone",
+      is_primary: 0,
+      is_revoked: 0,
+      issued_at: "2026-05-02T09:00:00.000Z",
+      last_seen_at: "2026-05-08T09:00:00.000Z",
+      expires_at: "2026-05-20T09:00:00.000Z",
+      created_at: "2026-05-02T09:00:00.000Z",
+      updated_at: "2026-05-08T09:00:00.000Z",
+    },
+    {
+      ...currentSession,
+      id: "sess_other_beta",
+      device_label: "Chrome on Mac",
+      is_primary: 0,
+      is_revoked: 0,
+      issued_at: "2026-05-03T09:00:00.000Z",
+      last_seen_at: "2026-05-09T09:00:00.000Z",
+      expires_at: "2026-05-20T09:00:00.000Z",
+      created_at: "2026-05-03T09:00:00.000Z",
+      updated_at: "2026-05-09T09:00:00.000Z",
+    }
+  );
+
+  const makePrimaryResponse = await worker.fetch(
+    jsonRequest(
+      "http://localhost/api/account/sessions/make-primary",
+      "POST",
+      { session_id: "sess_other_beta" },
+      { cookie: `og_premium_session=${sessionCookie}` }
+    ),
+    env
+  );
+  const makePrimaryPayload = await makePrimaryResponse.json();
+  assert.equal(makePrimaryResponse.status, 200);
+  assert.equal(makePrimaryPayload.status, "account_session_primary_updated");
+  assert.equal(makePrimaryPayload.primary_session_id, "sess_other_beta");
+  assert.equal(env.ACCOUNT_DB.accountSessions.find((row) => row.id === "sess_other_beta")?.is_primary, 1);
+  assert.equal(env.ACCOUNT_DB.accountSessions.find((row) => row.id === currentSession.id)?.is_primary, 0);
+
+  const revokeOneResponse = await worker.fetch(
+    jsonRequest(
+      "http://localhost/api/account/sessions/revoke",
+      "POST",
+      { session_id: "sess_other_alpha" },
+      { cookie: `og_premium_session=${sessionCookie}` }
+    ),
+    env
+  );
+  const revokeOnePayload = await revokeOneResponse.json();
+  assert.equal(revokeOneResponse.status, 200);
+  assert.equal(revokeOnePayload.status, "account_session_revoked");
+  assert.equal(env.ACCOUNT_DB.accountSessions.find((row) => row.id === "sess_other_alpha")?.is_revoked, 1);
+
+  const revokeOthersResponse = await worker.fetch(
+    jsonRequest(
+      "http://localhost/api/account/sessions/revoke-others",
+      "POST",
+      null,
+      { cookie: `og_premium_session=${sessionCookie}` }
+    ),
+    env
+  );
+  const revokeOthersPayload = await revokeOthersResponse.json();
+  assert.equal(revokeOthersResponse.status, 200);
+  assert.equal(revokeOthersPayload.status, "account_other_sessions_revoked");
+  assert.equal(revokeOthersPayload.revoked_count, 1);
+  assert.equal(env.ACCOUNT_DB.accountSessions.find((row) => row.id === "sess_other_beta")?.is_revoked, 1);
+  assert.equal(env.ACCOUNT_DB.accountSessions.find((row) => row.id === currentSession.id)?.is_revoked, 0);
+
+  const revokeCurrentResponse = await worker.fetch(
+    jsonRequest(
+      "http://localhost/api/account/sessions/revoke",
+      "POST",
+      { session_id: currentSession.id },
+      { cookie: `og_premium_session=${sessionCookie}` }
+    ),
+    env
+  );
+  const revokeCurrentPayload = await revokeCurrentResponse.json();
+  assert.equal(revokeCurrentResponse.status, 200);
+  assert.equal(revokeCurrentPayload.status, "account_current_session_revoked");
+  assert.match(String(revokeCurrentResponse.headers.get("set-cookie") || ""), /og_premium_session=;/);
+  assert.equal(env.ACCOUNT_DB.accountSessions.find((row) => row.id === currentSession.id)?.is_revoked, 1);
+};
+
 const testTelegramWebhookCompletesLinkFlow = async (fetchHarness) => {
   const env = createEnv();
   await writeSubscriberRecord(
@@ -1546,6 +1696,7 @@ const main = async () => {
     await testMagicLinkVerifyAndSessionFlow(fetchHarness);
     await testAccountStateAndTelegramLinkFlow(fetchHarness);
     await testAccountSessionsState(fetchHarness);
+    await testAccountSessionActions(fetchHarness);
     await testTelegramWebhookCompletesLinkFlow(fetchHarness);
     await testTelegramTestAlertRoute(fetchHarness);
     await testTelegramFixtureAlertRoute(fetchHarness);
@@ -1565,6 +1716,7 @@ const main = async () => {
     console.log("- magic-link verify + session premium flow: passed");
     console.log("- D1-backed account state + Telegram link flow: passed");
     console.log("- account devices session surface: passed");
+    console.log("- account device actions: passed");
     console.log("- Telegram bot webhook completion flow: passed");
     console.log("- Telegram test alert route: passed");
     console.log("- Telegram fixture alert route: passed");

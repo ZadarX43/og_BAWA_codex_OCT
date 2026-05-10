@@ -46,6 +46,7 @@
       accountAlerts: [],
       accountStateError: "",
       accountSessionsError: "",
+      accountSessionsMessage: "",
       dashboardClassFilter: "ALL",
       dashboardReasonFilter: "ALL",
       telegramLinkCode: "",
@@ -235,13 +236,19 @@
       <div class="cta-row">
         ${
           session.is_current
-            ? `<button class="ghost-button" type="button" disabled>Current session</button>`
-            : `<button class="ghost-button" type="button" disabled>Revoke soon</button>`
+            ? `<button class="ghost-button" type="button" data-action="revoke-account-session" data-session-id="${escapeHtml(
+                session.id
+              )}" data-session-label="${escapeHtml(session.device_label || "Current device")}">Sign out this device</button>`
+            : `<button class="ghost-button" type="button" data-action="revoke-account-session" data-session-id="${escapeHtml(
+                session.id
+              )}" data-session-label="${escapeHtml(session.device_label || "Device")}">Revoke device</button>`
         }
         ${
           session.is_primary || session.is_revoked
             ? ""
-            : `<button class="ghost-button" type="button" disabled>Make primary soon</button>`
+            : `<button class="ghost-button" type="button" data-action="make-primary-session" data-session-id="${escapeHtml(
+                session.id
+              )}" data-session-label="${escapeHtml(session.device_label || "Device")}">Make primary</button>`
         }
       </div>
     </article>
@@ -2437,6 +2444,7 @@
               <article class="panel" id="devices">
                 <h3>Devices</h3>
                 <p class="muted">This is the first visible device layer on top of magic-link sign-in. Use it to understand where this account is active before revoke and sign-out-other-devices controls go live.</p>
+                ${renderNotice(state.runtime.accountSessionsMessage, state.runtime.accountSessionsMessage ? "success" : "default")}
                 ${renderNotice(state.runtime.accountSessionsError, state.runtime.accountSessionsError ? "warning" : "default")}
                 ${
                   currentSession
@@ -2444,7 +2452,7 @@
                     : `<div class="notice">No current tracked device session was returned yet.</div>`
                 }
                 <div class="cta-row">
-                  <button class="ghost-button" type="button" disabled>Sign out other devices soon</button>
+                  <button class="ghost-button" type="button" data-action="revoke-other-sessions">Sign out other devices</button>
                 </div>
                 ${
                   recentSessions.length
@@ -3312,6 +3320,7 @@
     state.runtime.accountAlerts = [];
     state.runtime.accountStateError = "";
     state.runtime.accountSessionsError = "";
+    state.runtime.accountSessionsMessage = "";
 
     const notice = authNoticeFromQuery();
     state.runtime.authMessage = notice.message;
@@ -3396,6 +3405,19 @@
     } catch (error) {
       state.runtime.accountSessionsError = error.message || "Unable to load account devices.";
     }
+  };
+
+  const refreshSignedInAccountRuntime = async () => {
+    await loadAuthSession();
+    if (!state.runtime.sessionAuthenticated) {
+      state.runtime.accountState = null;
+      state.runtime.accountSessions = [];
+      state.runtime.accountAlerts = [];
+      return;
+    }
+    await loadAccountState();
+    await loadAccountSessions();
+    await loadAccountAlerts();
   };
 
   const loadAccountAlerts = async () => {
@@ -3733,6 +3755,122 @@
     render();
   };
 
+  const revokeAccountSession = async (event, sessionId, sessionLabel) => {
+    event.preventDefault();
+    if (!workerConfigured() || !state.runtime.sessionAuthenticated) {
+      state.runtime.accountSessionsError = "Verify your email before managing devices.";
+      render();
+      return;
+    }
+
+    const label = String(sessionLabel || "this device").trim();
+    if (!window.confirm(`Sign out ${label}?`)) {
+      return;
+    }
+
+    state.runtime.accountSessionsError = "";
+    state.runtime.accountSessionsMessage = "Updating device access…";
+    render();
+
+    try {
+      const { response, payload } = await fetchWorkerJson("/api/account/sessions/revoke", {
+        method: "POST",
+        withToken: true,
+        body: { session_id: String(sessionId || "").trim() },
+      });
+
+      if (!response.ok || !payload?.ok) {
+        throw new Error(payload?.message || "Unable to revoke device session.");
+      }
+
+      if (payload.status === "account_current_session_revoked") {
+        writeStoredPremiumToken("");
+        state.runtime.premiumToken = "";
+        await refreshSignedInAccountRuntime();
+        state.runtime.authMessage = payload.message || "This device has been signed out.";
+      } else {
+        state.runtime.accountSessions = Array.isArray(payload.sessions) ? payload.sessions : [];
+        state.runtime.accountSessionsMessage = payload.message || "Device session revoked.";
+      }
+    } catch (error) {
+      state.runtime.accountSessionsError = error.message || "Unable to revoke device session.";
+    }
+
+    render();
+  };
+
+  const revokeOtherAccountSessions = async (event) => {
+    event.preventDefault();
+    if (!workerConfigured() || !state.runtime.sessionAuthenticated) {
+      state.runtime.accountSessionsError = "Verify your email before managing devices.";
+      render();
+      return;
+    }
+
+    if (!window.confirm("Sign out all other devices and keep only this current session active?")) {
+      return;
+    }
+
+    state.runtime.accountSessionsError = "";
+    state.runtime.accountSessionsMessage = "Signing out other devices…";
+    render();
+
+    try {
+      const { response, payload } = await fetchWorkerJson("/api/account/sessions/revoke-others", {
+        method: "POST",
+        withToken: true,
+      });
+
+      if (!response.ok || !payload?.ok) {
+        throw new Error(payload?.message || "Unable to sign out other devices.");
+      }
+
+      state.runtime.accountSessions = Array.isArray(payload.sessions) ? payload.sessions : [];
+      state.runtime.accountSessionsMessage = payload.message || "Other devices signed out.";
+    } catch (error) {
+      state.runtime.accountSessionsError = error.message || "Unable to sign out other devices.";
+    }
+
+    render();
+  };
+
+  const makePrimaryAccountSession = async (event, sessionId, sessionLabel) => {
+    event.preventDefault();
+    if (!workerConfigured() || !state.runtime.sessionAuthenticated) {
+      state.runtime.accountSessionsError = "Verify your email before managing devices.";
+      render();
+      return;
+    }
+
+    const label = String(sessionLabel || "this device").trim();
+    if (!window.confirm(`Make ${label} the primary device for this account?`)) {
+      return;
+    }
+
+    state.runtime.accountSessionsError = "";
+    state.runtime.accountSessionsMessage = "Updating primary device…";
+    render();
+
+    try {
+      const { response, payload } = await fetchWorkerJson("/api/account/sessions/make-primary", {
+        method: "POST",
+        withToken: true,
+        body: { session_id: String(sessionId || "").trim() },
+      });
+
+      if (!response.ok || !payload?.ok) {
+        throw new Error(payload?.message || "Unable to update primary device.");
+      }
+
+      state.runtime.accountSessions = Array.isArray(payload.sessions) ? payload.sessions : [];
+      state.runtime.accountSessionsMessage = payload.message || "Primary device updated.";
+    } catch (error) {
+      state.runtime.accountSessionsError = error.message || "Unable to update primary device.";
+    }
+
+    render();
+  };
+
   const handleTokenSave = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
@@ -3774,6 +3912,7 @@
     state.runtime.accountSessions = [];
     state.runtime.accountStateError = "";
     state.runtime.accountSessionsError = "";
+    state.runtime.accountSessionsMessage = "";
     state.runtime.telegramLinkCode = "";
     state.runtime.telegramLinkExpiresAt = "";
     state.runtime.telegramBotUsername = "";
@@ -3857,6 +3996,32 @@
     const dispatchAlertsTarget = event.target.closest("[data-action='dispatch-followed-alerts']");
     if (dispatchAlertsTarget) {
       await dispatchFollowedAlerts(event);
+      return;
+    }
+
+    const revokeSessionTarget = event.target.closest("[data-action='revoke-account-session']");
+    if (revokeSessionTarget) {
+      await revokeAccountSession(
+        event,
+        revokeSessionTarget.dataset.sessionId,
+        revokeSessionTarget.dataset.sessionLabel
+      );
+      return;
+    }
+
+    const revokeOtherSessionsTarget = event.target.closest("[data-action='revoke-other-sessions']");
+    if (revokeOtherSessionsTarget) {
+      await revokeOtherAccountSessions(event);
+      return;
+    }
+
+    const makePrimaryTarget = event.target.closest("[data-action='make-primary-session']");
+    if (makePrimaryTarget) {
+      await makePrimaryAccountSession(
+        event,
+        makePrimaryTarget.dataset.sessionId,
+        makePrimaryTarget.dataset.sessionLabel
+      );
     }
   });
 

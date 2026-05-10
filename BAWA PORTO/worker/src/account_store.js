@@ -577,6 +577,76 @@ export async function revokeAccountSession(db, sessionId, revokeReason = "revoke
   return true;
 }
 
+export async function revokeOtherAccountSessions(db, userId, currentSessionId, revokeReason = "user_revoked_other_sessions", revokedAt = isoNow()) {
+  if (!db || !userId) {
+    return 0;
+  }
+  return callMaybeMock(
+    db,
+    "revoke_other_account_sessions",
+    {
+      user_id: userId,
+      current_session_id: currentSessionId || null,
+      revoke_reason: revokeReason,
+      revoked_at: revokedAt,
+      updated_at: revokedAt,
+    },
+    async () => {
+      const result = await run(
+        db,
+        `-- og:revoke_other_account_sessions
+        UPDATE account_sessions
+        SET is_revoked = 1,
+            revoked_at = ?3,
+            revoke_reason = ?4,
+            updated_at = ?5
+        WHERE user_id = ?1
+          AND (?2 IS NULL OR id != ?2)
+          AND is_revoked = 0`,
+        [userId, currentSessionId || null, revokedAt, revokeReason, revokedAt]
+      );
+      return Number(result?.meta?.changes || 0);
+    }
+  );
+}
+
+export async function setPrimaryAccountSession(db, userId, sessionId, updatedAt = isoNow()) {
+  if (!db || !userId || !sessionId) {
+    return false;
+  }
+  await callMaybeMock(
+    db,
+    "set_primary_account_session",
+    {
+      user_id: userId,
+      session_id: sessionId,
+      updated_at: updatedAt,
+    },
+    async () => {
+      await run(
+        db,
+        `-- og:unset_primary_account_sessions
+        UPDATE account_sessions
+        SET is_primary = 0,
+            updated_at = ?2
+        WHERE user_id = ?1`,
+        [userId, updatedAt]
+      );
+      await run(
+        db,
+        `-- og:set_primary_account_session
+        UPDATE account_sessions
+        SET is_primary = 1,
+            updated_at = ?3
+        WHERE user_id = ?1
+          AND id = ?2`,
+        [userId, sessionId, updatedAt]
+      );
+    }
+  );
+  return true;
+}
+
 export async function getAccountStateByEmail(db, email) {
   if (!db) {
     return null;

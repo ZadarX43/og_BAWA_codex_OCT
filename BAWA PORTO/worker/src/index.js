@@ -21,6 +21,8 @@ import {
   mirrorSubscriptionFromRecord,
   recordAuthEvent,
   revokeAccountSession,
+  revokeOtherAccountSessions,
+  setPrimaryAccountSession,
   touchAccountSessionSeen,
   upsertNotificationAlerts,
   updateNotificationPreferences,
@@ -1545,6 +1547,306 @@ async function handleAccountSessionsState(request, env) {
   });
 }
 
+async function handleAccountSessionRevoke(request, env) {
+  const sessionAccess = await verifySessionAccess(request, env);
+  if (!sessionAccess.ok) {
+    return json(
+      {
+        ok: false,
+        authenticated: false,
+        entitled: false,
+        status: sessionAccess.status || "unauthenticated",
+        message: sessionAccess.message || "Sign in to manage devices.",
+      },
+      401,
+      sessionFailureHeaders(sessionAccess.status)
+    );
+  }
+
+  const accountDb = getAccountDb(env);
+  if (!accountDb) {
+    return configError("ACCOUNT_DB D1 binding is required for account session actions.", ["ACCOUNT_DB"]);
+  }
+
+  let payload;
+  try {
+    payload = await request.json();
+  } catch (error) {
+    return requestError("Session revoke body must be valid JSON.", error.message);
+  }
+
+  const sessionId = String(payload?.session_id || "").trim();
+  if (!sessionId) {
+    return requestError("A session_id is required to revoke a device session.");
+  }
+
+  const accountState = await getAccountStateByEmail(accountDb, sessionAccess.email);
+  if (!accountState?.user?.id) {
+    return json(
+      {
+        ok: false,
+        status: "account_state_missing",
+        message: "Unable to load account devices for this account yet.",
+      },
+      500
+    );
+  }
+
+  const targetSession = await getAccountSessionById(accountDb, sessionId);
+  if (!targetSession?.id || targetSession.user_id !== accountState.user.id) {
+    return json(
+      {
+        ok: false,
+        status: "session_not_found",
+        message: "That device session was not found for this account.",
+      },
+      404
+    );
+  }
+
+  const revokedAt = nowIso();
+  await revokeAccountSession(accountDb, targetSession.id, "user_revoked", revokedAt);
+  try {
+    await recordAuthEvent(accountDb, {
+      user_id: accountState.user.id,
+      email_normalized: sessionAccess.email,
+      event_type: "account_session_revoked",
+      ip_hint: getRequestIp(request) || null,
+      user_agent_hint: getUserAgentHint(request),
+      metadata: {
+        current_session_id: sessionAccess.session_id || null,
+        target_session_id: targetSession.id,
+        target_device_label: targetSession.device_label || null,
+      },
+    });
+  } catch {
+    // Best-effort audit trail only.
+  }
+
+  const sessions = await listAccountSessionsByUser(accountDb, accountState.user.id, { limit: 8 });
+  const responseHeaders = targetSession.id === sessionAccess.session_id
+    ? { "set-cookie": clearCookieHeader(AUTH_SESSION_COOKIE) }
+    : {};
+
+  return json(
+    {
+      ok: true,
+      status:
+        targetSession.id === sessionAccess.session_id
+          ? "account_current_session_revoked"
+          : "account_session_revoked",
+      message:
+        targetSession.id === sessionAccess.session_id
+          ? "This device has been signed out."
+          : "Selected device session revoked.",
+      revoked_session_id: targetSession.id,
+      sessions: sessions.map((session) => ({
+        id: session.id,
+        device_label: session.device_label || "Browser session",
+        session_kind: session.session_kind || "browser",
+        is_current: session.id === sessionAccess.session_id,
+        is_primary: Number(session.is_primary || 0) === 1,
+        is_revoked: Number(session.is_revoked || 0) === 1 || Boolean(session.revoked_at),
+        issued_at: session.issued_at || null,
+        last_seen_at: session.last_seen_at || null,
+        expires_at: session.expires_at || null,
+        revoked_at: session.revoked_at || null,
+        revoke_reason: session.revoke_reason || null,
+      })),
+    },
+    200,
+    responseHeaders
+  );
+}
+
+async function handleAccountSessionsRevokeOthers(request, env) {
+  const sessionAccess = await verifySessionAccess(request, env);
+  if (!sessionAccess.ok) {
+    return json(
+      {
+        ok: false,
+        authenticated: false,
+        entitled: false,
+        status: sessionAccess.status || "unauthenticated",
+        message: sessionAccess.message || "Sign in to manage devices.",
+      },
+      401,
+      sessionFailureHeaders(sessionAccess.status)
+    );
+  }
+
+  const accountDb = getAccountDb(env);
+  if (!accountDb) {
+    return configError("ACCOUNT_DB D1 binding is required for account session actions.", ["ACCOUNT_DB"]);
+  }
+
+  const accountState = await getAccountStateByEmail(accountDb, sessionAccess.email);
+  if (!accountState?.user?.id) {
+    return json(
+      {
+        ok: false,
+        status: "account_state_missing",
+        message: "Unable to load account devices for this account yet.",
+      },
+      500
+    );
+  }
+
+  const revokedCount = await revokeOtherAccountSessions(
+    accountDb,
+    accountState.user.id,
+    sessionAccess.session_id || null,
+    "user_revoked_other_sessions",
+    nowIso()
+  );
+  try {
+    await recordAuthEvent(accountDb, {
+      user_id: accountState.user.id,
+      email_normalized: sessionAccess.email,
+      event_type: "account_other_sessions_revoked",
+      ip_hint: getRequestIp(request) || null,
+      user_agent_hint: getUserAgentHint(request),
+      metadata: {
+        current_session_id: sessionAccess.session_id || null,
+        revoked_count: revokedCount,
+      },
+    });
+  } catch {
+    // Best-effort audit trail only.
+  }
+
+  const sessions = await listAccountSessionsByUser(accountDb, accountState.user.id, { limit: 8 });
+  return json({
+    ok: true,
+    status: "account_other_sessions_revoked",
+    message: revokedCount
+      ? "Other signed-in devices have been signed out."
+      : "No other active device sessions were found.",
+    revoked_count: revokedCount,
+    sessions: sessions.map((session) => ({
+      id: session.id,
+      device_label: session.device_label || "Browser session",
+      session_kind: session.session_kind || "browser",
+      is_current: session.id === sessionAccess.session_id,
+      is_primary: Number(session.is_primary || 0) === 1,
+      is_revoked: Number(session.is_revoked || 0) === 1 || Boolean(session.revoked_at),
+      issued_at: session.issued_at || null,
+      last_seen_at: session.last_seen_at || null,
+      expires_at: session.expires_at || null,
+      revoked_at: session.revoked_at || null,
+      revoke_reason: session.revoke_reason || null,
+    })),
+  });
+}
+
+async function handleAccountSessionMakePrimary(request, env) {
+  const sessionAccess = await verifySessionAccess(request, env);
+  if (!sessionAccess.ok) {
+    return json(
+      {
+        ok: false,
+        authenticated: false,
+        entitled: false,
+        status: sessionAccess.status || "unauthenticated",
+        message: sessionAccess.message || "Sign in to manage devices.",
+      },
+      401,
+      sessionFailureHeaders(sessionAccess.status)
+    );
+  }
+
+  const accountDb = getAccountDb(env);
+  if (!accountDb) {
+    return configError("ACCOUNT_DB D1 binding is required for account session actions.", ["ACCOUNT_DB"]);
+  }
+
+  let payload;
+  try {
+    payload = await request.json();
+  } catch (error) {
+    return requestError("Make-primary body must be valid JSON.", error.message);
+  }
+
+  const sessionId = String(payload?.session_id || "").trim();
+  if (!sessionId) {
+    return requestError("A session_id is required to make a device primary.");
+  }
+
+  const accountState = await getAccountStateByEmail(accountDb, sessionAccess.email);
+  if (!accountState?.user?.id) {
+    return json(
+      {
+        ok: false,
+        status: "account_state_missing",
+        message: "Unable to load account devices for this account yet.",
+      },
+      500
+    );
+  }
+
+  const targetSession = await getAccountSessionById(accountDb, sessionId);
+  if (!targetSession?.id || targetSession.user_id !== accountState.user.id) {
+    return json(
+      {
+        ok: false,
+        status: "session_not_found",
+        message: "That device session was not found for this account.",
+      },
+      404
+    );
+  }
+
+  if (Number(targetSession.is_revoked || 0) === 1 || targetSession.revoked_at) {
+    return json(
+      {
+        ok: false,
+        status: "session_revoked",
+        message: "Revoked device sessions cannot become primary.",
+      },
+      409
+    );
+  }
+
+  await setPrimaryAccountSession(accountDb, accountState.user.id, targetSession.id, nowIso());
+  try {
+    await recordAuthEvent(accountDb, {
+      user_id: accountState.user.id,
+      email_normalized: sessionAccess.email,
+      event_type: "account_session_primary_updated",
+      ip_hint: getRequestIp(request) || null,
+      user_agent_hint: getUserAgentHint(request),
+      metadata: {
+        current_session_id: sessionAccess.session_id || null,
+        primary_session_id: targetSession.id,
+        primary_device_label: targetSession.device_label || null,
+      },
+    });
+  } catch {
+    // Best-effort audit trail only.
+  }
+
+  const sessions = await listAccountSessionsByUser(accountDb, accountState.user.id, { limit: 8 });
+  return json({
+    ok: true,
+    status: "account_session_primary_updated",
+    message: "Primary device updated for this account.",
+    primary_session_id: targetSession.id,
+    sessions: sessions.map((session) => ({
+      id: session.id,
+      device_label: session.device_label || "Browser session",
+      session_kind: session.session_kind || "browser",
+      is_current: session.id === sessionAccess.session_id,
+      is_primary: Number(session.is_primary || 0) === 1,
+      is_revoked: Number(session.is_revoked || 0) === 1 || Boolean(session.revoked_at),
+      issued_at: session.issued_at || null,
+      last_seen_at: session.last_seen_at || null,
+      expires_at: session.expires_at || null,
+      revoked_at: session.revoked_at || null,
+      revoke_reason: session.revoke_reason || null,
+    })),
+  });
+}
+
 async function handleAccountPreferencesUpdate(request, env) {
   const sessionAccess = await verifySessionAccess(request, env);
   if (!sessionAccess.ok) {
@@ -2951,6 +3253,9 @@ async function handleRequest(request, env) {
         "POST /api/auth/logout",
         "GET /api/account/state",
         "GET /api/account/sessions",
+        "POST /api/account/sessions/revoke",
+        "POST /api/account/sessions/revoke-others",
+        "POST /api/account/sessions/make-primary",
         "POST /api/account/preferences",
         "GET /api/account/alerts",
         "POST /api/account/alerts/refresh",
@@ -3031,6 +3336,33 @@ async function handleRequest(request, env) {
       return withCors(response, request, env);
     }
     response = await handleAccountSessionsState(request, env);
+    return withCors(response, request, env);
+  }
+
+  if (pathname === "/api/account/sessions/revoke") {
+    if (request.method !== "POST") {
+      response = methodNotAllowed("POST");
+      return withCors(response, request, env);
+    }
+    response = await handleAccountSessionRevoke(request, env);
+    return withCors(response, request, env);
+  }
+
+  if (pathname === "/api/account/sessions/revoke-others") {
+    if (request.method !== "POST") {
+      response = methodNotAllowed("POST");
+      return withCors(response, request, env);
+    }
+    response = await handleAccountSessionsRevokeOthers(request, env);
+    return withCors(response, request, env);
+  }
+
+  if (pathname === "/api/account/sessions/make-primary") {
+    if (request.method !== "POST") {
+      response = methodNotAllowed("POST");
+      return withCors(response, request, env);
+    }
+    response = await handleAccountSessionMakePrimary(request, env);
     return withCors(response, request, env);
   }
 
