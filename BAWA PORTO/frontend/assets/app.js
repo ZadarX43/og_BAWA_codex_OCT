@@ -2859,6 +2859,15 @@
       Number(Boolean(parsePreferenceList(notificationPreferences?.favourite_teams).length)) +
       Number(Boolean(parsePreferenceList(notificationPreferences?.followed_fixtures).length)) +
       Number(Boolean(notificationPreferences?.telegram_enabled));
+    const savedFollowCount =
+      parsePreferenceList(notificationPreferences?.favourite_teams).length +
+      parsePreferenceList(notificationPreferences?.favourite_leagues).length +
+      parsePreferenceList(notificationPreferences?.favourite_markets).length +
+      parsePreferenceList(notificationPreferences?.followed_fixtures).length;
+    const alertCount = Array.isArray(state.runtime.accountAlerts) ? state.runtime.accountAlerts.length : 0;
+    const deliveryPosture =
+      notificationPreferences?.telegram_enabled && !notificationPreferences?.website_only_mode ? "Selective" : "Website-first";
+    const telegramStatusLabel = telegramLinked ? "Linked" : telegramReady ? "Ready to link" : "Not linked";
 
     return `
       ${
@@ -3042,62 +3051,64 @@
             </section>
           `
           : `
-            <section class="section">
+            <section class="section section-tight">
+              <nav class="page-subnav" aria-label="Account sections">
+                <div class="page-subnav-scroll">
+                  <a class="page-subnav-link is-active" href="#account-overview">Workspace</a>
+                  <a class="page-subnav-link" href="#activity-desk">Activity</a>
+                  <a class="page-subnav-link" href="#devices">Devices</a>
+                  <a class="page-subnav-link" href="#preferences">Preferences</a>
+                  <a class="page-subnav-link" href="#billing">Billing</a>
+                  <a class="page-subnav-link" href="#help">Help</a>
+                </div>
+              </nav>
+            </section>
+            ${
+              !onboardingCompleted
+                ? `
+                  <section class="section">
+                    <article class="panel">
+                      <h3>Calm setup still needs one final pass</h3>
+                      <p class="muted">Your account is live, but the desk still gets better once your preset, follows, delivery posture, and decision-support settings are locked in together.</p>
+                      <div class="stats-grid">
+                        ${statPanel("Progress", `${onboardingSummary.completed}/${onboardingSummary.total}`, "Preset, follows, delivery, decision support, reset mode")}
+                        ${statPanel("Preset", stylePresetLabel(userStylePreset), stylePresetSummary(userStylePreset))}
+                        ${statPanel("Delivery", deliveryPosture, feedRoutingExplanation(userStylePreset))}
+                        ${statPanel("Outcome", "Calmer account", "Less noise, clearer relevance, stronger pacing")}
+                      </div>
+                      <div class="cta-row">
+                        <a class="button" href="./onboarding.html">Finish calm setup</a>
+                        <a class="ghost-button" href="#preferences">Open preferences anyway</a>
+                      </div>
+                    </article>
+                  </section>
+                `
+                : ""
+            }
+            <section class="section split" id="account-overview">
               <article class="panel">
-                <h3>Account navigation</h3>
-                <p class="muted">Use this as the stable navigation layer for account state, delivery posture, preferences, billing, and help.</p>
-                <div class="pill-row">
-                  <a class="ghost-button" href="#account-overview">Account</a>
-                  <a class="ghost-button" href="#devices">Devices</a>
-                  <a class="ghost-button" href="#settings">Settings</a>
-                  <a class="ghost-button" href="#preferences">Preferences</a>
-                  <a class="ghost-button" href="#language">Language</a>
-                  <a class="ghost-button" href="#billing">Billing</a>
-                  <a class="ghost-button" href="#help">Help</a>
+                <h3>Member workspace</h3>
+                <p class="muted">This is the calm top layer for your account: what posture you saved, how your desk will deliver, and what is actively shaping the product around you.</p>
+                <div class="stats-grid">
+                  ${statPanel("Membership", subscriptionStatus, entitled ? "Premium access is unlocked on this device." : "Membership is still settling.")}
+                  ${statPanel("Preset", stylePresetLabel(userStylePreset), stylePresetSummary(userStylePreset))}
+                  ${statPanel("Saved follows", String(savedFollowCount), followedSignalsConfigured ? "Teams, leagues, markets, and fixtures are shaping the desk." : "No follow environment saved yet.")}
+                  ${statPanel("Alerts", String(alertCount), alertCount ? "Queued and delivered account alerts are live." : "No account alerts are stored yet.")}
                 </div>
               </article>
-            </section>
-            <section class="section split">
-              <article class="panel" id="account-overview">
-                <h3>Account state</h3>
+              <article class="panel">
+                <h3>Account and delivery</h3>
                 <ul class="feature-list">
                   <li>Verified email: ${displayEmail ? escapeHtml(displayEmail) : "Signed in"}</li>
                   <li>Membership status: ${escapeHtml(subscriptionStatus)}</li>
                   <li>D1 profile state: ${accountState ? "Active" : state.runtime.accountStateError ? "Unavailable" : "Pending"}</li>
+                  <li>Delivery posture: ${escapeHtml(deliveryPosture)}</li>
+                  <li>Telegram: ${escapeHtml(telegramStatusLabel)}</li>
                 </ul>
-              </article>
-              <article class="panel" id="devices">
-                <h3>Devices</h3>
-                <p class="muted">This is the first visible device layer on top of magic-link sign-in. Use it to understand where this account is active before revoke and sign-out-other-devices controls go live.</p>
-                ${renderNotice(state.runtime.accountSessionsMessage, state.runtime.accountSessionsMessage ? "success" : "default")}
-                ${renderNotice(state.runtime.accountSessionsError, state.runtime.accountSessionsError ? "warning" : "default")}
-                ${
-                  currentSession
-                    ? `<div class="card-grid">${accountSessionCard(currentSession)}</div>`
-                    : `<div class="notice">No current tracked device session was returned yet.</div>`
-                }
-                <div class="cta-row">
-                  <button class="ghost-button" type="button" data-action="revoke-other-sessions">Sign out other devices</button>
-                </div>
-                ${
-                  recentSessions.length
-                    ? `<div class="card-grid">${recentSessions.slice(0, 5).map((session) => accountSessionCard(session)).join("")}</div>`
-                    : `<div class="notice">No recent secondary device sessions are stored for this account yet.</div>`
-                }
-              </article>
-              <article class="panel" id="settings">
-                <h3>Telegram premium access</h3>
-                <p class="muted">
-                  Link Telegram when you want premium comms, elite deployment alerts, and future acca drops beyond the website shell.
-                </p>
                 ${
                   telegramLinked
                     ? `
-                      <ul class="feature-list">
-                        <li>Telegram linked: ${escapeHtml(formatTelegramIdentity(telegramLink) || "Linked account")}</li>
-                        <li>Linked at: ${escapeHtml(formatDateTime(telegramLink.linked_at) || "Recently linked")}</li>
-                        <li>Telegram alerts: ${notificationPreferences?.telegram_enabled ? "Enabled" : "Ready to enable"}</li>
-                      </ul>
+                      <p class="muted">Telegram is linked as ${escapeHtml(formatTelegramIdentity(telegramLink) || "Linked account")} and can be used for stronger interruptions only.</p>
                       <div class="cta-row">
                         <button class="button button-secondary" type="button" data-action="telegram-test-alert">Send test Telegram alert</button>
                       </div>
@@ -3113,18 +3124,16 @@
                                 ? ` · <a href="${escapeHtml(state.runtime.telegramDeepLinkUrl)}" target="_blank" rel="noreferrer">Open Telegram bot</a>`
                                 : ""
                             }<br><span class="muted">Expires ${escapeHtml(formatDateTime(state.runtime.telegramLinkExpiresAt))}</span></div>`
-                          : ""
+                          : `<p class="muted">Link Telegram when you want premium comms, elite deployment alerts, and future acca drops beyond the website shell.</p>`
                       }
                     `
                 }
               </article>
             </section>
-            <section class="section">
+            <section class="section split" id="activity-desk">
               <article class="panel">
                 <h3>Followed intelligence</h3>
-                <p class="muted">
-                  This is the account preview of your followed intelligence. Use the dashboard for the fuller grouped fixture workspace.
-                </p>
+                <p class="muted">A shorter preview of the fixtures currently matching your saved follows. Use the dashboard for the fuller grouped fixture workspace.</p>
                 ${
                   !followedSignalsConfigured
                     ? `<div class="notice">Add followed teams, leagues, markets, or fixtures below to start shaping your personal intelligence board.</div>`
@@ -3132,7 +3141,7 @@
                       ? `
                         <div class="card-grid intelligence-grid">
                           ${followedIntelligence
-                            .slice(0, 8)
+                            .slice(0, 4)
                             .map((entry) => intelligenceCard(entry, Boolean(notificationPreferences?.telegram_enabled)))
                             .join("")}
                         </div>
@@ -3140,13 +3149,9 @@
                       : `<div class="notice">Your follow settings are saved, but no current published fixtures matched this window yet. That will change as covered-fixture and context publishing expands.</div>`
                 }
               </article>
-            </section>
-            <section class="section">
               <article class="panel">
                 <h3>My alerts</h3>
-                <p class="muted">
-                  This queue is the first step from followed intelligence into automatic Telegram delivery. Team and fixture follows take priority. Lower-relevance market-only matches stay in the website feed instead of auto-sending to Telegram.
-                </p>
+                <p class="muted">This is the transition layer from followed intelligence into Telegram. Lower-relevance market-only matches stay on the website instead of breaking attention.</p>
                 ${renderNotice(state.runtime.alertsMessage, state.runtime.alertsMessage ? "success" : "default")}
                 <div class="cta-row">
                   <button class="button" type="button" data-action="refresh-followed-alerts">Refresh followed alerts</button>
@@ -3155,19 +3160,48 @@
                 ${
                   state.runtime.accountAlerts.length
                     ? `<div class="card-grid intelligence-grid">${state.runtime.accountAlerts
-                        .slice(0, 6)
+                        .slice(0, 4)
                         .map((alert) => notificationAlertCard(alert))
                         .join("")}</div>`
                     : `<div class="notice">No queued or delivered alerts are stored for this account yet.</div>`
                 }
               </article>
             </section>
+            <section class="section split">
+              <article class="panel" id="devices">
+                <h3>Devices</h3>
+                <p class="muted">This device layer is here to make magic-link access feel intentional rather than invisible.</p>
+                ${renderNotice(state.runtime.accountSessionsMessage, state.runtime.accountSessionsMessage ? "success" : "default")}
+                ${renderNotice(state.runtime.accountSessionsError, state.runtime.accountSessionsError ? "warning" : "default")}
+                ${
+                  currentSession
+                    ? `<div class="card-grid">${accountSessionCard(currentSession)}</div>`
+                    : `<div class="notice">No current tracked device session was returned yet.</div>`
+                }
+                <div class="cta-row">
+                  <button class="ghost-button" type="button" data-action="revoke-other-sessions">Sign out other devices</button>
+                </div>
+                ${
+                  recentSessions.length
+                    ? `<div class="card-grid">${recentSessions.slice(0, 3).map((session) => accountSessionCard(session)).join("")}</div>`
+                    : `<div class="notice">No recent secondary device sessions are stored for this account yet.</div>`
+                }
+              </article>
+              <article class="panel">
+                <h3>Workspace controls</h3>
+                <p class="muted">This is the compact read of what shapes your desk before you open the full preferences layer underneath.</p>
+                <div class="stats-grid">
+                  ${statPanel("Style", stylePresetLabel(userStylePreset), stylePresetSummary(userStylePreset))}
+                  ${statPanel("Language", languageLabel(notificationPreferences?.language_preference || "en-GB"), "Language is ready for fuller localisation later.")}
+                  ${statPanel("Interruptions", deliveryPosture, feedRoutingExplanation(userStylePreset))}
+                  ${statPanel("Onboarding", `${onboardingSummary.completed}/${onboardingSummary.total}`, onboardingCompleted ? "Calm setup is complete." : "There are still first-run choices to lock in.")}
+                </div>
+              </article>
+            </section>
             <section class="section">
               <article class="panel" id="preferences">
                 <h3>Intelligence preferences</h3>
-                <p class="muted">
-                  Choose what kind of intelligence you want on the website and in Telegram. This is the first layer of personalised delivery.
-                </p>
+                <p class="muted">Open the full control layer here when you want to change the desk, not just inspect it.</p>
                 <form id="preferences-form" class="stack-form">
                   <div class="card-grid">
                     <article class="panel">
