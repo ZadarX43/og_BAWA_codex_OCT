@@ -2260,13 +2260,18 @@ async function handleInternalAccountNoteCreate(request, env, userId) {
   } catch (error) {
     return requestError("Internal note body must be valid JSON.", error.message);
   }
+  const actor = normalizeInternalActor(payload?.author_id);
+  const actorError = validateInternalActor(actor);
+  if (actorError) {
+    return json({ ok: false, status: "internal_operator_identity_required", message: actorError }, 400);
+  }
 
   const note = await addAccountAdminNote(accountDb, {
     user_id: userId,
     note_type: String(payload?.note_type || "").trim() || "support_note",
     visibility: String(payload?.visibility || "internal").trim() || "internal",
     content: String(payload?.content || "").trim(),
-    author_id: String(payload?.author_id || "").trim() || "internal:operator",
+    author_id: actor,
   });
   if (!note?.id) {
     return requestError("A note_type and content are required to add an internal note.");
@@ -2303,6 +2308,25 @@ function normalizeInternalActionReason(input) {
     .trim();
 }
 
+function normalizeInternalActor(input) {
+  return String(input || "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function validateInternalActor(actor) {
+  if (!actor) {
+    return "Operator identity is required.";
+  }
+  if (actor.length < 5) {
+    return "Operator identity must be at least 5 characters.";
+  }
+  if (["internal:web-shell", "internal:operator", "operator"].includes(actor.toLowerCase())) {
+    return "Use a real operator identity instead of the generic shell label.";
+  }
+  return null;
+}
+
 function validateInternalActionReason(reason, label = "reason") {
   if (!reason) {
     return `${label} is required.`;
@@ -2333,7 +2357,11 @@ async function handleInternalAccountRestrict(request, env, userId) {
   if (reasonError) {
     return json({ ok: false, status: "internal_restriction_reason_required", message: reasonError }, 400);
   }
-  const actor = String(payload?.author_id || "internal:operator").trim();
+  const actor = normalizeInternalActor(payload?.author_id);
+  const actorError = validateInternalActor(actor);
+  if (actorError) {
+    return json({ ok: false, status: "internal_operator_identity_required", message: actorError }, 400);
+  }
 
   await updateAccountRiskState(accountDb, userId, {
     account_status: "restricted",
@@ -2396,7 +2424,11 @@ async function handleInternalAccountSuspend(request, env, userId) {
       400
     );
   }
-  const actor = String(payload?.author_id || "internal:operator").trim();
+  const actor = normalizeInternalActor(payload?.author_id);
+  const actorError = validateInternalActor(actor);
+  if (actorError) {
+    return json({ ok: false, status: "internal_operator_identity_required", message: actorError }, 400);
+  }
   const sessions = await listAccountSessionsByUser(accountDb, userId, { limit: 24 });
   const revokedAt = nowIso();
   for (const session of sessions) {
@@ -2456,7 +2488,11 @@ async function handleInternalAccountReinstate(request, env, userId) {
   if (reasonError) {
     return json({ ok: false, status: "internal_reinstatement_reason_required", message: reasonError }, 400);
   }
-  const actor = String(payload?.author_id || "internal:operator").trim();
+  const actor = normalizeInternalActor(payload?.author_id);
+  const actorError = validateInternalActor(actor);
+  if (actorError) {
+    return json({ ok: false, status: "internal_operator_identity_required", message: actorError }, 400);
+  }
   const now = nowIso();
   await updateAccountRiskState(accountDb, userId, {
     account_status: "active",
@@ -2507,7 +2543,11 @@ async function handleInternalFlagStatusUpdate(request, env, userId, flagId, next
   } catch (error) {
     return requestError("Flag update body must be valid JSON.", error.message);
   }
-  const actor = String(payload?.author_id || "internal:operator").trim();
+  const actor = normalizeInternalActor(payload?.author_id);
+  const actorError = validateInternalActor(actor);
+  if (actorError) {
+    return json({ ok: false, status: "internal_operator_identity_required", message: actorError }, 400);
+  }
   const note = normalizeInternalActionReason(payload?.resolution_note || payload?.reason);
   const noteError = validateInternalActionReason(
     note,

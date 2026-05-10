@@ -2,6 +2,7 @@
   const DATA_ROOT = "./public/data";
   const PREMIUM_TOKEN_STORAGE_KEY = "og_premium_token";
   const INTERNAL_ADMIN_KEY_STORAGE_KEY = "og_internal_admin_key";
+  const INTERNAL_OPERATOR_ID_STORAGE_KEY = "og_internal_operator_id";
   const app = document.getElementById("app");
   const page = document.body.dataset.page || "home";
   const query = new URLSearchParams(window.location.search);
@@ -55,6 +56,7 @@
       telegramBotUsername: "",
       telegramDeepLinkUrl: "",
       internalAdminKey: "",
+      internalOperatorId: "",
       internalLookupMessage: "",
       internalReviewMessage: "",
       internalSelectedUserId: "",
@@ -122,6 +124,24 @@
         window.localStorage.setItem(INTERNAL_ADMIN_KEY_STORAGE_KEY, value);
       } else {
         window.localStorage.removeItem(INTERNAL_ADMIN_KEY_STORAGE_KEY);
+      }
+    } catch {
+      return;
+    }
+  };
+  const readStoredInternalOperatorId = () => {
+    try {
+      return window.localStorage.getItem(INTERNAL_OPERATOR_ID_STORAGE_KEY) || "";
+    } catch {
+      return "";
+    }
+  };
+  const writeStoredInternalOperatorId = (value) => {
+    try {
+      if (value) {
+        window.localStorage.setItem(INTERNAL_OPERATOR_ID_STORAGE_KEY, value);
+      } else {
+        window.localStorage.removeItem(INTERNAL_OPERATOR_ID_STORAGE_KEY);
       }
     } catch {
       return;
@@ -2902,6 +2922,17 @@
     const flags = Array.isArray(state.runtime.internalFlags) ? state.runtime.internalFlags : [];
     const notes = Array.isArray(state.runtime.internalNotes) ? state.runtime.internalNotes : [];
     const timeline = Array.isArray(state.runtime.internalTimeline) ? state.runtime.internalTimeline : [];
+    const operatorId = String(state.runtime.internalOperatorId || "").trim();
+    const actionAuditEntries = timeline
+      .filter((item) => {
+        const eventType = String(item?.event_type || "");
+        return (
+          eventType.startsWith("internal_account_") ||
+          eventType.startsWith("internal_flag_") ||
+          eventType.startsWith("admin_note_")
+        );
+      })
+      .slice(0, 10);
 
     if (!hasKey) {
       return `
@@ -2925,13 +2956,16 @@
         <section class="section">
           ${renderNotice(state.runtime.internalLookupMessage, state.runtime.internalLookupMessage ? "warning" : "default")}
           <article class="panel">
-            <h3>Operator key</h3>
-            <p class="muted">Store the operator key only on this browser if you are actively using the review desk.</p>
+            <h3>Operator access</h3>
+            <p class="muted">Store the operator key and your operator identity only on a trusted browser while you are actively using the review desk.</p>
             <form id="internal-admin-form" class="stack-form">
+              <label class="field-label" for="internal-operator-id">Operator identity</label>
+              <input id="internal-operator-id" name="internal_operator_id" class="text-input" type="text" placeholder="hugh.admin" autocomplete="off" value="${escapeHtml(operatorId)}" />
+              <p class="muted">This is the identity that will be stamped onto notes, restrictions, suspensions, reinstatements, and flag actions.</p>
               <label class="field-label" for="internal-admin-key">Operator key</label>
               <input id="internal-admin-key" name="internal_admin_key" class="text-input" type="password" placeholder="Paste operator key" autocomplete="off" />
               <div class="cta-row">
-                <button class="button" type="submit">Save operator key</button>
+                <button class="button" type="submit">Save operator access</button>
               </div>
             </form>
           </article>
@@ -2958,11 +2992,37 @@
             <span class="metric-label">Risk level</span>
             <span class="metric-value">${summary?.risk_state?.risk_level ? escapeHtml(titleCase(summary.risk_state.risk_level)) : "Unknown"}</span>
           </div>
+          <div class="metric">
+            <span class="metric-label">Operator</span>
+            <span class="metric-value">${escapeHtml(operatorId || "Unset")}</span>
+          </div>
         </aside>
       </section>
       <section class="section">
         ${renderNotice(state.runtime.internalLookupMessage, state.runtime.internalLookupMessage ? "warning" : "default")}
         ${renderNotice(state.runtime.internalReviewMessage, state.runtime.internalReviewMessage ? "success" : "default")}
+        <article class="panel">
+          <h3>Operator access</h3>
+          <form id="internal-admin-form" class="stack-form">
+            <div class="card-grid">
+              <article class="panel">
+                <label class="field-label" for="internal-operator-id">Operator identity</label>
+                <input id="internal-operator-id" name="internal_operator_id" class="text-input" type="text" placeholder="hugh.admin" autocomplete="off" value="${escapeHtml(operatorId)}" />
+                <p class="muted">Use a real operator identity so the audit trail does not fall back to the generic web shell label.</p>
+              </article>
+              <article class="panel">
+                <label class="field-label" for="internal-admin-key">Operator key</label>
+                <input id="internal-admin-key" name="internal_admin_key" class="text-input" type="password" placeholder="Stored in this browser" autocomplete="off" />
+                <p class="muted">Update the key here if you rotate it later.</p>
+              </article>
+            </div>
+            <div class="cta-row">
+              <button class="button" type="submit">Save operator access</button>
+            </div>
+          </form>
+        </article>
+      </section>
+      <section class="section">
         <article class="panel">
           <h3>Find account</h3>
           <form id="internal-account-lookup-form" class="stack-form">
@@ -3059,6 +3119,35 @@
               </article>
             </section>
             <section class="section split">
+              <article class="panel">
+                <h3>Action audit</h3>
+                ${
+                  actionAuditEntries.length
+                    ? `<div class="card-grid">${actionAuditEntries
+                        .map((item) => {
+                          const actor =
+                            item?.metadata?.author_id ||
+                            item?.metadata?.author ||
+                            item?.metadata?.operator_id ||
+                            "System";
+                          return `
+                            <article class="panel">
+                              <div class="pill-row">
+                                <span class="stat-chip">${escapeHtml(item.source_type || "event")}</span>
+                              </div>
+                              <strong>${escapeHtml(titleCase(String(item.event_type || "event").replaceAll("_", " ")))}</strong>
+                              <p class="muted">${escapeHtml(item.summary || "")}</p>
+                              <ul class="feature-list">
+                                <li>When: ${escapeHtml(formatDateTime(item.timestamp) || "Unknown")}</li>
+                                <li>Who: ${escapeHtml(actor)}</li>
+                              </ul>
+                            </article>
+                          `;
+                        })
+                        .join("")}</div>`
+                    : `<div class="notice">No operator actions have been recorded for this account yet.</div>`
+                }
+              </article>
               <article class="panel">
                 <h3>Timeline</h3>
                 ${
@@ -4074,26 +4163,64 @@
     state.runtime.internalSelectedUserId = targetUserId;
   };
 
+  const currentInternalOperatorId = () =>
+    String(state.runtime.internalOperatorId || "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  const ensureInternalOperatorIdentity = () => {
+    const operatorId = currentInternalOperatorId();
+    if (!operatorId) {
+      return { ok: false, message: "Save your operator identity before using the review desk." };
+    }
+    if (operatorId.length < 5) {
+      return { ok: false, message: "Operator identity must be at least 5 characters." };
+    }
+    if (["internal:web-shell", "internal:operator", "operator"].includes(operatorId.toLowerCase())) {
+      return { ok: false, message: "Use a real operator identity instead of the generic shell label." };
+    }
+    return { ok: true, operatorId };
+  };
+
   const saveInternalAdminKey = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
     const key = String(formData.get("internal_admin_key") || "").trim();
-    if (!key) {
+    const operatorId = String(formData.get("internal_operator_id") || "")
+      .replace(/\s+/g, " ")
+      .trim();
+    if (!operatorId) {
+      state.runtime.internalLookupMessage = "Add your operator identity before opening the review desk.";
+      render();
+      return;
+    }
+    if (operatorId.length < 5) {
+      state.runtime.internalLookupMessage = "Operator identity must be at least 5 characters.";
+      render();
+      return;
+    }
+    if (!key && !state.runtime.internalAdminKey) {
       state.runtime.internalLookupMessage = "Add the operator key before opening the review desk.";
       render();
       return;
     }
-    writeStoredInternalAdminKey(key);
-    state.runtime.internalAdminKey = key;
+    if (key) {
+      writeStoredInternalAdminKey(key);
+      state.runtime.internalAdminKey = key;
+    }
+    writeStoredInternalOperatorId(operatorId);
+    state.runtime.internalOperatorId = operatorId;
     state.runtime.internalLookupMessage = "";
-    state.runtime.internalReviewMessage = "Operator key saved for this browser.";
+    state.runtime.internalReviewMessage = "Operator access saved for this browser.";
     render();
   };
 
   const clearInternalAdminKey = async (event) => {
     event.preventDefault();
     writeStoredInternalAdminKey("");
+    writeStoredInternalOperatorId("");
     state.runtime.internalAdminKey = "";
+    state.runtime.internalOperatorId = "";
     state.runtime.internalSelectedUserId = "";
     state.runtime.internalLookupEmail = "";
     state.runtime.internalAccountSummary = null;
@@ -4178,6 +4305,12 @@
       render();
       return;
     }
+    const operatorIdentity = ensureInternalOperatorIdentity();
+    if (!operatorIdentity.ok) {
+      state.runtime.internalLookupMessage = operatorIdentity.message;
+      render();
+      return;
+    }
     const formData = new FormData(event.target);
     const noteType = String(formData.get("internal_note_type") || "support_note").trim();
     const content = String(formData.get("internal_note_content") || "").trim();
@@ -4199,7 +4332,7 @@
           body: {
             note_type: noteType,
             content,
-            author_id: "internal:web-shell",
+            author_id: operatorIdentity.operatorId,
           },
         }
       );
@@ -4256,6 +4389,12 @@
       render();
       return;
     }
+    const operatorIdentity = ensureInternalOperatorIdentity();
+    if (!operatorIdentity.ok) {
+      state.runtime.internalLookupMessage = operatorIdentity.message;
+      render();
+      return;
+    }
     const reasonPrompt = promptInternalActionReason(
       "Restriction reason",
       "Account moved into restricted review state pending further review."
@@ -4272,7 +4411,7 @@
       await runInternalAccountAction(
         `/internal/accounts/${encodeURIComponent(state.runtime.internalSelectedUserId)}/restrict`,
         "Account restricted.",
-        { reason: reasonPrompt.reason, author_id: "internal:web-shell" }
+        { reason: reasonPrompt.reason, author_id: operatorIdentity.operatorId }
       );
     } catch (error) {
       state.runtime.internalLookupMessage = error.message || "Unable to restrict this account.";
@@ -4285,6 +4424,12 @@
     event.preventDefault();
     if (!state.runtime.internalSelectedUserId) {
       state.runtime.internalLookupMessage = "Load an account before applying review actions.";
+      render();
+      return;
+    }
+    const operatorIdentity = ensureInternalOperatorIdentity();
+    if (!operatorIdentity.ok) {
+      state.runtime.internalLookupMessage = operatorIdentity.message;
       render();
       return;
     }
@@ -4310,7 +4455,7 @@
       await runInternalAccountAction(
         `/internal/accounts/${encodeURIComponent(state.runtime.internalSelectedUserId)}/suspend`,
         "Account suspended.",
-        { reason: reasonPrompt.reason, confirmation, author_id: "internal:web-shell" }
+        { reason: reasonPrompt.reason, confirmation, author_id: operatorIdentity.operatorId }
       );
     } catch (error) {
       state.runtime.internalLookupMessage = error.message || "Unable to suspend this account.";
@@ -4323,6 +4468,12 @@
     event.preventDefault();
     if (!state.runtime.internalSelectedUserId) {
       state.runtime.internalLookupMessage = "Load an account before applying review actions.";
+      render();
+      return;
+    }
+    const operatorIdentity = ensureInternalOperatorIdentity();
+    if (!operatorIdentity.ok) {
+      state.runtime.internalLookupMessage = operatorIdentity.message;
       render();
       return;
     }
@@ -4342,7 +4493,7 @@
       await runInternalAccountAction(
         `/internal/accounts/${encodeURIComponent(state.runtime.internalSelectedUserId)}/reinstate`,
         "Account reinstated.",
-        { reason: reasonPrompt.reason, author_id: "internal:web-shell" }
+        { reason: reasonPrompt.reason, author_id: operatorIdentity.operatorId }
       );
     } catch (error) {
       state.runtime.internalLookupMessage = error.message || "Unable to reinstate this account.";
@@ -4355,6 +4506,12 @@
     event.preventDefault();
     if (!state.runtime.internalSelectedUserId) {
       state.runtime.internalLookupMessage = "Load an account before updating flags.";
+      render();
+      return;
+    }
+    const operatorIdentity = ensureInternalOperatorIdentity();
+    if (!operatorIdentity.ok) {
+      state.runtime.internalLookupMessage = operatorIdentity.message;
       render();
       return;
     }
@@ -4383,7 +4540,7 @@
       await runInternalAccountAction(
         `/internal/accounts/${encodeURIComponent(state.runtime.internalSelectedUserId)}/flags/${encodeURIComponent(flagId)}/${status === "dismiss" ? "dismiss" : "resolve"}`,
         status === "dismiss" ? "Flag dismissed." : "Flag resolved.",
-        { resolution_note: normalizedReason, author_id: "internal:web-shell" }
+        { resolution_note: normalizedReason, author_id: operatorIdentity.operatorId }
       );
     } catch (error) {
       state.runtime.internalLookupMessage = error.message || "Unable to update the flag.";
@@ -4765,6 +4922,7 @@
     syncActiveNav();
     state.runtime.premiumToken = readStoredPremiumToken();
     state.runtime.internalAdminKey = readStoredInternalAdminKey();
+    state.runtime.internalOperatorId = readStoredInternalOperatorId();
     await loadAuthSession();
     await loadAccountState();
     await loadAccountSessions();
