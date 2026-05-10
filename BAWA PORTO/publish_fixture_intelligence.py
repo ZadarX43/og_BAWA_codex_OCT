@@ -33,6 +33,7 @@ REPORT_PATH = REPORTS_DIR / "FIXTURE_INTELLIGENCE_REPORT.md"
 COVERED_UNIVERSE_PATH = FRONTEND_DATA_DIR / "covered_fixture_universe.json"
 FIXTURES_MASTER_PATH = ROOT / "data_sources" / "api_football" / "normalized" / "fixtures_master.csv"
 CURRENT_CONTEXT_NORMALIZED_DIR = ROOT / "reports" / "latest" / "api_current_context_overlay_window" / "normalized"
+REPORTS_ROOT = ROOT / "reports"
 
 PUBLISH_CLASS_ORDER = {"DEPLOY": 0, "OBSERVE": 1, "CONTEXT": 2, "MONITOR": 3, "HIDDEN": 4}
 MARKET_PRIORITY = {"FTR": 0, "BTTS": 1, "OU25": 2, "CS": 3}
@@ -135,8 +136,19 @@ def load_fixtures_master_index() -> dict[str, dict[Any, dict[str, str]]]:
         paths.append(FIXTURES_MASTER_PATH)
     if CURRENT_CONTEXT_NORMALIZED_DIR.exists():
         paths.extend(sorted(CURRENT_CONTEXT_NORMALIZED_DIR.glob("fixtures_master__*.csv")))
+    if REPORTS_ROOT.exists():
+        paths.extend(sorted(REPORTS_ROOT.glob("**/normalized/fixtures_master__*.csv")))
 
+    deduped_paths: list[Path] = []
+    seen_paths: set[Path] = set()
     for path in paths:
+        resolved = path.resolve()
+        if resolved in seen_paths:
+            continue
+        seen_paths.add(resolved)
+        deduped_paths.append(path)
+
+    for path in deduped_paths:
         for row in load_rows(path):
             key = fixture_record_key(
                 str(row.get("league", "") or ""),

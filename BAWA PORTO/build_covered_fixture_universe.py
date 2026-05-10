@@ -36,6 +36,7 @@ FEATURES_DIR = ROOT / "data_sources" / "api_football" / "features"
 PLAYER_EVENTS_FEATURES_DIR = FEATURES_DIR / "player_events"
 CURRENT_CONTEXT_OVERLAY_SUMMARY_PATH = ROOT / "reports" / "latest" / "api_current_context_overlay_window" / "CURRENT_CONTEXT_OVERLAY_SUMMARY.json"
 CURRENT_CONTEXT_NORMALIZED_DIR = ROOT / "reports" / "latest" / "api_current_context_overlay_window" / "normalized"
+REPORTS_ROOT = ROOT / "reports"
 
 LEAGUE_TAG_ALIASES: dict[str, list[str]] = {
     "belgium pro": ["Belgium_Pro"],
@@ -192,8 +193,19 @@ def load_fixtures_master_index() -> dict[str, dict[Any, dict[str, str]]]:
         paths.append(FIXTURES_MASTER_PATH)
     if CURRENT_CONTEXT_NORMALIZED_DIR.exists():
         paths.extend(sorted(CURRENT_CONTEXT_NORMALIZED_DIR.glob("fixtures_master__*.csv")))
+    if REPORTS_ROOT.exists():
+        paths.extend(sorted(REPORTS_ROOT.glob("**/normalized/fixtures_master__*.csv")))
 
+    deduped_paths: list[Path] = []
+    seen_paths: set[Path] = set()
     for path in paths:
+        resolved = path.resolve()
+        if resolved in seen_paths:
+            continue
+        seen_paths.add(resolved)
+        deduped_paths.append(path)
+
+    for path in deduped_paths:
         with path.open("r", encoding="utf-8", newline="") as handle:
             reader = csv.DictReader(handle)
             for row in reader:
