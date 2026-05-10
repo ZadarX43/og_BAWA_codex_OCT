@@ -626,19 +626,19 @@ const installMockFetch = () => {
       );
     }
 
-    if (url === "https://v3.football.api-sports.io/fixtures?league=140&season=2025&date=2026-05-10") {
+    if (url === "https://v3.football.api-sports.io/fixtures?date=2026-05-10") {
       counters.widgetFixtureLookupFetches += 1;
       return new Response(
         JSON.stringify({
           get: "fixtures",
-          parameters: { league: "140", season: "2025", date: "2026-05-10" },
+          parameters: { date: "2026-05-10" },
           response: [
             {
               fixture: { id: 120001, status: { short: "NS" } },
               league: { id: 140, season: 2025 },
               teams: {
-                home: { name: "FC Barcelona" },
-                away: { name: "Real Madrid" },
+                home: { id: 529, name: "FC Barcelona" },
+                away: { id: 541, name: "Real Madrid" },
               },
             },
           ],
@@ -2168,7 +2168,7 @@ const testWidgetFixtureLookupProxy = async (fetchHarness) => {
   const env = createEnv();
   const firstResponse = await worker.fetch(
     makeGetRequest(
-      "http://localhost/api/widgets/football/fixture-lookup?league=140&season=2025&date=2026-05-10&home=Barcelona&away=Real%20Madrid"
+      "http://localhost/api/widgets/football/fixture-lookup?date=2026-05-10&home=Barcelona&away=Real%20Madrid&home_team_id=529&away_team_id=541"
     ),
     env
   );
@@ -2179,7 +2179,7 @@ const testWidgetFixtureLookupProxy = async (fetchHarness) => {
 
   const secondResponse = await worker.fetch(
     makeGetRequest(
-      "http://localhost/api/widgets/football/fixture-lookup?league=140&season=2025&date=2026-05-10&home=Barcelona&away=Real%20Madrid"
+      "http://localhost/api/widgets/football/fixture-lookup?date=2026-05-10&home=Barcelona&away=Real%20Madrid&home_team_id=529&away_team_id=541"
     ),
     env
   );

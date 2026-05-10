@@ -1241,6 +1241,12 @@
     return match ? match[1] : "";
   };
 
+  const extractTeamIdFromLogoUrl = (value) => {
+    const raw = String(value || "").trim();
+    const match = raw.match(/\/football\/teams\/(\d+)\.(?:png|svg|webp)(?:\?.*)?$/i);
+    return match ? match[1] : "";
+  };
+
   const inferFootballSeason = (kickoffTime) => {
     const parsed = kickoffTime ? new Date(kickoffTime) : null;
     if (!parsed || Number.isNaN(parsed.getTime())) {
@@ -1252,16 +1258,25 @@
   };
 
   const fixtureStandingsWidgetMarkup = (fixture) => {
-    const leagueId = extractLeagueIdFromLogoUrl(fixture.league_logo_url);
-    const season = inferFootballSeason(fixture.kickoff_time);
-    if (!leagueId || !season) {
+    const kickoffDate = String(fixture.kickoff_time || "").slice(0, 10);
+    const homeTeamId = extractTeamIdFromLogoUrl(fixture.home_team_logo_url);
+    const awayTeamId = extractTeamIdFromLogoUrl(fixture.away_team_logo_url);
+    if (!kickoffDate || !fixture.home_team || !fixture.away_team) {
       return `<div class="notice">League table reference is not available for this fixture yet because the widget identity mapping is incomplete.</div>`;
     }
     if (!workerConfigured()) {
       return `<div class="notice">League table reference needs the Worker proxy so the widget can stay branded and keep the API key off the page.</div>`;
     }
     return `
-      <div class="widget-reference-shell" data-role="fixture-standings-reference" data-league="${escapeHtml(leagueId)}" data-season="${escapeHtml(season)}">
+      <div
+        class="widget-reference-shell"
+        data-role="fixture-standings-reference"
+        data-date="${escapeHtml(kickoffDate)}"
+        data-home="${escapeHtml(fixture.home_team)}"
+        data-away="${escapeHtml(fixture.away_team)}"
+        data-home-team-id="${escapeHtml(homeTeamId)}"
+        data-away-team-id="${escapeHtml(awayTeamId)}"
+      >
         <div class="widget-reference-head">
           <div>
             <span class="metric-label">Reference layer</span>
@@ -1278,10 +1293,10 @@
   };
 
   const fixtureLineupsWidgetMarkup = (fixture) => {
-    const leagueId = extractLeagueIdFromLogoUrl(fixture.league_logo_url);
-    const season = inferFootballSeason(fixture.kickoff_time);
     const kickoffDate = String(fixture.kickoff_time || "").slice(0, 10);
-    if (!leagueId || !season || !kickoffDate) {
+    const homeTeamId = extractTeamIdFromLogoUrl(fixture.home_team_logo_url);
+    const awayTeamId = extractTeamIdFromLogoUrl(fixture.away_team_logo_url);
+    if (!kickoffDate || !fixture.home_team || !fixture.away_team) {
       return `<div class="notice">Lineups and formations are not available for this fixture yet because the widget identity mapping is incomplete.</div>`;
     }
     if (!workerConfigured()) {
@@ -1291,11 +1306,11 @@
       <div
         class="widget-reference-shell"
         data-role="fixture-lineups-widget"
-        data-league="${escapeHtml(leagueId)}"
-        data-season="${escapeHtml(season)}"
         data-date="${escapeHtml(kickoffDate)}"
         data-home="${escapeHtml(fixture.home_team)}"
         data-away="${escapeHtml(fixture.away_team)}"
+        data-home-team-id="${escapeHtml(homeTeamId)}"
+        data-away-team-id="${escapeHtml(awayTeamId)}"
       >
         <div class="widget-reference-head">
           <div>
@@ -4266,17 +4281,47 @@
     if ((!roots.length && !standingsRoots.length) || !workerConfigured()) {
       return;
     }
+    const fixtureLookupCache = new Map();
+    const resolveFixtureReference = async (root) => {
+      const params = new URLSearchParams({
+        date: root.dataset.date || "",
+        home: root.dataset.home || "",
+        away: root.dataset.away || "",
+      });
+      if (root.dataset.homeTeamId) {
+        params.set("home_team_id", root.dataset.homeTeamId);
+      }
+      if (root.dataset.awayTeamId) {
+        params.set("away_team_id", root.dataset.awayTeamId);
+      }
+      const cacheKey = params.toString();
+      if (!fixtureLookupCache.has(cacheKey)) {
+        fixtureLookupCache.set(
+          cacheKey,
+          fetchWorkerJson(`/api/widgets/football/fixture-lookup?${cacheKey}`, { method: "GET" })
+        );
+      }
+      return fixtureLookupCache.get(cacheKey);
+    };
     await Promise.all(
       standingsRoots.map(async (root) => {
         const frame = root.querySelector(".widget-reference-frame");
         if (!frame) {
           return;
         }
-        const params = new URLSearchParams({
-          league: root.dataset.league || "",
-          season: root.dataset.season || "",
-        });
         try {
+          const fixtureLookup = await resolveFixtureReference(root);
+          if (!fixtureLookup?.response?.ok || !fixtureLookup?.payload?.ok) {
+            throw new Error(
+              fixtureLookup?.payload?.message || "League table reference could not be loaded for this fixture."
+            );
+          }
+          const leagueId = String(fixtureLookup.payload.league_id || "").trim();
+          const season = String(fixtureLookup.payload.season || "").trim();
+          if (!leagueId || !season) {
+            throw new Error("League table reference is not available for this fixture yet.");
+          }
+          const params = new URLSearchParams({ league: leagueId, season });
           const { response, payload } = await fetchWorkerJson(
             `/api/widgets/football/standings?${params.toString()}`,
             { method: "GET" }
@@ -4329,18 +4374,8 @@
         if (!frame) {
           return;
         }
-        const params = new URLSearchParams({
-          league: root.dataset.league || "",
-          season: root.dataset.season || "",
-          date: root.dataset.date || "",
-          home: root.dataset.home || "",
-          away: root.dataset.away || "",
-        });
         try {
-          const { response, payload } = await fetchWorkerJson(
-            `/api/widgets/football/fixture-lookup?${params.toString()}`,
-            { method: "GET" }
-          );
+          const { response, payload } = await resolveFixtureReference(root);
           if (!response.ok || !payload?.ok || !payload.fixture_id) {
             throw new Error(payload?.message || "Unable to resolve fixture lineups for this page.");
           }
