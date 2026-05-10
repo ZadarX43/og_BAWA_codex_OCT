@@ -51,6 +51,7 @@
       accountSessionsMessage: "",
       dashboardClassFilter: "ALL",
       dashboardReasonFilter: "ALL",
+      internalFlagSeverityFilter: "ALL",
       telegramLinkCode: "",
       telegramLinkExpiresAt: "",
       telegramBotUsername: "",
@@ -2923,6 +2924,22 @@
     const notes = Array.isArray(state.runtime.internalNotes) ? state.runtime.internalNotes : [];
     const timeline = Array.isArray(state.runtime.internalTimeline) ? state.runtime.internalTimeline : [];
     const operatorId = String(state.runtime.internalOperatorId || "").trim();
+    const severityFilter = String(state.runtime.internalFlagSeverityFilter || "ALL").toUpperCase();
+    const severityOptions = ["ALL", "CRITICAL", "HIGH", "MEDIUM", "LOW"];
+    const severityCounts = severityOptions.reduce((accumulator, option) => {
+      if (option === "ALL") {
+        accumulator[option] = flags.length;
+      } else {
+        accumulator[option] = flags.filter(
+          (flag) => String(flag?.severity || "").trim().toUpperCase() === option
+        ).length;
+      }
+      return accumulator;
+    }, {});
+    const filteredFlags =
+      severityFilter === "ALL"
+        ? flags
+        : flags.filter((flag) => String(flag?.severity || "").trim().toUpperCase() === severityFilter);
     const actionAuditEntries = timeline
       .filter((item) => {
         const eventType = String(item?.event_type || "");
@@ -3080,10 +3097,49 @@
             </section>
             <section class="section split">
               <article class="panel">
+                <h3>Restrictions / suspensions</h3>
+                <ul class="feature-list">
+                  <li>Account status: ${escapeHtml(summary.risk_state?.account_status || "Unknown")}</li>
+                  <li>Suspended at: ${escapeHtml(formatDateTime(summary.risk_state?.suspended_at) || "Not suspended")}</li>
+                  <li>Suspension reason: ${escapeHtml(summary.risk_state?.suspension_reason || "None recorded")}</li>
+                  <li>Reinstated at: ${escapeHtml(formatDateTime(summary.risk_state?.reinstated_at) || "Not reinstated")}</li>
+                  <li>Reinstatement reason: ${escapeHtml(summary.risk_state?.reinstatement_reason || "None recorded")}</li>
+                </ul>
+              </article>
+              <article class="panel">
+                <h3>Review ownership</h3>
+                <ul class="feature-list">
+                  <li>Last reviewed at: ${escapeHtml(formatDateTime(summary.risk_state?.last_reviewed_at) || "Unknown")}</li>
+                  <li>Last reviewed by: ${escapeHtml(summary.risk_state?.last_reviewed_by || "Unknown")}</li>
+                  <li>Last risk event: ${escapeHtml(formatDateTime(summary.risk_state?.last_risk_event_at) || "Unknown")}</li>
+                  <li>Open flags now: ${escapeHtml(summary.open_flags_count ?? 0)}</li>
+                  <li>Risk score: ${escapeHtml(summary.risk_state?.risk_score ?? "0")}</li>
+                </ul>
+              </article>
+            </section>
+            <section class="section split">
+              <article class="panel">
                 <h3>Open flags</h3>
+                <div class="filter-row">
+                  ${severityOptions
+                    .map(
+                      (option) => `
+                        <button
+                          class="${severityFilter === option ? "button" : "ghost-button"}"
+                          type="button"
+                          data-action="internal-flag-filter"
+                          data-value="${escapeHtml(option)}"
+                        >
+                          ${escapeHtml(option === "ALL" ? "All" : titleCase(option.toLowerCase()))}
+                          ${escapeHtml(` (${severityCounts[option] || 0})`)}
+                        </button>
+                      `
+                    )
+                    .join("")}
+                </div>
                 ${
-                  flags.length
-                    ? `<div class="card-grid">${flags
+                  filteredFlags.length
+                    ? `<div class="card-grid">${filteredFlags
                         .map(
                           (flag) => `
                             <article class="panel">
@@ -3105,7 +3161,11 @@
                           `
                         )
                         .join("")}</div>`
-                    : `<div class="notice">No risk flags are open for this account.</div>`
+                    : `<div class="notice">${
+                        flags.length
+                          ? "No risk flags match the current severity filter."
+                          : "No risk flags are open for this account."
+                      }</div>`
                 }
               </article>
               <article class="panel">
@@ -4868,6 +4928,15 @@
         dismissInternalFlagTarget.dataset.flagType,
         "dismiss"
       );
+      return;
+    }
+
+    const internalFlagFilterTarget = event.target.closest("[data-action='internal-flag-filter']");
+    if (internalFlagFilterTarget) {
+      state.runtime.internalFlagSeverityFilter = String(
+        internalFlagFilterTarget.dataset.value || "ALL"
+      ).toUpperCase();
+      render();
     }
   });
 
