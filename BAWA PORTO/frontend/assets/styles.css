@@ -19,6 +19,10 @@
   --standard: #80caf0;
   --warning: #f6b36d;
   --danger: #ff8b8b;
+  --signal-mint: #3dd9b0;
+  --signal-amber: #d9b86b;
+  --signal-slate: #6b7a8f;
+  --signal-rose: #c97a7a;
   --shadow: 0 28px 80px rgba(0, 0, 0, 0.38);
   --radius-xl: 30px;
   --radius-lg: 24px;
@@ -160,9 +164,9 @@ body::after {
 
 .nav a:hover,
 .nav a.is-active {
-  color: #04111a;
-  background: var(--glow);
-  box-shadow: 0 0 26px rgba(92, 200, 232, 0.24);
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: none;
 }
 
 .nav-utility a {
@@ -253,6 +257,11 @@ body::after {
   padding: 20px;
 }
 
+.compact-panel-primary {
+  border-color: rgba(61, 217, 176, 0.26);
+  background: linear-gradient(180deg, rgba(18, 39, 33, 0.98), rgba(11, 24, 20, 0.98));
+}
+
 .metric-stack {
   display: grid;
   gap: 12px;
@@ -261,6 +270,36 @@ body::after {
 .fixture-hero-scoreboard {
   display: grid;
   gap: 18px;
+}
+
+.hero-verdict-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.hero-verdict-card {
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(107, 122, 143, 0.22);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.hero-verdict-card strong {
+  display: block;
+  margin-top: 10px;
+  font-size: 1.04rem;
+  letter-spacing: -0.03em;
+}
+
+.hero-verdict-card p {
+  margin-top: 8px;
+  font-size: 0.92rem;
+}
+
+.hero-verdict-card-primary {
+  border-color: rgba(61, 217, 176, 0.24);
+  background: rgba(61, 217, 176, 0.06);
 }
 
 .fixture-hero-meta {
@@ -468,8 +507,36 @@ body::after {
 .chip,
 .stat-chip {
   border: 1px solid var(--line);
-  color: var(--muted);
-  background: rgba(255, 255, 255, 0.03);
+  color: var(--signal-slate);
+  background: rgba(107, 122, 143, 0.08);
+}
+
+.chip-signal {
+  color: var(--signal-mint);
+  border-color: rgba(61, 217, 176, 0.22);
+  background: rgba(61, 217, 176, 0.08);
+}
+
+.chip-reference {
+  color: var(--signal-slate);
+  border-color: rgba(107, 122, 143, 0.22);
+  background: rgba(107, 122, 143, 0.08);
+}
+
+.chip-confidence {
+  border-color: rgba(217, 184, 107, 0.22);
+}
+
+.chip-confidence-elite {
+  color: var(--signal-mint);
+  background: rgba(61, 217, 176, 0.06);
+  border-color: rgba(61, 217, 176, 0.22);
+}
+
+.chip-confidence-standard {
+  color: var(--signal-amber);
+  background: rgba(217, 184, 107, 0.06);
+  border-color: rgba(217, 184, 107, 0.22);
 }
 
 .market-badge {
@@ -775,6 +842,16 @@ body::after {
   background: rgba(255, 255, 255, 0.025);
 }
 
+.signal-cell-model {
+  border-color: rgba(61, 217, 176, 0.22);
+  background: rgba(61, 217, 176, 0.05);
+}
+
+.signal-cell-market {
+  border-color: rgba(107, 122, 143, 0.22);
+  background: rgba(107, 122, 143, 0.06);
+}
+
 .signal-cell span {
   display: block;
 }
@@ -1005,10 +1082,43 @@ tbody tr:hover {
   overflow: hidden;
 }
 
+.reference-loading {
+  color: var(--signal-slate);
+}
+
 .lineup-reference-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
+}
+
+.lineup-empty-state {
+  display: grid;
+  gap: 16px;
+}
+
+.lineup-empty-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.lineup-empty-card {
+  padding: 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(107, 122, 143, 0.18);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.lineup-empty-skeleton {
+  height: 14px;
+  margin-top: 12px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.06), rgba(107, 122, 143, 0.14), rgba(255, 255, 255, 0.06));
+}
+
+.lineup-empty-skeleton-short {
+  width: 72%;
 }
 
 .lineup-team-panel {
@@ -1133,6 +1243,17 @@ tbody tr:hover {
   border: 1px solid rgba(123, 154, 184, 0.12);
   background: rgba(255, 255, 255, 0.03);
   color: var(--muted);
+}
+
+.standings-reference-row-active {
+  border-left: 2px solid rgba(61, 217, 176, 0.7);
+  background: rgba(61, 217, 176, 0.05);
+}
+
+.standings-form-sequence {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
 .standings-reference-row strong {
@@ -1293,27 +1414,44 @@ tbody tr:hover {
 }
 
 .fixture-state-pill-deploy {
-  color: var(--mint);
-  background: rgba(78, 222, 163, 0.12);
-  border-color: rgba(78, 222, 163, 0.24);
+  color: var(--signal-mint);
+  background: rgba(61, 217, 176, 0.12);
+  border-color: rgba(61, 217, 176, 0.24);
 }
 
 .fixture-state-pill-observe {
-  color: var(--sky);
-  background: rgba(48, 199, 255, 0.11);
-  border-color: rgba(48, 199, 255, 0.2);
+  color: var(--signal-amber);
+  background: rgba(217, 184, 107, 0.08);
+  border-color: rgba(217, 184, 107, 0.24);
 }
 
 .fixture-state-pill-monitor {
-  color: var(--sand);
-  background: rgba(246, 179, 109, 0.1);
-  border-color: rgba(246, 179, 109, 0.18);
+  color: var(--signal-slate);
+  background: rgba(107, 122, 143, 0.08);
+  border-color: rgba(107, 122, 143, 0.24);
 }
 
 .fixture-state-pill-pass {
-  color: var(--muted);
-  background: rgba(184, 193, 204, 0.08);
-  border-color: rgba(184, 193, 204, 0.18);
+  color: var(--signal-rose);
+  background: rgba(201, 122, 122, 0.08);
+  border-color: rgba(201, 122, 122, 0.24);
+}
+
+.edge-tone-positive {
+  color: var(--signal-mint);
+}
+
+.edge-tone-fragile {
+  color: var(--signal-rose);
+}
+
+.edge-tone-neutral {
+  color: var(--signal-slate);
+}
+
+.mini-score-pair {
+  display: grid;
+  gap: 6px;
 }
 
 .fixture-stream-headline {
@@ -2030,6 +2168,8 @@ code {
   }
 
   .lineup-reference-grid,
+  .lineup-empty-grid,
+  .hero-verdict-strip,
   .fixture-hero-score-row {
     grid-template-columns: 1fr;
   }

@@ -1221,9 +1221,109 @@
     return `${Math.round(numeric * 100)}%`;
   };
 
+  const formatOdds = (value) => {
+    const numeric = Number(value);
+    if (!Number.isFinite(numeric)) {
+      return "N/A";
+    }
+    return numeric.toFixed(2).replace(/\.?0+$/, "");
+  };
+
+  const impliedProbability = (odds) => {
+    const numeric = Number(odds);
+    if (!Number.isFinite(numeric) || numeric <= 0) {
+      return null;
+    }
+    return 1 / numeric;
+  };
+
+  const formatImpliedProbability = (odds) => {
+    const implied = impliedProbability(odds);
+    return implied == null ? "N/A" : `${Math.round(implied * 100)}%`;
+  };
+
   const edgeLabel = (row) => row.value_edge_display || row.value_edge || "N/A";
   const confidenceLabel = (row) => row.display_confidence || row.model_prob_display || formatProbability(row.model_prob);
   const tierClass = (tier) => (String(tier || "").toUpperCase() === "STANDARD" ? "standard" : "elite");
+
+  const marketFamilyDisplay = (value) => {
+    const family = String(value || "").toUpperCase();
+    if (family === "OU25") {
+      return "Over 2.5";
+    }
+    return marketFamilyLabel(family);
+  };
+
+  const deployPickDisplay = (value) => {
+    const pick = String(value || "").toUpperCase();
+    if (pick === "OVER25") {
+      return "Over 2.5";
+    }
+    if (pick === "UNDER25") {
+      return "Under 2.5";
+    }
+    return pick || "TBC";
+  };
+
+  const confidenceBandDisplay = (tier) => {
+    const value = String(tier || "").toUpperCase();
+    if (value === "ELITE") {
+      return "Elite confidence";
+    }
+    if (value === "STANDARD") {
+      return "Standard confidence";
+    }
+    return "Observed confidence";
+  };
+
+  const valueEdgeTone = (fixture) => {
+    const label = String(fixture?.deploy_summary?.value_edge_label || "").toLowerCase();
+    if (label === "positive") {
+      return "positive";
+    }
+    if (label === "negative") {
+      return "fragile";
+    }
+    return "neutral";
+  };
+
+  const valueEdgeDisplay = (fixture) => {
+    const tone = valueEdgeTone(fixture);
+    if (tone === "positive") {
+      return "Positive edge";
+    }
+    if (tone === "fragile") {
+      return "Fragility active";
+    }
+    return "Edge unscored";
+  };
+
+  const primaryMarketLine = (fixture) => {
+    const family = String(fixture?.signal_summary?.market_family || "").toUpperCase();
+    const odds = fixture?.odds_summary || {};
+    if (family === "BTTS") {
+      return {
+        label: "BTTS Yes",
+        odds: odds.btts_yes_odds,
+        otherLabel: "BTTS No",
+        otherOdds: odds.btts_no_odds,
+      };
+    }
+    if (family === "OU25") {
+      return {
+        label: "Over 2.5",
+        odds: odds.over25_odds,
+        otherLabel: "Under 2.5",
+        otherOdds: odds.under25_odds,
+      };
+    }
+    return {
+      label: deployPickDisplay(fixture?.signal_summary?.deploy_pick || fixture?.deploy_summary?.pick || ""),
+      odds: fixture?.deploy_summary?.bookie_od,
+      otherLabel: "",
+      otherOdds: null,
+    };
+  };
 
   const safeLogoUrl = (value) => {
     const raw = String(value || "").trim();
@@ -1291,11 +1391,10 @@
             <span class="metric-label">Reference layer</span>
             <h4>League table</h4>
           </div>
-          <span class="pill">Prototype</span>
         </div>
         <p class="muted">Reference context for this fixture. Use this as orientation, not as the decision layer. If the fit is strong, lineups and formations can sit beside it later.</p>
         <div class="widget-reference-frame">
-          <div class="notice">Loading league table…</div>
+          <div class="notice reference-loading">Loading league table…</div>
         </div>
       </div>
     `;
@@ -1328,11 +1427,26 @@
             <span class="metric-label">Reference layer</span>
             <h4>Lineups & formations</h4>
           </div>
-          <span class="pill">Prototype</span>
         </div>
         <p class="muted">This sits beside the custom intelligence layer so confirmed teams and shape can support the read without taking over the page.</p>
         <div class="widget-reference-frame">
-          <div class="notice">Loading confirmed lineups and formations…</div>
+          <div class="lineup-empty-state">
+            <div class="lineup-empty-grid">
+              <article class="lineup-empty-card">
+                <span class="metric-label">${escapeHtml(fixture.home_team)}</span>
+                <div class="lineup-empty-skeleton"></div>
+                <div class="lineup-empty-skeleton lineup-empty-skeleton-short"></div>
+                <div class="lineup-empty-skeleton"></div>
+              </article>
+              <article class="lineup-empty-card">
+                <span class="metric-label">${escapeHtml(fixture.away_team)}</span>
+                <div class="lineup-empty-skeleton"></div>
+                <div class="lineup-empty-skeleton lineup-empty-skeleton-short"></div>
+                <div class="lineup-empty-skeleton"></div>
+              </article>
+            </div>
+            <p class="muted">Confirmed lineups usually publish closer to kickoff. If team sheets are not available yet, the intelligence, table, and context layers stay live.</p>
+          </div>
         </div>
       </div>
     `;
@@ -1444,11 +1558,13 @@
     `;
   };
 
-  const renderFixtureHeroScoreboard = (fixture) => {
+  const renderFixtureHeroScoreboard = (fixture, clarity) => {
     const leagueBadge = safeLogoUrl(fixture.league_logo_url || fixture.league_flag_url);
     const timing = fixtureTimeState(fixture.kickoff_time);
     const homeTeamId = String(fixture.api_home_team_id || "").trim() || extractTeamIdFromLogoUrl(fixture.home_team_logo_url);
     const awayTeamId = String(fixture.api_away_team_id || "").trim() || extractTeamIdFromLogoUrl(fixture.away_team_logo_url);
+    const marketLine = primaryMarketLine(fixture);
+    const confidenceTier = String(fixture.signal_summary?.confidence_tier || fixture.deploy_summary?.confidence_tier || "").toUpperCase();
     return `
       <div
         class="fixture-hero-scoreboard"
@@ -1486,6 +1602,28 @@
             ${badgeMarkup(fixture.away_team_logo_url, fixture.away_team, "fixture-hero-badge")}
             <strong>${escapeHtml(fixture.away_team)}</strong>
           </div>
+        </div>
+        <div class="hero-verdict-strip">
+          <article class="hero-verdict-card hero-verdict-card-primary">
+            <span class="metric-label">Market verdict</span>
+            <strong>${escapeHtml(`${marketFamilyDisplay(fixture.signal_summary?.market_family)} • ${deployPickDisplay(fixture.signal_summary?.deploy_pick || fixture.deploy_summary?.pick)}`)}</strong>
+            <p class="muted">${escapeHtml(clarity.action_label)}</p>
+          </article>
+          <article class="hero-verdict-card">
+            <span class="metric-label">Confidence</span>
+            <strong>${escapeHtml(confidenceBandDisplay(confidenceTier))}</strong>
+            <p class="muted">${escapeHtml(fixture.signal_summary?.signal_strength ? `${String(fixture.signal_summary.signal_strength).toLowerCase()} strength` : "Published signal strength")}</p>
+          </article>
+          <article class="hero-verdict-card">
+            <span class="metric-label">Bookmaker line</span>
+            <strong>${escapeHtml(formatOdds(marketLine.odds))}</strong>
+            <p class="muted">${escapeHtml(`${formatImpliedProbability(marketLine.odds)} implied`)}</p>
+          </article>
+          <article class="hero-verdict-card">
+            <span class="metric-label">Edge posture</span>
+            <strong class="edge-tone-${escapeHtml(valueEdgeTone(fixture))}">${escapeHtml(valueEdgeDisplay(fixture))}</strong>
+            <p class="muted">${escapeHtml(marketLine.otherLabel && marketLine.otherOdds ? `${marketLine.otherLabel} ${formatOdds(marketLine.otherOdds)}` : "Reference price active")}</p>
+          </article>
         </div>
       </div>
     `;
@@ -4401,6 +4539,8 @@
     const matchedEntry = getFollowedIntelligenceMatches(accountState, [fixture])[0] || null;
     const clarity = fixtureClarityProfile(fixture, matchedEntry);
     const matchReasons = Array.isArray(matchedEntry?.reasons) ? matchedEntry.reasons : [];
+    const confidenceTier = String(fixture.signal_summary?.confidence_tier || fixture.deploy_summary?.confidence_tier || "").toUpperCase();
+    const marketLine = primaryMarketLine(fixture);
     const matchCopy = matchReasons.length
       ? `This fixture matches your saved follows through ${matchReasons.join(", ")}.`
       : "This fixture is being shown from the current intelligence window rather than a direct saved follow.";
@@ -4451,13 +4591,14 @@
                     <h4>Published summary</h4>
                     <p class="muted">${escapeHtml(fixture.signal_summary?.summary_text || headline)}</p>
                   </article>
-                  <article class="panel">
-                    <h4>State snapshot</h4>
-                    <ul class="feature-list compact-list">
-                      <li>Action state: ${escapeHtml(clarity.action_label)}</li>
-                      <li>Feed bucket: ${escapeHtml(clarity.feed_bucket)}</li>
-                      <li>Coverage: ${escapeHtml(String(fixture.coverage_status || "covered"))}</li>
-                      <li>Alert priority: ${
+              <article class="panel">
+                <h4>State snapshot</h4>
+                <ul class="feature-list compact-list">
+                  <li>Action state: ${escapeHtml(clarity.action_label)}</li>
+                  <li>Confidence band: ${escapeHtml(confidenceBandDisplay(confidenceTier))}</li>
+                  <li>Feed bucket: ${escapeHtml(clarity.feed_bucket)}</li>
+                  <li>Coverage: ${escapeHtml(String(fixture.coverage_status || "covered"))}</li>
+                  <li>Alert priority: ${
                         notificationPreferences?.telegram_enabled
                           ? escapeHtml(fixture.follow_relevance?.notification_priority || "website only")
                           : "Preview"
@@ -4473,20 +4614,20 @@
                     <span class="signal-label">1X2</span>
                     <span class="signal-value">${escapeHtml(
                       odds.home_win_odds && odds.draw_odds && odds.away_win_odds
-                        ? `${odds.home_win_odds} / ${odds.draw_odds} / ${odds.away_win_odds}`
+                        ? `${formatOdds(odds.home_win_odds)} / ${formatOdds(odds.draw_odds)} / ${formatOdds(odds.away_win_odds)}`
                         : "N/A"
                     )}</span>
                   </div>
                   <div class="signal-cell">
                     <span class="signal-label">OU25</span>
                     <span class="signal-value">${escapeHtml(
-                      odds.over25_odds && odds.under25_odds ? `${odds.over25_odds} / ${odds.under25_odds}` : "N/A"
+                      odds.over25_odds && odds.under25_odds ? `${formatOdds(odds.over25_odds)} / ${formatOdds(odds.under25_odds)}` : "N/A"
                     )}</span>
                   </div>
                   <div class="signal-cell">
                     <span class="signal-label">BTTS</span>
                     <span class="signal-value">${escapeHtml(
-                      odds.btts_yes_odds && odds.btts_no_odds ? `${odds.btts_yes_odds} / ${odds.btts_no_odds}` : "N/A"
+                      odds.btts_yes_odds && odds.btts_no_odds ? `${formatOdds(odds.btts_yes_odds)} / ${formatOdds(odds.btts_no_odds)}` : "N/A"
                     )}</span>
                   </div>
                 </div>
@@ -4526,43 +4667,53 @@
             ${fixtureSummaryNotice}
             <div class="fixture-detail-grid">
               <article class="panel">
-                <h3>Published market state</h3>
+                <h3>BAWA PORTO read</h3>
                 <div class="prediction-meta-grid dashboard-odds-grid">
-                  <div class="signal-cell">
+                  <div class="signal-cell signal-cell-model">
+                    <span class="signal-label">Verdict</span>
+                    <span class="signal-value">${escapeHtml(`${marketFamilyDisplay(fixture.signal_summary?.market_family)} • ${deployPickDisplay(fixture.signal_summary?.deploy_pick || fixture.deploy_summary?.pick)}`)}</span>
+                  </div>
+                  <div class="signal-cell signal-cell-model">
+                    <span class="signal-label">Confidence</span>
+                    <span class="signal-value">${escapeHtml(confidenceBandDisplay(confidenceTier))}</span>
+                  </div>
+                  <div class="signal-cell signal-cell-model">
+                    <span class="signal-label">Edge posture</span>
+                    <span class="signal-value">${escapeHtml(valueEdgeDisplay(fixture))}</span>
+                  </div>
+                </div>
+                <p class="muted">This is the deploy-layer reading for this fixture: market family, pick, confidence band, and whether the line still reads as supportive or fragile.</p>
+              </article>
+              <article class="panel">
+                <h3>Market reference</h3>
+                <div class="prediction-meta-grid dashboard-odds-grid">
+                  <div class="signal-cell signal-cell-market">
+                    <span class="signal-label">${escapeHtml(marketLine.label)}</span>
+                    <span class="signal-value">${escapeHtml(formatOdds(marketLine.odds))}</span>
+                    <span class="muted">${escapeHtml(`${formatImpliedProbability(marketLine.odds)} implied`)}</span>
+                  </div>
+                  <div class="signal-cell signal-cell-market">
                     <span class="signal-label">1X2</span>
                     <span class="signal-value">${escapeHtml(
                       odds.home_win_odds && odds.draw_odds && odds.away_win_odds
-                        ? `${odds.home_win_odds} / ${odds.draw_odds} / ${odds.away_win_odds}`
+                        ? `${formatOdds(odds.home_win_odds)} / ${formatOdds(odds.draw_odds)} / ${formatOdds(odds.away_win_odds)}`
                         : "N/A"
                     )}</span>
                   </div>
-                  <div class="signal-cell">
+                  <div class="signal-cell signal-cell-market">
                     <span class="signal-label">OU25</span>
                     <span class="signal-value">${escapeHtml(
-                      odds.over25_odds && odds.under25_odds ? `${odds.over25_odds} / ${odds.under25_odds}` : "N/A"
+                      odds.over25_odds && odds.under25_odds ? `${formatOdds(odds.over25_odds)} / ${formatOdds(odds.under25_odds)}` : "N/A"
                     )}</span>
                   </div>
-                  <div class="signal-cell">
+                  <div class="signal-cell signal-cell-market">
                     <span class="signal-label">BTTS</span>
                     <span class="signal-value">${escapeHtml(
-                      odds.btts_yes_odds && odds.btts_no_odds ? `${odds.btts_yes_odds} / ${odds.btts_no_odds}` : "N/A"
+                      odds.btts_yes_odds && odds.btts_no_odds ? `${formatOdds(odds.btts_yes_odds)} / ${formatOdds(odds.btts_no_odds)}` : "N/A"
                     )}</span>
                   </div>
                 </div>
-                <p class="muted">This is the current published reference layer for the fixture. Richer match-centre stats can sit here later without replacing the intelligence read.</p>
-              </article>
-              <article class="panel">
-                <h3>Fixture metadata</h3>
-                <ul class="feature-list">
-                  <li>Action state: ${escapeHtml(clarity.action_label)}</li>
-                  <li>Coverage: ${escapeHtml(String(fixture.coverage_status || "covered"))}</li>
-                  <li>Alert priority: ${
-                    notificationPreferences?.telegram_enabled
-                      ? escapeHtml(fixture.follow_relevance?.notification_priority || "website only")
-                      : "Preview"
-                  }</li>
-                  <li>Follow match: ${escapeHtml(followMatchLabel)}</li>
-                </ul>
+                <p class="muted">Rounded bookmaker prices and implied probability for the active market sit here as the reference side of the read. This layer should stay visually separate from the model verdict.</p>
               </article>
             </div>
           </section>
@@ -4706,15 +4857,15 @@
       <section class="section split">
         <article class="hero-main">
           <p class="hero-kicker">Fixture Intelligence</p>
-          ${renderFixtureHeroScoreboard(fixture)}
+          ${renderFixtureHeroScoreboard(fixture, clarity)}
           <h1>${escapeHtml(fixture.home_team)} <span class="muted">vs</span> ${escapeHtml(fixture.away_team)}</h1>
           <p>${escapeHtml(clarity.action_copy)}</p>
           <div class="pill-row">
-            <span class="pill">${escapeHtml(publishClass)}</span>
-            <span class="chip">${escapeHtml(marketFamilyLabel(fixture.signal_summary?.market_family))}</span>
-            <span class="chip">${escapeHtml(fixture.league)}</span>
-            <span class="chip">${escapeHtml(formatKickoffLabel(fixture.kickoff_time))}</span>
-            <span class="chip">${escapeHtml(clarity.feed_bucket)}</span>
+            <span class="fixture-state-pill fixture-state-pill-${escapeHtml(clarity.action_label.toLowerCase().includes("deploy") ? "deploy" : publishClass.toLowerCase())}">${escapeHtml(publishClass)}</span>
+            <span class="chip chip-signal">${escapeHtml(`${marketFamilyDisplay(fixture.signal_summary?.market_family)} • ${deployPickDisplay(fixture.signal_summary?.deploy_pick || fixture.deploy_summary?.pick)}`)}</span>
+            <span class="chip chip-confidence chip-confidence-${escapeHtml((confidenceTier || "standard").toLowerCase())}">${escapeHtml(confidenceBandDisplay(confidenceTier))}</span>
+            <span class="chip chip-reference">${escapeHtml(fixture.league)}</span>
+            <span class="chip chip-reference">${escapeHtml(formatKickoffLabel(fixture.kickoff_time))}</span>
           </div>
           <div class="cta-row">
             <a class="button" href="./dashboard.html">Back to dashboard</a>
@@ -4723,29 +4874,27 @@
           </div>
         </article>
         <aside class="hero-side">
-          <article class="panel compact-panel">
-            <span class="metric-label">Match state</span>
+          <article class="panel compact-panel compact-panel-primary">
+            <span class="metric-label">Action state</span>
             <div class="metric-stack">
-              <strong class="metric-value">${escapeHtml(clarity.action_label)}</strong>
-              <ul class="feature-list compact-list">
-                <li>Coverage: ${escapeHtml(String(fixture.coverage_status || "covered"))}</li>
-                <li>Alert priority: ${
-                  notificationPreferences?.telegram_enabled
-                    ? escapeHtml(fixture.follow_relevance?.notification_priority || "website only")
-                    : "Preview"
-                }</li>
-                <li>Feed bucket: ${escapeHtml(clarity.feed_bucket)}</li>
-              </ul>
+              <strong class="metric-value">${escapeHtml(`${deployPickDisplay(fixture.signal_summary?.deploy_pick || fixture.deploy_summary?.pick)} ${marketFamilyDisplay(fixture.signal_summary?.market_family)}`)}</strong>
+              <p class="muted">${escapeHtml(`${clarity.action_label} • ${confidenceBandDisplay(confidenceTier)}`)}</p>
             </div>
           </article>
           <article class="panel compact-panel">
-            <span class="metric-label">Relevance</span>
+            <span class="metric-label">Glance panel</span>
             <div class="metric-stack">
-              <strong class="metric-value">${matchedEntry ? escapeHtml(matchedEntry.reasons.join(" / ")) : "Not followed"}</strong>
-              <p class="muted">Direct team, fixture, league, and market relevance determine whether this page stays website-first or deserves interruption.</p>
-              <div class="pill-row">
-                <span class="chip">${escapeHtml(marketFamilyLabel(fixture.signal_summary?.market_family))}</span>
-                <span class="chip">${escapeHtml(publishClass)}</span>
+              <div class="mini-score-pair">
+                <span class="metric-label">Book line</span>
+                <strong>${escapeHtml(`${formatOdds(marketLine.odds)} • ${formatImpliedProbability(marketLine.odds)}`)}</strong>
+              </div>
+              <div class="mini-score-pair">
+                <span class="metric-label">Edge</span>
+                <strong class="edge-tone-${escapeHtml(valueEdgeTone(fixture))}">${escapeHtml(valueEdgeDisplay(fixture))}</strong>
+              </div>
+              <div class="mini-score-pair">
+                <span class="metric-label">Relevance</span>
+                <strong>${matchedEntry ? escapeHtml(matchedEntry.reasons.join(" / ")) : "Window fixture"}</strong>
               </div>
             </div>
           </article>
@@ -4894,6 +5043,10 @@
           return;
         }
         try {
+          const homeTeamId = String(root.dataset.homeTeamId || "").trim();
+          const awayTeamId = String(root.dataset.awayTeamId || "").trim();
+          const homeName = normalizePreferenceText(root.dataset.home || "");
+          const awayName = normalizePreferenceText(root.dataset.away || "");
           let leagueId = String(root.dataset.apiLeagueId || "").trim();
           let season = String(root.dataset.apiSeason || "").trim();
           if (!leagueId || !season) {
@@ -4931,23 +5084,36 @@
               </div>
               ${tableRows
                 .slice(0, 8)
-                .map(
-                  (row) => `
-                    <div class="standings-reference-row">
+                .map((row) => {
+                  const rowTeamId = String(row?.team?.id || "").trim();
+                  const rowTeamName = normalizePreferenceText(row?.team?.name || "");
+                  const isActiveTeam =
+                    (rowTeamId && (rowTeamId === homeTeamId || rowTeamId === awayTeamId)) ||
+                    rowTeamName === homeName ||
+                    rowTeamName === awayName;
+                  return `
+                    <div class="standings-reference-row ${isActiveTeam ? "standings-reference-row-active" : ""}">
                       <span>${escapeHtml(row.rank ?? "")}</span>
                       <strong>${escapeHtml(row.team?.name || "")}</strong>
                       <span>${escapeHtml(row.all?.played ?? "")}</span>
                       <span>${escapeHtml(row.goalsDiff ?? "")}</span>
                       <span>${escapeHtml(row.points ?? "")}</span>
-                      <span>${escapeHtml(row.form || "—")}</span>
+                      <span class="standings-form-sequence">${
+                        String(row.form || "")
+                          .split("")
+                          .filter(Boolean)
+                          .slice(0, 5)
+                          .map((letter) => `<span class="form-pill form-pill-${escapeHtml(letter.toLowerCase())}">${escapeHtml(letter)}</span>`)
+                          .join("") || "—"
+                      }</span>
                     </div>
-                  `
-                )
+                  `;
+                })
                 .join("")}
             </div>
           `;
         } catch (error) {
-          frame.innerHTML = `<div class="notice">${escapeHtml(
+          frame.innerHTML = `<div class="notice reference-loading">${escapeHtml(
             error.message || "League table reference could not be loaded for this fixture."
           )}</div>`;
         }
@@ -5023,7 +5189,7 @@
           );
           const rows = response.ok && Array.isArray(payload?.response) ? payload.response : [];
           if (!rows.length) {
-            throw new Error("Confirmed lineups are not available from the upstream provider for this fixture yet. Keep the intelligence read, table, and context layers visible while team sheets remain unavailable.");
+            throw new Error("Confirmed lineups are not available from the upstream provider for this fixture yet. Team sheets usually land closer to kickoff, so keep the intelligence, table, and context layers visible in the meantime.");
           }
           frame.innerHTML = `
             <div class="lineup-reference-grid">
@@ -5058,9 +5224,16 @@
             </div>
           `;
         } catch (error) {
-          frame.innerHTML = `<div class="notice">${escapeHtml(
-            error.message || "Lineups and formations are not available for this fixture yet."
-          )}</div>`;
+          frame.innerHTML = `
+            <div class="lineup-empty-state">
+              <div class="lineup-empty-grid">
+                <article class="lineup-empty-card">
+                  <span class="metric-label">Lineups pending</span>
+                  <p class="muted">${escapeHtml(error.message || "Lineups and formations are not available for this fixture yet.")}</p>
+                </article>
+              </div>
+            </div>
+          `;
         }
       })
     );
