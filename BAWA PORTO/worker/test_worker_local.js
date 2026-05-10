@@ -166,6 +166,13 @@ class MockD1 {
         return this.accountSessions
           .filter((row) => row.user_id === args.user_id && !row.is_revoked && String(row.expires_at) > new Date().toISOString())
           .sort((a, b) => String(a.issued_at).localeCompare(String(b.issued_at)));
+      case "list_account_sessions_by_user":
+        return this.accountSessions
+          .filter((row) => row.user_id === args.user_id)
+          .sort((a, b) =>
+            String(b.last_seen_at || b.issued_at).localeCompare(String(a.last_seen_at || a.issued_at))
+          )
+          .slice(0, args.limit);
       case "get_account_session_by_id":
         return this.accountSessions.find((row) => row.id === args.id) || null;
       case "insert_account_session":
@@ -910,6 +917,67 @@ const testAccountStateAndTelegramLinkFlow = async (fetchHarness) => {
   assert.equal(completePayload.account.notification_preferences.telegram_enabled, 1);
 };
 
+const testAccountSessionsState = async (fetchHarness) => {
+  const env = createEnv();
+  await writeSubscriberRecord(
+    env,
+    buildSubscriberRecord({
+      email: "member@example.com",
+    })
+  );
+
+  const requestResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/auth/magic-link/request", "POST", {
+      email: "member@example.com",
+    }),
+    env
+  );
+  assert.equal(requestResponse.status, 200);
+  const emailBody = fetchHarness.sentEmails.at(-1);
+  const verifyMatch = String(emailBody?.html || "").match(/verify\?token=([^"&]+)/);
+  assert.ok(verifyMatch?.[1], "expected magic-link token in email body");
+  const token = decodeURIComponent(verifyMatch[1]);
+
+  const tokenResponse = await worker.fetch(
+    makeGetRequest(`http://localhost/api/auth/magic-link/verify?token=${encodeURIComponent(token)}`),
+    env
+  );
+  const sessionCookie = extractCookieValue(tokenResponse.headers.get("set-cookie"), "og_premium_session");
+  assert.ok(sessionCookie, "expected premium session cookie after verify");
+
+  const primarySession = env.ACCOUNT_DB.accountSessions[0];
+  env.ACCOUNT_DB.accountSessions.push({
+    ...primarySession,
+    id: "sess_old_browser",
+    device_label: "Chrome on Mac",
+    is_primary: 0,
+    is_revoked: 0,
+    issued_at: "2026-05-01T09:00:00.000Z",
+    last_seen_at: "2026-05-08T09:00:00.000Z",
+    expires_at: "2026-05-20T09:00:00.000Z",
+    created_at: "2026-05-01T09:00:00.000Z",
+    updated_at: "2026-05-08T09:00:00.000Z",
+  });
+
+  const sessionsResponse = await worker.fetch(
+    makeGetRequest("http://localhost/api/account/sessions", {
+      cookie: `og_premium_session=${sessionCookie}`,
+    }),
+    env
+  );
+  const sessionsPayload = await sessionsResponse.json();
+  assert.equal(sessionsResponse.status, 200);
+  assert.equal(sessionsPayload.ok, true);
+  assert.equal(sessionsPayload.status, "account_sessions_loaded");
+  assert.equal(Array.isArray(sessionsPayload.sessions), true);
+  assert.equal(sessionsPayload.sessions.length, 2);
+  assert.equal(sessionsPayload.sessions[0].device_label, primarySession.device_label);
+  assert.equal(sessionsPayload.sessions[0].is_current, true);
+  assert.equal(sessionsPayload.sessions[0].is_primary, true);
+  assert.equal(sessionsPayload.sessions[1].device_label, "Chrome on Mac");
+  assert.equal(sessionsPayload.sessions[1].is_current, false);
+};
+
 const testTelegramWebhookCompletesLinkFlow = async (fetchHarness) => {
   const env = createEnv();
   await writeSubscriberRecord(
@@ -1477,6 +1545,7 @@ const main = async () => {
     await testAuthSessionSkeleton();
     await testMagicLinkVerifyAndSessionFlow(fetchHarness);
     await testAccountStateAndTelegramLinkFlow(fetchHarness);
+    await testAccountSessionsState(fetchHarness);
     await testTelegramWebhookCompletesLinkFlow(fetchHarness);
     await testTelegramTestAlertRoute(fetchHarness);
     await testTelegramFixtureAlertRoute(fetchHarness);
@@ -1495,6 +1564,7 @@ const main = async () => {
     console.log("- auth session flow: passed");
     console.log("- magic-link verify + session premium flow: passed");
     console.log("- D1-backed account state + Telegram link flow: passed");
+    console.log("- account devices session surface: passed");
     console.log("- Telegram bot webhook completion flow: passed");
     console.log("- Telegram test alert route: passed");
     console.log("- Telegram fixture alert route: passed");

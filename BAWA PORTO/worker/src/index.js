@@ -11,6 +11,7 @@ import {
   getAccountDb,
   getAccountSessionById,
   getAccountStateByEmail,
+  listAccountSessionsByUser,
   listDueNotificationAlerts,
   listActiveAccountSessionsByUser,
   listNotificationAlertsByUser,
@@ -1490,6 +1491,60 @@ async function handleAccountState(request, env) {
   });
 }
 
+async function handleAccountSessionsState(request, env) {
+  const sessionAccess = await verifySessionAccess(request, env);
+  if (!sessionAccess.ok) {
+    return json(
+      {
+        ok: false,
+        authenticated: false,
+        entitled: false,
+        status: sessionAccess.status || "unauthenticated",
+        message: sessionAccess.message || "Sign in to view account devices.",
+      },
+      401,
+      sessionFailureHeaders(sessionAccess.status)
+    );
+  }
+
+  const accountDb = getAccountDb(env);
+  if (!accountDb) {
+    return configError("ACCOUNT_DB D1 binding is required for account sessions.", ["ACCOUNT_DB"]);
+  }
+
+  const accountState = await getAccountStateByEmail(accountDb, sessionAccess.email);
+  if (!accountState?.user?.id) {
+    return json(
+      {
+        ok: false,
+        status: "account_state_missing",
+        message: "Unable to load account devices for this account yet.",
+      },
+      500
+    );
+  }
+
+  const sessions = await listAccountSessionsByUser(accountDb, accountState.user.id, { limit: 8 });
+  return json({
+    ok: true,
+    status: "account_sessions_loaded",
+    current_session_id: sessionAccess.session_id || null,
+    sessions: sessions.map((session) => ({
+      id: session.id,
+      device_label: session.device_label || "Browser session",
+      session_kind: session.session_kind || "browser",
+      is_current: session.id === sessionAccess.session_id,
+      is_primary: Number(session.is_primary || 0) === 1,
+      is_revoked: Number(session.is_revoked || 0) === 1 || Boolean(session.revoked_at),
+      issued_at: session.issued_at || null,
+      last_seen_at: session.last_seen_at || null,
+      expires_at: session.expires_at || null,
+      revoked_at: session.revoked_at || null,
+      revoke_reason: session.revoke_reason || null,
+    })),
+  });
+}
+
 async function handleAccountPreferencesUpdate(request, env) {
   const sessionAccess = await verifySessionAccess(request, env);
   if (!sessionAccess.ok) {
@@ -2895,6 +2950,7 @@ async function handleRequest(request, env) {
         "GET /api/auth/session",
         "POST /api/auth/logout",
         "GET /api/account/state",
+        "GET /api/account/sessions",
         "POST /api/account/preferences",
         "GET /api/account/alerts",
         "POST /api/account/alerts/refresh",
@@ -2966,6 +3022,15 @@ async function handleRequest(request, env) {
       return withCors(response, request, env);
     }
     response = await handleAccountState(request, env);
+    return withCors(response, request, env);
+  }
+
+  if (pathname === "/api/account/sessions") {
+    if (request.method !== "GET") {
+      response = methodNotAllowed("GET");
+      return withCors(response, request, env);
+    }
+    response = await handleAccountSessionsState(request, env);
     return withCors(response, request, env);
   }
 

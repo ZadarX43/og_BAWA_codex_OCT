@@ -442,6 +442,31 @@ export async function listActiveAccountSessionsByUser(db, userId) {
   );
 }
 
+export async function listAccountSessionsByUser(db, userId, options = {}) {
+  if (!db || !userId) {
+    return [];
+  }
+  const limit = Math.max(1, Math.min(24, Number(options.limit || 8)));
+  return callMaybeMock(
+    db,
+    "list_account_sessions_by_user",
+    { user_id: userId, limit },
+    () =>
+      all(
+        db,
+        `-- og:list_account_sessions_by_user
+        SELECT id, user_id, session_token_hash, device_label, user_agent_hash, ip_hash, session_kind,
+               is_primary, is_revoked, issued_at, last_seen_at, expires_at, revoked_at, revoke_reason,
+               created_at, updated_at
+        FROM account_sessions
+        WHERE user_id = ?1
+        ORDER BY COALESCE(last_seen_at, issued_at) DESC, issued_at DESC
+        LIMIT ?2`,
+        [userId, limit]
+      )
+  );
+}
+
 export async function getAccountSessionById(db, sessionId) {
   if (!db || !sessionId) {
     return null;

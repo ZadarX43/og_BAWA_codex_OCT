@@ -42,8 +42,10 @@
       sessionCustomerId: "",
       sessionSubscriptionId: "",
       accountState: null,
+      accountSessions: [],
       accountAlerts: [],
       accountStateError: "",
+      accountSessionsError: "",
       dashboardClassFilter: "ALL",
       dashboardReasonFilter: "ALL",
       telegramLinkCode: "",
@@ -193,6 +195,57 @@
     }
     return "Linked account";
   };
+  const sessionKindLabel = (value) => {
+    const kind = String(value || "browser").trim().toLowerCase();
+    if (kind === "browser") return "Browser";
+    return titleCase(kind);
+  };
+  const sessionStatusLabel = (session) => {
+    if (!session) return "Recent device";
+    if (session.is_current) return "Current device";
+    if (session.is_revoked) return "Signed out";
+    const expiresAt = Date.parse(String(session.expires_at || ""));
+    if (Number.isFinite(expiresAt) && expiresAt <= Date.now()) return "Expired";
+    return "Recent device";
+  };
+  const sessionActivityNote = (session) => {
+    if (!session) return "";
+    if (session.is_current) {
+      return "This is the session you are using right now.";
+    }
+    if (session.is_revoked) {
+      return `Revoked ${formatDateTime(session.revoked_at) || "recently"}.`;
+    }
+    const lastSeen = formatDateTime(session.last_seen_at);
+    return lastSeen ? `Last active ${lastSeen}.` : "Recent verified sign-in.";
+  };
+  const accountSessionCard = (session) => `
+    <article class="panel">
+      <div class="pill-row">
+        <span class="stat-chip">${escapeHtml(sessionStatusLabel(session))}</span>
+        <span class="stat-chip">${escapeHtml(sessionKindLabel(session.session_kind))}</span>
+        ${session.is_primary ? `<span class="stat-chip">Primary</span>` : ""}
+      </div>
+      <h4>${escapeHtml(session.device_label || "Browser session")}</h4>
+      <ul class="feature-list">
+        <li>${escapeHtml(sessionActivityNote(session))}</li>
+        <li>Issued: ${escapeHtml(formatDateTime(session.issued_at) || "Unknown")}</li>
+        <li>Expires: ${escapeHtml(formatDateTime(session.expires_at) || "Unknown")}</li>
+      </ul>
+      <div class="cta-row">
+        ${
+          session.is_current
+            ? `<button class="ghost-button" type="button" disabled>Current session</button>`
+            : `<button class="ghost-button" type="button" disabled>Revoke soon</button>`
+        }
+        ${
+          session.is_primary || session.is_revoked
+            ? ""
+            : `<button class="ghost-button" type="button" disabled>Make primary soon</button>`
+        }
+      </div>
+    </article>
+  `;
 
   const joinPreferenceList = (value) => (Array.isArray(value) ? value.join(", ") : "");
   const normalizeStylePreset = (value) => {
@@ -2159,6 +2212,9 @@
     const onboardingCompleted = Boolean(notificationPreferences?.calm_onboarding_completed_at);
     const onboardingSummary = onboardingStepSummary(notificationPreferences);
     const followedIntelligence = getFollowedIntelligenceMatches(accountState, state.fixtureIntelligence);
+    const accountSessions = Array.isArray(state.runtime.accountSessions) ? state.runtime.accountSessions : [];
+    const currentSession = accountSessions.find((session) => session.is_current) || null;
+    const recentSessions = accountSessions.filter((session) => !session.is_current);
     const followedSignalsConfigured = Boolean(
       parsePreferenceList(notificationPreferences?.favourite_teams).length ||
         parsePreferenceList(notificationPreferences?.favourite_leagues).length ||
@@ -2360,6 +2416,7 @@
                 <p class="muted">Use this as the stable navigation layer for account state, delivery posture, preferences, billing, and help.</p>
                 <div class="pill-row">
                   <a class="ghost-button" href="#account-overview">Account</a>
+                  <a class="ghost-button" href="#devices">Devices</a>
                   <a class="ghost-button" href="#settings">Settings</a>
                   <a class="ghost-button" href="#preferences">Preferences</a>
                   <a class="ghost-button" href="#language">Language</a>
@@ -2376,6 +2433,24 @@
                   <li>Membership status: ${escapeHtml(subscriptionStatus)}</li>
                   <li>D1 profile state: ${accountState ? "Active" : state.runtime.accountStateError ? "Unavailable" : "Pending"}</li>
                 </ul>
+              </article>
+              <article class="panel" id="devices">
+                <h3>Devices</h3>
+                <p class="muted">This is the first visible device layer on top of magic-link sign-in. Use it to understand where this account is active before revoke and sign-out-other-devices controls go live.</p>
+                ${renderNotice(state.runtime.accountSessionsError, state.runtime.accountSessionsError ? "warning" : "default")}
+                ${
+                  currentSession
+                    ? `<div class="card-grid">${accountSessionCard(currentSession)}</div>`
+                    : `<div class="notice">No current tracked device session was returned yet.</div>`
+                }
+                <div class="cta-row">
+                  <button class="ghost-button" type="button" disabled>Sign out other devices soon</button>
+                </div>
+                ${
+                  recentSessions.length
+                    ? `<div class="card-grid">${recentSessions.slice(0, 5).map((session) => accountSessionCard(session)).join("")}</div>`
+                    : `<div class="notice">No recent secondary device sessions are stored for this account yet.</div>`
+                }
               </article>
               <article class="panel" id="settings">
                 <h3>Telegram premium access</h3>
@@ -3233,8 +3308,10 @@
     state.runtime.sessionCustomerId = "";
     state.runtime.sessionSubscriptionId = "";
     state.runtime.accountState = null;
+    state.runtime.accountSessions = [];
     state.runtime.accountAlerts = [];
     state.runtime.accountStateError = "";
+    state.runtime.accountSessionsError = "";
 
     const notice = authNoticeFromQuery();
     state.runtime.authMessage = notice.message;
@@ -3293,6 +3370,31 @@
       state.runtime.accountState = payload.account || null;
     } catch (error) {
       state.runtime.accountStateError = error.message || "Unable to load account state.";
+    }
+  };
+
+  const loadAccountSessions = async () => {
+    state.runtime.accountSessions = [];
+    state.runtime.accountSessionsError = "";
+
+    if (!workerConfigured() || !state.runtime.sessionAuthenticated) {
+      return;
+    }
+
+    try {
+      const { response, payload } = await fetchWorkerJson("/api/account/sessions", {
+        method: "GET",
+        withToken: true,
+      });
+
+      if (!response.ok || !payload?.ok) {
+        state.runtime.accountSessionsError = payload?.message || "Unable to load account devices.";
+        return;
+      }
+
+      state.runtime.accountSessions = Array.isArray(payload.sessions) ? payload.sessions : [];
+    } catch (error) {
+      state.runtime.accountSessionsError = error.message || "Unable to load account devices.";
     }
   };
 
@@ -3669,7 +3771,9 @@
     state.runtime.sessionCustomerId = "";
     state.runtime.sessionSubscriptionId = "";
     state.runtime.accountState = null;
+    state.runtime.accountSessions = [];
     state.runtime.accountStateError = "";
+    state.runtime.accountSessionsError = "";
     state.runtime.telegramLinkCode = "";
     state.runtime.telegramLinkExpiresAt = "";
     state.runtime.telegramBotUsername = "";
@@ -3791,6 +3895,7 @@
     state.runtime.premiumToken = readStoredPremiumToken();
     await loadAuthSession();
     await loadAccountState();
+    await loadAccountSessions();
     await loadAccountAlerts();
 
     try {
