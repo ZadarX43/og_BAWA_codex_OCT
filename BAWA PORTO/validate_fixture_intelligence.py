@@ -21,6 +21,11 @@ REQUIRED_TOP_LEVEL_FIELDS = {
 REQUIRED_FIXTURE_FIELDS = {
     "fixture_id",
     "fixture_key",
+    "api_fixture_id",
+    "api_league_id",
+    "api_season",
+    "api_home_team_id",
+    "api_away_team_id",
     "publish_class",
     "coverage_status",
     "kickoff_time",

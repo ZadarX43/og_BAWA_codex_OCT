@@ -1,6 +1,6 @@
 # FIXTURE_INTELLIGENCE_REPORT
 
-Generated: `2026-05-09T14:11:03+00:00`
+Generated: `2026-05-10T16:52:28+00:00`
 Source run id: `2026-05-09`
 Source window: `2026-05-09` to `2026-05-11`
 

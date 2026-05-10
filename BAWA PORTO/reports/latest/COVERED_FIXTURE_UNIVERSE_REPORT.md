@@ -1,6 +1,6 @@
 # COVERED_FIXTURE_UNIVERSE_REPORT
 
-Generated: `2026-05-09T14:07:35+00:00`
+Generated: `2026-05-10T16:52:28+00:00`
 Source run id: `2026-05-09`
 Source window: `2026-05-09` to `2026-05-11`
 
@@ -22,6 +22,7 @@ Source window: `2026-05-09` to `2026-05-11`
 - Covered leagues: `22`
 
 ## Availability Counters
+- `availability:fixtures_master`: `14`
 - `availability:goal_shape_base`: `132`
 - `availability:historical_overlay`: `80`
 - `availability:prematch_odds`: `132`

@@ -19,6 +19,7 @@ from publish_predictions import (
     logo_assets_for,
     normalize_market,
     normalize_pick,
+    normalize_lookup_text,
     normalize_tier,
     parse_float,
     pick_first,
@@ -30,6 +31,8 @@ from publish_predictions import (
 OUTPUT_PATH = FRONTEND_DATA_DIR / "fixture_intelligence_public.json"
 REPORT_PATH = REPORTS_DIR / "FIXTURE_INTELLIGENCE_REPORT.md"
 COVERED_UNIVERSE_PATH = FRONTEND_DATA_DIR / "covered_fixture_universe.json"
+FIXTURES_MASTER_PATH = ROOT / "data_sources" / "api_football" / "normalized" / "fixtures_master.csv"
+CURRENT_CONTEXT_NORMALIZED_DIR = ROOT / "reports" / "latest" / "api_current_context_overlay_window" / "normalized"
 
 PUBLISH_CLASS_ORDER = {"DEPLOY": 0, "OBSERVE": 1, "CONTEXT": 2, "MONITOR": 3, "HIDDEN": 4}
 MARKET_PRIORITY = {"FTR": 0, "BTTS": 1, "OU25": 2, "CS": 3}
@@ -88,6 +91,93 @@ def parse_source_run_id(paths: list[Path]) -> str:
             if re.fullmatch(r"\d{4}-\d{2}-\d{2}", part):
                 return part
     return paths[0].parent.name if paths else "unknown"
+
+
+def parse_optional_int(value: Any) -> int | None:
+    text = str(value or "").strip()
+    if not text:
+        return None
+    try:
+        return int(float(text))
+    except ValueError:
+        return None
+
+
+def fixture_record_key(league: str, match_date: str, home_team: str, away_team: str) -> tuple[str, str, str, str]:
+    return (
+        normalize_lookup_text(league),
+        str(match_date or "").strip().split("T", 1)[0].split(" ", 1)[0],
+        normalize_identity_text(home_team),
+        normalize_identity_text(away_team),
+    )
+
+
+def normalize_identity_text(value: Any) -> str:
+    tokens = re.findall(r"[a-z0-9]+", str(value or "").lower().replace("&", " and "))
+    stopwords = {"fc", "cf", "ac", "sc", "afc", "club", "fcv", "eh", "fk", "bk", "sv", "cd", "rcd", "csd"}
+    filtered = [token for token in tokens if token not in stopwords]
+    return normalize_lookup_text(" ".join(filtered or tokens))
+
+
+def fixture_fallback_key(match_date: str, home_team: str, away_team: str) -> tuple[str, str, str]:
+    return (
+        str(match_date or "").strip().split("T", 1)[0].split(" ", 1)[0],
+        normalize_identity_text(home_team),
+        normalize_identity_text(away_team),
+    )
+
+
+def load_fixtures_master_index() -> dict[str, dict[Any, dict[str, str]]]:
+    exact: dict[tuple[str, str, str, str], dict[str, str]] = {}
+    fallback: dict[tuple[str, str, str], dict[str, str]] = {}
+    paths: list[Path] = []
+    if FIXTURES_MASTER_PATH.exists():
+        paths.append(FIXTURES_MASTER_PATH)
+    if CURRENT_CONTEXT_NORMALIZED_DIR.exists():
+        paths.extend(sorted(CURRENT_CONTEXT_NORMALIZED_DIR.glob("fixtures_master__*.csv")))
+
+    for path in paths:
+        for row in load_rows(path):
+            key = fixture_record_key(
+                str(row.get("league", "") or ""),
+                str(row.get("match_date", "") or ""),
+                str(row.get("home_team_name", "") or ""),
+                str(row.get("away_team_name", "") or ""),
+            )
+            if all(key):
+                exact[key] = row
+            fallback_key = fixture_fallback_key(
+                str(row.get("match_date", "") or ""),
+                str(row.get("home_team_name", "") or ""),
+                str(row.get("away_team_name", "") or ""),
+            )
+            if all(fallback_key):
+                fallback[fallback_key] = row
+    return {"exact": exact, "fallback": fallback}
+
+
+def lookup_master_match(
+    fixtures_master_index: dict[str, dict[Any, dict[str, str]]],
+    league: str,
+    match_date: str,
+    home_team: str,
+    away_team: str,
+) -> dict[str, str] | None:
+    exact = fixtures_master_index.get("exact", {})
+    fallback = fixtures_master_index.get("fallback", {})
+    return exact.get(fixture_record_key(league, match_date, home_team, away_team)) or fallback.get(
+        fixture_fallback_key(match_date, home_team, away_team)
+    )
+
+
+def build_api_identity(master_match: dict[str, str] | None) -> dict[str, Any]:
+    return {
+        "api_fixture_id": parse_optional_int(master_match.get("fixture_id")) if master_match else None,
+        "api_league_id": parse_optional_int(master_match.get("league_id")) if master_match else None,
+        "api_season": parse_optional_int(master_match.get("season")) if master_match else None,
+        "api_home_team_id": parse_optional_int(master_match.get("home_team_id")) if master_match else None,
+        "api_away_team_id": parse_optional_int(master_match.get("away_team_id")) if master_match else None,
+    }
 
 
 def load_json(path: Path) -> Any:
@@ -183,7 +273,12 @@ def parse_boolish(value: Any) -> bool:
     return str(value or "").strip().lower() in {"1", "true", "yes", "y"}
 
 
-def build_row_snapshot(row: dict[str, str], counters: Counter[str], logo_index: dict[str, Any]) -> dict[str, Any] | None:
+def build_row_snapshot(
+    row: dict[str, str],
+    counters: Counter[str],
+    logo_index: dict[str, Any],
+    fixtures_master_index: dict[tuple[str, str, str, str], dict[str, str]],
+) -> dict[str, Any] | None:
     fixture_key = pick_first(row, ["fixture_key"], "fixture_key", counters)
     kickoff_time = normalize_kickoff_time(
         pick_first(row, ["kickoff_time", "match_date"], "kickoff_time", counters),
@@ -206,9 +301,12 @@ def build_row_snapshot(row: dict[str, str], counters: Counter[str], logo_index: 
         return None
 
     logo_assets = logo_assets_for(logo_index, league, home_team, away_team, counters)
+    match_date = str(row.get("match_date", "") or "").strip()
+    master_match = lookup_master_match(fixtures_master_index, league, match_date, home_team, away_team)
     return {
         "fixture_id": fixture_key,
         "fixture_key": fixture_key,
+        **build_api_identity(master_match),
         "kickoff_time": kickoff_time,
         "league": league,
         "home_team": home_team,
@@ -663,6 +761,11 @@ def classify_context_monitor_fixture(
     record = {
         "fixture_id": universe_record["fixture_id"],
         "fixture_key": universe_record["fixture_key"],
+        "api_fixture_id": universe_record.get("api_fixture_id"),
+        "api_league_id": universe_record.get("api_league_id"),
+        "api_season": universe_record.get("api_season"),
+        "api_home_team_id": universe_record.get("api_home_team_id"),
+        "api_away_team_id": universe_record.get("api_away_team_id"),
         "fixture_class": publish_class,
         "publish_class": publish_class,
         "coverage_status": universe_record.get("coverage_status", "covered"),
@@ -752,6 +855,11 @@ def build_fixture_record(
     record: dict[str, Any] = {
         "fixture_id": base["fixture_id"],
         "fixture_key": base["fixture_key"],
+        "api_fixture_id": base.get("api_fixture_id"),
+        "api_league_id": base.get("api_league_id"),
+        "api_season": base.get("api_season"),
+        "api_home_team_id": base.get("api_home_team_id"),
+        "api_away_team_id": base.get("api_away_team_id"),
         "fixture_class": "",
         "publish_class": "",
         "coverage_status": "covered",
@@ -917,12 +1025,13 @@ def main() -> int:
     else:
         logo_manifest_path = None
     logo_index = load_logo_manifest(logo_manifest_path, counters)
+    fixtures_master_index = load_fixtures_master_index()
 
     source_rows = load_bundle_rows(source_paths, counters)
     row_snapshots = [
         snapshot
         for row in source_rows
-        if (snapshot := build_row_snapshot(row, counters, logo_index)) is not None
+        if (snapshot := build_row_snapshot(row, counters, logo_index, fixtures_master_index)) is not None
     ]
     grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for snapshot in row_snapshots:

@@ -35,6 +35,7 @@ MATCH_EVENTS_PATH = ROOT / "data_sources" / "api_football" / "normalized" / "mat
 FEATURES_DIR = ROOT / "data_sources" / "api_football" / "features"
 PLAYER_EVENTS_FEATURES_DIR = FEATURES_DIR / "player_events"
 CURRENT_CONTEXT_OVERLAY_SUMMARY_PATH = ROOT / "reports" / "latest" / "api_current_context_overlay_window" / "CURRENT_CONTEXT_OVERLAY_SUMMARY.json"
+CURRENT_CONTEXT_NORMALIZED_DIR = ROOT / "reports" / "latest" / "api_current_context_overlay_window" / "normalized"
 
 LEAGUE_TAG_ALIASES: dict[str, list[str]] = {
     "belgium pro": ["Belgium_Pro"],
@@ -153,26 +154,89 @@ def fixture_record_key(league: str, match_date: str, home_team: str, away_team: 
     return (
         normalize_lookup_text(league),
         str(match_date or "").strip(),
-        normalize_lookup_text(home_team),
-        normalize_lookup_text(away_team),
+        normalize_identity_text(home_team),
+        normalize_identity_text(away_team),
     )
 
 
-def load_fixtures_master_index() -> dict[tuple[str, str, str, str], dict[str, str]]:
-    if not FIXTURES_MASTER_PATH.exists():
-        return {}
-    with FIXTURES_MASTER_PATH.open("r", encoding="utf-8", newline="") as handle:
-        reader = csv.DictReader(handle)
-        index: dict[tuple[str, str, str, str], dict[str, str]] = {}
-        for row in reader:
-            key = fixture_record_key(
-                str(row.get("league", "") or ""),
-                str(row.get("match_date", "") or ""),
-                str(row.get("home_team_name", "") or ""),
-                str(row.get("away_team_name", "") or ""),
-            )
-            index.setdefault(key, row)
-        return index
+def parse_optional_int(value: Any) -> int | None:
+    text = str(value or "").strip()
+    if not text:
+        return None
+    try:
+        return int(float(text))
+    except ValueError:
+        return None
+
+
+def normalize_identity_text(value: Any) -> str:
+    tokens = re.findall(r"[a-z0-9]+", str(value or "").lower().replace("&", " and "))
+    stopwords = {"fc", "cf", "ac", "sc", "afc", "club", "fcv", "eh", "fk", "bk", "sv", "cd", "rcd", "csd"}
+    filtered = [token for token in tokens if token not in stopwords]
+    return normalize_lookup_text(" ".join(filtered or tokens))
+
+
+def fixture_fallback_key(match_date: str, home_team: str, away_team: str) -> tuple[str, str, str]:
+    return (
+        str(match_date or "").strip(),
+        normalize_identity_text(home_team),
+        normalize_identity_text(away_team),
+    )
+
+
+def load_fixtures_master_index() -> dict[str, dict[Any, dict[str, str]]]:
+    exact: dict[tuple[str, str, str, str], dict[str, str]] = {}
+    fallback: dict[tuple[str, str, str], dict[str, str]] = {}
+    paths: list[Path] = []
+    if FIXTURES_MASTER_PATH.exists():
+        paths.append(FIXTURES_MASTER_PATH)
+    if CURRENT_CONTEXT_NORMALIZED_DIR.exists():
+        paths.extend(sorted(CURRENT_CONTEXT_NORMALIZED_DIR.glob("fixtures_master__*.csv")))
+
+    for path in paths:
+        with path.open("r", encoding="utf-8", newline="") as handle:
+            reader = csv.DictReader(handle)
+            for row in reader:
+                key = fixture_record_key(
+                    str(row.get("league", "") or ""),
+                    str(row.get("match_date", "") or ""),
+                    str(row.get("home_team_name", "") or ""),
+                    str(row.get("away_team_name", "") or ""),
+                )
+                if all(key):
+                    exact[key] = row
+                fallback_key = fixture_fallback_key(
+                    str(row.get("match_date", "") or ""),
+                    str(row.get("home_team_name", "") or ""),
+                    str(row.get("away_team_name", "") or ""),
+                )
+                if all(fallback_key):
+                    fallback[fallback_key] = row
+    return {"exact": exact, "fallback": fallback}
+
+
+def lookup_master_match(
+    fixtures_master_index: dict[str, dict[Any, dict[str, str]]],
+    league: str,
+    match_date: str,
+    home_team: str,
+    away_team: str,
+) -> dict[str, str] | None:
+    exact = fixtures_master_index.get("exact", {})
+    fallback = fixtures_master_index.get("fallback", {})
+    return exact.get(fixture_record_key(league, match_date, home_team, away_team)) or fallback.get(
+        fixture_fallback_key(match_date, home_team, away_team)
+    )
+
+
+def build_api_identity(master_match: dict[str, str] | None) -> dict[str, Any]:
+    return {
+        "api_fixture_id": parse_optional_int(master_match.get("fixture_id")) if master_match else None,
+        "api_league_id": parse_optional_int(master_match.get("league_id")) if master_match else None,
+        "api_season": parse_optional_int(master_match.get("season")) if master_match else None,
+        "api_home_team_id": parse_optional_int(master_match.get("home_team_id")) if master_match else None,
+        "api_away_team_id": parse_optional_int(master_match.get("away_team_id")) if master_match else None,
+    }
 
 
 def load_fixture_id_set(path: Path) -> set[str]:
@@ -492,7 +556,7 @@ def build_base_record(
     current_overlay_index: dict[str, dict[str, Any]],
 ) -> dict[str, Any]:
     kickoff_time = normalize_kickoff(match_date)
-    master_match = fixtures_master_index.get(fixture_record_key(league, match_date, home_team, away_team))
+    master_match = lookup_master_match(fixtures_master_index, league, match_date, home_team, away_team)
     logo_assets = logo_assets_for(logo_index, league, home_team, away_team, counters)
     fixture_id = str(master_match.get("fixture_id", "") or "").strip() if master_match else ""
     home_profile = team_profile_index.get(normalize_lookup_text(home_team))
@@ -512,6 +576,7 @@ def build_base_record(
     return {
         "fixture_id": fixture_id or fixture_key,
         "fixture_key": fixture_key,
+        **build_api_identity(master_match),
         "kickoff_time": kickoff_time,
         "league": league,
         "home_team": home_team,
