@@ -1088,6 +1088,11 @@ const testAccountPreferencesUpdate = async (fetchHarness) => {
       {
         telegram_enabled: true,
         email_enabled: true,
+        user_style_preset: "analyst",
+        decision_companion_enabled: true,
+        reset_mode_enabled: true,
+        language_preference: "en-GB",
+        complete_calm_setup: true,
         elite_alerts_enabled: true,
         standard_alerts_enabled: false,
         acca_alerts_enabled: true,
@@ -1120,6 +1125,9 @@ const testAccountPreferencesUpdate = async (fetchHarness) => {
   assert.equal(prefsPayload.status, "notification_preferences_updated");
   assert.equal(prefsPayload.account.notification_preferences.alert_frequency_mode, "immediate");
   assert.equal(prefsPayload.account.notification_preferences.standard_alerts_enabled, 0);
+  assert.equal(prefsPayload.account.notification_preferences.user_style_preset, "analyst");
+  assert.equal(prefsPayload.account.notification_preferences.language_preference, "en-GB");
+  assert.equal(Boolean(prefsPayload.account.notification_preferences.calm_onboarding_completed_at), true);
   assert.deepEqual(prefsPayload.account.notification_preferences.favourite_teams, ["Arsenal", "Porto"]);
   assert.deepEqual(prefsPayload.account.notification_preferences.favourite_markets, ["BTTS", "OU25"]);
 };

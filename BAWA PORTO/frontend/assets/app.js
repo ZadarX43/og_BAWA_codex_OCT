@@ -136,6 +136,7 @@
       home: "./index.html",
       dashboard: "./dashboard.html",
       fixture: "./dashboard.html",
+      onboarding: "./account.html",
       predictions: "./predictions.html",
       premium: "./premium.html",
       results: "./results.html",
@@ -194,6 +195,163 @@
   };
 
   const joinPreferenceList = (value) => (Array.isArray(value) ? value.join(", ") : "");
+  const normalizeStylePreset = (value) => {
+    const preset = String(value || "").trim().toLowerCase();
+    if (["analyst", "disciplined_bettor", "tactical_reader", "researcher"].includes(preset)) {
+      return preset;
+    }
+    return "disciplined_bettor";
+  };
+  const stylePresetLabel = (value) => {
+    const preset = normalizeStylePreset(value);
+    if (preset === "analyst") return "Analyst";
+    if (preset === "disciplined_bettor") return "Disciplined bettor";
+    if (preset === "tactical_reader") return "Tactical reader";
+    if (preset === "researcher") return "Researcher";
+    return "Disciplined bettor";
+  };
+  const languageLabel = (value) => {
+    const key = String(value || "en-GB");
+    if (key === "en-US") return "English (US)";
+    if (key === "pt-PT") return "Portuguese";
+    if (key === "es-ES") return "Spanish";
+    return "English (UK)";
+  };
+  const titleCase = (value) =>
+    String(value || "")
+      .split(/\s+/)
+      .filter(Boolean)
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
+      .join(" ");
+  const deriveGreetingName = (accountState) => {
+    const email = String(accountState?.user?.email || "").trim().toLowerCase();
+    const localPart = email.split("@")[0] || "";
+    const direct = localPart.split(/[._-]+/).filter(Boolean)[0] || "";
+    if (direct && /[._-]/.test(localPart)) {
+      return titleCase(direct);
+    }
+    for (let pivot = 4; pivot <= 6; pivot += 1) {
+      const first = localPart.slice(0, pivot);
+      const middle = localPart.slice(pivot, pivot + 1);
+      const tail = localPart.slice(pivot + 1);
+      if (
+        first.length >= 3 &&
+        tail.length >= 3 &&
+        /[bcdfghjklmnpqrstvwxyz]/.test(middle) &&
+        /^[a-z]+$/.test(first) &&
+        /^[a-z]+$/.test(tail)
+      ) {
+        return titleCase(first);
+      }
+    }
+    return "";
+  };
+  const timeGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good Morning";
+    if (hour < 18) return "Good Afternoon";
+    return "Good Evening";
+  };
+  const accountGreeting = (accountState) => {
+    const name = deriveGreetingName(accountState);
+    return name ? `${timeGreeting()} ${name}` : timeGreeting();
+  };
+  const stylePresetSummary = (preset) => {
+    const key = normalizeStylePreset(preset);
+    if (key === "analyst") return "Broad website context, fewer Telegram interruptions, stronger reading posture.";
+    if (key === "tactical_reader") return "Team and fixture intelligence first, with calmer follow-led delivery.";
+    if (key === "researcher") return "Wide website visibility, richer non-deploy coverage, minimal interruption.";
+    return "Selective deploy-led delivery with a higher bar for interruption and action.";
+  };
+  const feedRoutingExplanation = (preset) => {
+    const key = normalizeStylePreset(preset);
+    if (key === "analyst") return "Telegram is kept tight. More useful depth stays on the website by design.";
+    if (key === "tactical_reader") return "Followed teams and fixtures can interrupt sooner than broad market signals.";
+    if (key === "researcher") return "Most intelligence stays on-site unless a direct team or fixture match deserves interruption.";
+    return "Telegram is reserved for stronger direct relevance. Broader market context stays website-first.";
+  };
+  const onboardingStepSummary = (notificationPreferences) => {
+    const prefs = notificationPreferences || {};
+    const teams = parsePreferenceList(prefs.favourite_teams);
+    const leagues = parsePreferenceList(prefs.favourite_leagues);
+    const markets = parsePreferenceList(prefs.favourite_markets);
+    const fixtures = parsePreferenceList(prefs.followed_fixtures);
+    const preset = normalizeStylePreset(prefs.user_style_preset);
+    const steps = [
+      {
+        key: "preset",
+        label: "Choose your style preset",
+        complete: Boolean(preset),
+        detail: stylePresetLabel(preset),
+      },
+      {
+        key: "scope",
+        label: "Choose what you care about",
+        complete: Boolean(teams.length || leagues.length || markets.length || fixtures.length),
+        detail: teams.length || leagues.length || markets.length || fixtures.length ? "Follow scope saved" : "No follows saved yet",
+      },
+      {
+        key: "delivery",
+        label: "Set your interruption posture",
+        complete: prefs.telegram_enabled || prefs.website_only_mode || prefs.email_enabled,
+        detail: prefs.website_only_mode ? "Website-first mode" : prefs.telegram_enabled ? "Selective Telegram enabled" : "Delivery still needs a choice",
+      },
+      {
+        key: "companion",
+        label: "Keep decision support active",
+        complete: Boolean(prefs.decision_companion_enabled),
+        detail: prefs.decision_companion_enabled ? "Decision companion enabled" : "Decision companion not enabled yet",
+      },
+      {
+        key: "reset",
+        label: "Turn on reset / clarity mode",
+        complete: Boolean(prefs.reset_mode_enabled),
+        detail: prefs.reset_mode_enabled ? "Loss-state support enabled" : "Reset mode not enabled yet",
+      },
+    ];
+    return {
+      steps,
+      completed: steps.filter((step) => step.complete).length,
+      total: steps.length,
+    };
+  };
+  const routeExplanation = (entry) => {
+    const preset = normalizeStylePreset(entry?.accountState?.notification_preferences?.user_style_preset);
+    const priority = dashboardPriorityProfile(entry);
+    const reasons = Array.isArray(entry?.reasons) ? entry.reasons : [];
+    const publishClass = String(entry?.row?.publish_class || entry?.row?.fixture_class || "MONITOR").toUpperCase();
+    if (priority.bucket === "send_now") {
+      return "Why this interrupts: direct team or fixture relevance makes this one worth active attention.";
+    }
+    if (priority.bucket === "watch_closely") {
+      return "Why this stays just below interruption: the signal is useful, but it is better read than rushed.";
+    }
+    if (priority.bucket === "website_only") {
+      if (preset === "analyst" || preset === "researcher") {
+        return "Why this stays website-only: your preset prefers depth on-site unless the relevance becomes more direct.";
+      }
+      if (reasons.includes("followed market") && !reasons.includes("followed team") && !reasons.includes("followed fixture")) {
+        return "Why this stays website-only: market-only relevance is useful, but not strong enough to break attention.";
+      }
+      return "Why this stays website-only: it matters, but not enough to justify interruption.";
+    }
+    if (publishClass === "OBSERVE" || publishClass === "CONTEXT" || publishClass === "MONITOR") {
+      return "Why this sits in no edge / monitor: the fixture is informative, but disciplined action is not warranted yet.";
+    }
+    return "Why this is here: it fits your saved follows, but the website remains the calm first surface.";
+  };
+  const alertAutoGateLabel = (value) => {
+    const key = String(value || "").trim();
+    if (key === "direct_follow") return "Direct team or fixture follow";
+    if (key === "direct_fixture_follow") return "Direct fixture follow";
+    if (key === "direct_team_deploy") return "Direct team deploy match";
+    if (key === "direct_team_observe") return "Direct team observe match";
+    if (key === "league_market_deploy") return "League and market deploy match";
+    if (key === "team_context_follow") return "Team-led context follow";
+    if (key === "website_depth_preferred") return "Website depth preferred by preset";
+    if (key === "website_only") return "Website-first route";
+    return key ? titleCase(key.replace(/_/g, " ")) : "";
+  };
 
   const normalizePreferenceText = (value) =>
     String(value || "")
@@ -292,6 +450,7 @@
         return {
           row,
           reasons,
+          accountState,
           score: reasons.length * 10 + publishClassRank(row.publish_class),
         };
       })
@@ -401,7 +560,7 @@
             fixture?.signal_summary?.summary_text ||
             `${alert.alert_kind || "follow alert"} is queued from the published intelligence feed.`
         )}</p>
-        ${autoGate ? `<p class="muted">Auto route: ${escapeHtml(autoGate)}</p>` : ""}
+        ${autoGate ? `<p class="muted">Why this interrupted: ${escapeHtml(alertAutoGateLabel(autoGate))}</p>` : ""}
         ${
           alert.delivered_at
             ? `<p class="muted">Delivered ${escapeHtml(formatDateTime(alert.delivered_at))}</p>`
@@ -436,6 +595,7 @@
   const dashboardPriorityProfile = (entry) => {
     const reasons = Array.isArray(entry?.reasons) ? entry.reasons : [];
     const publishClass = String(entry?.row?.publish_class || entry?.row?.fixture_class || "MONITOR").toUpperCase();
+    const stylePreset = normalizeStylePreset(entry?.accountState?.notification_preferences?.user_style_preset);
     const reasonSet = new Set(reasons);
     const hasFixture = reasonSet.has("followed fixture");
     const hasTeam = reasonSet.has("followed team");
@@ -452,16 +612,63 @@
     else if (publishClass === "CONTEXT") score += 8;
     else if (publishClass === "MONITOR") score += 4;
 
-    if (hasFixture || hasTeam) {
+    if (stylePreset === "analyst") {
+      if (publishClass === "CONTEXT" || publishClass === "MONITOR") score += 8;
+      if (hasMarket && !hasTeam && !hasFixture) score -= 10;
+    } else if (stylePreset === "disciplined_bettor") {
+      if (publishClass === "DEPLOY") score += 18;
+      if (publishClass === "OBSERVE") score -= 8;
+      if (publishClass === "CONTEXT" || publishClass === "MONITOR") score -= 18;
+    } else if (stylePreset === "tactical_reader") {
+      if (hasTeam || hasFixture) score += 12;
+      if (publishClass === "CONTEXT") score += 14;
+      if (hasMarket && !hasLeague && !hasTeam && !hasFixture) score -= 8;
+    } else if (stylePreset === "researcher") {
+      if (publishClass === "OBSERVE" || publishClass === "CONTEXT" || publishClass === "MONITOR") score += 10;
+      if (publishClass === "DEPLOY") score -= 4;
+      if (hasMarket && !hasTeam && !hasFixture) score -= 6;
+    }
+
+    if (hasFixture) {
       return { label: "Send now", score, bucket: "send_now" };
     }
+    if (hasTeam && publishClass === "DEPLOY") {
+      return { label: "Send now", score, bucket: "send_now" };
+    }
+    if (hasTeam && publishClass === "OBSERVE") {
+      return { label: "Watch closely", score, bucket: "watch_closely" };
+    }
+    if (hasTeam && publishClass === "CONTEXT") {
+      if (stylePreset === "tactical_reader" || stylePreset === "analyst") {
+        return { label: "Watch closely", score, bucket: "watch_closely" };
+      }
+      return { label: "Website only", score, bucket: "website_only" };
+    }
+    if (hasTeam && publishClass === "MONITOR") {
+      return { label: "No edge", score, bucket: "no_edge" };
+    }
     if (publishClass === "DEPLOY" && hasLeague && hasMarket) {
+      if (stylePreset === "disciplined_bettor" || stylePreset === "tactical_reader") {
+        return { label: "Watch closely", score, bucket: "watch_closely" };
+      }
+      return { label: "Website only", score, bucket: "website_only" };
+    }
+    if (publishClass === "OBSERVE" && (hasLeague || hasMarket)) {
+      if (stylePreset === "researcher" || stylePreset === "analyst") {
+        return { label: "Website only", score, bucket: "website_only" };
+      }
+      return { label: "No edge", score, bucket: "no_edge" };
+    }
+    if ((stylePreset === "analyst" || stylePreset === "researcher") && (publishClass === "CONTEXT" || publishClass === "MONITOR")) {
+      return { label: "Website only", score, bucket: "website_only" };
+    }
+    if (stylePreset === "tactical_reader" && publishClass === "CONTEXT" && hasLeague) {
       return { label: "Watch closely", score, bucket: "watch_closely" };
     }
     if (hasLeague || hasMarket) {
       return { label: "Website only", score, bucket: "website_only" };
     }
-    return { label: "No edge", score, bucket: "no_edge" };
+    return { label: "No edge", score, bucket: publishClass === "MONITOR" || publishClass === "CONTEXT" ? "no_edge" : "website_only" };
   };
 
   const fixtureClarityProfile = (fixture, matchedEntry) => {
@@ -593,6 +800,7 @@
           <span class="metric-label">Telegram alert preview</span>
           <pre>${escapeHtml(telegramAlertPreview(entry))}</pre>
         </div>
+        <p class="muted">${escapeHtml(routeExplanation(entry))}</p>
         <div class="cta-row">
           <a class="button" href="${fixtureDetailHref(row)}">Open fixture view</a>
           <button class="ghost-button" type="button" data-action="telegram-fixture-alert" data-fixture-key="${escapeHtml(String(row.fixture_key || ""))}">Send to Telegram</button>
@@ -1668,10 +1876,14 @@
     const accountState = state.runtime.accountState;
     const telegramLink = accountState?.telegram_link || null;
     const notificationPreferences = accountState?.notification_preferences || null;
+    const userStylePreset = normalizeStylePreset(notificationPreferences?.user_style_preset);
     const telegramLinked = telegramLink?.link_status === "linked";
     const telegramReady = Boolean(state.runtime.telegramLinkCode);
     const subscriptionStatus = accountState?.subscription?.subscription_status || (entitled ? "active" : "pending");
     const displayEmail = accountState?.user?.email || "";
+    const greeting = accountGreeting(accountState);
+    const onboardingCompleted = Boolean(notificationPreferences?.calm_onboarding_completed_at);
+    const onboardingSummary = onboardingStepSummary(notificationPreferences);
     const followedIntelligence = getFollowedIntelligenceMatches(accountState, state.fixtureIntelligence);
     const followedSignalsConfigured = Boolean(
       parsePreferenceList(notificationPreferences?.favourite_teams).length ||
@@ -1687,6 +1899,80 @@
       Number(Boolean(notificationPreferences?.telegram_enabled));
 
     return `
+      ${
+        signedIn
+          ? `
+            <section class="section split">
+              <article class="hero-main">
+                <div class="hero-copy-stack">
+                  <p class="hero-kicker">Account home</p>
+                  <h1>${escapeHtml(greeting)}</h1>
+                  <p>Welcome back to your calm intelligence desk. Your account, settings, delivery posture, and followed environment all live here behind your verified sign-in.</p>
+                </div>
+                <div class="pill-row">
+                  <span class="stat-chip">${escapeHtml(stylePresetLabel(userStylePreset))}</span>
+                  <span class="stat-chip">${escapeHtml(languageLabel(notificationPreferences?.language_preference || "en-GB"))}</span>
+                  <span class="stat-chip">${onboardingCompleted ? "Calm setup saved" : "Calm setup in progress"}</span>
+                </div>
+                <div class="cta-row">
+                  <a class="button" href="${onboardingCompleted ? "#preferences" : "./onboarding.html"}">${onboardingCompleted ? "Preferences" : "Finish calm setup"}</a>
+                  <a class="ghost-button" href="#billing">Billing</a>
+                  <a class="ghost-button" href="#help">Help</a>
+                </div>
+              </article>
+              <aside class="hero-side">
+                <div class="metric">
+                  <span class="metric-label">Account</span>
+                  <span class="metric-value">Verified</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">Preset</span>
+                  <span class="metric-value">${escapeHtml(stylePresetLabel(userStylePreset))}</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">Delivery posture</span>
+                  <span class="metric-value">${notificationPreferences?.telegram_enabled && !notificationPreferences?.website_only_mode ? "Selective" : "Website-first"}</span>
+                </div>
+              </aside>
+            </section>
+            ${
+              !onboardingCompleted
+                ? `
+                  <section class="section" id="first-run-onboarding">
+                    <article class="panel">
+                      <h3>First-run onboarding</h3>
+                      <p class="muted">This account is signed in, but your calm setup is not fully locked yet. Finish these steps once so the dashboard and alert system can behave more like your own analyst desk.</p>
+                      <div class="stats-grid">
+                        ${statPanel("Progress", `${onboardingSummary.completed}/${onboardingSummary.total}`, "Complete your first-run setup")}
+                        ${statPanel("Preset", stylePresetLabel(userStylePreset), "This shapes feed ranking and alert selectivity")}
+                        ${statPanel("Delivery rule", notificationPreferences?.telegram_enabled && !notificationPreferences?.website_only_mode ? "Telegram selective" : "Website-first", feedRoutingExplanation(userStylePreset))}
+                        ${statPanel("Outcome", "Calmer account", "Less noise, clearer relevance, stronger pacing")}
+                      </div>
+                      <div class="card-grid">
+                        ${onboardingSummary.steps
+                          .map(
+                            (step) => `
+                              <article class="panel">
+                                <h4>${escapeHtml(step.complete ? "Complete" : "Next step")}</h4>
+                                <strong>${escapeHtml(step.label)}</strong>
+                                <p class="muted">${escapeHtml(step.detail)}</p>
+                              </article>
+                            `
+                          )
+                          .join("")}
+                      </div>
+                      <div class="cta-row">
+                        <a class="button" href="./onboarding.html">Open onboarding flow</a>
+                        <a class="ghost-button" href="./dashboard.html">Preview dashboard anyway</a>
+                      </div>
+                    </article>
+                  </section>
+                `
+                : ""
+            }
+          `
+          : ""
+      }
       <section class="section split">
         <article class="hero-main">
           <p class="hero-kicker">Account</p>
@@ -1736,6 +2022,7 @@
           ? `
             <section class="section split">
               <article class="panel">
+                <p class="hero-kicker">Sign up / Log in</p>
                 <h3>Verify your email</h3>
                 <p class="muted">
                   Use the same email you used for checkout. If the address is eligible, a sign-in link will be sent so you can open your calm intelligence dashboard on this device.
@@ -1789,8 +2076,22 @@
             </section>
           `
           : `
-            <section class="section split">
+            <section class="section">
               <article class="panel">
+                <h3>Account shell</h3>
+                <p class="muted">This signed-in area is now structured like a product home rather than a simple access page.</p>
+                <div class="pill-row">
+                  <a class="ghost-button" href="#account-overview">Account</a>
+                  <a class="ghost-button" href="#settings">Settings</a>
+                  <a class="ghost-button" href="#preferences">Preferences</a>
+                  <a class="ghost-button" href="#language">Language</a>
+                  <a class="ghost-button" href="#billing">Billing</a>
+                  <a class="ghost-button" href="#help">Help</a>
+                </div>
+              </article>
+            </section>
+            <section class="section split">
+              <article class="panel" id="account-overview">
                 <h3>Account state</h3>
                 <ul class="feature-list">
                   <li>Verified email: ${displayEmail ? escapeHtml(displayEmail) : "Signed in"}</li>
@@ -1798,7 +2099,7 @@
                   <li>D1 profile state: ${accountState ? "Active" : state.runtime.accountStateError ? "Unavailable" : "Pending"}</li>
                 </ul>
               </article>
-              <article class="panel">
+              <article class="panel" id="settings">
                 <h3>Telegram premium access</h3>
                 <p class="muted">
                   Link Telegram when you want premium comms, elite deployment alerts, and future acca drops beyond the website shell.
@@ -1843,7 +2144,7 @@
                 </p>
                 <div class="stats-grid">
                   ${statPanel("Setup progress", `${onboardingStageCount}/5`, "Leagues, markets, teams, fixtures, Telegram")}
-                  ${statPanel("Style", followedSignalsConfigured ? "Selective" : "Starting clean", followedSignalsConfigured ? "Your board is beginning to take shape" : "No saved follows yet")}
+                  ${statPanel("Style", stylePresetLabel(userStylePreset), stylePresetSummary(userStylePreset))}
                   ${statPanel("Default principle", "Signal over noise", "No edge is also information")}
                 </div>
                 <ul class="feature-list">
@@ -1896,12 +2197,40 @@
               </article>
             </section>
             <section class="section">
-              <article class="panel">
+              <article class="panel" id="preferences">
                 <h3>Intelligence preferences</h3>
                 <p class="muted">
                   Choose what kind of intelligence you want on the website and in Telegram. This is the first layer of personalised delivery.
                 </p>
                 <form id="preferences-form" class="stack-form">
+                  <div class="card-grid">
+                    <article class="panel">
+                      <h4>Onboarding and style</h4>
+                      <p class="muted">Choose the product posture that should shape your feed, alert thresholds, and interruption style.</p>
+                      <label class="field-label" for="user-style-preset">Style preset</label>
+                      <select id="user-style-preset" name="user_style_preset" class="text-input">
+                        <option value="analyst" ${userStylePreset === "analyst" ? "selected" : ""}>Analyst</option>
+                        <option value="disciplined_bettor" ${userStylePreset === "disciplined_bettor" ? "selected" : ""}>Disciplined bettor</option>
+                        <option value="tactical_reader" ${userStylePreset === "tactical_reader" ? "selected" : ""}>Tactical reader</option>
+                        <option value="researcher" ${userStylePreset === "researcher" ? "selected" : ""}>Researcher</option>
+                      </select>
+                      <p class="muted">${escapeHtml(stylePresetSummary(userStylePreset))}</p>
+                      <label class="checkbox-row"><input type="checkbox" name="decision_companion_enabled" ${notificationPreferences?.decision_companion_enabled ? "checked" : ""} /> Decision companion prompts</label>
+                      <label class="checkbox-row"><input type="checkbox" name="reset_mode_enabled" ${notificationPreferences?.reset_mode_enabled ? "checked" : ""} /> Reset / clarity mode after losses or failed deploys</label>
+                      <label class="checkbox-row"><input type="checkbox" name="complete_calm_setup" ${onboardingCompleted ? "checked" : ""} /> Mark calm setup as complete</label>
+                    </article>
+                    <article class="panel" id="language">
+                      <h4>Language</h4>
+                      <label class="field-label" for="language-preference">Interface language</label>
+                      <select id="language-preference" name="language_preference" class="text-input">
+                        <option value="en-GB" ${(notificationPreferences?.language_preference || "en-GB") === "en-GB" ? "selected" : ""}>English (UK)</option>
+                        <option value="en-US" ${notificationPreferences?.language_preference === "en-US" ? "selected" : ""}>English (US)</option>
+                        <option value="pt-PT" ${notificationPreferences?.language_preference === "pt-PT" ? "selected" : ""}>Portuguese</option>
+                        <option value="es-ES" ${notificationPreferences?.language_preference === "es-ES" ? "selected" : ""}>Spanish</option>
+                      </select>
+                      <p class="muted">Language is saved now so the account shell is ready for fuller localisation later.</p>
+                    </article>
+                  </div>
                   <div class="card-grid">
                     <article class="panel">
                       <h4>Channels</h4>
@@ -1938,6 +2267,7 @@
                       </select>
                       <label class="field-label" for="pre-match-window-minutes">Pre-match window (minutes)</label>
                       <input id="pre-match-window-minutes" name="pre_match_window_minutes" class="text-input" type="number" min="0" max="1440" value="${escapeHtml(notificationPreferences?.pre_match_window_minutes ?? 90)}" />
+                      <p class="muted">${escapeHtml(feedRoutingExplanation(userStylePreset))}</p>
                     </article>
                   </div>
                   <div class="card-grid">
@@ -1968,8 +2298,209 @@
                 </form>
               </article>
             </section>
+            <section class="section split">
+              <article class="panel" id="billing">
+                <h3>Billing</h3>
+                <p class="muted">Payments and membership controls will live here once customer self-service is fully wired.</p>
+                <ul class="feature-list">
+                  <li>Membership status remains controlled by your active subscription.</li>
+                  <li>Customer billing self-service is the next commercial polish layer.</li>
+                  <li>Board freshness and membership metadata will sit here later.</li>
+                </ul>
+              </article>
+              <article class="panel" id="help">
+                <h3>Help</h3>
+                <p class="muted">Use this area as the calm support layer: access questions, Telegram linking, and how to interpret product states.</p>
+                <ul class="feature-list">
+                  <li>Use Telegram for stronger interruptions only.</li>
+                  <li>Use the dashboard for broader interpretation and watchlist depth.</li>
+                  <li>A pass state is valid. No edge is also information.</li>
+                </ul>
+              </article>
+            </section>
           `
       }
+    `;
+  };
+
+  const onboardingView = () => {
+    const signedIn = state.runtime.sessionAuthenticated;
+    const entitled = state.runtime.sessionEntitled;
+    const accountState = state.runtime.accountState;
+    const notificationPreferences = accountState?.notification_preferences || null;
+    const userStylePreset = normalizeStylePreset(notificationPreferences?.user_style_preset);
+    const onboardingSummary = onboardingStepSummary(notificationPreferences);
+    const followedSignalsConfigured = Boolean(
+      parsePreferenceList(notificationPreferences?.favourite_teams).length ||
+        parsePreferenceList(notificationPreferences?.favourite_leagues).length ||
+        parsePreferenceList(notificationPreferences?.favourite_markets).length ||
+        parsePreferenceList(notificationPreferences?.followed_fixtures).length
+    );
+
+    if (!signedIn) {
+      return `
+        <section class="section split">
+          <article class="hero-main">
+            <p class="hero-kicker">Onboarding</p>
+            <h1>Set up your calm intelligence desk.</h1>
+            <p>Verify your email first, then come back here to choose your style preset, follows, and delivery posture.</p>
+            <div class="cta-row">
+              <a class="button" href="./account.html">Verify email</a>
+              <a class="ghost-button" href="./pricing.html">See founding plan</a>
+            </div>
+          </article>
+          <aside class="hero-side">
+            <div class="metric">
+              <span class="metric-label">Access</span>
+              <span class="metric-value">Locked</span>
+            </div>
+            <div class="metric">
+              <span class="metric-label">Goal</span>
+              <span class="metric-value">Clarity</span>
+            </div>
+          </aside>
+        </section>
+      `;
+    }
+
+    return `
+      <section class="section split">
+        <article class="hero-main">
+          <p class="hero-kicker">Onboarding</p>
+          <h1>Build your personal Odds Genius environment.</h1>
+          <p>This guided setup is here to help you choose what matters, how often you want interruption, and what kind of analyst desk you want the product to become for you.</p>
+          <div class="pill-row">
+            <span class="stat-chip">${entitled ? "Premium active" : "Membership pending"}</span>
+            <span class="stat-chip">${stylePresetLabel(userStylePreset)}</span>
+            <span class="stat-chip">${onboardingSummary.completed}/${onboardingSummary.total} steps complete</span>
+          </div>
+        </article>
+        <aside class="hero-side">
+          <div class="metric">
+            <span class="metric-label">Preset</span>
+            <span class="metric-value">${escapeHtml(stylePresetLabel(userStylePreset))}</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Delivery</span>
+            <span class="metric-value">${notificationPreferences?.telegram_enabled && !notificationPreferences?.website_only_mode ? "Selective" : "Website-first"}</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Why this matters</span>
+            <span class="metric-value">Less noise</span>
+          </div>
+        </aside>
+      </section>
+
+      <section class="section">
+        ${renderNotice(state.runtime.preferencesMessage, state.runtime.preferencesMessage ? "success" : "default")}
+        <article class="panel">
+          <h3>First-run path</h3>
+          <p class="muted">Move through these steps once, then let the dashboard and alert system adapt to your saved posture.</p>
+          <div class="card-grid">
+            ${onboardingSummary.steps
+              .map(
+                (step, index) => `
+                  <article class="panel">
+                    <h4>${escapeHtml(step.complete ? `Step ${index + 1} complete` : `Step ${index + 1}`)}</h4>
+                    <strong>${escapeHtml(step.label)}</strong>
+                    <p class="muted">${escapeHtml(step.detail)}</p>
+                  </article>
+                `
+              )
+              .join("")}
+          </div>
+        </article>
+      </section>
+
+      <section class="section">
+        <article class="panel">
+          <h3>Preset guide</h3>
+          <p class="muted">Choose the posture that should shape your feed, alert thresholds, and pacing.</p>
+          <div class="card-grid">
+            <article class="panel">
+              <h4>Analyst</h4>
+              <p class="muted">Broad website context, fewer Telegram interruptions, more reading than reacting.</p>
+            </article>
+            <article class="panel">
+              <h4>Disciplined bettor</h4>
+              <p class="muted">Deploy-led, selective, and built to filter harder before anything interrupts you.</p>
+            </article>
+            <article class="panel">
+              <h4>Tactical reader</h4>
+              <p class="muted">Team and fixture intelligence first, with stronger follow-led relevance.</p>
+            </article>
+            <article class="panel">
+              <h4>Researcher</h4>
+              <p class="muted">Wider website coverage, deeper non-deploy intelligence, minimal interruption.</p>
+            </article>
+          </div>
+        </article>
+      </section>
+
+      <section class="section">
+        <article class="panel">
+          <h3>Guided setup</h3>
+          <p class="muted">Use this to configure the account once in a clearer order, rather than as one large settings screen.</p>
+          <form id="onboarding-form" class="stack-form">
+            <div class="card-grid">
+              <article class="panel">
+                <h4>Step 1 — Style preset</h4>
+                <label class="field-label" for="onboarding-style-preset">Style preset</label>
+                <select id="onboarding-style-preset" name="user_style_preset" class="text-input">
+                  <option value="analyst" ${userStylePreset === "analyst" ? "selected" : ""}>Analyst</option>
+                  <option value="disciplined_bettor" ${userStylePreset === "disciplined_bettor" ? "selected" : ""}>Disciplined bettor</option>
+                  <option value="tactical_reader" ${userStylePreset === "tactical_reader" ? "selected" : ""}>Tactical reader</option>
+                  <option value="researcher" ${userStylePreset === "researcher" ? "selected" : ""}>Researcher</option>
+                </select>
+                <p class="muted">${escapeHtml(stylePresetSummary(userStylePreset))}</p>
+              </article>
+              <article class="panel">
+                <h4>Step 2 — Choose your language</h4>
+                <label class="field-label" for="onboarding-language-preference">Interface language</label>
+                <select id="onboarding-language-preference" name="language_preference" class="text-input">
+                  <option value="en-GB" ${(notificationPreferences?.language_preference || "en-GB") === "en-GB" ? "selected" : ""}>English (UK)</option>
+                  <option value="en-US" ${notificationPreferences?.language_preference === "en-US" ? "selected" : ""}>English (US)</option>
+                  <option value="pt-PT" ${notificationPreferences?.language_preference === "pt-PT" ? "selected" : ""}>Portuguese</option>
+                  <option value="es-ES" ${notificationPreferences?.language_preference === "es-ES" ? "selected" : ""}>Spanish</option>
+                </select>
+              </article>
+              <article class="panel">
+                <h4>Step 3 — Choose what you care about</h4>
+                <input name="favourite_teams" class="text-input" type="text" placeholder="Teams" value="${escapeHtml(joinPreferenceList(notificationPreferences?.favourite_teams))}" />
+                <input name="favourite_leagues" class="text-input" type="text" placeholder="Leagues" value="${escapeHtml(joinPreferenceList(notificationPreferences?.favourite_leagues))}" />
+                <input name="favourite_markets" class="text-input" type="text" placeholder="Markets" value="${escapeHtml(joinPreferenceList(notificationPreferences?.favourite_markets))}" />
+                <input name="followed_fixtures" class="text-input" type="text" placeholder="Fixtures" value="${escapeHtml(joinPreferenceList(notificationPreferences?.followed_fixtures))}" />
+                <p class="muted">${followedSignalsConfigured ? "Your follow environment is already taking shape." : "Start narrow. Relevance beats volume."}</p>
+              </article>
+              <article class="panel">
+                <h4>Step 4 — Set delivery posture</h4>
+                <label class="checkbox-row"><input type="checkbox" name="telegram_enabled" ${notificationPreferences?.telegram_enabled ? "checked" : ""} /> Telegram messages</label>
+                <label class="checkbox-row"><input type="checkbox" name="email_enabled" ${notificationPreferences?.email_enabled ? "checked" : ""} /> Email digests</label>
+                <label class="checkbox-row"><input type="checkbox" name="website_only_mode" ${notificationPreferences?.website_only_mode ? "checked" : ""} /> Website-first mode</label>
+                <label class="field-label" for="onboarding-alert-frequency">Alert frequency</label>
+                <select id="onboarding-alert-frequency" name="alert_frequency_mode" class="text-input">
+                  <option value="mixed" ${notificationPreferences?.alert_frequency_mode === "mixed" ? "selected" : ""}>Balanced</option>
+                  <option value="immediate" ${notificationPreferences?.alert_frequency_mode === "immediate" ? "selected" : ""}>Interrupt when strong</option>
+                  <option value="digest_only" ${notificationPreferences?.alert_frequency_mode === "digest_only" ? "selected" : ""}>Digest only</option>
+                </select>
+                <p class="muted">${escapeHtml(feedRoutingExplanation(userStylePreset))}</p>
+              </article>
+              <article class="panel">
+                <h4>Step 5 — Keep the decision layer active</h4>
+                <label class="checkbox-row"><input type="checkbox" name="decision_companion_enabled" ${notificationPreferences?.decision_companion_enabled ? "checked" : ""} /> Decision companion prompts</label>
+                <label class="checkbox-row"><input type="checkbox" name="reset_mode_enabled" ${notificationPreferences?.reset_mode_enabled ? "checked" : ""} /> Reset / clarity mode after losses or failed deploys</label>
+                <label class="checkbox-row"><input type="checkbox" name="complete_calm_setup" ${Boolean(notificationPreferences?.calm_onboarding_completed_at) ? "checked" : ""} /> Mark calm setup as complete</label>
+                <p class="muted">This keeps the product calm when a read fails or a result lands badly.</p>
+              </article>
+            </div>
+            <div class="cta-row">
+              <button class="button" type="submit">Save onboarding and continue</button>
+              <a class="ghost-button" href="./dashboard.html">Skip to dashboard</a>
+              <a class="ghost-button" href="./account.html">Back to account</a>
+            </div>
+          </form>
+        </article>
+      </section>
     `;
   };
 
@@ -1996,6 +2527,9 @@
     const watchEntries = matches.filter((entry) => dashboardPriorityProfile(entry).bucket === "watch_closely");
     const websiteOnlyEntries = matches.filter((entry) => dashboardPriorityProfile(entry).bucket === "website_only");
     const noEdgeEntries = matches.filter((entry) => dashboardPriorityProfile(entry).bucket === "no_edge");
+    const stylePreset = normalizeStylePreset(notificationPreferences?.user_style_preset);
+    const onboardingCompleted = Boolean(notificationPreferences?.calm_onboarding_completed_at);
+    const onboardingSummary = onboardingStepSummary(notificationPreferences);
     const classFilter = String(state.runtime.dashboardClassFilter || "ALL").toUpperCase();
     const reasonFilter = String(state.runtime.dashboardReasonFilter || "ALL").toUpperCase();
     const classOptions = ["ALL", "DEPLOY", "OBSERVE", "CONTEXT", "MONITOR"];
@@ -2034,6 +2568,28 @@
     }
 
     return `
+      ${
+        !onboardingCompleted
+          ? `
+            <section class="section">
+              <article class="panel">
+                <h3>Finish calm setup</h3>
+                <p class="muted">Your dashboard is live, but your first-run setup is still shaping how sharply the feed and alerts should behave.</p>
+                <div class="stats-grid">
+                  ${statPanel("Progress", `${onboardingSummary.completed}/${onboardingSummary.total}`, "Preset, follows, delivery, decision support, reset mode")}
+                  ${statPanel("Preset", stylePresetLabel(stylePreset), stylePresetSummary(stylePreset))}
+                  ${statPanel("Current route", notificationPreferences?.telegram_enabled && !notificationPreferences?.website_only_mode ? "Selective Telegram" : "Website-first", feedRoutingExplanation(stylePreset))}
+                  ${statPanel("Next move", "Finish setup", "Lock your preferred posture before relying on the feed")}
+                </div>
+                <div class="cta-row">
+                  <a class="button" href="./onboarding.html">Complete calm setup</a>
+                  <a class="ghost-button" href="./account.html#preferences">Open preferences directly</a>
+                </div>
+              </article>
+            </section>
+          `
+          : ""
+      }
       <section class="section split">
         <article class="hero-main">
           <p class="hero-kicker">Dashboard</p>
@@ -2089,7 +2645,7 @@
       <section class="section">
         <article class="panel">
           <h3>Priority map</h3>
-          <p class="muted">Telegram should interrupt only when relevance is strong. Everything else can still stay useful on the website.</p>
+          <p class="muted">${escapeHtml(feedRoutingExplanation(stylePreset))}</p>
           <div class="stats-grid">
             ${statPanel("Send now", sendNowEntries.length, "Direct fixture or team relevance")}
             ${statPanel("Watch closely", watchEntries.length, "Higher-quality deploy watchlist")}
@@ -2375,6 +2931,7 @@
       pricing: pricingView,
       methodology: methodologyView,
       account: accountView,
+      onboarding: onboardingView,
     };
     const view = views[page] || homeView;
     app.innerHTML = view();
@@ -2655,6 +3212,11 @@
       daily_digest_enabled: formData.get("daily_digest_enabled") === "on",
       results_digest_enabled: formData.get("results_digest_enabled") === "on",
       weekend_slate_digest_enabled: formData.get("weekend_slate_digest_enabled") === "on",
+      user_style_preset: String(formData.get("user_style_preset") || "disciplined_bettor"),
+      decision_companion_enabled: formData.get("decision_companion_enabled") === "on",
+      reset_mode_enabled: formData.get("reset_mode_enabled") === "on",
+      complete_calm_setup: formData.get("complete_calm_setup") === "on",
+      language_preference: String(formData.get("language_preference") || "en-GB"),
       alert_frequency_mode: String(formData.get("alert_frequency_mode") || "mixed"),
       pre_match_window_minutes: Number(formData.get("pre_match_window_minutes") || 90),
       favourite_teams: String(formData.get("favourite_teams") || ""),
@@ -2951,20 +3513,22 @@
       return;
     }
 
-    if (event.target.id === "preferences-form") {
+    if (event.target.id === "preferences-form" || event.target.id === "onboarding-form") {
       await savePreferences(event);
     }
   });
 
   const boot = async () => {
     let loadingMessage = "Loading published board…";
-    if (page === "account" || page === "dashboard") {
+    if (page === "account" || page === "dashboard" || page === "onboarding") {
       loadingMessage =
         checkoutState === "success"
           ? "Membership confirmed. Please verify your email to continue…"
           : page === "dashboard"
             ? "Loading your intelligence dashboard…"
-            : "Loading your account access…";
+            : page === "onboarding"
+              ? "Loading your onboarding flow…"
+              : "Loading your account access…";
     } else if (page === "premium") {
       loadingMessage = "Checking premium access…";
     }

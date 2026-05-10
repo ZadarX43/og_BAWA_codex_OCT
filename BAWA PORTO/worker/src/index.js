@@ -246,6 +246,13 @@ const fixturePreferenceLabel = (fixture) =>
 const nowIso = () => new Date().toISOString();
 const textEncoder = new TextEncoder();
 const textDecoder = new TextDecoder();
+const normalizeStylePreset = (value) => {
+  const preset = String(value || "").trim().toLowerCase();
+  if (["analyst", "disciplined_bettor", "tactical_reader", "researcher"].includes(preset)) {
+    return preset;
+  }
+  return "disciplined_bettor";
+};
 
 const redirect = (location, status = 303, extraHeaders = {}) =>
   new Response(null, {
@@ -1863,6 +1870,7 @@ function buildFollowMatchProfile(entry) {
   const reasons = Array.isArray(entry?.reasons) ? entry.reasons : [];
   const reasonSet = new Set(reasons);
   const publishClass = String(entry?.fixture?.publish_class || entry?.fixture?.fixture_class || "MONITOR").toUpperCase();
+  const stylePreset = normalizeStylePreset(entry?.accountState?.notification_preferences?.user_style_preset);
   const hasFixture = reasonSet.has("followed fixture");
   const hasTeam = reasonSet.has("followed team");
   const hasLeague = reasonSet.has("followed league");
@@ -1879,14 +1887,48 @@ function buildFollowMatchProfile(entry) {
   else if (publishClass === "CONTEXT") score += 8;
   else if (publishClass === "MONITOR") score += 4;
 
+  if (stylePreset === "analyst") {
+    if (publishClass === "CONTEXT" || publishClass === "MONITOR") score += 8;
+    if (hasMarket && !hasTeam && !hasFixture) score -= 10;
+  } else if (stylePreset === "disciplined_bettor") {
+    if (publishClass === "DEPLOY") score += 18;
+    if (publishClass === "OBSERVE") score -= 8;
+    if (publishClass === "CONTEXT" || publishClass === "MONITOR") score -= 18;
+  } else if (stylePreset === "tactical_reader") {
+    if (hasTeam || hasFixture) score += 12;
+    if (publishClass === "CONTEXT") score += 14;
+    if (hasMarket && !hasLeague && !hasTeam && !hasFixture) score -= 8;
+  } else if (stylePreset === "researcher") {
+    if (publishClass === "OBSERVE" || publishClass === "CONTEXT" || publishClass === "MONITOR") score += 10;
+    if (publishClass === "DEPLOY") score -= 4;
+    if (hasMarket && !hasTeam && !hasFixture) score -= 6;
+  }
+
   let telegramEligible = false;
   let autoGate = "website_only";
-  if (hasFixture || hasTeam) {
+  if (hasFixture) {
     telegramEligible = true;
-    autoGate = "direct_follow";
-  } else if (publishClass === "DEPLOY" && hasLeague && hasMarket) {
+    autoGate = "direct_fixture_follow";
+  } else if (hasTeam && publishClass === "DEPLOY") {
+    telegramEligible = true;
+    autoGate = "direct_team_deploy";
+  } else if (hasTeam && publishClass === "OBSERVE" && (stylePreset === "disciplined_bettor" || stylePreset === "tactical_reader")) {
+    telegramEligible = true;
+    autoGate = "direct_team_observe";
+  } else if (publishClass === "DEPLOY" && hasLeague && hasMarket && (stylePreset === "disciplined_bettor" || stylePreset === "tactical_reader")) {
     telegramEligible = true;
     autoGate = "league_market_deploy";
+  }
+
+  if (stylePreset === "analyst" || stylePreset === "researcher") {
+    if (!hasFixture && !hasTeam) {
+      telegramEligible = false;
+      autoGate = "website_depth_preferred";
+    }
+  }
+  if (stylePreset === "tactical_reader" && publishClass === "CONTEXT" && (hasTeam || hasFixture)) {
+    telegramEligible = true;
+    autoGate = "team_context_follow";
   }
 
   const relevanceTier =
@@ -1997,7 +2039,10 @@ async function queueFollowedTelegramAlertsForAccount(accountDb, env, accountStat
     return { attempted: 0, queued: 0, matched: 0 };
   }
   const fixtures = await loadFixtureIntelligenceArtifact(env);
-  const matches = getFollowedFixtureMatches(accountState, fixtures);
+  const matches = getFollowedFixtureMatches(accountState, fixtures).map((entry) => ({
+    ...entry,
+    accountState,
+  }));
   const alerts = matches
     .filter((entry) => shouldQueueTelegramAlert(accountState, entry))
     .map((entry) => buildNotificationAlertRecord(accountState, entry))

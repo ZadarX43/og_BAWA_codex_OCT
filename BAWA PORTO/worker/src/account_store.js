@@ -63,6 +63,11 @@ const buildDefaultNotificationPreferences = (userId, existing = {}) => {
     allow_non_signal_intelligence: existing.allow_non_signal_intelligence ?? 1,
     alert_frequency_mode: existing.alert_frequency_mode || "mixed",
     pre_match_window_minutes: existing.pre_match_window_minutes ?? 90,
+    user_style_preset: existing.user_style_preset || "disciplined_bettor",
+    decision_companion_enabled: existing.decision_companion_enabled ?? 1,
+    reset_mode_enabled: existing.reset_mode_enabled ?? 1,
+    calm_onboarding_completed_at: existing.calm_onboarding_completed_at || null,
+    language_preference: existing.language_preference || "en-GB",
     favourite_markets_json: toJson(fromJson(existing.favourite_markets_json, [])),
     favourite_leagues_json: toJson(fromJson(existing.favourite_leagues_json, [])),
     favourite_teams_json: toJson(fromJson(existing.favourite_teams_json, [])),
@@ -320,8 +325,9 @@ export async function ensureNotificationPreferences(db, userId) {
           acca_alerts_enabled, correct_score_alerts_enabled, injury_alerts_enabled, weather_alerts_enabled,
           market_movement_alerts_enabled, volatility_alerts_enabled, team_news_alerts_enabled, daily_digest_enabled,
           results_digest_enabled, weekend_slate_digest_enabled, website_only_mode, allow_non_signal_intelligence,
-          alert_frequency_mode, pre_match_window_minutes, favourite_markets_json, favourite_leagues_json,
-          favourite_teams_json, followed_fixtures_json, quiet_hours_json, updated_at
+          alert_frequency_mode, pre_match_window_minutes, user_style_preset, decision_companion_enabled,
+          reset_mode_enabled, calm_onboarding_completed_at, language_preference, favourite_markets_json,
+          favourite_leagues_json, favourite_teams_json, followed_fixtures_json, quiet_hours_json, updated_at
         )
         VALUES (
           ?1, ?2, ?3, ?4, ?5, ?6,
@@ -329,7 +335,9 @@ export async function ensureNotificationPreferences(db, userId) {
           ?11, ?12, ?13, ?14,
           ?15, ?16, ?17, ?18,
           ?19, ?20, ?21, ?22,
-          ?23, ?24, ?25, ?26
+          ?23, ?24, ?25, ?26,
+          ?27, ?28, ?29, ?30,
+          ?31
         )
         ON CONFLICT(user_id) DO NOTHING`,
         [
@@ -353,6 +361,11 @@ export async function ensureNotificationPreferences(db, userId) {
           defaults.allow_non_signal_intelligence,
           defaults.alert_frequency_mode,
           defaults.pre_match_window_minutes,
+          defaults.user_style_preset,
+          defaults.decision_companion_enabled,
+          defaults.reset_mode_enabled,
+          defaults.calm_onboarding_completed_at,
+          defaults.language_preference,
           defaults.favourite_markets_json,
           defaults.favourite_leagues_json,
           defaults.favourite_teams_json,
@@ -476,7 +489,8 @@ export async function getAccountStateByEmail(db, email) {
                acca_alerts_enabled, correct_score_alerts_enabled, injury_alerts_enabled, weather_alerts_enabled,
                market_movement_alerts_enabled, volatility_alerts_enabled, team_news_alerts_enabled,
                daily_digest_enabled, results_digest_enabled, weekend_slate_digest_enabled, website_only_mode,
-               allow_non_signal_intelligence, alert_frequency_mode, pre_match_window_minutes,
+               allow_non_signal_intelligence, alert_frequency_mode, pre_match_window_minutes, user_style_preset,
+               decision_companion_enabled, reset_mode_enabled, calm_onboarding_completed_at, language_preference,
                favourite_markets_json, favourite_leagues_json, favourite_teams_json, followed_fixtures_json,
                quiet_hours_json, updated_at
         FROM notification_preferences
@@ -511,6 +525,11 @@ export async function getAccountStateByEmail(db, email) {
           allow_non_signal_intelligence: notificationPreferences.allow_non_signal_intelligence ?? 1,
           alert_frequency_mode: notificationPreferences.alert_frequency_mode || "mixed",
           pre_match_window_minutes: notificationPreferences.pre_match_window_minutes ?? 90,
+          user_style_preset: notificationPreferences.user_style_preset || "disciplined_bettor",
+          decision_companion_enabled: notificationPreferences.decision_companion_enabled ?? 1,
+          reset_mode_enabled: notificationPreferences.reset_mode_enabled ?? 1,
+          calm_onboarding_completed_at: notificationPreferences.calm_onboarding_completed_at || null,
+          language_preference: notificationPreferences.language_preference || "en-GB",
           favourite_markets: fromJson(notificationPreferences.favourite_markets_json, []),
           favourite_leagues: fromJson(notificationPreferences.favourite_leagues_json, []),
           favourite_teams: fromJson(notificationPreferences.favourite_teams_json, []),
@@ -538,7 +557,8 @@ export async function updateNotificationPreferences(db, userId, input = {}) {
                acca_alerts_enabled, correct_score_alerts_enabled, injury_alerts_enabled, weather_alerts_enabled,
                market_movement_alerts_enabled, volatility_alerts_enabled, team_news_alerts_enabled,
                daily_digest_enabled, results_digest_enabled, weekend_slate_digest_enabled, website_only_mode,
-               allow_non_signal_intelligence, alert_frequency_mode, pre_match_window_minutes,
+               allow_non_signal_intelligence, alert_frequency_mode, pre_match_window_minutes, user_style_preset,
+               decision_companion_enabled, reset_mode_enabled, calm_onboarding_completed_at, language_preference,
                favourite_markets_json, favourite_leagues_json, favourite_teams_json, followed_fixtures_json,
                quiet_hours_json, updated_at
         FROM notification_preferences
@@ -549,11 +569,25 @@ export async function updateNotificationPreferences(db, userId, input = {}) {
   );
 
   const base = buildDefaultNotificationPreferences(userId, existing || {});
+  const stylePreset = ["analyst", "disciplined_bettor", "tactical_reader", "researcher"].includes(
+    String(input.user_style_preset || "")
+  )
+    ? String(input.user_style_preset)
+    : base.user_style_preset;
   const frequencyMode = ["immediate", "digest_only", "mixed"].includes(String(input.alert_frequency_mode || ""))
     ? String(input.alert_frequency_mode)
     : base.alert_frequency_mode;
+  const languagePreference = ["en-GB", "en-US", "pt-PT", "es-ES"].includes(String(input.language_preference || ""))
+    ? String(input.language_preference)
+    : base.language_preference;
   const preMatchWindow = Math.max(0, Math.min(1440, Number(input.pre_match_window_minutes ?? base.pre_match_window_minutes)));
   const quietHours = normalizeQuietHours(input.quiet_hours ?? fromJson(base.quiet_hours_json, null));
+  const calmOnboardingCompletedAt =
+    typeof input.calm_onboarding_completed_at === "string" && input.calm_onboarding_completed_at.trim()
+      ? input.calm_onboarding_completed_at.trim()
+      : input.complete_calm_setup
+        ? base.calm_onboarding_completed_at || isoNow()
+        : base.calm_onboarding_completed_at || null;
   const payload = {
     ...base,
     email_enabled: toIntFlag(input.email_enabled ?? base.email_enabled),
@@ -580,6 +614,11 @@ export async function updateNotificationPreferences(db, userId, input = {}) {
     ),
     alert_frequency_mode: frequencyMode,
     pre_match_window_minutes: Number.isFinite(preMatchWindow) ? preMatchWindow : base.pre_match_window_minutes,
+    user_style_preset: stylePreset,
+    decision_companion_enabled: toIntFlag(input.decision_companion_enabled ?? base.decision_companion_enabled),
+    reset_mode_enabled: toIntFlag(input.reset_mode_enabled ?? base.reset_mode_enabled),
+    calm_onboarding_completed_at: calmOnboardingCompletedAt,
+    language_preference: languagePreference,
     favourite_markets_json: toJson(normalizeStringList(input.favourite_markets ?? fromJson(base.favourite_markets_json, []))),
     favourite_leagues_json: toJson(normalizeStringList(input.favourite_leagues ?? fromJson(base.favourite_leagues_json, []))),
     favourite_teams_json: toJson(normalizeStringList(input.favourite_teams ?? fromJson(base.favourite_teams_json, []))),
@@ -617,12 +656,17 @@ export async function updateNotificationPreferences(db, userId, input = {}) {
             allow_non_signal_intelligence = ?17,
             alert_frequency_mode = ?18,
             pre_match_window_minutes = ?19,
-            favourite_markets_json = ?20,
-            favourite_leagues_json = ?21,
-            favourite_teams_json = ?22,
-            followed_fixtures_json = ?23,
-            quiet_hours_json = ?24,
-            updated_at = ?25
+            user_style_preset = ?20,
+            decision_companion_enabled = ?21,
+            reset_mode_enabled = ?22,
+            calm_onboarding_completed_at = ?23,
+            language_preference = ?24,
+            favourite_markets_json = ?25,
+            favourite_leagues_json = ?26,
+            favourite_teams_json = ?27,
+            followed_fixtures_json = ?28,
+            quiet_hours_json = ?29,
+            updated_at = ?30
         WHERE user_id = ?1`,
         [
           payload.user_id,
@@ -644,6 +688,11 @@ export async function updateNotificationPreferences(db, userId, input = {}) {
           payload.allow_non_signal_intelligence,
           payload.alert_frequency_mode,
           payload.pre_match_window_minutes,
+          payload.user_style_preset,
+          payload.decision_companion_enabled,
+          payload.reset_mode_enabled,
+          payload.calm_onboarding_completed_at,
+          payload.language_preference,
           payload.favourite_markets_json,
           payload.favourite_leagues_json,
           payload.favourite_teams_json,

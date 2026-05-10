@@ -21,6 +21,7 @@ HTML_FILES = [
     FRONTEND / "pricing.html",
     FRONTEND / "methodology.html",
     FRONTEND / "account.html",
+    FRONTEND / "onboarding.html",
 ]
 
 REQUIRED_FILES = [
