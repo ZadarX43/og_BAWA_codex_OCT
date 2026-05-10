@@ -52,6 +52,7 @@
       dashboardClassFilter: "ALL",
       dashboardReasonFilter: "ALL",
       internalFlagSeverityFilter: "ALL",
+      internalFlagStatusFilter: "ALL",
       telegramLinkCode: "",
       telegramLinkExpiresAt: "",
       telegramBotUsername: "",
@@ -2925,7 +2926,9 @@
     const timeline = Array.isArray(state.runtime.internalTimeline) ? state.runtime.internalTimeline : [];
     const operatorId = String(state.runtime.internalOperatorId || "").trim();
     const severityFilter = String(state.runtime.internalFlagSeverityFilter || "ALL").toUpperCase();
+    const statusFilter = String(state.runtime.internalFlagStatusFilter || "ALL").toUpperCase();
     const severityOptions = ["ALL", "CRITICAL", "HIGH", "MEDIUM", "LOW"];
+    const statusOptions = ["ALL", "OPEN", "RESOLVED", "DISMISSED"];
     const severityCounts = severityOptions.reduce((accumulator, option) => {
       if (option === "ALL") {
         accumulator[option] = flags.length;
@@ -2936,10 +2939,23 @@
       }
       return accumulator;
     }, {});
-    const filteredFlags =
-      severityFilter === "ALL"
-        ? flags
-        : flags.filter((flag) => String(flag?.severity || "").trim().toUpperCase() === severityFilter);
+    const statusCounts = statusOptions.reduce((accumulator, option) => {
+      if (option === "ALL") {
+        accumulator[option] = flags.length;
+      } else {
+        accumulator[option] = flags.filter(
+          (flag) => String(flag?.flag_status || "open").trim().toUpperCase() === option
+        ).length;
+      }
+      return accumulator;
+    }, {});
+    const filteredFlags = flags.filter((flag) => {
+      const flagSeverity = String(flag?.severity || "").trim().toUpperCase();
+      const flagStatus = String(flag?.flag_status || "open").trim().toUpperCase();
+      const severityMatches = severityFilter === "ALL" || flagSeverity === severityFilter;
+      const statusMatches = statusFilter === "ALL" || flagStatus === statusFilter;
+      return severityMatches && statusMatches;
+    });
     const actionAuditEntries = timeline
       .filter((item) => {
         const eventType = String(item?.event_type || "");
@@ -2950,6 +2966,48 @@
         );
       })
       .slice(0, 10);
+    const restrictedEvent = timeline.find((item) => String(item?.event_type || "") === "internal_account_restricted");
+    const suspendedEvent = timeline.find((item) => String(item?.event_type || "") === "internal_account_suspended");
+    const reinstatedEvent = timeline.find((item) => String(item?.event_type || "") === "internal_account_reinstated");
+    const accountHistoryMilestones = [
+      restrictedEvent
+        ? {
+            label: "Restricted",
+            when: restrictedEvent.timestamp,
+            note: restrictedEvent?.metadata?.reason || "Restriction recorded",
+          }
+        : null,
+      summary?.risk_state?.suspended_at
+        ? {
+            label: "Suspended",
+            when: summary.risk_state.suspended_at,
+            note:
+              summary.risk_state?.suspension_reason ||
+              suspendedEvent?.metadata?.reason ||
+              "Suspension recorded",
+          }
+        : null,
+      summary?.risk_state?.reinstated_at
+        ? {
+            label: "Reinstated",
+            when: summary.risk_state.reinstated_at,
+            note:
+              summary.risk_state?.reinstatement_reason ||
+              reinstatedEvent?.metadata?.reason ||
+              "Reinstatement recorded",
+          }
+        : null,
+      reinstatedEvent
+        ? {
+            label: "Review cleared",
+            when: reinstatedEvent.timestamp,
+            note: reinstatedEvent?.metadata?.reason || "Account returned to active state",
+          }
+        : null,
+    ]
+      .filter(Boolean)
+      .sort((left, right) => String(right.when || "").localeCompare(String(left.when || "")))
+      .slice(0, 5);
 
     if (!hasKey) {
       return `
@@ -3137,6 +3195,23 @@
                     )
                     .join("")}
                 </div>
+                <div class="filter-row">
+                  ${statusOptions
+                    .map(
+                      (option) => `
+                        <button
+                          class="${statusFilter === option ? "button" : "ghost-button"}"
+                          type="button"
+                          data-action="internal-flag-status-filter"
+                          data-value="${escapeHtml(option)}"
+                        >
+                          ${escapeHtml(option === "ALL" ? "All statuses" : titleCase(option.toLowerCase()))}
+                          ${escapeHtml(` (${statusCounts[option] || 0})`)}
+                        </button>
+                      `
+                    )
+                    .join("")}
+                </div>
                 ${
                   filteredFlags.length
                     ? `<div class="card-grid">${filteredFlags
@@ -3163,7 +3238,7 @@
                         .join("")}</div>`
                     : `<div class="notice">${
                         flags.length
-                          ? "No risk flags match the current severity filter."
+                          ? "No risk flags match the current filter combination."
                           : "No risk flags are open for this account."
                       }</div>`
                 }
@@ -3179,6 +3254,26 @@
               </article>
             </section>
             <section class="section split">
+              <article class="panel">
+                <h3>Account history</h3>
+                ${
+                  accountHistoryMilestones.length
+                    ? `<div class="card-grid">${accountHistoryMilestones
+                        .map(
+                          (item) => `
+                            <article class="panel">
+                              <div class="pill-row">
+                                <span class="stat-chip">${escapeHtml(item.label || "Milestone")}</span>
+                              </div>
+                              <strong>${escapeHtml(formatDateTime(item.when) || "Unknown")}</strong>
+                              <p class="muted">${escapeHtml(item.note || "")}</p>
+                            </article>
+                          `
+                        )
+                        .join("")}</div>`
+                    : `<div class="notice">No internal account milestones have been recorded yet.</div>`
+                }
+              </article>
               <article class="panel">
                 <h3>Action audit</h3>
                 ${
@@ -4935,6 +5030,17 @@
     if (internalFlagFilterTarget) {
       state.runtime.internalFlagSeverityFilter = String(
         internalFlagFilterTarget.dataset.value || "ALL"
+      ).toUpperCase();
+      render();
+      return;
+    }
+
+    const internalFlagStatusFilterTarget = event.target.closest(
+      "[data-action='internal-flag-status-filter']"
+    );
+    if (internalFlagStatusFilterTarget) {
+      state.runtime.internalFlagStatusFilter = String(
+        internalFlagStatusFilterTarget.dataset.value || "ALL"
       ).toUpperCase();
       render();
     }
