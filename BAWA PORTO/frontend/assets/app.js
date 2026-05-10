@@ -477,7 +477,7 @@
       return {
         action_label: "Deploy signal",
         action_copy: "A deployable edge is live here, but it should still be read with discipline rather than urgency.",
-        meaning_title: "Why this is live",
+        meaning_title: "Why this reached deployment",
         meaning_copy: headline,
         risk_title: "Why we may be wrong",
         risk_points: notes.length ? notes : ["Market conditions can change quickly around team news, price movement, or fragility factors."],
@@ -494,11 +494,11 @@
 
     if (publishClass === "OBSERVE") {
       return {
-        action_label: "Observe, not deploy",
-        action_copy: "There is signal shape here, but not enough support for a disciplined deployment.",
+        action_label: "Pass / observe",
+        action_copy: "There is signal shape here, but not enough support for disciplined deployment. This is a respectable no-edge state, not a missed pick.",
         meaning_title: "What this means",
         meaning_copy: headline,
-        risk_title: "Why it stayed out",
+        risk_title: "Why this stayed out",
         risk_points: notes.length ? notes : ["Structural support remained too weak for deployment."],
         decision_title: "What to do now",
         decision_points: [
@@ -2178,6 +2178,10 @@
     const notificationPreferences = accountState?.notification_preferences || null;
     const matchedEntry = getFollowedIntelligenceMatches(accountState, [fixture])[0] || null;
     const clarity = fixtureClarityProfile(fixture, matchedEntry);
+    const matchReasons = Array.isArray(matchedEntry?.reasons) ? matchedEntry.reasons : [];
+    const matchCopy = matchReasons.length
+      ? `This fixture matches your saved follows through ${matchReasons.join(", ")}.`
+      : "This fixture is being shown from the current intelligence window rather than a direct saved follow.";
     const relatedFixtures = state.fixtureIntelligence
       .filter((row) => row.fixture_key !== fixture.fixture_key && row.league === fixture.league)
       .slice(0, 4);
@@ -2211,8 +2215,8 @@
             <span class="metric-value">${escapeHtml(String(fixture.coverage_status || "covered"))}</span>
           </div>
           <div class="metric">
-            <span class="metric-label">Telegram</span>
-            <span class="metric-value">${notificationPreferences?.telegram_enabled ? escapeHtml(fixture.follow_relevance?.notification_priority || "ready") : "Preview"}</span>
+            <span class="metric-label">Alert priority</span>
+            <span class="metric-value">${notificationPreferences?.telegram_enabled ? escapeHtml(fixture.follow_relevance?.notification_priority || "website only") : "Preview"}</span>
           </div>
           <div class="metric">
             <span class="metric-label">Follow match</span>
@@ -2283,6 +2287,15 @@
       </section>
 
       <section class="section split">
+        <article class="panel">
+          <h3>Why this matches you</h3>
+          <p class="muted">${escapeHtml(matchCopy)}</p>
+          ${
+            matchReasons.length
+              ? `<div class="pill-row">${matchReasons.map((reason) => `<span class="chip">${escapeHtml(reason)}</span>`).join("")}</div>`
+              : `<div class="notice">No direct saved follow is attached to this fixture right now.</div>`
+          }
+        </article>
         <article class="panel">
           <h3>${escapeHtml(clarity.decision_title)}</h3>
           <ul class="feature-list">
