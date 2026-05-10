@@ -3057,6 +3057,54 @@
         `${flag?.flag_type || ""} ${flag?.summary || ""} ${flag?.source || ""}`.toLowerCase().includes(needle)
       )
     );
+    const reviewPresetTemplates = {
+      CUSTOM: {
+        noteType: "support_note",
+        noteTitle: "General review note",
+        noteBody:
+          "Review summary:\n- Key evidence:\n- Open questions:\n- Next step:",
+        checklist: [
+          "Check the current account state and review status first.",
+          "Confirm whether open flags still match the current evidence.",
+          "Leave a concise note before taking any stronger action.",
+        ],
+      },
+      SUSPENSION_REVIEW: {
+        noteType: "risk_note",
+        noteTitle: "Suspension review note",
+        noteBody:
+          "Suspension review:\n- Reason currently supporting suspension:\n- Evidence checked:\n- Reinstatement blockers:\n- Recommended next move:",
+        checklist: [
+          "Read the latest enforcement event and suspension reason.",
+          "Verify that open flags still support keeping the account suspended.",
+          "Confirm whether ownership or billing verification has arrived.",
+        ],
+      },
+      SHARING_RISK: {
+        noteType: "risk_note",
+        noteTitle: "Sharing-risk review note",
+        noteBody:
+          "Sharing-risk review:\n- Session/device pattern:\n- IP spread evidence:\n- Follow-up risk questions:\n- Recommended next move:",
+        checklist: [
+          "Compare active session count, distinct devices, and IP spread.",
+          "Check auth-event churn for repeated sign-ins or session rotation.",
+          "Decide whether the pattern supports monitoring, restriction, or escalation.",
+        ],
+      },
+      BILLING_CONCERN: {
+        noteType: "billing_note",
+        noteTitle: "Billing concern review note",
+        noteBody:
+          "Billing concern review:\n- Subscription/payment context:\n- Billing evidence checked:\n- Outstanding risks:\n- Recommended next move:",
+        checklist: [
+          "Review billing-related flags, notes, and subscription status together.",
+          "Confirm whether the account state still matches current payment standing.",
+          "Avoid suspension until billing evidence is clear enough to support it.",
+        ],
+      },
+    };
+    const presetTemplate =
+      reviewPresetTemplates[reviewPreset] || reviewPresetTemplates.CUSTOM;
     const caseBadges = [
       summary?.risk_state?.account_status &&
       String(summary.risk_state.account_status).toLowerCase() !== "active"
@@ -3329,6 +3377,32 @@
             </section>
             <section class="section split">
               <article class="panel">
+                <h3>Evidence checklist</h3>
+                <p class="muted">This checklist changes with the current review preset so operators can follow a steadier case workflow.</p>
+                <ul class="feature-list">
+                  ${presetTemplate.checklist
+                    .map((item) => `<li>${escapeHtml(item)}</li>`)
+                    .join("")}
+                </ul>
+              </article>
+              <article class="panel">
+                <h3>Note template</h3>
+                <p class="muted">${escapeHtml(presetTemplate.noteTitle)}</p>
+                <div class="cta-row">
+                  <button
+                    class="ghost-button"
+                    type="button"
+                    data-action="internal-note-template"
+                    data-note-type="${escapeHtml(presetTemplate.noteType)}"
+                    data-note-body="${escapeHtml(presetTemplate.noteBody)}"
+                  >
+                    Apply note template
+                  </button>
+                </div>
+              </article>
+            </section>
+            <section class="section split">
+              <article class="panel">
                 <h3>Open flags</h3>
                 <div class="filter-row">
                   ${severityOptions
@@ -3511,6 +3585,7 @@
                     <option value="risk_note">Risk note</option>
                     <option value="reinstatement_note">Reinstatement note</option>
                   </select>
+                  <p class="muted">Current preset template: ${escapeHtml(presetTemplate.noteTitle)}</p>
                   <label class="field-label" for="internal-note-content">Note</label>
                   <textarea id="internal-note-content" name="internal_note_content" class="text-input" rows="5" placeholder="Add an internal review note"></textarea>
                   <div class="cta-row">
@@ -4590,6 +4665,20 @@
     state.runtime.internalReviewMessage = "Custom review mode restored.";
   };
 
+  const applyInternalNoteTemplate = (noteType, noteBody) => {
+    const noteTypeElement = document.getElementById("internal-note-type");
+    const noteContentElement = document.getElementById("internal-note-content");
+    if (noteTypeElement && noteType) {
+      noteTypeElement.value = String(noteType).trim();
+    }
+    if (noteContentElement && noteBody) {
+      noteContentElement.value = String(noteBody);
+      noteContentElement.focus();
+      noteContentElement.setSelectionRange(noteContentElement.value.length, noteContentElement.value.length);
+    }
+    state.runtime.internalReviewMessage = "Preset note template applied.";
+  };
+
   const lookupInternalAccount = async (event) => {
     event.preventDefault();
     if (!workerConfigured() || !state.runtime.internalAdminKey) {
@@ -5265,6 +5354,17 @@
     if (internalReviewPresetTarget) {
       state.runtime.internalLookupMessage = "";
       applyInternalReviewPreset(internalReviewPresetTarget.dataset.value || "CUSTOM");
+      render();
+      return;
+    }
+
+    const internalNoteTemplateTarget = event.target.closest("[data-action='internal-note-template']");
+    if (internalNoteTemplateTarget) {
+      state.runtime.internalLookupMessage = "";
+      applyInternalNoteTemplate(
+        internalNoteTemplateTarget.dataset.noteType || "support_note",
+        internalNoteTemplateTarget.dataset.noteBody || ""
+      );
       render();
       return;
     }
