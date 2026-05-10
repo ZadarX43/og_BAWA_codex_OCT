@@ -431,7 +431,8 @@ export async function getAccountRiskState(db, userId) {
         `-- og:get_account_risk_state
         SELECT user_id, account_status, risk_level, risk_score, review_status, last_risk_event_at,
                last_reviewed_at, last_reviewed_by, suspended_at, suspension_reason, reinstated_at,
-               reinstatement_reason, created_at, updated_at
+               reinstatement_reason, last_review_outcome, last_review_outcome_note,
+               last_review_outcome_at, last_review_outcome_by, created_at, updated_at
         FROM account_risk_state
         WHERE user_id = ?1
         LIMIT 1`,
@@ -488,6 +489,10 @@ export async function ensureAccountRiskState(db, userId) {
     suspension_reason: null,
     reinstated_at: null,
     reinstatement_reason: null,
+    last_review_outcome: null,
+    last_review_outcome_note: null,
+    last_review_outcome_at: null,
+    last_review_outcome_by: null,
     created_at: now,
     updated_at: now,
   };
@@ -502,9 +507,10 @@ export async function ensureAccountRiskState(db, userId) {
         INSERT INTO account_risk_state (
           user_id, account_status, risk_level, risk_score, review_status, last_risk_event_at,
           last_reviewed_at, last_reviewed_by, suspended_at, suspension_reason, reinstated_at,
-          reinstatement_reason, created_at, updated_at
+          reinstatement_reason, last_review_outcome, last_review_outcome_note,
+          last_review_outcome_at, last_review_outcome_by, created_at, updated_at
         )
-        VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14)`,
+        VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18)`,
         [
           payload.user_id,
           payload.account_status,
@@ -518,6 +524,10 @@ export async function ensureAccountRiskState(db, userId) {
           payload.suspension_reason,
           payload.reinstated_at,
           payload.reinstatement_reason,
+          payload.last_review_outcome,
+          payload.last_review_outcome_note,
+          payload.last_review_outcome_at,
+          payload.last_review_outcome_by,
           payload.created_at,
           payload.updated_at,
         ]
@@ -572,6 +582,22 @@ export async function updateAccountRiskState(db, userId, input = {}) {
       Object.prototype.hasOwnProperty.call(input, "reinstatement_reason")
         ? input.reinstatement_reason
         : base.reinstatement_reason,
+    last_review_outcome:
+      Object.prototype.hasOwnProperty.call(input, "last_review_outcome")
+        ? input.last_review_outcome
+        : base.last_review_outcome,
+    last_review_outcome_note:
+      Object.prototype.hasOwnProperty.call(input, "last_review_outcome_note")
+        ? input.last_review_outcome_note
+        : base.last_review_outcome_note,
+    last_review_outcome_at:
+      Object.prototype.hasOwnProperty.call(input, "last_review_outcome_at")
+        ? input.last_review_outcome_at
+        : base.last_review_outcome_at,
+    last_review_outcome_by:
+      Object.prototype.hasOwnProperty.call(input, "last_review_outcome_by")
+        ? input.last_review_outcome_by
+        : base.last_review_outcome_by,
     updated_at: now,
   };
   await callMaybeMock(
@@ -594,7 +620,11 @@ export async function updateAccountRiskState(db, userId, input = {}) {
             suspension_reason = ?10,
             reinstated_at = ?11,
             reinstatement_reason = ?12,
-            updated_at = ?13
+            last_review_outcome = ?13,
+            last_review_outcome_note = ?14,
+            last_review_outcome_at = ?15,
+            last_review_outcome_by = ?16,
+            updated_at = ?17
         WHERE user_id = ?1`,
         [
           payload.user_id,
@@ -609,6 +639,10 @@ export async function updateAccountRiskState(db, userId, input = {}) {
           payload.suspension_reason,
           payload.reinstated_at,
           payload.reinstatement_reason,
+          payload.last_review_outcome,
+          payload.last_review_outcome_note,
+          payload.last_review_outcome_at,
+          payload.last_review_outcome_by,
           payload.updated_at,
         ]
       )

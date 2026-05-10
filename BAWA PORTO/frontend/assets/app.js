@@ -56,6 +56,7 @@
       internalTimelineSourceFilter: "ALL",
       internalReviewPreset: "CUSTOM",
       internalReviewOutcome: "AUTO",
+      internalReviewOutcomeNote: "",
       telegramLinkCode: "",
       telegramLinkExpiresAt: "",
       telegramBotUsername: "",
@@ -3357,6 +3358,28 @@
               )
               .join("")}
           </div>
+          <label class="field-label" for="internal-review-outcome-note">Outcome note</label>
+          <textarea
+            id="internal-review-outcome-note"
+            class="text-input"
+            rows="4"
+            placeholder="Why does this outcome fit the current evidence?"
+            data-role="internal-review-outcome-note"
+          >${escapeHtml(state.runtime.internalReviewOutcomeNote || "")}</textarea>
+          <p class="muted">
+            Last saved outcome:
+            ${escapeHtml(
+              summary?.risk_state?.last_review_outcome
+                ? titleCase(String(summary.risk_state.last_review_outcome).replaceAll("_", " "))
+                : "None yet"
+            )}
+            ${summary?.risk_state?.last_review_outcome_at ? `· ${escapeHtml(formatDateTime(summary.risk_state.last_review_outcome_at) || "Unknown")}` : ""}
+          </p>
+          <div class="cta-row">
+            <button class="ghost-button" type="button" data-action="internal-save-review-outcome">
+              Save review outcome
+            </button>
+          </div>
         </article>
         <article class="panel">
           <h3>Operator access</h3>
@@ -3451,6 +3474,7 @@
                 <ul class="feature-list">
                   <li>Last reviewed at: ${escapeHtml(formatDateTime(summary.risk_state?.last_reviewed_at) || "Unknown")}</li>
                   <li>Last reviewed by: ${escapeHtml(summary.risk_state?.last_reviewed_by || "Unknown")}</li>
+                  <li>Last chosen outcome: ${escapeHtml(summary.risk_state?.last_review_outcome ? titleCase(String(summary.risk_state.last_review_outcome).replaceAll("_", " ")) : "None")}</li>
                   <li>Last risk event: ${escapeHtml(formatDateTime(summary.risk_state?.last_risk_event_at) || "Unknown")}</li>
                   <li>Open flags now: ${escapeHtml(summary.open_flags_count ?? 0)}</li>
                   <li>Risk score: ${escapeHtml(summary.risk_state?.risk_score ?? "0")}</li>
@@ -4658,6 +4682,12 @@
     state.runtime.internalNotes = Array.isArray(notesResult.payload.notes) ? notesResult.payload.notes : [];
     state.runtime.internalTimeline = Array.isArray(timelineResult.payload.timeline) ? timelineResult.payload.timeline : [];
     state.runtime.internalSelectedUserId = targetUserId;
+    state.runtime.internalReviewOutcome = String(
+      summaryResult.payload.account_summary?.risk_state?.last_review_outcome || "AUTO"
+    ).toUpperCase();
+    state.runtime.internalReviewOutcomeNote = String(
+      summaryResult.payload.account_summary?.risk_state?.last_review_outcome_note || ""
+    );
   };
 
   const currentInternalOperatorId = () =>
@@ -4765,6 +4795,74 @@
       state.runtime.internalReviewOutcome === "AUTO"
         ? "Automatic review outcome restored."
         : `${titleCase(state.runtime.internalReviewOutcome.toLowerCase().replaceAll("_", " "))} outcome selected.`;
+  };
+
+  const saveInternalReviewOutcome = async (event) => {
+    event.preventDefault();
+    if (!workerConfigured() || !state.runtime.internalAdminKey || !state.runtime.internalSelectedUserId) {
+      state.runtime.internalLookupMessage = "Load an account before saving a review outcome.";
+      render();
+      return;
+    }
+    const operatorIdentity = ensureInternalOperatorIdentity();
+    if (!operatorIdentity.ok) {
+      state.runtime.internalLookupMessage = operatorIdentity.message;
+      render();
+      return;
+    }
+    const outcome = String(state.runtime.internalReviewOutcome || "AUTO").toUpperCase();
+    if (outcome === "AUTO") {
+      state.runtime.internalLookupMessage = "Choose a review outcome before saving it to the backend trail.";
+      render();
+      return;
+    }
+    const note = String(state.runtime.internalReviewOutcomeNote || "")
+      .replace(/\s+/g, " ")
+      .trim();
+    if (!note) {
+      state.runtime.internalLookupMessage = "Add a review outcome note before saving it.";
+      render();
+      return;
+    }
+    if (note.length < 12) {
+      state.runtime.internalLookupMessage = "Use at least 12 characters so the saved review outcome is meaningful.";
+      render();
+      return;
+    }
+    state.runtime.internalLookupMessage = "";
+    state.runtime.internalReviewMessage = "Saving review outcome…";
+    render();
+    try {
+      const { response, payload } = await fetchInternalWorkerJson(
+        `/internal/accounts/${encodeURIComponent(state.runtime.internalSelectedUserId)}/review-outcome`,
+        {
+          method: "POST",
+          body: {
+            review_outcome: outcome.toLowerCase(),
+            review_outcome_note: note,
+            author_id: operatorIdentity.operatorId,
+          },
+        }
+      );
+      if (!response.ok || !payload?.ok) {
+        throw new Error(payload?.message || "Unable to save the review outcome.");
+      }
+      if (payload.account_summary) {
+        state.runtime.internalAccountSummary = payload.account_summary;
+        state.runtime.internalReviewOutcome = String(
+          payload.account_summary?.risk_state?.last_review_outcome || outcome
+        ).toUpperCase();
+        state.runtime.internalReviewOutcomeNote = String(
+          payload.account_summary?.risk_state?.last_review_outcome_note || note
+        );
+      }
+      await loadInternalAccountBundle(state.runtime.internalSelectedUserId);
+      state.runtime.internalReviewMessage = payload.message || "Review outcome saved.";
+    } catch (error) {
+      state.runtime.internalLookupMessage = error.message || "Unable to save the review outcome.";
+      state.runtime.internalReviewMessage = "";
+    }
+    render();
   };
 
   const applyInternalNoteTemplate = (noteType, noteBody) => {
@@ -5468,6 +5566,16 @@
       return;
     }
 
+    const internalSaveReviewOutcomeTarget = event.target.closest(
+      "[data-action='internal-save-review-outcome']"
+    );
+    if (internalSaveReviewOutcomeTarget) {
+      const outcomeNoteElement = document.querySelector("[data-role='internal-review-outcome-note']");
+      state.runtime.internalReviewOutcomeNote = String(outcomeNoteElement?.value || "");
+      await saveInternalReviewOutcome(event);
+      return;
+    }
+
     const internalNoteTemplateTarget = event.target.closest("[data-action='internal-note-template']");
     if (internalNoteTemplateTarget) {
       state.runtime.internalLookupMessage = "";
@@ -5477,6 +5585,13 @@
       );
       render();
       return;
+    }
+  });
+
+  app.addEventListener("input", (event) => {
+    const internalReviewOutcomeNoteTarget = event.target.closest("[data-role='internal-review-outcome-note']");
+    if (internalReviewOutcomeNoteTarget) {
+      state.runtime.internalReviewOutcomeNote = String(internalReviewOutcomeNoteTarget.value || "");
     }
   });
 

@@ -1573,6 +1573,45 @@ const testInternalAccountReviewActions = async (fetchHarness) => {
   assert.equal(reinstateResponse.status, 200);
   assert.equal(reinstatePayload.status, "internal_account_reinstated");
   assert.equal(reinstatePayload.account_summary.risk_state.account_status, "active");
+
+  const reviewOutcomeResponse = await worker.fetch(
+    jsonRequest(
+      `http://localhost/internal/accounts/${encodeURIComponent(userId)}/review-outcome`,
+      "POST",
+      {
+        review_outcome: "reinstate_ready",
+        review_outcome_note: "Ownership and payment standing now support reinstatement.",
+        author_id: "internal:test",
+      },
+      { "x-og-internal-admin": env.INTERNAL_ADMIN_SECRET }
+    ),
+    env
+  );
+  const reviewOutcomePayload = await reviewOutcomeResponse.json();
+  assert.equal(reviewOutcomeResponse.status, 200);
+  assert.equal(reviewOutcomePayload.status, "internal_review_outcome_saved");
+  assert.equal(reviewOutcomePayload.account_summary.risk_state.last_review_outcome, "reinstate_ready");
+  assert.equal(
+    reviewOutcomePayload.account_summary.risk_state.last_review_outcome_note,
+    "Ownership and payment standing now support reinstatement."
+  );
+
+  const badReviewOutcomeResponse = await worker.fetch(
+    jsonRequest(
+      `http://localhost/internal/accounts/${encodeURIComponent(userId)}/review-outcome`,
+      "POST",
+      {
+        review_outcome: "auto",
+        review_outcome_note: "too short",
+        author_id: "internal:test",
+      },
+      { "x-og-internal-admin": env.INTERNAL_ADMIN_SECRET }
+    ),
+    env
+  );
+  const badReviewOutcomePayload = await badReviewOutcomeResponse.json();
+  assert.equal(badReviewOutcomeResponse.status, 400);
+  assert.equal(badReviewOutcomePayload.status, "internal_review_outcome_invalid");
 };
 
 const testTelegramWebhookCompletesLinkFlow = async (fetchHarness) => {

@@ -2337,6 +2337,13 @@ function validateInternalActionReason(reason, label = "reason") {
   return null;
 }
 
+const ALLOWED_INTERNAL_REVIEW_OUTCOMES = new Set([
+  "monitor_only",
+  "restrict_for_review",
+  "suspend",
+  "reinstate_ready",
+]);
+
 async function handleInternalAccountRestrict(request, env, userId) {
   const adminAccess = verifyInternalAdminRequest(request, env);
   if (!adminAccess.ok) {
@@ -2599,6 +2606,77 @@ async function handleInternalFlagStatusUpdate(request, env, userId, flagId, next
         }
       })(),
     })),
+  });
+}
+
+async function handleInternalReviewOutcomeUpdate(request, env, userId) {
+  const adminAccess = verifyInternalAdminRequest(request, env);
+  if (!adminAccess.ok) {
+    return json({ ok: false, status: adminAccess.status, message: adminAccess.message }, adminAccess.code);
+  }
+  const accountDb = getAccountDb(env);
+  if (!accountDb) {
+    return configError("ACCOUNT_DB D1 binding is required for internal review routes.", ["ACCOUNT_DB"]);
+  }
+  let payload;
+  try {
+    payload = await request.json();
+  } catch (error) {
+    return requestError("Review outcome body must be valid JSON.", error.message);
+  }
+  const actor = normalizeInternalActor(payload?.author_id);
+  const actorError = validateInternalActor(actor);
+  if (actorError) {
+    return json({ ok: false, status: "internal_operator_identity_required", message: actorError }, 400);
+  }
+  const outcome = String(payload?.review_outcome || "")
+    .trim()
+    .toLowerCase();
+  if (!ALLOWED_INTERNAL_REVIEW_OUTCOMES.has(outcome)) {
+    return json(
+      {
+        ok: false,
+        status: "internal_review_outcome_invalid",
+        message: "Choose a valid operator review outcome before saving it.",
+      },
+      400
+    );
+  }
+  const note = normalizeInternalActionReason(payload?.review_outcome_note);
+  const noteError = validateInternalActionReason(note, "Review outcome note");
+  if (noteError) {
+    return json({ ok: false, status: "internal_review_outcome_note_required", message: noteError }, 400);
+  }
+  const now = nowIso();
+  await updateAccountRiskState(accountDb, userId, {
+    last_review_outcome: outcome,
+    last_review_outcome_note: note,
+    last_review_outcome_at: now,
+    last_review_outcome_by: actor,
+    last_reviewed_at: now,
+    last_reviewed_by: actor,
+  });
+  await addAccountAdminNote(accountDb, {
+    user_id: userId,
+    note_type: "review_outcome_note",
+    visibility: "internal",
+    author_id: actor,
+    content: `Review outcome saved: ${outcome.replaceAll("_", " ")}. ${note}`,
+  });
+  await recordAuthEvent(accountDb, {
+    user_id: userId,
+    event_type: "internal_review_outcome_recorded",
+    metadata: {
+      review_outcome: outcome,
+      review_outcome_note: note,
+      author_id: actor,
+    },
+  });
+  return json({
+    ok: true,
+    status: "internal_review_outcome_saved",
+    message: "Review outcome saved to the internal account trail.",
+    account_summary: await summarizeInternalAccount(accountDb, userId),
   });
 }
 
@@ -4022,6 +4100,7 @@ async function handleRequest(request, env) {
         "POST /internal/accounts/:user_id/reinstate",
         "POST /internal/accounts/:user_id/flags/:flag_id/resolve",
         "POST /internal/accounts/:user_id/flags/:flag_id/dismiss",
+        "POST /internal/accounts/:user_id/review-outcome",
         "POST /api/account/preferences",
         "GET /api/account/alerts",
         "POST /api/account/alerts/refresh",
@@ -4225,6 +4304,17 @@ async function handleRequest(request, env) {
       flagId,
       action === "dismiss" ? "dismissed" : "resolved"
     );
+    return withCors(response, request, env);
+  }
+
+  const internalReviewOutcomeMatch = pathname.match(/^\/internal\/accounts\/([^/]+)\/review-outcome$/);
+  if (internalReviewOutcomeMatch) {
+    const userId = decodeURIComponent(internalReviewOutcomeMatch[1] || "").trim();
+    if (request.method !== "POST") {
+      response = methodNotAllowed("POST");
+      return withCors(response, request, env);
+    }
+    response = await handleInternalReviewOutcomeUpdate(request, env, userId);
     return withCors(response, request, env);
   }
 
