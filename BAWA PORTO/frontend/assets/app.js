@@ -54,6 +54,7 @@
       internalFlagSeverityFilter: "ALL",
       internalFlagStatusFilter: "ALL",
       internalTimelineSourceFilter: "ALL",
+      internalReviewPreset: "CUSTOM",
       telegramLinkCode: "",
       telegramLinkExpiresAt: "",
       telegramBotUsername: "",
@@ -2929,6 +2930,7 @@
     const severityFilter = String(state.runtime.internalFlagSeverityFilter || "ALL").toUpperCase();
     const statusFilter = String(state.runtime.internalFlagStatusFilter || "ALL").toUpperCase();
     const timelineSourceFilter = String(state.runtime.internalTimelineSourceFilter || "ALL").toUpperCase();
+    const reviewPreset = String(state.runtime.internalReviewPreset || "CUSTOM").toUpperCase();
     const severityOptions = ["ALL", "CRITICAL", "HIGH", "MEDIUM", "LOW"];
     const statusOptions = ["ALL", "OPEN", "RESOLVED", "DISMISSED"];
     const timelineSourceOptions = [
@@ -2937,6 +2939,12 @@
       ["RISK_FLAG", "Risk flags"],
       ["ADMIN_NOTE", "Admin notes"],
       ["ENFORCEMENT", "Enforcement"],
+    ];
+    const reviewPresets = [
+      ["CUSTOM", "Custom"],
+      ["SUSPENSION_REVIEW", "Suspension review"],
+      ["SHARING_RISK", "Sharing risk"],
+      ["BILLING_CONCERN", "Billing concern"],
     ];
     const severityCounts = severityOptions.reduce((accumulator, option) => {
       if (option === "ALL") {
@@ -3044,6 +3052,11 @@
       Number(summary?.session_summary?.distinct_device_count ?? 0) > 1 &&
       Number(summary?.session_summary?.active_session_count ?? 0) > 1 &&
       !(summary?.session_summary?.primary_device_label || "");
+    const billingConcernFlag = flags.find((flag) =>
+      ["billing", "payment", "chargeback", "refund"].some((needle) =>
+        `${flag?.flag_type || ""} ${flag?.summary || ""} ${flag?.source || ""}`.toLowerCase().includes(needle)
+      )
+    );
     const caseBadges = [
       summary?.risk_state?.account_status &&
       String(summary.risk_state.account_status).toLowerCase() !== "active"
@@ -3053,6 +3066,61 @@
       Number(summary?.open_flags_count ?? 0) > 0 ? `${summary.open_flags_count} open flags` : null,
       primaryDeviceMismatch ? "Primary device mismatch" : null,
     ].filter(Boolean);
+    const recommendedNextAction = (() => {
+      if (String(summary?.risk_state?.account_status || "").toLowerCase() === "suspended") {
+        return {
+          title: "Hold suspension and verify ownership evidence.",
+          note: "Keep the account suspended while you review the latest enforcement trail and any reinstatement evidence.",
+          bullets: [
+            "Check the enforcement timeline and operator notes for the last suspension reason.",
+            "Verify whether any open flags still support keeping the account suspended.",
+            "Only reinstate after ownership or billing standing is clearly confirmed.",
+          ],
+        };
+      }
+      if (primaryDeviceMismatch || String(summary?.risk_state?.review_status || "").toLowerCase() === "manual_review") {
+        return {
+          title: "Review possible sharing risk.",
+          note: "This account looks like it may need a sharing-risk review before any stronger enforcement decision.",
+          bullets: [
+            "Compare active sessions, device spread, and recent auth events.",
+            "Check whether open flags are clustering around session churn or IP spread.",
+            "Restrict first if the pattern is concerning but not yet conclusive.",
+          ],
+        };
+      }
+      if (billingConcernFlag) {
+        return {
+          title: "Check billing context before enforcement.",
+          note: "There is billing-shaped risk context here, so confirm payment or subscription history before moving into suspension.",
+          bullets: [
+            "Read any billing notes or payment-related flags first.",
+            "Confirm whether the subscription state still matches the current account posture.",
+            "Use restriction or note capture before suspension if the evidence is incomplete.",
+          ],
+        };
+      }
+      if (Number(summary?.open_flags_count ?? 0) > 0) {
+        return {
+          title: "Work through the open flags.",
+          note: "This account has unresolved flags, so the clean next move is to resolve, dismiss, or escalate them deliberately.",
+          bullets: [
+            "Use the filters to isolate the highest-severity open flags first.",
+            "Record a note before taking any stronger enforcement action.",
+            "Escalate to restrict only if the open evidence now supports it.",
+          ],
+        };
+      }
+      return {
+        title: "No immediate enforcement needed.",
+        note: "The account currently reads as relatively clean, so keep monitoring and document anything new rather than forcing action.",
+        bullets: [
+          "Use the timeline and notes as a lightweight monitoring desk.",
+          "Leave a note if you spot a pattern that may matter later.",
+          "Avoid enforcement when the account state is currently clear.",
+        ],
+      };
+    })();
 
     if (!hasKey) {
       return `
@@ -3128,6 +3196,26 @@
       <section class="section">
         ${renderNotice(state.runtime.internalLookupMessage, state.runtime.internalLookupMessage ? "warning" : "default")}
         ${renderNotice(state.runtime.internalReviewMessage, state.runtime.internalReviewMessage ? "success" : "default")}
+        <article class="panel">
+          <h3>Quick review presets</h3>
+          <p class="muted">Use these saved desk modes to jump straight into the most common review patterns without rebuilding the filters manually.</p>
+          <div class="filter-row">
+            ${reviewPresets
+              .map(
+                ([value, label]) => `
+                  <button
+                    class="${reviewPreset === value ? "button" : "ghost-button"}"
+                    type="button"
+                    data-action="internal-review-preset"
+                    data-value="${escapeHtml(value)}"
+                  >
+                    ${escapeHtml(label)}
+                  </button>
+                `
+              )
+              .join("")}
+          </div>
+        </article>
         <article class="panel">
           <h3>Operator access</h3>
           <form id="internal-admin-form" class="stack-form">
@@ -3224,6 +3312,18 @@
                   <li>Last risk event: ${escapeHtml(formatDateTime(summary.risk_state?.last_risk_event_at) || "Unknown")}</li>
                   <li>Open flags now: ${escapeHtml(summary.open_flags_count ?? 0)}</li>
                   <li>Risk score: ${escapeHtml(summary.risk_state?.risk_score ?? "0")}</li>
+                </ul>
+              </article>
+            </section>
+            <section class="section">
+              <article class="panel">
+                <h3>Recommended next action</h3>
+                <strong>${escapeHtml(recommendedNextAction.title)}</strong>
+                <p class="muted">${escapeHtml(recommendedNextAction.note)}</p>
+                <ul class="feature-list">
+                  ${recommendedNextAction.bullets
+                    .map((bullet) => `<li>${escapeHtml(bullet)}</li>`)
+                    .join("")}
                 </ul>
               </article>
             </section>
@@ -4460,6 +4560,36 @@
     render();
   };
 
+  const applyInternalReviewPreset = (preset) => {
+    const nextPreset = String(preset || "CUSTOM").toUpperCase();
+    state.runtime.internalReviewPreset = nextPreset;
+    if (nextPreset === "SUSPENSION_REVIEW") {
+      state.runtime.internalFlagSeverityFilter = "HIGH";
+      state.runtime.internalFlagStatusFilter = "OPEN";
+      state.runtime.internalTimelineSourceFilter = "ENFORCEMENT";
+      state.runtime.internalReviewMessage = "Suspension review preset applied.";
+      return;
+    }
+    if (nextPreset === "SHARING_RISK") {
+      state.runtime.internalFlagSeverityFilter = "HIGH";
+      state.runtime.internalFlagStatusFilter = "OPEN";
+      state.runtime.internalTimelineSourceFilter = "AUTH_EVENT";
+      state.runtime.internalReviewMessage = "Sharing risk preset applied.";
+      return;
+    }
+    if (nextPreset === "BILLING_CONCERN") {
+      state.runtime.internalFlagSeverityFilter = "MEDIUM";
+      state.runtime.internalFlagStatusFilter = "OPEN";
+      state.runtime.internalTimelineSourceFilter = "ADMIN_NOTE";
+      state.runtime.internalReviewMessage = "Billing concern preset applied.";
+      return;
+    }
+    state.runtime.internalFlagSeverityFilter = "ALL";
+    state.runtime.internalFlagStatusFilter = "ALL";
+    state.runtime.internalTimelineSourceFilter = "ALL";
+    state.runtime.internalReviewMessage = "Custom review mode restored.";
+  };
+
   const lookupInternalAccount = async (event) => {
     event.preventDefault();
     if (!workerConfigured() || !state.runtime.internalAdminKey) {
@@ -5101,6 +5231,7 @@
 
     const internalFlagFilterTarget = event.target.closest("[data-action='internal-flag-filter']");
     if (internalFlagFilterTarget) {
+      state.runtime.internalReviewPreset = "CUSTOM";
       state.runtime.internalFlagSeverityFilter = String(
         internalFlagFilterTarget.dataset.value || "ALL"
       ).toUpperCase();
@@ -5112,6 +5243,7 @@
       "[data-action='internal-flag-status-filter']"
     );
     if (internalFlagStatusFilterTarget) {
+      state.runtime.internalReviewPreset = "CUSTOM";
       state.runtime.internalFlagStatusFilter = String(
         internalFlagStatusFilterTarget.dataset.value || "ALL"
       ).toUpperCase();
@@ -5121,10 +5253,20 @@
 
     const internalTimelineFilterTarget = event.target.closest("[data-action='internal-timeline-filter']");
     if (internalTimelineFilterTarget) {
+      state.runtime.internalReviewPreset = "CUSTOM";
       state.runtime.internalTimelineSourceFilter = String(
         internalTimelineFilterTarget.dataset.value || "ALL"
       ).toUpperCase();
       render();
+      return;
+    }
+
+    const internalReviewPresetTarget = event.target.closest("[data-action='internal-review-preset']");
+    if (internalReviewPresetTarget) {
+      state.runtime.internalLookupMessage = "";
+      applyInternalReviewPreset(internalReviewPresetTarget.dataset.value || "CUSTOM");
+      render();
+      return;
     }
   });
 
