@@ -5,8 +5,9 @@ import argparse
 import csv
 import json
 import re
+import unicodedata
 from collections import Counter
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -171,10 +172,24 @@ def parse_optional_int(value: Any) -> int | None:
 
 
 def normalize_identity_text(value: Any) -> str:
-    tokens = re.findall(r"[a-z0-9]+", str(value or "").lower().replace("&", " and "))
-    stopwords = {"fc", "cf", "ac", "sc", "afc", "club", "fcv", "eh", "fk", "bk", "sv", "cd", "rcd", "csd"}
+    base = unicodedata.normalize("NFKD", str(value or ""))
+    base = "".join(ch for ch in base if not unicodedata.combining(ch))
+    tokens = re.findall(r"[a-z0-9]+", base.lower().replace("&", " and "))
+    stopwords = {"fc", "cf", "ac", "sc", "afc", "club", "fcv", "eh", "fk", "bk", "sv", "cd", "rcd", "csd", "stade"}
     filtered = [token for token in tokens if token not in stopwords]
-    return normalize_lookup_text(" ".join(filtered or tokens))
+    normalized = normalize_lookup_text(" ".join(filtered or tokens))
+    alias_map = {
+        "psg": "parissaintgermain",
+        "brest": "brestois29",
+        "az": "azalkmaar",
+        "psv": "psveindhoven",
+        "nec": "necnijmegen",
+        "sportingbraga": "braga",
+        "stuttgart": "vfbstuttgart",
+        "wolfsburg": "vflwolfsburg",
+        "augsburg": "fcaugsburg",
+    }
+    return alias_map.get(normalized, normalized)
 
 
 def fixture_fallback_key(match_date: str, home_team: str, away_team: str) -> tuple[str, str, str]:
@@ -185,12 +200,24 @@ def fixture_fallback_key(match_date: str, home_team: str, away_team: str) -> tup
     )
 
 
+def candidate_match_dates(match_date: str) -> list[str]:
+    base = str(match_date or "").strip().split("T", 1)[0].split(" ", 1)[0]
+    if not base:
+        return [""]
+    try:
+        parsed = datetime.strptime(base, "%Y-%m-%d").date()
+    except ValueError:
+        return [base]
+    return [candidate.isoformat() for candidate in (parsed, parsed - timedelta(days=1), parsed + timedelta(days=1))]
+
+
 def load_fixtures_master_index() -> dict[str, dict[Any, dict[str, str]]]:
     exact: dict[tuple[str, str, str, str], dict[str, str]] = {}
     fallback: dict[tuple[str, str, str], dict[str, str]] = {}
     paths: list[Path] = []
     if FIXTURES_MASTER_PATH.exists():
         paths.append(FIXTURES_MASTER_PATH)
+    paths.extend(sorted(FIXTURES_MASTER_PATH.parent.glob("fixtures_master__*.csv")))
     if CURRENT_CONTEXT_NORMALIZED_DIR.exists():
         paths.extend(sorted(CURRENT_CONTEXT_NORMALIZED_DIR.glob("fixtures_master__*.csv")))
     if REPORTS_ROOT.exists():
@@ -236,9 +263,15 @@ def lookup_master_match(
 ) -> dict[str, str] | None:
     exact = fixtures_master_index.get("exact", {})
     fallback = fixtures_master_index.get("fallback", {})
-    return exact.get(fixture_record_key(league, match_date, home_team, away_team)) or fallback.get(
-        fixture_fallback_key(match_date, home_team, away_team)
-    )
+    for candidate_date in candidate_match_dates(match_date):
+        exact_match = exact.get(fixture_record_key(league, candidate_date, home_team, away_team))
+        if exact_match:
+            return exact_match
+    for candidate_date in candidate_match_dates(match_date):
+        fallback_match = fallback.get(fixture_fallback_key(candidate_date, home_team, away_team))
+        if fallback_match:
+            return fallback_match
+    return None
 
 
 def build_api_identity(master_match: dict[str, str] | None) -> dict[str, Any]:
