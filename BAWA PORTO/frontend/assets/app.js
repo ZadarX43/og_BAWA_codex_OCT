@@ -12,6 +12,7 @@
   const checkoutState = query.get("checkout") || "";
   const authState = query.get("auth") || "";
   const selectedFixtureKey = query.get("fixture") || "";
+  const selectedFixtureTab = String(query.get("tab") || "intelligence").toLowerCase();
   const runtimeConfig = window.OG_CONFIG || {};
   const workerApiBase = String(runtimeConfig.WORKER_API_BASE || "").replace(/\/+$/, "");
   const checkoutPlaceholderHref = "./account.html?intent=checkout";
@@ -1331,6 +1332,21 @@
         </div>
       </div>
     `;
+  };
+
+  const fixtureTabHref = (tabKey) => {
+    const params = new URLSearchParams();
+    if (selectedFixtureKey) {
+      params.set("fixture", selectedFixtureKey);
+    }
+    if (premiumDemoMode) {
+      params.set("demo", "1");
+    }
+    if (debugMode) {
+      params.set("debug", "1");
+    }
+    params.set("tab", String(tabKey || "intelligence"));
+    return `./fixture.html?${params.toString()}#fixture-tab-${encodeURIComponent(String(tabKey || "intelligence"))}`;
   };
 
   const teamInitials = (name) => {
@@ -4095,6 +4111,267 @@
     const relatedFixtures = state.fixtureIntelligence
       .filter((row) => row.fixture_key !== fixture.fixture_key && row.league === fixture.league)
       .slice(0, 4);
+    const fixtureTabs = [
+      ["overview", "Overview"],
+      ["intelligence", "Intelligence"],
+      ["lineups", "Lineups"],
+      ["table", "Table"],
+      ["stats", "Stats"],
+      ["form", "Form"],
+      ["context", "Context"],
+    ];
+    const activeFixtureTab = fixtureTabs.some(([key]) => key === selectedFixtureTab) ? selectedFixtureTab : "intelligence";
+    const followMatchLabel = matchedEntry ? matchedEntry.reasons.join(" / ") : "Not followed";
+    const fixtureSummaryNotice = renderNotice(
+      state.runtime.fixtureAlertMessage,
+      state.runtime.fixtureAlertMessage ? "success" : "default"
+    );
+    const relatedFixturesMarkup = relatedFixtures.length
+      ? `<div class="card-grid intelligence-grid">
+          ${relatedFixtures
+            .map((row) =>
+              intelligenceCard(
+                {
+                  row,
+                  reasons: [row.league === fixture.league ? "same league" : "related"],
+                },
+                Boolean(notificationPreferences?.telegram_enabled)
+              )
+            )
+            .join("")}
+        </div>`
+      : `<div class="notice">No related fixtures are available from the current published intelligence window.</div>`;
+    const activeTabContent = (() => {
+      if (activeFixtureTab === "overview") {
+        return `
+          <section class="section">
+            ${fixtureSummaryNotice}
+            <div class="fixture-detail-grid">
+              <article class="panel">
+                <h3>Overview</h3>
+                <p class="muted">${escapeHtml(headline)}</p>
+                <div class="card-grid">
+                  <article class="panel">
+                    <h4>Published summary</h4>
+                    <p class="muted">${escapeHtml(fixture.signal_summary?.summary_text || headline)}</p>
+                  </article>
+                  <article class="panel">
+                    <h4>State snapshot</h4>
+                    <ul class="feature-list compact-list">
+                      <li>Action state: ${escapeHtml(clarity.action_label)}</li>
+                      <li>Feed bucket: ${escapeHtml(clarity.feed_bucket)}</li>
+                      <li>Coverage: ${escapeHtml(String(fixture.coverage_status || "covered"))}</li>
+                      <li>Alert priority: ${
+                        notificationPreferences?.telegram_enabled
+                          ? escapeHtml(fixture.follow_relevance?.notification_priority || "website only")
+                          : "Preview"
+                      }</li>
+                    </ul>
+                  </article>
+                </div>
+              </article>
+              <article class="panel">
+                <h3>Market snapshot</h3>
+                <div class="prediction-meta-grid dashboard-odds-grid">
+                  <div class="signal-cell">
+                    <span class="signal-label">1X2</span>
+                    <span class="signal-value">${escapeHtml(
+                      odds.home_win_odds && odds.draw_odds && odds.away_win_odds
+                        ? `${odds.home_win_odds} / ${odds.draw_odds} / ${odds.away_win_odds}`
+                        : "N/A"
+                    )}</span>
+                  </div>
+                  <div class="signal-cell">
+                    <span class="signal-label">OU25</span>
+                    <span class="signal-value">${escapeHtml(
+                      odds.over25_odds && odds.under25_odds ? `${odds.over25_odds} / ${odds.under25_odds}` : "N/A"
+                    )}</span>
+                  </div>
+                  <div class="signal-cell">
+                    <span class="signal-label">BTTS</span>
+                    <span class="signal-value">${escapeHtml(
+                      odds.btts_yes_odds && odds.btts_no_odds ? `${odds.btts_yes_odds} / ${odds.btts_no_odds}` : "N/A"
+                    )}</span>
+                  </div>
+                </div>
+                <div class="pill-row">
+                  ${(fixture.signal_summary?.context_tags || []).length
+                    ? fixture.signal_summary.context_tags.map((tag) => `<span class="chip">${escapeHtml(String(tag).replace(/_/g, " "))}</span>`).join("")
+                    : `<span class="muted">No published context tags</span>`}
+                </div>
+              </article>
+            </div>
+          </section>
+        `;
+      }
+      if (activeFixtureTab === "lineups") {
+        return `
+          <section class="section">
+            ${fixtureSummaryNotice}
+            <article class="panel">
+              ${fixtureLineupsWidgetMarkup(fixture)}
+            </article>
+          </section>
+        `;
+      }
+      if (activeFixtureTab === "table") {
+        return `
+          <section class="section">
+            ${fixtureSummaryNotice}
+            <article class="panel">
+              ${fixtureStandingsWidgetMarkup(fixture)}
+            </article>
+          </section>
+        `;
+      }
+      if (activeFixtureTab === "stats") {
+        return `
+          <section class="section">
+            ${fixtureSummaryNotice}
+            <div class="fixture-detail-grid">
+              <article class="panel">
+                <h3>Published market state</h3>
+                <div class="prediction-meta-grid dashboard-odds-grid">
+                  <div class="signal-cell">
+                    <span class="signal-label">1X2</span>
+                    <span class="signal-value">${escapeHtml(
+                      odds.home_win_odds && odds.draw_odds && odds.away_win_odds
+                        ? `${odds.home_win_odds} / ${odds.draw_odds} / ${odds.away_win_odds}`
+                        : "N/A"
+                    )}</span>
+                  </div>
+                  <div class="signal-cell">
+                    <span class="signal-label">OU25</span>
+                    <span class="signal-value">${escapeHtml(
+                      odds.over25_odds && odds.under25_odds ? `${odds.over25_odds} / ${odds.under25_odds}` : "N/A"
+                    )}</span>
+                  </div>
+                  <div class="signal-cell">
+                    <span class="signal-label">BTTS</span>
+                    <span class="signal-value">${escapeHtml(
+                      odds.btts_yes_odds && odds.btts_no_odds ? `${odds.btts_yes_odds} / ${odds.btts_no_odds}` : "N/A"
+                    )}</span>
+                  </div>
+                </div>
+                <p class="muted">This is the current published reference layer for the fixture. Richer match-centre stats can sit here later without replacing the intelligence read.</p>
+              </article>
+              <article class="panel">
+                <h3>Fixture metadata</h3>
+                <ul class="feature-list">
+                  <li>Action state: ${escapeHtml(clarity.action_label)}</li>
+                  <li>Coverage: ${escapeHtml(String(fixture.coverage_status || "covered"))}</li>
+                  <li>Alert priority: ${
+                    notificationPreferences?.telegram_enabled
+                      ? escapeHtml(fixture.follow_relevance?.notification_priority || "website only")
+                      : "Preview"
+                  }</li>
+                  <li>Follow match: ${escapeHtml(followMatchLabel)}</li>
+                </ul>
+              </article>
+            </div>
+          </section>
+        `;
+      }
+      if (activeFixtureTab === "form") {
+        return `
+          <section class="section">
+            ${fixtureSummaryNotice}
+            <article class="panel">
+              <h3>League rhythm around this fixture</h3>
+              <p class="muted">This is the first pass of the form layer. It keeps nearby same-league intelligence visible until a fuller recent-form guide becomes part of the custom fixture stack.</p>
+              ${relatedFixturesMarkup}
+            </article>
+          </section>
+        `;
+      }
+      if (activeFixtureTab === "context") {
+        return `
+          <section class="section split">
+            ${fixtureSummaryNotice}
+            <article class="panel">
+              <h3>Why this matches you</h3>
+              <p class="muted">${escapeHtml(matchCopy)}</p>
+              ${
+                matchReasons.length
+                  ? `<div class="pill-row">${matchReasons.map((reason) => `<span class="chip">${escapeHtml(reason)}</span>`).join("")}</div>`
+                  : `<div class="notice">No direct saved follow is attached to this fixture right now.</div>`
+              }
+            </article>
+            <article class="panel">
+              <h3>Context notes</h3>
+              ${
+                notes.length
+                  ? `<ul class="feature-list">${notes.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}</ul>`
+                  : `<div class="notice">No extra context notes are currently published for this fixture.</div>`
+              }
+            </article>
+          </section>
+          <section class="section">
+            <article class="panel">
+              <h3>Related league fixtures</h3>
+              ${relatedFixturesMarkup}
+            </article>
+          </section>
+        `;
+      }
+      return `
+        <section class="section split">
+          ${fixtureSummaryNotice}
+          <article class="panel">
+            <h3>${escapeHtml(clarity.meaning_title)}</h3>
+            <p class="muted">${escapeHtml(clarity.meaning_copy)}</p>
+            <div class="card-grid">
+              <article class="panel">
+                <h4>Published summary</h4>
+                <p class="muted">${escapeHtml(fixture.signal_summary?.summary_text || headline)}</p>
+              </article>
+              <article class="panel">
+                <h4>Context tags</h4>
+                <div class="pill-row">
+                  ${(fixture.signal_summary?.context_tags || []).length
+                    ? fixture.signal_summary.context_tags.map((tag) => `<span class="chip">${escapeHtml(String(tag).replace(/_/g, " "))}</span>`).join("")
+                    : `<span class="muted">No published context tags</span>`}
+                </div>
+              </article>
+            </div>
+          </article>
+          <article class="panel">
+            <h3>${escapeHtml(clarity.risk_title)}</h3>
+            ${
+              clarity.risk_points.length
+                ? `<ul class="feature-list">${clarity.risk_points.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}</ul>`
+                : `<div class="notice">No extra context notes are currently published for this fixture.</div>`
+            }
+            <div class="dashboard-telegram-preview">
+              <span class="metric-label">Telegram relevance</span>
+              <pre>${escapeHtml(
+                telegramAlertPreview({
+                  row: fixture,
+                  reasons: matchedEntry?.reasons || ["fixture intelligence"],
+                })
+              )}</pre>
+            </div>
+          </article>
+        </section>
+        <section class="section split">
+          <article class="panel">
+            <h3>${escapeHtml(clarity.decision_title)}</h3>
+            <ul class="feature-list">
+              ${clarity.decision_points.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}
+            </ul>
+          </article>
+          <article class="panel">
+            <h3>Decision companion</h3>
+            <ul class="feature-list">
+              <li>${escapeHtml(clarity.reflection_prompt)}</li>
+              <li>What could invalidate this read before kickoff?</li>
+              <li>Is this structure, or are you reacting to noise?</li>
+              <li>Would no action be the cleaner decision here?</li>
+            </ul>
+          </article>
+        </section>
+      `;
+    })();
 
     return `
       <section class="section split">
@@ -4134,129 +4411,26 @@
           </div>
         </aside>
       </section>
-
-      <section class="section split">
-        ${renderNotice(state.runtime.fixtureAlertMessage, state.runtime.fixtureAlertMessage ? "success" : "default")}
-        <article class="panel">
-          <h3>${escapeHtml(clarity.meaning_title)}</h3>
-          <p class="muted">${escapeHtml(clarity.meaning_copy)}</p>
-          <div class="prediction-meta-grid dashboard-odds-grid">
-            <div class="signal-cell">
-              <span class="signal-label">1X2</span>
-              <span class="signal-value">${escapeHtml(
-                odds.home_win_odds && odds.draw_odds && odds.away_win_odds
-                  ? `${odds.home_win_odds} / ${odds.draw_odds} / ${odds.away_win_odds}`
-                  : "N/A"
-              )}</span>
-            </div>
-            <div class="signal-cell">
-              <span class="signal-label">OU25</span>
-              <span class="signal-value">${escapeHtml(
-                odds.over25_odds && odds.under25_odds ? `${odds.over25_odds} / ${odds.under25_odds}` : "N/A"
-              )}</span>
-            </div>
-            <div class="signal-cell">
-              <span class="signal-label">BTTS</span>
-              <span class="signal-value">${escapeHtml(
-                odds.btts_yes_odds && odds.btts_no_odds ? `${odds.btts_yes_odds} / ${odds.btts_no_odds}` : "N/A"
-              )}</span>
-            </div>
+      <section class="section section-tight">
+        <nav class="page-subnav" aria-label="Fixture sections">
+          <div class="page-subnav-scroll">
+            ${fixtureTabs
+              .map(
+                ([key, label]) => `
+                  <a
+                    id="fixture-tab-${escapeHtml(key)}"
+                    class="page-subnav-link ${activeFixtureTab === key ? "is-active" : ""}"
+                    href="${fixtureTabHref(key)}"
+                  >
+                    ${escapeHtml(label)}
+                  </a>
+                `
+              )
+              .join("")}
           </div>
-          <div class="card-grid">
-            <article class="panel">
-              <h4>Published summary</h4>
-              <p class="muted">${escapeHtml(fixture.signal_summary?.summary_text || headline)}</p>
-            </article>
-            <article class="panel">
-              <h4>Context tags</h4>
-              <div class="pill-row">
-                ${(fixture.signal_summary?.context_tags || []).length
-                  ? fixture.signal_summary.context_tags.map((tag) => `<span class="chip">${escapeHtml(String(tag).replace(/_/g, " "))}</span>`).join("")
-                  : `<span class="muted">No published context tags</span>`}
-              </div>
-            </article>
-          </div>
-        </article>
-        <article class="panel">
-          <h3>${escapeHtml(clarity.risk_title)}</h3>
-          ${
-            clarity.risk_points.length
-              ? `<ul class="feature-list">${clarity.risk_points.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}</ul>`
-              : `<div class="notice">No extra context notes are currently published for this fixture.</div>`
-          }
-          <div class="dashboard-telegram-preview">
-            <span class="metric-label">Telegram alert preview</span>
-            <pre>${escapeHtml(
-              telegramAlertPreview({
-                row: fixture,
-                reasons: matchedEntry?.reasons || ["fixture intelligence"],
-              })
-            )}</pre>
-          </div>
-        </article>
+        </nav>
       </section>
-
-      <section class="section split">
-        <article class="panel">
-          <h3>Why this matches you</h3>
-          <p class="muted">${escapeHtml(matchCopy)}</p>
-          ${
-            matchReasons.length
-              ? `<div class="pill-row">${matchReasons.map((reason) => `<span class="chip">${escapeHtml(reason)}</span>`).join("")}</div>`
-              : `<div class="notice">No direct saved follow is attached to this fixture right now.</div>`
-          }
-        </article>
-        <article class="panel">
-          <h3>${escapeHtml(clarity.decision_title)}</h3>
-          <ul class="feature-list">
-            ${clarity.decision_points.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}
-          </ul>
-        </article>
-        <article class="panel">
-          <h3>Decision companion</h3>
-          <ul class="feature-list">
-            <li>${escapeHtml(clarity.reflection_prompt)}</li>
-            <li>What could invalidate this read before kickoff?</li>
-            <li>Is this structure, or are you reacting to noise?</li>
-            <li>Would no action be the cleaner decision here?</li>
-          </ul>
-        </article>
-      </section>
-
-      <section class="section">
-        <article class="panel">
-          ${fixtureStandingsWidgetMarkup(fixture)}
-        </article>
-      </section>
-
-      <section class="section">
-        <article class="panel">
-          ${fixtureLineupsWidgetMarkup(fixture)}
-        </article>
-      </section>
-
-      <section class="section">
-        <article class="panel">
-          <h3>Related league fixtures</h3>
-          ${
-            relatedFixtures.length
-              ? `<div class="card-grid intelligence-grid">
-                  ${relatedFixtures
-                    .map((row) =>
-                      intelligenceCard(
-                        {
-                          row,
-                          reasons: [row.league === fixture.league ? "same league" : "related"],
-                        },
-                        Boolean(notificationPreferences?.telegram_enabled)
-                      )
-                    )
-                    .join("")}
-                </div>`
-              : `<div class="notice">No related fixtures are available from the current published intelligence window.</div>`
-          }
-        </article>
-      </section>
+      ${activeTabContent}
     `;
   };
 
