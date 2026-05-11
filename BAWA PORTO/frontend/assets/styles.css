@@ -1148,6 +1148,119 @@ body::after {
   padding: 10px 12px;
 }
 
+.market-bar-shell {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 13px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(123, 154, 184, 0.12);
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.market-bar-shell-positive {
+  border-color: rgba(61, 217, 176, 0.2);
+  background: rgba(61, 217, 176, 0.05);
+}
+
+.market-bar-shell-fragile {
+  border-color: rgba(201, 122, 122, 0.18);
+  background: rgba(201, 122, 122, 0.045);
+}
+
+.market-bar-shell-neutral {
+  border-color: rgba(107, 122, 143, 0.18);
+}
+
+.market-bar-header,
+.market-bar-legend,
+.market-mini-bar-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.market-bar-legend {
+  flex-wrap: wrap;
+}
+
+.market-bar-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted-1);
+  font-size: 0.88rem;
+}
+
+.market-bar-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+}
+
+.market-bar-dot-active {
+  background: rgba(61, 217, 176, 0.95);
+  box-shadow: 0 0 0 3px rgba(61, 217, 176, 0.12);
+}
+
+.market-bar-dot-opposition {
+  background: rgba(107, 122, 143, 0.95);
+  box-shadow: 0 0 0 3px rgba(107, 122, 143, 0.12);
+}
+
+.market-bar-track,
+.market-mini-bar-track {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(7, 16, 25, 0.45);
+}
+
+.market-bar-fill,
+.market-mini-bar-fill {
+  display: block;
+  height: 100%;
+}
+
+.market-bar-fill-active {
+  background: linear-gradient(90deg, rgba(61, 217, 176, 0.92), rgba(93, 231, 190, 0.84));
+}
+
+.market-bar-fill-opposition {
+  background: rgba(107, 122, 143, 0.9);
+}
+
+.market-bar-empty {
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px dashed rgba(123, 154, 184, 0.16);
+  color: var(--muted-1);
+  font-size: 0.88rem;
+}
+
+.market-mini-bar {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.market-mini-bar-top {
+  color: var(--muted-1);
+  font-size: 0.82rem;
+}
+
+.market-mini-bar-active .market-mini-bar-fill {
+  background: linear-gradient(90deg, rgba(61, 217, 176, 0.88), rgba(48, 199, 255, 0.72));
+}
+
+.market-mini-bar-reference .market-mini-bar-fill {
+  background: rgba(107, 122, 143, 0.82);
+}
+
 .market-structure-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }

@@ -1368,6 +1368,73 @@
 
   const impliedLineDisplay = (odds) => (hasUsableOdds(odds) ? `${formatImpliedProbability(odds)} implied` : "Public price unavailable");
 
+  const impliedPercentValue = (odds) => {
+    if (!hasUsableOdds(odds)) return null;
+    const numeric = Number(formatImpliedProbability(odds).replace("%", ""));
+    return Number.isFinite(numeric) ? Math.max(0, Math.min(100, numeric)) : null;
+  };
+
+  const compactMarketBarMarkup = ({ activeLabel, activeOdds, oppositionLabel, oppositionOdds, tone = "neutral" }) => {
+    const activePercent = impliedPercentValue(activeOdds);
+    const oppositionPercent = impliedPercentValue(oppositionOdds);
+    const usableValues = [activePercent, oppositionPercent].filter((value) => value !== null);
+
+    if (!usableValues.length) {
+      return `
+        <div class="market-bar-shell market-bar-shell-neutral">
+          <div class="market-bar-header">
+            <span class="metric-label">Pricing split</span>
+            <span class="muted">Public price unavailable</span>
+          </div>
+          <div class="market-bar-empty">Compact market bars will appear when usable bookmaker pricing lands.</div>
+        </div>
+      `;
+    }
+
+    const normalizedTotal = usableValues.reduce((sum, value) => sum + value, 0) || 1;
+    const activeShare = activePercent === null ? 0 : Math.round((activePercent / normalizedTotal) * 100);
+    const oppositionShare = oppositionPercent === null ? 0 : Math.max(0, 100 - activeShare);
+
+    return `
+      <div class="market-bar-shell market-bar-shell-${escapeHtml(tone)}">
+        <div class="market-bar-header">
+          <span class="metric-label">Pricing split</span>
+          <span class="muted">Public implied view</span>
+        </div>
+        <div class="market-bar-legend">
+          <div class="market-bar-legend-item">
+            <span class="market-bar-dot market-bar-dot-active"></span>
+            <span>${escapeHtml(activeLabel)}${activePercent === null ? "" : ` · ${activePercent}%`}</span>
+          </div>
+          <div class="market-bar-legend-item">
+            <span class="market-bar-dot market-bar-dot-opposition"></span>
+            <span>${escapeHtml(oppositionLabel)}${oppositionPercent === null ? "" : ` · ${oppositionPercent}%`}</span>
+          </div>
+        </div>
+        <div class="market-bar-track" aria-hidden="true">
+          <span class="market-bar-fill market-bar-fill-active" style="width:${activeShare}%"></span>
+          <span class="market-bar-fill market-bar-fill-opposition" style="width:${oppositionShare}%"></span>
+        </div>
+      </div>
+    `;
+  };
+
+  const marketStructureBarMarkup = (entry, isActive = false) => {
+    const value = entry.percent === null || entry.percent === undefined ? null : Math.max(0, Math.min(100, Math.round(entry.percent)));
+    const tone = isActive ? "active" : "reference";
+    return `
+      <div class="market-mini-bar market-mini-bar-${tone}">
+        <div class="market-mini-bar-top">
+          <span>${escapeHtml(entry.label)}</span>
+          <span>${value === null ? "N/A" : `${value}%`}</span>
+        </div>
+        <div class="market-mini-bar-track" aria-hidden="true">
+          <span class="market-mini-bar-fill" style="width:${value === null ? 0 : value}%"></span>
+        </div>
+      </div>
+    `;
+  };
+
   const primaryMarketLine = (fixture) => {
     const family = String(fixture?.signal_summary?.market_family || "").toUpperCase();
     const odds = fixture?.odds_summary || {};
@@ -1448,6 +1515,10 @@
         odds.home_win_odds && odds.draw_odds && odds.away_win_odds
           ? `H ${formatImpliedProbability(odds.home_win_odds)} • D ${formatImpliedProbability(odds.draw_odds)} • A ${formatImpliedProbability(odds.away_win_odds)}`
           : "No current 1X2 snapshot",
+      percent:
+        odds.home_win_odds && odds.draw_odds && odds.away_win_odds
+          ? Math.max(impliedPercentValue(odds.home_win_odds) || 0, impliedPercentValue(odds.draw_odds) || 0, impliedPercentValue(odds.away_win_odds) || 0)
+          : null,
     },
     {
       key: "OU25",
@@ -1460,6 +1531,8 @@
         odds.over25_odds && odds.under25_odds
           ? `Over ${formatImpliedProbability(odds.over25_odds)} • Under ${formatImpliedProbability(odds.under25_odds)}`
           : "No current totals snapshot",
+      percent:
+        odds.over25_odds && odds.under25_odds ? Math.max(impliedPercentValue(odds.over25_odds) || 0, impliedPercentValue(odds.under25_odds) || 0) : null,
     },
     {
       key: "BTTS",
@@ -1472,6 +1545,8 @@
         odds.btts_yes_odds && odds.btts_no_odds
           ? `Yes ${formatImpliedProbability(odds.btts_yes_odds)} • No ${formatImpliedProbability(odds.btts_no_odds)}`
           : "No current BTTS snapshot",
+      percent:
+        odds.btts_yes_odds && odds.btts_no_odds ? Math.max(impliedPercentValue(odds.btts_yes_odds) || 0, impliedPercentValue(odds.btts_no_odds) || 0) : null,
     },
   ];
 
@@ -5748,6 +5823,13 @@
                     <span class="muted">${escapeHtml(notes.length ? `${notes.length} caution note${notes.length === 1 ? "" : "s"}` : "No caution notes published")}</span>
                   </div>
                 </div>
+                ${compactMarketBarMarkup({
+                  activeLabel: marketLine.label,
+                  activeOdds: marketLine.odds,
+                  oppositionLabel: alternativeLine.label,
+                  oppositionOdds: alternativeLine.odds,
+                  tone: valueEdgeTone(fixture),
+                })}
                 <div class="fixture-stats-note">
                   <span class="metric-label">Market framing</span>
                   <p class="muted">The active line and its best available opposition are shown side by side so the deploy read stays anchored to a real bookmaker price rather than a floating verdict.</p>
@@ -5766,6 +5848,7 @@
                         <span class="signal-label">${escapeHtml(entry.label)}</span>
                         <span class="signal-value">${escapeHtml(entry.value)}</span>
                         <span class="muted">${escapeHtml(entry.meta)}</span>
+                        ${marketStructureBarMarkup(entry, entry.key === String(fixture.signal_summary?.market_family || "").toUpperCase())}
                       </article>
                     `
                   )
