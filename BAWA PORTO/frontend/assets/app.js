@@ -1266,13 +1266,22 @@
 
   const deployPickDisplay = (value) => {
     const pick = String(value || "").toUpperCase();
+    if (pick === "HOME") {
+      return "Home";
+    }
+    if (pick === "DRAW") {
+      return "Draw";
+    }
+    if (pick === "AWAY") {
+      return "Away";
+    }
     if (pick === "OVER25") {
       return "Over 2.5";
     }
     if (pick === "UNDER25") {
       return "Under 2.5";
     }
-    return pick || "TBC";
+    return pick || "Read pending";
   };
 
   const confidenceBandDisplay = (tier) => {
@@ -1283,7 +1292,7 @@
     if (value === "STANDARD") {
       return "Standard confidence";
     }
-    return "Observed confidence";
+    return "Watch-first confidence";
   };
 
   const valueEdgeTone = (fixture) => {
@@ -1305,8 +1314,59 @@
     if (tone === "fragile") {
       return "Fragility active";
     }
-    return "Edge unscored";
+    return "Public edge pending";
   };
+
+  const hasUsableOdds = (value) => {
+    const numeric = Number(value);
+    return Number.isFinite(numeric) && numeric > 1;
+  };
+
+  const marketVerdictDisplay = (fixture) => {
+    const family = String(fixture?.signal_summary?.market_family || "").toUpperCase();
+    const pick = String(fixture?.signal_summary?.deploy_pick || fixture?.deploy_summary?.pick || "").toUpperCase();
+    if (family === "OU25") {
+      if (pick === "OVER25") {
+        return "Over 2.5";
+      }
+      if (pick === "UNDER25") {
+        return "Under 2.5";
+      }
+      return "Totals read pending";
+    }
+    if (family === "BTTS") {
+      if (pick === "YES" || pick === "BTTSYES") {
+        return "BTTS Yes";
+      }
+      if (pick === "NO" || pick === "BTTSNO") {
+        return "BTTS No";
+      }
+      return "BTTS read pending";
+    }
+    if (family === "FTR") {
+      if (pick === "HOME") {
+        return "FTR · Home";
+      }
+      if (pick === "DRAW") {
+        return "FTR · Draw";
+      }
+      if (pick === "AWAY") {
+        return "FTR · Away";
+      }
+      return "Result read pending";
+    }
+    if (pick) {
+      return deployPickDisplay(pick);
+    }
+    if (family) {
+      return `${marketFamilyDisplay(family)} read pending`;
+    }
+    return "Read pending";
+  };
+
+  const bookmakerLineDisplay = (odds) => (hasUsableOdds(odds) ? formatOdds(odds) : "Line pending");
+
+  const impliedLineDisplay = (odds) => (hasUsableOdds(odds) ? `${formatImpliedProbability(odds)} implied` : "Public price unavailable");
 
   const primaryMarketLine = (fixture) => {
     const family = String(fixture?.signal_summary?.market_family || "").toUpperCase();
@@ -1651,14 +1711,17 @@
   const renderFixtureHeroScoreboard = (fixture, clarity) => {
     const leagueBadge = safeLogoUrl(fixture.league_logo_url || fixture.league_flag_url);
     const timing = fixtureTimeState(fixture.kickoff_time);
+    const heroMode = timing.tone === "scheduled" ? "editorial" : "scoreboard";
     const homeTeamId = String(fixture.api_home_team_id || "").trim() || extractTeamIdFromLogoUrl(fixture.home_team_logo_url);
     const awayTeamId = String(fixture.api_away_team_id || "").trim() || extractTeamIdFromLogoUrl(fixture.away_team_logo_url);
     const marketLine = primaryMarketLine(fixture);
     const confidenceTier = String(fixture.signal_summary?.confidence_tier || fixture.deploy_summary?.confidence_tier || "").toUpperCase();
+    const verdictLabel = marketVerdictDisplay(fixture);
     return `
       <div
-        class="fixture-hero-scoreboard"
+        class="fixture-hero-scoreboard fixture-hero-scoreboard-${escapeHtml(heroMode)}"
         data-role="fixture-scoreboard"
+        data-hero-mode="${escapeHtml(heroMode)}"
         data-api-fixture-id="${escapeHtml(String(fixture.api_fixture_id || ""))}"
         data-kickoff-time="${escapeHtml(String(fixture.kickoff_time || ""))}"
         data-date="${escapeHtml(String(fixture.kickoff_time || "").slice(0, 10))}"
@@ -1678,14 +1741,19 @@
           </a>
           <span class="fixture-status-badge fixture-status-badge-${escapeHtml(timing.tone)}">${escapeHtml(timing.label)}</span>
         </div>
+        ${
+          heroMode === "editorial"
+            ? `<h1 class="fixture-hero-title">${escapeHtml(fixture.home_team)} <span class="muted">—</span> ${escapeHtml(fixture.away_team)}</h1>`
+            : ""
+        }
         <div class="fixture-hero-score-row">
           <div class="fixture-hero-side">
             ${badgeMarkup(fixture.home_team_logo_url, fixture.home_team, "match-hero-badge")}
             <a class="fixture-entity-link" href="${teamPageHref(fixture.home_team)}"><strong>${escapeHtml(fixture.home_team)}</strong></a>
           </div>
           <div class="fixture-hero-center">
-            <span class="metric-label">Kickoff strip</span>
-            <strong class="fixture-hero-score">vs</strong>
+            <span class="metric-label">${escapeHtml(heroMode === "editorial" ? "Kickoff strip" : timing.label)}</span>
+            <strong class="fixture-hero-score">${escapeHtml(heroMode === "editorial" ? "vs" : "—")}</strong>
             <span class="muted">${escapeHtml(timing.detail)}</span>
           </div>
           <div class="fixture-hero-side fixture-hero-side-end">
@@ -1696,7 +1764,7 @@
         <div class="hero-verdict-strip">
           <article class="hero-verdict-card hero-verdict-card-primary">
             <span class="metric-label">Market verdict</span>
-            <strong>${escapeHtml(`${marketFamilyDisplay(fixture.signal_summary?.market_family)} • ${deployPickDisplay(fixture.signal_summary?.deploy_pick || fixture.deploy_summary?.pick)}`)}</strong>
+            <strong>${escapeHtml(verdictLabel)}</strong>
             <p class="muted">${escapeHtml(clarity.action_label)}</p>
           </article>
           <article class="hero-verdict-card">
@@ -1706,8 +1774,8 @@
           </article>
           <article class="hero-verdict-card">
             <span class="metric-label">Bookmaker line</span>
-            <strong>${escapeHtml(formatOdds(marketLine.odds))}</strong>
-            <p class="muted">${escapeHtml(`${formatImpliedProbability(marketLine.odds)} implied`)}</p>
+            <strong>${escapeHtml(bookmakerLineDisplay(marketLine.odds))}</strong>
+            <p class="muted">${escapeHtml(impliedLineDisplay(marketLine.odds))}</p>
           </article>
           <article class="hero-verdict-card">
             <span class="metric-label">Edge posture</span>
@@ -5484,6 +5552,8 @@
     const matchReasons = Array.isArray(matchedEntry?.reasons) ? matchedEntry.reasons : [];
     const confidenceTier = String(fixture.signal_summary?.confidence_tier || fixture.deploy_summary?.confidence_tier || "").toUpperCase();
     const marketLine = primaryMarketLine(fixture);
+    const verdictLabel = marketVerdictDisplay(fixture);
+    const heroMode = fixtureTimeState(fixture.kickoff_time).tone === "scheduled" ? "editorial" : "scoreboard";
     const alternativeLine = alternativeMarketLine(fixture);
     const marketStructure = marketStructureRows(odds);
     const matchCopy = matchReasons.length
@@ -5616,7 +5686,7 @@
                 <div class="prediction-meta-grid dashboard-odds-grid">
                   <div class="signal-cell signal-cell-model">
                     <span class="signal-label">Verdict</span>
-                    <span class="signal-value">${escapeHtml(`${marketFamilyDisplay(fixture.signal_summary?.market_family)} • ${deployPickDisplay(fixture.signal_summary?.deploy_pick || fixture.deploy_summary?.pick)}`)}</span>
+                    <span class="signal-value">${escapeHtml(verdictLabel)}</span>
                   </div>
                   <div class="signal-cell signal-cell-model">
                     <span class="signal-label">Confidence</span>
@@ -5649,13 +5719,13 @@
                 <div class="prediction-meta-grid dashboard-odds-grid">
                   <div class="signal-cell signal-cell-market">
                     <span class="signal-label">Active line</span>
-                    <span class="signal-value">${escapeHtml(`${marketLine.label} • ${formatOdds(marketLine.odds)}`)}</span>
-                    <span class="muted">${escapeHtml(`${formatImpliedProbability(marketLine.odds)} implied`)}</span>
+                    <span class="signal-value">${escapeHtml(`${marketLine.label} • ${bookmakerLineDisplay(marketLine.odds)}`)}</span>
+                    <span class="muted">${escapeHtml(impliedLineDisplay(marketLine.odds))}</span>
                   </div>
                   <div class="signal-cell signal-cell-market">
                     <span class="signal-label">Opposition</span>
-                    <span class="signal-value">${escapeHtml(`${alternativeLine.label} • ${formatOdds(alternativeLine.odds)}`)}</span>
-                    <span class="muted">${escapeHtml(`${formatImpliedProbability(alternativeLine.odds)} implied`)}</span>
+                    <span class="signal-value">${escapeHtml(`${alternativeLine.label} • ${bookmakerLineDisplay(alternativeLine.odds)}`)}</span>
+                    <span class="muted">${escapeHtml(impliedLineDisplay(alternativeLine.odds))}</span>
                   </div>
                   <div class="signal-cell signal-cell-market">
                     <span class="signal-label">Snapshot</span>
@@ -5664,8 +5734,8 @@
                   </div>
                   <div class="signal-cell signal-cell-market">
                     <span class="signal-label">Active family</span>
-                    <span class="signal-value">${escapeHtml(marketFamilyDisplay(fixture.signal_summary?.market_family))}</span>
-                    <span class="muted">${escapeHtml(deployPickDisplay(fixture.signal_summary?.deploy_pick || fixture.deploy_summary?.pick))}</span>
+                    <span class="signal-value">${escapeHtml(marketFamilyDisplay(fixture.signal_summary?.market_family) || "Market frame pending")}</span>
+                    <span class="muted">${escapeHtml(verdictLabel)}</span>
                   </div>
                   <div class="signal-cell signal-cell-market">
                     <span class="signal-label">Confidence band</span>
@@ -5857,18 +5927,19 @@
     })();
 
     return `
-      <section class="section split">
-        <article class="hero-main">
+      <section class="section split fixture-hero-shell">
+        <article class="hero-main fixture-hero-main fixture-hero-main-${escapeHtml(heroMode)}">
           <p class="hero-kicker">Fixture Intelligence</p>
           ${renderFixtureHeroScoreboard(fixture, clarity)}
-          <h1>${escapeHtml(fixture.home_team)} <span class="muted">vs</span> ${escapeHtml(fixture.away_team)}</h1>
           <p>${escapeHtml(clarity.action_copy)}</p>
           <div class="pill-row">
             <span class="fixture-state-pill fixture-state-pill-${escapeHtml(clarity.action_label.toLowerCase().includes("deploy") ? "deploy" : publishClass.toLowerCase())}">${escapeHtml(publishClass)}</span>
-            <span class="chip chip-signal">${escapeHtml(`${marketFamilyDisplay(fixture.signal_summary?.market_family)} • ${deployPickDisplay(fixture.signal_summary?.deploy_pick || fixture.deploy_summary?.pick)}`)}</span>
-            <span class="chip chip-confidence chip-confidence-${escapeHtml((confidenceTier || "standard").toLowerCase())}">${escapeHtml(confidenceBandDisplay(confidenceTier))}</span>
-            <span class="chip chip-reference">${escapeHtml(fixture.league)}</span>
-            <span class="chip chip-reference">${escapeHtml(formatKickoffLabel(fixture.kickoff_time))}</span>
+            ${
+              (fixture.signal_summary?.context_tags || [])
+                .slice(0, 2)
+                .map((tag) => `<span class="chip chip-reference">${escapeHtml(String(tag).replace(/_/g, " "))}</span>`)
+                .join("")
+            }
           </div>
           <div class="cta-row">
             <a class="button" href="./dashboard.html">Back to dashboard</a>
@@ -5880,7 +5951,7 @@
           <article class="panel compact-panel compact-panel-primary">
             <span class="metric-label">Action state</span>
             <div class="metric-stack">
-              <strong class="metric-value">${escapeHtml(`${deployPickDisplay(fixture.signal_summary?.deploy_pick || fixture.deploy_summary?.pick)} ${marketFamilyDisplay(fixture.signal_summary?.market_family)}`)}</strong>
+              <strong class="metric-value">${escapeHtml(verdictLabel)}</strong>
               <p class="muted">${escapeHtml(`${clarity.action_label} • ${confidenceBandDisplay(confidenceTier)}`)}</p>
             </div>
           </article>
@@ -5889,7 +5960,7 @@
             <div class="metric-stack">
               <div class="mini-score-pair">
                 <span class="metric-label">Book line</span>
-                <strong>${escapeHtml(`${formatOdds(marketLine.odds)} • ${formatImpliedProbability(marketLine.odds)}`)}</strong>
+                <strong>${escapeHtml(`${bookmakerLineDisplay(marketLine.odds)} • ${hasUsableOdds(marketLine.odds) ? formatImpliedProbability(marketLine.odds) : "Pricing pending"}`)}</strong>
               </div>
               <div class="mini-score-pair">
                 <span class="metric-label">Edge</span>
