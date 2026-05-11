@@ -2811,6 +2811,10 @@
     const teamClassMix = collectPublishClassMix(teamRecentRows);
     const teamMarketMix = collectMarketFamilyMix(teamRecentRows);
     const trackedTeamRows = teamClassMix.DEPLOY + teamClassMix.OBSERVE + teamClassMix.CONTEXT + teamClassMix.MONITOR;
+    const nextFixtureRows = team.fixtures.upcoming.slice(0, 1);
+    const latestResultRows = team.fixtures.results.slice(0, 1);
+    const hasUpcomingFixture = nextFixtureRows.length > 0;
+    const hasLatestResult = latestResultRows.length > 0;
     const tabs = [
       ["Overview", teamPageHref(team.name, "overview"), selectedTeamTab === "overview"],
       ["Fixtures", teamPageHref(team.name, "fixtures"), selectedTeamTab === "fixtures"],
@@ -2870,22 +2874,29 @@
         </div>
       </section>
       <section class="section">
-        <div class="split">
-          <article class="panel">
-            <h3>Next visible fixture</h3>
-            <p class="section-copy">The next current-window match stays near the top of the team desk so you can jump straight into the active read.</p>
-            ${renderEntityFixtureSection(
-              team.fixtures.upcoming.slice(0, 1),
-              "No upcoming current-window fixture is visible for this team right now."
-            )}
-          </article>
-          <article class="panel">
+        <div class="split split-top split-team-density">
+          <article class="panel ${hasLatestResult ? "team-spotlight-panel" : "team-empty-note"}">
             <h3>Latest visible result</h3>
             <p class="section-copy">The latest settled current-window result helps anchor the desk before you move into deeper form and signal layers.</p>
-            ${renderEntityFixtureSection(
-              team.fixtures.results.slice(0, 1),
-              "No current-window settled result is visible for this team right now."
-            )}
+            ${
+              hasLatestResult
+                ? renderEntityFixtureSection(latestResultRows, "No current-window settled result is visible for this team right now.")
+                : `<div class="notice">No current-window settled result is visible for this team right now.</div>`
+            }
+          </article>
+          <article class="panel team-empty-note">
+            <h3>Next visible fixture</h3>
+            <p class="section-copy">Keep the next team-linked match close to the top of the desk when one is in view. If the window is result-only, this panel stays compact instead of creating empty drag.</p>
+            ${
+              hasUpcomingFixture
+                ? renderEntityFixtureSection(nextFixtureRows, "No upcoming current-window fixture is visible for this team right now.")
+                : `<div class="notice">No upcoming current-window fixture is visible for this team right now.</div>`
+            }
+            ${
+              !hasUpcomingFixture && hasLatestResult
+                ? `<div class="pill-row"><span class="chip chip-reference">Result-led window</span><span class="chip chip-observe">Next match will appear here when the public window rolls forward</span></div>`
+                : ""
+            }
           </article>
         </div>
       </section>
@@ -5710,6 +5721,12 @@
                 <strong>${matchedEntry ? escapeHtml(matchedEntry.reasons.join(" / ")) : "Window fixture"}</strong>
               </div>
             </div>
+          </article>
+          <article class="panel compact-panel">
+            <span class="metric-label">Read first</span>
+            <ul class="feature-list compact-list">
+              ${clarity.risk_points.slice(0, 2).map((point) => `<li>${escapeHtml(point)}</li>`).join("")}
+            </ul>
           </article>
         </aside>
       </section>
