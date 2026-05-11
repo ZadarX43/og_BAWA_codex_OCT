@@ -1574,6 +1574,121 @@
     };
   };
 
+  const computeRouteTone = (entry) => {
+    const priority = dashboardPriorityProfile(entry);
+    if (priority.bucket === "send_now") {
+      return { label: "Deploy", tone: "deploy", read: "Route live" };
+    }
+    if (priority.bucket === "watch_closely") {
+      return { label: "Observe", tone: "observe", read: "Hold and watch" };
+    }
+    if (priority.bucket === "website_only") {
+      return { label: "Context", tone: "monitor", read: "Website-first" };
+    }
+    return { label: "Pass", tone: "pass", read: "No forced route" };
+  };
+
+  const compactKickoffLabel = (value) => {
+    if (!value) return "Pending kickoff";
+    const parsed = new Date(value);
+    if (Number.isNaN(parsed.getTime())) return String(value);
+    return parsed.toLocaleString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  const dashboardComputePanel = (entries) => {
+    if (!entries.length) {
+      return `
+        <article class="compute-panel compute-panel-empty">
+          <div class="compute-panel-head">
+            <div class="compute-panel-copy">
+              <span class="metric-label">Odds Genius - Computing...</span>
+              <h3>Routing window is calm.</h3>
+              <p class="muted">When followed intelligence comes into view, live route rows will appear here with league flow, market posture, and public pricing pressure.</p>
+            </div>
+            <div class="compute-panel-pulse">
+              <span class="compute-panel-dot" aria-hidden="true"></span>
+              <span>Standby</span>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    const rows = entries.slice(0, 4);
+    const visibleLeagues = new Set(rows.map((entry) => String(entry.row.league || "").trim()).filter(Boolean)).size;
+    const deployCount = rows.filter((entry) => computeRouteTone(entry).tone === "deploy").length;
+    const observeCount = rows.filter((entry) => computeRouteTone(entry).tone === "observe").length;
+
+    return `
+      <article class="compute-panel">
+        <div class="compute-panel-head">
+          <div class="compute-panel-copy">
+            <span class="metric-label">Odds Genius - Computing...</span>
+            <h3>Live routing surface.</h3>
+            <p class="muted">A quiet window into the current followed-intelligence layer: league flow, active market pressure, and route posture updating in sequence.</p>
+          </div>
+          <div class="compute-panel-pulse">
+            <span class="compute-panel-dot" aria-hidden="true"></span>
+            <span>Live</span>
+          </div>
+        </div>
+        <div class="compute-panel-meta">
+          <span>${visibleLeagues} leagues visible</span>
+          <span>${rows.length} live rows</span>
+          <span>${deployCount} deploy / ${observeCount} observe</span>
+        </div>
+        <div class="compute-panel-rows">
+          ${rows
+            .map((entry, index) => {
+              const row = entry.row;
+              const route = computeRouteTone(entry);
+              const marketLine = primaryMarketLine(row);
+              const opposition = alternativeMarketLine(row);
+              const activePercent = impliedPercentValue(marketLine.odds);
+              const oppositionPercent = impliedPercentValue(opposition.odds);
+              const activeShare = activePercent == null ? 0 : Math.max(12, activePercent);
+              const oppositionShare = oppositionPercent == null ? 0 : Math.max(8, oppositionPercent);
+              return `
+                <article class="compute-row compute-row-${escapeHtml(route.tone)}" style="--compute-index:${index}">
+                  <div class="compute-row-top">
+                    <span class="fixture-route-pill fixture-route-pill-${escapeHtml(route.tone)}">${escapeHtml(route.label)}</span>
+                    <span class="compute-row-meta">${escapeHtml(marketFamilyLabel(row.signal_summary?.market_family))} · ${escapeHtml(compactKickoffLabel(row.kickoff_time))}</span>
+                  </div>
+                  <strong class="compute-row-fixture">
+                    <span class="compute-row-team compute-row-team-home">${badgeMarkup(row.home_team_logo_url, row.home_team)}<span>${escapeHtml(teamCardName(row.home_team))}</span></span>
+                    <span class="versus">vs</span>
+                    <span class="compute-row-team compute-row-team-away"><span>${escapeHtml(teamCardName(row.away_team))}</span>${badgeMarkup(row.away_team_logo_url, row.away_team)}</span>
+                  </strong>
+                  <div class="compute-row-read">
+                    <span>${escapeHtml(`${marketVerdictDisplay(row)} · ${bookmakerLineDisplay(marketLine.odds)}`)}</span>
+                    <span class="edge-tone-${escapeHtml(valueEdgeTone(row))}">${escapeHtml(valueEdgeDisplay(row))}</span>
+                  </div>
+                  <div class="compute-market-track" aria-hidden="true">
+                    <span class="compute-market-bar compute-market-bar-active" style="width:${activeShare}%"></span>
+                    <span class="compute-market-bar compute-market-bar-opposition" style="width:${oppositionShare}%"></span>
+                  </div>
+                  <div class="compute-row-foot">
+                    <span>${escapeHtml(route.read)}</span>
+                    <span>${escapeHtml(
+                      activePercent == null
+                        ? "Public pricing pending"
+                        : `${activePercent}% active / ${oppositionPercent == null ? "N/A" : `${oppositionPercent}%`} opposition`
+                    )}</span>
+                  </div>
+                </article>
+              `;
+            })
+            .join("")}
+        </div>
+      </article>
+    `;
+  };
+
   const marketStructureRows = (odds) => [
     {
       key: "FTR",
@@ -5554,6 +5669,7 @@
             <span class="stat-chip">${entitled ? "Premium active" : "Free / pending"}</span>
             <span class="stat-chip">${notificationPreferences?.telegram_enabled ? "Telegram enabled" : "Website-first mode"}</span>
           </div>
+          ${dashboardComputePanel(matches)}
         </article>
         <aside class="hero-side">
           <div class="metric">
