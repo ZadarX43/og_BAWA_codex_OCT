@@ -1327,13 +1327,93 @@
         otherOdds: odds.under25_odds,
       };
     }
+    const pick = String(fixture?.signal_summary?.deploy_pick || fixture?.deploy_summary?.pick || "").toUpperCase();
+    const ftrFallbackOdds =
+      pick === "HOME"
+        ? odds.home_win_odds
+        : pick === "DRAW"
+          ? odds.draw_odds
+          : pick === "AWAY"
+            ? odds.away_win_odds
+            : null;
     return {
-      label: deployPickDisplay(fixture?.signal_summary?.deploy_pick || fixture?.deploy_summary?.pick || ""),
-      odds: fixture?.deploy_summary?.bookie_od,
+      label: deployPickDisplay(pick),
+      odds: fixture?.deploy_summary?.bookie_od ?? ftrFallbackOdds,
       otherLabel: "",
       otherOdds: null,
     };
   };
+
+  const signalStrengthDisplay = (value) => {
+    const raw = String(value || "").trim().toLowerCase();
+    if (!raw) {
+      return "Unspecified";
+    }
+    return `${raw.charAt(0).toUpperCase()}${raw.slice(1)} strength`;
+  };
+
+  const alternativeMarketLine = (fixture) => {
+    const family = String(fixture?.signal_summary?.market_family || "").toUpperCase();
+    const odds = fixture?.odds_summary || {};
+    const primary = primaryMarketLine(fixture);
+    if (family === "BTTS" || family === "OU25") {
+      return {
+        label: primary.otherLabel || "Opposition",
+        odds: primary.otherOdds,
+      };
+    }
+    const pick = String(fixture?.signal_summary?.deploy_pick || fixture?.deploy_summary?.pick || "").toUpperCase();
+    const candidates = [
+      { label: "Home", odds: odds.home_win_odds, key: "HOME" },
+      { label: "Draw", odds: odds.draw_odds, key: "DRAW" },
+      { label: "Away", odds: odds.away_win_odds, key: "AWAY" },
+    ].filter((entry) => entry.key !== pick && Number.isFinite(Number(entry.odds)));
+    candidates.sort((left, right) => Number(left.odds) - Number(right.odds));
+    const best = candidates[0];
+    return {
+      label: best?.label || "Best alternative",
+      odds: best?.odds ?? null,
+    };
+  };
+
+  const marketStructureRows = (odds) => [
+    {
+      key: "FTR",
+      label: "1X2",
+      value:
+        odds.home_win_odds && odds.draw_odds && odds.away_win_odds
+          ? `${formatOdds(odds.home_win_odds)} / ${formatOdds(odds.draw_odds)} / ${formatOdds(odds.away_win_odds)}`
+          : "N/A",
+      meta:
+        odds.home_win_odds && odds.draw_odds && odds.away_win_odds
+          ? `H ${formatImpliedProbability(odds.home_win_odds)} • D ${formatImpliedProbability(odds.draw_odds)} • A ${formatImpliedProbability(odds.away_win_odds)}`
+          : "No current 1X2 snapshot",
+    },
+    {
+      key: "OU25",
+      label: "OU25",
+      value:
+        odds.over25_odds && odds.under25_odds
+          ? `${formatOdds(odds.over25_odds)} / ${formatOdds(odds.under25_odds)}`
+          : "N/A",
+      meta:
+        odds.over25_odds && odds.under25_odds
+          ? `Over ${formatImpliedProbability(odds.over25_odds)} • Under ${formatImpliedProbability(odds.under25_odds)}`
+          : "No current totals snapshot",
+    },
+    {
+      key: "BTTS",
+      label: "BTTS",
+      value:
+        odds.btts_yes_odds && odds.btts_no_odds
+          ? `${formatOdds(odds.btts_yes_odds)} / ${formatOdds(odds.btts_no_odds)}`
+          : "N/A",
+      meta:
+        odds.btts_yes_odds && odds.btts_no_odds
+          ? `Yes ${formatImpliedProbability(odds.btts_yes_odds)} • No ${formatImpliedProbability(odds.btts_no_odds)}`
+          : "No current BTTS snapshot",
+    },
+  ];
 
   const safeLogoUrl = (value) => {
     const raw = String(value || "").trim();
@@ -5404,6 +5484,8 @@
     const matchReasons = Array.isArray(matchedEntry?.reasons) ? matchedEntry.reasons : [];
     const confidenceTier = String(fixture.signal_summary?.confidence_tier || fixture.deploy_summary?.confidence_tier || "").toUpperCase();
     const marketLine = primaryMarketLine(fixture);
+    const alternativeLine = alternativeMarketLine(fixture);
+    const marketStructure = marketStructureRows(odds);
     const matchCopy = matchReasons.length
       ? `This fixture matches your saved follows through ${matchReasons.join(", ")}.`
       : "This fixture is being shown from the current intelligence window rather than a direct saved follow.";
@@ -5541,44 +5623,102 @@
                     <span class="signal-value">${escapeHtml(confidenceBandDisplay(confidenceTier))}</span>
                   </div>
                   <div class="signal-cell signal-cell-model">
+                    <span class="signal-label">Signal strength</span>
+                    <span class="signal-value">${escapeHtml(signalStrengthDisplay(fixture.signal_summary?.signal_strength))}</span>
+                  </div>
+                  <div class="signal-cell signal-cell-model">
                     <span class="signal-label">Edge posture</span>
                     <span class="signal-value">${escapeHtml(valueEdgeDisplay(fixture))}</span>
                   </div>
+                  <div class="signal-cell signal-cell-model">
+                    <span class="signal-label">Support notes</span>
+                    <span class="signal-value">${escapeHtml(`${notes.length} published`)}</span>
+                  </div>
+                  <div class="signal-cell signal-cell-model">
+                    <span class="signal-label">Context tags</span>
+                    <span class="signal-value">${escapeHtml((fixture.signal_summary?.context_tags || []).length ? `${fixture.signal_summary.context_tags.length} active` : "None published")}</span>
+                  </div>
                 </div>
-                <p class="muted">This is the deploy-layer reading for this fixture: market family, pick, confidence band, and whether the line still reads as supportive or fragile.</p>
+                <div class="fixture-stats-note">
+                  <span class="metric-label">Public-safe model frame</span>
+                  <p class="muted">This is the approved public model layer for the fixture: verdict, confidence, strength, and caution structure. Raw model probabilities stay private outside premium and internal review tooling.</p>
+                </div>
               </article>
               <article class="panel">
-                <h3>Market reference</h3>
+                <h3>Active market comparison</h3>
                 <div class="prediction-meta-grid dashboard-odds-grid">
                   <div class="signal-cell signal-cell-market">
-                    <span class="signal-label">${escapeHtml(marketLine.label)}</span>
-                    <span class="signal-value">${escapeHtml(formatOdds(marketLine.odds))}</span>
+                    <span class="signal-label">Active line</span>
+                    <span class="signal-value">${escapeHtml(`${marketLine.label} • ${formatOdds(marketLine.odds)}`)}</span>
                     <span class="muted">${escapeHtml(`${formatImpliedProbability(marketLine.odds)} implied`)}</span>
                   </div>
                   <div class="signal-cell signal-cell-market">
-                    <span class="signal-label">1X2</span>
-                    <span class="signal-value">${escapeHtml(
-                      odds.home_win_odds && odds.draw_odds && odds.away_win_odds
-                        ? `${formatOdds(odds.home_win_odds)} / ${formatOdds(odds.draw_odds)} / ${formatOdds(odds.away_win_odds)}`
-                        : "N/A"
-                    )}</span>
+                    <span class="signal-label">Opposition</span>
+                    <span class="signal-value">${escapeHtml(`${alternativeLine.label} • ${formatOdds(alternativeLine.odds)}`)}</span>
+                    <span class="muted">${escapeHtml(`${formatImpliedProbability(alternativeLine.odds)} implied`)}</span>
                   </div>
                   <div class="signal-cell signal-cell-market">
-                    <span class="signal-label">OU25</span>
-                    <span class="signal-value">${escapeHtml(
-                      odds.over25_odds && odds.under25_odds ? `${formatOdds(odds.over25_odds)} / ${formatOdds(odds.under25_odds)}` : "N/A"
-                    )}</span>
+                    <span class="signal-label">Snapshot</span>
+                    <span class="signal-value">${escapeHtml(String(odds.odds_snapshot_status || "unknown").replace(/_/g, " "))}</span>
+                    <span class="muted">${escapeHtml(fixture.league)}</span>
                   </div>
                   <div class="signal-cell signal-cell-market">
-                    <span class="signal-label">BTTS</span>
-                    <span class="signal-value">${escapeHtml(
-                      odds.btts_yes_odds && odds.btts_no_odds ? `${formatOdds(odds.btts_yes_odds)} / ${formatOdds(odds.btts_no_odds)}` : "N/A"
-                    )}</span>
+                    <span class="signal-label">Active family</span>
+                    <span class="signal-value">${escapeHtml(marketFamilyDisplay(fixture.signal_summary?.market_family))}</span>
+                    <span class="muted">${escapeHtml(deployPickDisplay(fixture.signal_summary?.deploy_pick || fixture.deploy_summary?.pick))}</span>
+                  </div>
+                  <div class="signal-cell signal-cell-market">
+                    <span class="signal-label">Confidence band</span>
+                    <span class="signal-value">${escapeHtml(confidenceBandDisplay(confidenceTier))}</span>
+                    <span class="muted">${escapeHtml(signalStrengthDisplay(fixture.signal_summary?.signal_strength))}</span>
+                  </div>
+                  <div class="signal-cell signal-cell-market">
+                    <span class="signal-label">Edge posture</span>
+                    <span class="signal-value edge-tone-${escapeHtml(valueEdgeTone(fixture))}">${escapeHtml(valueEdgeDisplay(fixture))}</span>
+                    <span class="muted">${escapeHtml(notes.length ? `${notes.length} caution note${notes.length === 1 ? "" : "s"}` : "No caution notes published")}</span>
                   </div>
                 </div>
-                <p class="muted">Rounded bookmaker prices and implied probability for the active market sit here as the reference side of the read. This layer should stay visually separate from the model verdict.</p>
+                <div class="fixture-stats-note">
+                  <span class="metric-label">Market framing</span>
+                  <p class="muted">The active line and its best available opposition are shown side by side so the deploy read stays anchored to a real bookmaker price rather than a floating verdict.</p>
+                </div>
               </article>
             </div>
+          </section>
+          <section class="section split">
+            <article class="panel">
+              <h3>Market structure</h3>
+              <div class="card-grid market-structure-grid">
+                ${marketStructure
+                  .map(
+                    (entry) => `
+                      <article class="signal-cell ${entry.key === String(fixture.signal_summary?.market_family || "").toUpperCase() ? "signal-cell-market-active" : "signal-cell-market"}">
+                        <span class="signal-label">${escapeHtml(entry.label)}</span>
+                        <span class="signal-value">${escapeHtml(entry.value)}</span>
+                        <span class="muted">${escapeHtml(entry.meta)}</span>
+                      </article>
+                    `
+                  )
+                  .join("")}
+              </div>
+              <p class="muted">This is the rounded bookmaker map around the fixture. It shows which family the deploy sits in, while keeping neighbouring reference markets visible.</p>
+            </article>
+            <article class="panel">
+              <h3>Support and caution</h3>
+              ${
+                notes.length
+                  ? `<ul class="feature-list">${notes.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}</ul>`
+                  : `<div class="notice">No caution or support notes are currently published for this fixture.</div>`
+              }
+              <div class="fixture-stats-note">
+                <span class="metric-label">What is public here</span>
+                <ul class="feature-list compact-list">
+                  <li>Rounded odds and implied pricing.</li>
+                  <li>Approved deploy verdict, not raw model probability.</li>
+                  <li>Public-safe caution framing from the active export.</li>
+                </ul>
+              </div>
+            </article>
           </section>
         `;
       }

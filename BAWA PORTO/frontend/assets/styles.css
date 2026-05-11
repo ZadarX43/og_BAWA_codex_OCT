@@ -1075,6 +1075,11 @@ body::after {
   background: rgba(107, 122, 143, 0.06);
 }
 
+.signal-cell-market-active {
+  border-color: rgba(92, 200, 232, 0.24);
+  background: rgba(92, 200, 232, 0.08);
+}
+
 .signal-cell span {
   display: block;
 }
@@ -1090,6 +1095,28 @@ body::after {
   margin-top: 6px;
   font-size: 1.02rem;
   font-weight: 800;
+}
+
+.fixture-stats-note {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(123, 154, 184, 0.12);
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.fixture-stats-note .feature-list {
+  gap: 8px;
+}
+
+.fixture-stats-note .feature-list li {
+  padding: 10px 12px;
+}
+
+.market-structure-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .prediction-card p,
