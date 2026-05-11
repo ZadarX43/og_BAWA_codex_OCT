@@ -1028,7 +1028,7 @@
     return `${group.items.length} fixtures • from ${formatKickoffLabel(first.kickoff_time)}`;
   };
 
-  const dashboardFixtureCard = (entry, telegramEnabled) => {
+  const dashboardFixtureCard = (entry, telegramEnabled, entryIndex = 0) => {
     const row = entry.row;
     const publishClass = String(row.publish_class || row.fixture_class || "MONITOR").toUpperCase();
     const priority = dashboardPriorityProfile(entry);
@@ -1045,7 +1045,7 @@
     const supportCopy =
       row.signal_summary?.headline || row.signal_summary?.summary_text || "Monitoring update published.";
     return `
-      <details class="panel fixture-stream-card fixture-stream-card-${escapeHtml(deskState.tone)}" ${priority.bucket === "send_now" ? "open" : ""}>
+      <details class="panel fixture-stream-card fixture-stream-card-${escapeHtml(deskState.tone)}" style="--enter-index:${entryIndex}" ${priority.bucket === "send_now" ? "open" : ""}>
         <summary class="fixture-stream-summary">
           <div class="fixture-stream-summary-main">
             <div class="intelligence-card-head">
@@ -1064,9 +1064,8 @@
             <p class="fixture-stream-headline">${escapeHtml(supportCopy)}</p>
           </div>
           <div class="fixture-stream-summary-side">
-            <span class="metric-label">${escapeHtml(priority.label)}</span>
-            <span class="metric-value dashboard-route">${escapeHtml(routeValue)}</span>
-            <span class="muted fixture-stream-expand">Open intelligence</span>
+            <span class="fixture-route-pill fixture-route-pill-${escapeHtml(deskState.tone)}">${escapeHtml(priority.bucket === "send_now" ? "Send now" : priority.bucket === "watch_closely" ? "Watch closely" : routeValue)}</span>
+            <span class="muted fixture-stream-expand">Open read</span>
           </div>
         </summary>
         <div class="fixture-stream-body">
@@ -1141,7 +1140,7 @@
                   </div>
                 </div>
                 <div class="fixture-stream-list">
-                  ${group.items.map((entry) => dashboardFixtureCard(entry, telegramEnabled)).join("")}
+                  ${group.items.map((entry, index) => dashboardFixtureCard(entry, telegramEnabled, index)).join("")}
                 </div>
               </article>
             `
@@ -1151,12 +1150,12 @@
     `;
   };
 
-  const publicDeskFixtureCard = (row) => {
+  const publicDeskFixtureCard = (row, entryIndex = 0) => {
     const publishClass = String(row.publish_class || row.fixture_class || "MONITOR").toUpperCase();
     const deskState = publicDeskState(row);
     const notes = Array.isArray(row.context_summary?.notes) ? row.context_summary.notes.slice(0, 2) : [];
     return `
-      <details class="panel fixture-stream-card fixture-stream-card-${escapeHtml(deskState.tone)}">
+      <details class="panel fixture-stream-card fixture-stream-card-${escapeHtml(deskState.tone)}" style="--enter-index:${entryIndex}">
         <summary class="fixture-stream-summary">
           <div class="fixture-stream-summary-main">
             <div class="intelligence-card-head">
@@ -1176,16 +1175,15 @@
             )}</p>
           </div>
           <div class="fixture-stream-summary-side">
-            <span class="metric-label">${escapeHtml(publishClass === "DEPLOY" ? "Deployable" : "Read first")}</span>
-            <span class="metric-value dashboard-route">${escapeHtml(deskState.label === "DEPLOY" ? "Actionable" : "Interpretive")}</span>
-            <span class="muted fixture-stream-expand">Open intelligence</span>
+            <span class="fixture-route-pill fixture-route-pill-${escapeHtml(deskState.tone)}">${escapeHtml(deskState.label === "DEPLOY" ? "Actionable" : "Read first")}</span>
+            <span class="muted fixture-stream-expand">${escapeHtml(deskState.label === "DEPLOY" ? "Open deploy read" : "Open read")}</span>
           </div>
         </summary>
         <div class="fixture-stream-body">
           ${
             notes.length
               ? `<ul class="feature-list compact-list">${notes.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}</ul>`
-              : `<p class="muted">This fixture currently carries a concise public-safe intelligence summary only.</p>`
+              : ``
           }
           <div class="cta-row">
             <a class="button" href="${fixtureDetailHref(row)}">Open fixture view</a>
@@ -1213,7 +1211,7 @@
                   </div>
                 </div>
                 <div class="fixture-stream-list">
-                  ${group.items.map((row) => publicDeskFixtureCard(row)).join("")}
+                  ${group.items.map((row, index) => publicDeskFixtureCard(row, index)).join("")}
                 </div>
               </article>
             `
@@ -6105,7 +6103,7 @@
       "internal-review": internalReviewView,
     };
     const view = views[page] || homeView;
-    app.innerHTML = view();
+    app.innerHTML = `<div class="app-view" data-view="${escapeHtml(page)}">${view()}</div>`;
     if (page === "fixture" || page === "teams" || page === "competitions") {
       hydrateFixtureReferenceWidgets();
     }
