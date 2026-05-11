@@ -2335,6 +2335,12 @@
     return `<div class="card-grid">${rows.map((row) => entityFixtureCard(row)).join("")}</div>`;
   };
 
+  const renderEntityCompactEmpty = (copy, tone = "default") => `
+    <div class="entity-empty-card ${tone === "muted" ? "entity-empty-card-muted" : ""}">
+      <p class="section-copy">${escapeHtml(copy)}</p>
+    </div>
+  `;
+
   const renderTeamIntelligenceBuckets = (team) => {
     const deployRows = team.rows.filter((row) => String(row.publish_class || row.fixture_class || "").toUpperCase() === "DEPLOY");
     const observeRows = team.rows.filter((row) => String(row.publish_class || row.fixture_class || "").toUpperCase() === "OBSERVE");
@@ -2342,26 +2348,59 @@
       const key = String(row.publish_class || row.fixture_class || "").toUpperCase();
       return key === "CONTEXT" || key === "MONITOR";
     });
+    const hasDeploy = deployRows.length > 0;
+    const hasObserve = observeRows.length > 0;
+    const hasContext = contextRows.length > 0;
+    const adaptiveSplitClass =
+      hasDeploy && hasObserve ? "split split-top" : "split split-top split-entity-adaptive";
+    const primaryTitle = hasDeploy ? "Deployable team reads" : "Watch-first team reads";
+    const primaryCopy = hasDeploy
+      ? "These are the current-window rows where this team is part of an active deploy posture."
+      : "These are the rows worth tracking, but not treating as direct deployment calls yet.";
+    const primaryRows = hasDeploy ? deployRows : observeRows;
+    const primaryEmptyCopy = hasDeploy
+      ? "No deployable team-linked rows are visible in the current window yet."
+      : "No observe-level team-linked rows are visible in the current window yet.";
+    const secondaryTitle = hasDeploy ? "Watch-first team reads" : "Deployable team reads";
+    const secondaryCopy = hasDeploy
+      ? "These are the rows worth tracking, but not treating as direct deployment calls yet."
+      : "These are the current-window rows where this team is part of an active deploy posture.";
+    const secondaryRows = hasDeploy ? observeRows : deployRows;
+    const secondaryEmptyCopy = hasDeploy
+      ? "No observe-level team-linked rows are visible in the current window yet."
+      : "No deployable team-linked rows are visible in the current window yet.";
+    const primaryContent =
+      primaryRows.length > 0
+        ? renderEntityFixtureSection(primaryRows, primaryEmptyCopy)
+        : renderEntityCompactEmpty(primaryEmptyCopy, "muted");
+    const secondaryContent =
+      secondaryRows.length > 0
+        ? renderEntityFixtureSection(secondaryRows, secondaryEmptyCopy)
+        : renderEntityCompactEmpty(secondaryEmptyCopy, "muted");
     return `
       <section class="section">
-        <div class="split">
-          <article class="panel">
-            <h3>Deployable team reads</h3>
-            <p class="section-copy">These are the current-window rows where this team is part of an active deploy posture.</p>
-            ${renderEntityFixtureSection(deployRows, "No deployable team-linked rows are visible in the current window yet.")}
+        <div class="${adaptiveSplitClass}">
+          <article class="panel ${hasDeploy && !hasObserve ? "panel-primary-entity" : !hasDeploy && hasObserve ? "panel-primary-entity" : ""}">
+            <h3>${primaryTitle}</h3>
+            <p class="section-copy">${primaryCopy}</p>
+            ${primaryContent}
           </article>
-          <article class="panel">
-            <h3>Watch-first team reads</h3>
-            <p class="section-copy">These are the rows worth tracking, but not treating as direct deployment calls yet.</p>
-            ${renderEntityFixtureSection(observeRows, "No observe-level team-linked rows are visible in the current window yet.")}
+          <article class="panel ${primaryRows.length > 0 && !secondaryRows.length ? "panel-secondary-entity panel-compact-stack" : ""}">
+            <h3>${secondaryTitle}</h3>
+            <p class="section-copy">${secondaryCopy}</p>
+            ${secondaryContent}
           </article>
         </div>
       </section>
       <section class="section">
-        <article class="panel">
+        <article class="panel ${hasContext ? "" : "panel-compact-stack"}">
           <h3>Context and monitor layer</h3>
           <p class="section-copy">This is the softer context around the team: useful shape, caution, or slate-awareness without a direct deploy call.</p>
-          ${renderEntityFixtureSection(contextRows, "No context or monitor rows are visible for this team in the current window.")}
+          ${
+            hasContext
+              ? renderEntityFixtureSection(contextRows, "No context or monitor rows are visible for this team in the current window.")
+              : renderEntityCompactEmpty("No context or monitor rows are visible for this team in the current window.", "muted")
+          }
         </article>
       </section>
     `;
@@ -5949,7 +5988,12 @@
     const renderCompetitionArchiveCards = (fixtures, scope) => {
       const list = Array.isArray(fixtures) ? fixtures : [];
       if (!list.length) {
-        return `<div class="notice">No ${scope === "results" ? "recent results" : "upcoming fixtures"} are available from the upstream feed yet.</div>`;
+        return `
+          <div class="archive-empty-card">
+            <span class="metric-label">${scope === "results" ? "Archive unavailable" : "Schedule unavailable"}</span>
+            <p class="section-copy">No ${scope === "results" ? "recent results" : "upcoming fixtures"} are available from the upstream feed yet.</p>
+          </div>
+        `;
       }
       return `
         <div class="card-grid archive-grid">
@@ -6288,7 +6332,13 @@
           const fixtures = await fetchCompetitionFixtures(leagueId, season, "fixtures");
           frame.innerHTML = renderCompetitionArchiveCards(fixtures, "fixtures");
         } catch (error) {
-          root.innerHTML = `<div class="notice">${escapeHtml(error.message || "Competition fixtures unavailable.")}</div>`;
+          const frame = root.querySelector(".widget-reference-frame") || root;
+          frame.innerHTML = `
+            <div class="archive-empty-card">
+              <span class="metric-label">Schedule unavailable</span>
+              <p class="section-copy">${escapeHtml(error.message || "Competition fixtures unavailable.")}</p>
+            </div>
+          `;
         }
       })
     );
@@ -6304,7 +6354,13 @@
           const fixtures = await fetchCompetitionFixtures(leagueId, season, "results");
           frame.innerHTML = renderCompetitionArchiveCards(fixtures, "results");
         } catch (error) {
-          root.innerHTML = `<div class="notice">${escapeHtml(error.message || "Competition results unavailable.")}</div>`;
+          const frame = root.querySelector(".widget-reference-frame") || root;
+          frame.innerHTML = `
+            <div class="archive-empty-card">
+              <span class="metric-label">Archive unavailable</span>
+              <p class="section-copy">${escapeHtml(error.message || "Competition results unavailable.")}</p>
+            </div>
+          `;
         }
       })
     );
