@@ -1055,17 +1055,20 @@
               <span class="muted">${escapeHtml(formatKickoffLabel(row.kickoff_time))}</span>
             </div>
             <strong class="fixture-teamline dashboard-teamline">
-              ${badgeMarkup(row.home_team_logo_url, row.home_team)}
-              <span class="team-name">${escapeHtml(row.home_team)}</span>
+              <span class="team-side team-side-home">
+                ${badgeMarkup(row.home_team_logo_url, row.home_team)}
+                <span class="team-name">${escapeHtml(teamCardName(row.home_team))}</span>
+              </span>
               <span class="versus">vs</span>
-              ${badgeMarkup(row.away_team_logo_url, row.away_team)}
-              <span class="team-name">${escapeHtml(row.away_team)}</span>
+              <span class="team-side team-side-away">
+                <span class="team-name">${escapeHtml(teamCardName(row.away_team))}</span>
+                ${badgeMarkup(row.away_team_logo_url, row.away_team)}
+              </span>
             </strong>
             <p class="fixture-stream-headline">${escapeHtml(supportCopy)}</p>
           </div>
           <div class="fixture-stream-summary-side">
             <span class="fixture-route-pill fixture-route-pill-${escapeHtml(deskState.tone)}">${escapeHtml(priority.bucket === "send_now" ? "Send now" : priority.bucket === "watch_closely" ? "Watch closely" : routeValue)}</span>
-            <span class="muted fixture-stream-expand">Open read</span>
           </div>
         </summary>
         <div class="fixture-stream-body">
@@ -1164,11 +1167,15 @@
               <span class="muted">${escapeHtml(formatKickoffLabel(row.kickoff_time))}</span>
             </div>
             <strong class="fixture-teamline dashboard-teamline">
-              ${badgeMarkup(row.home_team_logo_url, row.home_team)}
-              <span class="team-name">${escapeHtml(row.home_team)}</span>
+              <span class="team-side team-side-home">
+                ${badgeMarkup(row.home_team_logo_url, row.home_team)}
+                <span class="team-name">${escapeHtml(teamCardName(row.home_team))}</span>
+              </span>
               <span class="versus">vs</span>
-              ${badgeMarkup(row.away_team_logo_url, row.away_team)}
-              <span class="team-name">${escapeHtml(row.away_team)}</span>
+              <span class="team-side team-side-away">
+                <span class="team-name">${escapeHtml(teamCardName(row.away_team))}</span>
+                ${badgeMarkup(row.away_team_logo_url, row.away_team)}
+              </span>
             </strong>
             <p class="fixture-stream-headline">${escapeHtml(
               row.signal_summary?.headline || row.signal_summary?.summary_text || "Fixture intelligence update available."
@@ -1176,7 +1183,6 @@
           </div>
           <div class="fixture-stream-summary-side">
             <span class="fixture-route-pill fixture-route-pill-${escapeHtml(deskState.tone)}">${escapeHtml(deskState.label === "DEPLOY" ? "Actionable" : "Read first")}</span>
-            <span class="muted fixture-stream-expand">${escapeHtml(deskState.label === "DEPLOY" ? "Open deploy read" : "Open read")}</span>
           </div>
         </summary>
         <div class="fixture-stream-body">
@@ -2072,14 +2078,14 @@
     `;
   };
 
-  const predictionCard = (row, locked) => {
+  const predictionCard = (row, locked, entryIndex = 0) => {
     const shortlist = Array.isArray(row.correct_score_shortlist) ? row.correct_score_shortlist : [];
     const edge = locked ? row.value_edge_display || edgeLabel(row) : edgeLabel(row);
     const edgeTone = predictionEdgeTone(row);
     const metricLine = compactMetricText(row);
     const reasonText = cardReasonText(row);
     return `
-      <article class="card prediction-card prediction-card-${escapeHtml(edgeTone)}">
+      <article class="card prediction-card prediction-card-${escapeHtml(edgeTone)}" style="--enter-index:${entryIndex}">
         <div class="prediction-top">
           ${fixtureTeamsMarkup(row)}
           <div class="pill-row">
@@ -3409,9 +3415,38 @@
         <a class="ghost-button" href="./premium.html">See premium unlock</a>
       </div>
       <div class="card-grid">
-        ${state.publicPredictions.map((row) => predictionCard(row, true)).join("")}
+        ${state.publicPredictions.map((row, index) => predictionCard(row, true, index)).join("")}
       </div>
     </section>
+  `;
+
+  const loadingShell = (message) => `
+    <div class="loading loading-shell">
+      <div class="loading-copy">
+        <span class="metric-label">Booting Odds Genius</span>
+        <strong>${escapeHtml(message)}</strong>
+      </div>
+      <div class="loading-skeleton-grid" aria-hidden="true">
+        <article class="loading-skeleton-card">
+          <div class="loading-skeleton-pill"></div>
+          <div class="loading-skeleton-line loading-skeleton-line-lg"></div>
+          <div class="loading-skeleton-line loading-skeleton-line-md"></div>
+          <div class="loading-skeleton-line loading-skeleton-line-sm"></div>
+        </article>
+        <article class="loading-skeleton-card">
+          <div class="loading-skeleton-pill"></div>
+          <div class="loading-skeleton-line loading-skeleton-line-md"></div>
+          <div class="loading-skeleton-line loading-skeleton-line-sm"></div>
+          <div class="loading-skeleton-line loading-skeleton-line-xs"></div>
+        </article>
+        <article class="loading-skeleton-card">
+          <div class="loading-skeleton-pill"></div>
+          <div class="loading-skeleton-line loading-skeleton-line-md"></div>
+          <div class="loading-skeleton-line loading-skeleton-line-sm"></div>
+          <div class="loading-skeleton-line loading-skeleton-line-sm"></div>
+        </article>
+      </div>
+    </div>
   `;
 
   const premiumView = () => {
@@ -8268,7 +8303,7 @@
     } else if (page === "premium") {
       loadingMessage = "Checking premium access…";
     }
-    app.innerHTML = `<div class="loading">${escapeHtml(loadingMessage)}</div>`;
+    app.innerHTML = loadingShell(loadingMessage);
     syncActiveNav();
     state.runtime.premiumToken = readStoredPremiumToken();
     state.runtime.internalAdminKey = readStoredInternalAdminKey();
