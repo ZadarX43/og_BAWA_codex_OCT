@@ -2189,6 +2189,75 @@
     };
   };
 
+  const publishClassKeyForRow = (row) => {
+    const key = String(row?.publish_class || row?.fixture_class || "").toUpperCase();
+    if (key === "DEPLOY" || key === "OBSERVE" || key === "CONTEXT" || key === "MONITOR") {
+      return key;
+    }
+    return "OTHER";
+  };
+
+  const collectPublishClassMix = (rows) => {
+    const counts = { DEPLOY: 0, OBSERVE: 0, CONTEXT: 0, MONITOR: 0, OTHER: 0 };
+    rows.forEach((row) => {
+      counts[publishClassKeyForRow(row)] += 1;
+    });
+    return counts;
+  };
+
+  const collectMarketFamilyMix = (rows) => {
+    const counts = new Map();
+    rows.forEach((row) => {
+      const label = marketFamilyLabel(row?.signal_summary?.market_family);
+      counts.set(label, (counts.get(label) || 0) + 1);
+    });
+    return Array.from(counts.entries())
+      .map(([label, value]) => ({ label, value }))
+      .sort((left, right) => right.value - left.value || left.label.localeCompare(right.label));
+  };
+
+  const renderEntitySurfaceTiles = (items) => `
+    <div class="entity-surface-grid">
+      ${items
+        .map(
+          (item) => `
+            <article class="entity-surface-tile entity-surface-tile-${escapeHtml(item.tone || "reference")}">
+              <span class="entity-surface-label">${escapeHtml(item.label)}</span>
+              <strong class="entity-surface-value">${escapeHtml(item.value)}</strong>
+              ${item.meta ? `<span class="entity-surface-meta">${escapeHtml(item.meta)}</span>` : ""}
+            </article>
+          `
+        )
+        .join("")}
+    </div>
+  `;
+
+  const renderEntityBreakdown = (items, total, emptyCopy) => {
+    if (!items.length || !total) {
+      return `<div class="notice">${escapeHtml(emptyCopy)}</div>`;
+    }
+    return `
+      <div class="entity-breakdown">
+        ${items
+          .map((item) => {
+            const share = Math.max(6, Math.round((item.value / total) * 100));
+            return `
+              <div class="entity-breakdown-row">
+                <div class="entity-breakdown-copy">
+                  <span class="entity-breakdown-label">${escapeHtml(item.label)}</span>
+                  <span class="entity-breakdown-meta">${escapeHtml(`${item.value} rows • ${Math.round((item.value / total) * 100)}%`)}</span>
+                </div>
+                <div class="entity-breakdown-bar">
+                  <span class="entity-breakdown-fill entity-breakdown-fill-${escapeHtml(item.tone || "reference")}" style="width:${share}%"></span>
+                </div>
+              </div>
+            `;
+          })
+          .join("")}
+      </div>
+    `;
+  };
+
   const renderEntitySubnav = (items, label) => `
     <section class="section section-tight">
       <nav class="page-subnav" aria-label="${escapeHtml(label)}">
@@ -2412,6 +2481,10 @@
   };
 
   const competitionEntityView = (competition) => {
+    const competitionClassMix = collectPublishClassMix(competition.rows);
+    const competitionMarketMix = collectMarketFamilyMix(competition.rows);
+    const competitionTrackedRows =
+      competitionClassMix.DEPLOY + competitionClassMix.OBSERVE + competitionClassMix.CONTEXT + competitionClassMix.MONITOR;
     const tabs = [
       ["Overview", competitionPageHref(competition.name, "overview"), selectedCompetitionTab === "overview"],
       ["Fixtures", competitionPageHref(competition.name, "fixtures"), selectedCompetitionTab === "fixtures"],
@@ -2438,6 +2511,32 @@
               <li>Full decision logic, caution framing, and Telegram-ready language stay on fixture pages.</li>
               <li>Use this desk to scan the competition, then drop into a fixture when the row deserves the full intelligence treatment.</li>
             </ul>
+          </article>
+        </div>
+      </section>
+      <section class="section">
+        <div class="split">
+          <article class="panel">
+            <h3>Competition signal surface</h3>
+            <p class="section-copy">This keeps the current-window competition mix visible: how much is deployable, how much is watch-first, and how much is context only.</p>
+            ${renderEntitySurfaceTiles([
+              { label: "Deploy", value: competitionClassMix.DEPLOY, meta: `${Math.round((competitionClassMix.DEPLOY / Math.max(1, competition.rows.length)) * 100)}% of rows`, tone: "deploy" },
+              { label: "Observe", value: competitionClassMix.OBSERVE, meta: `${Math.round((competitionClassMix.OBSERVE / Math.max(1, competition.rows.length)) * 100)}% of rows`, tone: "observe" },
+              { label: "Context / monitor", value: competitionClassMix.CONTEXT + competitionClassMix.MONITOR, meta: `${Math.round((((competitionClassMix.CONTEXT + competitionClassMix.MONITOR) / Math.max(1, competition.rows.length)) * 100))}% of rows`, tone: "reference" },
+            ])}
+          </article>
+          <article class="panel">
+            <h3>Market-family distribution</h3>
+            <p class="section-copy">This shows which market families are actually driving the visible competition slice right now.</p>
+            ${renderEntityBreakdown(
+              competitionMarketMix.map((item) => ({
+                ...item,
+                tone:
+                  item.label === "BTTS" ? "deploy" : item.label === "OU25" ? "observe" : "reference",
+              })),
+              competition.rows.length,
+              "No market-family distribution is visible for this competition yet."
+            )}
           </article>
         </div>
       </section>
@@ -2558,6 +2657,11 @@
               <span class="chip chip-reference">Teams: ${escapeHtml(competition.teamCount)}</span>
             </div>
             <p class="section-copy">This is the competition-level read: how much of the current slate is actionable, watch-only, or context-driven.</p>
+            ${renderEntitySurfaceTiles([
+              { label: "Tracked rows", value: competitionTrackedRows, meta: "Deploy + observe + context + monitor", tone: "reference" },
+              { label: "Lead market", value: competitionMarketMix[0]?.label || "—", meta: competitionMarketMix[0] ? `${competitionMarketMix[0].value} visible rows` : "No market data", tone: "deploy" },
+              { label: "Deploy share", value: `${Math.round((competitionClassMix.DEPLOY / Math.max(1, competition.rows.length)) * 100)}%`, meta: "Of current-window competition rows", tone: "observe" },
+            ])}
           </article>
           <article class="panel">
             <h3>Competition context in view</h3>
@@ -2703,6 +2807,10 @@
   };
 
   const teamEntityView = (team) => {
+    const teamRecentRows = team.rows.slice(0, 6);
+    const teamClassMix = collectPublishClassMix(teamRecentRows);
+    const teamMarketMix = collectMarketFamilyMix(teamRecentRows);
+    const trackedTeamRows = teamClassMix.DEPLOY + teamClassMix.OBSERVE + teamClassMix.CONTEXT + teamClassMix.MONITOR;
     const tabs = [
       ["Overview", teamPageHref(team.name, "overview"), selectedTeamTab === "overview"],
       ["Fixtures", teamPageHref(team.name, "fixtures"), selectedTeamTab === "fixtures"],
@@ -2733,6 +2841,31 @@
                 .join("")}
             </div>
             <p class="section-copy">Team pages keep the broader team story visible. Final market verdicts and discipline language stay on the fixture page itself.</p>
+          </article>
+        </div>
+      </section>
+      <section class="section">
+        <div class="split">
+          <article class="panel">
+            <h3>Recent output mix</h3>
+            <p class="section-copy">This is the current-window posture around this team: how much of the latest visible slice is deployable, watch-first, or softer context.</p>
+            ${renderEntitySurfaceTiles([
+              { label: "Recent rows", value: teamRecentRows.length, meta: "Latest visible team-linked rows", tone: "reference" },
+              { label: "Deploy share", value: `${Math.round((teamClassMix.DEPLOY / Math.max(1, teamRecentRows.length)) * 100)}%`, meta: `${teamClassMix.DEPLOY} deploy rows`, tone: "deploy" },
+              { label: "Watch share", value: `${Math.round((teamClassMix.OBSERVE / Math.max(1, teamRecentRows.length)) * 100)}%`, meta: `${teamClassMix.OBSERVE} observe rows`, tone: "observe" },
+            ])}
+          </article>
+          <article class="panel">
+            <h3>Market-family mix</h3>
+            <p class="section-copy">This shows which market families are appearing most often in the team’s latest visible output layer.</p>
+            ${renderEntityBreakdown(
+              teamMarketMix.map((item) => ({
+                ...item,
+                tone: item.label === "BTTS" ? "deploy" : item.label === "OU25" ? "observe" : "reference",
+              })),
+              teamRecentRows.length,
+              "No recent market-family mix is visible for this team yet."
+            )}
           </article>
         </div>
       </section>
@@ -2829,6 +2962,27 @@
       </section>
     `;
     const intelligenceContent = `
+      <section class="section">
+        <div class="split">
+          <article class="panel">
+            <h3>Team signal surface</h3>
+            <p class="section-copy">This is the high-level mix across the latest team-linked rows before you drop into individual fixture cards.</p>
+            ${renderEntitySurfaceTiles([
+              { label: "Tracked rows", value: trackedTeamRows, meta: "Deploy + observe + context + monitor", tone: "reference" },
+              { label: "Lead market", value: teamMarketMix[0]?.label || "—", meta: teamMarketMix[0] ? `${teamMarketMix[0].value} recent rows` : "No market data", tone: "deploy" },
+              { label: "Context share", value: `${Math.round(((teamClassMix.CONTEXT + teamClassMix.MONITOR) / Math.max(1, teamRecentRows.length)) * 100)}%`, meta: `${teamClassMix.CONTEXT + teamClassMix.MONITOR} softer rows`, tone: "observe" },
+            ])}
+          </article>
+          <article class="panel">
+            <h3>Why this stays team-level</h3>
+            <ul class="feature-list compact-list">
+              <li>Team desks keep recent output mix and grouped posture visible.</li>
+              <li>Competition desks own the broader league distribution and standings layer.</li>
+              <li>Fixture pages still carry the final market verdict and discipline framing.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
       ${renderTeamIntelligenceBuckets(team)}
     `;
     const tabContent = {

@@ -740,6 +740,93 @@ body::after {
   gap: 14px;
 }
 
+.entity-surface-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.entity-surface-tile {
+  display: grid;
+  gap: 8px;
+  padding: 14px 15px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(123, 154, 184, 0.14);
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.entity-surface-tile-deploy {
+  border-color: rgba(61, 217, 176, 0.18);
+  background: rgba(61, 217, 176, 0.05);
+}
+
+.entity-surface-tile-observe {
+  border-color: rgba(217, 184, 107, 0.18);
+  background: rgba(217, 184, 107, 0.05);
+}
+
+.entity-surface-label,
+.entity-breakdown-label {
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.entity-surface-value {
+  display: block;
+  margin: 0;
+  font-size: 1.7rem;
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+.entity-surface-meta,
+.entity-breakdown-meta {
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.entity-breakdown {
+  display: grid;
+  gap: 12px;
+}
+
+.entity-breakdown-row {
+  display: grid;
+  gap: 8px;
+}
+
+.entity-breakdown-copy {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.entity-breakdown-bar {
+  overflow: hidden;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(107, 122, 143, 0.12);
+}
+
+.entity-breakdown-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: rgba(107, 122, 143, 0.65);
+}
+
+.entity-breakdown-fill-deploy {
+  background: rgba(61, 217, 176, 0.8);
+}
+
+.entity-breakdown-fill-observe {
+  background: rgba(217, 184, 107, 0.78);
+}
+
 .panel {
   padding: 20px;
 }
@@ -2405,6 +2492,7 @@ code {
 
   .proof-strip,
   .stats-grid,
+  .entity-surface-grid,
   .card-grid,
   .locked-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2473,6 +2561,7 @@ code {
 
   .proof-strip,
   .stats-grid,
+  .entity-surface-grid,
   .card-grid,
   .locked-grid,
   .signal-grid,
@@ -2498,6 +2587,12 @@ code {
   .fixture-league-group-head {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .entity-breakdown-copy {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
   }
 
   .fixture-hero-meta,
