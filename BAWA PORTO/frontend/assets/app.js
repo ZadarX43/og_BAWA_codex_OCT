@@ -1253,6 +1253,73 @@
   const edgeLabel = (row) => row.value_edge_display || row.value_edge || "N/A";
   const confidenceLabel = (row) => row.display_confidence || row.model_prob_display || formatProbability(row.model_prob);
   const tierClass = (tier) => (String(tier || "").toUpperCase() === "STANDARD" ? "standard" : "elite");
+  const shouldShowTierChip = (tier) => {
+    const value = String(tier || "").toUpperCase();
+    return Boolean(value) && value !== "ELITE";
+  };
+  const edgePointsValue = (row) => {
+    const raw = row?.value_edge_display ?? row?.value_edge ?? "";
+    const match = String(raw).match(/-?\d+(?:\.\d+)?/);
+    if (!match) {
+      return null;
+    }
+    const numeric = Number(match[0]);
+    return Number.isFinite(numeric) ? numeric : null;
+  };
+  const predictionEdgeTone = (row) => {
+    const points = edgePointsValue(row);
+    if (points == null) {
+      return "neutral";
+    }
+    if (points < 0) {
+      return "negative";
+    }
+    if (points >= 10) {
+      return "strong";
+    }
+    if (points >= 5) {
+      return "positive";
+    }
+    return "marginal";
+  };
+  const cardReasonText = (row) => {
+    const reason = String(row?.short_reason || row?.human_reason || "").trim();
+    if (!reason) {
+      return "";
+    }
+    const normalized = reason.toLowerCase();
+    if (
+      normalized === "cleared value-edge threshold vs market price." ||
+      normalized === "qualified premium play." ||
+      normalized.includes("cleared live routing checks")
+    ) {
+      return "";
+    }
+    return reason;
+  };
+  const compactMetricText = (row) => {
+    const parts = [];
+    if (row?.bookie_od != null && row?.bookie_od !== "") {
+      parts.push(String(row.bookie_od));
+    }
+    const confidence = String(confidenceLabel(row) || "").trim();
+    if (confidence && confidence !== "N/A") {
+      parts.push(confidence);
+    }
+    if (shouldShowTierChip(row?.confidence_tier)) {
+      parts.push(String(row.confidence_tier).trim());
+    }
+    return parts.join(" · ");
+  };
+  const teamCardName = (value) =>
+    String(value || "")
+      .replace(/\s+FC$/i, "")
+      .replace(/\s+CF$/i, "")
+      .replace(/\s+SC$/i, "")
+      .replace(/\s+SV$/i, "")
+      .replace(/\s+Revolution$/i, "")
+      .replace(/\s+Union$/i, "")
+      .trim();
 
   const marketFamilyDisplay = (value) => {
     const family = String(value || "").toUpperCase();
@@ -1873,11 +1940,15 @@
           <span>${escapeHtml(row.league)} • ${escapeHtml(row.kickoff_time)}</span>
         </span>
         <strong class="fixture-teamline">
-          ${badgeMarkup(row.home_team_logo_url, row.home_team)}
-          <span class="team-name">${escapeHtml(row.home_team)}</span>
+          <span class="team-side team-side-home">
+            ${badgeMarkup(row.home_team_logo_url, row.home_team)}
+            <span class="team-name">${escapeHtml(teamCardName(row.home_team))}</span>
+          </span>
           <span class="versus">vs</span>
-          ${badgeMarkup(row.away_team_logo_url, row.away_team)}
-          <span class="team-name">${escapeHtml(row.away_team)}</span>
+          <span class="team-side team-side-away">
+            <span class="team-name">${escapeHtml(teamCardName(row.away_team))}</span>
+            ${badgeMarkup(row.away_team_logo_url, row.away_team)}
+          </span>
         </strong>
       </div>
     `;
@@ -2004,52 +2075,34 @@
   const predictionCard = (row, locked) => {
     const shortlist = Array.isArray(row.correct_score_shortlist) ? row.correct_score_shortlist : [];
     const edge = locked ? row.value_edge_display || edgeLabel(row) : edgeLabel(row);
+    const edgeTone = predictionEdgeTone(row);
+    const metricLine = compactMetricText(row);
+    const reasonText = cardReasonText(row);
     return `
-      <article class="card prediction-card">
+      <article class="card prediction-card prediction-card-${escapeHtml(edgeTone)}">
         <div class="prediction-top">
           ${fixtureTeamsMarkup(row)}
           <div class="pill-row">
             <span class="market-badge">${escapeHtml(row.market)}</span>
-            <span class="confidence-badge ${tierClass(row.confidence_tier)}">${escapeHtml(row.confidence_tier)}</span>
+            ${
+              shouldShowTierChip(row.confidence_tier)
+                ? `<span class="confidence-badge ${tierClass(row.confidence_tier)}">${escapeHtml(row.confidence_tier)}</span>`
+                : ""
+            }
           </div>
         </div>
         <div class="prediction-core">
           <div class="prediction-call">
             <div>
-              <span class="signal-label">Pick</span>
               <strong class="prediction-pick">${escapeHtml(row.pick)}</strong>
+              ${metricLine ? `<span class="prediction-metric-line">${escapeHtml(metricLine)}</span>` : ""}
             </div>
             <div class="prediction-edge">
-              <span class="signal-label">Edge</span>
-              <span class="prediction-edge-chip">${escapeHtml(`EV ${edge}`)}</span>
-            </div>
-          </div>
-          <div class="prediction-meta-grid">
-            <div class="signal-cell">
-              <span class="signal-label">Odds</span>
-              <span class="signal-value">${escapeHtml(row.bookie_od ?? "N/A")}</span>
-            </div>
-            <div class="signal-cell">
-              <span class="signal-label">${locked ? "Confidence" : "Model"}</span>
-              <span class="signal-value">${escapeHtml(locked ? confidenceLabel(row) : formatProbability(row.model_prob))}</span>
-            </div>
-            <div class="signal-cell">
-              <span class="signal-label">Tier</span>
-              <span class="signal-value">${escapeHtml(row.confidence_tier || "N/A")}</span>
+              <span class="prediction-edge-chip prediction-edge-chip-${escapeHtml(edgeTone)}">${escapeHtml(`EV ${edge}`)}</span>
             </div>
           </div>
         </div>
-        <div class="prediction-footer">
-          ${
-            locked
-              ? `<span class="premium-lock">Free board view</span>`
-              : `<span class="value-badge">Deployable edge cleared</span>`
-          }
-          <span class="pill">${escapeHtml(confidenceLabel(row))}</span>
-        </div>
-        <p class="muted">${escapeHtml(
-          row.short_reason || row.human_reason || "Cleared value-edge threshold vs market price."
-        )}</p>
+        ${reasonText ? `<p class="muted prediction-rationale">${escapeHtml(reasonText)}</p>` : ""}
         ${
           !locked && shortlist.length
             ? `<div class="detail-row"><span class="muted">Correct-score support</span><span>${shortlist

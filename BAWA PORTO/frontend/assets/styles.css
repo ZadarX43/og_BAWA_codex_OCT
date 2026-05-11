@@ -966,6 +966,26 @@ body::after {
   padding: 22px;
 }
 
+.prediction-card-strong {
+  border-color: rgba(61, 217, 176, 0.24);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.035),
+    0 18px 34px rgba(0, 0, 0, 0.24),
+    0 0 0 1px rgba(61, 217, 176, 0.06);
+}
+
+.prediction-card-positive {
+  border-color: rgba(61, 217, 176, 0.18);
+}
+
+.prediction-card-marginal {
+  border-color: rgba(107, 122, 143, 0.14);
+}
+
+.prediction-card-negative {
+  border-color: rgba(201, 122, 122, 0.18);
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -1011,6 +1031,17 @@ body::after {
 .fixture-teamline {
   flex-wrap: wrap;
   gap: 10px;
+}
+
+.team-side {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.team-side-away {
+  justify-content: flex-end;
 }
 
 .fixture-teams-compact .fixture-teamline {
@@ -1116,10 +1147,21 @@ body::after {
   letter-spacing: -0.06em;
 }
 
+.prediction-metric-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  color: var(--muted-1);
+  font-size: 0.96rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
 .prediction-edge {
   display: grid;
   justify-items: end;
-  gap: 8px;
+  gap: 6px;
 }
 
 .prediction-edge-chip {
@@ -1135,6 +1177,48 @@ body::after {
   box-shadow:
     0 0 28px rgba(78, 222, 163, 0.28),
     0 10px 22px rgba(0, 0, 0, 0.18);
+}
+
+.prediction-edge-chip-positive,
+.prediction-edge-chip-strong {
+  color: #071019;
+  background: linear-gradient(135deg, rgba(48, 199, 255, 0.96), rgba(78, 222, 163, 0.96));
+}
+
+.prediction-edge-chip-strong {
+  box-shadow:
+    0 0 30px rgba(78, 222, 163, 0.24),
+    0 10px 22px rgba(0, 0, 0, 0.2);
+}
+
+.prediction-edge-chip-marginal {
+  color: #d9f3ec;
+  background: linear-gradient(135deg, rgba(44, 118, 116, 0.82), rgba(61, 217, 176, 0.52));
+  box-shadow:
+    0 0 16px rgba(61, 217, 176, 0.14),
+    0 10px 20px rgba(0, 0, 0, 0.16);
+}
+
+.prediction-edge-chip-negative {
+  color: #fff3f3;
+  background: linear-gradient(135deg, rgba(169, 98, 98, 0.92), rgba(201, 122, 122, 0.92));
+  box-shadow:
+    0 0 18px rgba(201, 122, 122, 0.14),
+    0 10px 20px rgba(0, 0, 0, 0.16);
+}
+
+.prediction-edge-chip-neutral {
+  color: #e3ecf2;
+  background: linear-gradient(135deg, rgba(78, 94, 112, 0.9), rgba(107, 122, 143, 0.9));
+  box-shadow:
+    0 0 14px rgba(107, 122, 143, 0.12),
+    0 10px 20px rgba(0, 0, 0, 0.14);
+}
+
+.prediction-rationale {
+  margin-top: -4px;
+  font-size: 0.95rem;
+  color: rgba(216, 227, 236, 0.72);
 }
 
 .prediction-meta-grid {
