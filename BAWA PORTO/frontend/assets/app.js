@@ -1961,7 +1961,7 @@
     const label = escapeHtml(name || "Team");
     const initials = escapeHtml(teamInitials(name));
     return `
-      <span class="${className}" aria-hidden="true">
+      <span class="${className} ${safeUrl ? "badge-has-image" : "badge-fallback-only"}" aria-hidden="true">
         <span class="badge-fallback">${initials}</span>
         ${safeUrl ? `<img src="${escapeHtml(safeUrl)}" alt="" loading="lazy" decoding="async" onerror="this.remove()" />` : ""}
       </span>
