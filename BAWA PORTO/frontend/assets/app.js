@@ -2436,11 +2436,11 @@
       >
         <div class="widget-reference-head">
           <div>
-            <span class="metric-label">Reference layer</span>
-            <h4>Lineups & formations</h4>
+            <span class="metric-label">Confirmed provider lineup</span>
+            <h4>Official team sheets</h4>
           </div>
         </div>
-        <p class="muted">This sits beside the custom intelligence layer so confirmed teams and shape can support the read without taking over the page.</p>
+        <p class="muted">When the provider publishes official teams, this section is the confirmed lineup. Until then, use the predicted lineup from last fixture below.</p>
         <div class="widget-reference-frame">
           <div class="lineup-empty-state">
             <div class="lineup-empty-grid">
@@ -2731,30 +2731,42 @@
     const squadFallbackActive = playerDriverCount === 0 || tokenHas(decision?.caution_layers || [], "LINEUP_DATA_MISSING");
     const marketCount = decisionMarketSuitabilityItems(decision).length;
     const lineupModelActive = ["published", "confirmed", "predicted"].includes(lineupProfile.status);
+    const lineupCopy =
+      lineupProfile.status === "confirmed"
+        ? "Confirmed provider lineup"
+        : lineupProfile.status === "predicted"
+          ? "Predicted lineups from last fixture"
+          : "Lineup fallback available";
+    const h2hCopy =
+      h2hProfile.status === "historical"
+        ? "Historical matchup context"
+        : h2hProfile.status === "published"
+          ? "H2H context active"
+          : "H2H context unavailable";
     return `
       <section class="section section-tight">
         <article class="intel-coverage-strip" aria-label="Published intelligence coverage">
           <div class="intel-coverage-copy">
-            <span class="metric-label">Coverage truth</span>
-            <strong>${escapeHtml(lineupModelActive && h2hProfile.status !== "fallback" ? "Supporting estate active" : "Decision read with controlled fallbacks")}</strong>
-            <p>${escapeHtml("The fixture remains coherent even when optional upstream lineup or H2H layers are not published yet.")}</p>
+            <span class="metric-label">Intelligence status</span>
+            <strong>${escapeHtml(lineupModelActive && h2hProfile.status !== "fallback" ? "Supporting layers active" : "Decision read remains live")}</strong>
+            <p>${escapeHtml("The page explains what is real, what is predicted, and what is deliberately left out.")}</p>
           </div>
           <div class="intel-coverage-grid">
             <article class="intel-coverage-item intel-coverage-item-${escapeHtml(lineupProfile.tone)}">
-              <span>${escapeHtml(lineupProfile.label)}</span>
-              <strong>${escapeHtml(lineupProfile.status === "fallback" ? "Fallback active" : `${lineupProfile.profileCount} profiles`)}</strong>
+              <span>Lineups</span>
+              <strong>${escapeHtml(lineupCopy)}</strong>
             </article>
             <article class="intel-coverage-item intel-coverage-item-${escapeHtml(h2hProfile.tone)}">
-              <span>${escapeHtml(h2hProfile.label)}</span>
-              <strong>${escapeHtml(h2hProfile.status === "published" || h2hProfile.status === "historical" ? `${h2hProfile.sampleSize} matches` : "Supporting only")}</strong>
+              <span>H2H</span>
+              <strong>${escapeHtml(h2hCopy)}</strong>
             </article>
             <article class="intel-coverage-item intel-coverage-item-${escapeHtml(squadFallbackActive ? "observe" : "deploy")}">
               <span>Player drivers</span>
-              <strong>${escapeHtml(squadFallbackActive ? "Squad sourced" : `${playerDriverCount} direct`)}</strong>
+              <strong>${escapeHtml(squadFallbackActive ? "From squad model" : "Fixture player layer")}</strong>
             </article>
             <article class="intel-coverage-item intel-coverage-item-${escapeHtml(marketCount ? "deploy" : "reference")}">
-              <span>Market posture</span>
-              <strong>${escapeHtml(marketCount ? `${marketCount} reads` : "Pending")}</strong>
+              <span>Markets</span>
+              <strong>${escapeHtml(marketCount ? "Market read active" : "Market read pending")}</strong>
             </article>
           </div>
         </article>
@@ -2802,60 +2814,6 @@
     const confidenceTier = String(fixture.signal_summary?.confidence_tier || fixture.deploy_summary?.confidence_tier || "").toUpperCase();
     const verdictLabel = marketVerdictDisplay(fixture);
     const decisionMarkets = decisionMarketSuitabilityItems(decision);
-    const heroCards = decision
-      ? [
-          {
-            label: "Primary judgement",
-            value: decision.primary_signal || verdictLabel,
-            note: safeTitleLabel(decision.signal_state, "Pending"),
-            toneClass: `hero-verdict-card-${decisionStateTone(decision.signal_state)}`,
-          },
-          {
-            label: "Agreement stack",
-            value: `${decision.agreement_score ?? "—"}%`,
-            note: `${safeTitleLabel(decision.confidence_band, "Pending")} confidence`,
-            toneClass: `hero-verdict-card-${scoreTone(decision.agreement_score)}`,
-          },
-          {
-            label: "Best aligned market",
-            value: decisionMarkets[0] ? `${decisionMarkets[0].label} · ${decisionMarkets[0].rating}%` : "Pending",
-            note: decisionMarkets[0]?.band || "No published market read yet",
-            toneClass: "hero-verdict-card-observe",
-          },
-          {
-            label: "Main caution",
-            value: decisionTopCaution(decision),
-            note: "Why this may fail",
-            toneClass: "hero-verdict-card-reference",
-          },
-        ]
-      : [
-          {
-            label: "Market verdict",
-            value: verdictLabel,
-            note: clarity.action_label,
-            toneClass: "hero-verdict-card-primary",
-          },
-          {
-            label: "Confidence",
-            value: confidenceBandDisplay(confidenceTier),
-            note: fixture.signal_summary?.signal_strength ? `${String(fixture.signal_summary.signal_strength).toLowerCase()} strength` : "Published signal strength",
-            toneClass: "",
-          },
-          {
-            label: "Bookmaker line",
-            value: bookmakerLineDisplay(marketLine.odds),
-            note: impliedLineDisplay(marketLine.odds),
-            toneClass: "",
-          },
-          {
-            label: "Edge posture",
-            value: valueEdgeDisplay(fixture),
-            note: marketLine.otherLabel && marketLine.otherOdds ? `${marketLine.otherLabel} ${formatOdds(marketLine.otherOdds)}` : "Reference price active",
-            toneClass: "",
-            valueClass: `edge-tone-${valueEdgeTone(fixture)}`,
-          },
-        ];
     return `
       <div
         class="fixture-hero-scoreboard fixture-hero-scoreboard-${escapeHtml(heroMode)}"
@@ -2901,18 +2859,21 @@
           </div>
         </div>
         <div class="fixture-scorer-slot" data-role="fixture-scorers">${renderFixtureScorerStrip(collectGoalScorerRows(fixture, fixture))}</div>
-        <div class="hero-verdict-strip">
-          ${heroCards
-            .map(
-              (card) => `
-                <article class="hero-verdict-card ${escapeHtml(card.toneClass || "")}">
-                  <span class="metric-label">${escapeHtml(card.label)}</span>
-                  <strong${card.valueClass ? ` class="${escapeHtml(card.valueClass)}"` : ""}>${escapeHtml(card.value)}</strong>
-                  <p class="muted">${escapeHtml(card.note)}</p>
-                </article>
-              `
-            )
-            .join("")}
+        <div class="fixture-hero-decision-summary">
+          <span class="metric-label">Decision summary</span>
+          <strong>${escapeHtml(decision?.primary_signal || verdictLabel)}</strong>
+          <p>${escapeHtml(
+            decision
+              ? `${safeTitleLabel(decision.signal_state, "Pending")} read · ${decision.agreement_score ?? "—"}% agreement · ${
+                  decisionMarkets[0] ? `${decisionMarkets[0].label} is the strongest aligned market` : "market alignment pending"
+                }`
+              : `${clarity.action_label} · ${confidenceBandDisplay(confidenceTier)} confidence · ${valueEdgeDisplay(fixture)}`
+          )}</p>
+          <div class="fixture-hero-summary-chips">
+            <span class="chip chip-reference">${escapeHtml(decision ? safeTitleLabel(decision.confidence_band, "Pending") : confidenceBandDisplay(confidenceTier))}</span>
+            <span class="chip chip-reference">${escapeHtml(decisionMarkets[0] ? `${decisionMarkets[0].label} ${decisionMarkets[0].rating}%` : bookmakerLineDisplay(marketLine.odds))}</span>
+            <span class="chip chip-observe">${escapeHtml(decision ? decisionTopCaution(decision) : impliedLineDisplay(marketLine.odds))}</span>
+          </div>
         </div>
       </div>
     `;
@@ -3776,6 +3737,92 @@
     `;
   };
 
+  const horizontalPitchPlayers = (side, formation, profiles = []) => {
+    const bands = formationBandPlan(formation, profiles);
+    const lineCount = Math.max(1, bands.length);
+    return bands.flatMap((band, bandIndex) => {
+      const progress = lineCount === 1 ? 0.5 : bandIndex / Math.max(1, lineCount - 1);
+      const left = side === "home" ? 9 + progress * 34 : 91 - progress * 34;
+      const count = Math.max(1, band.length);
+      return band.map((player, playerIndex) => {
+        const top = count === 1 ? 50 : 16 + (playerIndex * 68) / Math.max(1, count - 1);
+        return { player, left, top, side };
+      });
+    });
+  };
+
+  const renderHorizontalPitchPlayer = ({ player, left, top, side }) => {
+    const [metricLabel, metricValue] = lineupTopMetric(player);
+    return `
+      <button
+        class="formation-player formation-player-horizontal formation-player-${escapeHtml(scoreTone(player.power))} formation-player-${escapeHtml(side)}"
+        type="button"
+        style="left:${left}%; top:${top}%;"
+      >
+        ${renderOgRatingBadge(player.power, "small", `${player.name || player.surname || "Player"} OG rating`)}
+        <span class="formation-player-name">${escapeHtml(player.surname || player.name || "Player")}</span>
+        <span class="formation-player-tooltip">
+          <strong>${escapeHtml(player.name || player.surname || "Player")}</strong>
+          <span>${escapeHtml(`OG Power ${player.power ?? "—"}%`)}</span>
+          <span>${escapeHtml(`Display rating ${ogRatingValue(player.power)?.toFixed(1) || "—"}`)}</span>
+          <span>${escapeHtml(`${metricLabel} ${metricValue ?? "—"}%`)}</span>
+          <span>${escapeHtml(`Discipline ${player.discipline_risk ?? "—"}%`)}</span>
+        </span>
+      </button>
+    `;
+  };
+
+  const renderCombinedFormationPitch = (payload, fixture = null) => {
+    const homePlayers = horizontalPitchPlayers("home", payload.home_formation || "", payload.home_lineup_profiles || []);
+    const awayPlayers = horizontalPitchPlayers("away", payload.away_formation || "", payload.away_lineup_profiles || []);
+    const unitChip = (label, value) => `
+      <span class="formation-unit-chip formation-unit-chip-${escapeHtml(scoreTone(value))}">
+        ${escapeHtml(`${label} ${value ?? "—"}%`)}
+      </span>
+    `;
+    return `
+      <article class="panel formation-pitch-card formation-pitch-card-wide">
+        <div class="formation-match-head">
+          <div class="formation-match-team">
+            ${badgeMarkup(fixture?.home_team_logo_url, payload.home_team || "Home", "lineup-team-badge")}
+            <div>
+              <span class="metric-label">${escapeHtml(payload.home_formation || "Shape pending")}</span>
+              <h4>${escapeHtml(payload.home_team || "Home")}</h4>
+            </div>
+          </div>
+          <div class="formation-match-center">
+            <span class="metric-label">Predicted shape</span>
+            <strong>${escapeHtml(`${payload.home_formation || "TBC"} · ${payload.away_formation || "TBC"}`)}</strong>
+          </div>
+          <div class="formation-match-team formation-match-team-away">
+            <div>
+              <span class="metric-label">${escapeHtml(payload.away_formation || "Shape pending")}</span>
+              <h4>${escapeHtml(payload.away_team || "Away")}</h4>
+            </div>
+            ${badgeMarkup(fixture?.away_team_logo_url, payload.away_team || "Away", "lineup-team-badge")}
+          </div>
+        </div>
+        <div class="formation-unit-strip formation-unit-strip-match">
+          ${unitChip(`${payload.home_team || "Home"} attack`, payload.home_units?.attack_unit)}
+          ${unitChip(`${payload.home_team || "Home"} midfield`, payload.home_units?.midfield_control)}
+          ${unitChip(`${payload.away_team || "Away"} midfield`, payload.away_units?.midfield_control)}
+          ${unitChip(`${payload.away_team || "Away"} attack`, payload.away_units?.attack_unit)}
+        </div>
+        <div class="formation-pitch-scroll">
+          <div class="formation-pitch formation-pitch-horizontal">
+            <span class="pitch-line pitch-line-half"></span>
+            <span class="pitch-line pitch-line-circle"></span>
+            <span class="pitch-line pitch-line-box pitch-line-box-home"></span>
+            <span class="pitch-line pitch-line-box pitch-line-box-away"></span>
+            <span class="pitch-line pitch-line-six pitch-line-six-home"></span>
+            <span class="pitch-line pitch-line-six pitch-line-six-away"></span>
+            ${homePlayers.concat(awayPlayers).map(renderHorizontalPitchPlayer).join("")}
+          </div>
+        </div>
+      </article>
+    `;
+  };
+
   const renderFormationMismatchSurface = (payload) => {
     const mismatches = Array.isArray(payload?.key_mismatches) ? payload.key_mismatches.slice(0, 4) : [];
     if (!mismatches.length) {
@@ -3847,7 +3894,7 @@
   };
 
   const renderBenchSnapshot = (teamName, players = []) => {
-    const bench = Array.isArray(players) ? players.slice(0, 9) : [];
+    const bench = Array.isArray(players) ? players.slice(0, 7) : [];
     if (!bench.length) {
       return "";
     }
@@ -3960,7 +4007,7 @@
                 <span class="metric-label">Formation intelligence</span>
                 <h3>Lineup unavailable</h3>
               </div>
-              <span class="chip chip-reference">Fallback active</span>
+              <span class="chip chip-reference">Unavailable</span>
             </div>
             <p class="section-copy">${escapeHtml(coverage.summary)}</p>
             <div class="lineup-fallback-grid">
@@ -4026,10 +4073,7 @@
               ? coverage.summary
               : "This layer turns the actual XI into a visual judgement surface: team shape, player strength, unit balance, and the mismatch zones most likely to drive the read."
           )}</p>
-          <div class="formation-pitch-grid">
-            ${renderFormationPitchCard(payload.home_team || "Home", payload.home_formation || "", payload.home_lineup_profiles || [], payload.home_units || {}, fixture?.home_team_logo_url || "")}
-            ${renderFormationPitchCard(payload.away_team || "Away", payload.away_formation || "", payload.away_lineup_profiles || [], payload.away_units || {}, fixture?.away_team_logo_url || "")}
-          </div>
+          ${renderCombinedFormationPitch(payload, fixture)}
           ${
             coverage.status === "predicted"
               ? `
@@ -4721,8 +4765,9 @@
               )
               .join("")}
           </div>
-          <div class="fixture-market-suitability-grid">
+          <div class="fixture-market-suitability-grid fixture-market-suitability-grid-compact">
             ${items
+              .slice(0, 6)
               .map(
                 (market) => {
                   const role = roleFor(market);
@@ -4737,7 +4782,6 @@
                     </div>
                     <p class="muted">${escapeHtml(market?.read || "No published read yet.")}</p>
                     <div class="market-intel-meta">
-                      <span>${escapeHtml(market.modelLean ? `Lean: ${market.modelLean}` : "Lean pending")}</span>
                       <span>${escapeHtml(`${market.support?.length || 0} support / ${market.cautions?.length || 0} caution`)}</span>
                     </div>
                   </article>
@@ -4791,26 +4835,26 @@
               <div class="intel-placeholder-head">
                 <div>
                   <span class="metric-label">H2H context</span>
-                  <h3>H2H layer is supporting-only</h3>
+                  <h3>No recent direct matchup sample published</h3>
                 </div>
                 <span class="chip chip-reference">${escapeHtml(coverage.label)}</span>
               </div>
-              <p class="section-copy">${escapeHtml(coverage.summary)}</p>
+              <p class="section-copy">This layer is not used to force the decision. When a reliable direct sample is unavailable, the page keeps ratings, squad drivers, and market posture in charge.</p>
               <div class="lineup-fallback-grid">
                 <article class="lineup-fallback-card">
                   <span class="metric-label">Direct H2H</span>
-                  <strong>Not published</strong>
-                  <p class="muted">No current fixture-key regime summary is available from the publish-safe source.</p>
+                  <strong>Unavailable</strong>
+                  <p class="muted">No recent direct matchup sample has passed the publish-safe source for this fixture key.</p>
                 </article>
                 <article class="lineup-fallback-card">
                   <span class="metric-label">Decision role</span>
-                  <strong>Cannot lead</strong>
+                  <strong>Does not lead</strong>
                   <p class="muted">Team ratings, player drivers, and market alignment remain the primary decision layers.</p>
                 </article>
                 <article class="lineup-fallback-card">
-                  <span class="metric-label">Fallback mode</span>
-                  <strong>Clean placeholder</strong>
-                  <p class="muted">The page shows the absence deliberately instead of rendering a broken or empty tab.</p>
+                  <span class="metric-label">Product state</span>
+                  <strong>Handled deliberately</strong>
+                  <p class="muted">The page explains the gap rather than rendering a broken or empty tab.</p>
                 </article>
               </div>
             </article>
@@ -4830,9 +4874,15 @@
     if (!h2hSupport) {
       return `
         <section class="section">
-          <article class="panel">
-            <h3>H2H context</h3>
-            <div class="notice">No publish-safe H2H regime summary has been published for this fixture key yet, so the decision layer is leaning on ratings and lineup structure first.</div>
+          <article class="panel intel-placeholder-panel">
+            <div class="intel-placeholder-head">
+              <div>
+                <span class="metric-label">H2H context</span>
+                <h3>No recent direct matchup sample published</h3>
+              </div>
+              <span class="chip chip-reference">Context unavailable</span>
+            </div>
+            <p class="section-copy">This layer is not used to force the decision. Team ratings, squad drivers, and market posture remain primary.</p>
           </article>
         </section>
       `;
@@ -9314,6 +9364,7 @@
                         <div class="lineup-team-title">
                           ${badgeMarkup(teamInfo.logo, teamInfo.name, "lineup-team-badge")}
                           <div>
+                            <span class="metric-label">Confirmed provider lineup</span>
                             <h4>${escapeHtml(teamInfo.name || "Team")}</h4>
                             <p class="muted">Formation ${escapeHtml(team?.formation || "TBC")} • Coach ${escapeHtml(coach.name || "TBC")}</p>
                           </div>
@@ -9342,7 +9393,7 @@
             <div class="lineup-empty-state">
               <div class="lineup-empty-grid">
                 <article class="lineup-empty-card">
-                  <span class="metric-label">Reference lineup feed</span>
+                  <span class="metric-label">Confirmed provider lineup</span>
                   <p class="muted">${escapeHtml(fallbackMessage)}</p>
                 </article>
               </div>
