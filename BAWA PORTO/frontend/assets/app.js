@@ -86,20 +86,49 @@
     },
   };
 
+  const parseJsonResponse = async (response, path, { optional = false } = {}) => {
+    const contentType = String(response.headers.get("content-type") || "").toLowerCase();
+    const bodyText = await response.text();
+
+    if (!response.ok) {
+      if (optional) {
+        return null;
+      }
+      throw new Error(`Failed to load ${path} (${response.status})`);
+    }
+
+    const trimmed = bodyText.trim();
+    const looksLikeHtml = trimmed.startsWith("<!DOCTYPE") || trimmed.startsWith("<html");
+    const looksLikeJson =
+      contentType.includes("application/json") ||
+      trimmed.startsWith("{") ||
+      trimmed.startsWith("[");
+
+    if (!looksLikeJson || looksLikeHtml) {
+      if (optional) {
+        return null;
+      }
+      throw new Error(`Expected JSON from ${path} but received HTML or non-JSON content.`);
+    }
+
+    try {
+      return JSON.parse(bodyText);
+    } catch (error) {
+      if (optional) {
+        return null;
+      }
+      throw new Error(`Invalid JSON in ${path}: ${error.message}`);
+    }
+  };
+
   const fetchJson = async (path) => {
     const response = await fetch(path, { cache: "no-store" });
-    if (!response.ok) {
-      throw new Error(`Failed to load ${path}`);
-    }
-    return response.json();
+    return parseJsonResponse(response, path);
   };
 
   const fetchOptionalJson = async (path) => {
     const response = await fetch(path, { cache: "no-store" });
-    if (!response.ok) {
-      return null;
-    }
-    return response.json();
+    return parseJsonResponse(response, path, { optional: true });
   };
 
   const escapeHtml = (value) =>
