@@ -14,6 +14,18 @@ from ratings_engine_utils import clean_columns, ensure_dir, score_to_int, slugif
 from team_rating_engine import build_team_scores, prepare_team_frame
 
 
+CONFIRMED_LINEUP_UPDATE_MODEL = {
+    "trigger": "provider_lineups_available",
+    "target_window_minutes_before_kickoff": 50,
+    "frontend_contract": (
+        "Keep the fixture_lineup_intelligence payload shape stable. Replace predicted "
+        "last-fixture starters/bench with confirmed provider starters/bench, set "
+        "lineup_status to confirmed_lineup, and republish both D1 and static fallback."
+    ),
+    "fallback_before_confirmation": "predicted_from_last_fixture",
+}
+
+
 LINEUP_OUTPUT_FIELDS = [
     "attack_unit",
     "midfield_control",
@@ -59,6 +71,18 @@ def season_start(value: object) -> str:
     return match.group(1) if match else text
 
 
+def safe_int_value(value: object) -> int | None:
+    try:
+        if value is None or (isinstance(value, float) and pd.isna(value)):
+            return None
+        text = str(value).strip()
+        if not re.fullmatch(r"-?\d+", text):
+            return None
+        return int(text)
+    except (TypeError, ValueError):
+        return None
+
+
 def normalize_text(value: object) -> str:
     text = str(value or "").strip().lower()
     text = unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode("ascii")
@@ -67,10 +91,69 @@ def normalize_text(value: object) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
+def normalize_competition_key(value: object) -> str:
+    text = normalize_text(value)
+    aliases = {
+        "swiss super league": "switzerland super league",
+    }
+    return aliases.get(text, text)
+
+
 def normalize_team_key(value: object) -> str:
     text = normalize_text(value)
     text = re.sub(r"\b(fc|cf|sc|afc|club)\b", " ", text)
     return re.sub(r"\s+", " ", text).strip()
+
+
+def team_match_key(value: object) -> str:
+    text = normalize_team_key(value)
+    replacements = {
+        "st": "saint",
+        "sint": "saint",
+        "hove": "",
+        "albion": "",
+        "hotspur": "",
+        "united": "",
+        "wanderers": "",
+        "kv": "",
+        "kvc": "",
+        "kaa": "",
+        "krc": "",
+        "rsc": "",
+        "royal": "",
+        "eh": "",
+    }
+    tokens = [replacements.get(token, token) for token in text.split()]
+    text = " ".join(token for token in tokens if token)
+    aliases = {
+        "wolverhampton": "wolves",
+        "atletico mineiro": "atletico mg",
+        "atletico pr": "atletico paranaense",
+        "bragantino": "rb bragantino",
+        "sporting braga": "braga",
+        "vitoria guimaraes": "guimaraes",
+        "estrela amadora": "estrela",
+        "gd estoril praia": "estoril",
+        "cd nacional": "nacional",
+    }
+    return aliases.get(text, text)
+
+
+def team_match_score(left: object, right: object) -> int:
+    left_key = team_match_key(left)
+    right_key = team_match_key(right)
+    if not left_key or not right_key:
+        return 0
+    if left_key == right_key:
+        return 100
+    if len(left_key) >= 4 and len(right_key) >= 4 and (left_key in right_key or right_key in left_key):
+        return 86
+    left_tokens = set(left_key.split())
+    right_tokens = set(right_key.split())
+    if not left_tokens or not right_tokens:
+        return 0
+    overlap = len(left_tokens & right_tokens)
+    return int(round((overlap / max(len(left_tokens), len(right_tokens))) * 80))
 
 
 def person_name_keys(value: object) -> dict[str, str]:
@@ -122,9 +205,51 @@ def discover_competition_file(root: Path, prefix: str, competition_name: str, ye
     return None
 
 
+def parsed_competition_file(path: Path, prefix: str) -> tuple[str, int] | None:
+    match = re.match(rf"{re.escape(prefix)}__(.+)__(\d{{4}})$", path.stem)
+    if not match:
+        return None
+    return normalize_competition_key(match.group(1).replace("_", " ")), int(match.group(2))
+
+
+def discover_latest_competition_pair(normalized_root: Path, features_root: Path, competition_name: str) -> tuple[Path, Path, int] | None:
+    target = normalize_competition_key(competition_name)
+    lineups_by_year: dict[int, Path] = {}
+    for path in normalized_root.glob("lineups__*.csv"):
+        parsed = parsed_competition_file(path, "lineups")
+        if parsed and parsed[0] == target:
+            lineups_by_year[parsed[1]] = path
+
+    features_by_year: dict[int, Path] = {}
+    for path in features_root.glob("api_lineup_features__*.csv"):
+        parsed = parsed_competition_file(path, "api_lineup_features")
+        if parsed and parsed[0] == target:
+            features_by_year[parsed[1]] = path
+
+    common_years = sorted(set(lineups_by_year) & set(features_by_year), reverse=True)
+    if not common_years:
+        return None
+    year = common_years[0]
+    return lineups_by_year[year], features_by_year[year], year
+
+
+def latest_by_competition(entries: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
+    latest: dict[str, dict[str, Any]] = {}
+    for entry in entries:
+        comp_key = entry.get("competition_key")
+        if not comp_key:
+            continue
+        current = latest.get(comp_key)
+        if current is None or season_start(entry.get("season")) > season_start(current.get("season")):
+            latest[comp_key] = entry
+    return latest
+
+
 def load_entries(args: argparse.Namespace) -> list[dict[str, Any]]:
     if args.config:
         payload = json.loads(Path(args.config).read_text(encoding="utf-8"))
+        fixture_feed_rows = load_fixture_feed_rows(Path(args.fixture_feed)) if args.fixture_feed else []
+        active_competitions = {normalize_competition_key(row.get("league")) for row in fixture_feed_rows if row.get("league")}
         teams = {
             (entry["competition_key"], str(entry["season"])): entry
             for entry in payload.get("teams", [])
@@ -135,6 +260,38 @@ def load_entries(args: argparse.Namespace) -> list[dict[str, Any]]:
         }
         normalized_root = Path(args.normalized_lineups_root)
         features_root = Path(args.features_root)
+
+        if active_competitions:
+            latest_teams = latest_by_competition(
+                [entry for entry in payload.get("teams", []) if normalize_competition_key(entry.get("competition_name")) in active_competitions]
+            )
+            latest_players = latest_by_competition(
+                [entry for entry in payload.get("players", []) if normalize_competition_key(entry.get("competition_name")) in active_competitions]
+            )
+            entries: list[dict[str, Any]] = []
+            for competition_key, team_entry in latest_teams.items():
+                player_entry = latest_players.get(competition_key)
+                if not player_entry:
+                    continue
+                competition_name = team_entry.get("competition_name") or player_entry.get("competition_name") or competition_key
+                latest_pair = discover_latest_competition_pair(normalized_root, features_root, competition_name)
+                if not latest_pair:
+                    continue
+                lineups_csv, features_csv, source_year = latest_pair
+                entries.append(
+                    {
+                        "competition_name": competition_name,
+                        "competition_key": competition_key,
+                        "season": str(team_entry.get("season")),
+                        "snapshot_source_year": str(source_year),
+                        "team_source": team_entry["source"],
+                        "player_source": player_entry["source"],
+                        "lineups_csv": str(lineups_csv),
+                        "features_csv": str(features_csv),
+                    }
+                )
+            return entries
+
         entries: list[dict[str, Any]] = []
         for key, team_entry in teams.items():
             player_entry = players.get(key)
@@ -582,7 +739,66 @@ def build_player_matchups(
     return sorted(pairs, key=lambda item: item["mismatch_score"], reverse=True)[:3]
 
 
-def build_fixture_payloads(entry: dict[str, Any], output_root: Path) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+def lineup_profiles_for_rows(
+    lineup_rows: pd.DataFrame,
+    team_row: pd.Series | None,
+    player_lookup: dict[str, dict[str, dict[str, list[dict[str, Any]]]]],
+) -> tuple[list[dict[str, Any]], dict[str, int]]:
+    team_name = team_row.get("team") if team_row is not None else ""
+    club_bucket = player_lookup.get(normalize_team_key(team_name), {"full": {}, "surname": {}, "initial_surname": {}})
+    resolved_players: list[dict[str, Any]] = []
+    unresolved = 0
+    for _, lineup_row in lineup_rows.iterrows():
+        profile = resolve_player_profile(lineup_row.get("player_name"), lineup_row.get("position"), club_bucket)
+        if profile is None:
+            unresolved += 1
+            profile = {
+                "name": lineup_row.get("player_name") or "Player",
+                "pitch_label": str(lineup_row.get("player_name") or "Player").split()[-1],
+                "position_group": inferred_position_group(lineup_row.get("position")),
+                "og_player_power": 50,
+                "goal_threat": 50,
+                "creative_spark": 50,
+                "midfield_engine": 50,
+                "defensive_lock": 50,
+                "pressing_heat": 50,
+                "ball_progression": 50,
+                "aerial_dominance": 50,
+                "goalkeeper_shield": 50,
+                "discipline_risk": 50,
+                "booking_heat": 50,
+                "minutes_played_overall": 0,
+                "tags": [],
+            }
+        resolved_players.append(
+            {
+                "name": profile.get("name") or lineup_row.get("player_name") or "Player",
+                "surname": profile.get("pitch_label") or str(profile.get("name") or lineup_row.get("player_name") or "Player").split()[-1],
+                "lineup_position": str(lineup_row.get("position") or "").upper(),
+                "position_group": profile.get("position_group") or inferred_position_group(lineup_row.get("position")),
+                "power": int(score_to_int(profile.get("og_player_power", 50))),
+                "goal_threat": int(score_to_int(profile.get("goal_threat", 50))),
+                "creative_spark": int(score_to_int(profile.get("creative_spark", 50))),
+                "midfield_engine": int(score_to_int(profile.get("midfield_engine", 50))),
+                "defensive_lock": int(score_to_int(profile.get("defensive_lock", 50))),
+                "pressing_heat": int(score_to_int(profile.get("pressing_heat", 50))),
+                "ball_progression": int(score_to_int(profile.get("ball_progression", 50))),
+                "aerial_dominance": int(score_to_int(profile.get("aerial_dominance", 50))),
+                "goalkeeper_shield": int(score_to_int(profile.get("goalkeeper_shield", 50))),
+                "discipline_risk": int(score_to_int(profile.get("discipline_risk", 50))),
+                "booking_heat": int(score_to_int(profile.get("booking_heat", 50))),
+                "minutes_played": int(float(profile.get("minutes_played_overall", 0) or 0)),
+                "tags": list(profile.get("tags") or [])[:3],
+            }
+        )
+    return resolved_players, {
+        "player_count": int(len(lineup_rows)),
+        "resolved_profiles": int(len(lineup_rows) - unresolved),
+        "fallback_profiles": int(unresolved),
+    }
+
+
+def build_fixture_payloads(entry: dict[str, Any], output_root: Path, write_output: bool = True) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     team_frame = build_team_scores(prepare_team_frame(Path(entry["team_source"])))
     player_frame = build_ranks(build_player_scores(prepare_player_frame(Path(entry["player_source"]))))
     lineup_frame = clean_columns(pd.read_csv(entry["lineups_csv"]))
@@ -650,28 +866,291 @@ def build_fixture_payloads(entry: dict[str, Any], output_root: Path) -> tuple[li
             }
         )
 
+    if write_output:
+        base = output_root / "fixture_lineup_intelligence"
+        ensure_dir(base)
+        for payload in records:
+            write_json(base / f"{payload['fixture_key']}.json", payload)
+
+        index_path = base / "index.json"
+        existing: list[dict[str, Any]] = []
+        if index_path.exists():
+            existing = json.loads(index_path.read_text(encoding="utf-8"))
+            existing = [
+                row
+                for row in existing
+                if not (
+                    row.get("competition_key") == entry["competition_key"]
+                    and str(row.get("season")) == str(entry["season"])
+                )
+            ]
+        write_json(
+            index_path,
+            sorted(existing + index_records, key=lambda row: (row["competition_key"], row["season"], row["fixture_key"])),
+        )
+    return records, index_records
+
+
+def latest_team_fixture_rows(feature_frame: pd.DataFrame) -> dict[tuple[str, str], tuple[pd.Series, str]]:
+    team_rows: dict[tuple[str, str], tuple[pd.Series, str]] = {}
+    sorted_features = feature_frame.sort_values(["match_date", "fixture_id"], ascending=[False, False])
+    for _, fixture in sorted_features.iterrows():
+        for side in ("home", "away"):
+            team_id = str(fixture.get(f"{side}_team_id") or "").strip()
+            team_name = str(fixture.get(f"{side}_team_name") or "").strip()
+            key = (team_id, normalize_team_key(team_name))
+            if not team_id and not key[1]:
+                continue
+            if key not in team_rows:
+                team_rows[key] = (fixture, side)
+    return team_rows
+
+
+def build_team_lineup_snapshots(entry: dict[str, Any]) -> tuple[dict[tuple[str, str], dict[str, Any]], list[dict[str, Any]]]:
+    team_frame = build_team_scores(prepare_team_frame(Path(entry["team_source"])))
+    player_frame = build_ranks(build_player_scores(prepare_player_frame(Path(entry["player_source"]))))
+    lineup_frame = clean_columns(pd.read_csv(entry["lineups_csv"]))
+    feature_frame = clean_columns(pd.read_csv(entry["features_csv"]))
+
+    team_lookup = build_team_lookup(team_frame)
+    player_lookup = build_player_lookup(player_frame)
+    snapshots: dict[tuple[str, str], dict[str, Any]] = {}
+    index_rows: list[dict[str, Any]] = []
+
+    for (team_id_key, normalized_name), (fixture, side) in latest_team_fixture_rows(feature_frame).items():
+        fixture_id = int(fixture.get("fixture_id") or 0)
+        team_id = int(fixture.get(f"{side}_team_id") or 0)
+        opponent_side = "away" if side == "home" else "home"
+        team_name = fixture.get(f"{side}_team_name") or ""
+        opponent_name = fixture.get(f"{opponent_side}_team_name") or ""
+        team_row = team_lookup.get(normalize_team_key(team_name))
+        fixture_lineups = lineup_frame[lineup_frame["fixture_id"] == fixture_id]
+        team_lineups = fixture_lineups[fixture_lineups["team_id"] == team_id]
+        starters_rows = team_lineups[team_lineups["is_starting_xi"] == 1]
+        bench_rows = team_lineups[team_lineups["is_starting_xi"] != 1]
+        if starters_rows.empty and bench_rows.empty:
+            continue
+
+        units, starters, starter_resolution = lineup_side_payload(side, starters_rows, team_row, player_lookup)
+        bench, bench_resolution = lineup_profiles_for_rows(bench_rows, team_row, player_lookup)
+        formation = fixture.get(f"{side}_formation") or (team_lineups["formation"].dropna().astype(str).iloc[0] if not team_lineups.empty else "")
+        snapshot_key = slugify(str(team_name))
+        payload = {
+            "payload_type": "team_latest_lineup_snapshot",
+            "team": team_name,
+            "team_key": snapshot_key,
+            "team_id": team_id,
+            "competition": entry["competition_name"],
+            "competition_key": entry["competition_key"],
+            "season": str(entry["season"]),
+            "snapshot_source_year": str(entry.get("snapshot_source_year") or season_start(entry.get("season"))),
+            "source_fixture_key": fixture.get("fixture_key"),
+            "source_fixture_id": fixture_id,
+            "source_match_date": str(fixture.get("match_date") or ""),
+            "source_opponent": opponent_name,
+            "source_venue": side,
+            "formation": formation,
+            "lineup_status": "last_fixture_snapshot",
+            "lineup_mode": "team_snapshot_last_fixture",
+            "lineup_label": "Last fixture lineup snapshot",
+            "prediction_use": "Use this compact team snapshot as the predicted lineup source for upcoming fixtures.",
+            "confirmed_lineup_update_model": CONFIRMED_LINEUP_UPDATE_MODEL,
+            "refresh_policy": "Use this snapshot as the predicted lineup until a confirmed upstream lineup is published close to kickoff.",
+            "units": units,
+            "starters": starters,
+            "bench": bench,
+            "starter_resolution": starter_resolution,
+            "bench_resolution": bench_resolution,
+            "summary": (
+                f"Most recent published lineup snapshot for {team_name}: {formation or 'formation pending'} "
+                f"against {opponent_name} on {fixture.get('match_date') or 'the latest available fixture'}."
+            ),
+        }
+        lookup_key = (normalize_competition_key(entry["competition_name"]), normalize_team_key(team_name))
+        snapshots[lookup_key] = payload
+        index_rows.append(
+            {
+                "team": team_name,
+                "team_key": snapshot_key,
+                "team_id": team_id,
+                "competition": entry["competition_name"],
+                "competition_key": entry["competition_key"],
+                "season": str(entry["season"]),
+                "snapshot_source_year": payload["snapshot_source_year"],
+                "source_fixture_key": payload["source_fixture_key"],
+                "source_match_date": payload["source_match_date"],
+                "formation": payload["formation"],
+                "starter_count": len(starters),
+                "bench_count": len(bench),
+            }
+        )
+    return snapshots, index_rows
+
+
+def placeholder_current_fixture_payload(fixture: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "fixture_key": str(fixture.get("fixture_key") or "").strip(),
+        "fixture_id": safe_int_value(fixture.get("api_fixture_id") or fixture.get("fixture_id")),
+        "competition": fixture.get("league"),
+        "competition_key": slugify(fixture.get("league") or ""),
+        "season": str(fixture.get("api_season") or fixture.get("season") or ""),
+        "home_team": fixture.get("home_team"),
+        "away_team": fixture.get("away_team"),
+        "home_formation": "",
+        "away_formation": "",
+        "home_units": {},
+        "away_units": {},
+        "home_resolution": {"starting_xi_count": 0, "resolved_profiles": 0, "fallback_profiles": 0},
+        "away_resolution": {"starting_xi_count": 0, "resolved_profiles": 0, "fallback_profiles": 0},
+        "key_mismatches": [],
+        "player_matchups": [],
+        "home_lineup_profiles": [],
+        "away_lineup_profiles": [],
+        "home_bench_profiles": [],
+        "away_bench_profiles": [],
+        "coverage_status": "unpublished",
+        "lineup_status": "unavailable",
+        "lineup_mode": "unavailable_fallback",
+        "lineup_label": "Lineup unavailable",
+        "fallback_mode": "unpublished",
+        "confirmed_lineup_update_model": CONFIRMED_LINEUP_UPDATE_MODEL,
+        "summary": "No publish-safe last-known lineup snapshot is available yet for at least one team in this fixture.",
+    }
+
+
+def find_team_snapshot(
+    snapshots: dict[tuple[str, str], dict[str, Any]],
+    competition: str,
+    team_name: object,
+) -> dict[str, Any] | None:
+    exact = snapshots.get((competition, normalize_team_key(team_name)))
+    if exact:
+        return exact
+
+    best: tuple[int, dict[str, Any] | None] = (0, None)
+    for (snapshot_competition, _snapshot_team_key), snapshot in snapshots.items():
+        if snapshot_competition != competition:
+            continue
+        score = team_match_score(team_name, snapshot.get("team"))
+        if score > best[0]:
+            best = (score, snapshot)
+    return best[1] if best[0] >= 80 else None
+
+
+def build_current_fixture_snapshot_payloads(
+    fixture_feed_rows: list[dict[str, Any]],
+    snapshots: dict[tuple[str, str], dict[str, Any]],
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    records: list[dict[str, Any]] = []
+    index_rows: list[dict[str, Any]] = []
+    for fixture in fixture_feed_rows:
+        fixture_key = str(fixture.get("fixture_key") or "").strip()
+        if not fixture_key:
+            continue
+        competition = normalize_competition_key(fixture.get("league"))
+        home_snapshot = find_team_snapshot(snapshots, competition, fixture.get("home_team"))
+        away_snapshot = find_team_snapshot(snapshots, competition, fixture.get("away_team"))
+        if not home_snapshot or not away_snapshot:
+            payload = placeholder_current_fixture_payload(fixture)
+        else:
+            home_units = dict(home_snapshot.get("units") or {})
+            away_units = dict(away_snapshot.get("units") or {})
+            home_players = list(home_snapshot.get("starters") or [])
+            away_players = list(away_snapshot.get("starters") or [])
+            payload = {
+                "fixture_key": fixture_key,
+                "fixture_id": safe_int_value(fixture.get("api_fixture_id") or fixture.get("fixture_id")),
+                "competition": fixture.get("league") or home_snapshot.get("competition"),
+                "competition_key": home_snapshot.get("competition_key"),
+                "season": str(fixture.get("api_season") or fixture.get("season") or home_snapshot.get("season") or ""),
+                "home_team": fixture.get("home_team") or home_snapshot.get("team"),
+                "away_team": fixture.get("away_team") or away_snapshot.get("team"),
+                "home_team_id": home_snapshot.get("team_id"),
+                "away_team_id": away_snapshot.get("team_id"),
+                "home_formation": home_snapshot.get("formation") or "",
+                "away_formation": away_snapshot.get("formation") or "",
+                "home_units": home_units,
+                "away_units": away_units,
+                "home_resolution": home_snapshot.get("starter_resolution"),
+                "away_resolution": away_snapshot.get("starter_resolution"),
+                "key_mismatches": build_key_mismatches(home_units, away_units, fixture.get("home_team") or "Home", fixture.get("away_team") or "Away"),
+                "player_matchups": build_player_matchups(home_players, away_players, fixture.get("home_team") or "Home", fixture.get("away_team") or "Away"),
+                "home_lineup_profiles": home_players,
+                "away_lineup_profiles": away_players,
+                "home_bench_profiles": list(home_snapshot.get("bench") or []),
+                "away_bench_profiles": list(away_snapshot.get("bench") or []),
+                "home_snapshot": {
+                    "source_fixture_key": home_snapshot.get("source_fixture_key"),
+                    "source_match_date": home_snapshot.get("source_match_date"),
+                    "source_opponent": home_snapshot.get("source_opponent"),
+                    "source_venue": home_snapshot.get("source_venue"),
+                },
+                "away_snapshot": {
+                    "source_fixture_key": away_snapshot.get("source_fixture_key"),
+                    "source_match_date": away_snapshot.get("source_match_date"),
+                    "source_opponent": away_snapshot.get("source_opponent"),
+                    "source_venue": away_snapshot.get("source_venue"),
+                },
+                "coverage_status": "predicted",
+                "lineup_status": "predicted_from_last_fixture",
+                "lineup_mode": "predicted_from_last_fixture",
+                "lineup_label": "Predicted lineups",
+                "fallback_mode": "last_fixture_snapshot",
+                "confirmed_lineup_update_model": CONFIRMED_LINEUP_UPDATE_MODEL,
+                "refresh_policy": "Replace this last-known prediction with confirmed team sheets when upstream lineups publish close to kickoff.",
+                "formation_context": {
+                    "same_formation_flag": int((home_snapshot.get("formation") or "") == (away_snapshot.get("formation") or "")),
+                    "formation_mismatch_flag": int((home_snapshot.get("formation") or "") != (away_snapshot.get("formation") or "")),
+                    "formation_attack_delta": 0.0,
+                    "formation_defence_delta": 0.0,
+                },
+                "summary": "Predicted lineups are built from each team's most recent published lineup and bench snapshot.",
+            }
+        records.append(payload)
+        index_rows.append(
+            {
+                "fixture_key": fixture_key,
+                "fixture_id": payload.get("fixture_id"),
+                "competition": payload.get("competition"),
+                "competition_key": payload.get("competition_key"),
+                "season": payload.get("season"),
+                "home_team": payload.get("home_team"),
+                "away_team": payload.get("away_team"),
+                "coverage_status": payload.get("coverage_status"),
+                "lineup_status": payload.get("lineup_status"),
+                "lineup_mode": payload.get("lineup_mode"),
+            }
+        )
+    return records, index_rows
+
+
+def publish_team_snapshots(snapshots: dict[tuple[str, str], dict[str, Any]], index_rows: list[dict[str, Any]], output_root: Path) -> None:
+    base = output_root / "fixture_lineup_intelligence" / "team_snapshots"
+    ensure_dir(base)
+    keep_paths: set[Path] = set()
+    for payload in snapshots.values():
+        comp_dir = base / str(payload.get("competition_key") or "unknown")
+        ensure_dir(comp_dir)
+        target = comp_dir / f"{payload.get('team_key')}.json"
+        write_json(target, payload)
+        keep_paths.add(target)
+    for path in base.glob("*/*.json"):
+        if path not in keep_paths:
+            path.unlink()
+    write_json(base / "index.json", sorted(index_rows, key=lambda row: (row["competition_key"], row["team_key"])))
+
+
+def publish_current_fixture_lineups(records: list[dict[str, Any]], index_rows: list[dict[str, Any]], output_root: Path) -> None:
     base = output_root / "fixture_lineup_intelligence"
     ensure_dir(base)
+    keep = {f"{payload['fixture_key']}.json" for payload in records}
+    keep.add("index.json")
     for payload in records:
         write_json(base / f"{payload['fixture_key']}.json", payload)
-
-    index_path = base / "index.json"
-    existing: list[dict[str, Any]] = []
-    if index_path.exists():
-        existing = json.loads(index_path.read_text(encoding="utf-8"))
-        existing = [
-            row
-            for row in existing
-            if not (
-                row.get("competition_key") == entry["competition_key"]
-                and str(row.get("season")) == str(entry["season"])
-            )
-        ]
-    write_json(
-        index_path,
-        sorted(existing + index_records, key=lambda row: (row["competition_key"], row["season"], row["fixture_key"])),
-    )
-    return records, index_records
+    for path in base.glob("*.json"):
+        if path.name not in keep:
+            path.unlink()
+    write_json(base / "index.json", sorted(index_rows, key=lambda row: (row["competition_key"] or "", row["fixture_key"])))
 
 
 def load_fixture_feed_rows(path: Path | None) -> list[dict[str, Any]]:
@@ -765,119 +1244,33 @@ def alias_current_fixture_keys(
     return aliased_records, aliased_index
 
 
-def add_fixture_feed_placeholders(
-    records: list[dict[str, Any]],
-    index_records: list[dict[str, Any]],
-    fixture_feed_rows: list[dict[str, Any]],
-    competition_name: str,
-    competition_key: str,
-    season: str,
-) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
-    if not fixture_feed_rows:
-        return records, index_records
-
-    target_competition = normalize_text(competition_name)
-    target_season = season_start(season)
-    relevant_rows = [
-        row
-        for row in fixture_feed_rows
-        if normalize_text(row.get("league")) == target_competition
-        and (
-            not season_start(row.get("api_season") or row.get("season"))
-            or season_start(row.get("api_season") or row.get("season")) == target_season
-        )
-    ]
-    if not relevant_rows:
-        return records, index_records
-
-    seen_keys = {record["fixture_key"] for record in index_records}
-    padded_records = list(records)
-    padded_index = list(index_records)
-    for fixture_row in relevant_rows:
-        current_key = str(fixture_row.get("fixture_key") or "").strip()
-        if not current_key or current_key in seen_keys:
-            continue
-        placeholder = {
-            "fixture_key": current_key,
-            "fixture_id": int(fixture_row.get("api_fixture_id") or fixture_row.get("fixture_id") or 0) or None,
-            "competition": competition_name,
-            "competition_key": competition_key,
-            "season": season,
-            "home_team": fixture_row.get("home_team"),
-            "away_team": fixture_row.get("away_team"),
-            "home_formation": "",
-            "away_formation": "",
-            "home_units": {},
-            "away_units": {},
-            "home_lineup_profiles": [],
-            "away_lineup_profiles": [],
-            "key_mismatches": [],
-            "player_matchups": [],
-            "coverage_status": "unpublished",
-            "summary": "No publish-safe lineup intelligence has been produced for this fixture yet, so the page should fall back to squad and team intelligence.",
-        }
-        padded_records.append(placeholder)
-        padded_index.append(
-            {
-                "fixture_key": current_key,
-                "fixture_id": placeholder["fixture_id"],
-                "competition": competition_name,
-                "competition_key": competition_key,
-                "season": season,
-                "home_team": placeholder["home_team"],
-                "away_team": placeholder["away_team"],
-                "coverage_status": "unpublished",
-            }
-        )
-        seen_keys.add(current_key)
-    return padded_records, padded_index
-
-
 def main() -> None:
     args = parse_args()
     entries = load_entries(args)
     output_root = Path(args.output_root)
     fixture_feed_rows = load_fixture_feed_rows(Path(args.fixture_feed)) if args.fixture_feed else []
+
+    if fixture_feed_rows:
+        all_snapshots: dict[tuple[str, str], dict[str, Any]] = {}
+        snapshot_index_rows: list[dict[str, Any]] = []
+        for entry in entries:
+            snapshots, rows = build_team_lineup_snapshots(entry)
+            all_snapshots.update(snapshots)
+            snapshot_index_rows.extend(rows)
+            print(
+                f"Built {len(snapshots)} team lineup snapshots for "
+                f"{entry['competition_name']} from {entry.get('snapshot_source_year') or season_start(entry.get('season'))}"
+            )
+
+        records, index_records = build_current_fixture_snapshot_payloads(fixture_feed_rows, all_snapshots)
+        publish_team_snapshots(all_snapshots, snapshot_index_rows, output_root)
+        publish_current_fixture_lineups(records, index_records, output_root)
+        print(f"Published {len(records)} predicted fixture lineup payloads from {len(all_snapshots)} team snapshots.")
+        return
+
     total = 0
     for entry in entries:
         records, _ = build_fixture_payloads(entry, output_root)
-        if fixture_feed_rows:
-            base = output_root / "fixture_lineup_intelligence"
-            index_path = base / "index.json"
-            existing_index = json.loads(index_path.read_text(encoding="utf-8")) if index_path.exists() else []
-            existing_index = [
-                row
-                for row in existing_index
-                if not (
-                    row.get("competition_key") == entry["competition_key"]
-                    and str(row.get("season")) == str(entry["season"])
-                )
-            ]
-            records, index_records = build_fixture_payloads(entry, output_root)
-            records, index_records = alias_current_fixture_keys(
-                records,
-                index_records,
-                fixture_feed_rows,
-                entry["competition_name"],
-                str(entry["season"]),
-            )
-            records, index_records = add_fixture_feed_placeholders(
-                records,
-                index_records,
-                fixture_feed_rows,
-                entry["competition_name"],
-                entry["competition_key"],
-                str(entry["season"]),
-            )
-            base.mkdir(parents=True, exist_ok=True)
-            for payload in records:
-                write_json(base / f"{payload['fixture_key']}.json", payload)
-            write_json(
-                index_path,
-                sorted(existing_index + index_records, key=lambda row: (row["competition_key"], row["season"], row["fixture_key"])),
-            )
-        else:
-            index_records = []
         total += len(records)
         print(
             f"Built {len(records)} fixture lineup intelligence profiles for "

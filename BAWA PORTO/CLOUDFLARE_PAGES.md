@@ -23,7 +23,7 @@ Current Cloudflare Pages assumptions:
 - production branch: `main`
 - preview branch: `dev`
 - build command: none
-- build output directory: `frontend`
+- build output directory depends on whether Root directory is `BAWA PORTO` or repo root
 - environment variables required for static v1: none
 
 ## GitHub Repo Connection
@@ -43,28 +43,31 @@ Use these settings:
 
 - Framework preset: `None`
 - Build command: leave blank
-- Build output directory: `frontend`
-- Root directory: repository root unless you later prefer a narrower path
+- Preferred Root directory: `BAWA PORTO`
+- Preferred Build output directory: `frontend`
+- Fallback Root directory: repository root
+- Fallback Build output directory: `BAWA PORTO/frontend`
 
 Why:
 
 - the site is static HTML/CSS/JS
 - published JSON already lives inside `frontend/public/data/`
+- the app lives inside the `BAWA PORTO` subfolder, not at repository root
 - no Node build step is required for v1
 
 ## What Cloudflare Serves
 
 Cloudflare Pages should serve:
 
-- `frontend/index.html`
-- `frontend/predictions.html`
-- `frontend/premium.html`
-- `frontend/results.html`
-- `frontend/pricing.html`
-- `frontend/methodology.html`
-- `frontend/account.html`
-- `frontend/assets/*`
-- `frontend/public/data/*`
+- `BAWA PORTO/frontend/index.html`
+- `BAWA PORTO/frontend/predictions.html`
+- `BAWA PORTO/frontend/premium.html`
+- `BAWA PORTO/frontend/results.html`
+- `BAWA PORTO/frontend/pricing.html`
+- `BAWA PORTO/frontend/methodology.html`
+- `BAWA PORTO/frontend/account.html`
+- `BAWA PORTO/frontend/assets/*`
+- `BAWA PORTO/frontend/public/data/*`
 
 ## Preview And Production Behavior
 
@@ -141,6 +144,7 @@ Current Worker route family:
 Worker setup details live in:
 
 - [worker/DEPLOY_WORKER.md](/Users/hughwade/Documents/Code/OG_master/BAWA PORTO/worker/DEPLOY_WORKER.md:1)
+- [CLOUDFLARE_PAGES_CONNECT_STEPS.md](/Users/hughwade/Documents/Code/OG_master/BAWA PORTO/CLOUDFLARE_PAGES_CONNECT_STEPS.md:1)
 
 ## Future Frontend To Worker Direction
 

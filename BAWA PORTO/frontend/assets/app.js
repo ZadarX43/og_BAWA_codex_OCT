@@ -852,6 +852,79 @@
     return "reference";
   };
 
+  const ogRatingValue = (value) => {
+    const numeric = Number(value);
+    if (!Number.isFinite(numeric)) return null;
+    if (numeric >= 3 && numeric <= 10) return numeric;
+    const clamped = Math.max(0, Math.min(100, numeric));
+    return 3 + clamped * 0.07;
+  };
+
+  const ogRatingBand = (rating) => {
+    if (!Number.isFinite(Number(rating))) return "none";
+    if (rating >= 9) return "excellent";
+    if (rating >= 8) return "very-good";
+    if (rating >= 7) return "good";
+    if (rating >= 6.5) return "average";
+    if (rating >= 6) return "below-average";
+    if (rating >= 3) return "poor";
+    return "none";
+  };
+
+  const renderOgRatingBadge = (value, size = "medium", label = "OG player rating") => {
+    const rating = ogRatingValue(value);
+    const text = rating === null ? "—" : rating.toFixed(1);
+    return `<span class="og-rating-badge og-rating-badge-${escapeHtml(size)} og-rating-${escapeHtml(ogRatingBand(rating))}" title="${escapeHtml(label)}">${escapeHtml(text)}</span>`;
+  };
+
+  const collectGoalScorerRows = (source = {}, fixture = {}) => {
+    const homeName = normalizePreferenceText(fixture.home_team || fixture.home || fixture?.teams?.home?.name);
+    const awayName = normalizePreferenceText(fixture.away_team || fixture.away || fixture?.teams?.away?.name);
+    const rawEvents = [
+      ...(Array.isArray(source.events) ? source.events : []),
+      ...(Array.isArray(source.match_events) ? source.match_events : []),
+      ...(Array.isArray(source.goalscorers) ? source.goalscorers : []),
+      ...(Array.isArray(source.scorers) ? source.scorers : []),
+    ];
+    return rawEvents
+      .map((event) => {
+        const type = String(event?.type || event?.event_type || event?.detail || "").toLowerCase();
+        const hasGoalSignal = type.includes("goal") || event?.is_goal === true || event?.goal === true;
+        if (!hasGoalSignal || type.includes("missed")) return null;
+        const teamName = event?.team?.name || event?.team_name || event?.team || "";
+        const teamKey = normalizePreferenceText(teamName);
+        const side = teamKey && homeName && teamKey === homeName ? "home" : teamKey && awayName && teamKey === awayName ? "away" : "";
+        const elapsed = event?.time?.elapsed ?? event?.minute ?? event?.time ?? "";
+        const extra = event?.time?.extra ?? event?.added_time ?? "";
+        const minute = elapsed ? `${elapsed}${extra ? `+${extra}` : ""}'` : "";
+        return {
+          side,
+          player: event?.player?.name || event?.player_name || event?.scorer || "Scorer",
+          minute,
+        };
+      })
+      .filter(Boolean);
+  };
+
+  const renderFixtureScorerStrip = (scorers = []) => {
+    const rows = Array.isArray(scorers) ? scorers.filter(Boolean).slice(0, 8) : [];
+    if (!rows.length) return "";
+    return `
+      <div class="fixture-scorer-strip">
+        ${rows
+          .map(
+            (row) => `
+              <span class="fixture-scorer-pill fixture-scorer-pill-${escapeHtml(row.side || "neutral")}">
+                <strong>${escapeHtml(row.player || "Scorer")}</strong>
+                ${row.minute ? `<span>${escapeHtml(row.minute)}</span>` : ""}
+              </span>
+            `
+          )
+          .join("")}
+      </div>
+    `;
+  };
+
   const safeTitleLabel = (value, fallback = "—") => {
     const key = String(value || "").trim();
     return key ? titleCase(key.replace(/_/g, " ")) : fallback;
@@ -2607,18 +2680,23 @@
     const awayUnits = payload?.away_units && typeof payload.away_units === "object" ? Object.values(payload.away_units) : [];
     const publishedProfiles = homeProfiles.length + awayProfiles.length;
     const unitsZero = allNumericValuesZero([...homeUnits, ...awayUnits]);
-    const explicitUnpublished = String(payload?.coverage_status || payload?.fallback_mode || "").toLowerCase().includes("unpublished");
-    const predicted = String(payload?.coverage_status || payload?.lineup_mode || "").toLowerCase().includes("predicted");
+    const statusText = String(
+      payload?.lineup_status || payload?.lineup_mode || payload?.coverage_status || payload?.fallback_mode || ""
+    ).toLowerCase();
+    const explicitUnpublished = statusText.includes("unpublished") || statusText.includes("unavailable");
+    const confirmed = statusText.includes("confirmed");
+    const predicted = statusText.includes("predicted");
     const decisionMissing = tokenHas([...(decision?.caution_layers || []), ...(decision?.internal_reason_tokens || [])], "LINEUP_DATA_MISSING");
     const placeholder = !payload || explicitUnpublished || publishedProfiles === 0 || unitsZero;
+    const status = placeholder ? "fallback" : confirmed ? "confirmed" : predicted ? "predicted" : "published";
     return {
-      status: placeholder ? "fallback" : predicted ? "predicted" : "published",
-      label: placeholder ? "Squad fallback" : predicted ? "Predicted lineups" : "Lineup published",
-      tone: placeholder ? "observe" : "deploy",
+      status,
+      label: placeholder ? "Lineup unavailable" : confirmed ? "Confirmed lineup" : predicted ? "Predicted from last fixture" : "Lineup published",
+      tone: placeholder ? "reference" : confirmed ? "deploy" : predicted ? "observe" : "deploy",
       summary:
         payload?.summary ||
         (placeholder || decisionMissing
-          ? "Confirmed lineup intelligence is not published for this fixture key yet, so the page leans on squad and team intelligence."
+          ? "No publish-safe lineup snapshot is available for this fixture key yet, so the page leans on squad and team intelligence."
           : predicted
             ? "Predicted lineups are built from each team's most recent published lineup and bench snapshot."
             : "Published lineup profiles are active for this fixture."),
@@ -2652,18 +2730,19 @@
     const playerDriverCount = Array.isArray(decision?.key_player_drivers) ? decision.key_player_drivers.length : 0;
     const squadFallbackActive = playerDriverCount === 0 || tokenHas(decision?.caution_layers || [], "LINEUP_DATA_MISSING");
     const marketCount = decisionMarketSuitabilityItems(decision).length;
+    const lineupModelActive = ["published", "confirmed", "predicted"].includes(lineupProfile.status);
     return `
       <section class="section section-tight">
         <article class="intel-coverage-strip" aria-label="Published intelligence coverage">
           <div class="intel-coverage-copy">
             <span class="metric-label">Coverage truth</span>
-            <strong>${escapeHtml(lineupProfile.status === "published" && h2hProfile.status !== "fallback" ? "Full supporting estate active" : "Decision read with controlled fallbacks")}</strong>
+            <strong>${escapeHtml(lineupModelActive && h2hProfile.status !== "fallback" ? "Supporting estate active" : "Decision read with controlled fallbacks")}</strong>
             <p>${escapeHtml("The fixture remains coherent even when optional upstream lineup or H2H layers are not published yet.")}</p>
           </div>
           <div class="intel-coverage-grid">
             <article class="intel-coverage-item intel-coverage-item-${escapeHtml(lineupProfile.tone)}">
               <span>${escapeHtml(lineupProfile.label)}</span>
-              <strong>${escapeHtml(lineupProfile.status === "published" ? `${lineupProfile.profileCount} profiles` : "Fallback active")}</strong>
+              <strong>${escapeHtml(lineupProfile.status === "fallback" ? "Fallback active" : `${lineupProfile.profileCount} profiles`)}</strong>
             </article>
             <article class="intel-coverage-item intel-coverage-item-${escapeHtml(h2hProfile.tone)}">
               <span>${escapeHtml(h2hProfile.label)}</span>
@@ -2821,6 +2900,7 @@
             <a class="fixture-entity-link" href="${teamPageHref(fixture.away_team)}"><strong>${escapeHtml(fixture.away_team)}</strong></a>
           </div>
         </div>
+        <div class="fixture-scorer-slot" data-role="fixture-scorers">${renderFixtureScorerStrip(collectGoalScorerRows(fixture, fixture))}</div>
         <div class="hero-verdict-strip">
           ${heroCards
             .map(
@@ -3675,12 +3755,13 @@
                       type="button"
                       style="left:${left}%; top:${top}%;"
                     >
-                      <span class="formation-player-badge">${escapeHtml(player.power ?? "—")}</span>
+                      ${renderOgRatingBadge(player.power, "medium", `${player.name || player.surname || "Player"} OG rating`)}
                       <span class="formation-player-name">${escapeHtml(player.surname || player.name || "Player")}</span>
                       <span class="formation-player-role">${escapeHtml(safeTitleLabel(player.position_group, "Utility"))}</span>
                       <span class="formation-player-tooltip">
                         <strong>${escapeHtml(player.name || player.surname || "Player")}</strong>
-                        <span>${escapeHtml(`Power ${player.power ?? "—"}%`)}</span>
+                        <span>${escapeHtml(`OG Power ${player.power ?? "—"}%`)}</span>
+                        <span>${escapeHtml(`Display rating ${ogRatingValue(player.power)?.toFixed(1) || "—"}`)}</span>
                         <span>${escapeHtml(`${metricLabel} ${metricValue ?? "—"}%`)}</span>
                         <span>${escapeHtml(`Discipline ${player.discipline_risk ?? "—"}%`)}</span>
                       </span>
@@ -3778,8 +3859,11 @@
             .map(
               (player) => `
                 <span class="fixture-bench-player">
-                  <strong>${escapeHtml(player.surname || player.name || "Player")}</strong>
-                  <small>${escapeHtml(`${safeTitleLabel(player.position_group, "Utility")} · ${player.power ?? "—"}%`)}</small>
+                  ${renderOgRatingBadge(player.power, "small", `${player.name || player.surname || "Player"} OG rating`)}
+                  <span>
+                    <strong>${escapeHtml(player.surname || player.name || "Player")}</strong>
+                    <small>${escapeHtml(`${safeTitleLabel(player.position_group, "Utility")} · ${player.power ?? "—"}%`)}</small>
+                  </span>
                 </span>
               `
             )
@@ -3820,8 +3904,11 @@
                   .map(
                     (player) => `
                       <span class="fixture-bench-player">
-                        <strong>${escapeHtml(player.surname || player.name || "Player")}</strong>
-                        <small>${escapeHtml(`${safeTitleLabel(player.position_group, "Utility")} · ${player.power ?? "—"}%`)}</small>
+                        ${renderOgRatingBadge(player.power, "small", `${player.name || player.surname || "Player"} OG rating`)}
+                        <span>
+                          <strong>${escapeHtml(player.surname || player.name || "Player")}</strong>
+                          <small>${escapeHtml(`${safeTitleLabel(player.position_group, "Utility")} · ${player.power ?? "—"}%`)}</small>
+                        </span>
                       </span>
                     `
                   )
@@ -3835,8 +3922,11 @@
                   .map(
                     (player) => `
                       <span class="fixture-bench-player">
-                        <strong>${escapeHtml(player.surname || player.name || "Player")}</strong>
-                        <small>${escapeHtml(`${safeTitleLabel(player.position_group, "Utility")} · ${player.power ?? "—"}%`)}</small>
+                        ${renderOgRatingBadge(player.power, "small", `${player.name || player.surname || "Player"} OG rating`)}
+                        <span>
+                          <strong>${escapeHtml(player.surname || player.name || "Player")}</strong>
+                          <small>${escapeHtml(`${safeTitleLabel(player.position_group, "Utility")} · ${player.power ?? "—"}%`)}</small>
+                        </span>
                       </span>
                     `
                   )
@@ -3868,16 +3958,16 @@
             <div class="intel-placeholder-head">
               <div>
                 <span class="metric-label">Formation intelligence</span>
-                <h3>Lineup layer is in squad fallback</h3>
+                <h3>Lineup unavailable</h3>
               </div>
-              <span class="chip chip-observe">Unpublished upstream</span>
+              <span class="chip chip-reference">Fallback active</span>
             </div>
             <p class="section-copy">${escapeHtml(coverage.summary)}</p>
             <div class="lineup-fallback-grid">
               <article class="lineup-fallback-card">
-                <span class="metric-label">What is hidden</span>
-                <strong>Confirmed XI structure</strong>
-                <p class="muted">No publish-safe player formation map has been emitted for this fixture key yet.</p>
+                <span class="metric-label">What is unavailable</span>
+                <strong>Last-fixture team sheet</strong>
+                <p class="muted">No compact latest-lineup snapshot has been emitted for at least one team in this fixture.</p>
               </article>
               <article class="lineup-fallback-card">
                 <span class="metric-label">What stays live</span>
@@ -3909,19 +3999,31 @@
         band: value >= 80 ? "Strong unit" : value >= 55 ? "Live support" : "Needs context",
         tone: key === "discipline_risk" ? scoreTone(100 - Number(value || 0)) : scoreTone(value),
       }));
+    const lineupHeading =
+      coverage.status === "confirmed"
+        ? "Confirmed lineups"
+        : coverage.status === "predicted"
+          ? "Predicted lineups"
+          : "Published lineup structure";
+    const lineupChip =
+      coverage.status === "confirmed"
+        ? "Team sheets confirmed"
+        : coverage.status === "predicted"
+          ? "From last fixture"
+          : `${coverage.profileCount} profiles`;
     return `
       <section class="section">
         <article class="panel">
           <div class="intel-placeholder-head">
             <div>
               <span class="metric-label">Formation intelligence</span>
-              <h3>${escapeHtml(coverage.status === "predicted" ? "Predicted lineup structure" : "Published lineup structure")}</h3>
+              <h3>${escapeHtml(lineupHeading)}</h3>
             </div>
-            <span class="chip chip-signal">${escapeHtml(coverage.status === "predicted" ? "Last known XI" : `${coverage.profileCount} profiles`)}</span>
+            <span class="chip chip-signal">${escapeHtml(lineupChip)}</span>
           </div>
           <p class="section-copy">${escapeHtml(
-            coverage.status === "predicted"
-              ? "This layer uses each team's most recent published lineup and bench as the predicted team sheet until confirmed lineups arrive close to kickoff."
+            coverage.status === "predicted" || coverage.status === "confirmed"
+              ? coverage.summary
               : "This layer turns the actual XI into a visual judgement surface: team shape, player strength, unit balance, and the mismatch zones most likely to drive the read."
           )}</p>
           <div class="formation-pitch-grid">
@@ -9026,10 +9128,10 @@
               const role = player.pos || player.grid || "Player";
               return `
                 <article class="lineup-player-card">
-                  <span class="lineup-player-number">${escapeHtml(jersey)}</span>
+                  ${renderOgRatingBadge(null, "small", "Rating unavailable")}
                   <div>
                     <strong>${escapeHtml(player.name || "Unnamed player")}</strong>
-                    <span class="muted">${escapeHtml(role)}</span>
+                    <span class="muted">${escapeHtml(`${jersey} · ${role}`)}</span>
                   </div>
                 </article>
               `;
@@ -9156,6 +9258,12 @@
               <strong class="fixture-hero-score">${escapeHtml(centerLabel)}</strong>
               <span class="muted">${escapeHtml(detailLabel)}</span>
             `;
+          }
+          const scorerNode = root.querySelector("[data-role='fixture-scorers']");
+          if (scorerNode) {
+            scorerNode.innerHTML = renderFixtureScorerStrip(
+              collectGoalScorerRows(fixtureDetails, { home_team: root.dataset.home, away_team: root.dataset.away })
+            );
           }
           const badge = root.querySelector(".fixture-status-badge");
           if (badge) {
