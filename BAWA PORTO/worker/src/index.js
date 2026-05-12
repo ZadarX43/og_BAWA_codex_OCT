@@ -39,6 +39,7 @@ import {
   updateNotificationPreferences,
 } from "./account_store.js";
 import { issuePremiumToken, verifyPremiumAccess } from "./auth.js";
+import { getCurrentFixtures, getFixtureDetail, getTeamDetail } from "./site_data_store.js";
 
 const STRIPE_WEBHOOK_TOLERANCE_SECONDS = 300;
 const PREMIUM_CACHE_TTL_SECONDS = 300;
@@ -127,6 +128,7 @@ const envSummary = (env) => ({
   has_resend_api_key: Boolean(env.RESEND_API_KEY),
   has_auth_email_from: Boolean(env.AUTH_EMAIL_FROM),
   has_account_db: Boolean(getAccountDb(env)),
+  has_site_data_db: Boolean(env.SITE_DATA_DB),
   has_telegram_bot_token: Boolean(getTelegramBotToken(env)),
   has_telegram_bot_username: Boolean(env.TELEGRAM_BOT_USERNAME),
   has_telegram_webhook_secret: Boolean(getTelegramWebhookSecret(env)),
@@ -212,6 +214,94 @@ const requestError = (message, details = null, status = 400) =>
     },
     status
   );
+
+const getSiteDataDb = (env) => env.SITE_DATA_DB || null;
+
+const siteDataCacheHeaders = {
+  "cache-control": "public, max-age=60, s-maxage=300, stale-while-revalidate=600",
+};
+const SITE_DATA_CACHE_VERSION = "active-site-rich-team-v2";
+
+const siteDataDbRequired = () =>
+  configError("SITE_DATA_DB D1/libSQL-compatible binding is required for site data API routes.", ["SITE_DATA_DB"]);
+
+const elapsedMs = (started) => Math.round((performance.now() - started) * 100) / 100;
+
+const withSiteDataCacheStatus = (response, status) => {
+  const headers = new Headers(response.headers);
+  headers.set("x-og-site-cache", status);
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+};
+
+const handleCachedSiteData = async (request, handler) => {
+  if (request.method !== "GET" || typeof caches === "undefined") {
+    return withSiteDataCacheStatus(await handler(), "BYPASS");
+  }
+  const cache = caches.default;
+  const cacheUrl = new URL(request.url);
+  cacheUrl.searchParams.set("__og_cache_version", SITE_DATA_CACHE_VERSION);
+  const cacheKey = new Request(cacheUrl.toString(), { method: "GET" });
+  const cached = await cache.match(cacheKey);
+  if (cached) {
+    return withSiteDataCacheStatus(cached, "HIT");
+  }
+  const response = await handler();
+  if (response.ok) {
+    await cache.put(cacheKey, response.clone());
+  }
+  return withSiteDataCacheStatus(response, "MISS");
+};
+
+const handleSiteFixtureDetail = async (_request, env, fixtureKey) => {
+  const db = getSiteDataDb(env);
+  if (!db) {
+    return siteDataDbRequired();
+  }
+  const started = performance.now();
+  const data = await getFixtureDetail(db, fixtureKey);
+  if (!data.fixture) {
+    return requestError("Fixture was not found in the site data store.", { fixture_key: fixtureKey }, 404);
+  }
+  return json({ ok: true, fixture_key: fixtureKey, meta: { worker_elapsed_ms: elapsedMs(started) }, data }, 200, siteDataCacheHeaders);
+};
+
+const handleSiteTeamDetail = async (_request, env, competitionKey, teamSlug) => {
+  const db = getSiteDataDb(env);
+  if (!db) {
+    return siteDataDbRequired();
+  }
+  const started = performance.now();
+  const data = await getTeamDetail(db, competitionKey, teamSlug);
+  if (!data.team && !data.squad && !data.lineup_snapshot) {
+    return requestError(
+      "Team was not found in the site data store.",
+      { competition_key: competitionKey, team_slug: teamSlug },
+      404
+    );
+  }
+  return json(
+    { ok: true, competition_key: competitionKey, team_slug: teamSlug, meta: { worker_elapsed_ms: elapsedMs(started) }, data },
+    200,
+    siteDataCacheHeaders
+  );
+};
+
+const handleSiteCurrentFixtures = async (request, env) => {
+  const db = getSiteDataDb(env);
+  if (!db) {
+    return siteDataDbRequired();
+  }
+  const url = new URL(request.url);
+  const leagueKey = String(url.searchParams.get("league_key") || "").trim();
+  const limit = Number(url.searchParams.get("limit") || 80);
+  const started = performance.now();
+  const fixtures = await getCurrentFixtures(db, { leagueKey, limit });
+  return json({ ok: true, count: fixtures.length, meta: { worker_elapsed_ms: elapsedMs(started) }, fixtures }, 200, siteDataCacheHeaders);
+};
 
 const stripeError = (message, details = null, status = 502) =>
   json(
@@ -4472,6 +4562,9 @@ async function handleRequest(request, env) {
         "POST /api/account/telegram/link/complete",
         "POST /api/account/telegram/test-alert",
         "POST /api/account/telegram/fixture-alert",
+        "GET /api/site/fixtures/current",
+        "GET /api/site/fixtures/:fixture_key",
+        "GET /api/site/teams/:competition_key/:team_slug",
         "GET /api/widgets/football/standings",
         "GET /api/widgets/football/fixture-lookup",
         "POST /api/telegram/webhook",
@@ -4752,6 +4845,44 @@ async function handleRequest(request, env) {
       return withCors(response, request, env);
     }
     response = await handleTelegramFixtureAlert(request, env);
+    return withCors(response, request, env);
+  }
+
+  if (pathname === "/api/site/fixtures/current") {
+    if (request.method !== "GET") {
+      response = methodNotAllowed("GET");
+      return withCors(response, request, env);
+    }
+    response = await handleCachedSiteData(request, () => handleSiteCurrentFixtures(request, env));
+    return withCors(response, request, env);
+  }
+
+  const siteFixtureMatch = pathname.match(/^\/api\/site\/fixtures\/([^/]+)$/);
+  if (siteFixtureMatch) {
+    if (request.method !== "GET") {
+      response = methodNotAllowed("GET");
+      return withCors(response, request, env);
+    }
+    response = await handleCachedSiteData(request, () =>
+      handleSiteFixtureDetail(request, env, decodeURIComponent(siteFixtureMatch[1] || ""))
+    );
+    return withCors(response, request, env);
+  }
+
+  const siteTeamMatch = pathname.match(/^\/api\/site\/teams\/([^/]+)\/([^/]+)$/);
+  if (siteTeamMatch) {
+    if (request.method !== "GET") {
+      response = methodNotAllowed("GET");
+      return withCors(response, request, env);
+    }
+    response = await handleCachedSiteData(request, () =>
+      handleSiteTeamDetail(
+        request,
+        env,
+        decodeURIComponent(siteTeamMatch[1] || ""),
+        decodeURIComponent(siteTeamMatch[2] || "")
+      )
+    );
     return withCors(response, request, env);
   }
 

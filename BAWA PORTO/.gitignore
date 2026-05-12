@@ -1,0 +1,75 @@
+.env
+
+# Python environments and caches
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Editor and local tooling noise
+.vscode/
+.idea/
+.DS_Store
+
+# Cloudflare / local worker state
+.wrangler/
+
+# Logs and temporary runtime output
+logs/
+run_logs/
+*.log
+tmp*/
+tmp_*/
+
+# Generated prediction and reporting outputs
+predictions_output/
+reports/
+PredictionReports/
+PredictionComplete/
+ROIReports/
+BankerReports/
+diagnostics/
+
+# Backup and snapshot sprawl
+archive/
+backups/
+backup_pre_rebuild_*/
+_bundle_backups/
+MAIN BACKUP BACKUPS/
+ModelStore_backup*/
+ModelStore_backups/
+ModelStore_snapshot*/
+ModelStore_QUARANTINE_*/
+ModelStore_shadow_goal_rebuild_*/
+ModelStore_goal_ensembles_backup_*/
+ModelStore_feb_sandbox/
+ModelStore_wf/
+walkforward_frozen/
+walkforward_frozen_accuracy/
+walkforward_frozen_valueev_aggressive/
+walkforward_frozen_valueev_balanced/
+
+# Python build artifacts
+build/
+dist/
+*.egg-info/
+
+# Local SQLite export artifacts
+*.sqlite
+*.sqlite3
+*.db
+
+# Large raw/derived data dumps that should not be casually tracked
+predictions_output/
+reports/
+
+# Frontend publish artifacts
+# Keep schema and manifest files tracked, but ignore regenerated data payloads by default.
+frontend/public/data/*.json
+!frontend/public/data/api_football_logo_asset_manifest.json

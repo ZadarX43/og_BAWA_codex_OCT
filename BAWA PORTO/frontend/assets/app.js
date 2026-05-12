@@ -19,6 +19,7 @@
   const selectedCompetitionTab = String(query.get("tab") || "overview").toLowerCase();
   const runtimeConfig = window.OG_CONFIG || {};
   const workerApiBase = String(runtimeConfig.WORKER_API_BASE || "").replace(/\/+$/, "");
+  const siteDataApiBase = String(runtimeConfig.SITE_DATA_API_BASE || runtimeConfig.WORKER_API_BASE || "").replace(/\/+$/, "");
   const checkoutPlaceholderHref = "./account.html?intent=checkout";
 
   const state = {
@@ -35,11 +36,15 @@
     fixtureH2HIndex: [],
     selectedTeamIntelligence: null,
     selectedTeamSquadIntelligence: null,
+    selectedTeamLineupSnapshot: null,
     selectedFixtureLineupIntelligence: null,
     selectedFixtureDecisionIntelligence: null,
     selectedFixtureDecisionSupport: null,
+    selectedFixtureSiteData: null,
+    selectedFixtureSiteDataKey: "",
     runtime: {
       workerApiBase,
+      siteDataApiBase,
       premiumToken: null,
       premiumFetchError: "",
       premiumSourceLabel: "",
@@ -199,6 +204,7 @@
   };
 
   const workerConfigured = () => Boolean(state.runtime.workerApiBase);
+  const siteDataApiConfigured = () => Boolean(state.runtime.siteDataApiBase);
   const premiumTokenPresent = () => Boolean(state.runtime.premiumToken);
 
   const workerApiUrl = (path) => {
@@ -206,6 +212,32 @@
       return "";
     }
     return new URL(path, `${state.runtime.workerApiBase}/`).toString();
+  };
+
+  const siteDataApiUrl = (path) => {
+    if (!siteDataApiConfigured()) {
+      return "";
+    }
+    return new URL(path, `${state.runtime.siteDataApiBase}/`).toString();
+  };
+
+  const fetchSiteDataJson = async (path) => {
+    if (!siteDataApiConfigured()) {
+      return null;
+    }
+    try {
+      const response = await fetch(siteDataApiUrl(path), {
+        headers: { accept: "application/json" },
+        credentials: "omit",
+      });
+      const payload = await parseJsonResponse(response, path, { optional: true });
+      return payload?.ok ? payload : null;
+    } catch (error) {
+      if (debugMode) {
+        console.warn("Site data API fallback:", error);
+      }
+      return null;
+    }
   };
 
   const fetchWorkerJson = async (path, options = {}) => {
@@ -618,6 +650,8 @@
 
   const fixtureIndexScore = (entry, fixture, selectedKey, options = {}) => {
     let score = 0;
+    let identityScore = 0;
+    let teamPairScore = 0;
     const allowHistoricalPairFallback = Boolean(options.allowHistoricalPairFallback);
     const selectedKeyRaw = String(selectedKey || "").trim();
     const selectedKeyNormalized = normalizePreferenceText(selectedKeyRaw);
@@ -625,14 +659,17 @@
     const entryKeyNormalized = normalizePreferenceText(entryKeyRaw);
     if (selectedKeyRaw && entryKeyRaw === selectedKeyRaw) {
       score += 100;
+      identityScore += 100;
     } else if (selectedKeyNormalized && entryKeyNormalized === selectedKeyNormalized) {
       score += 85;
+      identityScore += 85;
     }
 
     const fixtureId = String(fixture?.api_fixture_id || fixture?.fixture_id || "").trim();
     const entryFixtureId = String(entry?.fixture_id || "").trim();
     if (fixtureId && entryFixtureId && fixtureId === entryFixtureId) {
       score += 100;
+      identityScore += 100;
     }
 
     const fixtureDate = fixtureDateToken(fixture?.kickoff_time || selectedKeyRaw);
@@ -659,16 +696,24 @@
     }
     if (fixtureHome && entryHome && fixtureHome === entryHome) {
       score += 12;
+      teamPairScore += 12;
     } else if (fixtureHomeLoose && entryHomeLoose && fixtureHomeLoose === entryHomeLoose) {
       score += 8;
+      teamPairScore += 8;
     }
     if (fixtureAway && entryAway && fixtureAway === entryAway) {
       score += 12;
+      teamPairScore += 12;
     } else if (fixtureAwayLoose && entryAwayLoose && fixtureAwayLoose === entryAwayLoose) {
       score += 8;
+      teamPairScore += 8;
     }
 
-    if (allowHistoricalPairFallback && score > 0 && score < 24) {
+    if (allowHistoricalPairFallback && !identityScore && teamPairScore < 16) {
+      return 0;
+    }
+
+    if (allowHistoricalPairFallback && teamPairScore > 0 && score < 24) {
       score += 8;
     }
 
@@ -702,6 +747,101 @@
     }
     const payload = await fetchOptionalJson(`${DATA_ROOT}/${section}/${encodeURIComponent(record.fixture_key)}.json`);
     return payload ? { payload, record } : null;
+  };
+
+  const loadTeamIntelligenceFromStaticBundle = async (record) => {
+    if (!record?.competition_key || !record?.season || !record?.team_slug) {
+      return null;
+    }
+    const bundle = await fetchOptionalJson(
+      `${DATA_ROOT}/team_intelligence/competitions/${record.competition_key}__${record.season}.json`
+    );
+    if (Array.isArray(bundle)) {
+      return (
+        bundle.find(
+          (item) =>
+            String(item?.team_slug || "") === String(record.team_slug || "") ||
+            normalizePreferenceText(item?.team) === normalizePreferenceText(record.team)
+        ) || null
+      );
+    }
+    if (Array.isArray(bundle?.teams)) {
+      return (
+        bundle.teams.find(
+          (item) =>
+            String(item?.team_slug || "") === String(record.team_slug || "") ||
+            normalizePreferenceText(item?.team) === normalizePreferenceText(record.team)
+        ) || null
+      );
+    }
+    const legacy = await fetchOptionalJson(
+      `${DATA_ROOT}/team_intelligence/teams/${record.competition_key}/${record.season}/${record.team_slug}.json`
+    );
+    return legacy || null;
+  };
+
+  const loadClubSquadFromStaticPayload = async (record) => {
+    if (!record?.competition_key || !record?.season || !record?.club_slug) {
+      return null;
+    }
+    return fetchOptionalJson(
+      `${DATA_ROOT}/player_intelligence/clubs/${record.competition_key}/${record.season}/${record.club_slug}.json`
+    );
+  };
+
+  const loadTeamDetailFromSiteOrStatic = async (teamName, options = {}) => {
+    const teamIndexRecord = options.teamIndexRecord || findBestTeamIntelligenceIndexRecord(teamName, options);
+    const clubIndexRecord = findBestClubSquadIndexRecord(teamName, { ...options, teamIndexRecord });
+    if (teamIndexRecord?.competition_key && teamIndexRecord?.team_slug) {
+      const sitePayload = await fetchSiteDataJson(
+        `/api/site/teams/${encodeURIComponent(teamIndexRecord.competition_key)}/${encodeURIComponent(teamIndexRecord.team_slug)}`
+      );
+      if (sitePayload?.data) {
+        return {
+          team: sitePayload.data.team || null,
+          squad: sitePayload.data.squad || null,
+          lineupSnapshot: sitePayload.data.lineup_snapshot || null,
+          teamIndexRecord,
+          clubIndexRecord,
+          source: "site_api",
+        };
+      }
+    }
+    const [team, squad] = await Promise.all([
+      loadTeamIntelligenceFromStaticBundle(teamIndexRecord),
+      loadClubSquadFromStaticPayload(clubIndexRecord),
+    ]);
+    return {
+      team,
+      squad,
+      lineupSnapshot: null,
+      teamIndexRecord,
+      clubIndexRecord,
+      source: "static",
+    };
+  };
+
+  const loadSelectedFixtureSiteData = async () => {
+    if (page !== "fixture" || !selectedFixtureKey) {
+      return null;
+    }
+    if (state.selectedFixtureSiteDataKey === selectedFixtureKey) {
+      return state.selectedFixtureSiteData;
+    }
+    state.selectedFixtureSiteDataKey = selectedFixtureKey;
+    state.selectedFixtureSiteData = null;
+    const payload = await fetchSiteDataJson(`/api/site/fixtures/${encodeURIComponent(selectedFixtureKey)}`);
+    state.selectedFixtureSiteData = payload?.data || null;
+    return state.selectedFixtureSiteData;
+  };
+
+  const loadFixtureIntelligenceRows = async () => {
+    const sitePayload = await fetchSiteDataJson("/api/site/fixtures/current?limit=200");
+    if (Array.isArray(sitePayload?.fixtures) && sitePayload.fixtures.length) {
+      return sitePayload.fixtures;
+    }
+    const fixtureIntelligence = await fetchOptionalJson(`${DATA_ROOT}/fixture_intelligence_public.json`);
+    return Array.isArray(fixtureIntelligence?.fixtures) ? fixtureIntelligence.fixtures : [];
   };
 
   const scoreTone = (value) => {
@@ -792,34 +932,43 @@
           String(right.entry?.season || "").localeCompare(String(left.entry?.season || "")) ||
           String(left.entry?.competition || "").localeCompare(String(right.entry?.competition || ""))
       );
-    return candidates[0]?.entry || findClubSquadIndexRecord(teamName, teamIndexRecord);
+    return (
+      candidates[0]?.entry ||
+      findClubSquadIndexRecord(teamName, teamIndexRecord) ||
+      (teamIndexRecord?.competition_key && teamIndexRecord?.season && teamIndexRecord?.team_slug
+        ? {
+            club: teamIndexRecord.team || teamName,
+            club_slug: teamIndexRecord.team_slug,
+            competition: teamIndexRecord.competition,
+            competition_key: teamIndexRecord.competition_key,
+            season: teamIndexRecord.season,
+          }
+        : null)
+    );
   };
 
   const loadSelectedTeamIntelligence = async () => {
     state.selectedTeamIntelligence = null;
     state.selectedTeamSquadIntelligence = null;
+    state.selectedTeamLineupSnapshot = null;
     if (page !== "teams" || !selectedTeam) {
       return;
     }
 
-    const teamIndexRecord = findTeamIntelligenceIndexRecord(selectedTeam);
-    if (teamIndexRecord?.competition_key && teamIndexRecord?.season && teamIndexRecord?.team_slug) {
-      state.selectedTeamIntelligence = await fetchOptionalJson(
-        `${DATA_ROOT}/team_intelligence/teams/${teamIndexRecord.competition_key}/${teamIndexRecord.season}/${teamIndexRecord.team_slug}.json`
-      );
-    }
-
-    const clubIndexRecord = findClubSquadIndexRecord(selectedTeam, teamIndexRecord);
-    if (clubIndexRecord?.competition_key && clubIndexRecord?.season && clubIndexRecord?.club_slug) {
-      state.selectedTeamSquadIntelligence = await fetchOptionalJson(
-        `${DATA_ROOT}/player_intelligence/clubs/${clubIndexRecord.competition_key}/${clubIndexRecord.season}/${clubIndexRecord.club_slug}.json`
-      );
-    }
+    const teamDetail = await loadTeamDetailFromSiteOrStatic(selectedTeam);
+    state.selectedTeamIntelligence = teamDetail.team || null;
+    state.selectedTeamSquadIntelligence = teamDetail.squad || null;
+    state.selectedTeamLineupSnapshot = teamDetail.lineupSnapshot || null;
   };
 
   const loadSelectedFixtureLineupIntelligence = async () => {
     state.selectedFixtureLineupIntelligence = null;
     if (page !== "fixture" || !selectedFixtureKey) {
+      return;
+    }
+    const siteData = await loadSelectedFixtureSiteData();
+    if (siteData?.lineup) {
+      state.selectedFixtureLineupIntelligence = siteData.lineup;
       return;
     }
     const fixture = findFixtureRowBySelectedKey();
@@ -846,20 +995,25 @@
       return;
     }
     const fixture = findFixtureRowBySelectedKey();
-    const directDecision = await fetchOptionalJson(
-      `${DATA_ROOT}/fixture_decision_intelligence/${encodeURIComponent(selectedFixtureKey)}.json`
-    );
-    if (directDecision) {
-      state.selectedFixtureDecisionIntelligence = directDecision;
+    const siteData = await loadSelectedFixtureSiteData();
+    if (siteData?.decision) {
+      state.selectedFixtureDecisionIntelligence = siteData.decision;
     } else {
-      const resolvedDecision = await loadFixturePayloadFromIndex(
-        "fixture_decision_intelligence",
-        state.fixtureDecisionIndex,
-        fixture,
-        selectedFixtureKey,
-        { allowHistoricalPairFallback: false }
+      const directDecision = await fetchOptionalJson(
+        `${DATA_ROOT}/fixture_decision_intelligence/${encodeURIComponent(selectedFixtureKey)}.json`
       );
-      state.selectedFixtureDecisionIntelligence = resolvedDecision?.payload || null;
+      if (directDecision) {
+        state.selectedFixtureDecisionIntelligence = directDecision;
+      } else {
+        const resolvedDecision = await loadFixturePayloadFromIndex(
+          "fixture_decision_intelligence",
+          state.fixtureDecisionIndex,
+          fixture,
+          selectedFixtureKey,
+          { allowHistoricalPairFallback: false }
+        );
+        state.selectedFixtureDecisionIntelligence = resolvedDecision?.payload || null;
+      }
     }
     if (!fixture) {
       return;
@@ -868,33 +1022,12 @@
       competitionName: fixture.league,
       season: fixture.api_season,
     };
-    const homeTeamIndex = findBestTeamIntelligenceIndexRecord(fixture.home_team, options);
-    const awayTeamIndex = findBestTeamIntelligenceIndexRecord(fixture.away_team, options);
-    const homeSquadIndex = findBestClubSquadIndexRecord(fixture.home_team, { ...options, teamIndexRecord: homeTeamIndex });
-    const awaySquadIndex = findBestClubSquadIndexRecord(fixture.away_team, { ...options, teamIndexRecord: awayTeamIndex });
-
-    const [homeTeamIntelligence, awayTeamIntelligence, homeSquadIntelligence, awaySquadIntelligence, directH2H] = await Promise.all([
-      homeTeamIndex?.competition_key && homeTeamIndex?.season && homeTeamIndex?.team_slug
-        ? fetchOptionalJson(
-            `${DATA_ROOT}/team_intelligence/teams/${homeTeamIndex.competition_key}/${homeTeamIndex.season}/${homeTeamIndex.team_slug}.json`
-          )
-        : Promise.resolve(null),
-      awayTeamIndex?.competition_key && awayTeamIndex?.season && awayTeamIndex?.team_slug
-        ? fetchOptionalJson(
-            `${DATA_ROOT}/team_intelligence/teams/${awayTeamIndex.competition_key}/${awayTeamIndex.season}/${awayTeamIndex.team_slug}.json`
-          )
-        : Promise.resolve(null),
-      homeSquadIndex?.competition_key && homeSquadIndex?.season && homeSquadIndex?.club_slug
-        ? fetchOptionalJson(
-            `${DATA_ROOT}/player_intelligence/clubs/${homeSquadIndex.competition_key}/${homeSquadIndex.season}/${homeSquadIndex.club_slug}.json`
-          )
-        : Promise.resolve(null),
-      awaySquadIndex?.competition_key && awaySquadIndex?.season && awaySquadIndex?.club_slug
-        ? fetchOptionalJson(
-            `${DATA_ROOT}/player_intelligence/clubs/${awaySquadIndex.competition_key}/${awaySquadIndex.season}/${awaySquadIndex.club_slug}.json`
-          )
-        : Promise.resolve(null),
-      fetchOptionalJson(`${DATA_ROOT}/fixture_h2h_support/${encodeURIComponent(selectedFixtureKey)}.json`),
+    const [homeTeamDetail, awayTeamDetail, directH2H] = await Promise.all([
+      loadTeamDetailFromSiteOrStatic(fixture.home_team, options),
+      loadTeamDetailFromSiteOrStatic(fixture.away_team, options),
+      siteData?.h2h
+        ? Promise.resolve(siteData.h2h)
+        : fetchOptionalJson(`${DATA_ROOT}/fixture_h2h_support/${encodeURIComponent(selectedFixtureKey)}.json`),
     ]);
 
     let h2hSupport = directH2H;
@@ -915,10 +1048,10 @@
     }
 
     state.selectedFixtureDecisionSupport = {
-      homeTeamIntelligence,
-      awayTeamIntelligence,
-      homeSquadIntelligence,
-      awaySquadIntelligence,
+      homeTeamIntelligence: homeTeamDetail.team || null,
+      awayTeamIntelligence: awayTeamDetail.team || null,
+      homeSquadIntelligence: homeTeamDetail.squad || null,
+      awaySquadIntelligence: awayTeamDetail.squad || null,
       h2hSupport,
     };
   };
@@ -2402,6 +2535,9 @@
           rating: Number(value?.alignment_score),
           read: value?.public_summary || "No published read yet.",
           band: value?.state || "Pending",
+          modelLean: value?.model_lean || "",
+          support: Array.isArray(value?.structural_support) ? value.structural_support : [],
+          cautions: Array.isArray(value?.cautions) ? value.cautions : [],
         }))
         .filter((entry) => Number.isFinite(entry.rating))
         .sort((left, right) => right.rating - left.rating || left.label.localeCompare(right.label));
@@ -2424,6 +2560,9 @@
         rating: Number(entry.data?.rating),
         read: entry.data?.read || "No published read yet.",
         band: entry.data?.label || "Pending",
+        modelLean: entry.data?.model_lean || "",
+        support: Array.isArray(entry.data?.structural_support) ? entry.data.structural_support : [],
+        cautions: Array.isArray(entry.data?.cautions) ? entry.data.cautions : [],
       }))
       .filter((entry) => Number.isFinite(entry.rating))
       .sort((left, right) => right.rating - left.rating || left.label.localeCompare(right.label));
@@ -2451,6 +2590,97 @@
       weak: weakCandidate,
       avoid: avoidCandidate,
     };
+  };
+
+  const tokenHas = (items = [], needle = "") =>
+    items.some((item) => String(item || "").toUpperCase().includes(String(needle || "").toUpperCase()));
+
+  const allNumericValuesZero = (values = []) => {
+    const usable = values.map((value) => Number(value)).filter((value) => Number.isFinite(value));
+    return usable.length > 0 && usable.every((value) => value === 0);
+  };
+
+  const lineupCoverageProfile = (payload = null, decision = null) => {
+    const homeProfiles = Array.isArray(payload?.home_lineup_profiles) ? payload.home_lineup_profiles : [];
+    const awayProfiles = Array.isArray(payload?.away_lineup_profiles) ? payload.away_lineup_profiles : [];
+    const homeUnits = payload?.home_units && typeof payload.home_units === "object" ? Object.values(payload.home_units) : [];
+    const awayUnits = payload?.away_units && typeof payload.away_units === "object" ? Object.values(payload.away_units) : [];
+    const publishedProfiles = homeProfiles.length + awayProfiles.length;
+    const unitsZero = allNumericValuesZero([...homeUnits, ...awayUnits]);
+    const explicitUnpublished = String(payload?.coverage_status || payload?.fallback_mode || "").toLowerCase().includes("unpublished");
+    const predicted = String(payload?.coverage_status || payload?.lineup_mode || "").toLowerCase().includes("predicted");
+    const decisionMissing = tokenHas([...(decision?.caution_layers || []), ...(decision?.internal_reason_tokens || [])], "LINEUP_DATA_MISSING");
+    const placeholder = !payload || explicitUnpublished || publishedProfiles === 0 || unitsZero;
+    return {
+      status: placeholder ? "fallback" : predicted ? "predicted" : "published",
+      label: placeholder ? "Squad fallback" : predicted ? "Predicted lineups" : "Lineup published",
+      tone: placeholder ? "observe" : "deploy",
+      summary:
+        payload?.summary ||
+        (placeholder || decisionMissing
+          ? "Confirmed lineup intelligence is not published for this fixture key yet, so the page leans on squad and team intelligence."
+          : predicted
+            ? "Predicted lineups are built from each team's most recent published lineup and bench snapshot."
+            : "Published lineup profiles are active for this fixture."),
+      profileCount: publishedProfiles,
+    };
+  };
+
+  const h2hCoverageProfile = (payload = null, decision = null) => {
+    const context = decision?.h2h_context || null;
+    const fallbackMode = String(payload?.fallback_mode || "").toLowerCase();
+    const directAvailable = Boolean(context?.available || (payload && Number(payload.sample_size || 0) > 0 && fallbackMode !== "unpublished"));
+    const historicalFallback = fallbackMode === "historical_team_pair";
+    const unpublished = !payload || fallbackMode === "unpublished" || context?.available === false;
+    return {
+      status: directAvailable ? (historicalFallback ? "historical" : "published") : "fallback",
+      label: directAvailable ? (historicalFallback ? "Historical pair" : "H2H published") : "H2H unpublished",
+      tone: directAvailable ? (historicalFallback ? "observe" : "deploy") : "reference",
+      summary:
+        payload?.summary ||
+        context?.summary ||
+        (unpublished
+          ? "No publish-safe H2H regime summary is available for this fixture key yet; history stays supporting-only."
+          : "Published H2H context is available as supporting evidence."),
+      sampleSize: payload?.sample_size ?? context?.sample_size ?? 0,
+    };
+  };
+
+  const renderFixtureCoverageTruthStrip = (fixture, decision = null, lineup = null, h2hSupport = null) => {
+    const lineupProfile = lineupCoverageProfile(lineup, decision);
+    const h2hProfile = h2hCoverageProfile(h2hSupport, decision);
+    const playerDriverCount = Array.isArray(decision?.key_player_drivers) ? decision.key_player_drivers.length : 0;
+    const squadFallbackActive = playerDriverCount === 0 || tokenHas(decision?.caution_layers || [], "LINEUP_DATA_MISSING");
+    const marketCount = decisionMarketSuitabilityItems(decision).length;
+    return `
+      <section class="section section-tight">
+        <article class="intel-coverage-strip" aria-label="Published intelligence coverage">
+          <div class="intel-coverage-copy">
+            <span class="metric-label">Coverage truth</span>
+            <strong>${escapeHtml(lineupProfile.status === "published" && h2hProfile.status !== "fallback" ? "Full supporting estate active" : "Decision read with controlled fallbacks")}</strong>
+            <p>${escapeHtml("The fixture remains coherent even when optional upstream lineup or H2H layers are not published yet.")}</p>
+          </div>
+          <div class="intel-coverage-grid">
+            <article class="intel-coverage-item intel-coverage-item-${escapeHtml(lineupProfile.tone)}">
+              <span>${escapeHtml(lineupProfile.label)}</span>
+              <strong>${escapeHtml(lineupProfile.status === "published" ? `${lineupProfile.profileCount} profiles` : "Fallback active")}</strong>
+            </article>
+            <article class="intel-coverage-item intel-coverage-item-${escapeHtml(h2hProfile.tone)}">
+              <span>${escapeHtml(h2hProfile.label)}</span>
+              <strong>${escapeHtml(h2hProfile.status === "published" || h2hProfile.status === "historical" ? `${h2hProfile.sampleSize} matches` : "Supporting only")}</strong>
+            </article>
+            <article class="intel-coverage-item intel-coverage-item-${escapeHtml(squadFallbackActive ? "observe" : "deploy")}">
+              <span>Player drivers</span>
+              <strong>${escapeHtml(squadFallbackActive ? "Squad sourced" : `${playerDriverCount} direct`)}</strong>
+            </article>
+            <article class="intel-coverage-item intel-coverage-item-${escapeHtml(marketCount ? "deploy" : "reference")}">
+              <span>Market posture</span>
+              <strong>${escapeHtml(marketCount ? `${marketCount} reads` : "Pending")}</strong>
+            </article>
+          </div>
+        </article>
+      </section>
+    `;
   };
 
   const renderTeamOverviewDrivers = (payload) => {
@@ -3535,9 +3765,134 @@
     `;
   };
 
-  const renderFixtureLineupIntelligence = (payload, fixture = null) => {
-    if (!payload || !payload.home_units || !payload.away_units) {
+  const renderBenchSnapshot = (teamName, players = []) => {
+    const bench = Array.isArray(players) ? players.slice(0, 9) : [];
+    if (!bench.length) {
       return "";
+    }
+    return `
+      <article class="lineup-fallback-card">
+        <span class="metric-label">${escapeHtml(teamName || "Team")} bench</span>
+        <div class="fixture-bench-list">
+          ${bench
+            .map(
+              (player) => `
+                <span class="fixture-bench-player">
+                  <strong>${escapeHtml(player.surname || player.name || "Player")}</strong>
+                  <small>${escapeHtml(`${safeTitleLabel(player.position_group, "Utility")} · ${player.power ?? "—"}%`)}</small>
+                </span>
+              `
+            )
+            .join("")}
+        </div>
+      </article>
+    `;
+  };
+
+  const renderTeamLineupSnapshot = (snapshot) => {
+    if (!snapshot) {
+      return "";
+    }
+    const starters = Array.isArray(snapshot.starters) ? snapshot.starters.slice(0, 11) : [];
+    const bench = Array.isArray(snapshot.bench) ? snapshot.bench.slice(0, 9) : [];
+    const units = snapshot.units && typeof snapshot.units === "object" ? snapshot.units : {};
+    return `
+      <section class="section">
+        <article class="panel">
+          <div class="intel-placeholder-head">
+            <div>
+              <span class="metric-label">Team sheet snapshot</span>
+              <h3>Most recent lineup and bench</h3>
+            </div>
+            <span class="chip chip-signal">${escapeHtml(snapshot.formation || "Shape pending")}</span>
+          </div>
+          <p class="section-copy">${escapeHtml(
+            snapshot.summary ||
+              `Latest publish-safe team sheet snapshot for ${snapshot.team || "this team"}${
+                snapshot.source_match_date ? ` from ${snapshot.source_match_date}` : ""
+              }.`
+          )}</p>
+          <div class="split">
+            <article class="lineup-fallback-card">
+              <span class="metric-label">Starting XI</span>
+              <div class="fixture-bench-list">
+                ${starters
+                  .map(
+                    (player) => `
+                      <span class="fixture-bench-player">
+                        <strong>${escapeHtml(player.surname || player.name || "Player")}</strong>
+                        <small>${escapeHtml(`${safeTitleLabel(player.position_group, "Utility")} · ${player.power ?? "—"}%`)}</small>
+                      </span>
+                    `
+                  )
+                  .join("") || `<span class="muted">Starting XI snapshot is not available yet.</span>`}
+              </div>
+            </article>
+            <article class="lineup-fallback-card">
+              <span class="metric-label">Bench</span>
+              <div class="fixture-bench-list">
+                ${bench
+                  .map(
+                    (player) => `
+                      <span class="fixture-bench-player">
+                        <strong>${escapeHtml(player.surname || player.name || "Player")}</strong>
+                        <small>${escapeHtml(`${safeTitleLabel(player.position_group, "Utility")} · ${player.power ?? "—"}%`)}</small>
+                      </span>
+                    `
+                  )
+                  .join("") || `<span class="muted">Bench snapshot is not available yet.</span>`}
+              </div>
+            </article>
+          </div>
+          ${renderScoreBreakdown(
+            Object.entries(units).map(([key, value]) => ({
+              label: safeTitleLabel(key),
+              value,
+              band: key === "discipline_risk" ? "Risk profile" : "Unit score",
+              tone: key === "discipline_risk" ? scoreTone(100 - Number(value || 0)) : scoreTone(value),
+            })),
+            "No unit scores are available for this lineup snapshot yet."
+          )}
+        </article>
+      </section>
+    `;
+  };
+
+  const renderFixtureLineupIntelligence = (payload, fixture = null) => {
+    const decision = state.selectedFixtureDecisionIntelligence || null;
+    const coverage = lineupCoverageProfile(payload, decision);
+    if (!payload || coverage.status === "fallback" || !payload.home_units || !payload.away_units) {
+      return `
+        <section class="section">
+          <article class="panel intel-placeholder-panel">
+            <div class="intel-placeholder-head">
+              <div>
+                <span class="metric-label">Formation intelligence</span>
+                <h3>Lineup layer is in squad fallback</h3>
+              </div>
+              <span class="chip chip-observe">Unpublished upstream</span>
+            </div>
+            <p class="section-copy">${escapeHtml(coverage.summary)}</p>
+            <div class="lineup-fallback-grid">
+              <article class="lineup-fallback-card">
+                <span class="metric-label">What is hidden</span>
+                <strong>Confirmed XI structure</strong>
+                <p class="muted">No publish-safe player formation map has been emitted for this fixture key yet.</p>
+              </article>
+              <article class="lineup-fallback-card">
+                <span class="metric-label">What stays live</span>
+                <strong>Team and squad intelligence</strong>
+                <p class="muted">The page keeps the decision, team ratings, market posture, and squad-driver fallback visible.</p>
+              </article>
+              <article class="lineup-fallback-card">
+                <span class="metric-label">Decision impact</span>
+                <strong>${escapeHtml(tokenHas(decision?.caution_layers || [], "LINEUP_DATA_MISSING") ? "Caution applied" : "Context only")}</strong>
+                <p class="muted">Missing lineups are treated as a caution layer, never as a reason to invent a stronger read.</p>
+              </article>
+            </div>
+          </article>
+        </section>
+      `;
     }
     const unitLabelMap = {
       attack_unit: "Attack Unit",
@@ -3557,12 +3912,32 @@
     return `
       <section class="section">
         <article class="panel">
-          <h3>Formation intelligence</h3>
-          <p class="section-copy">This layer turns the actual XI into a visual judgement surface: team shape, player strength, unit balance, and the mismatch zones most likely to drive the read.</p>
+          <div class="intel-placeholder-head">
+            <div>
+              <span class="metric-label">Formation intelligence</span>
+              <h3>${escapeHtml(coverage.status === "predicted" ? "Predicted lineup structure" : "Published lineup structure")}</h3>
+            </div>
+            <span class="chip chip-signal">${escapeHtml(coverage.status === "predicted" ? "Last known XI" : `${coverage.profileCount} profiles`)}</span>
+          </div>
+          <p class="section-copy">${escapeHtml(
+            coverage.status === "predicted"
+              ? "This layer uses each team's most recent published lineup and bench as the predicted team sheet until confirmed lineups arrive close to kickoff."
+              : "This layer turns the actual XI into a visual judgement surface: team shape, player strength, unit balance, and the mismatch zones most likely to drive the read."
+          )}</p>
           <div class="formation-pitch-grid">
             ${renderFormationPitchCard(payload.home_team || "Home", payload.home_formation || "", payload.home_lineup_profiles || [], payload.home_units || {}, fixture?.home_team_logo_url || "")}
             ${renderFormationPitchCard(payload.away_team || "Away", payload.away_formation || "", payload.away_lineup_profiles || [], payload.away_units || {}, fixture?.away_team_logo_url || "")}
           </div>
+          ${
+            coverage.status === "predicted"
+              ? `
+                <div class="lineup-fallback-grid lineup-bench-grid">
+                  ${renderBenchSnapshot(payload.home_team || "Home", payload.home_bench_profiles || [])}
+                  ${renderBenchSnapshot(payload.away_team || "Away", payload.away_bench_profiles || [])}
+                </div>
+              `
+              : ""
+          }
         </article>
       </section>
       <section class="section">
@@ -4097,7 +4472,9 @@
   };
 
   const renderDecisionKeyPlayerDrivers = (decision) => {
+    const directDriverCount = Array.isArray(decision?.key_player_drivers) ? decision.key_player_drivers.length : 0;
     let drivers = Array.isArray(decision?.key_player_drivers) ? decision.key_player_drivers.slice(0, 6) : [];
+    let driverSource = directDriverCount ? "fixture" : "squad";
     if (!drivers.length) {
       const support = state.selectedFixtureDecisionSupport || {};
       const collectSquadFallback = (squadPayload, teamLabel) => {
@@ -4112,6 +4489,7 @@
               : "Creative Spark",
           driver_value: Math.max(Number(player?.ratings?.goal_threat || 0), Number(player?.ratings?.creative_spark || 0)) || Number(player?.ratings?.og_player_power || 0),
           power: Number(player?.ratings?.og_player_power || 0),
+          source: "Squad fallback",
         }));
       };
       drivers = [
@@ -4131,20 +4509,29 @@
     }
     return `
       <section class="section">
-        <article class="panel">
-          <h3>Key player drivers</h3>
-          <p class="section-copy">These are the players carrying the structural edge or caution inside the fixture. If lineup data is missing, the page falls back to the best publish-safe squad profiles instead of going blank.</p>
+          <article class="panel">
+            <h3>Key player drivers</h3>
+            <p class="section-copy">${escapeHtml(
+              driverSource === "squad"
+                ? "Lineup-specific player drivers are not published for this fixture yet, so this surface is deliberately using the strongest publish-safe squad profiles."
+                : "These are the players carrying the structural edge or caution inside the fixture decision layer."
+            )}</p>
+            <div class="pill-row">
+              <span class="chip ${driverSource === "squad" ? "chip-observe" : "chip-signal"}">${escapeHtml(driverSource === "squad" ? "Squad fallback active" : "Fixture player layer")}</span>
+              <span class="chip chip-reference">${escapeHtml(driverSource === "squad" ? "Not a confirmed XI" : `${directDriverCount} direct drivers`)}</span>
+            </div>
           <div class="fixture-driver-grid">
             ${drivers
               .map(
                 (driver) => `
-                  <article class="fixture-driver-card">
+                  <article class="fixture-driver-card ${driverSource === "squad" ? "fixture-driver-card-fallback" : ""}">
                     <span class="metric-label">${escapeHtml(driver.team || "Team")}</span>
                     <h4>${escapeHtml(driver.player || "Profile pending")}</h4>
                     <p class="muted">${escapeHtml(`${safeTitleLabel(driver.role, "Utility")} · ${driver.driver_metric || "Impact"} ${driver.driver_value ?? "—"}%`)}</p>
                     <div class="pill-row">
                       <span class="chip chip-reference">${escapeHtml(`Power ${driver.power ?? "—"}%`)}</span>
                       <span class="chip chip-reference">${escapeHtml(`${driver.driver_metric || "Impact"} ${driver.driver_value ?? "—"}%`)}</span>
+                      ${driver.source ? `<span class="chip chip-observe">${escapeHtml(driver.source)}</span>` : ""}
                     </div>
                   </article>
                 `
@@ -4194,21 +4581,66 @@
         </section>
       `;
     }
+    const posture = decisionMarketPosture(decision);
+    const roleFor = (market) => {
+      if (posture?.best === market) return "Best";
+      if (posture?.secondary === market) return "Secondary";
+      if (posture?.avoid === market) return "Avoid";
+      if (posture?.weak === market) return "Weak";
+      return "Context";
+    };
+    const roleClassFor = (role) => String(role || "context").toLowerCase();
     return `
       <section class="section">
         <article class="panel">
-          <h3>Market suitability</h3>
+          <div class="intel-placeholder-head">
+            <div>
+              <span class="metric-label">Market intelligence</span>
+              <h3>Ranked market posture</h3>
+            </div>
+            <span class="chip chip-signal">${escapeHtml(`${items.length} reads`)}</span>
+          </div>
           <p class="section-copy">This is the judgement layer, not a market dump: how well the current fixture structure supports each product family.</p>
+          <div class="market-posture-rail">
+            ${[
+              ["Best", posture?.best],
+              ["Secondary", posture?.secondary],
+              ["Weak", posture?.weak],
+              ["Avoid", posture?.avoid],
+            ]
+              .map(
+                ([label, market]) => `
+                  <article class="market-posture-card market-posture-card-${escapeHtml(roleClassFor(label))}">
+                    <span class="metric-label">${escapeHtml(label)}</span>
+                    <strong>${escapeHtml(market ? `${market.label} · ${market.rating}%` : label === "Avoid" ? "None flagged" : "Pending")}</strong>
+                    <p class="muted">${escapeHtml(market?.band || (label === "Avoid" ? "No hard avoid state" : "No published read yet"))}</p>
+                  </article>
+                `
+              )
+              .join("")}
+          </div>
           <div class="fixture-market-suitability-grid">
             ${items
               .map(
-                (market) => `
-                  <article class="signal-cell signal-cell-model">
-                    <span class="signal-label">${escapeHtml(market.label)}</span>
-                    <span class="signal-value">${escapeHtml(`${market?.rating ?? "—"}% · ${safeTitleLabel(market?.band, "Pending")}`)}</span>
-                    <span class="muted">${escapeHtml(market?.read || "No published read yet.")}</span>
+                (market) => {
+                  const role = roleFor(market);
+                  return `
+                  <article class="market-intel-card market-intel-card-${escapeHtml(roleClassFor(role))}">
+                    <div class="market-intel-card-head">
+                      <div>
+                        <span class="signal-label">${escapeHtml(market.label)}</span>
+                        <span class="signal-value">${escapeHtml(`${market?.rating ?? "—"}% · ${safeTitleLabel(market?.band, "Pending")}`)}</span>
+                      </div>
+                      <span class="chip ${role === "Best" || role === "Secondary" ? "chip-signal" : role === "Avoid" || role === "Weak" ? "chip-observe" : "chip-reference"}">${escapeHtml(role)}</span>
+                    </div>
+                    <p class="muted">${escapeHtml(market?.read || "No published read yet.")}</p>
+                    <div class="market-intel-meta">
+                      <span>${escapeHtml(market.modelLean ? `Lean: ${market.modelLean}` : "Lean pending")}</span>
+                      <span>${escapeHtml(`${market.support?.length || 0} support / ${market.cautions?.length || 0} caution`)}</span>
+                    </div>
                   </article>
-                `
+                `;
+                }
               )
               .join("")}
           </div>
@@ -4219,34 +4651,76 @@
 
   const renderFixtureH2HSupport = (fixture, h2hSupport = null) => {
     const decision = state.selectedFixtureDecisionIntelligence || null;
+    const coverage = h2hCoverageProfile(h2hSupport, decision);
+    const renderH2HTiles = (source = {}) => {
+      const summaryItems = [
+        { label: "Sample", value: `${source.sample_size ?? 0} matches`, meta: "Last five cap" },
+        { label: "Goal environment", value: `${source.goal_environment ?? 0}%`, meta: "Historic scoring climate" },
+        { label: "BTTS regime", value: `${source.btts_regime ?? 0}%`, meta: "Historic two-way scoring" },
+        { label: "Over 2.5", value: `${source.over25_rate ?? 0}%`, meta: "Historic 3+ goal rate" },
+        { label: "Draw rate", value: `${source.draw_rate ?? 0}%`, meta: "Historic stalemate share" },
+        { label: "Booking heat", value: `${source.booking_heat ?? 0}%`, meta: "Historic card climate" },
+      ];
+      return renderEntitySurfaceTiles(summaryItems.map((item) => ({ ...item, tone: scoreTone(parseFloat(String(item.value))) })));
+    };
+    if (h2hSupport && coverage.status !== "fallback") {
+      return `
+        <section class="section">
+          <article class="panel">
+            <div class="intel-placeholder-head">
+              <div>
+                <span class="metric-label">H2H context</span>
+                <h3>${escapeHtml(coverage.status === "historical" ? "Historical same-team-pair context" : "Published H2H support")}</h3>
+              </div>
+              <span class="chip ${coverage.status === "historical" ? "chip-observe" : "chip-signal"}">${escapeHtml(coverage.label)}</span>
+            </div>
+            <p class="section-copy">${escapeHtml(coverage.summary)}</p>
+            ${renderH2HTiles(h2hSupport)}
+          </article>
+        </section>
+      `;
+    }
     if (decision?.h2h_context) {
       const context = decision.h2h_context;
       if (!context.available) {
         return `
           <section class="section">
-            <article class="panel">
-              <h3>H2H context</h3>
-              <div class="notice">${escapeHtml((h2hSupport?.fallback_mode === "historical_team_pair"
-                ? "Exact fixture H2H is not published yet, so this layer is falling back to the latest available same-team-pair historical context."
-                : context.summary) || "No publish-safe H2H regime summary is available for this fixture yet.")}</div>
+            <article class="panel intel-placeholder-panel">
+              <div class="intel-placeholder-head">
+                <div>
+                  <span class="metric-label">H2H context</span>
+                  <h3>H2H layer is supporting-only</h3>
+                </div>
+                <span class="chip chip-reference">${escapeHtml(coverage.label)}</span>
+              </div>
+              <p class="section-copy">${escapeHtml(coverage.summary)}</p>
+              <div class="lineup-fallback-grid">
+                <article class="lineup-fallback-card">
+                  <span class="metric-label">Direct H2H</span>
+                  <strong>Not published</strong>
+                  <p class="muted">No current fixture-key regime summary is available from the publish-safe source.</p>
+                </article>
+                <article class="lineup-fallback-card">
+                  <span class="metric-label">Decision role</span>
+                  <strong>Cannot lead</strong>
+                  <p class="muted">Team ratings, player drivers, and market alignment remain the primary decision layers.</p>
+                </article>
+                <article class="lineup-fallback-card">
+                  <span class="metric-label">Fallback mode</span>
+                  <strong>Clean placeholder</strong>
+                  <p class="muted">The page shows the absence deliberately instead of rendering a broken or empty tab.</p>
+                </article>
+              </div>
             </article>
           </section>
         `;
       }
-      const summaryItems = [
-        { label: "Sample", value: `${context.sample_size ?? 0} matches`, meta: "Last five cap" },
-        { label: "Goal environment", value: `${context.goal_environment ?? 0}%`, meta: "Historic scoring climate" },
-        { label: "BTTS regime", value: `${context.btts_regime ?? 0}%`, meta: "Historic two-way scoring" },
-        { label: "Over 2.5", value: `${context.over25_rate ?? 0}%`, meta: "Historic 3+ goal rate" },
-        { label: "Draw rate", value: `${context.draw_rate ?? 0}%`, meta: "Historic stalemate share" },
-        { label: "Booking heat", value: `${context.booking_heat ?? 0}%`, meta: "Historic card climate" },
-      ];
       return `
         <section class="section">
           <article class="panel">
             <h3>H2H context</h3>
             <p class="section-copy">${escapeHtml(context.summary || "Historic meeting regime is shown here as supporting context, not as the primary signal layer.")}</p>
-            ${renderEntitySurfaceTiles(summaryItems.map((item) => ({ ...item, tone: scoreTone(parseFloat(String(item.value))) })))}
+            ${renderH2HTiles(context)}
           </article>
         </section>
       `;
@@ -4261,20 +4735,12 @@
         </section>
       `;
     }
-    const summaryItems = [
-      { label: "Sample", value: `${h2hSupport.sample_size ?? 0} matches`, meta: "Last five cap" },
-      { label: "Goal environment", value: `${h2hSupport.goal_environment ?? 0}%`, meta: "Historic scoring climate" },
-      { label: "BTTS regime", value: `${h2hSupport.btts_regime ?? 0}%`, meta: "Historic two-way scoring" },
-      { label: "Over 2.5", value: `${h2hSupport.over25_rate ?? 0}%`, meta: "Historic 3+ goal rate" },
-      { label: "Draw rate", value: `${h2hSupport.draw_rate ?? 0}%`, meta: "Historic stalemate share" },
-      { label: "Booking heat", value: `${h2hSupport.booking_heat ?? 0}%`, meta: "Historic card climate" },
-    ];
     return `
       <section class="section">
         <article class="panel">
           <h3>H2H context</h3>
           <p class="section-copy">${escapeHtml(h2hSupport.summary || "Historic meeting regime is shown here as supporting context, not as the primary signal layer.")}</p>
-          ${renderEntitySurfaceTiles(summaryItems.map((item) => ({ ...item, tone: scoreTone(parseFloat(String(item.value))) })))}
+          ${renderH2HTiles(h2hSupport)}
         </article>
       </section>
     `;
@@ -5092,12 +5558,9 @@
   };
 
   const teamEntityView = (team) => {
-    const teamIntelligence = state.selectedTeamIntelligence && normalizePreferenceText(state.selectedTeamIntelligence.team) === normalizePreferenceText(team.name)
-      ? state.selectedTeamIntelligence
-      : null;
-    const squadIntelligence = state.selectedTeamSquadIntelligence && normalizePreferenceText(state.selectedTeamSquadIntelligence.club) === normalizePreferenceText(team.name)
-      ? state.selectedTeamSquadIntelligence
-      : null;
+    const teamIntelligence = state.selectedTeamIntelligence || null;
+    const squadIntelligence = state.selectedTeamSquadIntelligence || null;
+    const lineupSnapshot = state.selectedTeamLineupSnapshot || null;
     const teamRecentRows = team.rows.slice(0, 6);
     const teamClassMix = collectPublishClassMix(teamRecentRows);
     const teamMarketMix = collectMarketFamilyMix(teamRecentRows);
@@ -5176,6 +5639,7 @@
     const overviewContent = `
       ${intelligenceOverviewSection}
       ${renderTeamOverviewDrivers(squadIntelligence)}
+      ${renderTeamLineupSnapshot(lineupSnapshot)}
       <section class="section">
         <div class="split">
           <article class="panel">
@@ -5402,6 +5866,7 @@
       </section>
       ${timingProfileSection}
       ${squadIntelligence ? `<section class="section">${renderSquadSnapshot(squadIntelligence)}</section>` : ""}
+      ${renderTeamLineupSnapshot(lineupSnapshot)}
       ${renderTeamIntelligenceBuckets(team)}
     `;
     const tabContent = {
@@ -5422,6 +5887,28 @@
             </div>
           </div>
           <p>${escapeHtml(intelligenceHeroCopy)}</p>
+          ${
+            teamIntelligence
+              ? `<div class="team-hero-intel-grid">
+                  ${[
+                    ["OG Power", `${teamIntelligence.ratings?.og_power_rating ?? "—"}%`, teamIntelligence.rating_bands?.og_power_rating || "Team strength"],
+                    ["Attack Flow", `${teamIntelligence.ratings?.attack_flow_rating ?? "—"}%`, teamIntelligence.rating_bands?.attack_flow_rating || "Chance creation"],
+                    ["Defensive Lock", `${teamIntelligence.ratings?.defensive_lock_rating ?? "—"}%`, teamIntelligence.rating_bands?.defensive_lock_rating || "Suppression"],
+                    ["Squad Profiles", squadIntelligence ? String(squadIntelligence.players?.length || 0) : "Pending", squadIntelligence ? "Player layer active" : "Awaiting squad layer"],
+                  ]
+                    .map(
+                      ([label, value, meta]) => `
+                        <article class="team-hero-intel-card">
+                          <span class="metric-label">${escapeHtml(label)}</span>
+                          <strong>${escapeHtml(value)}</strong>
+                          <p class="muted">${escapeHtml(meta)}</p>
+                        </article>
+                      `
+                    )
+                    .join("")}
+                </div>`
+              : ""
+          }
           <div class="pill-row">
             ${
               teamIntelligence
@@ -7919,6 +8406,13 @@
           ${renderDecisionKeyMismatches(state.selectedFixtureDecisionIntelligence || null)}
         `;
       }
+      if (activeFixtureTab === "intelligence") {
+        return `
+          ${renderFixtureOverviewPrimer(fixture, clarity)}
+          ${renderFixtureDecisionCompanion(fixture, clarity)}
+          ${renderFixtureLineupIntelligence(state.selectedFixtureLineupIntelligence, fixture)}
+        `;
+      }
       if (activeFixtureTab === "lineups") {
         return `
           <section class="section">
@@ -8245,6 +8739,12 @@
           ${renderFixtureHeroDecisionAside(fixture, clarity, matchedEntry)}
         </aside>
       </section>
+      ${renderFixtureCoverageTruthStrip(
+        fixture,
+        state.selectedFixtureDecisionIntelligence || null,
+        state.selectedFixtureLineupIntelligence || null,
+        state.selectedFixtureDecisionSupport?.h2hSupport || null
+      )}
       <section class="section section-tight">
         <nav class="page-subnav" aria-label="Fixture sections">
           <div class="page-subnav-scroll">
@@ -8726,12 +9226,16 @@
             </div>
           `;
         } catch (error) {
+          const rawMessage = error.message || "";
+          const fallbackMessage = /failed to fetch/i.test(rawMessage)
+            ? "The live lineup reference could not be reached from this local page. Use the publish-safe lineup intelligence below; if confirmed teams are unavailable, it will show the squad fallback state deliberately."
+            : rawMessage || "Lineups and formations are not available for this fixture yet.";
           frame.innerHTML = `
             <div class="lineup-empty-state">
               <div class="lineup-empty-grid">
                 <article class="lineup-empty-card">
-                  <span class="metric-label">Lineups pending</span>
-                  <p class="muted">${escapeHtml(error.message || "Lineups and formations are not available for this fixture yet.")}</p>
+                  <span class="metric-label">Reference lineup feed</span>
+                  <p class="muted">${escapeHtml(fallbackMessage)}</p>
                 </article>
               </div>
             </div>
@@ -10424,18 +10928,18 @@
         fetchJson(`${DATA_ROOT}/public_predictions.json`),
         premiumDemoMode ? fetchOptionalJson(`${DATA_ROOT}/premium_predictions.json`) : Promise.resolve([]),
         fetchOptionalJson(`${DATA_ROOT}/team_intelligence/team_ratings_index.json`),
-        fetchOptionalJson(`${DATA_ROOT}/player_intelligence/club_squad_ratings.json`),
+        siteDataApiConfigured() ? Promise.resolve([]) : fetchOptionalJson(`${DATA_ROOT}/player_intelligence/club_squad_ratings.json`),
         fetchOptionalJson(`${DATA_ROOT}/fixture_decision_intelligence/index.json`),
         fetchOptionalJson(`${DATA_ROOT}/fixture_lineup_intelligence/index.json`),
         fetchOptionalJson(`${DATA_ROOT}/fixture_h2h_support/index.json`),
       ]);
       const weeklyResults = await fetchOptionalJson(`${DATA_ROOT}/weekly_results.json`);
-      const fixtureIntelligence = await fetchOptionalJson(`${DATA_ROOT}/fixture_intelligence_public.json`);
+      const fixtureIntelligenceRows = await loadFixtureIntelligenceRows();
       state.summary = summary;
       state.publicPredictions = publicPredictions;
       state.premiumPredictions = Array.isArray(premiumPredictions) ? premiumPredictions : [];
       state.weeklyResults = weeklyResults;
-      state.fixtureIntelligence = Array.isArray(fixtureIntelligence?.fixtures) ? fixtureIntelligence.fixtures : [];
+      state.fixtureIntelligence = fixtureIntelligenceRows;
       state.teamIntelligenceIndex = Array.isArray(teamIntelligenceIndex) ? teamIntelligenceIndex : [];
       state.clubSquadIntelligenceIndex = Array.isArray(clubSquadIntelligenceIndex) ? clubSquadIntelligenceIndex : [];
       state.fixtureDecisionIndex = Array.isArray(fixtureDecisionIndex) ? fixtureDecisionIndex : [];

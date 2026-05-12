@@ -1,0 +1,73 @@
+name = "odds-genius-worker"
+main = "src/index.js"
+compatibility_date = "2026-05-04"
+workers_dev = true
+
+[observability]
+enabled = true
+
+[triggers]
+crons = ["*/15 * * * *"]
+
+[vars]
+SITE_URL = "https://og-bawa-codex-oct.pages.dev"
+PREMIUM_DATA_SOURCE = "https://og-bawa-codex-oct.pages.dev/public/data/premium_predictions.json"
+STRIPE_PRICE_ID = "price_1TTRvkDoSY9qcu1woHJ5iKSZ"
+TELEGRAM_BOT_USERNAME = "oddsgeniusintel_bot"
+
+[[kv_namespaces]]
+binding = "SUBSCRIBER_STATE"
+id = "82c0190b2e5a43e1aff70eebb70c4388"
+preview_id = "a152e737280f4eb6a1d7946410a0ba45"
+
+[[d1_databases]]
+binding = "ACCOUNT_DB"
+database_name = "odds-genius-account-state"
+database_id = "93e51a25-0ea2-4d62-b45c-d8ae7f76fac7"
+
+[[d1_databases]]
+binding = "SITE_DATA_DB"
+database_name = "odds-genius-site-data"
+database_id = "2a21d853-9d3e-4c6e-bc03-a2e138c96020"
+
+[env.site_data_test]
+name = "odds-genius-worker-site-data-test"
+workers_dev = true
+
+[env.site_data_test.triggers]
+crons = []
+
+[env.site_data_test.vars]
+SITE_URL = "https://og-bawa-codex-oct.pages.dev"
+PREMIUM_DATA_SOURCE = "https://og-bawa-codex-oct.pages.dev/public/data/premium_predictions.json"
+STRIPE_PRICE_ID = "price_1TTRvkDoSY9qcu1woHJ5iKSZ"
+TELEGRAM_BOT_USERNAME = "oddsgeniusintel_bot"
+
+[[env.site_data_test.kv_namespaces]]
+binding = "SUBSCRIBER_STATE"
+id = "82c0190b2e5a43e1aff70eebb70c4388"
+preview_id = "a152e737280f4eb6a1d7946410a0ba45"
+
+[[env.site_data_test.d1_databases]]
+binding = "ACCOUNT_DB"
+database_name = "odds-genius-account-state"
+database_id = "93e51a25-0ea2-4d62-b45c-d8ae7f76fac7"
+
+[[env.site_data_test.d1_databases]]
+binding = "SITE_DATA_DB"
+database_name = "odds-genius-site-data-test"
+database_id = "2e03996d-257f-434a-8599-623c35bce4aa"
+
+# Optional production override example.
+# [env.production.vars]
+# SITE_URL = "https://og-bawa-codex-oct.pages.dev"
+# PREMIUM_DATA_SOURCE = "https://og-bawa-codex-oct.pages.dev/public/data/premium_predictions.json"
+# STRIPE_PRICE_ID = "price_replace_with_real_production_price"
+# TELEGRAM_BOT_USERNAME = "odds_genius_bot"
+#
+# [[env.production.kv_namespaces]]
+# binding = "SUBSCRIBER_STATE"
+# id = "replace-with-real-production-kv-namespace-id"
+
+# Set real secrets with Cloudflare secret management later.
+# Do not place STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, or PREMIUM_TOKEN_SECRET in this file.
