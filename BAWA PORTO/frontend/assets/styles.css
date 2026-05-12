@@ -380,7 +380,7 @@ body::after {
   margin: 0;
   font-size: clamp(3.1rem, 4.7vw, 5.9rem);
   line-height: 0.9;
-  letter-spacing: -0.06em;
+  letter-spacing: 0;
 }
 
 .hero-verdict-strip {
@@ -506,7 +506,7 @@ body::after {
 }
 
 .fixture-hero-scoreboard-scoreboard .fixture-hero-score {
-  font-size: clamp(3rem, 4vw, 4.8rem);
+  font-size: clamp(3.4rem, 5.2vw, 6.2rem);
 }
 
 .fixture-hero-scoreboard-editorial .fixture-hero-score-row {
@@ -526,7 +526,7 @@ body::after {
 .fixture-hero-side {
   display: inline-flex;
   align-items: center;
-  gap: 16px;
+  gap: 18px;
   min-width: 0;
 }
 
@@ -562,7 +562,7 @@ body::after {
 .fixture-hero-score {
   font-size: clamp(2.2rem, 3vw, 3.3rem);
   line-height: 0.95;
-  letter-spacing: -0.06em;
+  letter-spacing: 0;
 }
 
 .match-hero-badge,
@@ -680,6 +680,87 @@ body::after {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+.fixture-hero-shell-wide {
+  display: block;
+}
+
+.fixture-hero-shell-wide .fixture-hero-main {
+  width: 100%;
+}
+
+.fixture-hero-meta-bottom {
+  justify-content: center;
+  color: var(--muted);
+}
+
+.fixture-hero-meta-item {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.fixture-prediction-section {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(300px, 0.92fr);
+  gap: 14px;
+  align-items: stretch;
+}
+
+.fixture-prediction-card {
+  display: grid;
+  gap: 16px;
+  align-content: start;
+  border-color: rgba(61, 217, 176, 0.24);
+  background:
+    linear-gradient(180deg, rgba(19, 44, 36, 0.98), rgba(10, 24, 20, 0.98)),
+    radial-gradient(circle at top left, rgba(61, 217, 176, 0.1), transparent 38%);
+}
+
+.fixture-prediction-card h2 {
+  margin: 8px 0;
+  font-size: clamp(2rem, 3vw, 3.55rem);
+  line-height: 0.98;
+  letter-spacing: 0;
+}
+
+.fixture-prediction-card p {
+  max-width: 64ch;
+  color: var(--muted);
+}
+
+.fixture-prediction-card-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.fixture-prediction-card-grid > div {
+  display: grid;
+  gap: 7px;
+  min-height: 84px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(123, 154, 184, 0.17);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.fixture-prediction-card-grid strong {
+  color: var(--ink);
+  font-size: clamp(1.04rem, 1.35vw, 1.28rem);
+  line-height: 1.12;
+}
+
+.fixture-prediction-support-grid {
+  display: grid;
+  gap: 12px;
+  align-content: start;
 }
 
 .badge-has-image .badge-fallback {
@@ -4512,6 +4593,8 @@ code {
   .lineup-empty-grid,
   .formation-pitch-grid,
   .formation-match-head,
+  .fixture-prediction-section,
+  .fixture-prediction-card-grid,
   .hero-verdict-strip,
   .intel-coverage-strip,
   .intel-coverage-grid,
@@ -4634,6 +4717,10 @@ code {
   .fixture-hero-center {
     justify-items: start;
     text-align: left;
+    justify-content: flex-start;
+  }
+
+  .fixture-hero-meta-bottom {
     justify-content: flex-start;
   }
 

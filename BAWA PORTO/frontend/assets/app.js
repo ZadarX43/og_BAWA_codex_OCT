@@ -12,7 +12,7 @@
   const checkoutState = query.get("checkout") || "";
   const authState = query.get("auth") || "";
   const selectedFixtureKey = query.get("fixture") || "";
-  const selectedFixtureTab = String(query.get("tab") || "intelligence").toLowerCase();
+  const selectedFixtureTab = String(query.get("tab") || "lineups").toLowerCase();
   const selectedTeam = query.get("team") || "";
   const selectedTeamTab = String(query.get("tab") || "overview").toLowerCase();
   const selectedCompetition = query.get("competition") || "";
@@ -2804,16 +2804,11 @@
   };
 
   const renderFixtureHeroScoreboard = (fixture, clarity) => {
-    const decision = state.selectedFixtureDecisionIntelligence || null;
     const leagueBadge = safeLogoUrl(fixture.league_logo_url || fixture.league_flag_url);
     const timing = fixtureTimeState(fixture.kickoff_time);
     const heroMode = timing.tone === "scheduled" ? "editorial" : "scoreboard";
     const homeTeamId = String(fixture.api_home_team_id || "").trim() || extractTeamIdFromLogoUrl(fixture.home_team_logo_url);
     const awayTeamId = String(fixture.api_away_team_id || "").trim() || extractTeamIdFromLogoUrl(fixture.away_team_logo_url);
-    const marketLine = primaryMarketLine(fixture);
-    const confidenceTier = String(fixture.signal_summary?.confidence_tier || fixture.deploy_summary?.confidence_tier || "").toUpperCase();
-    const verdictLabel = marketVerdictDisplay(fixture);
-    const decisionMarkets = decisionMarketSuitabilityItems(decision);
     return `
       <div
         class="fixture-hero-scoreboard fixture-hero-scoreboard-${escapeHtml(heroMode)}"
@@ -2827,7 +2822,24 @@
         data-home-team-id="${escapeHtml(homeTeamId)}"
         data-away-team-id="${escapeHtml(awayTeamId)}"
       >
-        <div class="fixture-hero-meta">
+        <div class="fixture-hero-score-row">
+          <div class="fixture-hero-side">
+            <a class="fixture-entity-link" href="${teamPageHref(fixture.home_team)}"><strong>${escapeHtml(fixture.home_team)}</strong></a>
+            ${badgeMarkup(fixture.home_team_logo_url, fixture.home_team, "match-hero-badge")}
+          </div>
+          <div class="fixture-hero-center">
+            <span class="metric-label">${escapeHtml(timing.label)}</span>
+            <strong class="fixture-hero-score">${escapeHtml(heroMode === "editorial" ? "vs" : "—")}</strong>
+            <span class="muted">${escapeHtml(timing.detail)}</span>
+          </div>
+          <div class="fixture-hero-side fixture-hero-side-end">
+            ${badgeMarkup(fixture.away_team_logo_url, fixture.away_team, "match-hero-badge")}
+            <a class="fixture-entity-link" href="${teamPageHref(fixture.away_team)}"><strong>${escapeHtml(fixture.away_team)}</strong></a>
+          </div>
+        </div>
+        <div class="fixture-scorer-slot" data-role="fixture-scorers">${renderFixtureScorerStrip(collectGoalScorerRows(fixture, fixture))}</div>
+        <div class="fixture-hero-meta fixture-hero-meta-bottom">
+          <span class="fixture-hero-meta-item">${escapeHtml(timing.detail)}</span>
           <a class="fixture-competition-mark" href="${competitionPageHref(fixture.league)}">
             ${
               leagueBadge
@@ -2838,44 +2850,72 @@
           </a>
           <span class="fixture-status-badge fixture-status-badge-${escapeHtml(timing.tone)}">${escapeHtml(timing.label)}</span>
         </div>
-        ${
-          heroMode === "editorial"
-            ? `<h1 class="fixture-hero-title">${escapeHtml(fixture.home_team)} <span class="muted">—</span> ${escapeHtml(fixture.away_team)}</h1>`
-            : ""
-        }
-        <div class="fixture-hero-score-row">
-          <div class="fixture-hero-side">
-            ${badgeMarkup(fixture.home_team_logo_url, fixture.home_team, "match-hero-badge")}
-            <a class="fixture-entity-link" href="${teamPageHref(fixture.home_team)}"><strong>${escapeHtml(fixture.home_team)}</strong></a>
-          </div>
-          <div class="fixture-hero-center">
-            <span class="metric-label">${escapeHtml(heroMode === "editorial" ? "Kickoff strip" : timing.label)}</span>
-            <strong class="fixture-hero-score">${escapeHtml(heroMode === "editorial" ? "vs" : "—")}</strong>
-            <span class="muted">${escapeHtml(timing.detail)}</span>
-          </div>
-          <div class="fixture-hero-side fixture-hero-side-end">
-            ${badgeMarkup(fixture.away_team_logo_url, fixture.away_team, "match-hero-badge")}
-            <a class="fixture-entity-link" href="${teamPageHref(fixture.away_team)}"><strong>${escapeHtml(fixture.away_team)}</strong></a>
-          </div>
-        </div>
-        <div class="fixture-scorer-slot" data-role="fixture-scorers">${renderFixtureScorerStrip(collectGoalScorerRows(fixture, fixture))}</div>
-        <div class="fixture-hero-decision-summary">
-          <span class="metric-label">Decision summary</span>
-          <strong>${escapeHtml(decision?.primary_signal || verdictLabel)}</strong>
-          <p>${escapeHtml(
-            decision
-              ? `${safeTitleLabel(decision.signal_state, "Pending")} read · ${decision.agreement_score ?? "—"}% agreement · ${
-                  decisionMarkets[0] ? `${decisionMarkets[0].label} is the strongest aligned market` : "market alignment pending"
-                }`
-              : `${clarity.action_label} · ${confidenceBandDisplay(confidenceTier)} confidence · ${valueEdgeDisplay(fixture)}`
-          )}</p>
-          <div class="fixture-hero-summary-chips">
-            <span class="chip chip-reference">${escapeHtml(decision ? safeTitleLabel(decision.confidence_band, "Pending") : confidenceBandDisplay(confidenceTier))}</span>
-            <span class="chip chip-reference">${escapeHtml(decisionMarkets[0] ? `${decisionMarkets[0].label} ${decisionMarkets[0].rating}%` : bookmakerLineDisplay(marketLine.odds))}</span>
-            <span class="chip chip-observe">${escapeHtml(decision ? decisionTopCaution(decision) : impliedLineDisplay(marketLine.odds))}</span>
-          </div>
-        </div>
       </div>
+    `;
+  };
+
+  const renderFixturePredictionDeck = (fixture, clarity, matchedEntry, publishClass) => {
+    const decision = state.selectedFixtureDecisionIntelligence || null;
+    const marketLine = primaryMarketLine(fixture);
+    const confidenceTier = String(fixture.signal_summary?.confidence_tier || fixture.deploy_summary?.confidence_tier || "").toUpperCase();
+    const verdictLabel = marketVerdictDisplay(fixture);
+    const decisionMarkets = decisionMarketSuitabilityItems(decision);
+    return `
+      <section class="section fixture-prediction-section">
+        <article class="panel fixture-prediction-card">
+          <div>
+            <span class="metric-label">Odds Genius prediction</span>
+            <h2>${escapeHtml(decision?.primary_signal || verdictLabel)}</h2>
+            <p>${escapeHtml(
+              decision?.preview?.short_summary ||
+                decision?.public_safe_summary ||
+                fixture.signal_summary?.summary_text ||
+                clarity.action_copy
+            )}</p>
+          </div>
+          <div class="fixture-prediction-card-grid">
+            <div>
+              <span class="metric-label">Signal</span>
+              <strong>${escapeHtml(decision ? safeTitleLabel(decision.signal_state, "Pending") : clarity.action_label)}</strong>
+            </div>
+            <div>
+              <span class="metric-label">Agreement</span>
+              <strong>${escapeHtml(decision ? `${decision.agreement_score ?? "—"}%` : confidenceBandDisplay(confidenceTier))}</strong>
+            </div>
+            <div>
+              <span class="metric-label">Best market</span>
+              <strong>${escapeHtml(decisionMarkets[0] ? `${decisionMarkets[0].label} ${decisionMarkets[0].rating}%` : bookmakerLineDisplay(marketLine.odds))}</strong>
+            </div>
+            <div>
+              <span class="metric-label">Main caution</span>
+              <strong>${escapeHtml(decision ? decisionTopCaution(decision) : valueEdgeDisplay(fixture))}</strong>
+            </div>
+          </div>
+          <div class="pill-row">
+            <span class="fixture-state-pill fixture-state-pill-${escapeHtml(clarity.action_label.toLowerCase().includes("deploy") ? "deploy" : publishClass.toLowerCase())}">${escapeHtml(publishClass)}</span>
+            <span class="chip chip-reference">${escapeHtml(decision ? safeTitleLabel(decision.confidence_band, "Pending") : confidenceBandDisplay(confidenceTier))}</span>
+            ${
+              decision?.supporting_layers
+                ? decision.supporting_layers
+                    .slice(0, 2)
+                    .map((tag) => `<span class="chip chip-reference">${escapeHtml(reasonTokenLabel(String(tag)))}</span>`)
+                    .join("")
+                : (fixture.signal_summary?.context_tags || [])
+                    .slice(0, 2)
+                    .map((tag) => `<span class="chip chip-reference">${escapeHtml(String(tag).replace(/_/g, " "))}</span>`)
+                    .join("")
+            }
+          </div>
+          <div class="cta-row">
+            <a class="button" href="./dashboard.html">Back to dashboard</a>
+            <a class="ghost-button" href="./premium.html">Open premium board</a>
+            <button class="ghost-button" type="button" data-action="telegram-fixture-alert" data-fixture-key="${escapeHtml(String(fixture.fixture_key || ""))}">Send to Telegram</button>
+          </div>
+        </article>
+        <div class="fixture-prediction-support-grid">
+          ${renderFixtureHeroDecisionAside(fixture, clarity, matchedEntry)}
+        </div>
+      </section>
     `;
   };
 
@@ -8458,16 +8498,18 @@
       .filter((row) => row.fixture_key !== fixture.fixture_key && row.league === fixture.league)
       .slice(0, 4);
     const fixtureTabs = [
-      ["overview", "Overview"],
-      ["intelligence", "Intelligence"],
-      ["h2h", "H2H"],
       ["lineups", "Lineups"],
-      ["table", "Table"],
+      ["prediction", "Prediction"],
       ["stats", "Stats"],
+      ["table", "Table"],
+      ["h2h", "H2H"],
+      ["markets", "Markets"],
       ["form", "Form"],
       ["context", "Context"],
     ];
-    const activeFixtureTab = fixtureTabs.some(([key]) => key === selectedFixtureTab) ? selectedFixtureTab : "overview";
+    const requestedFixtureTab =
+      selectedFixtureTab === "overview" || selectedFixtureTab === "intelligence" ? "prediction" : selectedFixtureTab;
+    const activeFixtureTab = fixtureTabs.some(([key]) => key === requestedFixtureTab) ? requestedFixtureTab : "lineups";
     const followMatchLabel = matchedEntry ? matchedEntry.reasons.join(" / ") : "Not followed";
     const fixtureSummaryNotice = renderNotice(
       state.runtime.fixtureAlertMessage,
@@ -8489,7 +8531,7 @@
         </div>`
       : `<div class="notice">No related fixtures are available from the current published intelligence window.</div>`;
     const activeTabContent = (() => {
-      if (activeFixtureTab === "overview") {
+      if (activeFixtureTab === "prediction") {
         return `
           ${renderFixtureOverviewPrimer(fixture, clarity)}
           ${renderFixtureTeamFaceOff(fixture, state.selectedFixtureDecisionIntelligence || null)}
@@ -8558,34 +8600,25 @@
           ${renderDecisionKeyMismatches(state.selectedFixtureDecisionIntelligence || null)}
         `;
       }
-      if (activeFixtureTab === "intelligence") {
-        return `
-          ${renderFixtureOverviewPrimer(fixture, clarity)}
-          ${renderFixtureDecisionCompanion(fixture, clarity)}
-          ${renderFixtureLineupIntelligence(state.selectedFixtureLineupIntelligence, fixture)}
-        `;
-      }
       if (activeFixtureTab === "lineups") {
         return `
+          ${renderFixtureLineupIntelligence(state.selectedFixtureLineupIntelligence, fixture)}
           <section class="section">
             ${fixtureSummaryNotice}
             <article class="panel">
               ${fixtureLineupsWidgetMarkup(fixture)}
             </article>
           </section>
-          ${renderFixtureLineupIntelligence(state.selectedFixtureLineupIntelligence, fixture)}
+        `;
+      }
+      if (activeFixtureTab === "markets") {
+        return `
+          ${renderDecisionMarketSuitability(state.selectedFixtureDecisionIntelligence || null)}
         `;
       }
       if (activeFixtureTab === "h2h") {
         return `
-          <section class="section">
-            ${fixtureSummaryNotice}
-            <article class="panel">
-              <h3>Decision companion</h3>
-              <p class="muted">This surface is built around one question: do the ratings and lineup layers agree with the current read? Proprietary intelligence leads; supporting H2H context follows.</p>
-            </article>
-          </section>
-          ${renderFixtureDecisionCompanion(fixture, clarity)}
+          ${renderFixtureH2HSupport(fixture, state.selectedFixtureDecisionSupport?.h2hSupport || null)}
         `;
       }
       if (activeFixtureTab === "table") {
@@ -8857,40 +8890,12 @@
     })();
 
     return `
-      <section class="section split fixture-hero-shell">
+      <section class="section fixture-hero-shell fixture-hero-shell-wide">
         <article class="hero-main fixture-hero-main fixture-hero-main-${escapeHtml(heroMode)}">
-          <p class="hero-kicker">Fixture Intelligence</p>
           ${renderFixtureHeroScoreboard(fixture, clarity)}
-          <p>${escapeHtml(state.selectedFixtureDecisionIntelligence?.preview?.short_summary || state.selectedFixtureDecisionIntelligence?.public_safe_summary || clarity.action_copy)}</p>
-          <div class="pill-row">
-            <span class="fixture-state-pill fixture-state-pill-${escapeHtml(clarity.action_label.toLowerCase().includes("deploy") ? "deploy" : publishClass.toLowerCase())}">${escapeHtml(publishClass)}</span>
-            ${
-              state.selectedFixtureDecisionIntelligence?.signal_state
-                ? `<span class="chip chip-reference">${escapeHtml(safeTitleLabel(state.selectedFixtureDecisionIntelligence.signal_state, "Pending"))}</span>`
-                : ""
-            }
-            ${
-              state.selectedFixtureDecisionIntelligence?.supporting_layers
-                ? state.selectedFixtureDecisionIntelligence.supporting_layers
-                    .slice(0, 2)
-                    .map((tag) => `<span class="chip chip-reference">${escapeHtml(reasonTokenLabel(String(tag)))}</span>`)
-                    .join("")
-                : (fixture.signal_summary?.context_tags || [])
-                .slice(0, 2)
-                .map((tag) => `<span class="chip chip-reference">${escapeHtml(String(tag).replace(/_/g, " "))}</span>`)
-                .join("")
-            }
-          </div>
-          <div class="cta-row">
-            <a class="button" href="./dashboard.html">Back to dashboard</a>
-            <a class="ghost-button" href="./premium.html">Open premium board</a>
-            <button class="ghost-button" type="button" data-action="telegram-fixture-alert" data-fixture-key="${escapeHtml(String(fixture.fixture_key || ""))}">Send to Telegram</button>
-          </div>
         </article>
-        <aside class="hero-side">
-          ${renderFixtureHeroDecisionAside(fixture, clarity, matchedEntry)}
-        </aside>
       </section>
+      ${renderFixturePredictionDeck(fixture, clarity, matchedEntry, publishClass)}
       ${renderFixtureCoverageTruthStrip(
         fixture,
         state.selectedFixtureDecisionIntelligence || null,
@@ -9290,7 +9295,7 @@
           const status = fixtureDetails?.fixture?.status || {};
           const goals = fixtureDetails?.goals || {};
           const hasScore = Number.isFinite(Number(goals.home)) && Number.isFinite(Number(goals.away));
-          const centerLabel = hasScore ? `${goals.home} : ${goals.away}` : "vs";
+          const centerLabel = hasScore ? `${goals.home} - ${goals.away}` : "vs";
           const statusLabel = String(status.short || status.long || "").trim() || fixtureTimeState(root.dataset.kickoffTime).label;
           const detailLabel =
             status.elapsed != null
