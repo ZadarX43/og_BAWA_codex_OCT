@@ -8882,72 +8882,62 @@
         return `
           <section class="section">
             ${fixtureSummaryNotice}
-            <div class="fixture-detail-grid">
-              <article class="panel">
-                <div
-                  class="fixture-form-shell"
-                  data-role="fixture-form-reference"
-                  data-league-id="${escapeHtml(String(fixture.api_league_id || ""))}"
-                  data-season="${escapeHtml(String(fixture.api_season || ""))}"
-                  data-home-team-id="${escapeHtml(String(fixture.api_home_team_id || "").trim() || extractTeamIdFromLogoUrl(fixture.home_team_logo_url))}"
-                  data-away-team-id="${escapeHtml(String(fixture.api_away_team_id || "").trim() || extractTeamIdFromLogoUrl(fixture.away_team_logo_url))}"
-                  data-home-team="${escapeHtml(fixture.home_team || "")}"
-                  data-away-team="${escapeHtml(fixture.away_team || "")}"
-                  data-home-logo="${escapeHtml(fixture.home_team_logo_url || "")}"
-                  data-away-logo="${escapeHtml(fixture.away_team_logo_url || "")}"
-                >
-                  <div class="fixture-form-head">
-                    <span class="metric-label">Form intelligence</span>
-                    <h3>Team rhythm</h3>
-                    <p class="muted">Live league position, recent results, and scoring rhythm for both sides. This layer explains whether the current read is moving with or against team form.</p>
-                  </div>
-                  <div class="fixture-rhythm-board">
-                    <article class="fixture-rhythm-team fixture-rhythm-loading">
-                      <div class="fixture-rhythm-team-head">
-                        ${badgeMarkup(fixture.home_team_logo_url, fixture.home_team, "lineup-team-badge fixture-rhythm-badge")}
-                        <div>
-                          <span class="metric-label">Home rhythm</span>
-                          <h4>${escapeHtml(fixture.home_team)}</h4>
-                          <p class="muted">Preparing form reference</p>
-                        </div>
-                      </div>
-                      <div class="fixture-rhythm-stats">
-                        <span><strong>—</strong><small>Position</small></span>
-                        <span><strong>—</strong><small>Points</small></span>
-                        <span><strong>—</strong><small>Goal diff</small></span>
-                        <span><strong>—</strong><small>Last five</small></span>
-                      </div>
-                      <div class="notice">Live team rhythm will appear here when the league form reference is available.</div>
-                    </article>
-                    <article class="fixture-rhythm-team fixture-rhythm-loading fixture-rhythm-team-away">
-                      <div class="fixture-rhythm-team-head">
-                        ${badgeMarkup(fixture.away_team_logo_url, fixture.away_team, "lineup-team-badge fixture-rhythm-badge")}
-                        <div>
-                          <span class="metric-label">Away rhythm</span>
-                          <h4>${escapeHtml(fixture.away_team)}</h4>
-                          <p class="muted">Preparing form reference</p>
-                        </div>
-                      </div>
-                      <div class="fixture-rhythm-stats">
-                        <span><strong>—</strong><small>Position</small></span>
-                        <span><strong>—</strong><small>Points</small></span>
-                        <span><strong>—</strong><small>Goal diff</small></span>
-                        <span><strong>—</strong><small>Last five</small></span>
-                      </div>
-                      <div class="notice">Live team rhythm will appear here when the league form reference is available.</div>
-                    </article>
-                  </div>
+            <article class="panel fixture-form-panel">
+              <div
+                class="fixture-form-shell"
+                data-role="fixture-form-reference"
+                data-league-id="${escapeHtml(String(fixture.api_league_id || ""))}"
+                data-season="${escapeHtml(String(fixture.api_season || ""))}"
+                data-home-team-id="${escapeHtml(String(fixture.api_home_team_id || "").trim() || extractTeamIdFromLogoUrl(fixture.home_team_logo_url))}"
+                data-away-team-id="${escapeHtml(String(fixture.api_away_team_id || "").trim() || extractTeamIdFromLogoUrl(fixture.away_team_logo_url))}"
+                data-home-team="${escapeHtml(fixture.home_team || "")}"
+                data-away-team="${escapeHtml(fixture.away_team || "")}"
+                data-home-logo="${escapeHtml(fixture.home_team_logo_url || "")}"
+                data-away-logo="${escapeHtml(fixture.away_team_logo_url || "")}"
+              >
+                <div class="fixture-form-head">
+                  <span class="metric-label">Form intelligence</span>
+                  <h3>Team rhythm</h3>
+                  <p class="muted">Live league position, recent results, and scoring rhythm for both sides. This layer explains whether the current read is moving with or against team form.</p>
                 </div>
-              </article>
-              <article class="panel">
-                <h3>Context support</h3>
-                ${
-                  notes.length
-                    ? `<ul class="feature-list">${notes.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}</ul>`
-                    : `<div class="notice">No extra form support notes are currently published for this fixture.</div>`
-                }
-              </article>
-            </div>
+                <div class="fixture-rhythm-board">
+                  <article class="fixture-rhythm-team fixture-rhythm-loading">
+                    <div class="fixture-rhythm-team-head">
+                      ${badgeMarkup(fixture.home_team_logo_url, fixture.home_team, "lineup-team-badge fixture-rhythm-badge")}
+                      <div>
+                        <span class="metric-label">Home rhythm</span>
+                        <h4>${escapeHtml(fixture.home_team)}</h4>
+                        <p class="muted">Preparing form reference</p>
+                      </div>
+                    </div>
+                    <div class="fixture-rhythm-stats">
+                      <span><strong>—</strong><small>Position</small></span>
+                      <span><strong>—</strong><small>Points</small></span>
+                      <span><strong>—</strong><small>Goal diff</small></span>
+                      <span><strong>—</strong><small>Last five</small></span>
+                    </div>
+                    <div class="notice">Live team rhythm will appear here when the league form reference is available.</div>
+                  </article>
+                  <article class="fixture-rhythm-team fixture-rhythm-loading fixture-rhythm-team-away">
+                    <div class="fixture-rhythm-team-head">
+                      ${badgeMarkup(fixture.away_team_logo_url, fixture.away_team, "lineup-team-badge fixture-rhythm-badge")}
+                      <div>
+                        <span class="metric-label">Away rhythm</span>
+                        <h4>${escapeHtml(fixture.away_team)}</h4>
+                        <p class="muted">Preparing form reference</p>
+                      </div>
+                    </div>
+                    <div class="fixture-rhythm-stats">
+                      <span><strong>—</strong><small>Position</small></span>
+                      <span><strong>—</strong><small>Points</small></span>
+                      <span><strong>—</strong><small>Goal diff</small></span>
+                      <span><strong>—</strong><small>Last five</small></span>
+                    </div>
+                    <div class="notice">Live team rhythm will appear here when the league form reference is available.</div>
+                  </article>
+                </div>
+              </div>
+            </article>
             <article class="panel">
               <h3>League rhythm around this fixture</h3>
               <p class="muted">Nearby same-league fixtures remain visible underneath the direct team-form layer so the broader slate still has context.</p>

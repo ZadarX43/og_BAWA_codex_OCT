@@ -3244,10 +3244,14 @@ tbody tr:hover {
   gap: 18px;
 }
 
+.fixture-form-panel {
+  overflow: hidden;
+}
+
 .fixture-form-head {
   display: grid;
   gap: 8px;
-  max-width: 780px;
+  max-width: 980px;
 }
 
 .fixture-form-head h3 {
@@ -3266,6 +3270,7 @@ tbody tr:hover {
 .fixture-rhythm-team {
   display: grid;
   gap: 16px;
+  min-width: 0;
   padding: 18px;
   border-radius: var(--radius-md);
   border: 1px solid rgba(123, 154, 184, 0.14);
@@ -3401,6 +3406,8 @@ tbody tr:hover {
 .team-form-card {
   display: grid;
   gap: 8px;
+  min-width: 0;
+  overflow: hidden;
   padding: 12px;
   border-radius: var(--radius-sm);
   border: 1px solid rgba(107, 122, 143, 0.16);
@@ -3412,6 +3419,12 @@ tbody tr:hover {
 .team-form-card strong {
   font-size: 1rem;
   letter-spacing: -0.03em;
+}
+
+.team-form-card .muted {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .team-form-card-top {
