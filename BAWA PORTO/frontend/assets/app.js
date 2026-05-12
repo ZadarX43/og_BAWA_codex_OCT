@@ -28,6 +28,13 @@
     securePremiumPredictions: [],
     fixtureIntelligence: [],
     weeklyResults: null,
+    teamIntelligenceIndex: [],
+    clubSquadIntelligenceIndex: [],
+    selectedTeamIntelligence: null,
+    selectedTeamSquadIntelligence: null,
+    selectedFixtureLineupIntelligence: null,
+    selectedFixtureDecisionIntelligence: null,
+    selectedFixtureDecisionSupport: null,
     runtime: {
       workerApiBase,
       premiumToken: null,
@@ -527,6 +534,200 @@
     `./competitions.html?competition=${encodeURIComponent(String(competitionName || ""))}&tab=${encodeURIComponent(
       String(tab || "overview")
     )}`;
+
+  const TEAM_RATING_LABELS = {
+    og_power_rating: "OG Power Rating",
+    attack_flow_rating: "Attack Flow",
+    defensive_lock_rating: "Defensive Lock",
+    goal_heat_rating: "Goal Heat",
+    btts_pressure_rating: "BTTS Pressure",
+    over25_heat_rating: "Over 2.5 Heat",
+    control_rating: "Control Rating",
+    first_strike_rating: "First Strike",
+    corner_pressure_rating: "Corner Pressure",
+    card_heat_rating: "Card Heat",
+    chaos_rating: "Chaos Rating",
+    home_fortress_rating: "Home Fortress",
+    away_threat_rating: "Away Threat",
+  };
+
+  const scoreTone = (value) => {
+    const numeric = Number(value);
+    if (!Number.isFinite(numeric)) return "reference";
+    if (numeric >= 80) return "deploy";
+    if (numeric >= 55) return "observe";
+    return "reference";
+  };
+
+  const safeTitleLabel = (value, fallback = "—") => {
+    const key = String(value || "").trim();
+    return key ? titleCase(key.replace(/_/g, " ")) : fallback;
+  };
+
+  const findTeamIntelligenceIndexRecord = (teamName) => {
+    const target = normalizePreferenceText(teamName);
+    return state.teamIntelligenceIndex.find((entry) => normalizePreferenceText(entry?.team) === target) || null;
+  };
+
+  const seasonStartLabel = (value) => {
+    const raw = String(value || "").trim();
+    if (!raw) return "";
+    const match = raw.match(/\d{4}/);
+    return match ? match[0] : raw;
+  };
+
+  const findBestTeamIntelligenceIndexRecord = (teamName, options = {}) => {
+    const target = normalizePreferenceText(teamName);
+    const targetCompetition = normalizePreferenceText(options.competitionName);
+    const targetSeason = seasonStartLabel(options.season);
+    const candidates = state.teamIntelligenceIndex
+      .filter((entry) => normalizePreferenceText(entry?.team) === target)
+      .map((entry) => {
+        let score = 0;
+        if (targetCompetition && normalizePreferenceText(entry?.competition) === targetCompetition) {
+          score += 4;
+        }
+        if (targetSeason && seasonStartLabel(entry?.season) === targetSeason) {
+          score += 6;
+        }
+        return { entry, score };
+      })
+      .sort(
+        (left, right) =>
+          right.score - left.score ||
+          String(right.entry?.season || "").localeCompare(String(left.entry?.season || "")) ||
+          String(left.entry?.competition || "").localeCompare(String(right.entry?.competition || ""))
+      );
+    return candidates[0]?.entry || findTeamIntelligenceIndexRecord(teamName);
+  };
+
+  const findClubSquadIndexRecord = (teamName, teamIndexRecord = null) => {
+    const target = normalizePreferenceText(teamName);
+    return (
+      state.clubSquadIntelligenceIndex.find((entry) => {
+        return (
+          normalizePreferenceText(entry?.club) === target &&
+          (!teamIndexRecord ||
+            (String(entry?.competition_key || "") === String(teamIndexRecord?.competition_key || "") &&
+              String(entry?.season || "") === String(teamIndexRecord?.season || "")))
+        );
+      }) || null
+    );
+  };
+
+  const findBestClubSquadIndexRecord = (teamName, options = {}) => {
+    const teamIndexRecord =
+      options.teamIndexRecord || findBestTeamIntelligenceIndexRecord(teamName, options);
+    const target = normalizePreferenceText(teamName);
+    const targetCompetition = normalizePreferenceText(options.competitionName || teamIndexRecord?.competition);
+    const targetSeason = seasonStartLabel(options.season || teamIndexRecord?.season);
+    const candidates = state.clubSquadIntelligenceIndex
+      .filter((entry) => normalizePreferenceText(entry?.club) === target)
+      .map((entry) => {
+        let score = 0;
+        if (targetCompetition && normalizePreferenceText(entry?.competition) === targetCompetition) {
+          score += 4;
+        }
+        if (targetSeason && seasonStartLabel(entry?.season) === targetSeason) {
+          score += 6;
+        }
+        return { entry, score };
+      })
+      .sort(
+        (left, right) =>
+          right.score - left.score ||
+          String(right.entry?.season || "").localeCompare(String(left.entry?.season || "")) ||
+          String(left.entry?.competition || "").localeCompare(String(right.entry?.competition || ""))
+      );
+    return candidates[0]?.entry || findClubSquadIndexRecord(teamName, teamIndexRecord);
+  };
+
+  const loadSelectedTeamIntelligence = async () => {
+    state.selectedTeamIntelligence = null;
+    state.selectedTeamSquadIntelligence = null;
+    if (page !== "teams" || !selectedTeam) {
+      return;
+    }
+
+    const teamIndexRecord = findTeamIntelligenceIndexRecord(selectedTeam);
+    if (teamIndexRecord?.competition_key && teamIndexRecord?.season && teamIndexRecord?.team_slug) {
+      state.selectedTeamIntelligence = await fetchOptionalJson(
+        `${DATA_ROOT}/team_intelligence/teams/${teamIndexRecord.competition_key}/${teamIndexRecord.season}/${teamIndexRecord.team_slug}.json`
+      );
+    }
+
+    const clubIndexRecord = findClubSquadIndexRecord(selectedTeam, teamIndexRecord);
+    if (clubIndexRecord?.competition_key && clubIndexRecord?.season && clubIndexRecord?.club_slug) {
+      state.selectedTeamSquadIntelligence = await fetchOptionalJson(
+        `${DATA_ROOT}/player_intelligence/clubs/${clubIndexRecord.competition_key}/${clubIndexRecord.season}/${clubIndexRecord.club_slug}.json`
+      );
+    }
+  };
+
+  const loadSelectedFixtureLineupIntelligence = async () => {
+    state.selectedFixtureLineupIntelligence = null;
+    if (page !== "fixture" || !selectedFixtureKey) {
+      return;
+    }
+    state.selectedFixtureLineupIntelligence = await fetchOptionalJson(
+      `${DATA_ROOT}/fixture_lineup_intelligence/${encodeURIComponent(selectedFixtureKey)}.json`
+    );
+  };
+
+  const loadSelectedFixtureDecisionIntelligence = async () => {
+    state.selectedFixtureDecisionIntelligence = null;
+    state.selectedFixtureDecisionSupport = null;
+    if (page !== "fixture" || !selectedFixtureKey) {
+      return;
+    }
+    state.selectedFixtureDecisionIntelligence = await fetchOptionalJson(
+      `${DATA_ROOT}/fixture_decision_intelligence/${encodeURIComponent(selectedFixtureKey)}.json`
+    );
+    const fixture = state.fixtureIntelligence.find((row) => String(row.fixture_key || "") === String(selectedFixtureKey || ""));
+    if (!fixture) {
+      return;
+    }
+    const options = {
+      competitionName: fixture.league,
+      season: fixture.api_season,
+    };
+    const homeTeamIndex = findBestTeamIntelligenceIndexRecord(fixture.home_team, options);
+    const awayTeamIndex = findBestTeamIntelligenceIndexRecord(fixture.away_team, options);
+    const homeSquadIndex = findBestClubSquadIndexRecord(fixture.home_team, { ...options, teamIndexRecord: homeTeamIndex });
+    const awaySquadIndex = findBestClubSquadIndexRecord(fixture.away_team, { ...options, teamIndexRecord: awayTeamIndex });
+
+    const [homeTeamIntelligence, awayTeamIntelligence, homeSquadIntelligence, awaySquadIntelligence, h2hSupport] = await Promise.all([
+      homeTeamIndex?.competition_key && homeTeamIndex?.season && homeTeamIndex?.team_slug
+        ? fetchOptionalJson(
+            `${DATA_ROOT}/team_intelligence/teams/${homeTeamIndex.competition_key}/${homeTeamIndex.season}/${homeTeamIndex.team_slug}.json`
+          )
+        : Promise.resolve(null),
+      awayTeamIndex?.competition_key && awayTeamIndex?.season && awayTeamIndex?.team_slug
+        ? fetchOptionalJson(
+            `${DATA_ROOT}/team_intelligence/teams/${awayTeamIndex.competition_key}/${awayTeamIndex.season}/${awayTeamIndex.team_slug}.json`
+          )
+        : Promise.resolve(null),
+      homeSquadIndex?.competition_key && homeSquadIndex?.season && homeSquadIndex?.club_slug
+        ? fetchOptionalJson(
+            `${DATA_ROOT}/player_intelligence/clubs/${homeSquadIndex.competition_key}/${homeSquadIndex.season}/${homeSquadIndex.club_slug}.json`
+          )
+        : Promise.resolve(null),
+      awaySquadIndex?.competition_key && awaySquadIndex?.season && awaySquadIndex?.club_slug
+        ? fetchOptionalJson(
+            `${DATA_ROOT}/player_intelligence/clubs/${awaySquadIndex.competition_key}/${awaySquadIndex.season}/${awaySquadIndex.club_slug}.json`
+          )
+        : Promise.resolve(null),
+      fetchOptionalJson(`${DATA_ROOT}/fixture_h2h_support/${encodeURIComponent(selectedFixtureKey)}.json`),
+    ]);
+
+    state.selectedFixtureDecisionSupport = {
+      homeTeamIntelligence,
+      awayTeamIntelligence,
+      homeSquadIntelligence,
+      awaySquadIntelligence,
+      h2hSupport,
+    };
+  };
 
   const marketFamilyLabel = (value) => {
     const key = String(value || "").toUpperCase();
@@ -1969,7 +2170,73 @@
     `;
   };
 
+  const decisionStateTone = (signalState) => {
+    const normalized = String(signalState || "").toUpperCase();
+    if (normalized === "SUPPORTED") {
+      return "deploy";
+    }
+    if (normalized === "WATCHLIST" || normalized === "MIXED") {
+      return "observe";
+    }
+    return "reference";
+  };
+
+  const decisionReasonRows = (decision, limit = 4) => {
+    const supportRows = (decision?.supporting_layers || []).slice(0, 2).map((token) => ({
+      tone: "support",
+      text: reasonTokenLabel(token),
+    }));
+    const cautionRows = (decision?.caution_layers || []).slice(0, 2).map((token) => ({
+      tone: "contradict",
+      text: reasonTokenLabel(token),
+    }));
+    return [...supportRows, ...cautionRows].slice(0, limit);
+  };
+
+  const decisionTopCaution = (decision) => {
+    const token = Array.isArray(decision?.caution_layers) ? decision.caution_layers[0] : null;
+    return token ? reasonTokenLabel(token) : "No major caution has been published for this fixture yet.";
+  };
+
+  const decisionMarketSuitabilityItems = (decision) => {
+    const marketIntelligence = decision?.market_intelligence || null;
+    if (marketIntelligence && typeof marketIntelligence === "object") {
+      return Object.entries(marketIntelligence)
+        .map(([key, value]) => ({
+          key,
+          label: key === "ftr" ? "FTR" : key === "btts" ? "BTTS" : key === "ou25" ? "Over 2.5" : safeTitleLabel(key),
+          rating: Number(value?.alignment_score),
+          read: value?.public_summary || "No published read yet.",
+          band: value?.state || "Pending",
+        }))
+        .filter((entry) => Number.isFinite(entry.rating))
+        .sort((left, right) => right.rating - left.rating || left.label.localeCompare(right.label));
+    }
+    const markets = decision?.market_suitability || null;
+    if (!markets) {
+      return [];
+    }
+    return [
+      { label: "FTR", data: markets.ftr },
+      { label: "BTTS", data: markets.btts },
+      { label: "Over 2.5", data: markets.ou25 },
+      { label: "Team Goals", data: markets.team_goals },
+      { label: "Correct Score", data: markets.correct_score },
+      { label: "Corners", data: markets.corners },
+      { label: "Cards", data: markets.cards },
+    ]
+      .map((entry) => ({
+        label: entry.label,
+        rating: Number(entry.data?.rating),
+        read: entry.data?.read || "No published read yet.",
+        band: entry.data?.label || "Pending",
+      }))
+      .filter((entry) => Number.isFinite(entry.rating))
+      .sort((left, right) => right.rating - left.rating || left.label.localeCompare(right.label));
+  };
+
   const renderFixtureHeroScoreboard = (fixture, clarity) => {
+    const decision = state.selectedFixtureDecisionIntelligence || null;
     const leagueBadge = safeLogoUrl(fixture.league_logo_url || fixture.league_flag_url);
     const timing = fixtureTimeState(fixture.kickoff_time);
     const heroMode = timing.tone === "scheduled" ? "editorial" : "scoreboard";
@@ -1978,6 +2245,61 @@
     const marketLine = primaryMarketLine(fixture);
     const confidenceTier = String(fixture.signal_summary?.confidence_tier || fixture.deploy_summary?.confidence_tier || "").toUpperCase();
     const verdictLabel = marketVerdictDisplay(fixture);
+    const decisionMarkets = decisionMarketSuitabilityItems(decision);
+    const heroCards = decision
+      ? [
+          {
+            label: "Primary judgement",
+            value: decision.primary_signal || verdictLabel,
+            note: safeTitleLabel(decision.signal_state, "Pending"),
+            toneClass: `hero-verdict-card-${decisionStateTone(decision.signal_state)}`,
+          },
+          {
+            label: "Agreement stack",
+            value: `${decision.agreement_score ?? "—"}%`,
+            note: `${safeTitleLabel(decision.confidence_band, "Pending")} confidence`,
+            toneClass: `hero-verdict-card-${scoreTone(decision.agreement_score)}`,
+          },
+          {
+            label: "Best aligned market",
+            value: decisionMarkets[0] ? `${decisionMarkets[0].label} · ${decisionMarkets[0].rating}%` : "Pending",
+            note: decisionMarkets[0]?.band || "No published market read yet",
+            toneClass: "hero-verdict-card-observe",
+          },
+          {
+            label: "Main caution",
+            value: decisionTopCaution(decision),
+            note: "Why this may fail",
+            toneClass: "hero-verdict-card-reference",
+          },
+        ]
+      : [
+          {
+            label: "Market verdict",
+            value: verdictLabel,
+            note: clarity.action_label,
+            toneClass: "hero-verdict-card-primary",
+          },
+          {
+            label: "Confidence",
+            value: confidenceBandDisplay(confidenceTier),
+            note: fixture.signal_summary?.signal_strength ? `${String(fixture.signal_summary.signal_strength).toLowerCase()} strength` : "Published signal strength",
+            toneClass: "",
+          },
+          {
+            label: "Bookmaker line",
+            value: bookmakerLineDisplay(marketLine.odds),
+            note: impliedLineDisplay(marketLine.odds),
+            toneClass: "",
+          },
+          {
+            label: "Edge posture",
+            value: valueEdgeDisplay(fixture),
+            note: marketLine.otherLabel && marketLine.otherOdds ? `${marketLine.otherLabel} ${formatOdds(marketLine.otherOdds)}` : "Reference price active",
+            toneClass: "",
+            valueClass: `edge-tone-${valueEdgeTone(fixture)}`,
+          },
+        ];
     return `
       <div
         class="fixture-hero-scoreboard fixture-hero-scoreboard-${escapeHtml(heroMode)}"
@@ -2023,26 +2345,17 @@
           </div>
         </div>
         <div class="hero-verdict-strip">
-          <article class="hero-verdict-card hero-verdict-card-primary">
-            <span class="metric-label">Market verdict</span>
-            <strong>${escapeHtml(verdictLabel)}</strong>
-            <p class="muted">${escapeHtml(clarity.action_label)}</p>
-          </article>
-          <article class="hero-verdict-card">
-            <span class="metric-label">Confidence</span>
-            <strong>${escapeHtml(confidenceBandDisplay(confidenceTier))}</strong>
-            <p class="muted">${escapeHtml(fixture.signal_summary?.signal_strength ? `${String(fixture.signal_summary.signal_strength).toLowerCase()} strength` : "Published signal strength")}</p>
-          </article>
-          <article class="hero-verdict-card">
-            <span class="metric-label">Bookmaker line</span>
-            <strong>${escapeHtml(bookmakerLineDisplay(marketLine.odds))}</strong>
-            <p class="muted">${escapeHtml(impliedLineDisplay(marketLine.odds))}</p>
-          </article>
-          <article class="hero-verdict-card">
-            <span class="metric-label">Edge posture</span>
-            <strong class="edge-tone-${escapeHtml(valueEdgeTone(fixture))}">${escapeHtml(valueEdgeDisplay(fixture))}</strong>
-            <p class="muted">${escapeHtml(marketLine.otherLabel && marketLine.otherOdds ? `${marketLine.otherLabel} ${formatOdds(marketLine.otherOdds)}` : "Reference price active")}</p>
-          </article>
+          ${heroCards
+            .map(
+              (card) => `
+                <article class="hero-verdict-card ${escapeHtml(card.toneClass || "")}">
+                  <span class="metric-label">${escapeHtml(card.label)}</span>
+                  <strong${card.valueClass ? ` class="${escapeHtml(card.valueClass)}"` : ""}>${escapeHtml(card.value)}</strong>
+                  <p class="muted">${escapeHtml(card.note)}</p>
+                </article>
+              `
+            )
+            .join("")}
         </div>
       </div>
     `;
@@ -2653,6 +2966,1147 @@
     `;
   };
 
+  const renderScoreBreakdown = (items, emptyCopy) => {
+    if (!items.length) {
+      return `<div class="notice">${escapeHtml(emptyCopy)}</div>`;
+    }
+    return `
+      <div class="entity-breakdown">
+        ${items
+          .map((item) => {
+            const numeric = Number(item.value);
+            const share = Math.max(6, Math.min(100, Math.round(Number.isFinite(numeric) ? numeric : 0)));
+            return `
+              <div class="entity-breakdown-row">
+                <div class="entity-breakdown-copy">
+                  <span class="entity-breakdown-label">${escapeHtml(item.label)}</span>
+                  <span class="entity-breakdown-meta">${escapeHtml(`${share}% • ${item.meta || safeTitleLabel(item.band)}`)}</span>
+                </div>
+                <div class="entity-breakdown-bar">
+                  <span class="entity-breakdown-fill entity-breakdown-fill-${escapeHtml(item.tone || scoreTone(share))}" style="width:${share}%"></span>
+                </div>
+              </div>
+            `;
+          })
+          .join("")}
+      </div>
+    `;
+  };
+
+  const renderSquadLeaderList = (label, names) => {
+    if (!Array.isArray(names) || !names.length) {
+      return "";
+    }
+    return `
+      <li>
+        <strong>${escapeHtml(label)}</strong><br />
+        <span class="muted">${escapeHtml(names.join(" • "))}</span>
+      </li>
+    `;
+  };
+
+  const renderPlayerIntelligenceCard = (player) => {
+    const power = player?.ratings?.og_player_power;
+    const goalThreat = player?.ratings?.goal_threat;
+    const creativeSpark = player?.ratings?.creative_spark;
+    const disciplineRisk = player?.ratings?.discipline_risk;
+    return `
+      <article class="panel">
+        <h4>${escapeHtml(player?.name || "Player")}</h4>
+        <div class="pill-row">
+          <span class="chip chip-reference">${escapeHtml(`${safeTitleLabel(player?.position_group, "Utility")} • ${power ?? "—"}%`)}</span>
+          <span class="chip chip-reference">${escapeHtml(player?.minutes_confidence?.label || "Sample pending")}</span>
+        </div>
+        <ul class="feature-list compact-list">
+          <li>Goal Threat: ${escapeHtml(goalThreat ?? "—")}%</li>
+          <li>Creative Spark: ${escapeHtml(creativeSpark ?? "—")}%</li>
+          <li>Discipline Risk: ${escapeHtml(disciplineRisk ?? "—")}%</li>
+          <li>League Rank: ${escapeHtml(player?.ranks?.league_overall_rank ? `#${player.ranks.league_overall_rank}` : "—")}</li>
+        </ul>
+        <p class="section-copy">${escapeHtml((player?.tags || []).slice(0, 3).join(" • ") || "No public player tags yet.")}</p>
+      </article>
+    `;
+  };
+
+  const renderIntelligenceHeadline = (headline, body, tone = "reference") => `
+    <article class="panel intelligence-callout intelligence-callout-${escapeHtml(tone)}">
+      <h3>${escapeHtml(headline)}</h3>
+      <p class="section-copy">${escapeHtml(body)}</p>
+    </article>
+  `;
+
+  const summarizeSquadSnapshot = (payload) => {
+    const players = Array.isArray(payload?.players) ? payload.players : [];
+    const powers = players.map((player) => Number(player?.ratings?.og_player_power || 0)).filter(Number.isFinite);
+    return {
+      totalProfiles: players.length,
+      eliteCount: powers.filter((value) => value >= 90).length,
+      strongCount: powers.filter((value) => value >= 80).length,
+      highRiskCount: players.filter((player) => Number(player?.ratings?.discipline_risk || 0) >= 70).length,
+    };
+  };
+
+  const renderSquadDepthTiles = (payload) => {
+    const snapshot = summarizeSquadSnapshot(payload);
+    return renderEntitySurfaceTiles([
+      { label: "Squad profiles", value: snapshot.totalProfiles || 0, meta: "Publish-safe player profiles", tone: "reference" },
+      { label: "Elite profiles", value: snapshot.eliteCount || 0, meta: "90%+ OG Player Power", tone: "deploy" },
+      { label: "Strong profiles", value: snapshot.strongCount || 0, meta: "80%+ OG Player Power", tone: "observe" },
+      { label: "Discipline risk", value: snapshot.highRiskCount || 0, meta: "70%+ risk profiles", tone: snapshot.highRiskCount ? "observe" : "reference" },
+    ]);
+  };
+
+  const renderMarketTendencyList = (marketTendencies) => {
+    const items = [
+      ["FTR Lean", marketTendencies?.ftr_lean, "Full-result posture"],
+      ["BTTS Lean", marketTendencies?.btts_lean, "Two-way scoring pressure"],
+      ["Over 2.5", marketTendencies?.over25_lean, "Goal-total profile"],
+      ["Under Control", marketTendencies?.under_control, "Suppression/read discipline"],
+      ["Team Goals 1.5+", marketTendencies?.team_goals_15, "Scoring-repeat pressure"],
+      ["Corners", marketTendencies?.corners, "Territory / wide pressure"],
+      ["Cards", marketTendencies?.cards, "Discipline / card heat"],
+    ];
+    return `
+      <ul class="feature-list compact-list">
+        ${items
+          .map(
+            ([label, value, note]) => `
+              <li>
+                <strong>${escapeHtml(label)}</strong><br />
+                <span class="muted">${escapeHtml(`${safeTitleLabel(value)} • ${note}`)}</span>
+              </li>
+            `
+          )
+          .join("")}
+      </ul>
+    `;
+  };
+
+  const renderProfileSurface = (label, profile = {}) => `
+    <article class="panel">
+      <h3>${escapeHtml(label)}</h3>
+      ${renderEntitySurfaceTiles([
+        { label: "Power", value: `${profile.power ?? "—"}%`, meta: "Overall profile", tone: scoreTone(profile.power) },
+        { label: "Attack", value: `${profile.attack ?? "—"}%`, meta: "Chance / scoring shape", tone: scoreTone(profile.attack) },
+        { label: "Defence", value: `${profile.defence ?? "—"}%`, meta: "Resistance / suppression", tone: scoreTone(profile.defence) },
+        { label: "Goal Heat", value: `${profile.goal_heat ?? "—"}%`, meta: "Total-goals environment", tone: scoreTone(profile.goal_heat) },
+      ])}
+    </article>
+  `;
+
+  const formationBandPlan = (formation, players = []) => {
+    const digits = String(formation || "")
+      .split(/[^0-9]+/)
+      .filter(Boolean)
+      .map((value) => Number(value))
+      .filter((value) => Number.isFinite(value) && value > 0);
+    const goalkeeper = players.find((player) => String(player?.lineup_position || "").toUpperCase() === "G") || null;
+    const outfield = players.filter((player) => player !== goalkeeper);
+    if (!digits.length || digits.reduce((sum, value) => sum + value, 0) !== outfield.length) {
+      const fallbackCounts = [];
+      const remaining = outfield.length;
+      if (remaining <= 0) {
+        return goalkeeper ? [[goalkeeper]] : [];
+      }
+      if (remaining <= 3) {
+        fallbackCounts.push(remaining);
+      } else {
+        const defence = Math.max(3, Math.round(remaining * 0.36));
+        const midfield = Math.max(2, Math.round(remaining * 0.32));
+        const attack = Math.max(1, remaining - defence - midfield);
+        const correction = remaining - (defence + midfield + attack);
+        fallbackCounts.push(defence, midfield, attack + correction);
+      }
+      const bands = goalkeeper ? [[goalkeeper]] : [];
+      let cursor = 0;
+      fallbackCounts.forEach((count) => {
+        bands.push(outfield.slice(cursor, cursor + count));
+        cursor += count;
+      });
+      if (cursor < outfield.length) {
+        bands[bands.length - 1] = (bands[bands.length - 1] || []).concat(outfield.slice(cursor));
+      }
+      return bands;
+    }
+    const bands = goalkeeper ? [[goalkeeper]] : [];
+    let cursor = 0;
+    digits.forEach((count) => {
+      bands.push(outfield.slice(cursor, cursor + count));
+      cursor += count;
+    });
+    return bands;
+  };
+
+  const lineupTopMetric = (profile = {}) => {
+    const metrics = [
+      ["Goal Threat", Number(profile.goal_threat || 0)],
+      ["Creative Spark", Number(profile.creative_spark || 0)],
+      ["Midfield Engine", Number(profile.midfield_engine || 0)],
+      ["Defensive Lock", Number(profile.defensive_lock || 0)],
+      ["Pressing Heat", Number(profile.pressing_heat || 0)],
+      ["Ball Progression", Number(profile.ball_progression || 0)],
+      ["Aerial Dominance", Number(profile.aerial_dominance || 0)],
+      ["Goalkeeper Shield", Number(profile.goalkeeper_shield || 0)],
+    ]
+      .filter((entry) => Number.isFinite(entry[1]))
+      .sort((left, right) => right[1] - left[1]);
+    return metrics[0] || ["Profile", Number(profile.power || 0)];
+  };
+
+  const renderFormationPitchCard = (teamName, formation, profiles = [], units = {}, teamLogoUrl = "") => {
+    const bands = formationBandPlan(formation, profiles);
+    const lineCount = Math.max(1, bands.length);
+    const unitChips = [
+      ["Attack", units.attack_unit],
+      ["Midfield", units.midfield_control],
+      ["Defence", units.defensive_unit],
+    ];
+    return `
+      <article class="panel formation-pitch-card">
+        <div class="formation-pitch-head">
+          <div class="formation-pitch-title">
+            ${badgeMarkup(teamLogoUrl, teamName, "lineup-team-badge")}
+            <div>
+              <span class="metric-label">${escapeHtml(teamName || "Team")}</span>
+              <h4>${escapeHtml(formation || "Formation pending")}</h4>
+            </div>
+          </div>
+          <div class="formation-unit-strip">
+            ${unitChips
+              .map(
+                ([label, value]) => `
+                  <span class="formation-unit-chip formation-unit-chip-${escapeHtml(scoreTone(value))}">
+                    ${escapeHtml(`${label} ${value ?? "—"}%`)}
+                  </span>
+                `
+              )
+              .join("")}
+          </div>
+        </div>
+        <div class="formation-pitch">
+          ${bands
+            .map((band, bandIndex) => {
+              const top = lineCount === 1 ? 50 : 88 - (bandIndex * 68) / Math.max(1, lineCount - 1);
+              const count = Math.max(1, band.length);
+              return band
+                .map((player, playerIndex) => {
+                  const left = count === 1 ? 50 : 14 + (playerIndex * 72) / Math.max(1, count - 1);
+                  const [metricLabel, metricValue] = lineupTopMetric(player);
+                  return `
+                    <button
+                      class="formation-player formation-player-${escapeHtml(scoreTone(player.power))}"
+                      type="button"
+                      style="left:${left}%; top:${top}%;"
+                    >
+                      <span class="formation-player-badge">${escapeHtml(player.power ?? "—")}</span>
+                      <span class="formation-player-name">${escapeHtml(player.surname || player.name || "Player")}</span>
+                      <span class="formation-player-role">${escapeHtml(safeTitleLabel(player.position_group, "Utility"))}</span>
+                      <span class="formation-player-tooltip">
+                        <strong>${escapeHtml(player.name || player.surname || "Player")}</strong>
+                        <span>${escapeHtml(`Power ${player.power ?? "—"}%`)}</span>
+                        <span>${escapeHtml(`${metricLabel} ${metricValue ?? "—"}%`)}</span>
+                        <span>${escapeHtml(`Discipline ${player.discipline_risk ?? "—"}%`)}</span>
+                      </span>
+                    </button>
+                  `;
+                })
+                .join("");
+            })
+            .join("")}
+        </div>
+      </article>
+    `;
+  };
+
+  const renderFormationMismatchSurface = (payload) => {
+    const mismatches = Array.isArray(payload?.key_mismatches) ? payload.key_mismatches.slice(0, 4) : [];
+    if (!mismatches.length) {
+      return `<div class="notice">No publish-safe mismatch surface is available for this fixture yet.</div>`;
+    }
+    return `
+      <div class="formation-mismatch-grid">
+        ${mismatches
+          .map(
+            (item) => `
+              <article class="formation-mismatch-card">
+                <span class="metric-label">Key mismatch</span>
+                <h4>${escapeHtml(item.summary || item.zone || "Mismatch edge")}</h4>
+                <div class="formation-mismatch-values">
+                  <div>
+                    <span>${escapeHtml(item.left_label || "Left side")}</span>
+                    <strong>${escapeHtml(`${item.left_value ?? "—"}%`)}</strong>
+                  </div>
+                  <div>
+                    <span>${escapeHtml(item.right_label || "Right side")}</span>
+                    <strong>${escapeHtml(`${item.right_value ?? "—"}%`)}</strong>
+                  </div>
+                </div>
+                <p class="muted">${escapeHtml(`${item.advantage || "Advantage pending"} +${item.mismatch_score ?? "—"}`)}</p>
+              </article>
+            `
+          )
+          .join("")}
+      </div>
+    `;
+  };
+
+  const renderFormationPlayerMatchups = (payload) => {
+    const matchups = Array.isArray(payload?.player_matchups) ? payload.player_matchups.slice(0, 3) : [];
+    if (!matchups.length) {
+      return "";
+    }
+    return `
+      <article class="panel">
+        <h3>Player matchups</h3>
+        <div class="fixture-player-matchups">
+          ${matchups
+            .map(
+              (item) => `
+                <article class="fixture-player-matchup-card">
+                  <div class="fixture-player-matchup-head">
+                    <div>
+                      <span class="metric-label">${escapeHtml("Attacker / creator")}</span>
+                      <h4>${escapeHtml(item.home_player || "Player")}</h4>
+                    </div>
+                    <div class="fixture-player-matchup-delta">${escapeHtml(`${item.mismatch_score ?? "—"} pts`)}</div>
+                    <div class="fixture-player-matchup-away">
+                      <span class="metric-label">${escapeHtml("Defender / counter")}</span>
+                      <h4>${escapeHtml(item.away_player || "Player")}</h4>
+                    </div>
+                  </div>
+                  <div class="fixture-player-metric-grid">
+                    <div class="fixture-player-metric"><span>${escapeHtml(item.home_metric_label || "Metric")}</span><strong>${escapeHtml(`${item.home_metric_value ?? "—"}%`)}</strong></div>
+                    <div class="fixture-player-metric"><span>${escapeHtml(item.away_metric_label || "Metric")}</span><strong>${escapeHtml(`${item.away_metric_value ?? "—"}%`)}</strong></div>
+                  </div>
+                  <p class="muted">${escapeHtml(item.summary || `${item.advantage || "Advantage"} matchup edge`)}</p>
+                </article>
+              `
+            )
+            .join("")}
+        </div>
+      </article>
+    `;
+  };
+
+  const renderFixtureLineupIntelligence = (payload, fixture = null) => {
+    if (!payload || !payload.home_units || !payload.away_units) {
+      return "";
+    }
+    const unitLabelMap = {
+      attack_unit: "Attack Unit",
+      midfield_control: "Midfield Control",
+      defensive_unit: "Defensive Unit",
+      wide_threat: "Wide Threat",
+      central_threat: "Central Threat",
+      discipline_risk: "Discipline Risk",
+    };
+    const toItems = (unitMap = {}) =>
+      Object.entries(unitMap).map(([key, value]) => ({
+        label: unitLabelMap[key] || safeTitleLabel(key),
+        value,
+        band: value >= 80 ? "Strong unit" : value >= 55 ? "Live support" : "Needs context",
+        tone: key === "discipline_risk" ? scoreTone(100 - Number(value || 0)) : scoreTone(value),
+      }));
+    return `
+      <section class="section">
+        <article class="panel">
+          <h3>Formation intelligence</h3>
+          <p class="section-copy">This layer turns the actual XI into a visual judgement surface: team shape, player strength, unit balance, and the mismatch zones most likely to drive the read.</p>
+          <div class="formation-pitch-grid">
+            ${renderFormationPitchCard(payload.home_team || "Home", payload.home_formation || "", payload.home_lineup_profiles || [], payload.home_units || {}, fixture?.home_team_logo_url || "")}
+            ${renderFormationPitchCard(payload.away_team || "Away", payload.away_formation || "", payload.away_lineup_profiles || [], payload.away_units || {}, fixture?.away_team_logo_url || "")}
+          </div>
+        </article>
+      </section>
+      <section class="section">
+        <div class="split">
+          <article class="panel">
+            <h3>Unit strength</h3>
+            <div class="split split-tight">
+              <div>
+                <span class="metric-label">${escapeHtml(payload.home_team || "Home")}</span>
+                <h4>${escapeHtml(payload.home_formation || "Formation pending")}</h4>
+                ${renderScoreBreakdown(toItems(payload.home_units), "No home unit ratings published yet.")}
+              </div>
+              <div>
+                <span class="metric-label">${escapeHtml(payload.away_team || "Away")}</span>
+                <h4>${escapeHtml(payload.away_formation || "Formation pending")}</h4>
+                ${renderScoreBreakdown(toItems(payload.away_units), "No away unit ratings published yet.")}
+              </div>
+            </div>
+          </article>
+          <article class="panel">
+            <h3>Key mismatch zones</h3>
+            ${renderFormationMismatchSurface(payload)}
+          </article>
+        </div>
+      </section>
+      <section class="section">
+        ${renderFormationPlayerMatchups(payload)}
+      </section>
+    `;
+  };
+
+  const findLineupProfileByName = (profiles = [], playerName = "") => {
+    const target = normalizePreferenceText(playerName);
+    return (
+      profiles.find((profile) => normalizePreferenceText(profile?.name) === target || normalizePreferenceText(profile?.surname) === target) || null
+    );
+  };
+
+  const findSquadProfileByName = (payload, playerName = "") => {
+    if (!payload || !Array.isArray(payload.players)) {
+      return null;
+    }
+    const target = normalizePreferenceText(playerName);
+    return (
+      payload.players.find((profile) => normalizePreferenceText(profile?.name) === target || normalizePreferenceText(profile?.surname) === target) || null
+    );
+  };
+
+  const fixtureSignalProfile = (fixture) => {
+    const family = String(fixture?.signal_summary?.market_family || "").toUpperCase();
+    const copy = `${fixture?.signal_summary?.headline || ""} ${fixture?.signal_summary?.summary_text || ""}`.toLowerCase();
+    let pick = String(fixture?.signal_summary?.deploy_pick || fixture?.deploy_summary?.pick || "").toUpperCase();
+    if (!pick) {
+      if (family === "BTTS") {
+        pick = copy.includes("btts no") ? "NO" : "YES";
+      } else if (family === "OU25") {
+        pick = copy.includes("under") ? "UNDER25" : "OVER25";
+      } else if (family === "FTR") {
+        if (copy.includes("draw")) {
+          pick = "DRAW";
+        } else if (copy.includes("away")) {
+          pick = "AWAY";
+        } else {
+          pick = "HOME";
+        }
+      }
+    }
+    return { family, pick };
+  };
+
+  const signalRelevantRatingKeys = ({ family, pick }) => {
+    if (family === "BTTS") {
+      return pick === "NO"
+        ? ["defensive_lock_rating", "control_rating", "goal_heat_rating", "btts_pressure_rating", "chaos_rating"]
+        : ["goal_heat_rating", "btts_pressure_rating", "attack_flow_rating", "defensive_lock_rating", "first_strike_rating", "chaos_rating"];
+    }
+    if (family === "OU25") {
+      return pick === "UNDER25"
+        ? ["control_rating", "defensive_lock_rating", "goal_heat_rating", "over25_heat_rating", "chaos_rating", "first_strike_rating"]
+        : ["goal_heat_rating", "over25_heat_rating", "attack_flow_rating", "defensive_lock_rating", "chaos_rating", "first_strike_rating"];
+    }
+    if (family === "FTR") {
+      if (pick === "AWAY") {
+        return ["og_power_rating", "away_threat_rating", "home_fortress_rating", "defensive_lock_rating", "first_strike_rating", "control_rating"];
+      }
+      if (pick === "DRAW") {
+        return ["control_rating", "defensive_lock_rating", "chaos_rating", "goal_heat_rating", "first_strike_rating"];
+      }
+      return ["og_power_rating", "home_fortress_rating", "away_threat_rating", "defensive_lock_rating", "first_strike_rating", "control_rating"];
+    }
+    return ["og_power_rating", "attack_flow_rating", "defensive_lock_rating", "goal_heat_rating"];
+  };
+
+  const evaluateDecisionAlignment = (fixture, homeIntelligence, awayIntelligence) => {
+    if (!homeIntelligence?.ratings || !awayIntelligence?.ratings) {
+      return null;
+    }
+    const { family, pick } = fixtureSignalProfile(fixture);
+    const home = homeIntelligence.ratings;
+    const away = awayIntelligence.ratings;
+    const avg = (...values) => {
+      const usable = values.map((value) => Number(value)).filter((value) => Number.isFinite(value));
+      return usable.length ? usable.reduce((sum, value) => sum + value, 0) / usable.length : null;
+    };
+    const rows = [];
+    const push = (tone, text) => rows.push({ tone, text });
+    const toneFor = (supported, contradicted) => (supported ? "support" : contradicted ? "contradict" : "neutral");
+    const scoreForTone = (tone) => (tone === "support" ? 1 : tone === "contradict" ? -1 : 0);
+
+    if (family === "BTTS") {
+      const combinedHeat = avg(home.goal_heat_rating, away.goal_heat_rating);
+      const combinedBtts = avg(home.btts_pressure_rating, away.btts_pressure_rating);
+      const combinedAttack = avg(home.attack_flow_rating, away.attack_flow_rating);
+      const maxLock = Math.max(Number(home.defensive_lock_rating || 0), Number(away.defensive_lock_rating || 0));
+      if (pick === "NO") {
+        push(toneFor(combinedBtts !== null && combinedBtts <= 44, combinedBtts !== null && combinedBtts >= 58), `BTTS pressure averages ${Math.round(combinedBtts ?? 0)} across both sides.`);
+        push(toneFor(maxLock >= 72, maxLock <= 58), `Defensive lock peaks at ${Math.round(maxLock)} across the matchup.`);
+        push(toneFor(combinedHeat !== null && combinedHeat <= 48, combinedHeat !== null && combinedHeat >= 62), `Goal heat sits at ${Math.round(combinedHeat ?? 0)} combined.`);
+        push(toneFor(combinedAttack !== null && combinedAttack <= 54, combinedAttack !== null && combinedAttack >= 66), `Attack flow averages ${Math.round(combinedAttack ?? 0)} across the front lines.`);
+      } else {
+        push(toneFor(combinedHeat !== null && combinedHeat >= 62, combinedHeat !== null && combinedHeat <= 48), `Goal heat averages ${Math.round(combinedHeat ?? 0)} across both teams.`);
+        push(toneFor(combinedBtts !== null && combinedBtts >= 58, combinedBtts !== null && combinedBtts <= 44), `BTTS pressure combines to ${Math.round(combinedBtts ?? 0)} in this pairing.`);
+        push(toneFor(maxLock <= 62, maxLock >= 78), `Defensive lock tops out at ${Math.round(maxLock)} across the matchup.`);
+        push(toneFor(combinedAttack !== null && combinedAttack >= 60, combinedAttack !== null && combinedAttack <= 50), `Attack flow averages ${Math.round(combinedAttack ?? 0)} across both sides.`);
+      }
+    } else if (family === "OU25") {
+      const combinedHeat = avg(home.goal_heat_rating, away.goal_heat_rating);
+      const combinedOver = avg(home.over25_heat_rating, away.over25_heat_rating);
+      const combinedControl = avg(home.control_rating, away.control_rating);
+      const combinedLock = avg(home.defensive_lock_rating, away.defensive_lock_rating);
+      const combinedChaos = avg(home.chaos_rating, away.chaos_rating);
+      if (pick === "UNDER25") {
+        push(toneFor(combinedControl !== null && combinedControl >= 64, combinedControl !== null && combinedControl <= 48), `Control rating averages ${Math.round(combinedControl ?? 0)} across the fixture.`);
+        push(toneFor(combinedLock !== null && combinedLock >= 66, combinedLock !== null && combinedLock <= 54), `Defensive lock sits at ${Math.round(combinedLock ?? 0)} combined.`);
+        push(toneFor(combinedHeat !== null && combinedHeat <= 48, combinedHeat !== null && combinedHeat >= 62), `Goal heat runs at ${Math.round(combinedHeat ?? 0)} across both sides.`);
+        push(toneFor(combinedChaos !== null && combinedChaos <= 46, combinedChaos !== null && combinedChaos >= 62), `Chaos rating averages ${Math.round(combinedChaos ?? 0)} in this matchup.`);
+      } else {
+        push(toneFor(combinedHeat !== null && combinedHeat >= 60, combinedHeat !== null && combinedHeat <= 48), `Goal heat averages ${Math.round(combinedHeat ?? 0)} across the pairing.`);
+        push(toneFor(combinedOver !== null && combinedOver >= 58, combinedOver !== null && combinedOver <= 46), `Over 2.5 heat combines to ${Math.round(combinedOver ?? 0)} here.`);
+        push(toneFor(combinedLock !== null && combinedLock <= 58, combinedLock !== null && combinedLock >= 72), `Defensive lock averages ${Math.round(combinedLock ?? 0)} across both back lines.`);
+        push(toneFor(combinedChaos !== null && combinedChaos >= 52, combinedChaos !== null && combinedChaos <= 40), `Chaos rating runs at ${Math.round(combinedChaos ?? 0)} across the match state.`);
+      }
+    } else if (family === "FTR") {
+      const homePowerEdge = Number(home.og_power_rating || 0) - Number(away.og_power_rating || 0);
+      const fortressEdge = Number(home.home_fortress_rating || 0) - Number(away.away_threat_rating || 0);
+      const awayFortressEdge = Number(away.away_threat_rating || 0) - Number(home.home_fortress_rating || 0);
+      const firstStrikeEdge = Number(home.first_strike_rating || 0) - Number(away.first_strike_rating || 0);
+      const lockEdge = Number(home.defensive_lock_rating || 0) - Number(away.defensive_lock_rating || 0);
+      if (pick === "DRAW") {
+        const parity = Math.abs(homePowerEdge);
+        const combinedControl = avg(home.control_rating, away.control_rating);
+        const combinedChaos = avg(home.chaos_rating, away.chaos_rating);
+        push(toneFor(parity <= 8, parity >= 18), `Power difference sits at ${Math.round(Math.abs(homePowerEdge))} points between the sides.`);
+        push(toneFor(combinedControl !== null && combinedControl >= 58, combinedControl !== null && combinedControl <= 44), `Control rating averages ${Math.round(combinedControl ?? 0)} across the fixture.`);
+        push(toneFor(combinedChaos !== null && combinedChaos <= 48, combinedChaos !== null && combinedChaos >= 62), `Chaos rating averages ${Math.round(combinedChaos ?? 0)} in the matchup.`);
+      } else if (pick === "AWAY") {
+        push(toneFor(homePowerEdge <= -8, homePowerEdge >= 6), `Away OG Power edge lands at ${Math.round(Math.abs(homePowerEdge))} points over the home side.`);
+        push(toneFor(awayFortressEdge >= 6, awayFortressEdge <= -6), `Away Threat vs Home Fortress differential sits at ${Math.round(awayFortressEdge)}.`);
+        push(toneFor(firstStrikeEdge <= -4, firstStrikeEdge >= 8), `First-strike profile leans ${firstStrikeEdge <= 0 ? "toward the away side" : "toward the home side"} by ${Math.round(Math.abs(firstStrikeEdge))} points.`);
+        push(toneFor(lockEdge <= -4, lockEdge >= 8), `Defensive lock gap runs ${Math.round(Math.abs(lockEdge))} points toward ${lockEdge <= 0 ? awayIntelligence.team : homeIntelligence.team}.`);
+      } else {
+        push(toneFor(homePowerEdge >= 8, homePowerEdge <= -6), `Home OG Power edge lands at ${Math.round(homePowerEdge)} points over the away side.`);
+        push(toneFor(fortressEdge >= 6, fortressEdge <= -6), `Home Fortress vs Away Threat differential sits at ${Math.round(fortressEdge)}.`);
+        push(toneFor(firstStrikeEdge >= 4, firstStrikeEdge <= -8), `First-strike profile leans ${firstStrikeEdge >= 0 ? "toward the home side" : "toward the away side"} by ${Math.round(Math.abs(firstStrikeEdge))} points.`);
+        push(toneFor(lockEdge >= 4, lockEdge <= -8), `Defensive lock gap runs ${Math.round(Math.abs(lockEdge))} points toward ${lockEdge >= 0 ? homeIntelligence.team : awayIntelligence.team}.`);
+      }
+    }
+
+    const supportCount = rows.filter((row) => row.tone === "support").length;
+    const contradictionCount = rows.filter((row) => row.tone === "contradict").length;
+    const score = rows.reduce((sum, row) => sum + scoreForTone(row.tone), 0);
+    let alignment = "Mixed alignment";
+    if (supportCount >= 3 && contradictionCount === 0) {
+      alignment = "Strong alignment";
+    } else if (supportCount >= 2 && contradictionCount <= 1 && score > 0) {
+      alignment = "Moderate alignment";
+    } else if (contradictionCount >= 2 && contradictionCount > supportCount) {
+      alignment = "Contradiction warning";
+    }
+    return {
+      family,
+      pick,
+      alignment,
+      rows: rows.slice(0, 4),
+    };
+  };
+
+  const reasonTokenLabel = (token) =>
+    safeTitleLabel(
+      String(token || "")
+        .replace(/^H2H_/i, "H2H ")
+        .replace(/^BTTS_/i, "BTTS ")
+        .replace(/^OU25_/i, "OU25 ")
+        .replace(/^TEAM_/i, "Team ")
+        .replace(/^AWAY_/i, "Away ")
+        .replace(/^HOME_/i, "Home ")
+    );
+
+  const renderFixtureDecisionVerdict = (fixture, decision) => {
+    if (!decision) {
+      return `
+        <section class="section">
+          <article class="panel">
+            <h3>Decision companion</h3>
+            <div class="notice">The reconciled fixture decision layer has not been published for this fixture yet.</div>
+          </article>
+        </section>
+      `;
+    }
+    const stateToneMap = {
+      SUPPORTED: "deploy",
+      WATCHLIST: "observe",
+      MIXED: "observe",
+      FRAGILE: "reference",
+      AVOID: "reference",
+    };
+    const tone = stateToneMap[String(decision.signal_state || "").toUpperCase()] || "reference";
+    return `
+      <section class="section">
+        <article class="panel fixture-ratings-verdict">
+          <span class="metric-label">Decision companion</span>
+          <h3>${escapeHtml(decision.primary_signal || marketVerdictDisplay(fixture))}</h3>
+          <p class="section-copy">${escapeHtml(decision.public_safe_summary || "No reconciled public summary has been published yet.")}</p>
+          ${renderEntitySurfaceTiles([
+            { label: "Signal state", value: safeTitleLabel(decision.signal_state, "Pending"), meta: "Reconciled decision state", tone },
+            { label: "Agreement", value: `${decision.agreement_score ?? "—"}%`, meta: "Cross-layer agreement", tone: scoreTone(decision.agreement_score) },
+            { label: "Confidence", value: safeTitleLabel(decision.confidence_band, "Pending"), meta: "Reconciled confidence band", tone },
+            { label: "Primary read", value: decision.primary_signal || marketVerdictDisplay(fixture), meta: "Public-safe market view", tone },
+          ])}
+        </article>
+      </section>
+    `;
+  };
+
+  const renderFixtureHeroDecisionAside = (fixture, clarity, matchedEntry) => {
+    const decision = state.selectedFixtureDecisionIntelligence || null;
+    const marketLine = primaryMarketLine(fixture);
+    const confidenceTier = String(fixture.signal_summary?.confidence_tier || fixture.deploy_summary?.confidence_tier || "").toUpperCase();
+    const verdictLabel = marketVerdictDisplay(fixture);
+    if (!decision) {
+      return `
+        <article class="panel compact-panel compact-panel-primary">
+          <span class="metric-label">Action state</span>
+          <div class="metric-stack">
+            <strong class="metric-value">${escapeHtml(verdictLabel)}</strong>
+            <p class="muted">${escapeHtml(`${clarity.action_label} • ${confidenceBandDisplay(confidenceTier)}`)}</p>
+          </div>
+        </article>
+        <article class="panel compact-panel">
+          <span class="metric-label">Glance panel</span>
+          <div class="metric-stack">
+            <div class="mini-score-pair">
+              <span class="metric-label">Book line</span>
+              <strong>${escapeHtml(`${bookmakerLineDisplay(marketLine.odds)} • ${hasUsableOdds(marketLine.odds) ? formatImpliedProbability(marketLine.odds) : "Pricing pending"}`)}</strong>
+            </div>
+            <div class="mini-score-pair">
+              <span class="metric-label">Edge</span>
+              <strong class="edge-tone-${escapeHtml(valueEdgeTone(fixture))}">${escapeHtml(valueEdgeDisplay(fixture))}</strong>
+            </div>
+            <div class="mini-score-pair">
+              <span class="metric-label">Relevance</span>
+              <strong>${matchedEntry ? escapeHtml(matchedEntry.reasons.join(" / ")) : "Window fixture"}</strong>
+            </div>
+          </div>
+        </article>
+        <article class="panel compact-panel">
+          <span class="metric-label">Read first</span>
+          <ul class="feature-list compact-list">
+            ${clarity.risk_points.slice(0, 2).map((point) => `<li>${escapeHtml(point)}</li>`).join("")}
+          </ul>
+        </article>
+      `;
+    }
+    const tone = decisionStateTone(decision.signal_state);
+    const agreementRows = decisionReasonRows(decision, 4);
+    const marketHighlights = decisionMarketSuitabilityItems(decision).slice(0, 3);
+    return `
+      <article class="panel compact-panel compact-panel-primary">
+        <span class="metric-label">Decision verdict</span>
+        <div class="metric-stack">
+          <strong class="metric-value">${escapeHtml(decision.primary_signal || verdictLabel)}</strong>
+          <p class="muted">${escapeHtml(`${safeTitleLabel(decision.signal_state, "Pending")} • ${safeTitleLabel(decision.confidence_band, "Pending")} confidence • ${decision.agreement_score ?? "—"}% agreement`)}</p>
+        </div>
+      </article>
+      <article class="panel compact-panel">
+        <span class="metric-label">Agreement stack</span>
+        ${
+          agreementRows.length
+            ? `<ul class="feature-list compact-list fixture-ratings-verdict-list">
+                ${agreementRows
+                  .map(
+                    (row) => `
+                      <li class="fixture-ratings-verdict-item fixture-ratings-verdict-item-${escapeHtml(row.tone)}">
+                        <strong>${escapeHtml(row.tone === "support" ? "✓" : "✗")}</strong>
+                        <span>${escapeHtml(row.text)}</span>
+                      </li>
+                    `
+                  )
+                  .join("")}
+              </ul>`
+            : `<div class="notice">No reconciled agreement stack has been published for this fixture yet.</div>`
+        }
+      </article>
+      <article class="panel compact-panel">
+        <span class="metric-label">Market suitability</span>
+        ${
+          marketHighlights.length
+            ? `<div class="metric-stack">
+                ${marketHighlights
+                  .map(
+                    (market) => `
+                      <div class="mini-score-pair">
+                        <span class="metric-label">${escapeHtml(market.label)}</span>
+                        <strong>${escapeHtml(`${market.rating}% · ${market.band}`)}</strong>
+                      </div>
+                    `
+                  )
+                  .join("")}
+              </div>`
+            : `<div class="notice">No published market suitability layer is available yet.</div>`
+        }
+        <p class="muted">${escapeHtml(decisionTopCaution(decision))}</p>
+      </article>
+    `;
+  };
+
+  const renderRatingsVerdictStrip = (fixture, decision, clarity) => {
+    if (!decision) {
+      return `
+        <section class="section">
+          <article class="panel fixture-ratings-verdict">
+            <h3>Ratings verdict</h3>
+            <div class="notice">The published reconciler verdict has not been published for this fixture yet.</div>
+          </article>
+        </section>
+      `;
+    }
+    const deployMode = String(fixture.publish_class || "").toUpperCase() === "DEPLOY";
+    const modeCopy = deployMode ? "deploy signal" : "observed lean";
+    const toneIcon = (tone) => (tone === "support" ? "✓" : tone === "contradict" ? "✗" : "~");
+    const supportRows = (decision.supporting_layers || []).slice(0, 3).map((token) => ({ tone: "support", text: reasonTokenLabel(token) }));
+    const cautionRows = (decision.caution_layers || []).slice(0, 3).map((token) => ({ tone: "contradict", text: reasonTokenLabel(token) }));
+    const rows = [...supportRows, ...cautionRows].slice(0, 5);
+    return `
+      <section class="section">
+        <article class="panel fixture-ratings-verdict">
+          <span class="metric-label">Ratings verdict</span>
+          <h3>${escapeHtml(`${safeTitleLabel(decision.signal_state || "mixed")} with ${modeCopy}`)}</h3>
+          <p class="section-copy">The published decision layer is cross-checking the live fixture read. Agreement tightens trust; contradiction is a discipline signal rather than a reason to force the bet.</p>
+          <ul class="feature-list compact-list fixture-ratings-verdict-list">
+            ${rows
+              .map(
+                (row) => `
+                  <li class="fixture-ratings-verdict-item fixture-ratings-verdict-item-${escapeHtml(row.tone)}">
+                    <strong>${escapeHtml(toneIcon(row.tone))}</strong>
+                    <span>${escapeHtml(row.text)}</span>
+                  </li>
+                `
+              )
+              .join("")}
+          </ul>
+        </article>
+      </section>
+    `;
+  };
+
+  const renderFixtureTeamFaceOff = (fixture, decision) => {
+    const rowsSource = Array.isArray(decision?.team_faceoff_summary) ? decision.team_faceoff_summary : [];
+    if (!rowsSource.length) {
+      return `
+        <section class="section">
+          <article class="panel">
+            <h3>Team rating face-off</h3>
+            <div class="notice">Published team face-off ratings are not available for this fixture yet.</div>
+          </article>
+        </section>
+      `;
+    }
+    const rows = rowsSource
+      .map((entry) => {
+        const homeValue = Number(entry.home_value);
+        const awayValue = Number(entry.away_value);
+        return `
+          <div class="fixture-faceoff-row">
+            <div class="fixture-faceoff-team fixture-faceoff-team-home">
+              <strong>${escapeHtml(Number.isFinite(homeValue) ? Math.round(homeValue) : "—")}</strong>
+              <span>${escapeHtml(fixture.home_team)}</span>
+            </div>
+            <div class="fixture-faceoff-center">
+              <span class="metric-label">${escapeHtml(entry.label || safeTitleLabel(entry.metric))}</span>
+              <div class="fixture-faceoff-track" aria-hidden="true">
+                <span class="fixture-faceoff-bar fixture-faceoff-bar-home" style="width:${Math.max(0, Math.min(100, Number.isFinite(homeValue) ? homeValue : 0))}%"></span>
+                <span class="fixture-faceoff-bar fixture-faceoff-bar-away" style="width:${Math.max(0, Math.min(100, Number.isFinite(awayValue) ? awayValue : 0))}%"></span>
+              </div>
+            </div>
+            <div class="fixture-faceoff-team fixture-faceoff-team-away">
+              <strong>${escapeHtml(Number.isFinite(awayValue) ? Math.round(awayValue) : "—")}</strong>
+              <span>${escapeHtml(fixture.away_team)}</span>
+            </div>
+          </div>
+        `;
+      })
+      .join("");
+    return `
+      <section class="section">
+        <article class="panel">
+          <h3>Team rating face-off</h3>
+          <p class="section-copy">Only the ratings most diagnostic for this market are surfaced here, so the page reads like a decision tool rather than a generic data dump.</p>
+          <div class="fixture-faceoff-grid">
+            ${rows}
+          </div>
+        </article>
+      </section>
+    `;
+  };
+
+  const renderFixtureProfileNarrative = (fixture, homeIntelligence, awayIntelligence) => {
+    const decision = state.selectedFixtureDecisionIntelligence || null;
+    if (decision?.profile_narrative || decision?.profile_tags) {
+      const homeTags = Array.isArray(decision?.profile_tags?.home) ? decision.profile_tags.home.slice(0, 4) : [];
+      const awayTags = Array.isArray(decision?.profile_tags?.away) ? decision.profile_tags.away.slice(0, 4) : [];
+      return `
+        <section class="section">
+          <div class="split">
+            <article class="panel">
+              <h3>${escapeHtml(fixture.home_team)} profile</h3>
+              <ul class="feature-list compact-list">
+                ${homeTags.length ? homeTags.map((tag) => `<li>${escapeHtml(tag)}</li>`).join("") : `<li>Mixed team profile</li>`}
+              </ul>
+            </article>
+            <article class="panel">
+              <h3>${escapeHtml(fixture.away_team)} profile</h3>
+              <ul class="feature-list compact-list">
+                ${awayTags.length ? awayTags.map((tag) => `<li>${escapeHtml(tag)}</li>`).join("") : `<li>Mixed team profile</li>`}
+              </ul>
+            </article>
+          </div>
+          <article class="panel fixture-matchup-narrative">
+            <span class="metric-label">Matchup narrative</span>
+            <p>${escapeHtml(decision.profile_narrative || "No published matchup narrative yet.")}</p>
+          </article>
+        </section>
+      `;
+    }
+    if (!homeIntelligence || !awayIntelligence) {
+      return "";
+    }
+    const homeTags = (homeIntelligence.profile_tags || []).slice(0, 3);
+    const awayTags = (awayIntelligence.profile_tags || []).slice(0, 3);
+    const { family, pick } = fixtureSignalProfile(fixture);
+    let sentence = `${fixture.home_team} bring ${homeTags[0] || "a mixed profile"} into a matchup with ${fixture.away_team}'s ${awayTags[0] || "own structural read"}.`;
+    if (family === "BTTS") {
+      sentence += pick === "NO" ? " The shape is looking for suppression and restricted access rather than an open two-way trade." : " The shape points toward repeatable access for both forward lines rather than one side fully suppressing the game.";
+    } else if (family === "OU25") {
+      sentence += pick === "UNDER25" ? " The cleaner read is control and suppression if the stronger structure holds." : " The cleaner read is a live goal environment if the early pressure converts into repeated entries.";
+    } else if (family === "FTR") {
+      sentence += pick === "AWAY" ? ` The structural lean comes from ${fixture.away_team}'s travelling profile against the home-side resistance.` : pick === "DRAW" ? " The matchup reads like a parity contest where control and caution matter more than one-sided dominance." : ` The structural lean comes from ${fixture.home_team}'s home-side control against the away profile.`;
+    }
+    return `
+      <section class="section">
+        <div class="split">
+          <article class="panel">
+            <h3>${escapeHtml(fixture.home_team)} profile</h3>
+            <ul class="feature-list compact-list">
+              ${homeTags.length ? homeTags.map((tag) => `<li>${escapeHtml(tag)}</li>`).join("") : `<li>Mixed team profile</li>`}
+            </ul>
+          </article>
+          <article class="panel">
+            <h3>${escapeHtml(fixture.away_team)} profile</h3>
+            <ul class="feature-list compact-list">
+              ${awayTags.length ? awayTags.map((tag) => `<li>${escapeHtml(tag)}</li>`).join("") : `<li>Mixed team profile</li>`}
+            </ul>
+          </article>
+        </div>
+        <article class="panel fixture-matchup-narrative">
+          <span class="metric-label">Matchup narrative</span>
+          <p>${escapeHtml(sentence)}</p>
+        </article>
+      </section>
+    `;
+  };
+
+  const renderFixtureUnitBattle = (decision) => {
+    const rows = Array.isArray(decision?.unit_battle_summary) ? decision.unit_battle_summary : [];
+    if (!rows.length) {
+      return `
+        <section class="section">
+          <article class="panel">
+            <h3>Unit battle</h3>
+            <div class="notice">Published unit-battle intelligence is not available for this fixture yet.</div>
+          </article>
+        </section>
+      `;
+    }
+    return `
+      <section class="section">
+        <article class="panel">
+          <h3>Unit battle</h3>
+          <p class="section-copy">This is the structural reason layer: attack against defence, midfield against midfield, and where the shape is actually tilting.</p>
+          <div class="fixture-player-matchups">
+            ${rows
+              .map(
+                (row) => `
+                  <article class="fixture-player-matchup-card">
+                    <div class="fixture-player-matchup-head">
+                      <div>
+                        <span class="metric-label">${escapeHtml("Home side")}</span>
+                        <h4>${escapeHtml(row.label || "Unit battle")}</h4>
+                      </div>
+                      <div class="fixture-player-matchup-delta">${escapeHtml(`${row.delta > 0 ? "+" : ""}${row.delta ?? "—"}`)}</div>
+                      <div class="fixture-player-matchup-away">
+                        <span class="metric-label">${escapeHtml("Away side")}</span>
+                        <h4>${escapeHtml("Counter weight")}</h4>
+                      </div>
+                    </div>
+                    <div class="fixture-player-metric-grid">
+                      <div>
+                        <div class="fixture-player-metric"><span>${escapeHtml(fixture.home_team)}</span><strong>${escapeHtml(row.home_value ?? "—")}%</strong></div>
+                      </div>
+                      <div>
+                        <div class="fixture-player-metric"><span>${escapeHtml(fixture.away_team)}</span><strong>${escapeHtml(row.away_value ?? "—")}%</strong></div>
+                      </div>
+                    </div>
+                  </article>
+                `
+              )
+              .join("")}
+          </div>
+        </article>
+      </section>
+    `;
+  };
+
+  const renderDecisionKeyPlayerDrivers = (decision) => {
+    const drivers = Array.isArray(decision?.key_player_drivers) ? decision.key_player_drivers.slice(0, 6) : [];
+    if (!drivers.length) {
+      return `
+        <section class="section">
+          <article class="panel">
+            <h3>Key player drivers</h3>
+            <div class="notice">Published player-driver intelligence is not available for this fixture yet.</div>
+          </article>
+        </section>
+      `;
+    }
+    return `
+      <section class="section">
+        <article class="panel">
+          <h3>Key player drivers</h3>
+          <p class="section-copy">These are the players the reconciler sees as carrying the structural edge or caution inside the fixture.</p>
+          <div class="fixture-driver-grid">
+            ${drivers
+              .map(
+                (driver) => `
+                  <article class="fixture-driver-card">
+                    <span class="metric-label">${escapeHtml(driver.team || "Team")}</span>
+                    <h4>${escapeHtml(driver.player || "Profile pending")}</h4>
+                    <p class="muted">${escapeHtml(`${safeTitleLabel(driver.role, "Utility")} · ${driver.driver_metric || "Impact"} ${driver.driver_value ?? "—"}%`)}</p>
+                    <div class="pill-row">
+                      <span class="chip chip-reference">${escapeHtml(`Power ${driver.power ?? "—"}%`)}</span>
+                      <span class="chip chip-reference">${escapeHtml(`${driver.driver_metric || "Impact"} ${driver.driver_value ?? "—"}%`)}</span>
+                    </div>
+                  </article>
+                `
+              )
+              .join("")}
+          </div>
+        </article>
+      </section>
+    `;
+  };
+
+  const renderDecisionKeyMismatches = (decision) => {
+    const mismatches = Array.isArray(decision?.key_mismatches) ? decision.key_mismatches.slice(0, 4) : [];
+    if (!mismatches.length) {
+      return "";
+    }
+    return `
+      <section class="section">
+        <article class="panel">
+          <h3>Key mismatches</h3>
+          <ul class="feature-list compact-list">
+            ${mismatches
+              .map(
+                (item) => `
+                  <li>
+                    <strong>${escapeHtml(item.summary || item.zone || "Mismatch edge")}</strong><br />
+                    <span class="muted">${escapeHtml(`${item.advantage || "Advantage"} • ${item.mismatch_score ?? "—"} points`)}</span>
+                  </li>
+                `
+              )
+              .join("")}
+          </ul>
+        </article>
+      </section>
+    `;
+  };
+
+  const renderDecisionMarketSuitability = (decision) => {
+    const items = decisionMarketSuitabilityItems(decision);
+    if (!items.length) {
+      return `
+        <section class="section">
+          <article class="panel">
+            <h3>Market suitability</h3>
+            <div class="notice">Published market-suitability intelligence is not available for this fixture yet.</div>
+          </article>
+        </section>
+      `;
+    }
+    return `
+      <section class="section">
+        <article class="panel">
+          <h3>Market suitability</h3>
+          <p class="section-copy">This is the judgement layer, not a market dump: how well the current fixture structure supports each product family.</p>
+          <div class="fixture-market-suitability-grid">
+            ${items
+              .map(
+                (market) => `
+                  <article class="signal-cell signal-cell-model">
+                    <span class="signal-label">${escapeHtml(market.label)}</span>
+                    <span class="signal-value">${escapeHtml(`${market?.rating ?? "—"}% · ${safeTitleLabel(market?.band, "Pending")}`)}</span>
+                    <span class="muted">${escapeHtml(market?.read || "No published read yet.")}</span>
+                  </article>
+                `
+              )
+              .join("")}
+          </div>
+        </article>
+      </section>
+    `;
+  };
+
+  const renderFixtureH2HSupport = (fixture, h2hSupport = null) => {
+    const decision = state.selectedFixtureDecisionIntelligence || null;
+    if (decision?.h2h_context) {
+      const context = decision.h2h_context;
+      if (!context.available) {
+        return `
+          <section class="section">
+            <article class="panel">
+              <h3>H2H context</h3>
+              <div class="notice">${escapeHtml(context.summary || "No publish-safe H2H regime summary is available for this fixture yet.")}</div>
+            </article>
+          </section>
+        `;
+      }
+      const summaryItems = [
+        { label: "Sample", value: `${context.sample_size ?? 0} matches`, meta: "Last five cap" },
+        { label: "Goal environment", value: `${context.goal_environment ?? 0}%`, meta: "Historic scoring climate" },
+        { label: "BTTS regime", value: `${context.btts_regime ?? 0}%`, meta: "Historic two-way scoring" },
+        { label: "Over 2.5", value: `${context.over25_rate ?? 0}%`, meta: "Historic 3+ goal rate" },
+        { label: "Draw rate", value: `${context.draw_rate ?? 0}%`, meta: "Historic stalemate share" },
+        { label: "Booking heat", value: `${context.booking_heat ?? 0}%`, meta: "Historic card climate" },
+      ];
+      return `
+        <section class="section">
+          <article class="panel">
+            <h3>H2H context</h3>
+            <p class="section-copy">${escapeHtml(context.summary || "Historic meeting regime is shown here as supporting context, not as the primary signal layer.")}</p>
+            ${renderEntitySurfaceTiles(summaryItems.map((item) => ({ ...item, tone: scoreTone(parseFloat(String(item.value))) })))}
+          </article>
+        </section>
+      `;
+    }
+    if (!h2hSupport) {
+      return `
+        <section class="section">
+          <article class="panel">
+            <h3>H2H context</h3>
+            <div class="notice">No publish-safe H2H regime summary has been published for this fixture key yet, so the decision layer is leaning on ratings and lineup structure first.</div>
+          </article>
+        </section>
+      `;
+    }
+    const summaryItems = [
+      { label: "Sample", value: `${h2hSupport.sample_size ?? 0} matches`, meta: "Last five cap" },
+      { label: "Goal environment", value: `${h2hSupport.goal_environment ?? 0}%`, meta: "Historic scoring climate" },
+      { label: "BTTS regime", value: `${h2hSupport.btts_regime ?? 0}%`, meta: "Historic two-way scoring" },
+      { label: "Over 2.5", value: `${h2hSupport.over25_rate ?? 0}%`, meta: "Historic 3+ goal rate" },
+      { label: "Draw rate", value: `${h2hSupport.draw_rate ?? 0}%`, meta: "Historic stalemate share" },
+      { label: "Booking heat", value: `${h2hSupport.booking_heat ?? 0}%`, meta: "Historic card climate" },
+    ];
+    return `
+      <section class="section">
+        <article class="panel">
+          <h3>H2H context</h3>
+          <p class="section-copy">${escapeHtml(h2hSupport.summary || "Historic meeting regime is shown here as supporting context, not as the primary signal layer.")}</p>
+          ${renderEntitySurfaceTiles(summaryItems.map((item) => ({ ...item, tone: scoreTone(parseFloat(String(item.value))) })))}
+        </article>
+      </section>
+    `;
+  };
+
+  const renderFixtureDecisionCompanion = (fixture, clarity) => {
+    const decision = state.selectedFixtureDecisionIntelligence || null;
+    const bundle = state.selectedFixtureDecisionSupport || null;
+    const homeTeamIntelligence = bundle?.homeTeamIntelligence || null;
+    const awayTeamIntelligence = bundle?.awayTeamIntelligence || null;
+    return `
+      ${renderFixtureDecisionVerdict(fixture, decision)}
+      ${renderRatingsVerdictStrip(fixture, decision, clarity)}
+      ${renderFixtureTeamFaceOff(fixture, decision)}
+      ${renderFixtureProfileNarrative(fixture, homeTeamIntelligence, awayTeamIntelligence)}
+      ${renderFixtureUnitBattle(decision)}
+      ${renderDecisionKeyPlayerDrivers(decision)}
+      ${renderDecisionKeyMismatches(decision)}
+      ${renderDecisionMarketSuitability(decision)}
+      ${renderFixtureH2HSupport(fixture, bundle?.h2hSupport || null)}
+    `;
+  };
+
+  const renderSquadRoleSummary = (payload) => {
+    if (!payload || !Array.isArray(payload.players) || !payload.players.length) {
+      return `<div class="notice">No publish-safe squad role mix is available for this team yet.</div>`;
+    }
+    const grouped = payload.players.reduce((acc, player) => {
+      const key = safeTitleLabel(player?.position_group, "Utility");
+      if (!acc[key]) {
+        acc[key] = { label: key, value: 0, best: 0 };
+      }
+      acc[key].value += 1;
+      acc[key].best = Math.max(acc[key].best, Number(player?.ratings?.og_player_power || 0));
+      return acc;
+    }, {});
+    const items = Object.values(grouped)
+      .sort((left, right) => right.best - left.best || right.value - left.value || left.label.localeCompare(right.label))
+      .slice(0, 6)
+      .map((item) => ({
+        label: item.label,
+        value: item.best,
+        band: `${item.value} players`,
+        meta: `${item.value} squad profiles`,
+        tone: scoreTone(item.best),
+      }));
+    return renderScoreBreakdown(items, "No publish-safe squad role mix is available for this team yet.");
+  };
+
+  const renderSquadSnapshot = (payload) => {
+    if (!payload || !Array.isArray(payload.players) || !payload.players.length) {
+      return `<div class="notice">Publish-safe squad intelligence is not available for this team yet.</div>`;
+    }
+    const topPlayers = payload.players.slice(0, 5);
+    return `
+      <div class="split">
+        <article class="panel">
+          <h3>Squad depth snapshot</h3>
+          <p class="section-copy">This keeps the player layer publish-safe: strength distribution, trust depth, and where the best squad profiles are concentrated.</p>
+          ${renderSquadDepthTiles(payload)}
+        </article>
+        <article class="panel">
+          <h3>Squad intelligence leaders</h3>
+          <ul class="feature-list compact-list">
+            ${renderSquadLeaderList("Power", payload?.leaders?.power)}
+            ${renderSquadLeaderList("Goal threat", payload?.leaders?.goal_threat)}
+            ${renderSquadLeaderList("Creative spark", payload?.leaders?.creative_spark)}
+            ${renderSquadLeaderList("Discipline risk", payload?.leaders?.discipline_risk)}
+          </ul>
+        </article>
+        <article class="panel">
+          <h3>Top rated profiles</h3>
+          <ul class="feature-list compact-list">
+            ${topPlayers
+              .map(
+                (player) => `
+                  <li>
+                    <strong>${escapeHtml(player.surname || player.name || "Player")}</strong><br />
+                    <span class="muted">${escapeHtml(`${safeTitleLabel(player.position_group, "Utility")} • ${player.ratings?.og_player_power ?? "—"}% OG Player Power`)}</span>
+                  </li>
+                `
+              )
+              .join("")}
+          </ul>
+        </article>
+      </div>
+      <div class="split">
+        <article class="panel">
+          <h3>Squad role mix</h3>
+          <p class="section-copy">Role-group strength based on the best current publish-safe player power profiles in this squad.</p>
+          ${renderSquadRoleSummary(payload)}
+        </article>
+        <article class="panel">
+          <h3>Featured player intelligence</h3>
+          <div class="card-grid card-grid-compact">
+            ${topPlayers.slice(0, 3).map((player) => renderPlayerIntelligenceCard(player)).join("")}
+          </div>
+        </article>
+      </div>
+    `;
+  };
+
   const renderEntitySubnav = (items, label) => `
     <section class="section section-tight">
       <nav class="page-subnav" aria-label="${escapeHtml(label)}">
@@ -3241,6 +4695,12 @@
   };
 
   const teamEntityView = (team) => {
+    const teamIntelligence = state.selectedTeamIntelligence && normalizePreferenceText(state.selectedTeamIntelligence.team) === normalizePreferenceText(team.name)
+      ? state.selectedTeamIntelligence
+      : null;
+    const squadIntelligence = state.selectedTeamSquadIntelligence && normalizePreferenceText(state.selectedTeamSquadIntelligence.club) === normalizePreferenceText(team.name)
+      ? state.selectedTeamSquadIntelligence
+      : null;
     const teamRecentRows = team.rows.slice(0, 6);
     const teamClassMix = collectPublishClassMix(teamRecentRows);
     const teamMarketMix = collectMarketFamilyMix(teamRecentRows);
@@ -3256,7 +4716,68 @@
       ["Form", teamPageHref(team.name, "form"), selectedTeamTab === "form"],
       ["Intelligence", teamPageHref(team.name, "intelligence"), selectedTeamTab === "intelligence"],
     ];
+    const intelligenceHeroCopy =
+      teamIntelligence?.summary?.profile ||
+      "Team pages own the current team story: fixtures, results, recent form, and grouped intelligence. Match verdicts stay inside fixture pages.";
+    const intelligenceOverviewSection = teamIntelligence
+      ? `
+        <section class="section">
+          <div class="split">
+            <article class="panel">
+              <h3>Odds Genius team intelligence</h3>
+              <p class="section-copy">Publish-safe team intelligence derived from league-relative team strength, xG shape, scoring pressure, defensive resistance, and home/away balance.</p>
+              ${renderEntitySurfaceTiles([
+                { label: "OG Power", value: `${teamIntelligence.ratings?.og_power_rating ?? "—"}%`, meta: teamIntelligence.rating_bands?.og_power_rating || "", tone: scoreTone(teamIntelligence.ratings?.og_power_rating) },
+                { label: "Attack Flow", value: `${teamIntelligence.ratings?.attack_flow_rating ?? "—"}%`, meta: teamIntelligence.rating_bands?.attack_flow_rating || "", tone: scoreTone(teamIntelligence.ratings?.attack_flow_rating) },
+                { label: "Defensive Lock", value: `${teamIntelligence.ratings?.defensive_lock_rating ?? "—"}%`, meta: teamIntelligence.rating_bands?.defensive_lock_rating || "", tone: scoreTone(teamIntelligence.ratings?.defensive_lock_rating) },
+                { label: "Chaos Rating", value: `${teamIntelligence.ratings?.chaos_rating ?? "—"}%`, meta: teamIntelligence.rating_bands?.chaos_rating || "", tone: scoreTone(100 - Number(teamIntelligence.ratings?.chaos_rating || 0)) },
+              ])}
+              <p class="section-copy"><strong>Primary strengths:</strong> ${escapeHtml((teamIntelligence.summary?.primary_strengths || []).join(", ") || "Mixed team profile")}</p>
+              <p class="section-copy"><strong>Main caution:</strong> ${escapeHtml(teamIntelligence.summary?.main_caution || "No additional caution published yet.")}</p>
+            </article>
+            <article class="panel">
+              <h3>Market intelligence</h3>
+              ${renderMarketTendencyList(teamIntelligence.market_tendencies)}
+              <div class="pill-row">
+                ${(teamIntelligence.profile_tags || []).map((tag) => `<span class="chip chip-reference">${escapeHtml(tag)}</span>`).join("")}
+              </div>
+            </article>
+          </div>
+        </section>
+      `
+      : "";
+    const timingProfileSection = teamIntelligence
+      ? `
+        <section class="section">
+          <div class="split">
+            <article class="panel">
+              <h3>Timing profile</h3>
+              <p class="section-copy">This is the publish-safe timing layer for how the team tends to control or destabilize matches.</p>
+              ${renderScoreBreakdown(
+                [
+                  { label: "Early Threat", value: teamIntelligence.timing_profile?.early_threat, band: teamIntelligence.rating_bands?.first_strike_rating },
+                  { label: "Half-Time Control", value: teamIntelligence.timing_profile?.half_time_control, band: teamIntelligence.rating_bands?.control_rating },
+                  { label: "Late Surge", value: teamIntelligence.timing_profile?.late_surge, band: teamIntelligence.rating_bands?.over25_heat_rating },
+                  { label: "Late Fragility", value: teamIntelligence.timing_profile?.late_fragility, band: teamIntelligence.rating_bands?.chaos_rating },
+                ],
+                "No timing profile has been published for this team yet."
+              )}
+            </article>
+            ${renderProfileSurface("Home profile", teamIntelligence.home_profile)}
+          </div>
+          <div class="split">
+            ${renderProfileSurface("Away profile", teamIntelligence.away_profile)}
+            ${renderIntelligenceHeadline(
+              teamIntelligence.summary?.headline || `OG Power Rating: ${teamIntelligence.ratings?.og_power_rating ?? "—"}%`,
+              teamIntelligence.summary?.profile || "No summary profile has been published for this team yet.",
+              scoreTone(teamIntelligence.ratings?.og_power_rating)
+            )}
+          </div>
+        </section>
+      `
+      : "";
     const overviewContent = `
+      ${intelligenceOverviewSection}
       <section class="section">
         <div class="split">
           <article class="panel">
@@ -3307,6 +4828,38 @@
           </article>
         </div>
       </section>
+      ${
+        teamIntelligence
+          ? `<section class="section">
+              <div class="split">
+                <article class="panel">
+                  <h3>Published ratings stack</h3>
+                  ${renderScoreBreakdown(
+                    [
+                      { label: TEAM_RATING_LABELS.og_power_rating, value: teamIntelligence.ratings?.og_power_rating, band: teamIntelligence.rating_bands?.og_power_rating },
+                      { label: TEAM_RATING_LABELS.attack_flow_rating, value: teamIntelligence.ratings?.attack_flow_rating, band: teamIntelligence.rating_bands?.attack_flow_rating },
+                      { label: TEAM_RATING_LABELS.defensive_lock_rating, value: teamIntelligence.ratings?.defensive_lock_rating, band: teamIntelligence.rating_bands?.defensive_lock_rating },
+                      { label: TEAM_RATING_LABELS.goal_heat_rating, value: teamIntelligence.ratings?.goal_heat_rating, band: teamIntelligence.rating_bands?.goal_heat_rating },
+                      { label: TEAM_RATING_LABELS.btts_pressure_rating, value: teamIntelligence.ratings?.btts_pressure_rating, band: teamIntelligence.rating_bands?.btts_pressure_rating },
+                      { label: TEAM_RATING_LABELS.over25_heat_rating, value: teamIntelligence.ratings?.over25_heat_rating, band: teamIntelligence.rating_bands?.over25_heat_rating },
+                      { label: TEAM_RATING_LABELS.first_strike_rating, value: teamIntelligence.ratings?.first_strike_rating, band: teamIntelligence.rating_bands?.first_strike_rating },
+                      { label: TEAM_RATING_LABELS.corner_pressure_rating, value: teamIntelligence.ratings?.corner_pressure_rating, band: teamIntelligence.rating_bands?.corner_pressure_rating },
+                    ],
+                    "No publish-safe team ratings are available yet."
+                  )}
+                </article>
+                <article class="panel">
+                  <h3>Profile summary</h3>
+                  <ul class="feature-list compact-list">
+                    <li><strong>Headline</strong><br /><span class="muted">${escapeHtml(teamIntelligence.summary?.headline || "No headline yet")}</span></li>
+                    <li><strong>Profile</strong><br /><span class="muted">${escapeHtml(teamIntelligence.summary?.profile || "No summary profile available.")}</span></li>
+                    <li><strong>Main caution</strong><br /><span class="muted">${escapeHtml(teamIntelligence.summary?.main_caution || "No caution published yet.")}</span></li>
+                  </ul>
+                </article>
+              </div>
+            </section>`
+          : ""
+      }
       <section class="section">
         <div class="split split-top split-team-density">
           <article class="panel ${hasLatestResult ? "team-spotlight-panel" : "team-empty-note"}">
@@ -3418,16 +4971,39 @@
               { label: "Context share", value: `${Math.round(((teamClassMix.CONTEXT + teamClassMix.MONITOR) / Math.max(1, teamRecentRows.length)) * 100)}%`, meta: `${teamClassMix.CONTEXT + teamClassMix.MONITOR} softer rows`, tone: "observe" },
             ])}
           </article>
-          <article class="panel">
-            <h3>Why this stays team-level</h3>
-            <ul class="feature-list compact-list">
-              <li>Team desks keep recent output mix and grouped posture visible.</li>
-              <li>Competition desks own the broader league distribution and standings layer.</li>
-              <li>Fixture pages still carry the final market verdict and discipline framing.</li>
-            </ul>
-          </article>
+          ${
+            teamIntelligence
+              ? `
+                <article class="panel">
+                  <h3>Published team ratings</h3>
+                  ${renderScoreBreakdown(
+                    [
+                      { label: TEAM_RATING_LABELS.og_power_rating, value: teamIntelligence.ratings?.og_power_rating, band: teamIntelligence.rating_bands?.og_power_rating },
+                      { label: TEAM_RATING_LABELS.attack_flow_rating, value: teamIntelligence.ratings?.attack_flow_rating, band: teamIntelligence.rating_bands?.attack_flow_rating },
+                      { label: TEAM_RATING_LABELS.defensive_lock_rating, value: teamIntelligence.ratings?.defensive_lock_rating, band: teamIntelligence.rating_bands?.defensive_lock_rating },
+                      { label: TEAM_RATING_LABELS.goal_heat_rating, value: teamIntelligence.ratings?.goal_heat_rating, band: teamIntelligence.rating_bands?.goal_heat_rating },
+                      { label: TEAM_RATING_LABELS.btts_pressure_rating, value: teamIntelligence.ratings?.btts_pressure_rating, band: teamIntelligence.rating_bands?.btts_pressure_rating },
+                      { label: TEAM_RATING_LABELS.over25_heat_rating, value: teamIntelligence.ratings?.over25_heat_rating, band: teamIntelligence.rating_bands?.over25_heat_rating },
+                    ],
+                    "No publish-safe team ratings are available yet."
+                  )}
+                </article>
+              `
+              : `
+                <article class="panel">
+                  <h3>Why this stays team-level</h3>
+                  <ul class="feature-list compact-list">
+                    <li>Team desks keep recent output mix and grouped posture visible.</li>
+                    <li>Competition desks own the broader league distribution and standings layer.</li>
+                    <li>Fixture pages still carry the final market verdict and discipline framing.</li>
+                  </ul>
+                </article>
+              `
+          }
         </div>
       </section>
+      ${timingProfileSection}
+      ${squadIntelligence ? `<section class="section">${renderSquadSnapshot(squadIntelligence)}</section>` : ""}
       ${renderTeamIntelligenceBuckets(team)}
     `;
     const tabContent = {
@@ -3447,25 +5023,30 @@
               <h1>${escapeHtml(team.name)}</h1>
             </div>
           </div>
-          <p>Team pages own the current team story: fixtures, results, recent form, and grouped intelligence. Match verdicts stay inside fixture pages.</p>
+          <p>${escapeHtml(intelligenceHeroCopy)}</p>
           <div class="pill-row">
-            <span class="stat-chip">Window fixtures ${escapeHtml(team.rows.length)}</span>
+            ${
+              teamIntelligence
+                ? `<span class="stat-chip">${escapeHtml(teamIntelligence.summary?.headline || `OG Power Rating: ${teamIntelligence.ratings?.og_power_rating ?? "—"}%`)}</span>`
+                : `<span class="stat-chip">Window fixtures ${escapeHtml(team.rows.length)}</span>`
+            }
             <span class="stat-chip">Deploy ${escapeHtml(team.deployCount)}</span>
             <span class="stat-chip">Observe ${escapeHtml(team.observeCount)}</span>
+            ${(teamIntelligence?.profile_tags || []).slice(0, 2).map((tag) => `<span class="stat-chip">${escapeHtml(tag)}</span>`).join("")}
           </div>
         </article>
         <aside class="hero-side">
           <div class="metric">
-            <span class="metric-label">Competitions</span>
-            <span class="metric-value">${escapeHtml(team.relatedCompetitions.length)}</span>
+            <span class="metric-label">${escapeHtml(teamIntelligence ? "OG power" : "Competitions")}</span>
+            <span class="metric-value">${escapeHtml(teamIntelligence ? `${teamIntelligence.ratings?.og_power_rating ?? "—"}%` : team.relatedCompetitions.length)}</span>
           </div>
           <div class="metric">
-            <span class="metric-label">Completed</span>
-            <span class="metric-value">${escapeHtml(team.fixtures.results.length)}</span>
+            <span class="metric-label">${escapeHtml(teamIntelligence ? "Sample confidence" : "Completed")}</span>
+            <span class="metric-value">${escapeHtml(teamIntelligence ? teamIntelligence.sample_confidence?.label || "—" : team.fixtures.results.length)}</span>
           </div>
           <div class="metric">
-            <span class="metric-label">Upcoming</span>
-            <span class="metric-value">${escapeHtml(team.fixtures.upcoming.length)}</span>
+            <span class="metric-label">${escapeHtml(squadIntelligence ? "Squad profiles" : "Upcoming")}</span>
+            <span class="metric-value">${escapeHtml(squadIntelligence ? squadIntelligence.players?.length || 0 : team.fixtures.upcoming.length)}</span>
           </div>
         </aside>
       </section>
@@ -5842,6 +7423,7 @@
     const fixtureTabs = [
       ["overview", "Overview"],
       ["intelligence", "Intelligence"],
+      ["h2h", "H2H"],
       ["lineups", "Lineups"],
       ["table", "Table"],
       ["stats", "Stats"],
@@ -5941,6 +7523,19 @@
               ${fixtureLineupsWidgetMarkup(fixture)}
             </article>
           </section>
+          ${renderFixtureLineupIntelligence(state.selectedFixtureLineupIntelligence, fixture)}
+        `;
+      }
+      if (activeFixtureTab === "h2h") {
+        return `
+          <section class="section">
+            ${fixtureSummaryNotice}
+            <article class="panel">
+              <h3>Decision companion</h3>
+              <p class="muted">This surface is built around one question: do the ratings and lineup layers agree with the current read? Proprietary intelligence leads; supporting H2H context follows.</p>
+            </article>
+          </section>
+          ${renderFixtureDecisionCompanion(fixture, clarity)}
         `;
       }
       if (activeFixtureTab === "table") {
@@ -6216,11 +7811,21 @@
         <article class="hero-main fixture-hero-main fixture-hero-main-${escapeHtml(heroMode)}">
           <p class="hero-kicker">Fixture Intelligence</p>
           ${renderFixtureHeroScoreboard(fixture, clarity)}
-          <p>${escapeHtml(clarity.action_copy)}</p>
+          <p>${escapeHtml(state.selectedFixtureDecisionIntelligence?.preview?.short_summary || state.selectedFixtureDecisionIntelligence?.public_safe_summary || clarity.action_copy)}</p>
           <div class="pill-row">
             <span class="fixture-state-pill fixture-state-pill-${escapeHtml(clarity.action_label.toLowerCase().includes("deploy") ? "deploy" : publishClass.toLowerCase())}">${escapeHtml(publishClass)}</span>
             ${
-              (fixture.signal_summary?.context_tags || [])
+              state.selectedFixtureDecisionIntelligence?.signal_state
+                ? `<span class="chip chip-reference">${escapeHtml(safeTitleLabel(state.selectedFixtureDecisionIntelligence.signal_state, "Pending"))}</span>`
+                : ""
+            }
+            ${
+              state.selectedFixtureDecisionIntelligence?.supporting_layers
+                ? state.selectedFixtureDecisionIntelligence.supporting_layers
+                    .slice(0, 2)
+                    .map((tag) => `<span class="chip chip-reference">${escapeHtml(reasonTokenLabel(String(tag)))}</span>`)
+                    .join("")
+                : (fixture.signal_summary?.context_tags || [])
                 .slice(0, 2)
                 .map((tag) => `<span class="chip chip-reference">${escapeHtml(String(tag).replace(/_/g, " "))}</span>`)
                 .join("")
@@ -6233,36 +7838,7 @@
           </div>
         </article>
         <aside class="hero-side">
-          <article class="panel compact-panel compact-panel-primary">
-            <span class="metric-label">Action state</span>
-            <div class="metric-stack">
-              <strong class="metric-value">${escapeHtml(verdictLabel)}</strong>
-              <p class="muted">${escapeHtml(`${clarity.action_label} • ${confidenceBandDisplay(confidenceTier)}`)}</p>
-            </div>
-          </article>
-          <article class="panel compact-panel">
-            <span class="metric-label">Glance panel</span>
-            <div class="metric-stack">
-              <div class="mini-score-pair">
-                <span class="metric-label">Book line</span>
-                <strong>${escapeHtml(`${bookmakerLineDisplay(marketLine.odds)} • ${hasUsableOdds(marketLine.odds) ? formatImpliedProbability(marketLine.odds) : "Pricing pending"}`)}</strong>
-              </div>
-              <div class="mini-score-pair">
-                <span class="metric-label">Edge</span>
-                <strong class="edge-tone-${escapeHtml(valueEdgeTone(fixture))}">${escapeHtml(valueEdgeDisplay(fixture))}</strong>
-              </div>
-              <div class="mini-score-pair">
-                <span class="metric-label">Relevance</span>
-                <strong>${matchedEntry ? escapeHtml(matchedEntry.reasons.join(" / ")) : "Window fixture"}</strong>
-              </div>
-            </div>
-          </article>
-          <article class="panel compact-panel">
-            <span class="metric-label">Read first</span>
-            <ul class="feature-list compact-list">
-              ${clarity.risk_points.slice(0, 2).map((point) => `<li>${escapeHtml(point)}</li>`).join("")}
-            </ul>
-          </article>
+          ${renderFixtureHeroDecisionAside(fixture, clarity, matchedEntry)}
         </aside>
       </section>
       <section class="section section-tight">
@@ -8430,10 +10006,18 @@
     await loadAccountAlerts();
 
     try {
-      const [summary, publicPredictions, premiumPredictions] = await Promise.all([
+      const [
+        summary,
+        publicPredictions,
+        premiumPredictions,
+        teamIntelligenceIndex,
+        clubSquadIntelligenceIndex,
+      ] = await Promise.all([
         fetchJson(`${DATA_ROOT}/publish_summary.json`),
         fetchJson(`${DATA_ROOT}/public_predictions.json`),
         premiumDemoMode ? fetchOptionalJson(`${DATA_ROOT}/premium_predictions.json`) : Promise.resolve([]),
+        fetchOptionalJson(`${DATA_ROOT}/team_intelligence/team_ratings_index.json`),
+        fetchOptionalJson(`${DATA_ROOT}/player_intelligence/club_squad_ratings.json`),
       ]);
       const weeklyResults = await fetchOptionalJson(`${DATA_ROOT}/weekly_results.json`);
       const fixtureIntelligence = await fetchOptionalJson(`${DATA_ROOT}/fixture_intelligence_public.json`);
@@ -8442,6 +10026,11 @@
       state.premiumPredictions = Array.isArray(premiumPredictions) ? premiumPredictions : [];
       state.weeklyResults = weeklyResults;
       state.fixtureIntelligence = Array.isArray(fixtureIntelligence?.fixtures) ? fixtureIntelligence.fixtures : [];
+      state.teamIntelligenceIndex = Array.isArray(teamIntelligenceIndex) ? teamIntelligenceIndex : [];
+      state.clubSquadIntelligenceIndex = Array.isArray(clubSquadIntelligenceIndex) ? clubSquadIntelligenceIndex : [];
+      await loadSelectedTeamIntelligence();
+      await loadSelectedFixtureLineupIntelligence();
+      await loadSelectedFixtureDecisionIntelligence();
       await loadProtectedPremiumPredictions();
       render();
     } catch (error) {

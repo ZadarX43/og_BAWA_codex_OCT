@@ -37,6 +37,21 @@ The frontend reads:
 - `frontend/public/data/publish_summary.json`
 - `frontend/public/data/fixture_intelligence_public.json`
 - `frontend/public/data/covered_fixture_universe.json`
+- `frontend/public/data/team_intelligence/team_ratings_index.json` (optional enrichment)
+- `frontend/public/data/team_intelligence/teams/<competition_key>/<season>/<team_slug>.json` (lazy team enrichment)
+- `frontend/public/data/player_intelligence/club_squad_ratings.json` (optional enrichment)
+- `frontend/public/data/player_intelligence/clubs/<competition_key>/<season>/<club_slug>.json` (lazy squad enrichment)
+- `frontend/public/data/fixture_lineup_intelligence/<fixture_key>.json` (optional future lineup unit enrichment)
+- `frontend/public/data/fixture_lineup_intelligence/index.json` (optional lineup intelligence index)
+- `frontend/public/data/fixture_h2h_support/<fixture_key>.json` (optional H2H regime support)
+- `frontend/public/data/fixture_h2h_support/index.json` (optional H2H support index)
+- `frontend/public/data/fixture_decision_intelligence/<fixture_key>.json` (optional reconciled fixture decision layer)
+- `frontend/public/data/fixture_decision_intelligence/index.json` (optional decision companion index)
+
+Fixture decision payloads may now also include:
+- `market_intelligence`
+- `watchlist`
+- `preview`
 
 Current behavior:
 
@@ -44,6 +59,9 @@ Current behavior:
 - `premium.html` uses internal demo mode for static preview or the Worker premium route when configured and token-authenticated
 - `index.html` uses both boards plus publish summary metadata
 - `results.html` currently reads `weekly_results.json` for proof rollups; the backend now also publishes `results_archive.json` for the next settled archive UI layer
+- `teams.html` can enrich team desks from publish-safe team and squad intelligence when those files are present, while keeping the current fixture-linked desk as fallback
+- `fixture.html?tab=lineups` can render publish-safe formation, unit, mismatch, and player matchup intelligence when lineup JSON is published
+- `fixture.html` hero and decision surfaces can consume `fixture_decision_intelligence` when published, rather than rebuilding judgement phrases in-browser
 
 ## Frontend Worker Config
 
@@ -114,6 +132,8 @@ This writes:
 - `frontend/public/data/publish_summary.json`
 - `frontend/public/data/fixture_intelligence_public.json`
 - `frontend/public/data/covered_fixture_universe.json`
+- `frontend/public/data/team_intelligence/...` when team intelligence is published
+- `frontend/public/data/player_intelligence/...` when player intelligence is published
 - `reports/latest/PUBLISH_REPORT.md`
 - `reports/latest/FIXTURE_INTELLIGENCE_REPORT.md`
 - `reports/latest/COVERED_FIXTURE_UNIVERSE_REPORT.md`
@@ -175,5 +195,6 @@ Likely later deployment shape:
 
 - Never add deploy logic to the frontend
 - Never expose raw model internals
+- Never expose raw provider team/player rows directly to the browser
 - Never bypass the allowlisted publish layer
 - Never present local token storage as final public authentication

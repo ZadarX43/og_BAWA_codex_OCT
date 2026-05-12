@@ -1,0 +1,147 @@
+{
+  "$schema_version": "1.0.0",
+  "description": "Canonical publish-safe Odds Genius intelligence schema for team, player, fixture, lineup, H2H, matchup, and market layers.",
+  "shared_fields": {
+    "ratings": "Object of 0-100 proprietary scores only.",
+    "ranks": "Optional ranking object for league, position, club, or market-specific standing.",
+    "tags": "Short public labels that describe the profile.",
+    "summary": "Short public-facing object with headline/profile/caution language.",
+    "strengths": "Array of primary structural strengths.",
+    "cautions": "Array of caution or fragility flags.",
+    "confidence": "Object describing sample, trust, or reconciled confidence.",
+    "public_explanation": "Compact prose safe for frontend display.",
+    "internal_debug_reasons": "Private-only deterministic reason tokens and audit traces."
+  },
+  "objects": {
+    "team_intelligence": {
+      "required": [
+        "team",
+        "competition",
+        "season",
+        "ratings",
+        "rating_bands",
+        "summary",
+        "profile_tags",
+        "market_tendencies",
+        "home_profile",
+        "away_profile",
+        "timing_profile"
+      ],
+      "public_safe": true
+    },
+    "player_intelligence": {
+      "required": [
+        "player_id",
+        "name",
+        "surname",
+        "club",
+        "competition",
+        "season",
+        "position",
+        "position_group",
+        "ratings",
+        "rating_bands",
+        "ranks",
+        "tags",
+        "ui"
+      ],
+      "public_safe": true
+    },
+    "fixture_intelligence": {
+      "required": [
+        "fixture_key",
+        "league",
+        "home_team",
+        "away_team",
+        "publish_class",
+        "signal_summary",
+        "context_summary",
+        "odds_summary"
+      ],
+      "public_safe": true
+    },
+    "lineup_intelligence": {
+      "required": [
+        "fixture_key",
+        "home_team",
+        "away_team",
+        "home_units",
+        "away_units",
+        "key_mismatches",
+        "player_matchups"
+      ],
+      "public_safe": true
+    },
+    "h2h_intelligence": {
+      "required": [
+        "fixture_key",
+        "sample_size",
+        "goal_environment",
+        "btts_regime",
+        "over25_rate",
+        "draw_rate",
+        "booking_heat",
+        "summary"
+      ],
+      "public_safe": true
+    },
+    "matchup_intelligence": {
+      "required": [
+        "zone",
+        "advantage",
+        "mismatch_score",
+        "summary"
+      ],
+      "public_safe": true
+    },
+    "market_intelligence": {
+      "required": [
+        "ftr",
+        "btts",
+        "ou25",
+        "team_goals",
+        "correct_score",
+        "corners",
+        "cards"
+      ],
+      "public_safe": true
+    },
+    "fixture_decision_intelligence": {
+      "required": [
+        "fixture_key",
+        "fixture",
+        "primary_signal",
+        "signal_state",
+        "agreement_score",
+        "confidence_band",
+        "supporting_layers",
+        "caution_layers",
+        "profile_tags",
+        "profile_narrative",
+        "team_faceoff_summary",
+        "unit_battle_summary",
+        "key_player_drivers",
+        "key_mismatches",
+        "h2h_context",
+        "market_suitability",
+        "market_intelligence",
+        "watchlist",
+        "preview",
+        "public_safe_summary",
+        "internal_reason_tokens"
+      ],
+      "states": [
+        "SUPPORTED",
+        "MIXED",
+        "FRAGILE",
+        "AVOID",
+        "WATCHLIST"
+      ],
+      "public_safe": true,
+      "private_fields": [
+        "internal_reason_tokens",
+        "internal_debug_reasons"
+      ]
+    }
+  }
+}
