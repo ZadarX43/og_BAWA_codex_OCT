@@ -8890,17 +8890,50 @@
                   data-season="${escapeHtml(String(fixture.api_season || ""))}"
                   data-home-team-id="${escapeHtml(String(fixture.api_home_team_id || "").trim() || extractTeamIdFromLogoUrl(fixture.home_team_logo_url))}"
                   data-away-team-id="${escapeHtml(String(fixture.api_away_team_id || "").trim() || extractTeamIdFromLogoUrl(fixture.away_team_logo_url))}"
+                  data-home-team="${escapeHtml(fixture.home_team || "")}"
+                  data-away-team="${escapeHtml(fixture.away_team || "")}"
+                  data-home-logo="${escapeHtml(fixture.home_team_logo_url || "")}"
+                  data-away-logo="${escapeHtml(fixture.away_team_logo_url || "")}"
                 >
-                  <h3>Team rhythm</h3>
-                  <p class="muted">Current league form, position, and recent rhythm for both sides. This is the first true form layer for the fixture page.</p>
-                  <div class="card-grid">
-                    <article class="panel">
-                      <h4>${escapeHtml(fixture.home_team)}</h4>
-                      <div class="notice">Loading home form…</div>
+                  <div class="fixture-form-head">
+                    <span class="metric-label">Form intelligence</span>
+                    <h3>Team rhythm</h3>
+                    <p class="muted">Live league position, recent results, and scoring rhythm for both sides. This layer explains whether the current read is moving with or against team form.</p>
+                  </div>
+                  <div class="fixture-rhythm-board">
+                    <article class="fixture-rhythm-team fixture-rhythm-loading">
+                      <div class="fixture-rhythm-team-head">
+                        ${badgeMarkup(fixture.home_team_logo_url, fixture.home_team, "lineup-team-badge fixture-rhythm-badge")}
+                        <div>
+                          <span class="metric-label">Home rhythm</span>
+                          <h4>${escapeHtml(fixture.home_team)}</h4>
+                          <p class="muted">Preparing form reference</p>
+                        </div>
+                      </div>
+                      <div class="fixture-rhythm-stats">
+                        <span><strong>—</strong><small>Position</small></span>
+                        <span><strong>—</strong><small>Points</small></span>
+                        <span><strong>—</strong><small>Goal diff</small></span>
+                        <span><strong>—</strong><small>Last five</small></span>
+                      </div>
+                      <div class="notice">Live team rhythm will appear here when the league form reference is available.</div>
                     </article>
-                    <article class="panel">
-                      <h4>${escapeHtml(fixture.away_team)}</h4>
-                      <div class="notice">Loading away form…</div>
+                    <article class="fixture-rhythm-team fixture-rhythm-loading fixture-rhythm-team-away">
+                      <div class="fixture-rhythm-team-head">
+                        ${badgeMarkup(fixture.away_team_logo_url, fixture.away_team, "lineup-team-badge fixture-rhythm-badge")}
+                        <div>
+                          <span class="metric-label">Away rhythm</span>
+                          <h4>${escapeHtml(fixture.away_team)}</h4>
+                          <p class="muted">Preparing form reference</p>
+                        </div>
+                      </div>
+                      <div class="fixture-rhythm-stats">
+                        <span><strong>—</strong><small>Position</small></span>
+                        <span><strong>—</strong><small>Points</small></span>
+                        <span><strong>—</strong><small>Goal diff</small></span>
+                        <span><strong>—</strong><small>Last five</small></span>
+                      </div>
+                      <div class="notice">Live team rhythm will appear here when the league form reference is available.</div>
                     </article>
                   </div>
                 </div>
@@ -9187,6 +9220,50 @@
       }
       return payload.response.filter((entry) => isFinishedStatus(entry?.fixture?.status?.short)).slice(0, 5);
     };
+    const formOutcomeMeta = (fixtureRow, teamId) => {
+      const teams = fixtureRow?.teams || {};
+      const homeId = String(teams?.home?.id || "").trim();
+      const isHome = homeId === String(teamId || "").trim();
+      const result = formatFixtureResultChip(fixtureRow, isHome ? "home" : "away");
+      const label = String(result.label || "D").toUpperCase();
+      const tone = label === "WIN" || label === "W" ? "w" : label === "LOSS" || label === "L" ? "l" : "d";
+      const goals = fixtureRow?.goals || {};
+      const scored = Number(isHome ? goals.home : goals.away);
+      const conceded = Number(isHome ? goals.away : goals.home);
+      return {
+        isHome,
+        opponent: isHome ? teams?.away : teams?.home,
+        scored: Number.isFinite(scored) ? scored : null,
+        conceded: Number.isFinite(conceded) ? conceded : null,
+        label: tone === "w" ? "W" : tone === "l" ? "L" : "D",
+        tone,
+      };
+    };
+    const formRhythmSummary = (fixtures, teamId) => {
+      const list = Array.isArray(fixtures) ? fixtures : [];
+      const summary = list.reduce(
+        (acc, fixtureRow) => {
+          const meta = formOutcomeMeta(fixtureRow, teamId);
+          acc.played += 1;
+          if (meta.tone === "w") acc.wins += 1;
+          if (meta.tone === "d") acc.draws += 1;
+          if (meta.tone === "l") acc.losses += 1;
+          if (meta.scored !== null) acc.scored += meta.scored;
+          if (meta.conceded !== null) acc.conceded += meta.conceded;
+          return acc;
+        },
+        { played: 0, wins: 0, draws: 0, losses: 0, scored: 0, conceded: 0 }
+      );
+      const points = summary.wins * 3 + summary.draws;
+      const scoreBalance = summary.scored - summary.conceded;
+      let label = summary.played ? "Mixed rhythm" : "Form feed pending";
+      if (summary.played && points >= summary.played * 2) {
+        label = "Strong rhythm";
+      } else if (summary.played && points <= summary.played) {
+        label = "Fragile rhythm";
+      }
+      return { ...summary, points, scoreBalance, label };
+    };
     const renderRecentResults = (fixtures, teamId) => {
       const fixtureList = Array.isArray(fixtures) ? fixtures : [];
       if (!fixtureList.length) {
@@ -9196,27 +9273,79 @@
         <div class="team-form-results">
           ${fixtureList
             .map((fixtureRow) => {
-              const teams = fixtureRow?.teams || {};
-              const homeId = String(teams?.home?.id || "").trim();
-              const isHome = homeId === String(teamId || "").trim();
-              const opponent = isHome ? teams?.away?.name : teams?.home?.name;
-              const result = formatFixtureResultChip(fixtureRow, isHome ? "home" : "away");
-              const resultClass =
-                result.label === "WIN" ? "w" : result.label === "LOSS" ? "l" : "d";
-              const goals = fixtureRow?.goals || {};
-              const scored = isHome ? goals.home : goals.away;
-              const conceded = isHome ? goals.away : goals.home;
+              const meta = formOutcomeMeta(fixtureRow, teamId);
+              const score = `${meta.scored ?? "—"}-${meta.conceded ?? "—"}`;
+              const opponent = meta.opponent || {};
               return `
                 <article class="team-form-card">
-                  <span class="form-pill form-pill-${escapeHtml(result.tone === "pending" ? "d" : resultClass)}">${escapeHtml(result.label)}</span>
-                  <strong>${escapeHtml(`${scored ?? "—"}-${conceded ?? "—"}`)}</strong>
-                  <span class="muted">${escapeHtml(opponent || "Opponent")}</span>
+                  <div class="team-form-card-top">
+                    <span class="form-pill form-pill-${escapeHtml(meta.tone)}">${escapeHtml(meta.label)}</span>
+                    ${badgeMarkup(opponent.logo, opponent.name || "Opponent", "team-form-opponent-badge")}
+                  </div>
+                  <strong>${escapeHtml(score)}</strong>
+                  <span class="muted">${escapeHtml(opponent.name || "Opponent")}</span>
                   <span class="muted">${escapeHtml(formatKickoffLabel(fixtureRow?.fixture?.date || ""))}</span>
                 </article>
               `;
             })
             .join("")}
         </div>
+      `;
+    };
+    const renderFormSequence = (formString, fixtures, teamId) => {
+      const letters = String(formString || "")
+        .split("")
+        .filter(Boolean)
+        .slice(0, 5);
+      const fallbackLetters = (Array.isArray(fixtures) ? fixtures : [])
+        .map((fixtureRow) => formOutcomeMeta(fixtureRow, teamId).label)
+        .filter(Boolean)
+        .slice(0, 5);
+      const sequence = letters.length ? letters : fallbackLetters;
+      if (!sequence.length) {
+        return `<span class="muted">No current form string</span>`;
+      }
+      return sequence
+        .map((letter) => {
+          const tone = letter === "W" ? "w" : letter === "L" ? "l" : "d";
+          return `<span class="form-pill form-pill-${escapeHtml(tone)}">${escapeHtml(letter)}</span>`;
+        })
+        .join("");
+    };
+    const renderFixtureRhythmTeam = (row, fixtures, teamId, side, fallbackName, fallbackLogo) => {
+      const team = row?.team || {};
+      const teamName = team.name || fallbackName || "Team";
+      const logo = team.logo || fallbackLogo || "";
+      const summary = formRhythmSummary(fixtures, teamId);
+      const record = `${summary.wins}W ${summary.draws}D ${summary.losses}L`;
+      return `
+        <article class="fixture-rhythm-team fixture-rhythm-team-${escapeHtml(side)}">
+          <div class="fixture-rhythm-team-head">
+            ${badgeMarkup(logo, teamName, "lineup-team-badge fixture-rhythm-badge")}
+            <div>
+              <span class="metric-label">${escapeHtml(side === "home" ? "Home rhythm" : "Away rhythm")}</span>
+              <h4>${escapeHtml(teamName)}</h4>
+              <p class="muted">${escapeHtml(summary.label)} · last ${escapeHtml(String(summary.played || 0))}</p>
+            </div>
+          </div>
+          <div class="fixture-rhythm-stats">
+            <span><strong>${escapeHtml(row?.rank ?? "—")}</strong><small>Position</small></span>
+            <span><strong>${escapeHtml(row?.points ?? "—")}</strong><small>Points</small></span>
+            <span><strong>${escapeHtml(row?.goalsDiff ?? "—")}</strong><small>Goal diff</small></span>
+            <span><strong>${escapeHtml(record)}</strong><small>Last five</small></span>
+          </div>
+          <div class="fixture-rhythm-sequence">
+            ${renderFormSequence(row?.form || "", fixtures, teamId)}
+          </div>
+          <div class="fixture-rhythm-balance">
+            <span>${escapeHtml(`${summary.scored} scored`)}</span>
+            <div class="fixture-rhythm-balance-track" aria-hidden="true">
+              <span style="width:${escapeHtml(String(Math.min(100, Math.max(12, summary.scored * 12))))}%"></span>
+            </div>
+            <span>${escapeHtml(`${summary.conceded} conceded`)}</span>
+          </div>
+          ${renderRecentResults(fixtures, teamId)}
+        </article>
       `;
     };
     const formScoringSummary = (fixtures, teamId) => {
@@ -9668,6 +9797,35 @@
           let leagueId = String(root.dataset.leagueId || "").trim();
           let season = String(root.dataset.season || "").trim();
           if (!leagueId || !season) {
+            root.innerHTML = `
+              <div class="fixture-form-head">
+                <span class="metric-label">Form intelligence</span>
+                <h3>Team rhythm</h3>
+                <p class="muted">The league form reference is not attached to this published fixture yet, so the page keeps the form layer explicit instead of pretending a live rhythm sample exists.</p>
+              </div>
+              <div class="fixture-rhythm-board">
+                ${renderFixtureRhythmTeam(
+                  null,
+                  [],
+                  root.dataset.homeTeamId || "",
+                  "home",
+                  root.dataset.homeTeam || "",
+                  root.dataset.homeLogo || ""
+                )}
+                ${renderFixtureRhythmTeam(
+                  null,
+                  [],
+                  root.dataset.awayTeamId || "",
+                  "away",
+                  root.dataset.awayTeam || "",
+                  root.dataset.awayLogo || ""
+                )}
+              </div>
+              <div class="fixture-rhythm-footer">
+                <span class="chip chip-reference">Form feed pending</span>
+                <span class="muted">Team ratings, player drivers, H2H context, and market posture remain available while the live form reference is missing.</span>
+              </div>
+            `;
             return;
           }
           const standingsRows = await fetchStandingsRows(leagueId, season);
@@ -9684,31 +9842,35 @@
             standingsRows.find((row) => String(row?.team?.id || "").trim() === teamId) || null;
           const homeRow = matchByTeam(homeTeamId);
           const awayRow = matchByTeam(awayTeamId);
-          const cards = Array.from(root.querySelectorAll(".card-grid > article"));
-          [[homeRow, homeFixtures, homeTeamId], [awayRow, awayFixtures, awayTeamId]].forEach(([row, fixtures, teamId], index) => {
-            const card = cards[index];
-            if (!card || !row) {
-              return;
-            }
-            card.innerHTML = `
-              <h4>${escapeHtml(row.team?.name || "Team")}</h4>
-              <div class="form-summary-strip">
-                <span class="stat-chip">Pos ${escapeHtml(row.rank ?? "—")}</span>
-                <span class="stat-chip">${escapeHtml(row.points ?? "—")} pts</span>
-                <span class="stat-chip">GD ${escapeHtml(row.goalsDiff ?? "—")}</span>
-              </div>
-              <div class="form-sequence">
-                ${String(row.form || "")
-                  .split("")
-                  .filter(Boolean)
-                  .slice(0, 5)
-                  .map((letter) => `<span class="form-pill form-pill-${escapeHtml(letter.toLowerCase())}">${escapeHtml(letter)}</span>`)
-                  .join("") || `<span class="muted">No current form string</span>`}
-              </div>
-              <p class="muted">${escapeHtml(formScoringSummary(fixtures, teamId))}</p>
-              ${renderRecentResults(fixtures, teamId)}
-            `;
-          });
+          root.innerHTML = `
+            <div class="fixture-form-head">
+              <span class="metric-label">Form intelligence</span>
+              <h3>Team rhythm</h3>
+              <p class="muted">Live league position, recent results, and scoring rhythm for both sides. This layer explains whether the current read is moving with or against team form.</p>
+            </div>
+            <div class="fixture-rhythm-board">
+              ${renderFixtureRhythmTeam(
+                homeRow,
+                homeFixtures,
+                homeTeamId,
+                "home",
+                root.dataset.homeTeam || "",
+                root.dataset.homeLogo || ""
+              )}
+              ${renderFixtureRhythmTeam(
+                awayRow,
+                awayFixtures,
+                awayTeamId,
+                "away",
+                root.dataset.awayTeam || "",
+                root.dataset.awayLogo || ""
+              )}
+            </div>
+            <div class="fixture-rhythm-footer">
+              <span class="chip chip-reference">Team rhythm</span>
+              <span class="muted">Recent form is supporting context only. Deploy state, market posture, and caution layers remain the decision spine.</span>
+            </div>
+          `;
         } catch {
           return;
         }

@@ -3239,6 +3239,159 @@ tbody tr:hover {
   gap: 10px;
 }
 
+.fixture-form-shell {
+  display: grid;
+  gap: 18px;
+}
+
+.fixture-form-head {
+  display: grid;
+  gap: 8px;
+  max-width: 780px;
+}
+
+.fixture-form-head h3 {
+  margin: 0;
+  font-size: clamp(1.45rem, 2.2vw, 2.25rem);
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.fixture-rhythm-board {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.fixture-rhythm-team {
+  display: grid;
+  gap: 16px;
+  padding: 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(123, 154, 184, 0.14);
+  background:
+    radial-gradient(circle at 16% 10%, rgba(52, 211, 153, 0.12), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.016)),
+    rgba(11, 31, 25, 0.84);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.045),
+    0 18px 42px rgba(0, 0, 0, 0.16);
+}
+
+.fixture-rhythm-team-away {
+  background:
+    radial-gradient(circle at 84% 10%, rgba(48, 199, 255, 0.13), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.016)),
+    rgba(11, 31, 25, 0.84);
+}
+
+.fixture-rhythm-loading {
+  min-height: 180px;
+}
+
+.fixture-rhythm-team-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+
+.fixture-rhythm-team-head h4 {
+  margin: 2px 0 0;
+  color: var(--ink);
+  font-size: clamp(1.35rem, 2vw, 2rem);
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.fixture-rhythm-badge {
+  width: 62px;
+  height: 62px;
+  border-radius: 18px;
+  flex: 0 0 auto;
+}
+
+.fixture-rhythm-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.fixture-rhythm-stats span {
+  display: grid;
+  gap: 3px;
+  min-height: 62px;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(123, 154, 184, 0.13);
+  background: rgba(255, 255, 255, 0.032);
+}
+
+.fixture-rhythm-stats strong {
+  color: var(--ink);
+  font-size: clamp(1rem, 1.45vw, 1.35rem);
+  line-height: 1;
+}
+
+.fixture-rhythm-stats small {
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.fixture-rhythm-sequence {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(123, 154, 184, 0.12);
+  background:
+    linear-gradient(90deg, rgba(52, 211, 153, 0.07), rgba(48, 199, 255, 0.05)),
+    rgba(255, 255, 255, 0.018);
+}
+
+.fixture-rhythm-sequence .form-pill {
+  min-width: 42px;
+  min-height: 42px;
+}
+
+.fixture-rhythm-balance {
+  display: grid;
+  grid-template-columns: auto minmax(90px, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.fixture-rhythm-balance-track {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(123, 154, 184, 0.18);
+}
+
+.fixture-rhythm-balance-track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+}
+
+.fixture-rhythm-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(123, 154, 184, 0.12);
+  background: rgba(255, 255, 255, 0.025);
+}
+
 .team-form-results {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -3251,12 +3404,27 @@ tbody tr:hover {
   padding: 12px;
   border-radius: var(--radius-sm);
   border: 1px solid rgba(107, 122, 143, 0.16);
-  background: rgba(255, 255, 255, 0.025);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.015)),
+    rgba(255, 255, 255, 0.025);
 }
 
 .team-form-card strong {
   font-size: 1rem;
   letter-spacing: -0.03em;
+}
+
+.team-form-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.team-form-opponent-badge {
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
 }
 
 .form-pill {
@@ -4672,6 +4840,7 @@ code {
   .lineup-empty-grid,
   .formation-pitch-grid,
   .formation-match-head,
+  .fixture-rhythm-board,
   .fixture-prediction-section,
   .fixture-prediction-card-grid,
   .hero-verdict-strip,
@@ -4702,6 +4871,20 @@ code {
     justify-content: flex-start;
     justify-items: start;
     text-align: left;
+  }
+
+  .fixture-rhythm-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .fixture-rhythm-balance {
+    grid-template-columns: 1fr;
+    align-items: flex-start;
+  }
+
+  .fixture-rhythm-footer {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .fixture-faceoff-side-away {
