@@ -121,6 +121,12 @@ export const getTeamDetail = async (db, competitionKey, teamSlug) => {
 };
 
 export const getFixtureStats = async (db, fixtureKey) => {
+  const cached = await first(db.prepare("SELECT payload_json FROM site_fixture_stats_payloads WHERE fixture_key = ?").bind(fixtureKey));
+  const cachedPayload = parsePayload(cached);
+  if (cachedPayload) {
+    return cachedPayload;
+  }
+
   const [teamStats, playerStats, lineupSlots] = await Promise.all([
     all(
       db
@@ -169,6 +175,25 @@ export const getFixtureStats = async (db, fixtureKey) => {
 
 export const getTeamPremiumData = async (db, competitionKey, teamSlug, { limit = 20 } = {}) => {
   const safeLimit = Math.max(1, Math.min(Number(limit) || 20, 80));
+  if (safeLimit === 20) {
+    const cached = await first(
+      db
+        .prepare(
+          `
+          SELECT payload_json
+          FROM site_team_premium_payloads
+          WHERE competition_key = ? AND team_slug = ?
+          LIMIT 1
+          `
+        )
+        .bind(competitionKey, teamSlug)
+    );
+    const cachedPayload = parsePayload(cached);
+    if (cachedPayload) {
+      return cachedPayload;
+    }
+  }
+
   const [players, teamStats, lineupSlots] = await Promise.all([
     all(
       db

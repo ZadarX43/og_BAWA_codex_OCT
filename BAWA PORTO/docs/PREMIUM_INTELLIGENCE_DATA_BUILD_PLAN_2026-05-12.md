@@ -57,6 +57,59 @@ Important current truth:
 
 Implement these tables first:
 
+## Launch Data Limits
+
+The launch build should be deliberately smaller than the theoretical D1 ceiling.
+
+Current working rule:
+
+- default SQLite/D1 export is `active_site_latest_seasons`
+- competitions are limited to the 22 currently published site competitions
+- seasons are limited to the active published season per competition:
+  - `2025/2026` for winter leagues
+  - `2026` for calendar-year leagues already published that way
+- historical match/player/team rows are not included by default
+- deeper history remains behind `--include-history` and later high-tier/pro routes
+
+Practical pre-launch targets:
+
+- launch D1 under 500MB, so it also fits the D1 Free per-database ceiling during testing
+- preferred launch target under 300MB once route payloads are finalized
+- no route should depend on table scans
+- primary page routes should read from cached route payload rows where possible
+- raw premium tables remain available for audit and pro/deeper views, not first-render customer pages
+
+First measured launch slice after applying this rule:
+
+- SQLite size: ~99MB
+- D1 SQL chunks: ~86MB across 22 chunks
+- active fixtures: 156
+- active teams: 388
+- active squad rows: 388
+- active player identity rows: 11,521
+- cached fixture stat route payloads: 156
+- cached team premium route payloads: 388
+
+Current upstream gap exposed by the launch filter:
+
+- active-window `site_player_match_stats`: 0
+- active-window `site_team_match_stats`: 0
+- active-window `site_lineup_slots`: 0
+- active-window `team_lineup_snapshots`: 0
+
+This is correct behavior for launch safety. It means the database is not silently filling the product with older historical rows. The next data job is to refresh/import current-season provider match stats and lineups for the 22 active competitions, then rerun this same exporter.
+
+Why this matters:
+
+- Cloudflare D1 Free currently has a 500MB per-database limit
+- Workers Paid allows larger databases, but D1 still has a 10GB per-database hard ceiling
+- D1 billing is driven by rows read/written and stored GB, so indexed and cached route payloads matter more than just total row count
+
+Operational meaning:
+
+- launch mode is small, active, current-season, and page-shaped
+- pro/history mode can be built later from the same schema without forcing a frontend contract rewrite
+
 ### `site_player_identity_map`
 
 Purpose:
@@ -197,6 +250,13 @@ Add page-shaped reads:
 
 These should read from D1 when available and keep static JSON fallback available on the frontend until parity is proven.
 
+Cached route payload tables:
+
+- `site_fixture_stats_payloads`
+- `site_team_premium_payloads`
+
+These are intentionally denormalized. They make the common website reads cheap while the normalized tables remain available for premium drilldown, audit, and later pro/API use.
+
 ## Subscription Tiering Principle
 
 Build once, gate by depth:
@@ -217,4 +277,3 @@ Do not fork the intelligence schema per tier.
 5. Benchmark fixture/team premium reads.
 6. Wire frontend cards progressively.
 7. Add tier gating after the full card inventory exists.
-

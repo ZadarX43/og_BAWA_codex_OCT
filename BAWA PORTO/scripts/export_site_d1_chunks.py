@@ -28,6 +28,8 @@ TABLES = (
     "site_team_match_stats",
     "site_lineup_slots",
     "site_formation_slots",
+    "site_fixture_stats_payloads",
+    "site_team_premium_payloads",
 )
 
 
