@@ -784,8 +784,23 @@
     if (!record?.competition_key || !record?.season || !record?.club_slug) {
       return null;
     }
-    return fetchOptionalJson(
+    if (Array.isArray(record.players) && record.players.length) {
+      return record;
+    }
+    const direct = await fetchOptionalJson(
       `${DATA_ROOT}/player_intelligence/clubs/${record.competition_key}/${record.season}/${record.club_slug}.json`
+    );
+    if (direct) {
+      return direct;
+    }
+    return (
+      state.clubSquadIntelligenceIndex.find(
+        (entry) =>
+          String(entry?.competition_key || "") === String(record.competition_key || "") &&
+          String(entry?.season || "") === String(record.season || "") &&
+          String(entry?.club_slug || "") === String(record.club_slug || "") &&
+          Array.isArray(entry?.players)
+      ) || null
     );
   };
 
@@ -875,6 +890,118 @@
     const rating = ogRatingValue(value);
     const text = rating === null ? "—" : rating.toFixed(1);
     return `<span class="og-rating-badge og-rating-badge-${escapeHtml(size)} og-rating-${escapeHtml(ogRatingBand(rating))}" title="${escapeHtml(label)}">${escapeHtml(text)}</span>`;
+  };
+
+  const lineupSupportRank = (payload = null) => {
+    if (!payload) return 0;
+    const status = String(payload.lineup_status || payload.lineup_mode || payload.coverage_status || "").toLowerCase();
+    const profileCount =
+      (Array.isArray(payload.home_lineup_profiles) ? payload.home_lineup_profiles.length : 0) +
+      (Array.isArray(payload.away_lineup_profiles) ? payload.away_lineup_profiles.length : 0);
+    if (status.includes("confirmed") || status.includes("official")) return 5;
+    if (status.includes("predicted") || status.includes("last_fixture") || profileCount > 0) return 4;
+    if (status.includes("published")) return 3;
+    if (status.includes("unpublished") || status.includes("placeholder")) return 1;
+    return payload.home_units || payload.away_units ? 2 : 1;
+  };
+
+  const chooseBestLineupSupport = (...payloads) =>
+    payloads.filter(Boolean).sort((left, right) => lineupSupportRank(right) - lineupSupportRank(left))[0] || null;
+
+  const h2hSupportRank = (payload = null) => {
+    if (!payload) return 0;
+    const fallbackMode = String(payload.fallback_mode || payload.coverage_status || "").toLowerCase();
+    const sampleSize = Number(payload.sample_size || 0);
+    if (sampleSize > 0 && fallbackMode.includes("historical")) return 4;
+    if (sampleSize > 0) return 5;
+    if (fallbackMode.includes("historical")) return 3;
+    if (fallbackMode.includes("unpublished") || fallbackMode.includes("placeholder")) return 1;
+    return payload.summary ? 2 : 1;
+  };
+
+  const chooseBestH2HSupport = (...payloads) =>
+    payloads.filter(Boolean).sort((left, right) => h2hSupportRank(right) - h2hSupportRank(left))[0] || null;
+
+  const playerProfilePower = (profile = null) => {
+    const value =
+      profile?.ratings?.og_player_power ??
+      profile?.rating_power ??
+      profile?.power ??
+      profile?.ui?.badge_score ??
+      null;
+    const numeric = Number(value);
+    return Number.isFinite(numeric) ? numeric : null;
+  };
+
+  const playerProfileRank = (profile = null) => {
+    const rank = profile?.ranks?.club_rank ?? profile?.rank_club ?? profile?.club_rank ?? null;
+    const numeric = Number(rank);
+    return Number.isFinite(numeric) && numeric > 0 ? numeric : null;
+  };
+
+  const buildTeamSheetRatingLookup = () => {
+    const lookup = new Map();
+    const ambiguous = new Set();
+    const addKey = (key, profile) => {
+      const normalized = normalizePreferenceText(key);
+      if (!normalized || !profile) return;
+      if (lookup.has(normalized) && lookup.get(normalized) !== profile) {
+        ambiguous.add(normalized);
+        return;
+      }
+      lookup.set(normalized, profile);
+    };
+    const addProfile = (profile, fallbackTeam = "") => {
+      const teamKey = normalizePreferenceText(profile?.club || profile?.team || fallbackTeam);
+      const names = [
+        profile?.name,
+        profile?.surname,
+        profile?.ui?.pitch_label,
+        profile?.player_name,
+      ].filter(Boolean);
+      names.forEach((name) => {
+        addKey(`${teamKey}|${name}`, profile);
+        addKey(name, profile);
+        const parts = normalizePreferenceText(name).split(" ").filter(Boolean);
+        if (parts.length > 1) {
+          addKey(`${teamKey}|${parts[parts.length - 1]}`, profile);
+        }
+      });
+    };
+    const lineup = state.selectedFixtureLineupIntelligence || {};
+    [
+      ...(Array.isArray(lineup.home_lineup_profiles) ? lineup.home_lineup_profiles : []),
+      ...(Array.isArray(lineup.away_lineup_profiles) ? lineup.away_lineup_profiles : []),
+      ...(Array.isArray(lineup.home_bench_profiles) ? lineup.home_bench_profiles : []),
+      ...(Array.isArray(lineup.away_bench_profiles) ? lineup.away_bench_profiles : []),
+    ].forEach((profile) => addProfile(profile));
+    const support = state.selectedFixtureDecisionSupport || {};
+    [
+      support.homeSquadIntelligence,
+      support.awaySquadIntelligence,
+      state.selectedTeamSquadIntelligence,
+    ].forEach((squad) => {
+      const team = squad?.club || squad?.team || "";
+      (Array.isArray(squad?.players) ? squad.players : []).forEach((profile) => addProfile(profile, team));
+    });
+    return { lookup, ambiguous };
+  };
+
+  const findTeamSheetRatingProfile = (ratingLookup, teamName = "", playerName = "") => {
+    const teamKey = normalizePreferenceText(teamName);
+    const playerKey = normalizePreferenceText(playerName);
+    if (!playerKey) return null;
+    const keys = [`${teamKey}|${playerKey}`, playerKey];
+    const parts = playerKey.split(" ").filter(Boolean);
+    if (parts.length > 1) {
+      keys.push(`${teamKey}|${parts[parts.length - 1]}`);
+    }
+    for (const key of keys) {
+      if (ratingLookup?.ambiguous?.has(key)) continue;
+      const profile = ratingLookup?.lookup?.get(key);
+      if (profile) return profile;
+    }
+    return null;
   };
 
   const collectGoalScorerRows = (source = {}, fixture = {}) => {
@@ -1040,25 +1167,17 @@
       return;
     }
     const siteData = await loadSelectedFixtureSiteData();
-    if (siteData?.lineup) {
-      state.selectedFixtureLineupIntelligence = siteData.lineup;
-      return;
-    }
     const fixture = findFixtureRowBySelectedKey();
     const direct = await fetchOptionalJson(
       `${DATA_ROOT}/fixture_lineup_intelligence/${encodeURIComponent(selectedFixtureKey)}.json`
     );
-    if (direct) {
-      state.selectedFixtureLineupIntelligence = direct;
-      return;
-    }
     const resolved = await loadFixturePayloadFromIndex(
       "fixture_lineup_intelligence",
       state.fixtureLineupIndex,
       fixture,
       selectedFixtureKey
     );
-    state.selectedFixtureLineupIntelligence = resolved?.payload || null;
+    state.selectedFixtureLineupIntelligence = chooseBestLineupSupport(siteData?.lineup, direct, resolved?.payload || null);
   };
 
   const loadSelectedFixtureDecisionIntelligence = async () => {
@@ -1095,16 +1214,14 @@
       competitionName: fixture.league,
       season: fixture.api_season,
     };
-    const [homeTeamDetail, awayTeamDetail, directH2H] = await Promise.all([
+    const [homeTeamDetail, awayTeamDetail, directStaticH2H] = await Promise.all([
       loadTeamDetailFromSiteOrStatic(fixture.home_team, options),
       loadTeamDetailFromSiteOrStatic(fixture.away_team, options),
-      siteData?.h2h
-        ? Promise.resolve(siteData.h2h)
-        : fetchOptionalJson(`${DATA_ROOT}/fixture_h2h_support/${encodeURIComponent(selectedFixtureKey)}.json`),
+      fetchOptionalJson(`${DATA_ROOT}/fixture_h2h_support/${encodeURIComponent(selectedFixtureKey)}.json`),
     ]);
 
-    let h2hSupport = directH2H;
-    if (!h2hSupport) {
+    let h2hSupport = chooseBestH2HSupport(siteData?.h2h, directStaticH2H);
+    if (h2hSupportRank(h2hSupport) < 3) {
       const resolvedH2H = await loadFixturePayloadFromIndex(
         "fixture_h2h_support",
         state.fixtureH2HIndex,
@@ -1112,12 +1229,15 @@
         selectedFixtureKey,
         { allowHistoricalPairFallback: true }
       );
-      h2hSupport = resolvedH2H?.payload
+      const resolvedPayload = resolvedH2H?.payload
         ? {
             ...resolvedH2H.payload,
-            fallback_mode: resolvedH2H.record?.fixture_key !== selectedFixtureKey ? "historical_team_pair" : "",
+            fallback_mode:
+              resolvedH2H.payload?.fallback_mode ||
+              (resolvedH2H.record?.fixture_key !== selectedFixtureKey ? "historical_team_pair" : ""),
           }
         : null;
+      h2hSupport = chooseBestH2HSupport(h2hSupport, resolvedPayload);
     }
 
     state.selectedFixtureDecisionSupport = {
@@ -9171,7 +9291,8 @@
         </div>
       `;
     };
-    const renderLineupSquad = (players, emptyCopy) => {
+    const teamSheetRatingLookup = buildTeamSheetRatingLookup();
+    const renderLineupSquad = (players, emptyCopy, teamName = "") => {
       const list = Array.isArray(players) ? players : [];
       if (!list.length) {
         return `<div class="notice">${escapeHtml(emptyCopy)}</div>`;
@@ -9183,12 +9304,21 @@
               const player = entry?.player || {};
               const jersey = player.number ? `#${player.number}` : "Squad";
               const role = player.pos || player.grid || "Player";
+              const ratingProfile = findTeamSheetRatingProfile(teamSheetRatingLookup, teamName, player.name || "");
+              const power = playerProfilePower(ratingProfile);
+              const rank = playerProfileRank(ratingProfile);
+              const meta = [
+                jersey,
+                role,
+                power !== null ? `${power}% OG` : "Rating pending",
+                rank ? `Club rank ${rank}` : "",
+              ].filter(Boolean);
               return `
                 <article class="lineup-player-card">
-                  ${renderOgRatingBadge(null, "small", "Rating unavailable")}
+                  ${renderOgRatingBadge(power, "small", power !== null ? `${player.name || "Player"} OG player rating` : "Rating pending")}
                   <div>
                     <strong>${escapeHtml(player.name || "Unnamed player")}</strong>
-                    <span class="muted">${escapeHtml(`${jersey} · ${role}`)}</span>
+                    <span class="muted">${escapeHtml(meta.join(" · "))}</span>
                   </div>
                 </article>
               `;
@@ -9379,11 +9509,11 @@
                       </div>
                       <div class="lineup-section">
                         <span class="metric-label">Starting XI</span>
-                        ${renderLineupSquad(team?.startXI, "Starting XI not available yet.")}
+                        ${renderLineupSquad(team?.startXI, "Starting XI not available yet.", teamInfo.name)}
                       </div>
                       <div class="lineup-section">
                         <span class="metric-label">Bench</span>
-                        ${renderLineupSquad(team?.substitutes, "Substitutes list not available yet.")}
+                        ${renderLineupSquad(team?.substitutes, "Substitutes list not available yet.", teamInfo.name)}
                       </div>
                     </article>
                   `;
