@@ -3815,38 +3815,23 @@
   const renderCombinedFormationPitch = (payload, fixture = null) => {
     const homePlayers = horizontalPitchPlayers("home", payload.home_formation || "", payload.home_lineup_profiles || []);
     const awayPlayers = horizontalPitchPlayers("away", payload.away_formation || "", payload.away_lineup_profiles || []);
-    const unitChip = (label, value) => `
-      <span class="formation-unit-chip formation-unit-chip-${escapeHtml(scoreTone(value))}">
-        ${escapeHtml(`${label} ${value ?? "—"}%`)}
-      </span>
-    `;
     return `
       <article class="panel formation-pitch-card formation-pitch-card-wide">
         <div class="formation-match-head">
           <div class="formation-match-team">
             ${badgeMarkup(fixture?.home_team_logo_url, payload.home_team || "Home", "lineup-team-badge")}
             <div>
-              <span class="metric-label">${escapeHtml(payload.home_formation || "Shape pending")}</span>
+              <span class="formation-match-formation">${escapeHtml(payload.home_formation || "Shape pending")}</span>
               <h4>${escapeHtml(payload.home_team || "Home")}</h4>
             </div>
           </div>
-          <div class="formation-match-center">
-            <span class="metric-label">Predicted shape</span>
-            <strong>${escapeHtml(`${payload.home_formation || "TBC"} · ${payload.away_formation || "TBC"}`)}</strong>
-          </div>
           <div class="formation-match-team formation-match-team-away">
             <div>
-              <span class="metric-label">${escapeHtml(payload.away_formation || "Shape pending")}</span>
+              <span class="formation-match-formation">${escapeHtml(payload.away_formation || "Shape pending")}</span>
               <h4>${escapeHtml(payload.away_team || "Away")}</h4>
             </div>
             ${badgeMarkup(fixture?.away_team_logo_url, payload.away_team || "Away", "lineup-team-badge")}
           </div>
-        </div>
-        <div class="formation-unit-strip formation-unit-strip-match">
-          ${unitChip(`${payload.home_team || "Home"} attack`, payload.home_units?.attack_unit)}
-          ${unitChip(`${payload.home_team || "Home"} midfield`, payload.home_units?.midfield_control)}
-          ${unitChip(`${payload.away_team || "Away"} midfield`, payload.away_units?.midfield_control)}
-          ${unitChip(`${payload.away_team || "Away"} attack`, payload.away_units?.attack_unit)}
         </div>
         <div class="formation-pitch-scroll">
           <div class="formation-pitch formation-pitch-horizontal">
