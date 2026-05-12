@@ -80,7 +80,40 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "FC Barcelona",
+      "player": "Lamine Yamal",
+      "role": "Forward",
+      "power": 76,
+      "driver_metric": "Goal Threat",
+      "driver_value": 76
+    },
+    {
+      "team": "FC Barcelona",
+      "player": "Raphinha",
+      "role": "Forward",
+      "power": 67,
+      "driver_metric": "Goal Threat",
+      "driver_value": 66
+    },
+    {
+      "team": "Real Madrid",
+      "player": "Vinicius Junior",
+      "role": "Forward",
+      "power": 83,
+      "driver_metric": "Goal Threat",
+      "driver_value": 84
+    },
+    {
+      "team": "Real Madrid",
+      "player": "Kylian Mbappé",
+      "role": "Forward",
+      "power": 78,
+      "driver_metric": "Goal Threat",
+      "driver_value": 79
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

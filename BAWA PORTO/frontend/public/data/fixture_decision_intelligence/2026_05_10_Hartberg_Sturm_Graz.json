@@ -76,7 +76,40 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Hartberg",
+      "player": "Elias Havel",
+      "role": "Forward",
+      "power": 84,
+      "driver_metric": "Goal Threat",
+      "driver_value": 93
+    },
+    {
+      "team": "Hartberg",
+      "player": "Lukas Spendlhofer",
+      "role": "Centre Back",
+      "power": 70,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 73
+    },
+    {
+      "team": "Sturm Graz",
+      "player": "Maurice Malone",
+      "role": "Forward",
+      "power": 76,
+      "driver_metric": "Goal Threat",
+      "driver_value": 82
+    },
+    {
+      "team": "Sturm Graz",
+      "player": "Seedy Jatta",
+      "role": "Forward",
+      "power": 70,
+      "driver_metric": "Goal Threat",
+      "driver_value": 79
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

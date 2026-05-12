@@ -76,7 +76,24 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "PSG",
+      "player": "Khvicha Kvaratskhelia",
+      "role": "Forward",
+      "power": 82,
+      "driver_metric": "Goal Threat",
+      "driver_value": 82
+    },
+    {
+      "team": "PSG",
+      "player": "Vitinha",
+      "role": "Central Midfielder",
+      "power": 74,
+      "driver_metric": "Goal Threat",
+      "driver_value": 87
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

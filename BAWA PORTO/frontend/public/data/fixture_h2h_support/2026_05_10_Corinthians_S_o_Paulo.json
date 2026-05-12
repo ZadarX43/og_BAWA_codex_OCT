@@ -1,0 +1,23 @@
+{
+  "fixture_key": "2026_05_10_Corinthians_S_o_Paulo",
+  "fixture_id": 1492252,
+  "competition": "Brazil Serie A",
+  "season": "2026",
+  "home_team": "Corinthians",
+  "away_team": "São Paulo",
+  "sample_size": 1,
+  "goal_environment": 4,
+  "btts_regime": 100,
+  "booking_heat": 10,
+  "foul_intensity": 25,
+  "style_conflict_index": 20,
+  "home_win_rate": 0,
+  "draw_rate": 100,
+  "over25_rate": 100,
+  "high_cards_rate": 100,
+  "same_referee_overlap": false,
+  "same_referee_count": 0,
+  "summary": "Using the latest available same-team-pair historical regime (1 prior meeting) as supporting context for this current fixture.",
+  "fallback_mode": "historical_team_pair",
+  "source_fixture_key": "2024-09-29_sao_paulo_corinthians"
+}

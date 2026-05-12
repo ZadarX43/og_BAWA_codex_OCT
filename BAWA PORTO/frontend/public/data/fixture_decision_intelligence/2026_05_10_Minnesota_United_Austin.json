@@ -3,13 +3,12 @@
   "fixture": "Minnesota United vs Austin",
   "primary_signal": "BTTS Yes",
   "signal_state": "AVOID",
-  "agreement_score": 32,
+  "agreement_score": 36,
   "confidence_band": "LOW",
   "supporting_layers": [],
   "caution_layers": [
     "BTTS_PRESSURE_WEAK",
     "GOAL_ENVIRONMENT_SOFT",
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -71,7 +70,26 @@
       "leader": "Austin"
     }
   ],
-  "unit_battle_summary": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 43,
+      "away_value": 44,
+      "delta": -1
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 53,
+      "away_value": 44,
+      "delta": 9
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 47,
+      "away_value": 56,
+      "delta": -9
+    }
+  ],
   "key_player_drivers": [
     {
       "team": "Minnesota United",
@@ -106,7 +124,48 @@
       "driver_value": 72
     }
   ],
-  "key_mismatches": [],
+  "key_mismatches": [
+    {
+      "zone": "Austin attack vs Minnesota United FC defence",
+      "advantage": "Minnesota United FC",
+      "mismatch_score": 9,
+      "left_label": "Austin attack",
+      "left_value": 47,
+      "right_label": "Minnesota United FC defence",
+      "right_value": 56,
+      "summary": "Minnesota United FC defensive resistance is suppressing the away attack"
+    },
+    {
+      "zone": "Midfield control battle",
+      "advantage": "Minnesota United FC",
+      "mismatch_score": 9,
+      "left_label": "Minnesota United FC midfield",
+      "left_value": 53,
+      "right_label": "Austin midfield",
+      "right_value": 44,
+      "summary": "Minnesota United FC should control more of the central game-state"
+    },
+    {
+      "zone": "Minnesota United FC wide threat vs Austin resistance",
+      "advantage": "Minnesota United FC",
+      "mismatch_score": 8,
+      "left_label": "Minnesota United FC wide threat",
+      "left_value": 52,
+      "right_label": "Austin resistance",
+      "right_value": 44,
+      "summary": "Minnesota United FC wide channel has a live attacking edge"
+    },
+    {
+      "zone": "Austin wide threat vs Minnesota United FC resistance",
+      "advantage": "Minnesota United FC",
+      "mismatch_score": 2,
+      "left_label": "Austin wide threat",
+      "left_value": 54,
+      "right_label": "Minnesota United FC resistance",
+      "right_value": 56,
+      "summary": "Minnesota United FC can neutralize the wide-channel pressure"
+    }
+  ],
   "h2h_context": {
     "available": false,
     "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
@@ -164,7 +223,7 @@
       "band": "Weak"
     },
     "btts": {
-      "alignment_score": 38,
+      "alignment_score": 41,
       "state": "AVOID",
       "model_lean": "YES",
       "structural_support": [],
@@ -189,13 +248,12 @@
       "band": "Weak"
     },
     "team_goals": {
-      "alignment_score": 48,
+      "alignment_score": 52,
       "state": "FRAGILE",
       "model_lean": "Austin 1.5+",
       "structural_support": [],
       "cautions": [
-        "GOAL_ENVIRONMENT_SOFT",
-        "LINEUP_DATA_MISSING"
+        "GOAL_ENVIRONMENT_SOFT"
       ],
       "public_summary": "Team Goals has some structural support from structural support, but the overall layer fit remains fragile.",
       "rating": 62,
@@ -250,21 +308,20 @@
   "internal_reason_tokens": [
     "BTTS_PRESSURE_WEAK",
     "GOAL_ENVIRONMENT_SOFT",
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
     "support_count": 0,
-    "caution_count": 4,
-    "lineup_available": false,
+    "caution_count": 3,
+    "lineup_available": true,
     "h2h_available": false
   },
   "preview": {
     "headline": "Minnesota United vs Austin: BTTS Yes avoid",
     "short_summary": "BTTS Yes is too contradicted across the current structural layers for Minnesota United vs Austin, so the clean read is caution rather than action. Primary support comes from structural caution, while the main caution remains btts pressure weak.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: BTTS.",
+    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: FTR.",
     "caution_line": "Main caution: Btts Pressure Weak.",
-    "telegram_summary": "Minnesota United vs Austin — BTTS Yes (Avoid, 32% agreement). Support: structural caution. Caution: Btts Pressure Weak.",
-    "premium_summary": "BTTS Yes is carrying a 32% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from btts pressure weak, goal environment soft."
+    "telegram_summary": "Minnesota United vs Austin — BTTS Yes (Avoid, 36% agreement). Support: structural caution. Caution: Btts Pressure Weak.",
+    "premium_summary": "BTTS Yes is carrying a 36% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from btts pressure weak, goal environment soft."
   }
 }

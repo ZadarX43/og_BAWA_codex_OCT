@@ -2,16 +2,16 @@
   "fixture_key": "2026_05_09_Manchester_City_Brentford",
   "fixture": "Manchester City vs Brentford",
   "primary_signal": "Over 2.5",
-  "signal_state": "AVOID",
-  "agreement_score": 44,
+  "signal_state": "FRAGILE",
+  "agreement_score": 50,
   "confidence_band": "LOW",
   "supporting_layers": [
-    "OVER25_HEAT_SUPPORT"
+    "OVER25_HEAT_SUPPORT",
+    "H2H_OVER_SUPPORT"
   ],
   "caution_layers": [
     "CHAOS_ENVIRONMENT_SOFT",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "LINEUP_DATA_MISSING"
   ],
   "profile_tags": {
     "home": [
@@ -76,12 +76,50 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Manchester City",
+      "player": "Erling Haaland",
+      "role": "Forward",
+      "power": 73,
+      "driver_metric": "Goal Threat",
+      "driver_value": 74
+    },
+    {
+      "team": "Manchester City",
+      "player": "Jeremy Doku",
+      "role": "Forward",
+      "power": 58,
+      "driver_metric": "Goal Threat",
+      "driver_value": 63
+    },
+    {
+      "team": "Brentford",
+      "player": "Igor Thiago",
+      "role": "Forward",
+      "power": 59,
+      "driver_metric": "Goal Threat",
+      "driver_value": 61
+    },
+    {
+      "team": "Brentford",
+      "player": "Keane Lewis-Potter",
+      "role": "Forward",
+      "power": 58,
+      "driver_metric": "Goal Threat",
+      "driver_value": 60
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
-    "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "available": true,
+    "summary": "Using the latest available same-team-pair historical regime (1 prior meeting) as supporting context for this current fixture.",
+    "sample_size": 1,
+    "goal_environment": 3,
+    "btts_regime": 100,
+    "over25_rate": 100,
+    "draw_rate": 0,
+    "booking_heat": 4
   },
   "market_suitability": {
     "ftr": {
@@ -122,11 +160,12 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 72,
+      "alignment_score": 78,
       "state": "MIXED",
       "model_lean": "HOME",
       "structural_support": [
-        "OVER25_HEAT_SUPPORT"
+        "OVER25_HEAT_SUPPORT",
+        "H2H_OVER_SUPPORT"
       ],
       "cautions": [
         "CHAOS_ENVIRONMENT_SOFT",
@@ -137,23 +176,24 @@
       "band": "Strong"
     },
     "btts": {
-      "alignment_score": 41,
-      "state": "AVOID",
+      "alignment_score": 47,
+      "state": "FRAGILE",
       "model_lean": "NO",
       "structural_support": [
-        "OVER25_HEAT_SUPPORT"
+        "OVER25_HEAT_SUPPORT",
+        "H2H_OVER_SUPPORT"
       ],
       "cautions": [
         "CHAOS_ENVIRONMENT_SOFT",
         "LINEUP_DATA_MISSING"
       ],
-      "public_summary": "BTTS is too contradicted by chaos environment soft to present as a clean public read.",
+      "public_summary": "BTTS has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
       "rating": 44,
       "band": "Weak"
     },
     "ou25": {
-      "alignment_score": 48,
-      "state": "AVOID",
+      "alignment_score": 51,
+      "state": "FRAGILE",
       "model_lean": "OVER25",
       "structural_support": [
         "OVER25_HEAT_SUPPORT"
@@ -161,16 +201,17 @@
       "cautions": [
         "CHAOS_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Over 2.5 is too contradicted by chaos environment soft to present as a clean public read.",
+      "public_summary": "Over 2.5 has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
       "rating": 53,
       "band": "Weak"
     },
     "team_goals": {
-      "alignment_score": 52,
+      "alignment_score": 58,
       "state": "FRAGILE",
       "model_lean": "Manchester City 1.5+",
       "structural_support": [
-        "OVER25_HEAT_SUPPORT"
+        "OVER25_HEAT_SUPPORT",
+        "H2H_OVER_SUPPORT"
       ],
       "cautions": [
         "LINEUP_DATA_MISSING"
@@ -180,25 +221,27 @@
       "band": "Weak"
     },
     "correct_score": {
-      "alignment_score": 74,
-      "state": "MIXED",
+      "alignment_score": 80,
+      "state": "SUPPORTED",
       "model_lean": "STRUCTURED",
       "structural_support": [
-        "OVER25_HEAT_SUPPORT"
+        "OVER25_HEAT_SUPPORT",
+        "H2H_OVER_SUPPORT"
       ],
       "cautions": [
         "CHAOS_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Correct Score has partial support from over 2.5 heat support, but chaos environment soft keeps it from reading clean.",
+      "public_summary": "Correct Score is well supported by over 2.5 heat support, with caution still coming from chaos environment soft.",
       "rating": 83,
       "band": "Strong"
     },
     "corners": {
-      "alignment_score": 54,
+      "alignment_score": 60,
       "state": "FRAGILE",
       "model_lean": "ELEVATED",
       "structural_support": [
-        "OVER25_HEAT_SUPPORT"
+        "OVER25_HEAT_SUPPORT",
+        "H2H_OVER_SUPPORT"
       ],
       "cautions": [
         "CHAOS_ENVIRONMENT_SOFT",
@@ -209,16 +252,17 @@
       "band": "Mixed"
     },
     "cards": {
-      "alignment_score": 40,
-      "state": "AVOID",
+      "alignment_score": 46,
+      "state": "FRAGILE",
       "model_lean": "ELEVATED",
       "structural_support": [
-        "OVER25_HEAT_SUPPORT"
+        "OVER25_HEAT_SUPPORT",
+        "H2H_OVER_SUPPORT"
       ],
       "cautions": [
         "CHAOS_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Cards is too contradicted by chaos environment soft to present as a clean public read.",
+      "public_summary": "Cards has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
       "rating": 38,
       "band": "Red Flag"
     }
@@ -230,25 +274,25 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "Over 2.5 is too contradicted across the current structural layers for Manchester City vs Brentford, so the clean read is caution rather than action.",
+  "public_safe_summary": "Over 2.5 has some live shape in Manchester City vs Brentford, but the supporting layers remain fragile and need discipline.",
   "internal_reason_tokens": [
     "OVER25_HEAT_SUPPORT",
+    "H2H_OVER_SUPPORT",
     "CHAOS_ENVIRONMENT_SOFT",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "LINEUP_DATA_MISSING"
   ],
   "summary": {
-    "support_count": 1,
-    "caution_count": 3,
+    "support_count": 2,
+    "caution_count": 2,
     "lineup_available": false,
-    "h2h_available": false
+    "h2h_available": true
   },
   "preview": {
-    "headline": "Manchester City vs Brentford: Over 2.5 avoid",
-    "short_summary": "Over 2.5 is too contradicted across the current structural layers for Manchester City vs Brentford, so the clean read is caution rather than action. Primary support comes from over25 heat support, while the main caution remains chaos environment soft.",
-    "market_summary": "Best aligned market: Correct Score (Mixed). Secondary support: FTR. Weakest read: Cards.",
+    "headline": "Manchester City vs Brentford: Over 2.5 fragile",
+    "short_summary": "Over 2.5 has some live shape in Manchester City vs Brentford, but the supporting layers remain fragile and need discipline. Primary support comes from over25 heat support, while the main caution remains chaos environment soft.",
+    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: FTR. Weakest read: Cards.",
     "caution_line": "Main caution: Chaos Environment Soft.",
-    "telegram_summary": "Manchester City vs Brentford — Over 2.5 (Avoid, 44% agreement). Support: Over25 Heat Support. Caution: Chaos Environment Soft.",
-    "premium_summary": "Over 2.5 is carrying a 44% agreement read across the published decision layers. Support is currently led by over25 heat support, while caution is still coming from chaos environment soft, lineup data missing."
+    "telegram_summary": "Manchester City vs Brentford — Over 2.5 (Fragile, 50% agreement). Support: Over25 Heat Support. Caution: Chaos Environment Soft.",
+    "premium_summary": "Over 2.5 is carrying a 50% agreement read across the published decision layers. Support is currently led by over25 heat support, h2h over support, while caution is still coming from chaos environment soft, lineup data missing."
   }
 }

@@ -73,7 +73,40 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Vejle",
+      "player": "Christian Gammelgaard",
+      "role": "Forward",
+      "power": 74,
+      "driver_metric": "Goal Threat",
+      "driver_value": 79
+    },
+    {
+      "team": "Vejle",
+      "player": "Lasse Nielsen",
+      "role": "Centre Back",
+      "power": 70,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 73
+    },
+    {
+      "team": "Fredericia",
+      "player": "Oscar Buch",
+      "role": "Forward",
+      "power": 73,
+      "driver_metric": "Goal Threat",
+      "driver_value": 82
+    },
+    {
+      "team": "Fredericia",
+      "player": "Felix Winther",
+      "role": "Central Midfielder",
+      "power": 68,
+      "driver_metric": "Midfield Engine",
+      "driver_value": 65
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

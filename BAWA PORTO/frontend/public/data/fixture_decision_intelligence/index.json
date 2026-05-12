@@ -36,7 +36,7 @@
     "fixture": "Zulte-Waregem vs FCV Dender EH",
     "primary_signal": "Zulte-Waregem Win",
     "signal_state": "FRAGILE",
-    "agreement_score": 56,
+    "agreement_score": 54,
     "confidence_band": "STANDARD"
   },
   {
@@ -60,7 +60,7 @@
     "fixture": "Real Sociedad vs Real Betis",
     "primary_signal": "Over 2.5",
     "signal_state": "FRAGILE",
-    "agreement_score": 56,
+    "agreement_score": 58,
     "confidence_band": "STANDARD"
   },
   {
@@ -76,7 +76,7 @@
     "fixture": "Charlotte vs FC Cincinnati",
     "primary_signal": "Over 2.5",
     "signal_state": "FRAGILE",
-    "agreement_score": 56,
+    "agreement_score": 58,
     "confidence_band": "ELITE"
   },
   {
@@ -92,7 +92,7 @@
     "fixture": "New England Revolution vs Philadelphia Union",
     "primary_signal": "Over 2.5",
     "signal_state": "AVOID",
-    "agreement_score": 32,
+    "agreement_score": 38,
     "confidence_band": "ELITE"
   },
   {
@@ -147,8 +147,8 @@
     "fixture_key": "2026_05_09_RAAL_La_Louvi_re_Cercle_Brugge",
     "fixture": "RAAL La Louvière vs Cercle Brugge",
     "primary_signal": "Cercle Brugge Win",
-    "signal_state": "AVOID",
-    "agreement_score": 44,
+    "signal_state": "FRAGILE",
+    "agreement_score": 54,
     "confidence_band": "LOW"
   },
   {
@@ -156,23 +156,23 @@
     "fixture": "Coritiba vs Internacional",
     "primary_signal": "Over 2.5",
     "signal_state": "AVOID",
-    "agreement_score": 26,
+    "agreement_score": 32,
     "confidence_band": "LOW"
   },
   {
     "fixture_key": "2026_05_09_Fluminense_Vit_ria",
     "fixture": "Fluminense vs Vitória",
     "primary_signal": "Over 2.5",
-    "signal_state": "AVOID",
-    "agreement_score": 44,
+    "signal_state": "FRAGILE",
+    "agreement_score": 50,
     "confidence_band": "LOW"
   },
   {
     "fixture_key": "2026_05_09_Middlesbrough_Southampton",
     "fixture": "Middlesbrough vs Southampton",
     "primary_signal": "Middlesbrough Win",
-    "signal_state": "AVOID",
-    "agreement_score": 44,
+    "signal_state": "FRAGILE",
+    "agreement_score": 46,
     "confidence_band": "LOW"
   },
   {
@@ -188,7 +188,7 @@
     "fixture": "Stevenage vs Stockport County",
     "primary_signal": "BTTS Yes",
     "signal_state": "AVOID",
-    "agreement_score": 26,
+    "agreement_score": 32,
     "confidence_band": "LOW"
   },
   {
@@ -211,16 +211,16 @@
     "fixture_key": "2026_05_09_Liverpool_Chelsea",
     "fixture": "Liverpool vs Chelsea",
     "primary_signal": "Over 2.5",
-    "signal_state": "FRAGILE",
-    "agreement_score": 56,
-    "confidence_band": "LOW"
+    "signal_state": "WATCHLIST",
+    "agreement_score": 62,
+    "confidence_band": "MEDIUM"
   },
   {
     "fixture_key": "2026_05_09_Manchester_City_Brentford",
     "fixture": "Manchester City vs Brentford",
     "primary_signal": "Over 2.5",
-    "signal_state": "AVOID",
-    "agreement_score": 44,
+    "signal_state": "FRAGILE",
+    "agreement_score": 50,
     "confidence_band": "LOW"
   },
   {
@@ -260,7 +260,7 @@
     "fixture": "Cagliari vs Udinese",
     "primary_signal": "Cagliari Win",
     "signal_state": "AVOID",
-    "agreement_score": 32,
+    "agreement_score": 34,
     "confidence_band": "LOW"
   },
   {
@@ -275,8 +275,8 @@
     "fixture_key": "2026_05_09_Lecce_Juventus",
     "fixture": "Lecce vs Juventus",
     "primary_signal": "Juventus Win",
-    "signal_state": "FRAGILE",
-    "agreement_score": 56,
+    "signal_state": "WATCHLIST",
+    "agreement_score": 58,
     "confidence_band": "LOW"
   },
   {
@@ -323,8 +323,8 @@
     "fixture_key": "2026_05_09_Dundee_Livingston",
     "fixture": "Dundee vs Livingston",
     "primary_signal": "Dundee Win",
-    "signal_state": "AVOID",
-    "agreement_score": 44,
+    "signal_state": "FRAGILE",
+    "agreement_score": 46,
     "confidence_band": "LOW"
   },
   {
@@ -499,8 +499,8 @@
     "fixture_key": "2026_05_10_Remo_Palmeiras",
     "fixture": "Remo vs Palmeiras",
     "primary_signal": "Palmeiras Win",
-    "signal_state": "FRAGILE",
-    "agreement_score": 56,
+    "signal_state": "MIXED",
+    "agreement_score": 66,
     "confidence_band": "ELITE"
   },
   {
@@ -523,8 +523,8 @@
     "fixture_key": "2026_05_10_Fortuna_Sittard_PEC_Zwolle",
     "fixture": "Fortuna Sittard vs PEC Zwolle",
     "primary_signal": "Over 2.5",
-    "signal_state": "FRAGILE",
-    "agreement_score": 56,
+    "signal_state": "MIXED",
+    "agreement_score": 62,
     "confidence_band": "STANDARD"
   },
   {
@@ -547,8 +547,8 @@
     "fixture_key": "2026_05_10_NAC_Breda_Heerenveen",
     "fixture": "NAC Breda vs Heerenveen",
     "primary_signal": "Over 2.5",
-    "signal_state": "AVOID",
-    "agreement_score": 44,
+    "signal_state": "FRAGILE",
+    "agreement_score": 50,
     "confidence_band": "STANDARD"
   },
   {
@@ -563,8 +563,8 @@
     "fixture_key": "2026_05_10_AVS_Porto",
     "fixture": "AVS vs Porto",
     "primary_signal": "Porto Win",
-    "signal_state": "FRAGILE",
-    "agreement_score": 56,
+    "signal_state": "MIXED",
+    "agreement_score": 66,
     "confidence_band": "STANDARD"
   },
   {
@@ -587,8 +587,8 @@
     "fixture_key": "2026_05_10_FC_Dallas_Real_Salt_Lake",
     "fixture": "FC Dallas vs Real Salt Lake",
     "primary_signal": "BTTS Yes",
-    "signal_state": "AVOID",
-    "agreement_score": 32,
+    "signal_state": "FRAGILE",
+    "agreement_score": 48,
     "confidence_band": "ELITE"
   },
   {
@@ -596,7 +596,7 @@
     "fixture": "New York City vs Columbus Crew",
     "primary_signal": "Over 2.5",
     "signal_state": "AVOID",
-    "agreement_score": 32,
+    "agreement_score": 42,
     "confidence_band": "ELITE"
   },
   {
@@ -636,55 +636,55 @@
     "fixture": "Atlético Mineiro vs Botafogo",
     "primary_signal": "Atlético Mineiro Win",
     "signal_state": "AVOID",
-    "agreement_score": 32,
+    "agreement_score": 42,
     "confidence_band": "LOW"
   },
   {
     "fixture_key": "2026_05_10_Bahia_Cruzeiro",
     "fixture": "Bahia vs Cruzeiro",
     "primary_signal": "Over 2.5",
-    "signal_state": "FRAGILE",
-    "agreement_score": 56,
-    "confidence_band": "LOW"
+    "signal_state": "WATCHLIST",
+    "agreement_score": 72,
+    "confidence_band": "MEDIUM"
   },
   {
     "fixture_key": "2026_05_10_Corinthians_S_o_Paulo",
     "fixture": "Corinthians vs São Paulo",
     "primary_signal": "Over 2.5",
     "signal_state": "AVOID",
-    "agreement_score": 26,
+    "agreement_score": 36,
     "confidence_band": "LOW"
   },
   {
     "fixture_key": "2026_05_10_Gr_mio_Flamengo",
     "fixture": "Grêmio vs Flamengo",
     "primary_signal": "Over 2.5",
-    "signal_state": "AVOID",
-    "agreement_score": 32,
+    "signal_state": "FRAGILE",
+    "agreement_score": 42,
     "confidence_band": "LOW"
   },
   {
     "fixture_key": "2026_05_10_Mirassol_Chapecoense",
     "fixture": "Mirassol vs Chapecoense",
     "primary_signal": "Over 2.5",
-    "signal_state": "FRAGILE",
-    "agreement_score": 56,
+    "signal_state": "WATCHLIST",
+    "agreement_score": 60,
     "confidence_band": "LOW"
   },
   {
     "fixture_key": "2026_05_10_Santos_Bragantino",
     "fixture": "Santos vs Bragantino",
     "primary_signal": "Over 2.5",
-    "signal_state": "AVOID",
-    "agreement_score": 44,
+    "signal_state": "FRAGILE",
+    "agreement_score": 48,
     "confidence_band": "LOW"
   },
   {
     "fixture_key": "2026_05_10_Vasco_da_Gama_Atl_tico_PR",
     "fixture": "Vasco da Gama vs Atlético PR",
     "primary_signal": "Vasco da Gama Win",
-    "signal_state": "AVOID",
-    "agreement_score": 44,
+    "signal_state": "FRAGILE",
+    "agreement_score": 54,
     "confidence_band": "LOW"
   },
   {
@@ -723,16 +723,16 @@
     "fixture_key": "2026_05_10_Burnley_Aston_Villa",
     "fixture": "Burnley vs Aston Villa",
     "primary_signal": "BTTS Yes",
-    "signal_state": "AVOID",
-    "agreement_score": 32,
+    "signal_state": "FRAGILE",
+    "agreement_score": 42,
     "confidence_band": "LOW"
   },
   {
     "fixture_key": "2026_05_10_Crystal_Palace_Everton",
     "fixture": "Crystal Palace vs Everton",
     "primary_signal": "BTTS Yes",
-    "signal_state": "AVOID",
-    "agreement_score": 32,
+    "signal_state": "FRAGILE",
+    "agreement_score": 42,
     "confidence_band": "LOW"
   },
   {
@@ -764,7 +764,7 @@
     "fixture": "Auxerre vs Nice",
     "primary_signal": "BTTS Yes",
     "signal_state": "AVOID",
-    "agreement_score": 32,
+    "agreement_score": 38,
     "confidence_band": "LOW"
   },
   {
@@ -779,16 +779,16 @@
     "fixture_key": "2026_05_10_Metz_Lorient",
     "fixture": "Metz vs Lorient",
     "primary_signal": "BTTS Yes",
-    "signal_state": "FRAGILE",
-    "agreement_score": 56,
-    "confidence_band": "LOW"
+    "signal_state": "WATCHLIST",
+    "agreement_score": 62,
+    "confidence_band": "MEDIUM"
   },
   {
     "fixture_key": "2026_05_10_Monaco_Lille",
     "fixture": "Monaco vs Lille",
     "primary_signal": "BTTS Yes",
     "signal_state": "AVOID",
-    "agreement_score": 38,
+    "agreement_score": 40,
     "confidence_band": "LOW"
   },
   {
@@ -836,7 +836,7 @@
     "fixture": "AC Milan vs Atalanta",
     "primary_signal": "BTTS Yes",
     "signal_state": "AVOID",
-    "agreement_score": 26,
+    "agreement_score": 32,
     "confidence_band": "LOW"
   },
   {
@@ -852,15 +852,15 @@
     "fixture": "Fiorentina vs Genoa",
     "primary_signal": "Fiorentina Win",
     "signal_state": "AVOID",
-    "agreement_score": 32,
+    "agreement_score": 34,
     "confidence_band": "LOW"
   },
   {
     "fixture_key": "2026_05_10_Hellas_Verona_Como",
     "fixture": "Hellas Verona vs Como",
     "primary_signal": "Como Win",
-    "signal_state": "FRAGILE",
-    "agreement_score": 56,
+    "signal_state": "WATCHLIST",
+    "agreement_score": 58,
     "confidence_band": "LOW"
   },
   {
@@ -876,7 +876,7 @@
     "fixture": "Ajax vs Utrecht",
     "primary_signal": "Over 2.5",
     "signal_state": "AVOID",
-    "agreement_score": 32,
+    "agreement_score": 38,
     "confidence_band": "LOW"
   },
   {
@@ -892,7 +892,7 @@
     "fixture": "Twente vs Sparta Rotterdam",
     "primary_signal": "BTTS Yes",
     "signal_state": "AVOID",
-    "agreement_score": 32,
+    "agreement_score": 38,
     "confidence_band": "LOW"
   },
   {
@@ -948,7 +948,7 @@
     "fixture": "Celtic vs Rangers",
     "primary_signal": "Celtic Win",
     "signal_state": "AVOID",
-    "agreement_score": 32,
+    "agreement_score": 34,
     "confidence_band": "LOW"
   },
   {
@@ -995,8 +995,8 @@
     "fixture_key": "2026_05_10_Colorado_Rapids_St_Louis_City",
     "fixture": "Colorado Rapids vs St. Louis City",
     "primary_signal": "BTTS Yes",
-    "signal_state": "AVOID",
-    "agreement_score": 32,
+    "signal_state": "FRAGILE",
+    "agreement_score": 38,
     "confidence_band": "LOW"
   },
   {
@@ -1004,15 +1004,15 @@
     "fixture": "Minnesota United vs Austin",
     "primary_signal": "BTTS Yes",
     "signal_state": "AVOID",
-    "agreement_score": 32,
+    "agreement_score": 36,
     "confidence_band": "LOW"
   },
   {
     "fixture_key": "2026_05_10_Portland_Timbers_Sporting_KC",
     "fixture": "Portland Timbers vs Sporting KC",
     "primary_signal": "Over 2.5",
-    "signal_state": "FRAGILE",
-    "agreement_score": 56,
+    "signal_state": "WATCHLIST",
+    "agreement_score": 60,
     "confidence_band": "LOW"
   },
   {
@@ -1020,7 +1020,7 @@
     "fixture": "SJ Earthquakes vs Vancouver Whitecaps",
     "primary_signal": "BTTS Yes",
     "signal_state": "AVOID",
-    "agreement_score": 32,
+    "agreement_score": 42,
     "confidence_band": "LOW"
   },
   {
@@ -1028,7 +1028,7 @@
     "fixture": "Seattle Sounders vs San Diego",
     "primary_signal": "BTTS Yes",
     "signal_state": "AVOID",
-    "agreement_score": 32,
+    "agreement_score": 36,
     "confidence_band": "LOW"
   },
   {
@@ -1060,7 +1060,7 @@
     "fixture": "Benfica vs Sporting Braga",
     "primary_signal": "Fixture read",
     "signal_state": "FRAGILE",
-    "agreement_score": 44,
+    "agreement_score": 48,
     "confidence_band": "LOW"
   },
   {
@@ -1068,7 +1068,7 @@
     "fixture": "CD Tondela vs Moreirense FC",
     "primary_signal": "Fixture read",
     "signal_state": "FRAGILE",
-    "agreement_score": 44,
+    "agreement_score": 48,
     "confidence_band": "LOW"
   },
   {
@@ -1084,7 +1084,7 @@
     "fixture": "Gil Vicente vs FC Arouca",
     "primary_signal": "Fixture read",
     "signal_state": "FRAGILE",
-    "agreement_score": 44,
+    "agreement_score": 48,
     "confidence_band": "LOW"
   },
   {
@@ -1092,7 +1092,7 @@
     "fixture": "Rio Ave FC vs Sporting CP",
     "primary_signal": "Fixture read",
     "signal_state": "FRAGILE",
-    "agreement_score": 44,
+    "agreement_score": 48,
     "confidence_band": "LOW"
   },
   {
@@ -1100,7 +1100,7 @@
     "fixture": "Santa Clara vs CD Nacional",
     "primary_signal": "Fixture read",
     "signal_state": "FRAGILE",
-    "agreement_score": 44,
+    "agreement_score": 48,
     "confidence_band": "LOW"
   },
   {
@@ -1188,7 +1188,7 @@
     "fixture": "Nashville SC vs DC United",
     "primary_signal": "Fixture read",
     "signal_state": "FRAGILE",
-    "agreement_score": 44,
+    "agreement_score": 50,
     "confidence_band": "LOW"
   },
   {
@@ -1211,8 +1211,8 @@
     "fixture_key": "2026_05_11_Napoli_Bologna",
     "fixture": "Napoli vs Bologna",
     "primary_signal": "Napoli Win",
-    "signal_state": "FRAGILE",
-    "agreement_score": 56,
+    "signal_state": "WATCHLIST",
+    "agreement_score": 58,
     "confidence_band": "LOW"
   },
   {

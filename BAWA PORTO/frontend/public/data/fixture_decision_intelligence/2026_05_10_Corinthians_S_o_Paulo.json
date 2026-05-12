@@ -3,15 +3,15 @@
   "fixture": "Corinthians vs São Paulo",
   "primary_signal": "Over 2.5",
   "signal_state": "AVOID",
-  "agreement_score": 26,
+  "agreement_score": 36,
   "confidence_band": "LOW",
-  "supporting_layers": [],
+  "supporting_layers": [
+    "H2H_OVER_SUPPORT"
+  ],
   "caution_layers": [
     "OVER25_HEAT_SOFT",
     "CHAOS_ENVIRONMENT_SOFT",
-    "CONTROL_SUPPRESSION_RISK",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "CONTROL_SUPPRESSION_RISK"
   ],
   "profile_tags": {
     "home": [
@@ -72,13 +72,111 @@
       "leader": "São Paulo"
     }
   ],
-  "unit_battle_summary": [],
-  "key_player_drivers": [],
-  "key_mismatches": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 25,
+      "away_value": 67,
+      "delta": -42
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 73,
+      "away_value": 67,
+      "delta": 6
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 46,
+      "away_value": 73,
+      "delta": -27
+    }
+  ],
+  "key_player_drivers": [
+    {
+      "team": "Corinthians",
+      "player": "Yuri Alberto Monteiro da Silva",
+      "role": "Forward",
+      "power": 64,
+      "driver_metric": "Goal Threat",
+      "driver_value": 64
+    },
+    {
+      "team": "Corinthians",
+      "player": "Hugo de Souza Nogueira",
+      "role": "Goalkeeper",
+      "power": 63,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 49
+    },
+    {
+      "team": "São Paulo",
+      "player": "Jonathan Calleri",
+      "role": "Forward",
+      "power": 78,
+      "driver_metric": "Goal Threat",
+      "driver_value": 80
+    },
+    {
+      "team": "São Paulo",
+      "player": "José Sabino Chagas Monteiro",
+      "role": "Centre Back",
+      "power": 67,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 63
+    }
+  ],
+  "key_mismatches": [
+    {
+      "zone": "Corinthians attack vs Sao Paulo defence",
+      "advantage": "Sao Paulo",
+      "mismatch_score": 42,
+      "left_label": "Corinthians attack",
+      "left_value": 25,
+      "right_label": "Sao Paulo defence",
+      "right_value": 67,
+      "summary": "Sao Paulo defensive resistance is suppressing the home attack"
+    },
+    {
+      "zone": "Corinthians wide threat vs Sao Paulo resistance",
+      "advantage": "Sao Paulo",
+      "mismatch_score": 32,
+      "left_label": "Corinthians wide threat",
+      "left_value": 35,
+      "right_label": "Sao Paulo resistance",
+      "right_value": 67,
+      "summary": "Sao Paulo can neutralize the wide-channel pressure"
+    },
+    {
+      "zone": "Sao Paulo attack vs Corinthians defence",
+      "advantage": "Corinthians",
+      "mismatch_score": 27,
+      "left_label": "Sao Paulo attack",
+      "left_value": 46,
+      "right_label": "Corinthians defence",
+      "right_value": 73,
+      "summary": "Corinthians defensive resistance is suppressing the away attack"
+    },
+    {
+      "zone": "Sao Paulo wide threat vs Corinthians resistance",
+      "advantage": "Corinthians",
+      "mismatch_score": 8,
+      "left_label": "Sao Paulo wide threat",
+      "left_value": 65,
+      "right_label": "Corinthians resistance",
+      "right_value": 73,
+      "summary": "Corinthians can neutralize the wide-channel pressure"
+    }
+  ],
   "h2h_context": {
-    "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "available": true,
+    "summary": "Using the latest available same-team-pair historical regime (1 prior meeting) as supporting context for this current fixture.",
+    "sample_size": 1,
+    "goal_environment": 4,
+    "btts_regime": 100,
+    "over25_rate": 100,
+    "draw_rate": 100,
+    "booking_heat": 10
   },
   "market_suitability": {
     "ftr": {
@@ -97,7 +195,7 @@
       "read": "Driven by combined goal environment and tempo."
     },
     "team_goals": {
-      "rating": 32,
+      "rating": 46,
       "label": "Red Flag",
       "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
     },
@@ -119,22 +217,26 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 56,
-      "state": "FRAGILE",
+      "alignment_score": 62,
+      "state": "MIXED",
       "model_lean": "AWAY",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_OVER_SUPPORT"
+      ],
       "cautions": [
         "CONTROL_SUPPRESSION_RISK"
       ],
-      "public_summary": "FTR has some structural support from structural support, but the overall layer fit remains fragile.",
+      "public_summary": "FTR has partial support from h2h over support, but control suppression risk keeps it from reading clean.",
       "rating": 66,
       "band": "Mixed"
     },
     "btts": {
-      "alignment_score": 31,
+      "alignment_score": 37,
       "state": "AVOID",
       "model_lean": "NO",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_OVER_SUPPORT"
+      ],
       "cautions": [
         "CONTROL_SUPPRESSION_RISK"
       ],
@@ -143,10 +245,12 @@
       "band": "Red Flag"
     },
     "ou25": {
-      "alignment_score": 26,
+      "alignment_score": 32,
       "state": "AVOID",
       "model_lean": "OVER25",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_OVER_SUPPORT"
+      ],
       "cautions": [
         "OVER25_HEAT_SOFT",
         "CHAOS_ENVIRONMENT_SOFT",
@@ -157,52 +261,61 @@
       "band": "Red Flag"
     },
     "team_goals": {
-      "alignment_score": 30,
+      "alignment_score": 42,
       "state": "AVOID",
       "model_lean": "São Paulo 1.5+",
-      "structural_support": [],
-      "cautions": [
-        "LINEUP_DATA_MISSING"
+      "structural_support": [
+        "H2H_OVER_SUPPORT"
       ],
-      "public_summary": "Team Goals is too contradicted by lineup data missing to present as a clean public read.",
-      "rating": 32,
-      "band": "Red Flag"
-    },
-    "correct_score": {
-      "alignment_score": 70,
-      "state": "MIXED",
-      "model_lean": "STRUCTURED",
-      "structural_support": [],
-      "cautions": [
-        "CHAOS_ENVIRONMENT_SOFT",
-        "CONTROL_SUPPRESSION_RISK"
-      ],
-      "public_summary": "Correct Score has partial support from structural support, but chaos environment soft keeps it from reading clean.",
-      "rating": 91,
-      "band": "Elite"
-    },
-    "corners": {
-      "alignment_score": 41,
-      "state": "AVOID",
-      "model_lean": "ELEVATED",
-      "structural_support": [],
       "cautions": [
         "OVER25_HEAT_SOFT",
         "CHAOS_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Corners is too contradicted by over 2.5 heat soft to present as a clean public read.",
+      "public_summary": "Team Goals is too contradicted by over 2.5 heat soft to present as a clean public read.",
+      "rating": 46,
+      "band": "Red Flag"
+    },
+    "correct_score": {
+      "alignment_score": 76,
+      "state": "MIXED",
+      "model_lean": "STRUCTURED",
+      "structural_support": [
+        "H2H_OVER_SUPPORT"
+      ],
+      "cautions": [
+        "CHAOS_ENVIRONMENT_SOFT",
+        "CONTROL_SUPPRESSION_RISK"
+      ],
+      "public_summary": "Correct Score has partial support from h2h over support, but chaos environment soft keeps it from reading clean.",
+      "rating": 91,
+      "band": "Elite"
+    },
+    "corners": {
+      "alignment_score": 47,
+      "state": "FRAGILE",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "H2H_OVER_SUPPORT"
+      ],
+      "cautions": [
+        "OVER25_HEAT_SOFT",
+        "CHAOS_ENVIRONMENT_SOFT"
+      ],
+      "public_summary": "Corners has some structural support from h2h over support, but the overall layer fit remains fragile.",
       "rating": 52,
       "band": "Weak"
     },
     "cards": {
-      "alignment_score": 40,
-      "state": "AVOID",
+      "alignment_score": 46,
+      "state": "FRAGILE",
       "model_lean": "ELEVATED",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_OVER_SUPPORT"
+      ],
       "cautions": [
         "CHAOS_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Cards is too contradicted by chaos environment soft to present as a clean public read.",
+      "public_summary": "Cards has some structural support from h2h over support, but the overall layer fit remains fragile.",
       "rating": 46,
       "band": "Weak"
     }
@@ -216,24 +329,23 @@
   },
   "public_safe_summary": "Over 2.5 is too contradicted across the current structural layers for Corinthians vs São Paulo, so the clean read is caution rather than action.",
   "internal_reason_tokens": [
+    "H2H_OVER_SUPPORT",
     "OVER25_HEAT_SOFT",
     "CHAOS_ENVIRONMENT_SOFT",
-    "CONTROL_SUPPRESSION_RISK",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "CONTROL_SUPPRESSION_RISK"
   ],
   "summary": {
-    "support_count": 0,
-    "caution_count": 5,
-    "lineup_available": false,
-    "h2h_available": false
+    "support_count": 1,
+    "caution_count": 3,
+    "lineup_available": true,
+    "h2h_available": true
   },
   "preview": {
     "headline": "Corinthians vs São Paulo: Over 2.5 avoid",
-    "short_summary": "Over 2.5 is too contradicted across the current structural layers for Corinthians vs São Paulo, so the clean read is caution rather than action. Primary support comes from structural caution, while the main caution remains over25 heat soft.",
+    "short_summary": "Over 2.5 is too contradicted across the current structural layers for Corinthians vs São Paulo, so the clean read is caution rather than action. Primary support comes from h2h over support, while the main caution remains over25 heat soft.",
     "market_summary": "Best aligned market: Correct Score (Mixed). Secondary support: FTR. Weakest read: Over 2.5.",
     "caution_line": "Main caution: Over25 Heat Soft.",
-    "telegram_summary": "Corinthians vs São Paulo — Over 2.5 (Avoid, 26% agreement). Support: structural caution. Caution: Over25 Heat Soft.",
-    "premium_summary": "Over 2.5 is carrying a 26% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from over25 heat soft, chaos environment soft."
+    "telegram_summary": "Corinthians vs São Paulo — Over 2.5 (Avoid, 36% agreement). Support: H2H Over Support. Caution: Over25 Heat Soft.",
+    "premium_summary": "Over 2.5 is carrying a 36% agreement read across the published decision layers. Support is currently led by h2h over support, while caution is still coming from over25 heat soft, chaos environment soft."
   }
 }

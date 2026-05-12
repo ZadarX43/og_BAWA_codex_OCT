@@ -10,8 +10,7 @@
     "HOME_FORTRESS_ADVANTAGE"
   ],
   "caution_layers": [
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "LINEUP_UNIT_EDGE_SOFT"
   ],
   "profile_tags": {
     "home": [
@@ -72,7 +71,26 @@
       "leader": "Los Angeles FC"
     }
   ],
-  "unit_battle_summary": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 50,
+      "away_value": 48,
+      "delta": 2
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 65,
+      "away_value": 55,
+      "delta": 10
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 41,
+      "away_value": 70,
+      "delta": -29
+    }
+  ],
   "key_player_drivers": [
     {
       "team": "Los Angeles FC",
@@ -107,11 +125,57 @@
       "driver_value": 66
     }
   ],
-  "key_mismatches": [],
+  "key_mismatches": [
+    {
+      "zone": "Houston Dynamo attack vs Los Angeles FC defence",
+      "advantage": "Los Angeles FC",
+      "mismatch_score": 29,
+      "left_label": "Houston Dynamo attack",
+      "left_value": 41,
+      "right_label": "Los Angeles FC defence",
+      "right_value": 70,
+      "summary": "Los Angeles FC defensive resistance is suppressing the away attack"
+    },
+    {
+      "zone": "Houston Dynamo wide threat vs Los Angeles FC resistance",
+      "advantage": "Los Angeles FC",
+      "mismatch_score": 19,
+      "left_label": "Houston Dynamo wide threat",
+      "left_value": 51,
+      "right_label": "Los Angeles FC resistance",
+      "right_value": 70,
+      "summary": "Los Angeles FC can neutralize the wide-channel pressure"
+    },
+    {
+      "zone": "Midfield control battle",
+      "advantage": "Los Angeles FC",
+      "mismatch_score": 10,
+      "left_label": "Los Angeles FC midfield",
+      "left_value": 65,
+      "right_label": "Houston Dynamo midfield",
+      "right_value": 55,
+      "summary": "Los Angeles FC should control more of the central game-state"
+    },
+    {
+      "zone": "Los Angeles FC attack vs Houston Dynamo defence",
+      "advantage": "Los Angeles FC",
+      "mismatch_score": 2,
+      "left_label": "Los Angeles FC attack",
+      "left_value": 50,
+      "right_label": "Houston Dynamo defence",
+      "right_value": 48,
+      "summary": "Major Los Angeles FC attacking advantage"
+    }
+  ],
   "h2h_context": {
-    "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "available": true,
+    "summary": "Using the latest available same-team-pair historical regime (1 prior meeting) as supporting context for this current fixture.",
+    "sample_size": 1,
+    "goal_environment": 2,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 6
   },
   "market_suitability": {
     "ftr": {
@@ -130,7 +194,7 @@
       "read": "Driven by combined goal environment and tempo."
     },
     "team_goals": {
-      "rating": 43,
+      "rating": 50,
       "label": "Weak",
       "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
     },
@@ -160,76 +224,87 @@
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
       "public_summary": "FTR has some structural support from team power advantage, but the overall layer fit remains fragile.",
       "rating": 61,
       "band": "Mixed"
     },
     "btts": {
-      "alignment_score": 44,
-      "state": "AVOID",
+      "alignment_score": 48,
+      "state": "FRAGILE",
       "model_lean": "NO",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
-      "public_summary": "BTTS is too contradicted by lineup data missing to present as a clean public read.",
+      "public_summary": "BTTS has some structural support from team power advantage, but the overall layer fit remains fragile.",
       "rating": 40,
       "band": "Weak"
     },
     "ou25": {
-      "alignment_score": 42,
-      "state": "AVOID",
+      "alignment_score": 46,
+      "state": "FRAGILE",
       "model_lean": "UNDER25",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
-      "public_summary": "Over 2.5 is too contradicted by lineup data missing to present as a clean public read.",
+      "public_summary": "Over 2.5 has some structural support from team power advantage, but the overall layer fit remains fragile.",
       "rating": 38,
       "band": "Red Flag"
     },
     "team_goals": {
-      "alignment_score": 50,
+      "alignment_score": 56,
       "state": "FRAGILE",
-      "model_lean": "Houston Dynamo 1.5+",
+      "model_lean": "Los Angeles FC 1.5+",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
       "public_summary": "Team Goals has some structural support from team power advantage, but the overall layer fit remains fragile.",
-      "rating": 43,
+      "rating": 50,
       "band": "Weak"
     },
     "correct_score": {
-      "alignment_score": 78,
-      "state": "MIXED",
+      "alignment_score": 82,
+      "state": "SUPPORTED",
       "model_lean": "STRUCTURED",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
-      "public_summary": "Correct Score has partial support from team power advantage, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Correct Score is well supported by team power advantage, with caution still coming from lineup unit edge soft.",
       "rating": 93,
       "band": "Elite"
     },
     "corners": {
+      "alignment_score": 56,
+      "state": "FRAGILE",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE",
+        "HOME_FORTRESS_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_UNIT_EDGE_SOFT"
+      ],
+      "public_summary": "Corners has some structural support from team power advantage, but the overall layer fit remains fragile.",
+      "rating": 50,
+      "band": "Weak"
+    },
+    "cards": {
       "alignment_score": 52,
       "state": "FRAGILE",
       "model_lean": "ELEVATED",
@@ -238,24 +313,7 @@
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
-      ],
-      "public_summary": "Corners has some structural support from team power advantage, but the overall layer fit remains fragile.",
-      "rating": 50,
-      "band": "Weak"
-    },
-    "cards": {
-      "alignment_score": 48,
-      "state": "FRAGILE",
-      "model_lean": "ELEVATED",
-      "structural_support": [
-        "TEAM_POWER_ADVANTAGE",
-        "HOME_FORTRESS_ADVANTAGE"
-      ],
-      "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
       "public_summary": "Cards has some structural support from team power advantage, but the overall layer fit remains fragile.",
       "rating": 46,
@@ -273,21 +331,20 @@
   "internal_reason_tokens": [
     "TEAM_POWER_ADVANTAGE",
     "HOME_FORTRESS_ADVANTAGE",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "LINEUP_UNIT_EDGE_SOFT"
   ],
   "summary": {
     "support_count": 2,
-    "caution_count": 2,
-    "lineup_available": false,
-    "h2h_available": false
+    "caution_count": 1,
+    "lineup_available": true,
+    "h2h_available": true
   },
   "preview": {
     "headline": "Los Angeles FC vs Houston Dynamo: Los Angeles FC Win fragile",
-    "short_summary": "Los Angeles FC Win has some live shape in Los Angeles FC vs Houston Dynamo, but the supporting layers remain fragile and need discipline. Primary support comes from team power advantage, while the main caution remains lineup data missing.",
-    "market_summary": "Best aligned market: Correct Score (Mixed). Secondary support: FTR. Weakest read: Over 2.5.",
-    "caution_line": "Main caution: Lineup Data Missing.",
-    "telegram_summary": "Los Angeles FC vs Houston Dynamo — Los Angeles FC Win (Fragile, 56% agreement). Support: Team Power Advantage. Caution: Lineup Data Missing.",
-    "premium_summary": "Los Angeles FC Win is carrying a 56% agreement read across the published decision layers. Support is currently led by team power advantage, home fortress advantage, while caution is still coming from lineup data missing, h2h unavailable."
+    "short_summary": "Los Angeles FC Win has some live shape in Los Angeles FC vs Houston Dynamo, but the supporting layers remain fragile and need discipline. Primary support comes from team power advantage, while the main caution remains lineup unit edge soft.",
+    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: FTR. Weakest read: Over 2.5.",
+    "caution_line": "Main caution: Lineup Unit Edge Soft.",
+    "telegram_summary": "Los Angeles FC vs Houston Dynamo — Los Angeles FC Win (Fragile, 56% agreement). Support: Team Power Advantage. Caution: Lineup Unit Edge Soft.",
+    "premium_summary": "Los Angeles FC Win is carrying a 56% agreement read across the published decision layers. Support is currently led by team power advantage, home fortress advantage, while caution is still coming from lineup unit edge soft."
   }
 }

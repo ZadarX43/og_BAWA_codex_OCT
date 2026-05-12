@@ -76,7 +76,40 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Auckland",
+      "player": "Sam Cosgrove",
+      "role": "Forward",
+      "power": 89,
+      "driver_metric": "Goal Threat",
+      "driver_value": 93
+    },
+    {
+      "team": "Auckland",
+      "player": "Jesse Randall",
+      "role": "Forward",
+      "power": 86,
+      "driver_metric": "Goal Threat",
+      "driver_value": 90
+    },
+    {
+      "team": "Adelaide United",
+      "player": "Yaya Dukuly",
+      "role": "Forward",
+      "power": 72,
+      "driver_metric": "Goal Threat",
+      "driver_value": 73
+    },
+    {
+      "team": "Adelaide United",
+      "player": "Joshua Smits",
+      "role": "Goalkeeper",
+      "power": 67,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 52
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

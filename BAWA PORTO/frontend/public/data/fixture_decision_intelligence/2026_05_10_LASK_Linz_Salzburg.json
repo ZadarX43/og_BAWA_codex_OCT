@@ -77,7 +77,40 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "LASK Linz",
+      "player": "Samuel Adeniran",
+      "role": "Forward",
+      "power": 84,
+      "driver_metric": "Goal Threat",
+      "driver_value": 92
+    },
+    {
+      "team": "LASK Linz",
+      "player": "Sasa Kalajdzic",
+      "role": "Forward",
+      "power": 73,
+      "driver_metric": "Goal Threat",
+      "driver_value": 84
+    },
+    {
+      "team": "Salzburg",
+      "player": "Petar Ratkov",
+      "role": "Forward",
+      "power": 79,
+      "driver_metric": "Goal Threat",
+      "driver_value": 85
+    },
+    {
+      "team": "Salzburg",
+      "player": "Yorbe Vertessen",
+      "role": "Forward",
+      "power": 77,
+      "driver_metric": "Goal Threat",
+      "driver_value": 89
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

@@ -1,0 +1,91 @@
+{
+  "fixture_key": "2026_05_10_Gil_Vicente_FC_Arouca",
+  "fixture_id": 1396529,
+  "competition": "Portugal Liga",
+  "competition_key": "portugal_liga",
+  "season": "2025/2026",
+  "home_team": "Gil Vicente",
+  "away_team": "FC Arouca",
+  "home_team_id": 762,
+  "away_team_id": 240,
+  "home_formation": NaN,
+  "away_formation": NaN,
+  "home_units": {
+    "attack_unit": 72,
+    "midfield_control": 63,
+    "defensive_unit": 70,
+    "wide_threat": 78,
+    "central_threat": 73,
+    "discipline_risk": 41
+  },
+  "away_units": {
+    "attack_unit": 51,
+    "midfield_control": 34,
+    "defensive_unit": 24,
+    "wide_threat": 38,
+    "central_threat": 51,
+    "discipline_risk": 77
+  },
+  "home_resolution": {
+    "starting_xi_count": 0,
+    "resolved_profiles": 0,
+    "fallback_profiles": 0
+  },
+  "away_resolution": {
+    "starting_xi_count": 0,
+    "resolved_profiles": 0,
+    "fallback_profiles": 0
+  },
+  "key_mismatches": [
+    {
+      "zone": "GIL Vicente wide threat vs Arouca resistance",
+      "advantage": "GIL Vicente",
+      "mismatch_score": 54,
+      "left_label": "GIL Vicente wide threat",
+      "left_value": 78,
+      "right_label": "Arouca resistance",
+      "right_value": 24,
+      "summary": "GIL Vicente wide channel has a live attacking edge"
+    },
+    {
+      "zone": "GIL Vicente attack vs Arouca defence",
+      "advantage": "GIL Vicente",
+      "mismatch_score": 48,
+      "left_label": "GIL Vicente attack",
+      "left_value": 72,
+      "right_label": "Arouca defence",
+      "right_value": 24,
+      "summary": "Major GIL Vicente attacking advantage"
+    },
+    {
+      "zone": "Arouca wide threat vs GIL Vicente resistance",
+      "advantage": "GIL Vicente",
+      "mismatch_score": 32,
+      "left_label": "Arouca wide threat",
+      "left_value": 38,
+      "right_label": "GIL Vicente resistance",
+      "right_value": 70,
+      "summary": "GIL Vicente can neutralize the wide-channel pressure"
+    },
+    {
+      "zone": "Midfield control battle",
+      "advantage": "GIL Vicente",
+      "mismatch_score": 29,
+      "left_label": "GIL Vicente midfield",
+      "left_value": 63,
+      "right_label": "Arouca midfield",
+      "right_value": 34,
+      "summary": "GIL Vicente should control more of the central game-state"
+    }
+  ],
+  "player_matchups": [],
+  "home_lineup_profiles": [],
+  "away_lineup_profiles": [],
+  "formation_context": {
+    "same_formation_flag": 0,
+    "formation_mismatch_flag": 0,
+    "formation_attack_delta": 0.0,
+    "formation_defence_delta": 0.0
+  },
+  "site_alias_source_fixture_key": "2026-05-11_gil_vicente_arouca"
+}

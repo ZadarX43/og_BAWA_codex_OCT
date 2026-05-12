@@ -2,15 +2,15 @@
   "fixture_key": "2026_05_10_AVS_Porto",
   "fixture": "AVS vs Porto",
   "primary_signal": "Porto Win",
-  "signal_state": "FRAGILE",
-  "agreement_score": 56,
+  "signal_state": "MIXED",
+  "agreement_score": 66,
   "confidence_band": "STANDARD",
   "supporting_layers": [
     "AWAY_POWER_ADVANTAGE",
-    "AWAY_THREAT_ADVANTAGE"
+    "AWAY_THREAT_ADVANTAGE",
+    "AWAY_ATTACK_MISMATCH"
   ],
   "caution_layers": [
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -75,9 +75,86 @@
       "leader": "Porto"
     }
   ],
-  "unit_battle_summary": [],
-  "key_player_drivers": [],
-  "key_mismatches": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 22,
+      "away_value": 93,
+      "delta": -50
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 26,
+      "away_value": 76,
+      "delta": -50
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 85,
+      "away_value": 17,
+      "delta": 50
+    }
+  ],
+  "key_player_drivers": [
+    {
+      "team": "Porto",
+      "player": "Wenderson Galeno",
+      "role": "Forward",
+      "power": 70,
+      "driver_metric": "Goal Threat",
+      "driver_value": 68
+    },
+    {
+      "team": "Porto",
+      "player": "Mehdi Taremi",
+      "role": "Forward",
+      "power": 65,
+      "driver_metric": "Goal Threat",
+      "driver_value": 64
+    }
+  ],
+  "key_mismatches": [
+    {
+      "zone": "AVS attack vs FC Porto defence",
+      "advantage": "FC Porto",
+      "mismatch_score": 71,
+      "left_label": "AVS attack",
+      "left_value": 22,
+      "right_label": "FC Porto defence",
+      "right_value": 93,
+      "summary": "FC Porto defensive resistance is suppressing the home attack"
+    },
+    {
+      "zone": "FC Porto attack vs AVS defence",
+      "advantage": "FC Porto",
+      "mismatch_score": 68,
+      "left_label": "FC Porto attack",
+      "left_value": 85,
+      "right_label": "AVS defence",
+      "right_value": 17,
+      "summary": "Major FC Porto attacking advantage"
+    },
+    {
+      "zone": "AVS wide threat vs FC Porto resistance",
+      "advantage": "FC Porto",
+      "mismatch_score": 53,
+      "left_label": "AVS wide threat",
+      "left_value": 40,
+      "right_label": "FC Porto resistance",
+      "right_value": 93,
+      "summary": "FC Porto can neutralize the wide-channel pressure"
+    },
+    {
+      "zone": "Midfield control battle",
+      "advantage": "FC Porto",
+      "mismatch_score": 50,
+      "left_label": "AVS midfield",
+      "left_value": 26,
+      "right_label": "FC Porto midfield",
+      "right_value": 76,
+      "summary": "FC Porto should control more of the central game-state"
+    }
+  ],
   "h2h_context": {
     "available": false,
     "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
@@ -100,7 +177,7 @@
       "read": "Driven by combined goal environment and tempo."
     },
     "team_goals": {
-      "rating": 62,
+      "rating": 85,
       "label": "Mixed",
       "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
     },
@@ -122,39 +199,37 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 70,
-      "state": "FRAGILE",
+      "alignment_score": 76,
+      "state": "MIXED",
       "model_lean": "AWAY",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
-        "AWAY_THREAT_ADVANTAGE"
+        "AWAY_THREAT_ADVANTAGE",
+        "AWAY_ATTACK_MISMATCH"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "FTR has some structural support from away power advantage, but the overall layer fit remains fragile.",
+      "public_summary": "FTR has partial support from away power advantage, but h2h unavailable keeps it from reading clean.",
       "rating": 90,
       "band": "Elite"
     },
     "btts": {
-      "alignment_score": 46,
-      "state": "FRAGILE",
+      "alignment_score": 44,
+      "state": "AVOID",
       "model_lean": "NO",
       "structural_support": [
-        "AWAY_POWER_ADVANTAGE",
-        "AWAY_THREAT_ADVANTAGE"
+        "AWAY_ATTACK_MISMATCH"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "BTTS has some structural support from away power advantage, but the overall layer fit remains fragile.",
+      "public_summary": "BTTS is too contradicted by h2h unavailable to present as a clean public read.",
       "rating": 42,
       "band": "Weak"
     },
     "ou25": {
-      "alignment_score": 50,
+      "alignment_score": 54,
       "state": "FRAGILE",
       "model_lean": "UNDER25",
       "structural_support": [
@@ -162,7 +237,6 @@
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "Over 2.5 has some structural support from away power advantage, but the overall layer fit remains fragile.",
@@ -170,37 +244,35 @@
       "band": "Weak"
     },
     "team_goals": {
-      "alignment_score": 64,
+      "alignment_score": 76,
       "state": "MIXED",
-      "model_lean": "AVS 1.5+",
+      "model_lean": "Porto 1.5+",
       "structural_support": [
-        "AWAY_POWER_ADVANTAGE",
-        "AWAY_THREAT_ADVANTAGE"
+        "AWAY_ATTACK_MISMATCH"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Team Goals has partial support from away power advantage, but lineup data missing keeps it from reading clean.",
-      "rating": 62,
+      "public_summary": "Team Goals has partial support from away attack mismatch, but h2h unavailable keeps it from reading clean.",
+      "rating": 85,
       "band": "Mixed"
     },
     "correct_score": {
-      "alignment_score": 44,
-      "state": "AVOID",
+      "alignment_score": 48,
+      "state": "FRAGILE",
       "model_lean": "STRUCTURED",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Correct Score is too contradicted by lineup data missing to present as a clean public read.",
+      "public_summary": "Correct Score has some structural support from away power advantage, but the overall layer fit remains fragile.",
       "rating": 48,
       "band": "Weak"
     },
     "corners": {
-      "alignment_score": 52,
+      "alignment_score": 56,
       "state": "FRAGILE",
       "model_lean": "ELEVATED",
       "structural_support": [
@@ -208,7 +280,6 @@
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "Corners has some structural support from away power advantage, but the overall layer fit remains fragile.",
@@ -216,7 +287,7 @@
       "band": "Weak"
     },
     "cards": {
-      "alignment_score": 46,
+      "alignment_score": 50,
       "state": "FRAGILE",
       "model_lean": "ELEVATED",
       "structural_support": [
@@ -224,7 +295,6 @@
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "Cards has some structural support from away power advantage, but the overall layer fit remains fragile.",
@@ -239,25 +309,25 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "Porto Win has some live shape in AVS vs Porto, but the supporting layers remain fragile and need discipline.",
+  "public_safe_summary": "Porto Win has live support in AVS vs Porto, but the supporting layers are not clean enough to read as fully aligned.",
   "internal_reason_tokens": [
     "AWAY_POWER_ADVANTAGE",
     "AWAY_THREAT_ADVANTAGE",
-    "LINEUP_DATA_MISSING",
+    "AWAY_ATTACK_MISMATCH",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
-    "support_count": 2,
-    "caution_count": 2,
-    "lineup_available": false,
+    "support_count": 3,
+    "caution_count": 1,
+    "lineup_available": true,
     "h2h_available": false
   },
   "preview": {
-    "headline": "AVS vs Porto: Porto Win fragile",
-    "short_summary": "Porto Win has some live shape in AVS vs Porto, but the supporting layers remain fragile and need discipline. Primary support comes from away power advantage, while the main caution remains lineup data missing.",
-    "market_summary": "Best aligned market: FTR (Fragile). Secondary support: Team Goals. Weakest read: Correct Score.",
-    "caution_line": "Main caution: Lineup Data Missing.",
-    "telegram_summary": "AVS vs Porto — Porto Win (Fragile, 56% agreement). Support: Away Power Advantage. Caution: Lineup Data Missing.",
-    "premium_summary": "Porto Win is carrying a 56% agreement read across the published decision layers. Support is currently led by away power advantage, away threat advantage, while caution is still coming from lineup data missing, h2h unavailable."
+    "headline": "AVS vs Porto: Porto Win mixed",
+    "short_summary": "Porto Win has live support in AVS vs Porto, but the supporting layers are not clean enough to read as fully aligned. Primary support comes from away power advantage, while the main caution remains h2h unavailable.",
+    "market_summary": "Best aligned market: Team Goals (Mixed). Secondary support: FTR. Weakest read: BTTS.",
+    "caution_line": "Main caution: H2H Unavailable.",
+    "telegram_summary": "AVS vs Porto — Porto Win (Mixed, 66% agreement). Support: Away Power Advantage. Caution: H2H Unavailable.",
+    "premium_summary": "Porto Win is carrying a 66% agreement read across the published decision layers. Support is currently led by away power advantage, away threat advantage, while caution is still coming from h2h unavailable."
   }
 }

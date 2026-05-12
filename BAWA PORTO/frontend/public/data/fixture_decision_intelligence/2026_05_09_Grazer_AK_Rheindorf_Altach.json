@@ -72,7 +72,40 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Grazer AK",
+      "player": "Daniel Maderner",
+      "role": "Forward",
+      "power": 71,
+      "driver_metric": "Goal Threat",
+      "driver_value": 82
+    },
+    {
+      "team": "Grazer AK",
+      "player": "Donovan Pines",
+      "role": "Centre Back",
+      "power": 71,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 75
+    },
+    {
+      "team": "Rheindorf Altach",
+      "player": "Dejan Stojanovic",
+      "role": "Goalkeeper",
+      "power": 71,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 48
+    },
+    {
+      "team": "Rheindorf Altach",
+      "player": "Mike-Steven Bähre",
+      "role": "Central Midfielder",
+      "power": 66,
+      "driver_metric": "Midfield Engine",
+      "driver_value": 65
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

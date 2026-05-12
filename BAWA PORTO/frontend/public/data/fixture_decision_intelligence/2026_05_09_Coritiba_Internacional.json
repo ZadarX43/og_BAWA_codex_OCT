@@ -3,15 +3,13 @@
   "fixture": "Coritiba vs Internacional",
   "primary_signal": "Over 2.5",
   "signal_state": "AVOID",
-  "agreement_score": 26,
+  "agreement_score": 32,
   "confidence_band": "LOW",
   "supporting_layers": [],
   "caution_layers": [
     "OVER25_HEAT_SOFT",
     "CHAOS_ENVIRONMENT_SOFT",
-    "CONTROL_SUPPRESSION_RISK",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "CONTROL_SUPPRESSION_RISK"
   ],
   "profile_tags": {
     "home": [
@@ -72,13 +70,111 @@
       "leader": "Coritiba"
     }
   ],
-  "unit_battle_summary": [],
-  "key_player_drivers": [],
-  "key_mismatches": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 32,
+      "away_value": 66,
+      "delta": -34
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 53,
+      "away_value": 67,
+      "delta": -14
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 51,
+      "away_value": 52,
+      "delta": -1
+    }
+  ],
+  "key_player_drivers": [
+    {
+      "team": "Coritiba",
+      "player": "Pedro Rocha Neves",
+      "role": "Forward",
+      "power": 72,
+      "driver_metric": "Goal Threat",
+      "driver_value": 76
+    },
+    {
+      "team": "Coritiba",
+      "player": "Breno Lopes",
+      "role": "Forward",
+      "power": 67,
+      "driver_metric": "Goal Threat",
+      "driver_value": 69
+    },
+    {
+      "team": "Internacional",
+      "player": "Johan Stiven Carbonero Balanta",
+      "role": "Forward",
+      "power": 68,
+      "driver_metric": "Goal Threat",
+      "driver_value": 70
+    },
+    {
+      "team": "Internacional",
+      "player": "Rafael Santos Borré",
+      "role": "Forward",
+      "power": 66,
+      "driver_metric": "Goal Threat",
+      "driver_value": 67
+    }
+  ],
+  "key_mismatches": [
+    {
+      "zone": "Coritiba attack vs Internacional defence",
+      "advantage": "Internacional",
+      "mismatch_score": 34,
+      "left_label": "Coritiba attack",
+      "left_value": 32,
+      "right_label": "Internacional defence",
+      "right_value": 66,
+      "summary": "Internacional defensive resistance is suppressing the home attack"
+    },
+    {
+      "zone": "Coritiba wide threat vs Internacional resistance",
+      "advantage": "Internacional",
+      "mismatch_score": 31,
+      "left_label": "Coritiba wide threat",
+      "left_value": 35,
+      "right_label": "Internacional resistance",
+      "right_value": 66,
+      "summary": "Internacional can neutralize the wide-channel pressure"
+    },
+    {
+      "zone": "Internacional wide threat vs Coritiba resistance",
+      "advantage": "Internacional",
+      "mismatch_score": 18,
+      "left_label": "Internacional wide threat",
+      "left_value": 70,
+      "right_label": "Coritiba resistance",
+      "right_value": 52,
+      "summary": "Internacional wide channel has a live attacking edge"
+    },
+    {
+      "zone": "Midfield control battle",
+      "advantage": "Internacional",
+      "mismatch_score": 14,
+      "left_label": "Coritiba midfield",
+      "left_value": 53,
+      "right_label": "Internacional midfield",
+      "right_value": 67,
+      "summary": "Internacional should control more of the central game-state"
+    }
+  ],
   "h2h_context": {
-    "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "available": true,
+    "summary": "Using the latest available same-team-pair historical regime (1 prior meeting) as supporting context for this current fixture.",
+    "sample_size": 1,
+    "goal_environment": 100,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 6
   },
   "market_suitability": {
     "ftr": {
@@ -97,7 +193,7 @@
       "read": "Driven by combined goal environment and tempo."
     },
     "team_goals": {
-      "rating": 34,
+      "rating": 51,
       "label": "Red Flag",
       "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
     },
@@ -143,7 +239,7 @@
       "band": "Weak"
     },
     "ou25": {
-      "alignment_score": 28,
+      "alignment_score": 32,
       "state": "AVOID",
       "model_lean": "OVER25",
       "structural_support": [],
@@ -157,15 +253,16 @@
       "band": "Red Flag"
     },
     "team_goals": {
-      "alignment_score": 32,
+      "alignment_score": 40,
       "state": "AVOID",
-      "model_lean": "Coritiba 1.5+",
+      "model_lean": "Internacional 1.5+",
       "structural_support": [],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "OVER25_HEAT_SOFT",
+        "CHAOS_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Team Goals is too contradicted by lineup data missing to present as a clean public read.",
-      "rating": 34,
+      "public_summary": "Team Goals is too contradicted by over 2.5 heat soft to present as a clean public read.",
+      "rating": 51,
       "band": "Red Flag"
     },
     "correct_score": {
@@ -218,22 +315,20 @@
   "internal_reason_tokens": [
     "OVER25_HEAT_SOFT",
     "CHAOS_ENVIRONMENT_SOFT",
-    "CONTROL_SUPPRESSION_RISK",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "CONTROL_SUPPRESSION_RISK"
   ],
   "summary": {
     "support_count": 0,
-    "caution_count": 5,
-    "lineup_available": false,
-    "h2h_available": false
+    "caution_count": 3,
+    "lineup_available": true,
+    "h2h_available": true
   },
   "preview": {
     "headline": "Coritiba vs Internacional: Over 2.5 avoid",
     "short_summary": "Over 2.5 is too contradicted across the current structural layers for Coritiba vs Internacional, so the clean read is caution rather than action. Primary support comes from structural caution, while the main caution remains over25 heat soft.",
     "market_summary": "Best aligned market: Correct Score (Mixed). Secondary support: FTR. Weakest read: Over 2.5.",
     "caution_line": "Main caution: Over25 Heat Soft.",
-    "telegram_summary": "Coritiba vs Internacional — Over 2.5 (Avoid, 26% agreement). Support: structural caution. Caution: Over25 Heat Soft.",
-    "premium_summary": "Over 2.5 is carrying a 26% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from over25 heat soft, chaos environment soft."
+    "telegram_summary": "Coritiba vs Internacional — Over 2.5 (Avoid, 32% agreement). Support: structural caution. Caution: Over25 Heat Soft.",
+    "premium_summary": "Over 2.5 is carrying a 32% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from over25 heat soft, chaos environment soft."
   }
 }

@@ -2,16 +2,15 @@
   "fixture_key": "2026_05_09_Middlesbrough_Southampton",
   "fixture": "Middlesbrough vs Southampton",
   "primary_signal": "Middlesbrough Win",
-  "signal_state": "AVOID",
-  "agreement_score": 44,
+  "signal_state": "FRAGILE",
+  "agreement_score": 46,
   "confidence_band": "LOW",
   "supporting_layers": [
     "HOME_FORTRESS_ADVANTAGE"
   ],
   "caution_layers": [
     "TEAM_POWER_NOT_DECISIVE",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "LINEUP_DATA_MISSING"
   ],
   "profile_tags": {
     "home": [
@@ -77,12 +76,50 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Middlesbrough",
+      "player": "Morgan Whittaker",
+      "role": "Forward",
+      "power": 85,
+      "driver_metric": "Goal Threat",
+      "driver_value": 95
+    },
+    {
+      "team": "Middlesbrough",
+      "player": "Dávid Strelec",
+      "role": "Forward",
+      "power": 80,
+      "driver_metric": "Goal Threat",
+      "driver_value": 91
+    },
+    {
+      "team": "Southampton",
+      "player": "Adam Armstrong",
+      "role": "Forward",
+      "power": 86,
+      "driver_metric": "Goal Threat",
+      "driver_value": 95
+    },
+    {
+      "team": "Southampton",
+      "player": "Ross Stewart",
+      "role": "Forward",
+      "power": 72,
+      "driver_metric": "Goal Threat",
+      "driver_value": 81
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
-    "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "available": true,
+    "summary": "Using the latest available same-team-pair historical regime (1 prior meeting) as supporting context for this current fixture.",
+    "sample_size": 1,
+    "goal_environment": 3,
+    "btts_regime": 100,
+    "over25_rate": 100,
+    "draw_rate": 0,
+    "booking_heat": 3
   },
   "market_suitability": {
     "ftr": {
@@ -123,8 +160,8 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 58,
-      "state": "AVOID",
+      "alignment_score": 59,
+      "state": "FRAGILE",
       "model_lean": "HOME",
       "structural_support": [
         "HOME_FORTRESS_ADVANTAGE"
@@ -132,7 +169,7 @@
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE"
       ],
-      "public_summary": "FTR is too contradicted by team power not decisive to present as a clean public read.",
+      "public_summary": "FTR has some structural support from home fortress advantage, but the overall layer fit remains fragile.",
       "rating": 79,
       "band": "Positive"
     },
@@ -232,25 +269,24 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "Middlesbrough Win is too contradicted across the current structural layers for Middlesbrough vs Southampton, so the clean read is caution rather than action.",
+  "public_safe_summary": "Middlesbrough Win has some live shape in Middlesbrough vs Southampton, but the supporting layers remain fragile and need discipline.",
   "internal_reason_tokens": [
     "HOME_FORTRESS_ADVANTAGE",
     "TEAM_POWER_NOT_DECISIVE",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "LINEUP_DATA_MISSING"
   ],
   "summary": {
     "support_count": 1,
-    "caution_count": 3,
+    "caution_count": 2,
     "lineup_available": false,
-    "h2h_available": false
+    "h2h_available": true
   },
   "preview": {
-    "headline": "Middlesbrough vs Southampton: Middlesbrough Win avoid",
-    "short_summary": "Middlesbrough Win is too contradicted across the current structural layers for Middlesbrough vs Southampton, so the clean read is caution rather than action. Primary support comes from home fortress advantage, while the main caution remains team power not decisive.",
+    "headline": "Middlesbrough vs Southampton: Middlesbrough Win fragile",
+    "short_summary": "Middlesbrough Win has some live shape in Middlesbrough vs Southampton, but the supporting layers remain fragile and need discipline. Primary support comes from home fortress advantage, while the main caution remains team power not decisive.",
     "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: Cards.",
     "caution_line": "Main caution: Team Power Not Decisive.",
-    "telegram_summary": "Middlesbrough vs Southampton — Middlesbrough Win (Avoid, 44% agreement). Support: Home Fortress Advantage. Caution: Team Power Not Decisive.",
-    "premium_summary": "Middlesbrough Win is carrying a 44% agreement read across the published decision layers. Support is currently led by home fortress advantage, while caution is still coming from team power not decisive, lineup data missing."
+    "telegram_summary": "Middlesbrough vs Southampton — Middlesbrough Win (Fragile, 46% agreement). Support: Home Fortress Advantage. Caution: Team Power Not Decisive.",
+    "premium_summary": "Middlesbrough Win is carrying a 46% agreement read across the published decision layers. Support is currently led by home fortress advantage, while caution is still coming from team power not decisive, lineup data missing."
   }
 }

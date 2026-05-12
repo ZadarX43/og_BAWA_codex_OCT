@@ -57,7 +57,24 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Fenerbahçe",
+      "player": "Jhon Durán",
+      "role": "Forward",
+      "power": 55,
+      "driver_metric": "Goal Threat",
+      "driver_value": 60
+    },
+    {
+      "team": "Fenerbahçe",
+      "player": "Youssef En-Nesyri",
+      "role": "Forward",
+      "power": 55,
+      "driver_metric": "Goal Threat",
+      "driver_value": 59
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

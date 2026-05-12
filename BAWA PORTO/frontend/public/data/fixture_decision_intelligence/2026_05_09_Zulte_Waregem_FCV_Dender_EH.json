@@ -3,14 +3,14 @@
   "fixture": "Zulte-Waregem vs FCV Dender EH",
   "primary_signal": "Zulte-Waregem Win",
   "signal_state": "FRAGILE",
-  "agreement_score": 56,
+  "agreement_score": 54,
   "confidence_band": "STANDARD",
   "supporting_layers": [
     "TEAM_POWER_ADVANTAGE",
     "HOME_FORTRESS_ADVANTAGE"
   ],
   "caution_layers": [
-    "LINEUP_DATA_MISSING",
+    "LINEUP_UNIT_EDGE_SOFT",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -72,9 +72,102 @@
       "leader": "Zulte-Waregem"
     }
   ],
-  "unit_battle_summary": [],
-  "key_player_drivers": [],
-  "key_mismatches": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 47,
+      "away_value": 50,
+      "delta": -3
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 37,
+      "away_value": 50,
+      "delta": -13
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 50,
+      "away_value": 31,
+      "delta": 19
+    }
+  ],
+  "key_player_drivers": [
+    {
+      "team": "Zulte-Waregem",
+      "player": "Marley Ake",
+      "role": "Forward",
+      "power": 74,
+      "driver_metric": "Goal Threat",
+      "driver_value": 87
+    },
+    {
+      "team": "Zulte-Waregem",
+      "player": "Brent Gabriel",
+      "role": "Goalkeeper",
+      "power": 67,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 49
+    },
+    {
+      "team": "FCV Dender EH",
+      "player": "Bruny Nsimba",
+      "role": "Forward",
+      "power": 82,
+      "driver_metric": "Goal Threat",
+      "driver_value": 91
+    },
+    {
+      "team": "FCV Dender EH",
+      "player": "David Toshevski",
+      "role": "Forward",
+      "power": 70,
+      "driver_metric": "Goal Threat",
+      "driver_value": 79
+    }
+  ],
+  "key_mismatches": [
+    {
+      "zone": "Dender attack vs Zulte Waregem defence",
+      "advantage": "Dender",
+      "mismatch_score": 19,
+      "left_label": "Dender attack",
+      "left_value": 50,
+      "right_label": "Zulte Waregem defence",
+      "right_value": 31,
+      "summary": "Major Dender attacking advantage"
+    },
+    {
+      "zone": "Dender wide threat vs Zulte Waregem resistance",
+      "advantage": "Dender",
+      "mismatch_score": 19,
+      "left_label": "Dender wide threat",
+      "left_value": 50,
+      "right_label": "Zulte Waregem resistance",
+      "right_value": 31,
+      "summary": "Dender wide channel has a live attacking edge"
+    },
+    {
+      "zone": "Zulte Waregem wide threat vs Dender resistance",
+      "advantage": "Dender",
+      "mismatch_score": 16,
+      "left_label": "Zulte Waregem wide threat",
+      "left_value": 34,
+      "right_label": "Dender resistance",
+      "right_value": 50,
+      "summary": "Dender can neutralize the wide-channel pressure"
+    },
+    {
+      "zone": "Midfield control battle",
+      "advantage": "Dender",
+      "mismatch_score": 13,
+      "left_label": "Zulte Waregem midfield",
+      "left_value": 37,
+      "right_label": "Dender midfield",
+      "right_value": 50,
+      "summary": "Dender should control more of the central game-state"
+    }
+  ],
   "h2h_context": {
     "available": false,
     "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
@@ -119,7 +212,7 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 51,
+      "alignment_score": 50,
       "state": "FRAGILE",
       "model_lean": "HOME",
       "structural_support": [
@@ -127,7 +220,7 @@
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "FTR has some structural support from team power advantage, but the overall layer fit remains fragile.",
@@ -143,7 +236,7 @@
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "BTTS has some structural support from team power advantage, but the overall layer fit remains fragile.",
@@ -159,25 +252,25 @@
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Over 2.5 has partial support from team power advantage, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Over 2.5 has partial support from team power advantage, but lineup unit edge soft keeps it from reading clean.",
       "rating": 66,
       "band": "Mixed"
     },
     "team_goals": {
       "alignment_score": 73,
       "state": "MIXED",
-      "model_lean": "Zulte-Waregem 1.5+",
+      "model_lean": "FCV Dender EH 1.5+",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
-      "public_summary": "Team Goals has partial support from team power advantage, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Team Goals has partial support from team power advantage, but lineup unit edge soft keeps it from reading clean.",
       "rating": 73,
       "band": "Strong"
     },
@@ -189,10 +282,10 @@
         "TEAM_POWER_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Correct Score has partial support from team power advantage, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Correct Score has partial support from team power advantage, but lineup unit edge soft keeps it from reading clean.",
       "rating": 89,
       "band": "Strong"
     },
@@ -205,10 +298,10 @@
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Corners is too contradicted by lineup data missing to present as a clean public read.",
+      "public_summary": "Corners is too contradicted by lineup unit edge soft to present as a clean public read.",
       "rating": 24,
       "band": "Red Flag"
     },
@@ -221,7 +314,7 @@
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "Cards has some structural support from team power advantage, but the overall layer fit remains fragile.",
@@ -240,21 +333,21 @@
   "internal_reason_tokens": [
     "TEAM_POWER_ADVANTAGE",
     "HOME_FORTRESS_ADVANTAGE",
-    "LINEUP_DATA_MISSING",
+    "LINEUP_UNIT_EDGE_SOFT",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
     "support_count": 2,
     "caution_count": 2,
-    "lineup_available": false,
+    "lineup_available": true,
     "h2h_available": false
   },
   "preview": {
     "headline": "Zulte-Waregem vs FCV Dender EH: Zulte-Waregem Win fragile",
-    "short_summary": "Zulte-Waregem Win has some live shape in Zulte-Waregem vs FCV Dender EH, but the supporting layers remain fragile and need discipline. Primary support comes from team power advantage, while the main caution remains lineup data missing.",
+    "short_summary": "Zulte-Waregem Win has some live shape in Zulte-Waregem vs FCV Dender EH, but the supporting layers remain fragile and need discipline. Primary support comes from team power advantage, while the main caution remains lineup unit edge soft.",
     "market_summary": "Best aligned market: Correct Score (Mixed). Secondary support: Team Goals. Weakest read: Corners.",
-    "caution_line": "Main caution: Lineup Data Missing.",
-    "telegram_summary": "Zulte-Waregem vs FCV Dender EH — Zulte-Waregem Win (Fragile, 56% agreement). Support: Team Power Advantage. Caution: Lineup Data Missing.",
-    "premium_summary": "Zulte-Waregem Win is carrying a 56% agreement read across the published decision layers. Support is currently led by team power advantage, home fortress advantage, while caution is still coming from lineup data missing, h2h unavailable."
+    "caution_line": "Main caution: Lineup Unit Edge Soft.",
+    "telegram_summary": "Zulte-Waregem vs FCV Dender EH — Zulte-Waregem Win (Fragile, 54% agreement). Support: Team Power Advantage. Caution: Lineup Unit Edge Soft.",
+    "premium_summary": "Zulte-Waregem Win is carrying a 54% agreement read across the published decision layers. Support is currently led by team power advantage, home fortress advantage, while caution is still coming from lineup unit edge soft, h2h unavailable."
   }
 }

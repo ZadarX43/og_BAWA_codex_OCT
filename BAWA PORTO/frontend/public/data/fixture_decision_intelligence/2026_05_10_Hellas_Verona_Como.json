@@ -2,16 +2,15 @@
   "fixture_key": "2026_05_10_Hellas_Verona_Como",
   "fixture": "Hellas Verona vs Como",
   "primary_signal": "Como Win",
-  "signal_state": "FRAGILE",
-  "agreement_score": 56,
+  "signal_state": "WATCHLIST",
+  "agreement_score": 58,
   "confidence_band": "LOW",
   "supporting_layers": [
     "AWAY_POWER_ADVANTAGE",
     "AWAY_THREAT_ADVANTAGE"
   ],
   "caution_layers": [
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "LINEUP_DATA_MISSING"
   ],
   "profile_tags": {
     "home": [
@@ -80,9 +79,14 @@
   "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
-    "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "available": true,
+    "summary": "Using the latest available same-team-pair historical regime (1 prior meeting) as supporting context for this current fixture.",
+    "sample_size": 1,
+    "goal_environment": 5,
+    "btts_regime": 100,
+    "over25_rate": 100,
+    "draw_rate": 0,
+    "booking_heat": 8
   },
   "market_suitability": {
     "ftr": {
@@ -123,23 +127,22 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 67,
-      "state": "FRAGILE",
+      "alignment_score": 68,
+      "state": "WATCHLIST",
       "model_lean": "AWAY",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_DATA_MISSING"
       ],
-      "public_summary": "FTR has some structural support from away power advantage, but the overall layer fit remains fragile.",
+      "public_summary": "FTR is interesting enough to monitor, but current support is better treated as watch-first because of lineup data missing.",
       "rating": 83,
       "band": "Strong"
     },
     "btts": {
-      "alignment_score": 50,
+      "alignment_score": 54,
       "state": "FRAGILE",
       "model_lean": "NO",
       "structural_support": [
@@ -147,15 +150,14 @@
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_DATA_MISSING"
       ],
       "public_summary": "BTTS has some structural support from away power advantage, but the overall layer fit remains fragile.",
       "rating": 48,
       "band": "Weak"
     },
     "ou25": {
-      "alignment_score": 53,
+      "alignment_score": 57,
       "state": "FRAGILE",
       "model_lean": "UNDER25",
       "structural_support": [
@@ -163,8 +165,7 @@
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_DATA_MISSING"
       ],
       "public_summary": "Over 2.5 has some structural support from away power advantage, but the overall layer fit remains fragile.",
       "rating": 52,
@@ -186,22 +187,21 @@
       "band": "Mixed"
     },
     "correct_score": {
-      "alignment_score": 43,
-      "state": "AVOID",
+      "alignment_score": 47,
+      "state": "FRAGILE",
       "model_lean": "STRUCTURED",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_DATA_MISSING"
       ],
-      "public_summary": "Correct Score is too contradicted by lineup data missing to present as a clean public read.",
+      "public_summary": "Correct Score has some structural support from away power advantage, but the overall layer fit remains fragile.",
       "rating": 47,
       "band": "Weak"
     },
     "corners": {
-      "alignment_score": 47,
+      "alignment_score": 51,
       "state": "FRAGILE",
       "model_lean": "ELEVATED",
       "structural_support": [
@@ -209,15 +209,14 @@
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_DATA_MISSING"
       ],
       "public_summary": "Corners has some structural support from away power advantage, but the overall layer fit remains fragile.",
       "rating": 44,
       "band": "Weak"
     },
     "cards": {
-      "alignment_score": 70,
+      "alignment_score": 74,
       "state": "MIXED",
       "model_lean": "ELEVATED",
       "structural_support": [
@@ -225,8 +224,7 @@
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_DATA_MISSING"
       ],
       "public_summary": "Cards has partial support from away power advantage, but lineup data missing keeps it from reading clean.",
       "rating": 75,
@@ -234,31 +232,34 @@
     }
   },
   "watchlist": {
-    "active": false,
-    "summary": "No watchlist layer is active for this fixture.",
-    "trigger_signals": [],
-    "public_state": "No watchlist flag",
-    "mode": ""
+    "active": true,
+    "summary": "Como Win is better treated as a watch-first structure because lineup data missing.",
+    "trigger_signals": [
+      "Wait for the actual XI to confirm the structural edge.",
+      "Watch whether midfield control matches the pre-match read.",
+      "Treat short prices or late uncertainty as a reason to hold discipline."
+    ],
+    "public_state": "Watchlist: wait for live confirmation",
+    "mode": "FTR:AWAY"
   },
-  "public_safe_summary": "Como Win has some live shape in Hellas Verona vs Como, but the supporting layers remain fragile and need discipline.",
+  "public_safe_summary": "Como Win has useful structure for Hellas Verona vs Como, but the current layer fit is better treated as watch-first than pre-match deploy.",
   "internal_reason_tokens": [
     "AWAY_POWER_ADVANTAGE",
     "AWAY_THREAT_ADVANTAGE",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "LINEUP_DATA_MISSING"
   ],
   "summary": {
     "support_count": 2,
-    "caution_count": 2,
+    "caution_count": 1,
     "lineup_available": false,
-    "h2h_available": false
+    "h2h_available": true
   },
   "preview": {
-    "headline": "Hellas Verona vs Como: Como Win fragile",
-    "short_summary": "Como Win has some live shape in Hellas Verona vs Como, but the supporting layers remain fragile and need discipline. Primary support comes from away power advantage, while the main caution remains lineup data missing.",
+    "headline": "Hellas Verona vs Como: Como Win watchlist",
+    "short_summary": "Como Win has useful structure for Hellas Verona vs Como, but the current layer fit is better treated as watch-first than pre-match deploy. Primary support comes from away power advantage, while the main caution remains lineup data missing.",
     "market_summary": "Best aligned market: Cards (Mixed). Secondary support: FTR. Weakest read: Correct Score.",
     "caution_line": "Main caution: Lineup Data Missing.",
-    "telegram_summary": "Hellas Verona vs Como — Como Win (Fragile, 56% agreement). Support: Away Power Advantage. Caution: Lineup Data Missing.",
-    "premium_summary": "Como Win is carrying a 56% agreement read across the published decision layers. Support is currently led by away power advantage, away threat advantage, while caution is still coming from lineup data missing, h2h unavailable."
+    "telegram_summary": "Hellas Verona vs Como — Como Win (Watchlist, 58% agreement). Support: Away Power Advantage. Caution: Lineup Data Missing.",
+    "premium_summary": "Como Win is carrying a 58% agreement read across the published decision layers. Support is currently led by away power advantage, away threat advantage, while caution is still coming from lineup data missing."
   }
 }

@@ -3,15 +3,14 @@
   "fixture": "Real Sociedad vs Real Betis",
   "primary_signal": "Over 2.5",
   "signal_state": "FRAGILE",
-  "agreement_score": 56,
+  "agreement_score": 58,
   "confidence_band": "STANDARD",
   "supporting_layers": [
     "OVER25_HEAT_SUPPORT",
     "CHAOS_ENVIRONMENT_SUPPORT"
   ],
   "caution_layers": [
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "LINEUP_DATA_MISSING"
   ],
   "profile_tags": {
     "home": [
@@ -75,12 +74,34 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Real Sociedad",
+      "player": "Mikel Merino",
+      "role": "Central Midfielder",
+      "power": 63,
+      "driver_metric": "Goal Threat",
+      "driver_value": 65
+    },
+    {
+      "team": "Real Sociedad",
+      "player": "Takefusa Kubo",
+      "role": "Forward",
+      "power": 62,
+      "driver_metric": "Creative Spark",
+      "driver_value": 59
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
-    "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "available": true,
+    "summary": "Using the latest available same-team-pair historical regime (1 prior meeting) as supporting context for this current fixture.",
+    "sample_size": 1,
+    "goal_environment": 2,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 5
   },
   "market_suitability": {
     "ftr": {
@@ -121,7 +142,7 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 68,
+      "alignment_score": 72,
       "state": "MIXED",
       "model_lean": "AWAY",
       "structural_support": [
@@ -129,15 +150,14 @@
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_DATA_MISSING"
       ],
       "public_summary": "FTR has partial support from over 2.5 heat support, but lineup data missing keeps it from reading clean.",
       "rating": 72,
       "band": "Positive"
     },
     "btts": {
-      "alignment_score": 70,
+      "alignment_score": 74,
       "state": "MIXED",
       "model_lean": "YES",
       "structural_support": [
@@ -145,15 +165,14 @@
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_DATA_MISSING"
       ],
       "public_summary": "BTTS has partial support from over 2.5 heat support, but lineup data missing keeps it from reading clean.",
       "rating": 74,
       "band": "Positive"
     },
     "ou25": {
-      "alignment_score": 62,
+      "alignment_score": 63,
       "state": "FRAGILE",
       "model_lean": "OVER25",
       "structural_support": [
@@ -161,8 +180,7 @@
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_DATA_MISSING"
       ],
       "public_summary": "Over 2.5 has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
       "rating": 70,
@@ -184,22 +202,21 @@
       "band": "Strong"
     },
     "correct_score": {
-      "alignment_score": 83,
+      "alignment_score": 87,
       "state": "SUPPORTED",
       "model_lean": "OPEN",
       "structural_support": [
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_DATA_MISSING"
       ],
       "public_summary": "Correct Score is well supported by chaos environment support, with caution still coming from lineup data missing.",
       "rating": 100,
       "band": "Elite"
     },
     "corners": {
-      "alignment_score": 65,
+      "alignment_score": 69,
       "state": "MIXED",
       "model_lean": "ELEVATED",
       "structural_support": [
@@ -207,23 +224,21 @@
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_DATA_MISSING"
       ],
       "public_summary": "Corners has partial support from over 2.5 heat support, but lineup data missing keeps it from reading clean.",
       "rating": 68,
       "band": "Mixed"
     },
     "cards": {
-      "alignment_score": 40,
+      "alignment_score": 44,
       "state": "AVOID",
       "model_lean": "ELEVATED",
       "structural_support": [
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_DATA_MISSING"
       ],
       "public_summary": "Cards is too contradicted by lineup data missing to present as a clean public read.",
       "rating": 43,
@@ -241,21 +256,20 @@
   "internal_reason_tokens": [
     "OVER25_HEAT_SUPPORT",
     "CHAOS_ENVIRONMENT_SUPPORT",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "LINEUP_DATA_MISSING"
   ],
   "summary": {
     "support_count": 2,
-    "caution_count": 2,
+    "caution_count": 1,
     "lineup_available": false,
-    "h2h_available": false
+    "h2h_available": true
   },
   "preview": {
     "headline": "Real Sociedad vs Real Betis: Over 2.5 fragile",
     "short_summary": "Over 2.5 has some live shape in Real Sociedad vs Real Betis, but the supporting layers remain fragile and need discipline. Primary support comes from over25 heat support, while the main caution remains lineup data missing.",
     "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: Cards.",
     "caution_line": "Main caution: Lineup Data Missing.",
-    "telegram_summary": "Real Sociedad vs Real Betis — Over 2.5 (Fragile, 56% agreement). Support: Over25 Heat Support. Caution: Lineup Data Missing.",
-    "premium_summary": "Over 2.5 is carrying a 56% agreement read across the published decision layers. Support is currently led by over25 heat support, chaos environment support, while caution is still coming from lineup data missing, h2h unavailable."
+    "telegram_summary": "Real Sociedad vs Real Betis — Over 2.5 (Fragile, 58% agreement). Support: Over25 Heat Support. Caution: Lineup Data Missing.",
+    "premium_summary": "Over 2.5 is carrying a 58% agreement read across the published decision layers. Support is currently led by over25 heat support, chaos environment support, while caution is still coming from lineup data missing."
   }
 }

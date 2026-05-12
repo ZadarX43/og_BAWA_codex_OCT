@@ -1,0 +1,23 @@
+{
+  "fixture_key": "2026_05_09_Middlesbrough_Southampton",
+  "fixture_id": null,
+  "competition": "England Championship",
+  "season": "2023",
+  "home_team": "Middlesbrough",
+  "away_team": "Southampton",
+  "sample_size": 1,
+  "goal_environment": 3,
+  "btts_regime": 100,
+  "booking_heat": 3,
+  "foul_intensity": 23,
+  "style_conflict_index": 2,
+  "home_win_rate": 100,
+  "draw_rate": 0,
+  "over25_rate": 100,
+  "high_cards_rate": 0,
+  "same_referee_overlap": false,
+  "same_referee_count": 0,
+  "summary": "Using the latest available same-team-pair historical regime (1 prior meeting) as supporting context for this current fixture.",
+  "fallback_mode": "historical_team_pair",
+  "source_fixture_key": "2024-03-29_southampton_middlesbrough"
+}

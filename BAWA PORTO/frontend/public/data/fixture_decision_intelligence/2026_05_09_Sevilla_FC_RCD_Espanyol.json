@@ -72,7 +72,24 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Sevilla FC",
+      "player": "Youssef En-Nesyri",
+      "role": "Forward",
+      "power": 58,
+      "driver_metric": "Goal Threat",
+      "driver_value": 63
+    },
+    {
+      "team": "Sevilla FC",
+      "player": "Sergio Ramos",
+      "role": "Centre Back",
+      "power": 57,
+      "driver_metric": "Goal Threat",
+      "driver_value": 61
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

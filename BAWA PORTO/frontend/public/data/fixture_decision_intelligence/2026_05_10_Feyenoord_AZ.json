@@ -73,7 +73,40 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Feyenoord",
+      "player": "In-Beom Hwang",
+      "role": "Central Midfielder",
+      "power": 55,
+      "driver_metric": "Creative Spark",
+      "driver_value": 57
+    },
+    {
+      "team": "Feyenoord",
+      "player": "Tsuyoshi Watanabe",
+      "role": "Centre Back",
+      "power": 55,
+      "driver_metric": "Goal Threat",
+      "driver_value": 61
+    },
+    {
+      "team": "AZ",
+      "player": "Albert Gudmundsson",
+      "role": "Forward",
+      "power": 60,
+      "driver_metric": "Goal Threat",
+      "driver_value": 62
+    },
+    {
+      "team": "AZ",
+      "player": "Ferdy Druijf",
+      "role": "Forward",
+      "power": 58,
+      "driver_metric": "Goal Threat",
+      "driver_value": 56
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

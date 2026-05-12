@@ -2,16 +2,15 @@
   "fixture_key": "2026_05_11_Napoli_Bologna",
   "fixture": "Napoli vs Bologna",
   "primary_signal": "Napoli Win",
-  "signal_state": "FRAGILE",
-  "agreement_score": 56,
+  "signal_state": "WATCHLIST",
+  "agreement_score": 58,
   "confidence_band": "LOW",
   "supporting_layers": [
     "TEAM_POWER_ADVANTAGE",
     "HOME_FORTRESS_ADVANTAGE"
   ],
   "caution_layers": [
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "LINEUP_DATA_MISSING"
   ],
   "profile_tags": {
     "home": [
@@ -74,12 +73,34 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Napoli",
+      "player": "Rasmus Højlund",
+      "role": "Forward",
+      "power": 62,
+      "driver_metric": "Goal Threat",
+      "driver_value": 65
+    },
+    {
+      "team": "Napoli",
+      "player": "Scott McTominay",
+      "role": "Central Midfielder",
+      "power": 62,
+      "driver_metric": "Goal Threat",
+      "driver_value": 69
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
-    "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "available": true,
+    "summary": "Using the latest available same-team-pair historical regime (1 prior meeting) as supporting context for this current fixture.",
+    "sample_size": 1,
+    "goal_environment": 3,
+    "btts_regime": 0,
+    "over25_rate": 100,
+    "draw_rate": 0,
+    "booking_heat": 4
   },
   "market_suitability": {
     "ftr": {
@@ -120,23 +141,22 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 64,
-      "state": "FRAGILE",
+      "alignment_score": 65,
+      "state": "WATCHLIST",
       "model_lean": "HOME",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_DATA_MISSING"
       ],
-      "public_summary": "FTR has some structural support from team power advantage, but the overall layer fit remains fragile.",
+      "public_summary": "FTR is interesting enough to monitor, but current support is better treated as watch-first because of lineup data missing.",
       "rating": 76,
       "band": "Positive"
     },
     "btts": {
-      "alignment_score": 53,
+      "alignment_score": 57,
       "state": "FRAGILE",
       "model_lean": "YES",
       "structural_support": [
@@ -144,15 +164,14 @@
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_DATA_MISSING"
       ],
       "public_summary": "BTTS has some structural support from team power advantage, but the overall layer fit remains fragile.",
       "rating": 52,
       "band": "Weak"
     },
     "ou25": {
-      "alignment_score": 50,
+      "alignment_score": 54,
       "state": "FRAGILE",
       "model_lean": "UNDER25",
       "structural_support": [
@@ -160,8 +179,7 @@
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_DATA_MISSING"
       ],
       "public_summary": "Over 2.5 has some structural support from team power advantage, but the overall layer fit remains fragile.",
       "rating": 48,
@@ -183,22 +201,36 @@
       "band": "Mixed"
     },
     "correct_score": {
-      "alignment_score": 76,
-      "state": "MIXED",
+      "alignment_score": 80,
+      "state": "SUPPORTED",
       "model_lean": "STRUCTURED",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_DATA_MISSING"
       ],
-      "public_summary": "Correct Score has partial support from team power advantage, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Correct Score is well supported by team power advantage, with caution still coming from lineup data missing.",
       "rating": 91,
       "band": "Elite"
     },
     "corners": {
-      "alignment_score": 60,
+      "alignment_score": 64,
+      "state": "MIXED",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE",
+        "HOME_FORTRESS_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Corners has partial support from team power advantage, but lineup data missing keeps it from reading clean.",
+      "rating": 62,
+      "band": "Mixed"
+    },
+    "cards": {
+      "alignment_score": 48,
       "state": "FRAGILE",
       "model_lean": "ELEVATED",
       "structural_support": [
@@ -206,56 +238,42 @@
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_DATA_MISSING"
       ],
-      "public_summary": "Corners has some structural support from team power advantage, but the overall layer fit remains fragile.",
-      "rating": 62,
-      "band": "Mixed"
-    },
-    "cards": {
-      "alignment_score": 44,
-      "state": "AVOID",
-      "model_lean": "ELEVATED",
-      "structural_support": [
-        "TEAM_POWER_ADVANTAGE",
-        "HOME_FORTRESS_ADVANTAGE"
-      ],
-      "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
-      ],
-      "public_summary": "Cards is too contradicted by lineup data missing to present as a clean public read.",
+      "public_summary": "Cards has some structural support from team power advantage, but the overall layer fit remains fragile.",
       "rating": 40,
       "band": "Weak"
     }
   },
   "watchlist": {
-    "active": false,
-    "summary": "No watchlist layer is active for this fixture.",
-    "trigger_signals": [],
-    "public_state": "No watchlist flag",
-    "mode": ""
+    "active": true,
+    "summary": "Napoli Win is better treated as a watch-first structure because lineup data missing.",
+    "trigger_signals": [
+      "Wait for the actual XI to confirm the structural edge.",
+      "Watch whether midfield control matches the pre-match read.",
+      "Treat short prices or late uncertainty as a reason to hold discipline."
+    ],
+    "public_state": "Watchlist: wait for live confirmation",
+    "mode": "FTR:HOME"
   },
-  "public_safe_summary": "Napoli Win has some live shape in Napoli vs Bologna, but the supporting layers remain fragile and need discipline.",
+  "public_safe_summary": "Napoli Win has useful structure for Napoli vs Bologna, but the current layer fit is better treated as watch-first than pre-match deploy.",
   "internal_reason_tokens": [
     "TEAM_POWER_ADVANTAGE",
     "HOME_FORTRESS_ADVANTAGE",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "LINEUP_DATA_MISSING"
   ],
   "summary": {
     "support_count": 2,
-    "caution_count": 2,
+    "caution_count": 1,
     "lineup_available": false,
-    "h2h_available": false
+    "h2h_available": true
   },
   "preview": {
-    "headline": "Napoli vs Bologna: Napoli Win fragile",
-    "short_summary": "Napoli Win has some live shape in Napoli vs Bologna, but the supporting layers remain fragile and need discipline. Primary support comes from team power advantage, while the main caution remains lineup data missing.",
-    "market_summary": "Best aligned market: Correct Score (Mixed). Secondary support: FTR. Weakest read: Cards.",
+    "headline": "Napoli vs Bologna: Napoli Win watchlist",
+    "short_summary": "Napoli Win has useful structure for Napoli vs Bologna, but the current layer fit is better treated as watch-first than pre-match deploy. Primary support comes from team power advantage, while the main caution remains lineup data missing.",
+    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: FTR. Weakest read: Cards.",
     "caution_line": "Main caution: Lineup Data Missing.",
-    "telegram_summary": "Napoli vs Bologna — Napoli Win (Fragile, 56% agreement). Support: Team Power Advantage. Caution: Lineup Data Missing.",
-    "premium_summary": "Napoli Win is carrying a 56% agreement read across the published decision layers. Support is currently led by team power advantage, home fortress advantage, while caution is still coming from lineup data missing, h2h unavailable."
+    "telegram_summary": "Napoli vs Bologna — Napoli Win (Watchlist, 58% agreement). Support: Team Power Advantage. Caution: Lineup Data Missing.",
+    "premium_summary": "Napoli Win is carrying a 58% agreement read across the published decision layers. Support is currently led by team power advantage, home fortress advantage, while caution is still coming from lineup data missing."
   }
 }

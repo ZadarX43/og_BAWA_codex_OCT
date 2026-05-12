@@ -2,16 +2,16 @@
   "fixture_key": "2026_05_10_Metz_Lorient",
   "fixture": "Metz vs Lorient",
   "primary_signal": "BTTS Yes",
-  "signal_state": "FRAGILE",
-  "agreement_score": 56,
-  "confidence_band": "LOW",
+  "signal_state": "WATCHLIST",
+  "agreement_score": 62,
+  "confidence_band": "MEDIUM",
   "supporting_layers": [
     "BTTS_PRESSURE_SUPPORT",
-    "GOAL_ENVIRONMENT_SUPPORT"
+    "GOAL_ENVIRONMENT_SUPPORT",
+    "H2H_BTTS_SUPPORT"
   ],
   "caution_layers": [
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "LINEUP_DATA_MISSING"
   ],
   "profile_tags": {
     "home": [
@@ -77,9 +77,14 @@
   "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
-    "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "available": true,
+    "summary": "Using the latest available same-team-pair historical regime (1 prior meeting) as supporting context for this current fixture.",
+    "sample_size": 1,
+    "goal_environment": 5,
+    "btts_regime": 100,
+    "over25_rate": 100,
+    "draw_rate": 0,
+    "booking_heat": 3
   },
   "market_suitability": {
     "ftr": {
@@ -120,7 +125,7 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 47,
+      "alignment_score": 51,
       "state": "FRAGILE",
       "model_lean": "AWAY",
       "structural_support": [
@@ -128,39 +133,37 @@
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_DATA_MISSING"
       ],
       "public_summary": "FTR has some structural support from btts pressure support, but the overall layer fit remains fragile.",
       "rating": 44,
       "band": "Weak"
     },
     "btts": {
-      "alignment_score": 58,
-      "state": "FRAGILE",
+      "alignment_score": 61,
+      "state": "WATCHLIST",
       "model_lean": "YES",
       "structural_support": [
         "BTTS_PRESSURE_SUPPORT",
-        "GOAL_ENVIRONMENT_SUPPORT"
+        "GOAL_ENVIRONMENT_SUPPORT",
+        "H2H_BTTS_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_DATA_MISSING"
       ],
-      "public_summary": "BTTS has some structural support from btts pressure support, but the overall layer fit remains fragile.",
+      "public_summary": "BTTS is interesting enough to monitor, but current support is better treated as watch-first because of lineup data missing.",
       "rating": 60,
       "band": "Mixed"
     },
     "ou25": {
-      "alignment_score": 54,
+      "alignment_score": 58,
       "state": "FRAGILE",
       "model_lean": "OVER25",
       "structural_support": [
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_DATA_MISSING"
       ],
       "public_summary": "Over 2.5 has some structural support from goal environment support, but the overall layer fit remains fragile.",
       "rating": 62,
@@ -181,37 +184,35 @@
       "band": "Strong"
     },
     "correct_score": {
-      "alignment_score": 83,
+      "alignment_score": 87,
       "state": "SUPPORTED",
       "model_lean": "OPEN",
       "structural_support": [
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_DATA_MISSING"
       ],
       "public_summary": "Correct Score is well supported by goal environment support, with caution still coming from lineup data missing.",
       "rating": 100,
       "band": "Elite"
     },
     "corners": {
-      "alignment_score": 26,
+      "alignment_score": 30,
       "state": "AVOID",
       "model_lean": "ELEVATED",
       "structural_support": [
         "BTTS_PRESSURE_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_DATA_MISSING"
       ],
       "public_summary": "Corners is too contradicted by lineup data missing to present as a clean public read.",
       "rating": 24,
       "band": "Red Flag"
     },
     "cards": {
-      "alignment_score": 52,
+      "alignment_score": 56,
       "state": "FRAGILE",
       "model_lean": "ELEVATED",
       "structural_support": [
@@ -219,8 +220,7 @@
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_DATA_MISSING"
       ],
       "public_summary": "Cards has some structural support from btts pressure support, but the overall layer fit remains fragile.",
       "rating": 50,
@@ -228,31 +228,35 @@
     }
   },
   "watchlist": {
-    "active": false,
-    "summary": "No watchlist layer is active for this fixture.",
-    "trigger_signals": [],
-    "public_state": "No watchlist flag",
-    "mode": ""
+    "active": true,
+    "summary": "BTTS Yes is better treated as a watch-first structure because lineup data missing.",
+    "trigger_signals": [
+      "Confirm both forward lines are intact before kickoff.",
+      "Watch for early two-way shot volume inside the opening 15 minutes.",
+      "Escalate only if suppression signs stay absent."
+    ],
+    "public_state": "Watchlist: wait for live confirmation",
+    "mode": "BTTS:YES"
   },
-  "public_safe_summary": "BTTS Yes has some live shape in Metz vs Lorient, but the supporting layers remain fragile and need discipline.",
+  "public_safe_summary": "BTTS Yes has useful structure for Metz vs Lorient, but the current layer fit is better treated as watch-first than pre-match deploy.",
   "internal_reason_tokens": [
     "BTTS_PRESSURE_SUPPORT",
     "GOAL_ENVIRONMENT_SUPPORT",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "H2H_BTTS_SUPPORT",
+    "LINEUP_DATA_MISSING"
   ],
   "summary": {
-    "support_count": 2,
-    "caution_count": 2,
+    "support_count": 3,
+    "caution_count": 1,
     "lineup_available": false,
-    "h2h_available": false
+    "h2h_available": true
   },
   "preview": {
-    "headline": "Metz vs Lorient: BTTS Yes fragile",
-    "short_summary": "BTTS Yes has some live shape in Metz vs Lorient, but the supporting layers remain fragile and need discipline. Primary support comes from btts pressure support, while the main caution remains lineup data missing.",
+    "headline": "Metz vs Lorient: BTTS Yes watchlist",
+    "short_summary": "BTTS Yes has useful structure for Metz vs Lorient, but the current layer fit is better treated as watch-first than pre-match deploy. Primary support comes from btts pressure support, while the main caution remains lineup data missing.",
     "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: Corners.",
     "caution_line": "Main caution: Lineup Data Missing.",
-    "telegram_summary": "Metz vs Lorient — BTTS Yes (Fragile, 56% agreement). Support: Btts Pressure Support. Caution: Lineup Data Missing.",
-    "premium_summary": "BTTS Yes is carrying a 56% agreement read across the published decision layers. Support is currently led by btts pressure support, goal environment support, while caution is still coming from lineup data missing, h2h unavailable."
+    "telegram_summary": "Metz vs Lorient — BTTS Yes (Watchlist, 62% agreement). Support: Btts Pressure Support. Caution: Lineup Data Missing.",
+    "premium_summary": "BTTS Yes is carrying a 62% agreement read across the published decision layers. Support is currently led by btts pressure support, goal environment support, while caution is still coming from lineup data missing."
   }
 }

@@ -2,15 +2,14 @@
   "fixture_key": "2026_05_10_Portland_Timbers_Sporting_KC",
   "fixture": "Portland Timbers vs Sporting KC",
   "primary_signal": "Over 2.5",
-  "signal_state": "FRAGILE",
-  "agreement_score": 56,
+  "signal_state": "WATCHLIST",
+  "agreement_score": 60,
   "confidence_band": "LOW",
   "supporting_layers": [
     "OVER25_HEAT_SUPPORT",
     "CHAOS_ENVIRONMENT_SUPPORT"
   ],
   "caution_layers": [
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -72,7 +71,26 @@
       "leader": "Portland Timbers"
     }
   ],
-  "unit_battle_summary": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 43,
+      "away_value": 30,
+      "delta": 13
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 35,
+      "away_value": 32,
+      "delta": 3
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 30,
+      "away_value": 34,
+      "delta": -4
+    }
+  ],
   "key_player_drivers": [
     {
       "team": "Portland Timbers",
@@ -107,7 +125,48 @@
       "driver_value": 61
     }
   ],
-  "key_mismatches": [],
+  "key_mismatches": [
+    {
+      "zone": "Portland Timbers wide threat vs Sporting Kansas City resistance",
+      "advantage": "Portland Timbers",
+      "mismatch_score": 16,
+      "left_label": "Portland Timbers wide threat",
+      "left_value": 46,
+      "right_label": "Sporting Kansas City resistance",
+      "right_value": 30,
+      "summary": "Portland Timbers wide channel has a live attacking edge"
+    },
+    {
+      "zone": "Portland Timbers attack vs Sporting Kansas City defence",
+      "advantage": "Portland Timbers",
+      "mismatch_score": 13,
+      "left_label": "Portland Timbers attack",
+      "left_value": 43,
+      "right_label": "Sporting Kansas City defence",
+      "right_value": 30,
+      "summary": "Major Portland Timbers attacking advantage"
+    },
+    {
+      "zone": "Sporting Kansas City attack vs Portland Timbers defence",
+      "advantage": "Portland Timbers",
+      "mismatch_score": 4,
+      "left_label": "Sporting Kansas City attack",
+      "left_value": 30,
+      "right_label": "Portland Timbers defence",
+      "right_value": 34,
+      "summary": "Portland Timbers defensive resistance is suppressing the away attack"
+    },
+    {
+      "zone": "Midfield control battle",
+      "advantage": "Portland Timbers",
+      "mismatch_score": 3,
+      "left_label": "Portland Timbers midfield",
+      "left_value": 35,
+      "right_label": "Sporting Kansas City midfield",
+      "right_value": 32,
+      "summary": "Portland Timbers should control more of the central game-state"
+    }
+  ],
   "h2h_context": {
     "available": false,
     "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
@@ -152,23 +211,22 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 42,
-      "state": "AVOID",
+      "alignment_score": 46,
+      "state": "FRAGILE",
       "model_lean": "DRAW",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "FTR is too contradicted by lineup data missing to present as a clean public read.",
+      "public_summary": "FTR has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
       "rating": 37,
       "band": "Red Flag"
     },
     "btts": {
-      "alignment_score": 54,
+      "alignment_score": 58,
       "state": "FRAGILE",
       "model_lean": "YES",
       "structural_support": [
@@ -176,7 +234,6 @@
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "BTTS has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
@@ -184,18 +241,17 @@
       "band": "Weak"
     },
     "ou25": {
-      "alignment_score": 58,
-      "state": "FRAGILE",
+      "alignment_score": 60,
+      "state": "WATCHLIST",
       "model_lean": "OVER25",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Over 2.5 has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
+      "public_summary": "Over 2.5 is interesting enough to monitor, but current support is better treated as watch-first because of h2h unavailable.",
       "rating": 60,
       "band": "Mixed"
     },
@@ -208,52 +264,49 @@
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Team Goals has partial support from over 2.5 heat support, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Team Goals has partial support from over 2.5 heat support, but h2h unavailable keeps it from reading clean.",
       "rating": 60,
       "band": "Mixed"
     },
     "correct_score": {
-      "alignment_score": 82,
+      "alignment_score": 86,
       "state": "SUPPORTED",
       "model_lean": "OPEN",
       "structural_support": [
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Correct Score is well supported by chaos environment support, with caution still coming from lineup data missing.",
+      "public_summary": "Correct Score is well supported by chaos environment support, with caution still coming from h2h unavailable.",
       "rating": 99,
       "band": "Elite"
     },
     "corners": {
-      "alignment_score": 43,
-      "state": "AVOID",
+      "alignment_score": 47,
+      "state": "FRAGILE",
       "model_lean": "ELEVATED",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Corners is too contradicted by lineup data missing to present as a clean public read.",
+      "public_summary": "Corners has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
       "rating": 39,
       "band": "Red Flag"
     },
     "cards": {
-      "alignment_score": 46,
+      "alignment_score": 50,
       "state": "FRAGILE",
       "model_lean": "ELEVATED",
       "structural_support": [
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "Cards has some structural support from chaos environment support, but the overall layer fit remains fragile.",
@@ -262,31 +315,34 @@
     }
   },
   "watchlist": {
-    "active": false,
-    "summary": "No watchlist layer is active for this fixture.",
-    "trigger_signals": [],
-    "public_state": "No watchlist flag",
-    "mode": ""
+    "active": true,
+    "summary": "Over 2.5 is better treated as a watch-first structure because h2h unavailable.",
+    "trigger_signals": [
+      "Watch for early tempo and repeat penalty-box entries.",
+      "Escalate only if control signals fail to settle the game.",
+      "Treat a quiet opening phase as a downgrade rather than a delay."
+    ],
+    "public_state": "Watchlist: wait for live confirmation",
+    "mode": "OU25:OVER25"
   },
-  "public_safe_summary": "Over 2.5 has some live shape in Portland Timbers vs Sporting KC, but the supporting layers remain fragile and need discipline.",
+  "public_safe_summary": "Over 2.5 has useful structure for Portland Timbers vs Sporting KC, but the current layer fit is better treated as watch-first than pre-match deploy.",
   "internal_reason_tokens": [
     "OVER25_HEAT_SUPPORT",
     "CHAOS_ENVIRONMENT_SUPPORT",
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
     "support_count": 2,
-    "caution_count": 2,
-    "lineup_available": false,
+    "caution_count": 1,
+    "lineup_available": true,
     "h2h_available": false
   },
   "preview": {
-    "headline": "Portland Timbers vs Sporting KC: Over 2.5 fragile",
-    "short_summary": "Over 2.5 has some live shape in Portland Timbers vs Sporting KC, but the supporting layers remain fragile and need discipline. Primary support comes from over25 heat support, while the main caution remains lineup data missing.",
+    "headline": "Portland Timbers vs Sporting KC: Over 2.5 watchlist",
+    "short_summary": "Over 2.5 has useful structure for Portland Timbers vs Sporting KC, but the current layer fit is better treated as watch-first than pre-match deploy. Primary support comes from over25 heat support, while the main caution remains h2h unavailable.",
     "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: FTR.",
-    "caution_line": "Main caution: Lineup Data Missing.",
-    "telegram_summary": "Portland Timbers vs Sporting KC — Over 2.5 (Fragile, 56% agreement). Support: Over25 Heat Support. Caution: Lineup Data Missing.",
-    "premium_summary": "Over 2.5 is carrying a 56% agreement read across the published decision layers. Support is currently led by over25 heat support, chaos environment support, while caution is still coming from lineup data missing, h2h unavailable."
+    "caution_line": "Main caution: H2H Unavailable.",
+    "telegram_summary": "Portland Timbers vs Sporting KC — Over 2.5 (Watchlist, 60% agreement). Support: Over25 Heat Support. Caution: H2H Unavailable.",
+    "premium_summary": "Over 2.5 is carrying a 60% agreement read across the published decision layers. Support is currently led by over25 heat support, chaos environment support, while caution is still coming from h2h unavailable."
   }
 }

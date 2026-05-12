@@ -74,7 +74,24 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Zürich",
+      "player": "Ivan Santini",
+      "role": "Forward",
+      "power": 60,
+      "driver_metric": "Goal Threat",
+      "driver_value": 62
+    },
+    {
+      "team": "Zürich",
+      "player": "Lindrit Kamberi",
+      "role": "Centre Back",
+      "power": 55,
+      "driver_metric": "Goal Threat",
+      "driver_value": 59
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

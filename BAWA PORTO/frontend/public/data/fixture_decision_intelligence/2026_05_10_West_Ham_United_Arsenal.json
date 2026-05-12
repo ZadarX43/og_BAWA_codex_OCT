@@ -76,7 +76,40 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "West Ham United",
+      "player": "Crysencio Summerville",
+      "role": "Forward",
+      "power": 59,
+      "driver_metric": "Goal Threat",
+      "driver_value": 61
+    },
+    {
+      "team": "West Ham United",
+      "player": "Jarrod Bowen",
+      "role": "Forward",
+      "power": 59,
+      "driver_metric": "Goal Threat",
+      "driver_value": 60
+    },
+    {
+      "team": "Arsenal",
+      "player": "Viktor Gyökeres",
+      "role": "Forward",
+      "power": 73,
+      "driver_metric": "Goal Threat",
+      "driver_value": 75
+    },
+    {
+      "team": "Arsenal",
+      "player": "David Raya",
+      "role": "Goalkeeper",
+      "power": 69,
+      "driver_metric": "Midfield Engine",
+      "driver_value": 50
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

@@ -76,7 +76,40 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Brøndby",
+      "player": "Nicolai Vallys",
+      "role": "Forward",
+      "power": 77,
+      "driver_metric": "Goal Threat",
+      "driver_value": 78
+    },
+    {
+      "team": "Brøndby",
+      "player": "Patrick Pentz",
+      "role": "Goalkeeper",
+      "power": 71,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 49
+    },
+    {
+      "team": "AGF",
+      "player": "Tobias Bech Kristensen",
+      "role": "Forward",
+      "power": 87,
+      "driver_metric": "Goal Threat",
+      "driver_value": 91
+    },
+    {
+      "team": "AGF",
+      "player": "Kristian Arnstad",
+      "role": "Forward",
+      "power": 81,
+      "driver_metric": "Goal Threat",
+      "driver_value": 82
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

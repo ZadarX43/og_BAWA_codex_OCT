@@ -72,7 +72,24 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Villarreal",
+      "player": "Nicolas Pépé",
+      "role": "Forward",
+      "power": 62,
+      "driver_metric": "Goal Threat",
+      "driver_value": 59
+    },
+    {
+      "team": "Villarreal",
+      "player": "Álvaro Santiago Mouriño González",
+      "role": "Centre Back",
+      "power": 55,
+      "driver_metric": "Midfield Engine",
+      "driver_value": 56
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

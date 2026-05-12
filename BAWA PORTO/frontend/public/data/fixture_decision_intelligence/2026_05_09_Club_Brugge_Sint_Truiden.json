@@ -76,7 +76,40 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Club Brugge",
+      "player": "Christos Tzolis",
+      "role": "Forward",
+      "power": 88,
+      "driver_metric": "Goal Threat",
+      "driver_value": 93
+    },
+    {
+      "team": "Club Brugge",
+      "player": "Nicolo Tresoldi",
+      "role": "Forward",
+      "power": 87,
+      "driver_metric": "Goal Threat",
+      "driver_value": 95
+    },
+    {
+      "team": "Sint-Truiden",
+      "player": "Arbnor Muja",
+      "role": "Forward",
+      "power": 72,
+      "driver_metric": "Goal Threat",
+      "driver_value": 80
+    },
+    {
+      "team": "Sint-Truiden",
+      "player": "Rihito Yamamoto",
+      "role": "Central Midfielder",
+      "power": 70,
+      "driver_metric": "Creative Spark",
+      "driver_value": 70
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

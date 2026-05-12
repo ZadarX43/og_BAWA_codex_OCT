@@ -1,0 +1,91 @@
+{
+  "fixture_key": "2026_05_10_Minnesota_United_Austin",
+  "fixture_id": 1490279,
+  "competition": "USA MLS",
+  "competition_key": "usa_mls",
+  "season": "2026",
+  "home_team": "Minnesota United",
+  "away_team": "Austin",
+  "home_team_id": 1612,
+  "away_team_id": 16489,
+  "home_formation": NaN,
+  "away_formation": NaN,
+  "home_units": {
+    "attack_unit": 43,
+    "midfield_control": 53,
+    "defensive_unit": 56,
+    "wide_threat": 52,
+    "central_threat": 43,
+    "discipline_risk": 45
+  },
+  "away_units": {
+    "attack_unit": 47,
+    "midfield_control": 44,
+    "defensive_unit": 44,
+    "wide_threat": 54,
+    "central_threat": 47,
+    "discipline_risk": 60
+  },
+  "home_resolution": {
+    "starting_xi_count": 0,
+    "resolved_profiles": 0,
+    "fallback_profiles": 0
+  },
+  "away_resolution": {
+    "starting_xi_count": 0,
+    "resolved_profiles": 0,
+    "fallback_profiles": 0
+  },
+  "key_mismatches": [
+    {
+      "zone": "Austin attack vs Minnesota United FC defence",
+      "advantage": "Minnesota United FC",
+      "mismatch_score": 9,
+      "left_label": "Austin attack",
+      "left_value": 47,
+      "right_label": "Minnesota United FC defence",
+      "right_value": 56,
+      "summary": "Minnesota United FC defensive resistance is suppressing the away attack"
+    },
+    {
+      "zone": "Midfield control battle",
+      "advantage": "Minnesota United FC",
+      "mismatch_score": 9,
+      "left_label": "Minnesota United FC midfield",
+      "left_value": 53,
+      "right_label": "Austin midfield",
+      "right_value": 44,
+      "summary": "Minnesota United FC should control more of the central game-state"
+    },
+    {
+      "zone": "Minnesota United FC wide threat vs Austin resistance",
+      "advantage": "Minnesota United FC",
+      "mismatch_score": 8,
+      "left_label": "Minnesota United FC wide threat",
+      "left_value": 52,
+      "right_label": "Austin resistance",
+      "right_value": 44,
+      "summary": "Minnesota United FC wide channel has a live attacking edge"
+    },
+    {
+      "zone": "Austin wide threat vs Minnesota United FC resistance",
+      "advantage": "Minnesota United FC",
+      "mismatch_score": 2,
+      "left_label": "Austin wide threat",
+      "left_value": 54,
+      "right_label": "Minnesota United FC resistance",
+      "right_value": 56,
+      "summary": "Minnesota United FC can neutralize the wide-channel pressure"
+    }
+  ],
+  "player_matchups": [],
+  "home_lineup_profiles": [],
+  "away_lineup_profiles": [],
+  "formation_context": {
+    "same_formation_flag": 0,
+    "formation_mismatch_flag": 0,
+    "formation_attack_delta": 0.0,
+    "formation_defence_delta": 0.0
+  },
+  "site_alias_source_fixture_key": "2026-05-11_minnesota_united_fc_austin"
+}

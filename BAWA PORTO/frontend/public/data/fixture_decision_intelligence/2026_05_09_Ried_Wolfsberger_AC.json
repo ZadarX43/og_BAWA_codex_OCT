@@ -72,7 +72,40 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Ried",
+      "player": "Philipp Pomer",
+      "role": "Forward",
+      "power": 69,
+      "driver_metric": "Goal Threat",
+      "driver_value": 71
+    },
+    {
+      "team": "Ried",
+      "player": "Andreas Leitner",
+      "role": "Goalkeeper",
+      "power": 67,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 51
+    },
+    {
+      "team": "Wolfsberger AC",
+      "player": "Markus Pink",
+      "role": "Forward",
+      "power": 74,
+      "driver_metric": "Goal Threat",
+      "driver_value": 83
+    },
+    {
+      "team": "Wolfsberger AC",
+      "player": "Nicolas Wimmer",
+      "role": "Centre Back",
+      "power": 68,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 67
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

@@ -1,0 +1,91 @@
+{
+  "fixture_key": "2026_05_10_Nashville_SC_DC_United",
+  "fixture_id": 1490273,
+  "competition": "USA MLS",
+  "competition_key": "usa_mls",
+  "season": "2026",
+  "home_team": "Nashville SC",
+  "away_team": "DC United",
+  "home_team_id": 9569,
+  "away_team_id": 1615,
+  "home_formation": NaN,
+  "away_formation": NaN,
+  "home_units": {
+    "attack_unit": 60,
+    "midfield_control": 68,
+    "defensive_unit": 71,
+    "wide_threat": 41,
+    "central_threat": 60,
+    "discipline_risk": 37
+  },
+  "away_units": {
+    "attack_unit": 30,
+    "midfield_control": 60,
+    "defensive_unit": 61,
+    "wide_threat": 34,
+    "central_threat": 30,
+    "discipline_risk": 52
+  },
+  "home_resolution": {
+    "starting_xi_count": 0,
+    "resolved_profiles": 0,
+    "fallback_profiles": 0
+  },
+  "away_resolution": {
+    "starting_xi_count": 0,
+    "resolved_profiles": 0,
+    "fallback_profiles": 0
+  },
+  "key_mismatches": [
+    {
+      "zone": "DC United attack vs Nashville SC defence",
+      "advantage": "Nashville SC",
+      "mismatch_score": 41,
+      "left_label": "DC United attack",
+      "left_value": 30,
+      "right_label": "Nashville SC defence",
+      "right_value": 71,
+      "summary": "Nashville SC defensive resistance is suppressing the away attack"
+    },
+    {
+      "zone": "DC United wide threat vs Nashville SC resistance",
+      "advantage": "Nashville SC",
+      "mismatch_score": 37,
+      "left_label": "DC United wide threat",
+      "left_value": 34,
+      "right_label": "Nashville SC resistance",
+      "right_value": 71,
+      "summary": "Nashville SC can neutralize the wide-channel pressure"
+    },
+    {
+      "zone": "Nashville SC wide threat vs DC United resistance",
+      "advantage": "DC United",
+      "mismatch_score": 20,
+      "left_label": "Nashville SC wide threat",
+      "left_value": 41,
+      "right_label": "DC United resistance",
+      "right_value": 61,
+      "summary": "DC United can neutralize the wide-channel pressure"
+    },
+    {
+      "zone": "Midfield control battle",
+      "advantage": "Nashville SC",
+      "mismatch_score": 8,
+      "left_label": "Nashville SC midfield",
+      "left_value": 68,
+      "right_label": "DC United midfield",
+      "right_value": 60,
+      "summary": "Nashville SC should control more of the central game-state"
+    }
+  ],
+  "player_matchups": [],
+  "home_lineup_profiles": [],
+  "away_lineup_profiles": [],
+  "formation_context": {
+    "same_formation_flag": 0,
+    "formation_mismatch_flag": 0,
+    "formation_attack_delta": 0.0,
+    "formation_defence_delta": 0.0
+  },
+  "site_alias_source_fixture_key": "2026-05-10_nashville_sc_dc_united"
+}

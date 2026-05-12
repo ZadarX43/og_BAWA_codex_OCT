@@ -74,7 +74,24 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Bayer Leverkusen",
+      "player": "Álex Grimaldo",
+      "role": "Centre Back",
+      "power": 68,
+      "driver_metric": "Goal Threat",
+      "driver_value": 76
+    },
+    {
+      "team": "Bayer Leverkusen",
+      "player": "Aleix García",
+      "role": "Central Midfielder",
+      "power": 67,
+      "driver_metric": "Goal Threat",
+      "driver_value": 67
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

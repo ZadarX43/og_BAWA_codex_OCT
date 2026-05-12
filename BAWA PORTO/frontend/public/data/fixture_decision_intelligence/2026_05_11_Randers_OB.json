@@ -73,7 +73,40 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Randers",
+      "player": "Daniel Høegh",
+      "role": "Centre Back",
+      "power": 73,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 74
+    },
+    {
+      "team": "Randers",
+      "player": "Wessel Dammers",
+      "role": "Centre Back",
+      "power": 73,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 71
+    },
+    {
+      "team": "OB",
+      "player": "Noah Ganaus",
+      "role": "Forward",
+      "power": 84,
+      "driver_metric": "Goal Threat",
+      "driver_value": 89
+    },
+    {
+      "team": "OB",
+      "player": "Jay-Roy Grot",
+      "role": "Forward",
+      "power": 77,
+      "driver_metric": "Goal Threat",
+      "driver_value": 84
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

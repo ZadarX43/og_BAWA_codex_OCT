@@ -3,14 +3,15 @@
   "fixture": "Twente vs Sparta Rotterdam",
   "primary_signal": "BTTS Yes",
   "signal_state": "AVOID",
-  "agreement_score": 32,
+  "agreement_score": 38,
   "confidence_band": "LOW",
-  "supporting_layers": [],
+  "supporting_layers": [
+    "H2H_BTTS_SUPPORT"
+  ],
   "caution_layers": [
     "BTTS_PRESSURE_WEAK",
     "GOAL_ENVIRONMENT_SOFT",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "LINEUP_DATA_MISSING"
   ],
   "profile_tags": {
     "home": [
@@ -72,12 +73,34 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Twente",
+      "player": "Mats Rots",
+      "role": "Centre Back",
+      "power": 53,
+      "driver_metric": "Creative Spark",
+      "driver_value": 57
+    },
+    {
+      "team": "Twente",
+      "player": "Alfons Sampsted",
+      "role": "Centre Back",
+      "power": 50,
+      "driver_metric": "Creative Spark",
+      "driver_value": 50
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
-    "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "available": true,
+    "summary": "Using the latest available same-team-pair historical regime (1 prior meeting) as supporting context for this current fixture.",
+    "sample_size": 1,
+    "goal_environment": 2,
+    "btts_regime": 100,
+    "over25_rate": 0,
+    "draw_rate": 100,
+    "booking_heat": 100
   },
   "market_suitability": {
     "ftr": {
@@ -118,23 +141,27 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 58,
-      "state": "FRAGILE",
+      "alignment_score": 64,
+      "state": "MIXED",
       "model_lean": "HOME",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
         "GOAL_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "FTR has some structural support from structural support, but the overall layer fit remains fragile.",
+      "public_summary": "FTR has partial support from h2h btts support, but btts pressure weak keeps it from reading clean.",
       "rating": 74,
       "band": "Positive"
     },
     "btts": {
-      "alignment_score": 35,
+      "alignment_score": 38,
       "state": "AVOID",
       "model_lean": "YES",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
         "GOAL_ENVIRONMENT_SOFT"
@@ -144,10 +171,12 @@
       "band": "Red Flag"
     },
     "ou25": {
-      "alignment_score": 34,
+      "alignment_score": 40,
       "state": "AVOID",
       "model_lean": "UNDER25",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "GOAL_ENVIRONMENT_SOFT"
       ],
@@ -156,10 +185,12 @@
       "band": "Red Flag"
     },
     "team_goals": {
-      "alignment_score": 34,
+      "alignment_score": 40,
       "state": "AVOID",
       "model_lean": "Sparta Rotterdam 1.5+",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "GOAL_ENVIRONMENT_SOFT",
         "LINEUP_DATA_MISSING"
@@ -169,34 +200,40 @@
       "band": "Weak"
     },
     "correct_score": {
-      "alignment_score": 68,
+      "alignment_score": 74,
       "state": "MIXED",
       "model_lean": "STRUCTURED",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "GOAL_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Correct Score has partial support from structural support, but goal environment soft keeps it from reading clean.",
+      "public_summary": "Correct Score has partial support from h2h btts support, but goal environment soft keeps it from reading clean.",
       "rating": 82,
       "band": "Strong"
     },
     "corners": {
-      "alignment_score": 46,
+      "alignment_score": 52,
       "state": "FRAGILE",
       "model_lean": "ELEVATED",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "BTTS_PRESSURE_WEAK"
       ],
-      "public_summary": "Corners has some structural support from structural support, but the overall layer fit remains fragile.",
+      "public_summary": "Corners has some structural support from h2h btts support, but the overall layer fit remains fragile.",
       "rating": 54,
       "band": "Weak"
     },
     "cards": {
-      "alignment_score": 35,
+      "alignment_score": 41,
       "state": "AVOID",
       "model_lean": "ELEVATED",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
         "GOAL_ENVIRONMENT_SOFT"
@@ -215,23 +252,23 @@
   },
   "public_safe_summary": "BTTS Yes is too contradicted across the current structural layers for Twente vs Sparta Rotterdam, so the clean read is caution rather than action.",
   "internal_reason_tokens": [
+    "H2H_BTTS_SUPPORT",
     "BTTS_PRESSURE_WEAK",
     "GOAL_ENVIRONMENT_SOFT",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "LINEUP_DATA_MISSING"
   ],
   "summary": {
-    "support_count": 0,
-    "caution_count": 4,
+    "support_count": 1,
+    "caution_count": 3,
     "lineup_available": false,
-    "h2h_available": false
+    "h2h_available": true
   },
   "preview": {
     "headline": "Twente vs Sparta Rotterdam: BTTS Yes avoid",
-    "short_summary": "BTTS Yes is too contradicted across the current structural layers for Twente vs Sparta Rotterdam, so the clean read is caution rather than action. Primary support comes from structural caution, while the main caution remains btts pressure weak.",
-    "market_summary": "Best aligned market: Correct Score (Mixed). Secondary support: FTR. Weakest read: Over 2.5.",
+    "short_summary": "BTTS Yes is too contradicted across the current structural layers for Twente vs Sparta Rotterdam, so the clean read is caution rather than action. Primary support comes from h2h btts support, while the main caution remains btts pressure weak.",
+    "market_summary": "Best aligned market: Correct Score (Mixed). Secondary support: FTR. Weakest read: BTTS.",
     "caution_line": "Main caution: Btts Pressure Weak.",
-    "telegram_summary": "Twente vs Sparta Rotterdam — BTTS Yes (Avoid, 32% agreement). Support: structural caution. Caution: Btts Pressure Weak.",
-    "premium_summary": "BTTS Yes is carrying a 32% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from btts pressure weak, goal environment soft."
+    "telegram_summary": "Twente vs Sparta Rotterdam — BTTS Yes (Avoid, 38% agreement). Support: H2H Btts Support. Caution: Btts Pressure Weak.",
+    "premium_summary": "BTTS Yes is carrying a 38% agreement read across the published decision layers. Support is currently led by h2h btts support, while caution is still coming from btts pressure weak, goal environment soft."
   }
 }

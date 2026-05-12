@@ -73,7 +73,40 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Rapid Wien",
+      "player": "Nenad Cvetković",
+      "role": "Centre Back",
+      "power": 72,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 71
+    },
+    {
+      "team": "Rapid Wien",
+      "player": "Janis Antiste",
+      "role": "Forward",
+      "power": 71,
+      "driver_metric": "Goal Threat",
+      "driver_value": 77
+    },
+    {
+      "team": "Austria Wien",
+      "player": "Johannes Eggestein",
+      "role": "Forward",
+      "power": 81,
+      "driver_metric": "Goal Threat",
+      "driver_value": 85
+    },
+    {
+      "team": "Austria Wien",
+      "player": "Aleksandar Dragović",
+      "role": "Centre Back",
+      "power": 66,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 71
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

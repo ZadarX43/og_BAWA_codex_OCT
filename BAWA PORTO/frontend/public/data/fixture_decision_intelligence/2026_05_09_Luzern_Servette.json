@@ -75,7 +75,24 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Servette",
+      "player": "Samuel Mráz",
+      "role": "Forward",
+      "power": 58,
+      "driver_metric": "Goal Threat",
+      "driver_value": 61
+    },
+    {
+      "team": "Servette",
+      "player": "Bradley Mazikou",
+      "role": "Centre Back",
+      "power": 55,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 56
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

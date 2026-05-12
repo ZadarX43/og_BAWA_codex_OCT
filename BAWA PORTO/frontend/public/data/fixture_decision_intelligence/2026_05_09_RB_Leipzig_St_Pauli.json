@@ -75,7 +75,24 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "RB Leipzig",
+      "player": "David Raum",
+      "role": "Centre Back",
+      "power": 63,
+      "driver_metric": "Goal Threat",
+      "driver_value": 62
+    },
+    {
+      "team": "RB Leipzig",
+      "player": "Xavi Simons",
+      "role": "Central Midfielder",
+      "power": 63,
+      "driver_metric": "Goal Threat",
+      "driver_value": 65
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

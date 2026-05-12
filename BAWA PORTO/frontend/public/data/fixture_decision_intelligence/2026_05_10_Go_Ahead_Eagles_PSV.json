@@ -76,7 +76,24 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "PSV",
+      "player": "Joey Veerman",
+      "role": "Central Midfielder",
+      "power": 64,
+      "driver_metric": "Creative Spark",
+      "driver_value": 61
+    },
+    {
+      "team": "PSV",
+      "player": "Ivan Perišić",
+      "role": "Forward",
+      "power": 60,
+      "driver_metric": "Goal Threat",
+      "driver_value": 62
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

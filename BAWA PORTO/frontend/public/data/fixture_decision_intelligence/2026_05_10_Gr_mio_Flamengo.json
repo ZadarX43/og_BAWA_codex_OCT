@@ -2,15 +2,15 @@
   "fixture_key": "2026_05_10_Gr_mio_Flamengo",
   "fixture": "Grêmio vs Flamengo",
   "primary_signal": "Over 2.5",
-  "signal_state": "AVOID",
-  "agreement_score": 32,
+  "signal_state": "FRAGILE",
+  "agreement_score": 42,
   "confidence_band": "LOW",
-  "supporting_layers": [],
+  "supporting_layers": [
+    "H2H_OVER_SUPPORT"
+  ],
   "caution_layers": [
     "OVER25_HEAT_SOFT",
-    "CHAOS_ENVIRONMENT_SOFT",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "CHAOS_ENVIRONMENT_SOFT"
   ],
   "profile_tags": {
     "home": [
@@ -71,13 +71,111 @@
       "leader": "Flamengo"
     }
   ],
-  "unit_battle_summary": [],
-  "key_player_drivers": [],
-  "key_mismatches": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 31,
+      "away_value": 67,
+      "delta": -36
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 64,
+      "away_value": 51,
+      "delta": 13
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 76,
+      "away_value": 65,
+      "delta": 11
+    }
+  ],
+  "key_player_drivers": [
+    {
+      "team": "Grêmio",
+      "player": "Carlos Vinícius",
+      "role": "Forward",
+      "power": 77,
+      "driver_metric": "Goal Threat",
+      "driver_value": 81
+    },
+    {
+      "team": "Grêmio",
+      "player": "Weverton Pereira da Silva",
+      "role": "Goalkeeper",
+      "power": 68,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 49
+    },
+    {
+      "team": "Flamengo",
+      "player": "Pedro Guilherme Abreu dos Santos",
+      "role": "Forward",
+      "power": 78,
+      "driver_metric": "Goal Threat",
+      "driver_value": 79
+    },
+    {
+      "team": "Flamengo",
+      "player": "Agustín Daniel Rossi",
+      "role": "Goalkeeper",
+      "power": 69,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 50
+    }
+  ],
+  "key_mismatches": [
+    {
+      "zone": "Gremio attack vs Flamengo defence",
+      "advantage": "Flamengo",
+      "mismatch_score": 36,
+      "left_label": "Gremio attack",
+      "left_value": 31,
+      "right_label": "Flamengo defence",
+      "right_value": 67,
+      "summary": "Flamengo defensive resistance is suppressing the home attack"
+    },
+    {
+      "zone": "Gremio wide threat vs Flamengo resistance",
+      "advantage": "Flamengo",
+      "mismatch_score": 34,
+      "left_label": "Gremio wide threat",
+      "left_value": 33,
+      "right_label": "Flamengo resistance",
+      "right_value": 67,
+      "summary": "Flamengo can neutralize the wide-channel pressure"
+    },
+    {
+      "zone": "Flamengo wide threat vs Gremio resistance",
+      "advantage": "Gremio",
+      "mismatch_score": 20,
+      "left_label": "Flamengo wide threat",
+      "left_value": 45,
+      "right_label": "Gremio resistance",
+      "right_value": 65,
+      "summary": "Gremio can neutralize the wide-channel pressure"
+    },
+    {
+      "zone": "Midfield control battle",
+      "advantage": "Gremio",
+      "mismatch_score": 13,
+      "left_label": "Gremio midfield",
+      "left_value": 64,
+      "right_label": "Flamengo midfield",
+      "right_value": 51,
+      "summary": "Gremio should control more of the central game-state"
+    }
+  ],
   "h2h_context": {
-    "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "available": true,
+    "summary": "Using the latest available same-team-pair historical regime (1 prior meeting) as supporting context for this current fixture.",
+    "sample_size": 1,
+    "goal_environment": 3,
+    "btts_regime": 100,
+    "over25_rate": 100,
+    "draw_rate": 0,
+    "booking_heat": 6
   },
   "market_suitability": {
     "ftr": {
@@ -96,7 +194,7 @@
       "read": "Driven by combined goal environment and tempo."
     },
     "team_goals": {
-      "rating": 58,
+      "rating": 76,
       "label": "Mixed",
       "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
     },
@@ -118,23 +216,27 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 60,
-      "state": "FRAGILE",
+      "alignment_score": 66,
+      "state": "MIXED",
       "model_lean": "AWAY",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_OVER_SUPPORT"
+      ],
       "cautions": [
         "OVER25_HEAT_SOFT",
         "CHAOS_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "FTR has some structural support from structural support, but the overall layer fit remains fragile.",
+      "public_summary": "FTR has partial support from h2h over support, but over 2.5 heat soft keeps it from reading clean.",
       "rating": 77,
       "band": "Positive"
     },
     "btts": {
-      "alignment_score": 35,
+      "alignment_score": 41,
       "state": "AVOID",
       "model_lean": "NO",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_OVER_SUPPORT"
+      ],
       "cautions": [
         "OVER25_HEAT_SOFT",
         "CHAOS_ENVIRONMENT_SOFT"
@@ -144,47 +246,56 @@
       "band": "Weak"
     },
     "ou25": {
-      "alignment_score": 36,
-      "state": "AVOID",
+      "alignment_score": 42,
+      "state": "FRAGILE",
       "model_lean": "OVER25",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_OVER_SUPPORT"
+      ],
       "cautions": [
         "OVER25_HEAT_SOFT",
         "CHAOS_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Over 2.5 is too contradicted by over 2.5 heat soft to present as a clean public read.",
+      "public_summary": "Over 2.5 has some structural support from h2h over support, but the overall layer fit remains fragile.",
       "rating": 43,
       "band": "Weak"
     },
     "team_goals": {
-      "alignment_score": 50,
-      "state": "FRAGILE",
+      "alignment_score": 65,
+      "state": "MIXED",
       "model_lean": "Flamengo 1.5+",
-      "structural_support": [],
-      "cautions": [
-        "LINEUP_DATA_MISSING"
+      "structural_support": [
+        "H2H_OVER_SUPPORT"
       ],
-      "public_summary": "Team Goals has some structural support from structural support, but the overall layer fit remains fragile.",
-      "rating": 58,
+      "cautions": [
+        "OVER25_HEAT_SOFT",
+        "CHAOS_ENVIRONMENT_SOFT"
+      ],
+      "public_summary": "Team Goals has partial support from h2h over support, but over 2.5 heat soft keeps it from reading clean.",
+      "rating": 76,
       "band": "Mixed"
     },
     "correct_score": {
-      "alignment_score": 80,
+      "alignment_score": 86,
       "state": "SUPPORTED",
       "model_lean": "STRUCTURED",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_OVER_SUPPORT"
+      ],
       "cautions": [
         "CHAOS_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Correct Score is well supported by structural support, with caution still coming from chaos environment soft.",
+      "public_summary": "Correct Score is well supported by h2h over support, with caution still coming from chaos environment soft.",
       "rating": 98,
       "band": "Elite"
     },
     "corners": {
-      "alignment_score": 30,
+      "alignment_score": 36,
       "state": "AVOID",
       "model_lean": "ELEVATED",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_OVER_SUPPORT"
+      ],
       "cautions": [
         "OVER25_HEAT_SOFT",
         "CHAOS_ENVIRONMENT_SOFT"
@@ -194,14 +305,16 @@
       "band": "Red Flag"
     },
     "cards": {
-      "alignment_score": 42,
-      "state": "AVOID",
+      "alignment_score": 48,
+      "state": "FRAGILE",
       "model_lean": "ELEVATED",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_OVER_SUPPORT"
+      ],
       "cautions": [
         "CHAOS_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Cards is too contradicted by chaos environment soft to present as a clean public read.",
+      "public_summary": "Cards has some structural support from h2h over support, but the overall layer fit remains fragile.",
       "rating": 48,
       "band": "Weak"
     }
@@ -213,25 +326,24 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "Over 2.5 is too contradicted across the current structural layers for Grêmio vs Flamengo, so the clean read is caution rather than action.",
+  "public_safe_summary": "Over 2.5 has some live shape in Grêmio vs Flamengo, but the supporting layers remain fragile and need discipline.",
   "internal_reason_tokens": [
+    "H2H_OVER_SUPPORT",
     "OVER25_HEAT_SOFT",
-    "CHAOS_ENVIRONMENT_SOFT",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "CHAOS_ENVIRONMENT_SOFT"
   ],
   "summary": {
-    "support_count": 0,
-    "caution_count": 4,
-    "lineup_available": false,
-    "h2h_available": false
+    "support_count": 1,
+    "caution_count": 2,
+    "lineup_available": true,
+    "h2h_available": true
   },
   "preview": {
-    "headline": "Grêmio vs Flamengo: Over 2.5 avoid",
-    "short_summary": "Over 2.5 is too contradicted across the current structural layers for Grêmio vs Flamengo, so the clean read is caution rather than action. Primary support comes from structural caution, while the main caution remains over25 heat soft.",
+    "headline": "Grêmio vs Flamengo: Over 2.5 fragile",
+    "short_summary": "Over 2.5 has some live shape in Grêmio vs Flamengo, but the supporting layers remain fragile and need discipline. Primary support comes from h2h over support, while the main caution remains over25 heat soft.",
     "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: FTR. Weakest read: Corners.",
     "caution_line": "Main caution: Over25 Heat Soft.",
-    "telegram_summary": "Grêmio vs Flamengo — Over 2.5 (Avoid, 32% agreement). Support: structural caution. Caution: Over25 Heat Soft.",
-    "premium_summary": "Over 2.5 is carrying a 32% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from over25 heat soft, chaos environment soft."
+    "telegram_summary": "Grêmio vs Flamengo — Over 2.5 (Fragile, 42% agreement). Support: H2H Over Support. Caution: Over25 Heat Soft.",
+    "premium_summary": "Over 2.5 is carrying a 42% agreement read across the published decision layers. Support is currently led by h2h over support, while caution is still coming from over25 heat soft, chaos environment soft."
   }
 }

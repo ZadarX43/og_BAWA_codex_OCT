@@ -1,0 +1,23 @@
+{
+  "fixture_key": "2026_05_09_Coritiba_Internacional",
+  "fixture_id": 1492253,
+  "competition": "Brazil Serie A",
+  "season": "2026",
+  "home_team": "Coritiba",
+  "away_team": "Internacional",
+  "sample_size": 1,
+  "goal_environment": 100,
+  "btts_regime": 0,
+  "booking_heat": 6,
+  "foul_intensity": 37,
+  "style_conflict_index": 4,
+  "home_win_rate": 0,
+  "draw_rate": 0,
+  "over25_rate": 0,
+  "high_cards_rate": 100,
+  "same_referee_overlap": true,
+  "same_referee_count": 1,
+  "summary": "Using the latest available same-team-pair historical regime (1 prior meeting) as supporting context for this current fixture.",
+  "fallback_mode": "historical_team_pair",
+  "source_fixture_key": "2023-10-29_internacional_coritiba"
+}

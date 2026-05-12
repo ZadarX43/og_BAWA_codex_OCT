@@ -1,0 +1,91 @@
+{
+  "fixture_key": "2026_05_10_Bahia_Cruzeiro",
+  "fixture_id": 1492251,
+  "competition": "Brazil Serie A",
+  "competition_key": "brazil_serie_a",
+  "season": "2026",
+  "home_team": "Bahia",
+  "away_team": "Cruzeiro",
+  "home_team_id": 118,
+  "away_team_id": 135,
+  "home_formation": NaN,
+  "away_formation": NaN,
+  "home_units": {
+    "attack_unit": 64,
+    "midfield_control": 46,
+    "defensive_unit": 48,
+    "wide_threat": 65,
+    "central_threat": 64,
+    "discipline_risk": 45
+  },
+  "away_units": {
+    "attack_unit": 57,
+    "midfield_control": 47,
+    "defensive_unit": 44,
+    "wide_threat": 50,
+    "central_threat": 57,
+    "discipline_risk": 69
+  },
+  "home_resolution": {
+    "starting_xi_count": 0,
+    "resolved_profiles": 0,
+    "fallback_profiles": 0
+  },
+  "away_resolution": {
+    "starting_xi_count": 0,
+    "resolved_profiles": 0,
+    "fallback_profiles": 0
+  },
+  "key_mismatches": [
+    {
+      "zone": "Bahia wide threat vs Cruzeiro resistance",
+      "advantage": "Bahia",
+      "mismatch_score": 21,
+      "left_label": "Bahia wide threat",
+      "left_value": 65,
+      "right_label": "Cruzeiro resistance",
+      "right_value": 44,
+      "summary": "Bahia wide channel has a live attacking edge"
+    },
+    {
+      "zone": "Bahia attack vs Cruzeiro defence",
+      "advantage": "Bahia",
+      "mismatch_score": 20,
+      "left_label": "Bahia attack",
+      "left_value": 64,
+      "right_label": "Cruzeiro defence",
+      "right_value": 44,
+      "summary": "Major Bahia attacking advantage"
+    },
+    {
+      "zone": "Cruzeiro attack vs Bahia defence",
+      "advantage": "Cruzeiro",
+      "mismatch_score": 9,
+      "left_label": "Cruzeiro attack",
+      "left_value": 57,
+      "right_label": "Bahia defence",
+      "right_value": 48,
+      "summary": "Major Cruzeiro attacking advantage"
+    },
+    {
+      "zone": "Cruzeiro wide threat vs Bahia resistance",
+      "advantage": "Cruzeiro",
+      "mismatch_score": 2,
+      "left_label": "Cruzeiro wide threat",
+      "left_value": 50,
+      "right_label": "Bahia resistance",
+      "right_value": 48,
+      "summary": "Cruzeiro wide channel has a live attacking edge"
+    }
+  ],
+  "player_matchups": [],
+  "home_lineup_profiles": [],
+  "away_lineup_profiles": [],
+  "formation_context": {
+    "same_formation_flag": 0,
+    "formation_mismatch_flag": 0,
+    "formation_attack_delta": 0.0,
+    "formation_defence_delta": 0.0
+  },
+  "site_alias_source_fixture_key": "2026-05-10_bahia_cruzeiro"
+}

@@ -1,0 +1,91 @@
+{
+  "fixture_key": "2026_05_10_Vasco_da_Gama_Atl_tico_PR",
+  "fixture_id": 1492259,
+  "competition": "Brazil Serie A",
+  "competition_key": "brazil_serie_a",
+  "season": "2026",
+  "home_team": "Vasco da Gama",
+  "away_team": "Atl\u00e9tico PR",
+  "home_team_id": 133,
+  "away_team_id": 134,
+  "home_formation": NaN,
+  "away_formation": NaN,
+  "home_units": {
+    "attack_unit": 61,
+    "midfield_control": 38,
+    "defensive_unit": 34,
+    "wide_threat": 72,
+    "central_threat": 61,
+    "discipline_risk": 44
+  },
+  "away_units": {
+    "attack_unit": 50,
+    "midfield_control": 50,
+    "defensive_unit": 50,
+    "wide_threat": 50,
+    "central_threat": 50,
+    "discipline_risk": 50
+  },
+  "home_resolution": {
+    "starting_xi_count": 0,
+    "resolved_profiles": 0,
+    "fallback_profiles": 0
+  },
+  "away_resolution": {
+    "starting_xi_count": 0,
+    "resolved_profiles": 0,
+    "fallback_profiles": 0
+  },
+  "key_mismatches": [
+    {
+      "zone": "Vasco DA Gama wide threat vs Atletico Paranaense resistance",
+      "advantage": "Vasco DA Gama",
+      "mismatch_score": 22,
+      "left_label": "Vasco DA Gama wide threat",
+      "left_value": 72,
+      "right_label": "Atletico Paranaense resistance",
+      "right_value": 50,
+      "summary": "Vasco DA Gama wide channel has a live attacking edge"
+    },
+    {
+      "zone": "Atletico Paranaense attack vs Vasco DA Gama defence",
+      "advantage": "Atletico Paranaense",
+      "mismatch_score": 16,
+      "left_label": "Atletico Paranaense attack",
+      "left_value": 50,
+      "right_label": "Vasco DA Gama defence",
+      "right_value": 34,
+      "summary": "Major Atletico Paranaense attacking advantage"
+    },
+    {
+      "zone": "Atletico Paranaense wide threat vs Vasco DA Gama resistance",
+      "advantage": "Atletico Paranaense",
+      "mismatch_score": 16,
+      "left_label": "Atletico Paranaense wide threat",
+      "left_value": 50,
+      "right_label": "Vasco DA Gama resistance",
+      "right_value": 34,
+      "summary": "Atletico Paranaense wide channel has a live attacking edge"
+    },
+    {
+      "zone": "Midfield control battle",
+      "advantage": "Atletico Paranaense",
+      "mismatch_score": 12,
+      "left_label": "Vasco DA Gama midfield",
+      "left_value": 38,
+      "right_label": "Atletico Paranaense midfield",
+      "right_value": 50,
+      "summary": "Atletico Paranaense should control more of the central game-state"
+    }
+  ],
+  "player_matchups": [],
+  "home_lineup_profiles": [],
+  "away_lineup_profiles": [],
+  "formation_context": {
+    "same_formation_flag": 0,
+    "formation_mismatch_flag": 0,
+    "formation_attack_delta": 0.0,
+    "formation_defence_delta": 0.0
+  },
+  "site_alias_source_fixture_key": "2026-05-11_vasco_da_gama_atletico_paranaense"
+}

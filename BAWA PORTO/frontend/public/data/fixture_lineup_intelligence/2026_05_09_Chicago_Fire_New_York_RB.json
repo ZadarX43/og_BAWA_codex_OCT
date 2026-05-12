@@ -1,0 +1,91 @@
+{
+  "fixture_key": "2026_05_09_Chicago_Fire_New_York_RB",
+  "fixture_id": 1490266,
+  "competition": "USA MLS",
+  "competition_key": "usa_mls",
+  "season": "2026",
+  "home_team": "Chicago Fire",
+  "away_team": "New York RB",
+  "home_team_id": 1607,
+  "away_team_id": 1602,
+  "home_formation": NaN,
+  "away_formation": NaN,
+  "home_units": {
+    "attack_unit": 63,
+    "midfield_control": 57,
+    "defensive_unit": 62,
+    "wide_threat": 56,
+    "central_threat": 63,
+    "discipline_risk": 57
+  },
+  "away_units": {
+    "attack_unit": 56,
+    "midfield_control": 41,
+    "defensive_unit": 34,
+    "wide_threat": 72,
+    "central_threat": 56,
+    "discipline_risk": 48
+  },
+  "home_resolution": {
+    "starting_xi_count": 0,
+    "resolved_profiles": 0,
+    "fallback_profiles": 0
+  },
+  "away_resolution": {
+    "starting_xi_count": 0,
+    "resolved_profiles": 0,
+    "fallback_profiles": 0
+  },
+  "key_mismatches": [
+    {
+      "zone": "Chicago Fire attack vs New York Red Bulls defence",
+      "advantage": "Chicago Fire",
+      "mismatch_score": 29,
+      "left_label": "Chicago Fire attack",
+      "left_value": 63,
+      "right_label": "New York Red Bulls defence",
+      "right_value": 34,
+      "summary": "Major Chicago Fire attacking advantage"
+    },
+    {
+      "zone": "Chicago Fire wide threat vs New York Red Bulls resistance",
+      "advantage": "Chicago Fire",
+      "mismatch_score": 22,
+      "left_label": "Chicago Fire wide threat",
+      "left_value": 56,
+      "right_label": "New York Red Bulls resistance",
+      "right_value": 34,
+      "summary": "Chicago Fire wide channel has a live attacking edge"
+    },
+    {
+      "zone": "Midfield control battle",
+      "advantage": "Chicago Fire",
+      "mismatch_score": 16,
+      "left_label": "Chicago Fire midfield",
+      "left_value": 57,
+      "right_label": "New York Red Bulls midfield",
+      "right_value": 41,
+      "summary": "Chicago Fire should control more of the central game-state"
+    },
+    {
+      "zone": "New York Red Bulls wide threat vs Chicago Fire resistance",
+      "advantage": "New York Red Bulls",
+      "mismatch_score": 10,
+      "left_label": "New York Red Bulls wide threat",
+      "left_value": 72,
+      "right_label": "Chicago Fire resistance",
+      "right_value": 62,
+      "summary": "New York Red Bulls wide channel has a live attacking edge"
+    }
+  ],
+  "player_matchups": [],
+  "home_lineup_profiles": [],
+  "away_lineup_profiles": [],
+  "formation_context": {
+    "same_formation_flag": 0,
+    "formation_mismatch_flag": 0,
+    "formation_attack_delta": 0.0,
+    "formation_defence_delta": 0.0
+  },
+  "site_alias_source_fixture_key": "2026-05-09_chicago_fire_new_york_red_bulls"
+}

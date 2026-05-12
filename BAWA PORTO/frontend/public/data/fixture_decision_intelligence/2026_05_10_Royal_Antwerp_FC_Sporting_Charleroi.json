@@ -72,7 +72,40 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Royal Antwerp FC",
+      "player": "Vincent Janssen",
+      "role": "Forward",
+      "power": 83,
+      "driver_metric": "Goal Threat",
+      "driver_value": 85
+    },
+    {
+      "team": "Royal Antwerp FC",
+      "player": "Gyrano Kerk",
+      "role": "Forward",
+      "power": 70,
+      "driver_metric": "Goal Threat",
+      "driver_value": 73
+    },
+    {
+      "team": "Sporting Charleroi",
+      "player": "Aurélien Scheidler",
+      "role": "Forward",
+      "power": 79,
+      "driver_metric": "Goal Threat",
+      "driver_value": 80
+    },
+    {
+      "team": "Sporting Charleroi",
+      "player": "Antoine Bernier",
+      "role": "Forward",
+      "power": 73,
+      "driver_metric": "Goal Threat",
+      "driver_value": 78
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

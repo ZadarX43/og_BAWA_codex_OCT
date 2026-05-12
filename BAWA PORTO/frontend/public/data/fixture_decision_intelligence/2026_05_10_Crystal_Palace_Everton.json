@@ -2,15 +2,15 @@
   "fixture_key": "2026_05_10_Crystal_Palace_Everton",
   "fixture": "Crystal Palace vs Everton",
   "primary_signal": "BTTS Yes",
-  "signal_state": "AVOID",
-  "agreement_score": 32,
+  "signal_state": "FRAGILE",
+  "agreement_score": 42,
   "confidence_band": "LOW",
-  "supporting_layers": [],
+  "supporting_layers": [
+    "H2H_BTTS_SUPPORT"
+  ],
   "caution_layers": [
     "BTTS_PRESSURE_WEAK",
-    "GOAL_ENVIRONMENT_SOFT",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "GOAL_ENVIRONMENT_SOFT"
   ],
   "profile_tags": {
     "home": [
@@ -71,13 +71,111 @@
       "leader": "Crystal Palace"
     }
   ],
-  "unit_battle_summary": [],
-  "key_player_drivers": [],
-  "key_mismatches": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 55,
+      "away_value": 60,
+      "delta": -5
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 54,
+      "away_value": 57,
+      "delta": -3
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 56,
+      "away_value": 62,
+      "delta": -6
+    }
+  ],
+  "key_player_drivers": [
+    {
+      "team": "Crystal Palace",
+      "player": "Ismaïla Sarr",
+      "role": "Forward",
+      "power": 78,
+      "driver_metric": "Goal Threat",
+      "driver_value": 84
+    },
+    {
+      "team": "Crystal Palace",
+      "player": "Maxence Lacroix",
+      "role": "Centre Back",
+      "power": 73,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 74
+    },
+    {
+      "team": "Everton",
+      "player": "Iliman Ndiaye",
+      "role": "Forward",
+      "power": 75,
+      "driver_metric": "Goal Threat",
+      "driver_value": 77
+    },
+    {
+      "team": "Everton",
+      "player": "James Garner",
+      "role": "Central Midfielder",
+      "power": 74,
+      "driver_metric": "Creative Spark",
+      "driver_value": 73
+    }
+  ],
+  "key_mismatches": [
+    {
+      "zone": "Crystal Palace wide threat vs Everton resistance",
+      "advantage": "Everton",
+      "mismatch_score": 38,
+      "left_label": "Crystal Palace wide threat",
+      "left_value": 22,
+      "right_label": "Everton resistance",
+      "right_value": 60,
+      "summary": "Everton can neutralize the wide-channel pressure"
+    },
+    {
+      "zone": "Everton wide threat vs Crystal Palace resistance",
+      "advantage": "Crystal Palace",
+      "mismatch_score": 7,
+      "left_label": "Everton wide threat",
+      "left_value": 55,
+      "right_label": "Crystal Palace resistance",
+      "right_value": 62,
+      "summary": "Crystal Palace can neutralize the wide-channel pressure"
+    },
+    {
+      "zone": "Everton attack vs Crystal Palace defence",
+      "advantage": "Crystal Palace",
+      "mismatch_score": 6,
+      "left_label": "Everton attack",
+      "left_value": 56,
+      "right_label": "Crystal Palace defence",
+      "right_value": 62,
+      "summary": "Crystal Palace defensive resistance is suppressing the away attack"
+    },
+    {
+      "zone": "Crystal Palace attack vs Everton defence",
+      "advantage": "Everton",
+      "mismatch_score": 5,
+      "left_label": "Crystal Palace attack",
+      "left_value": 55,
+      "right_label": "Everton defence",
+      "right_value": 60,
+      "summary": "Everton defensive resistance is suppressing the home attack"
+    }
+  ],
   "h2h_context": {
-    "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "available": true,
+    "summary": "Using the latest available same-team-pair historical regime (1 prior meeting) as supporting context for this current fixture.",
+    "sample_size": 1,
+    "goal_environment": 3,
+    "btts_regime": 100,
+    "over25_rate": 100,
+    "draw_rate": 0,
+    "booking_heat": 2
   },
   "market_suitability": {
     "ftr": {
@@ -96,7 +194,7 @@
       "read": "Driven by combined goal environment and tempo."
     },
     "team_goals": {
-      "rating": 26,
+      "rating": 56,
       "label": "Red Flag",
       "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
     },
@@ -118,36 +216,42 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 44,
-      "state": "AVOID",
+      "alignment_score": 50,
+      "state": "FRAGILE",
       "model_lean": "AWAY",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
         "GOAL_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "FTR is too contradicted by btts pressure weak to present as a clean public read.",
+      "public_summary": "FTR has some structural support from h2h btts support, but the overall layer fit remains fragile.",
       "rating": 56,
       "band": "Mixed"
     },
     "btts": {
-      "alignment_score": 32,
-      "state": "AVOID",
+      "alignment_score": 38,
+      "state": "FRAGILE",
       "model_lean": "YES",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
         "GOAL_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "BTTS is too contradicted by btts pressure weak to present as a clean public read.",
+      "public_summary": "BTTS has some structural support from h2h btts support, but the overall layer fit remains fragile.",
       "rating": 31,
       "band": "Red Flag"
     },
     "ou25": {
-      "alignment_score": 22,
+      "alignment_score": 28,
       "state": "AVOID",
       "model_lean": "UNDER25",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "GOAL_ENVIRONMENT_SOFT"
       ],
@@ -156,35 +260,40 @@
       "band": "Red Flag"
     },
     "team_goals": {
-      "alignment_score": 22,
-      "state": "AVOID",
+      "alignment_score": 54,
+      "state": "FRAGILE",
       "model_lean": "Everton 1.5+",
-      "structural_support": [],
-      "cautions": [
-        "GOAL_ENVIRONMENT_SOFT",
-        "LINEUP_DATA_MISSING"
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
       ],
-      "public_summary": "Team Goals is too contradicted by goal environment soft to present as a clean public read.",
-      "rating": 26,
-      "band": "Red Flag"
-    },
-    "correct_score": {
-      "alignment_score": 81,
-      "state": "SUPPORTED",
-      "model_lean": "STRUCTURED",
-      "structural_support": [],
       "cautions": [
         "GOAL_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Correct Score is well supported by structural support, with caution still coming from goal environment soft.",
+      "public_summary": "Team Goals has some structural support from h2h btts support, but the overall layer fit remains fragile.",
+      "rating": 56,
+      "band": "Red Flag"
+    },
+    "correct_score": {
+      "alignment_score": 87,
+      "state": "SUPPORTED",
+      "model_lean": "STRUCTURED",
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
+      "cautions": [
+        "GOAL_ENVIRONMENT_SOFT"
+      ],
+      "public_summary": "Correct Score is well supported by h2h btts support, with caution still coming from goal environment soft.",
       "rating": 100,
       "band": "Elite"
     },
     "corners": {
-      "alignment_score": 24,
+      "alignment_score": 30,
       "state": "AVOID",
       "model_lean": "ELEVATED",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "BTTS_PRESSURE_WEAK"
       ],
@@ -193,15 +302,17 @@
       "band": "Red Flag"
     },
     "cards": {
-      "alignment_score": 44,
-      "state": "AVOID",
+      "alignment_score": 50,
+      "state": "FRAGILE",
       "model_lean": "ELEVATED",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
         "GOAL_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Cards is too contradicted by btts pressure weak to present as a clean public read.",
+      "public_summary": "Cards has some structural support from h2h btts support, but the overall layer fit remains fragile.",
       "rating": 56,
       "band": "Mixed"
     }
@@ -213,25 +324,24 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "BTTS Yes is too contradicted across the current structural layers for Crystal Palace vs Everton, so the clean read is caution rather than action.",
+  "public_safe_summary": "BTTS Yes has some live shape in Crystal Palace vs Everton, but the supporting layers remain fragile and need discipline.",
   "internal_reason_tokens": [
+    "H2H_BTTS_SUPPORT",
     "BTTS_PRESSURE_WEAK",
-    "GOAL_ENVIRONMENT_SOFT",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "GOAL_ENVIRONMENT_SOFT"
   ],
   "summary": {
-    "support_count": 0,
-    "caution_count": 4,
-    "lineup_available": false,
-    "h2h_available": false
+    "support_count": 1,
+    "caution_count": 2,
+    "lineup_available": true,
+    "h2h_available": true
   },
   "preview": {
-    "headline": "Crystal Palace vs Everton: BTTS Yes avoid",
-    "short_summary": "BTTS Yes is too contradicted across the current structural layers for Crystal Palace vs Everton, so the clean read is caution rather than action. Primary support comes from structural caution, while the main caution remains btts pressure weak.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: FTR. Weakest read: Over 2.5.",
+    "headline": "Crystal Palace vs Everton: BTTS Yes fragile",
+    "short_summary": "BTTS Yes has some live shape in Crystal Palace vs Everton, but the supporting layers remain fragile and need discipline. Primary support comes from h2h btts support, while the main caution remains btts pressure weak.",
+    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: Over 2.5.",
     "caution_line": "Main caution: Btts Pressure Weak.",
-    "telegram_summary": "Crystal Palace vs Everton — BTTS Yes (Avoid, 32% agreement). Support: structural caution. Caution: Btts Pressure Weak.",
-    "premium_summary": "BTTS Yes is carrying a 32% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from btts pressure weak, goal environment soft."
+    "telegram_summary": "Crystal Palace vs Everton — BTTS Yes (Fragile, 42% agreement). Support: H2H Btts Support. Caution: Btts Pressure Weak.",
+    "premium_summary": "BTTS Yes is carrying a 42% agreement read across the published decision layers. Support is currently led by h2h btts support, while caution is still coming from btts pressure weak, goal environment soft."
   }
 }

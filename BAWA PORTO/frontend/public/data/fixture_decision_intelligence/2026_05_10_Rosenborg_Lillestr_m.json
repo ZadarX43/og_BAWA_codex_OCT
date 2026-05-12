@@ -73,7 +73,24 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Rosenborg",
+      "player": "Alexander Toft Søderlund",
+      "role": "Forward",
+      "power": 50,
+      "driver_metric": "Goal Threat",
+      "driver_value": 56
+    },
+    {
+      "team": "Rosenborg",
+      "player": "Anders Konradsen",
+      "role": "Central Midfielder",
+      "power": 50,
+      "driver_metric": "Goal Threat",
+      "driver_value": 55
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

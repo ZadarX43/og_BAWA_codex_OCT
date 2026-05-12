@@ -2,15 +2,15 @@
   "fixture_key": "2026_05_10_Vasco_da_Gama_Atl_tico_PR",
   "fixture": "Vasco da Gama vs Atlético PR",
   "primary_signal": "Vasco da Gama Win",
-  "signal_state": "AVOID",
-  "agreement_score": 44,
+  "signal_state": "FRAGILE",
+  "agreement_score": 54,
   "confidence_band": "LOW",
   "supporting_layers": [
-    "HOME_FORTRESS_ADVANTAGE"
+    "HOME_FORTRESS_ADVANTAGE",
+    "ATTACK_VS_DEFENCE_MISMATCH"
   ],
   "caution_layers": [
     "TEAM_POWER_NOT_DECISIVE",
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -72,9 +72,102 @@
       "leader": "Atlético PR"
     }
   ],
-  "unit_battle_summary": [],
-  "key_player_drivers": [],
-  "key_mismatches": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 61,
+      "away_value": 50,
+      "delta": 11
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 38,
+      "away_value": 50,
+      "delta": -12
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 50,
+      "away_value": 34,
+      "delta": 16
+    }
+  ],
+  "key_player_drivers": [
+    {
+      "team": "Vasco da Gama",
+      "player": "Robert Renan Alves Barbosa",
+      "role": "Centre Back",
+      "power": 67,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 67
+    },
+    {
+      "team": "Vasco da Gama",
+      "player": "Thiago Mendes",
+      "role": "Central Midfielder",
+      "power": 67,
+      "driver_metric": "Goal Threat",
+      "driver_value": 62
+    },
+    {
+      "team": "Atlético PR",
+      "player": "Kevin Stiven Viveros Rodallega",
+      "role": "Forward",
+      "power": 82,
+      "driver_metric": "Goal Threat",
+      "driver_value": 86
+    },
+    {
+      "team": "Atlético PR",
+      "player": "John Stiven Mendoza Valencia",
+      "role": "Forward",
+      "power": 72,
+      "driver_metric": "Goal Threat",
+      "driver_value": 73
+    }
+  ],
+  "key_mismatches": [
+    {
+      "zone": "Vasco DA Gama wide threat vs Atletico Paranaense resistance",
+      "advantage": "Vasco DA Gama",
+      "mismatch_score": 22,
+      "left_label": "Vasco DA Gama wide threat",
+      "left_value": 72,
+      "right_label": "Atletico Paranaense resistance",
+      "right_value": 50,
+      "summary": "Vasco DA Gama wide channel has a live attacking edge"
+    },
+    {
+      "zone": "Atletico Paranaense attack vs Vasco DA Gama defence",
+      "advantage": "Atletico Paranaense",
+      "mismatch_score": 16,
+      "left_label": "Atletico Paranaense attack",
+      "left_value": 50,
+      "right_label": "Vasco DA Gama defence",
+      "right_value": 34,
+      "summary": "Major Atletico Paranaense attacking advantage"
+    },
+    {
+      "zone": "Atletico Paranaense wide threat vs Vasco DA Gama resistance",
+      "advantage": "Atletico Paranaense",
+      "mismatch_score": 16,
+      "left_label": "Atletico Paranaense wide threat",
+      "left_value": 50,
+      "right_label": "Vasco DA Gama resistance",
+      "right_value": 34,
+      "summary": "Atletico Paranaense wide channel has a live attacking edge"
+    },
+    {
+      "zone": "Midfield control battle",
+      "advantage": "Atletico Paranaense",
+      "mismatch_score": 12,
+      "left_label": "Vasco DA Gama midfield",
+      "left_value": 38,
+      "right_label": "Atletico Paranaense midfield",
+      "right_value": 50,
+      "summary": "Atletico Paranaense should control more of the central game-state"
+    }
+  ],
   "h2h_context": {
     "available": false,
     "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
@@ -119,16 +212,17 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 53,
-      "state": "AVOID",
+      "alignment_score": 59,
+      "state": "FRAGILE",
       "model_lean": "HOME",
       "structural_support": [
-        "HOME_FORTRESS_ADVANTAGE"
+        "HOME_FORTRESS_ADVANTAGE",
+        "ATTACK_VS_DEFENCE_MISMATCH"
       ],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE"
       ],
-      "public_summary": "FTR is too contradicted by team power not decisive to present as a clean public read.",
+      "public_summary": "FTR has some structural support from home fortress advantage, but the overall layer fit remains fragile.",
       "rating": 66,
       "band": "Mixed"
     },
@@ -137,51 +231,54 @@
       "state": "FRAGILE",
       "model_lean": "YES",
       "structural_support": [
-        "HOME_FORTRESS_ADVANTAGE"
+        "ATTACK_VS_DEFENCE_MISMATCH"
       ],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
-        "LINEUP_DATA_MISSING"
+        "H2H_UNAVAILABLE"
       ],
-      "public_summary": "BTTS has some structural support from home fortress advantage, but the overall layer fit remains fragile.",
+      "public_summary": "BTTS has some structural support from attack versus defence mismatch, but the overall layer fit remains fragile.",
       "rating": 58,
       "band": "Mixed"
     },
     "ou25": {
-      "alignment_score": 52,
+      "alignment_score": 58,
       "state": "FRAGILE",
       "model_lean": "OVER25",
       "structural_support": [
-        "HOME_FORTRESS_ADVANTAGE"
+        "HOME_FORTRESS_ADVANTAGE",
+        "ATTACK_VS_DEFENCE_MISMATCH"
       ],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
-        "LINEUP_DATA_MISSING"
+        "H2H_UNAVAILABLE"
       ],
       "public_summary": "Over 2.5 has some structural support from home fortress advantage, but the overall layer fit remains fragile.",
       "rating": 58,
       "band": "Mixed"
     },
     "team_goals": {
-      "alignment_score": 67,
+      "alignment_score": 63,
       "state": "MIXED",
       "model_lean": "Vasco da Gama 1.5+",
       "structural_support": [
-        "HOME_FORTRESS_ADVANTAGE"
+        "ATTACK_VS_DEFENCE_MISMATCH"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "TEAM_POWER_NOT_DECISIVE",
+        "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Team Goals has partial support from home fortress advantage, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Team Goals has partial support from attack versus defence mismatch, but team power not decisive keeps it from reading clean.",
       "rating": 73,
       "band": "Strong"
     },
     "correct_score": {
-      "alignment_score": 87,
+      "alignment_score": 93,
       "state": "SUPPORTED",
       "model_lean": "OPEN",
       "structural_support": [
-        "HOME_FORTRESS_ADVANTAGE"
+        "HOME_FORTRESS_ADVANTAGE",
+        "ATTACK_VS_DEFENCE_MISMATCH"
       ],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE"
@@ -191,32 +288,34 @@
       "band": "Elite"
     },
     "corners": {
-      "alignment_score": 50,
+      "alignment_score": 56,
       "state": "FRAGILE",
       "model_lean": "ELEVATED",
       "structural_support": [
-        "HOME_FORTRESS_ADVANTAGE"
+        "HOME_FORTRESS_ADVANTAGE",
+        "ATTACK_VS_DEFENCE_MISMATCH"
       ],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
-        "LINEUP_DATA_MISSING"
+        "H2H_UNAVAILABLE"
       ],
       "public_summary": "Corners has some structural support from home fortress advantage, but the overall layer fit remains fragile.",
       "rating": 56,
       "band": "Mixed"
     },
     "cards": {
-      "alignment_score": 43,
-      "state": "AVOID",
+      "alignment_score": 49,
+      "state": "FRAGILE",
       "model_lean": "ELEVATED",
       "structural_support": [
-        "HOME_FORTRESS_ADVANTAGE"
+        "HOME_FORTRESS_ADVANTAGE",
+        "ATTACK_VS_DEFENCE_MISMATCH"
       ],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
-        "LINEUP_DATA_MISSING"
+        "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Cards is too contradicted by team power not decisive to present as a clean public read.",
+      "public_summary": "Cards has some structural support from home fortress advantage, but the overall layer fit remains fragile.",
       "rating": 47,
       "band": "Weak"
     }
@@ -228,25 +327,25 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "Vasco da Gama Win is too contradicted across the current structural layers for Vasco da Gama vs Atlético PR, so the clean read is caution rather than action.",
+  "public_safe_summary": "Vasco da Gama Win has some live shape in Vasco da Gama vs Atlético PR, but the supporting layers remain fragile and need discipline.",
   "internal_reason_tokens": [
     "HOME_FORTRESS_ADVANTAGE",
+    "ATTACK_VS_DEFENCE_MISMATCH",
     "TEAM_POWER_NOT_DECISIVE",
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
-    "support_count": 1,
-    "caution_count": 3,
-    "lineup_available": false,
+    "support_count": 2,
+    "caution_count": 2,
+    "lineup_available": true,
     "h2h_available": false
   },
   "preview": {
-    "headline": "Vasco da Gama vs Atlético PR: Vasco da Gama Win avoid",
-    "short_summary": "Vasco da Gama Win is too contradicted across the current structural layers for Vasco da Gama vs Atlético PR, so the clean read is caution rather than action. Primary support comes from home fortress advantage, while the main caution remains team power not decisive.",
+    "headline": "Vasco da Gama vs Atlético PR: Vasco da Gama Win fragile",
+    "short_summary": "Vasco da Gama Win has some live shape in Vasco da Gama vs Atlético PR, but the supporting layers remain fragile and need discipline. Primary support comes from home fortress advantage, while the main caution remains team power not decisive.",
     "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: Cards.",
     "caution_line": "Main caution: Team Power Not Decisive.",
-    "telegram_summary": "Vasco da Gama vs Atlético PR — Vasco da Gama Win (Avoid, 44% agreement). Support: Home Fortress Advantage. Caution: Team Power Not Decisive.",
-    "premium_summary": "Vasco da Gama Win is carrying a 44% agreement read across the published decision layers. Support is currently led by home fortress advantage, while caution is still coming from team power not decisive, lineup data missing."
+    "telegram_summary": "Vasco da Gama vs Atlético PR — Vasco da Gama Win (Fragile, 54% agreement). Support: Home Fortress Advantage. Caution: Team Power Not Decisive.",
+    "premium_summary": "Vasco da Gama Win is carrying a 54% agreement read across the published decision layers. Support is currently led by home fortress advantage, attack vs defence mismatch, while caution is still coming from team power not decisive, h2h unavailable."
   }
 }

@@ -2,15 +2,15 @@
   "fixture_key": "2026_05_10_Remo_Palmeiras",
   "fixture": "Remo vs Palmeiras",
   "primary_signal": "Palmeiras Win",
-  "signal_state": "FRAGILE",
-  "agreement_score": 56,
+  "signal_state": "MIXED",
+  "agreement_score": 66,
   "confidence_band": "ELITE",
   "supporting_layers": [
     "AWAY_POWER_ADVANTAGE",
-    "AWAY_THREAT_ADVANTAGE"
+    "AWAY_THREAT_ADVANTAGE",
+    "AWAY_ATTACK_MISMATCH"
   ],
   "caution_layers": [
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -72,9 +72,102 @@
       "leader": "Palmeiras"
     }
   ],
-  "unit_battle_summary": [],
-  "key_player_drivers": [],
-  "key_mismatches": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 38,
+      "away_value": 66,
+      "delta": -28
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 39,
+      "away_value": 48,
+      "delta": -9
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 66,
+      "away_value": 31,
+      "delta": 35
+    }
+  ],
+  "key_player_drivers": [
+    {
+      "team": "Remo",
+      "player": "Alef Mangueira Severino Pereira",
+      "role": "Forward",
+      "power": 73,
+      "driver_metric": "Goal Threat",
+      "driver_value": 74
+    },
+    {
+      "team": "Remo",
+      "player": "Marcelo Rangel Rosa",
+      "role": "Goalkeeper",
+      "power": 65,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 52
+    },
+    {
+      "team": "Palmeiras",
+      "player": "José Manuel López",
+      "role": "Forward",
+      "power": 76,
+      "driver_metric": "Goal Threat",
+      "driver_value": 77
+    },
+    {
+      "team": "Palmeiras",
+      "player": "Carlos Miguel dos Santos Pereira",
+      "role": "Goalkeeper",
+      "power": 69,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 51
+    }
+  ],
+  "key_mismatches": [
+    {
+      "zone": "Palmeiras wide threat vs Remo resistance",
+      "advantage": "Palmeiras",
+      "mismatch_score": 37,
+      "left_label": "Palmeiras wide threat",
+      "left_value": 68,
+      "right_label": "Remo resistance",
+      "right_value": 31,
+      "summary": "Palmeiras wide channel has a live attacking edge"
+    },
+    {
+      "zone": "Palmeiras attack vs Remo defence",
+      "advantage": "Palmeiras",
+      "mismatch_score": 35,
+      "left_label": "Palmeiras attack",
+      "left_value": 66,
+      "right_label": "Remo defence",
+      "right_value": 31,
+      "summary": "Major Palmeiras attacking advantage"
+    },
+    {
+      "zone": "Remo attack vs Palmeiras defence",
+      "advantage": "Palmeiras",
+      "mismatch_score": 28,
+      "left_label": "Remo attack",
+      "left_value": 38,
+      "right_label": "Palmeiras defence",
+      "right_value": 66,
+      "summary": "Palmeiras defensive resistance is suppressing the home attack"
+    },
+    {
+      "zone": "Remo wide threat vs Palmeiras resistance",
+      "advantage": "Palmeiras",
+      "mismatch_score": 18,
+      "left_label": "Remo wide threat",
+      "left_value": 48,
+      "right_label": "Palmeiras resistance",
+      "right_value": 66,
+      "summary": "Palmeiras can neutralize the wide-channel pressure"
+    }
+  ],
   "h2h_context": {
     "available": false,
     "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
@@ -97,7 +190,7 @@
       "read": "Driven by combined goal environment and tempo."
     },
     "team_goals": {
-      "rating": 53,
+      "rating": 66,
       "label": "Weak",
       "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
     },
@@ -119,39 +212,37 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 64,
-      "state": "FRAGILE",
+      "alignment_score": 70,
+      "state": "MIXED",
       "model_lean": "AWAY",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
-        "AWAY_THREAT_ADVANTAGE"
+        "AWAY_THREAT_ADVANTAGE",
+        "AWAY_ATTACK_MISMATCH"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "FTR has some structural support from away power advantage, but the overall layer fit remains fragile.",
+      "public_summary": "FTR has partial support from away power advantage, but h2h unavailable keeps it from reading clean.",
       "rating": 76,
       "band": "Positive"
     },
     "btts": {
-      "alignment_score": 54,
+      "alignment_score": 52,
       "state": "FRAGILE",
       "model_lean": "YES",
       "structural_support": [
-        "AWAY_POWER_ADVANTAGE",
-        "AWAY_THREAT_ADVANTAGE"
+        "AWAY_ATTACK_MISMATCH"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "BTTS has some structural support from away power advantage, but the overall layer fit remains fragile.",
+      "public_summary": "BTTS has some structural support from away attack mismatch, but the overall layer fit remains fragile.",
       "rating": 53,
       "band": "Weak"
     },
     "ou25": {
-      "alignment_score": 53,
+      "alignment_score": 57,
       "state": "FRAGILE",
       "model_lean": "UNDER25",
       "structural_support": [
@@ -159,7 +250,6 @@
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "Over 2.5 has some structural support from away power advantage, but the overall layer fit remains fragile.",
@@ -167,29 +257,27 @@
       "band": "Weak"
     },
     "team_goals": {
-      "alignment_score": 58,
-      "state": "FRAGILE",
-      "model_lean": "Remo 1.5+",
+      "alignment_score": 62,
+      "state": "MIXED",
+      "model_lean": "Palmeiras 1.5+",
       "structural_support": [
-        "AWAY_POWER_ADVANTAGE",
-        "AWAY_THREAT_ADVANTAGE"
+        "AWAY_ATTACK_MISMATCH"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Team Goals has some structural support from away power advantage, but the overall layer fit remains fragile.",
-      "rating": 53,
+      "public_summary": "Team Goals has partial support from away attack mismatch, but h2h unavailable keeps it from reading clean.",
+      "rating": 66,
       "band": "Weak"
     },
     "correct_score": {
-      "alignment_score": 48,
+      "alignment_score": 52,
       "state": "FRAGILE",
       "model_lean": "OPEN",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "Correct Score has some structural support from away power advantage, but the overall layer fit remains fragile.",
@@ -197,23 +285,22 @@
       "band": "Weak"
     },
     "corners": {
-      "alignment_score": 58,
-      "state": "FRAGILE",
+      "alignment_score": 62,
+      "state": "MIXED",
       "model_lean": "ELEVATED",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Corners has some structural support from away power advantage, but the overall layer fit remains fragile.",
+      "public_summary": "Corners has partial support from away power advantage, but h2h unavailable keeps it from reading clean.",
       "rating": 58,
       "band": "Mixed"
     },
     "cards": {
-      "alignment_score": 47,
+      "alignment_score": 51,
       "state": "FRAGILE",
       "model_lean": "ELEVATED",
       "structural_support": [
@@ -221,7 +308,6 @@
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "Cards has some structural support from away power advantage, but the overall layer fit remains fragile.",
@@ -236,25 +322,25 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "Palmeiras Win has some live shape in Remo vs Palmeiras, but the supporting layers remain fragile and need discipline.",
+  "public_safe_summary": "Palmeiras Win has live support in Remo vs Palmeiras, but the supporting layers are not clean enough to read as fully aligned.",
   "internal_reason_tokens": [
     "AWAY_POWER_ADVANTAGE",
     "AWAY_THREAT_ADVANTAGE",
-    "LINEUP_DATA_MISSING",
+    "AWAY_ATTACK_MISMATCH",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
-    "support_count": 2,
-    "caution_count": 2,
-    "lineup_available": false,
+    "support_count": 3,
+    "caution_count": 1,
+    "lineup_available": true,
     "h2h_available": false
   },
   "preview": {
-    "headline": "Remo vs Palmeiras: Palmeiras Win fragile",
-    "short_summary": "Palmeiras Win has some live shape in Remo vs Palmeiras, but the supporting layers remain fragile and need discipline. Primary support comes from away power advantage, while the main caution remains lineup data missing.",
-    "market_summary": "Best aligned market: FTR (Fragile). Secondary support: Team Goals. Weakest read: Cards.",
-    "caution_line": "Main caution: Lineup Data Missing.",
-    "telegram_summary": "Remo vs Palmeiras — Palmeiras Win (Fragile, 56% agreement). Support: Away Power Advantage. Caution: Lineup Data Missing.",
-    "premium_summary": "Palmeiras Win is carrying a 56% agreement read across the published decision layers. Support is currently led by away power advantage, away threat advantage, while caution is still coming from lineup data missing, h2h unavailable."
+    "headline": "Remo vs Palmeiras: Palmeiras Win mixed",
+    "short_summary": "Palmeiras Win has live support in Remo vs Palmeiras, but the supporting layers are not clean enough to read as fully aligned. Primary support comes from away power advantage, while the main caution remains h2h unavailable.",
+    "market_summary": "Best aligned market: FTR (Mixed). Secondary support: Team Goals. Weakest read: Cards.",
+    "caution_line": "Main caution: H2H Unavailable.",
+    "telegram_summary": "Remo vs Palmeiras — Palmeiras Win (Mixed, 66% agreement). Support: Away Power Advantage. Caution: H2H Unavailable.",
+    "premium_summary": "Palmeiras Win is carrying a 66% agreement read across the published decision layers. Support is currently led by away power advantage, away threat advantage, while caution is still coming from h2h unavailable."
   }
 }

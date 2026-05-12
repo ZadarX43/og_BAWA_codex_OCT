@@ -49,6 +49,7 @@ def parse_args() -> argparse.Namespace:
         default="frontend/public/data",
         help="Publish output root. Default: frontend/public/data",
     )
+    parser.add_argument("--fixture-feed", default=None, help="Optional fixture feed JSON for current fixture-key aliases.")
     return parser.parse_args()
 
 
@@ -673,13 +674,210 @@ def build_fixture_payloads(entry: dict[str, Any], output_root: Path) -> tuple[li
     return records, index_records
 
 
+def load_fixture_feed_rows(path: Path | None) -> list[dict[str, Any]]:
+    if not path or not path.exists():
+        return []
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    rows = payload.get("fixtures") if isinstance(payload, dict) else None
+    return list(rows) if isinstance(rows, list) else []
+
+
+def alias_current_fixture_keys(
+    records: list[dict[str, Any]],
+    index_records: list[dict[str, Any]],
+    fixture_feed_rows: list[dict[str, Any]],
+    competition_name: str,
+    season: str,
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    if not fixture_feed_rows:
+        return records, index_records
+
+    target_competition = normalize_text(competition_name)
+    target_season = season_start(season)
+    relevant_rows = [
+        row
+        for row in fixture_feed_rows
+        if normalize_text(row.get("league")) == target_competition
+        and (
+            not season_start(row.get("api_season") or row.get("season"))
+            or season_start(row.get("api_season") or row.get("season")) == target_season
+        )
+    ]
+    if not relevant_rows:
+        return records, index_records
+
+    by_fixture_id = {
+        str(row.get("api_fixture_id") or row.get("fixture_id") or "").strip(): row
+        for row in relevant_rows
+        if str(row.get("api_fixture_id") or row.get("fixture_id") or "").strip()
+    }
+    by_pair = {
+        (
+            normalize_team_key(row.get("home_team")),
+            normalize_team_key(row.get("away_team")),
+        ): row
+        for row in relevant_rows
+    }
+
+    seen_keys = {record["fixture_key"] for record in index_records}
+    aliased_records = list(records)
+    aliased_index = list(index_records)
+    for payload in records:
+        fixture_row = None
+        fixture_id_key = str(payload.get("fixture_id") or "").strip()
+        if fixture_id_key:
+            fixture_row = by_fixture_id.get(fixture_id_key)
+        if not fixture_row:
+            fixture_row = by_pair.get(
+                (
+                    normalize_team_key(payload.get("home_team")),
+                    normalize_team_key(payload.get("away_team")),
+                )
+            )
+        if not fixture_row:
+            continue
+        current_key = str(fixture_row.get("fixture_key") or "").strip()
+        if not current_key or current_key in seen_keys:
+            continue
+        aliased_payload = dict(payload)
+        aliased_payload.update(
+            {
+                "fixture_key": current_key,
+                "fixture_id": int(fixture_row.get("api_fixture_id") or payload.get("fixture_id") or 0) or payload.get("fixture_id"),
+                "home_team": fixture_row.get("home_team") or payload.get("home_team"),
+                "away_team": fixture_row.get("away_team") or payload.get("away_team"),
+                "site_alias_source_fixture_key": payload.get("fixture_key"),
+            }
+        )
+        aliased_records.append(aliased_payload)
+        aliased_index.append(
+            {
+                "fixture_key": current_key,
+                "fixture_id": aliased_payload["fixture_id"],
+                "competition": payload["competition"],
+                "competition_key": payload["competition_key"],
+                "season": payload["season"],
+                "home_team": aliased_payload["home_team"],
+                "away_team": aliased_payload["away_team"],
+            }
+        )
+        seen_keys.add(current_key)
+    return aliased_records, aliased_index
+
+
+def add_fixture_feed_placeholders(
+    records: list[dict[str, Any]],
+    index_records: list[dict[str, Any]],
+    fixture_feed_rows: list[dict[str, Any]],
+    competition_name: str,
+    competition_key: str,
+    season: str,
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    if not fixture_feed_rows:
+        return records, index_records
+
+    target_competition = normalize_text(competition_name)
+    target_season = season_start(season)
+    relevant_rows = [
+        row
+        for row in fixture_feed_rows
+        if normalize_text(row.get("league")) == target_competition
+        and (
+            not season_start(row.get("api_season") or row.get("season"))
+            or season_start(row.get("api_season") or row.get("season")) == target_season
+        )
+    ]
+    if not relevant_rows:
+        return records, index_records
+
+    seen_keys = {record["fixture_key"] for record in index_records}
+    padded_records = list(records)
+    padded_index = list(index_records)
+    for fixture_row in relevant_rows:
+        current_key = str(fixture_row.get("fixture_key") or "").strip()
+        if not current_key or current_key in seen_keys:
+            continue
+        placeholder = {
+            "fixture_key": current_key,
+            "fixture_id": int(fixture_row.get("api_fixture_id") or fixture_row.get("fixture_id") or 0) or None,
+            "competition": competition_name,
+            "competition_key": competition_key,
+            "season": season,
+            "home_team": fixture_row.get("home_team"),
+            "away_team": fixture_row.get("away_team"),
+            "home_formation": "",
+            "away_formation": "",
+            "home_units": {},
+            "away_units": {},
+            "home_lineup_profiles": [],
+            "away_lineup_profiles": [],
+            "key_mismatches": [],
+            "player_matchups": [],
+            "coverage_status": "unpublished",
+            "summary": "No publish-safe lineup intelligence has been produced for this fixture yet, so the page should fall back to squad and team intelligence.",
+        }
+        padded_records.append(placeholder)
+        padded_index.append(
+            {
+                "fixture_key": current_key,
+                "fixture_id": placeholder["fixture_id"],
+                "competition": competition_name,
+                "competition_key": competition_key,
+                "season": season,
+                "home_team": placeholder["home_team"],
+                "away_team": placeholder["away_team"],
+                "coverage_status": "unpublished",
+            }
+        )
+        seen_keys.add(current_key)
+    return padded_records, padded_index
+
+
 def main() -> None:
     args = parse_args()
     entries = load_entries(args)
     output_root = Path(args.output_root)
+    fixture_feed_rows = load_fixture_feed_rows(Path(args.fixture_feed)) if args.fixture_feed else []
     total = 0
     for entry in entries:
         records, _ = build_fixture_payloads(entry, output_root)
+        if fixture_feed_rows:
+            base = output_root / "fixture_lineup_intelligence"
+            index_path = base / "index.json"
+            existing_index = json.loads(index_path.read_text(encoding="utf-8")) if index_path.exists() else []
+            existing_index = [
+                row
+                for row in existing_index
+                if not (
+                    row.get("competition_key") == entry["competition_key"]
+                    and str(row.get("season")) == str(entry["season"])
+                )
+            ]
+            records, index_records = build_fixture_payloads(entry, output_root)
+            records, index_records = alias_current_fixture_keys(
+                records,
+                index_records,
+                fixture_feed_rows,
+                entry["competition_name"],
+                str(entry["season"]),
+            )
+            records, index_records = add_fixture_feed_placeholders(
+                records,
+                index_records,
+                fixture_feed_rows,
+                entry["competition_name"],
+                entry["competition_key"],
+                str(entry["season"]),
+            )
+            base.mkdir(parents=True, exist_ok=True)
+            for payload in records:
+                write_json(base / f"{payload['fixture_key']}.json", payload)
+            write_json(
+                index_path,
+                sorted(existing_index + index_records, key=lambda row: (row["competition_key"], row["season"], row["fixture_key"])),
+            )
+        else:
+            index_records = []
         total += len(records)
         print(
             f"Built {len(records)} fixture lineup intelligence profiles for "

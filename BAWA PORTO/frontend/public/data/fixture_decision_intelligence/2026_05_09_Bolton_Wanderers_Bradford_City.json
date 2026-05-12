@@ -73,7 +73,40 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Bolton Wanderers",
+      "player": "Samuel George Dalby",
+      "role": "Forward",
+      "power": 85,
+      "driver_metric": "Goal Threat",
+      "driver_value": 91
+    },
+    {
+      "team": "Bolton Wanderers",
+      "player": "Johnny Kenny",
+      "role": "Forward",
+      "power": 74,
+      "driver_metric": "Goal Threat",
+      "driver_value": 80
+    },
+    {
+      "team": "Bradford City",
+      "player": "Stephen Humphrys",
+      "role": "Forward",
+      "power": 79,
+      "driver_metric": "Goal Threat",
+      "driver_value": 89
+    },
+    {
+      "team": "Bradford City",
+      "player": "Max Power",
+      "role": "Central Midfielder",
+      "power": 69,
+      "driver_metric": "Creative Spark",
+      "driver_value": 71
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

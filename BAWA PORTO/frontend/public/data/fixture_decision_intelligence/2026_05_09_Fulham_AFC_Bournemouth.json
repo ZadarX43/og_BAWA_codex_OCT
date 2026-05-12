@@ -75,7 +75,40 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Fulham",
+      "player": "Kevin Santos Lopes de Macedo",
+      "role": "Forward",
+      "power": 60,
+      "driver_metric": "Goal Threat",
+      "driver_value": 62
+    },
+    {
+      "team": "Fulham",
+      "player": "Harrison Reed",
+      "role": "Central Midfielder",
+      "power": 55,
+      "driver_metric": "Goal Threat",
+      "driver_value": 60
+    },
+    {
+      "team": "AFC Bournemouth",
+      "player": "David Brooks",
+      "role": "Forward",
+      "power": 60,
+      "driver_metric": "Goal Threat",
+      "driver_value": 62
+    },
+    {
+      "team": "AFC Bournemouth",
+      "player": "Evanilson",
+      "role": "Forward",
+      "power": 54,
+      "driver_metric": "Goal Threat",
+      "driver_value": 57
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

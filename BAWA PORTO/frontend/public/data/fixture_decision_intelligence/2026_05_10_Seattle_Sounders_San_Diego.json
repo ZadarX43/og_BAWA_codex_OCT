@@ -3,13 +3,12 @@
   "fixture": "Seattle Sounders vs San Diego",
   "primary_signal": "BTTS Yes",
   "signal_state": "AVOID",
-  "agreement_score": 32,
+  "agreement_score": 36,
   "confidence_band": "LOW",
   "supporting_layers": [],
   "caution_layers": [
     "BTTS_PRESSURE_WEAK",
     "GOAL_ENVIRONMENT_SOFT",
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -71,7 +70,26 @@
       "leader": "San Diego"
     }
   ],
-  "unit_battle_summary": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 53,
+      "away_value": 49,
+      "delta": 4
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 62,
+      "away_value": 47,
+      "delta": 15
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 50,
+      "away_value": 66,
+      "delta": -16
+    }
+  ],
   "key_player_drivers": [
     {
       "team": "Seattle Sounders",
@@ -106,7 +124,48 @@
       "driver_value": 72
     }
   ],
-  "key_mismatches": [],
+  "key_mismatches": [
+    {
+      "zone": "San Diego wide threat vs Seattle Sounders resistance",
+      "advantage": "Seattle Sounders",
+      "mismatch_score": 24,
+      "left_label": "San Diego wide threat",
+      "left_value": 42,
+      "right_label": "Seattle Sounders resistance",
+      "right_value": 66,
+      "summary": "Seattle Sounders can neutralize the wide-channel pressure"
+    },
+    {
+      "zone": "San Diego attack vs Seattle Sounders defence",
+      "advantage": "Seattle Sounders",
+      "mismatch_score": 16,
+      "left_label": "San Diego attack",
+      "left_value": 50,
+      "right_label": "Seattle Sounders defence",
+      "right_value": 66,
+      "summary": "Seattle Sounders defensive resistance is suppressing the away attack"
+    },
+    {
+      "zone": "Midfield control battle",
+      "advantage": "Seattle Sounders",
+      "mismatch_score": 15,
+      "left_label": "Seattle Sounders midfield",
+      "left_value": 62,
+      "right_label": "San Diego midfield",
+      "right_value": 47,
+      "summary": "Seattle Sounders should control more of the central game-state"
+    },
+    {
+      "zone": "Seattle Sounders wide threat vs San Diego resistance",
+      "advantage": "Seattle Sounders",
+      "mismatch_score": 13,
+      "left_label": "Seattle Sounders wide threat",
+      "left_value": 62,
+      "right_label": "San Diego resistance",
+      "right_value": 49,
+      "summary": "Seattle Sounders wide channel has a live attacking edge"
+    }
+  ],
   "h2h_context": {
     "available": false,
     "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
@@ -164,7 +223,7 @@
       "band": "Mixed"
     },
     "btts": {
-      "alignment_score": 37,
+      "alignment_score": 40,
       "state": "AVOID",
       "model_lean": "YES",
       "structural_support": [],
@@ -189,15 +248,14 @@
       "band": "Weak"
     },
     "team_goals": {
-      "alignment_score": 43,
-      "state": "AVOID",
-      "model_lean": "San Diego 1.5+",
+      "alignment_score": 47,
+      "state": "FRAGILE",
+      "model_lean": "Seattle Sounders 1.5+",
       "structural_support": [],
       "cautions": [
-        "GOAL_ENVIRONMENT_SOFT",
-        "LINEUP_DATA_MISSING"
+        "GOAL_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Team Goals is too contradicted by goal environment soft to present as a clean public read.",
+      "public_summary": "Team Goals has some structural support from structural support, but the overall layer fit remains fragile.",
       "rating": 55,
       "band": "Mixed"
     },
@@ -250,13 +308,12 @@
   "internal_reason_tokens": [
     "BTTS_PRESSURE_WEAK",
     "GOAL_ENVIRONMENT_SOFT",
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
     "support_count": 0,
-    "caution_count": 4,
-    "lineup_available": false,
+    "caution_count": 3,
+    "lineup_available": true,
     "h2h_available": false
   },
   "preview": {
@@ -264,7 +321,7 @@
     "short_summary": "BTTS Yes is too contradicted across the current structural layers for Seattle Sounders vs San Diego, so the clean read is caution rather than action. Primary support comes from structural caution, while the main caution remains btts pressure weak.",
     "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: FTR. Weakest read: Cards.",
     "caution_line": "Main caution: Btts Pressure Weak.",
-    "telegram_summary": "Seattle Sounders vs San Diego — BTTS Yes (Avoid, 32% agreement). Support: structural caution. Caution: Btts Pressure Weak.",
-    "premium_summary": "BTTS Yes is carrying a 32% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from btts pressure weak, goal environment soft."
+    "telegram_summary": "Seattle Sounders vs San Diego — BTTS Yes (Avoid, 36% agreement). Support: structural caution. Caution: Btts Pressure Weak.",
+    "premium_summary": "BTTS Yes is carrying a 36% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from btts pressure weak, goal environment soft."
   }
 }

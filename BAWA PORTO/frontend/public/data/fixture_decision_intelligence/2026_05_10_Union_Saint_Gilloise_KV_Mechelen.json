@@ -76,7 +76,40 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Union Saint-Gilloise",
+      "player": "Kevin Rodríguez",
+      "role": "Forward",
+      "power": 85,
+      "driver_metric": "Goal Threat",
+      "driver_value": 94
+    },
+    {
+      "team": "Union Saint-Gilloise",
+      "player": "Promise Akinpelu",
+      "role": "Forward",
+      "power": 83,
+      "driver_metric": "Goal Threat",
+      "driver_value": 94
+    },
+    {
+      "team": "KV Mechelen",
+      "player": "Lion Lauberbach",
+      "role": "Forward",
+      "power": 80,
+      "driver_metric": "Goal Threat",
+      "driver_value": 86
+    },
+    {
+      "team": "KV Mechelen",
+      "player": "Myron van Brederode",
+      "role": "Forward",
+      "power": 74,
+      "driver_metric": "Goal Threat",
+      "driver_value": 76
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

@@ -1,0 +1,23 @@
+{
+  "fixture_key": "2026_05_11_Los_Angeles_FC_Houston_Dynamo",
+  "fixture_id": 1490280,
+  "competition": "USA MLS",
+  "season": "2026",
+  "home_team": "Los Angeles FC",
+  "away_team": "Houston Dynamo",
+  "sample_size": 1,
+  "goal_environment": 2,
+  "btts_regime": 0,
+  "booking_heat": 6,
+  "foul_intensity": 23,
+  "style_conflict_index": 26,
+  "home_win_rate": 0,
+  "draw_rate": 0,
+  "over25_rate": 0,
+  "high_cards_rate": 100,
+  "same_referee_overlap": false,
+  "same_referee_count": 0,
+  "summary": "Using the latest available same-team-pair historical regime (1 prior meeting) as supporting context for this current fixture.",
+  "fallback_mode": "historical_team_pair",
+  "source_fixture_key": "2024-09-08_houston_dynamo_los_angeles_fc"
+}

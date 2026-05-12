@@ -73,7 +73,24 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Olympique Marseille",
+      "player": "Mason Greenwood",
+      "role": "Forward",
+      "power": 70,
+      "driver_metric": "Goal Threat",
+      "driver_value": 69
+    },
+    {
+      "team": "Olympique Marseille",
+      "player": "Pierre-Emerick Aubameyang",
+      "role": "Forward",
+      "power": 67,
+      "driver_metric": "Goal Threat",
+      "driver_value": 67
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

@@ -3,7 +3,7 @@
   "fixture": "Monaco vs Lille",
   "primary_signal": "BTTS Yes",
   "signal_state": "AVOID",
-  "agreement_score": 38,
+  "agreement_score": 40,
   "confidence_band": "LOW",
   "supporting_layers": [
     "GOAL_ENVIRONMENT_SUPPORT"
@@ -11,8 +11,7 @@
   "caution_layers": [
     "BTTS_PRESSURE_WEAK",
     "DEFENSIVE_SUPPRESSION_RISK",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "LINEUP_DATA_MISSING"
   ],
   "profile_tags": {
     "home": [
@@ -77,12 +76,50 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Monaco",
+      "player": "Maghnes Akliouche",
+      "role": "Forward",
+      "power": 72,
+      "driver_metric": "Goal Threat",
+      "driver_value": 70
+    },
+    {
+      "team": "Monaco",
+      "player": "Folarin Balogun",
+      "role": "Forward",
+      "power": 71,
+      "driver_metric": "Goal Threat",
+      "driver_value": 73
+    },
+    {
+      "team": "Lille",
+      "player": "Jonathan David",
+      "role": "Forward",
+      "power": 60,
+      "driver_metric": "Goal Threat",
+      "driver_value": 61
+    },
+    {
+      "team": "Lille",
+      "player": "Alexsandro Ribeiro",
+      "role": "Centre Back",
+      "power": 58,
+      "driver_metric": "Midfield Engine",
+      "driver_value": 56
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
-    "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "available": true,
+    "summary": "Using the latest available same-team-pair historical regime (1 prior meeting) as supporting context for this current fixture.",
+    "sample_size": 1,
+    "goal_environment": 0,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 100,
+    "booking_heat": 7
   },
   "market_suitability": {
     "ftr": {
@@ -138,7 +175,7 @@
       "band": "Positive"
     },
     "btts": {
-      "alignment_score": 45,
+      "alignment_score": 46,
       "state": "AVOID",
       "model_lean": "YES",
       "structural_support": [
@@ -236,21 +273,20 @@
     "GOAL_ENVIRONMENT_SUPPORT",
     "BTTS_PRESSURE_WEAK",
     "DEFENSIVE_SUPPRESSION_RISK",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "LINEUP_DATA_MISSING"
   ],
   "summary": {
     "support_count": 1,
-    "caution_count": 4,
+    "caution_count": 3,
     "lineup_available": false,
-    "h2h_available": false
+    "h2h_available": true
   },
   "preview": {
     "headline": "Monaco vs Lille: BTTS Yes avoid",
     "short_summary": "BTTS Yes is too contradicted across the current structural layers for Monaco vs Lille, so the clean read is caution rather than action. Primary support comes from goal environment support, while the main caution remains btts pressure weak.",
     "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: BTTS.",
     "caution_line": "Main caution: Btts Pressure Weak.",
-    "telegram_summary": "Monaco vs Lille — BTTS Yes (Avoid, 38% agreement). Support: Goal Environment Support. Caution: Btts Pressure Weak.",
-    "premium_summary": "BTTS Yes is carrying a 38% agreement read across the published decision layers. Support is currently led by goal environment support, while caution is still coming from btts pressure weak, defensive suppression risk."
+    "telegram_summary": "Monaco vs Lille — BTTS Yes (Avoid, 40% agreement). Support: Goal Environment Support. Caution: Btts Pressure Weak.",
+    "premium_summary": "BTTS Yes is carrying a 40% agreement read across the published decision layers. Support is currently led by goal environment support, while caution is still coming from btts pressure weak, defensive suppression risk."
   }
 }

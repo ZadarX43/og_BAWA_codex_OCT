@@ -1,0 +1,91 @@
+{
+  "fixture_key": "2026_05_10_Gr_mio_Flamengo",
+  "fixture_id": 1492255,
+  "competition": "Brazil Serie A",
+  "competition_key": "brazil_serie_a",
+  "season": "2026",
+  "home_team": "Gr\u00eamio",
+  "away_team": "Flamengo",
+  "home_team_id": 130,
+  "away_team_id": 127,
+  "home_formation": NaN,
+  "away_formation": NaN,
+  "home_units": {
+    "attack_unit": 31,
+    "midfield_control": 64,
+    "defensive_unit": 65,
+    "wide_threat": 33,
+    "central_threat": 31,
+    "discipline_risk": 41
+  },
+  "away_units": {
+    "attack_unit": 76,
+    "midfield_control": 51,
+    "defensive_unit": 67,
+    "wide_threat": 45,
+    "central_threat": 76,
+    "discipline_risk": 54
+  },
+  "home_resolution": {
+    "starting_xi_count": 0,
+    "resolved_profiles": 0,
+    "fallback_profiles": 0
+  },
+  "away_resolution": {
+    "starting_xi_count": 0,
+    "resolved_profiles": 0,
+    "fallback_profiles": 0
+  },
+  "key_mismatches": [
+    {
+      "zone": "Gremio attack vs Flamengo defence",
+      "advantage": "Flamengo",
+      "mismatch_score": 36,
+      "left_label": "Gremio attack",
+      "left_value": 31,
+      "right_label": "Flamengo defence",
+      "right_value": 67,
+      "summary": "Flamengo defensive resistance is suppressing the home attack"
+    },
+    {
+      "zone": "Gremio wide threat vs Flamengo resistance",
+      "advantage": "Flamengo",
+      "mismatch_score": 34,
+      "left_label": "Gremio wide threat",
+      "left_value": 33,
+      "right_label": "Flamengo resistance",
+      "right_value": 67,
+      "summary": "Flamengo can neutralize the wide-channel pressure"
+    },
+    {
+      "zone": "Flamengo wide threat vs Gremio resistance",
+      "advantage": "Gremio",
+      "mismatch_score": 20,
+      "left_label": "Flamengo wide threat",
+      "left_value": 45,
+      "right_label": "Gremio resistance",
+      "right_value": 65,
+      "summary": "Gremio can neutralize the wide-channel pressure"
+    },
+    {
+      "zone": "Midfield control battle",
+      "advantage": "Gremio",
+      "mismatch_score": 13,
+      "left_label": "Gremio midfield",
+      "left_value": 64,
+      "right_label": "Flamengo midfield",
+      "right_value": 51,
+      "summary": "Gremio should control more of the central game-state"
+    }
+  ],
+  "player_matchups": [],
+  "home_lineup_profiles": [],
+  "away_lineup_profiles": [],
+  "formation_context": {
+    "same_formation_flag": 0,
+    "formation_mismatch_flag": 0,
+    "formation_attack_delta": 0.0,
+    "formation_defence_delta": 0.0
+  },
+  "site_alias_source_fixture_key": "2026-05-10_gremio_flamengo"
+}

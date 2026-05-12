@@ -72,7 +72,40 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Brighton & Hove Albion",
+      "player": "Brajan Gruda",
+      "role": "Central Midfielder",
+      "power": 56,
+      "driver_metric": "Goal Threat",
+      "driver_value": 61
+    },
+    {
+      "team": "Brighton & Hove Albion",
+      "player": "Bart Verbruggen",
+      "role": "Goalkeeper",
+      "power": 50,
+      "driver_metric": "Creative Spark",
+      "driver_value": 50
+    },
+    {
+      "team": "Wolverhampton Wanderers",
+      "player": "Jhon Arias",
+      "role": "Forward",
+      "power": 60,
+      "driver_metric": "Goal Threat",
+      "driver_value": 62
+    },
+    {
+      "team": "Wolverhampton Wanderers",
+      "player": "Jørgen Strand Larsen",
+      "role": "Forward",
+      "power": 60,
+      "driver_metric": "Goal Threat",
+      "driver_value": 62
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

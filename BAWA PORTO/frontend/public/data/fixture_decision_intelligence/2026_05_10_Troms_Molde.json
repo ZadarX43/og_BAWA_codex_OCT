@@ -73,7 +73,24 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Molde",
+      "player": "Kristoffer Haugen",
+      "role": "Centre Back",
+      "power": 59,
+      "driver_metric": "Goal Threat",
+      "driver_value": 62
+    },
+    {
+      "team": "Molde",
+      "player": "Eirik Hestad",
+      "role": "Central Midfielder",
+      "power": 54,
+      "driver_metric": "Goal Threat",
+      "driver_value": 62
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

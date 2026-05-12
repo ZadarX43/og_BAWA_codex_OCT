@@ -75,7 +75,40 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "KAA Gent",
+      "player": "Wilfried Kanga",
+      "role": "Forward",
+      "power": 85,
+      "driver_metric": "Goal Threat",
+      "driver_value": 89
+    },
+    {
+      "team": "KAA Gent",
+      "player": "Davy Roef",
+      "role": "Goalkeeper",
+      "power": 70,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 51
+    },
+    {
+      "team": "RSC Anderlecht",
+      "player": "Adriano Bertaccini",
+      "role": "Forward",
+      "power": 79,
+      "driver_metric": "Goal Threat",
+      "driver_value": 90
+    },
+    {
+      "team": "RSC Anderlecht",
+      "player": "Nilson Angulo",
+      "role": "Forward",
+      "power": 79,
+      "driver_metric": "Goal Threat",
+      "driver_value": 82
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

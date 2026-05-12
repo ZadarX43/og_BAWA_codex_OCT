@@ -73,7 +73,40 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Nottingham Forest",
+      "player": "Callum Hudson-Odoi",
+      "role": "Forward",
+      "power": 60,
+      "driver_metric": "Goal Threat",
+      "driver_value": 62
+    },
+    {
+      "team": "Nottingham Forest",
+      "player": "Igor Jesus Maciel da Cruz",
+      "role": "Forward",
+      "power": 60,
+      "driver_metric": "Goal Threat",
+      "driver_value": 61
+    },
+    {
+      "team": "Newcastle United",
+      "player": "Harvey Barnes",
+      "role": "Forward",
+      "power": 75,
+      "driver_metric": "Goal Threat",
+      "driver_value": 75
+    },
+    {
+      "team": "Newcastle United",
+      "player": "Anthony Gordon",
+      "role": "Forward",
+      "power": 73,
+      "driver_metric": "Goal Threat",
+      "driver_value": 74
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

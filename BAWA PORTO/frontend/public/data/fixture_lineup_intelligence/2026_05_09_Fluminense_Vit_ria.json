@@ -1,0 +1,91 @@
+{
+  "fixture_key": "2026_05_09_Fluminense_Vit_ria",
+  "fixture_id": 1492254,
+  "competition": "Brazil Serie A",
+  "competition_key": "brazil_serie_a",
+  "season": "2026",
+  "home_team": "Fluminense",
+  "away_team": "Vit\u00f3ria",
+  "home_team_id": 124,
+  "away_team_id": 136,
+  "home_formation": NaN,
+  "away_formation": NaN,
+  "home_units": {
+    "attack_unit": 79,
+    "midfield_control": 49,
+    "defensive_unit": 44,
+    "wide_threat": 67,
+    "central_threat": 79,
+    "discipline_risk": 54
+  },
+  "away_units": {
+    "attack_unit": 42,
+    "midfield_control": 55,
+    "defensive_unit": 51,
+    "wide_threat": 27,
+    "central_threat": 42,
+    "discipline_risk": 54
+  },
+  "home_resolution": {
+    "starting_xi_count": 0,
+    "resolved_profiles": 0,
+    "fallback_profiles": 0
+  },
+  "away_resolution": {
+    "starting_xi_count": 0,
+    "resolved_profiles": 0,
+    "fallback_profiles": 0
+  },
+  "key_mismatches": [
+    {
+      "zone": "Fluminense attack vs Vitoria defence",
+      "advantage": "Fluminense",
+      "mismatch_score": 28,
+      "left_label": "Fluminense attack",
+      "left_value": 79,
+      "right_label": "Vitoria defence",
+      "right_value": 51,
+      "summary": "Major Fluminense attacking advantage"
+    },
+    {
+      "zone": "Vitoria wide threat vs Fluminense resistance",
+      "advantage": "Fluminense",
+      "mismatch_score": 17,
+      "left_label": "Vitoria wide threat",
+      "left_value": 27,
+      "right_label": "Fluminense resistance",
+      "right_value": 44,
+      "summary": "Fluminense can neutralize the wide-channel pressure"
+    },
+    {
+      "zone": "Fluminense wide threat vs Vitoria resistance",
+      "advantage": "Fluminense",
+      "mismatch_score": 16,
+      "left_label": "Fluminense wide threat",
+      "left_value": 67,
+      "right_label": "Vitoria resistance",
+      "right_value": 51,
+      "summary": "Fluminense wide channel has a live attacking edge"
+    },
+    {
+      "zone": "Midfield control battle",
+      "advantage": "Vitoria",
+      "mismatch_score": 6,
+      "left_label": "Fluminense midfield",
+      "left_value": 49,
+      "right_label": "Vitoria midfield",
+      "right_value": 55,
+      "summary": "Vitoria should control more of the central game-state"
+    }
+  ],
+  "player_matchups": [],
+  "home_lineup_profiles": [],
+  "away_lineup_profiles": [],
+  "formation_context": {
+    "same_formation_flag": 0,
+    "formation_mismatch_flag": 0,
+    "formation_attack_delta": 0.0,
+    "formation_defence_delta": 0.0
+  },
+  "site_alias_source_fixture_key": "2026-05-09_fluminense_vitoria"
+}

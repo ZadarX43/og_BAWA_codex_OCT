@@ -3,13 +3,14 @@
   "fixture": "SJ Earthquakes vs Vancouver Whitecaps",
   "primary_signal": "BTTS Yes",
   "signal_state": "AVOID",
-  "agreement_score": 32,
+  "agreement_score": 42,
   "confidence_band": "LOW",
-  "supporting_layers": [],
+  "supporting_layers": [
+    "BOTH_ATTACK_UNITS_LIVE"
+  ],
   "caution_layers": [
     "BTTS_PRESSURE_WEAK",
     "GOAL_ENVIRONMENT_SOFT",
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -71,7 +72,26 @@
       "leader": "SJ Earthquakes"
     }
   ],
-  "unit_battle_summary": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 68,
+      "away_value": 69,
+      "delta": -1
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 61,
+      "away_value": 62,
+      "delta": -1
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 74,
+      "away_value": 70,
+      "delta": 4
+    }
+  ],
   "key_player_drivers": [
     {
       "team": "SJ Earthquakes",
@@ -106,7 +126,48 @@
       "driver_value": 67
     }
   ],
-  "key_mismatches": [],
+  "key_mismatches": [
+    {
+      "zone": "Vancouver Whitecaps wide threat vs San Jose Earthquakes resistance",
+      "advantage": "San Jose Earthquakes",
+      "mismatch_score": 5,
+      "left_label": "Vancouver Whitecaps wide threat",
+      "left_value": 65,
+      "right_label": "San Jose Earthquakes resistance",
+      "right_value": 70,
+      "summary": "San Jose Earthquakes can neutralize the wide-channel pressure"
+    },
+    {
+      "zone": "Vancouver Whitecaps attack vs San Jose Earthquakes defence",
+      "advantage": "Vancouver Whitecaps",
+      "mismatch_score": 4,
+      "left_label": "Vancouver Whitecaps attack",
+      "left_value": 74,
+      "right_label": "San Jose Earthquakes defence",
+      "right_value": 70,
+      "summary": "Major Vancouver Whitecaps attacking advantage"
+    },
+    {
+      "zone": "San Jose Earthquakes wide threat vs Vancouver Whitecaps resistance",
+      "advantage": "San Jose Earthquakes",
+      "mismatch_score": 3,
+      "left_label": "San Jose Earthquakes wide threat",
+      "left_value": 72,
+      "right_label": "Vancouver Whitecaps resistance",
+      "right_value": 69,
+      "summary": "San Jose Earthquakes wide channel has a live attacking edge"
+    },
+    {
+      "zone": "San Jose Earthquakes attack vs Vancouver Whitecaps defence",
+      "advantage": "Vancouver Whitecaps",
+      "mismatch_score": 1,
+      "left_label": "San Jose Earthquakes attack",
+      "left_value": 68,
+      "right_label": "Vancouver Whitecaps defence",
+      "right_value": 69,
+      "summary": "Vancouver Whitecaps defensive resistance is suppressing the home attack"
+    }
+  ],
   "h2h_context": {
     "available": false,
     "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
@@ -129,7 +190,7 @@
       "read": "Driven by combined goal environment and tempo."
     },
     "team_goals": {
-      "rating": 48,
+      "rating": 74,
       "label": "Weak",
       "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
     },
@@ -151,23 +212,27 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 54,
+      "alignment_score": 60,
       "state": "FRAGILE",
       "model_lean": "DRAW",
-      "structural_support": [],
+      "structural_support": [
+        "BOTH_ATTACK_UNITS_LIVE"
+      ],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
         "GOAL_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "FTR has some structural support from structural support, but the overall layer fit remains fragile.",
+      "public_summary": "FTR has some structural support from both attack units live, but the overall layer fit remains fragile.",
       "rating": 70,
       "band": "Positive"
     },
     "btts": {
-      "alignment_score": 38,
+      "alignment_score": 44,
       "state": "AVOID",
       "model_lean": "YES",
-      "structural_support": [],
+      "structural_support": [
+        "BOTH_ATTACK_UNITS_LIVE"
+      ],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
         "GOAL_ENVIRONMENT_SOFT"
@@ -177,59 +242,68 @@
       "band": "Weak"
     },
     "ou25": {
-      "alignment_score": 40,
-      "state": "AVOID",
+      "alignment_score": 46,
+      "state": "FRAGILE",
       "model_lean": "UNDER25",
-      "structural_support": [],
+      "structural_support": [
+        "BOTH_ATTACK_UNITS_LIVE"
+      ],
       "cautions": [
         "GOAL_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Over 2.5 is too contradicted by goal environment soft to present as a clean public read.",
+      "public_summary": "Over 2.5 has some structural support from both attack units live, but the overall layer fit remains fragile.",
       "rating": 46,
       "band": "Weak"
     },
     "team_goals": {
-      "alignment_score": 38,
-      "state": "AVOID",
+      "alignment_score": 68,
+      "state": "MIXED",
       "model_lean": "Vancouver Whitecaps 1.5+",
-      "structural_support": [],
-      "cautions": [
-        "GOAL_ENVIRONMENT_SOFT",
-        "LINEUP_DATA_MISSING"
+      "structural_support": [
+        "BOTH_ATTACK_UNITS_LIVE"
       ],
-      "public_summary": "Team Goals is too contradicted by goal environment soft to present as a clean public read.",
-      "rating": 48,
-      "band": "Weak"
-    },
-    "correct_score": {
-      "alignment_score": 81,
-      "state": "SUPPORTED",
-      "model_lean": "STRUCTURED",
-      "structural_support": [],
       "cautions": [
         "GOAL_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Correct Score is well supported by structural support, with caution still coming from goal environment soft.",
+      "public_summary": "Team Goals has partial support from both attack units live, but goal environment soft keeps it from reading clean.",
+      "rating": 74,
+      "band": "Weak"
+    },
+    "correct_score": {
+      "alignment_score": 87,
+      "state": "SUPPORTED",
+      "model_lean": "STRUCTURED",
+      "structural_support": [
+        "BOTH_ATTACK_UNITS_LIVE"
+      ],
+      "cautions": [
+        "GOAL_ENVIRONMENT_SOFT"
+      ],
+      "public_summary": "Correct Score is well supported by both attack units live, with caution still coming from goal environment soft.",
       "rating": 100,
       "band": "Elite"
     },
     "corners": {
-      "alignment_score": 57,
-      "state": "FRAGILE",
+      "alignment_score": 63,
+      "state": "MIXED",
       "model_lean": "ELEVATED",
-      "structural_support": [],
+      "structural_support": [
+        "BOTH_ATTACK_UNITS_LIVE"
+      ],
       "cautions": [
         "BTTS_PRESSURE_WEAK"
       ],
-      "public_summary": "Corners has some structural support from structural support, but the overall layer fit remains fragile.",
+      "public_summary": "Corners has partial support from both attack units live, but btts pressure weak keeps it from reading clean.",
       "rating": 68,
       "band": "Mixed"
     },
     "cards": {
-      "alignment_score": 34,
+      "alignment_score": 40,
       "state": "AVOID",
       "model_lean": "ELEVATED",
-      "structural_support": [],
+      "structural_support": [
+        "BOTH_ATTACK_UNITS_LIVE"
+      ],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
         "GOAL_ENVIRONMENT_SOFT"
@@ -248,23 +322,23 @@
   },
   "public_safe_summary": "BTTS Yes is too contradicted across the current structural layers for SJ Earthquakes vs Vancouver Whitecaps, so the clean read is caution rather than action.",
   "internal_reason_tokens": [
+    "BOTH_ATTACK_UNITS_LIVE",
     "BTTS_PRESSURE_WEAK",
     "GOAL_ENVIRONMENT_SOFT",
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
-    "support_count": 0,
-    "caution_count": 4,
-    "lineup_available": false,
+    "support_count": 1,
+    "caution_count": 3,
+    "lineup_available": true,
     "h2h_available": false
   },
   "preview": {
     "headline": "SJ Earthquakes vs Vancouver Whitecaps: BTTS Yes avoid",
-    "short_summary": "BTTS Yes is too contradicted across the current structural layers for SJ Earthquakes vs Vancouver Whitecaps, so the clean read is caution rather than action. Primary support comes from structural caution, while the main caution remains btts pressure weak.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Corners. Weakest read: Cards.",
+    "short_summary": "BTTS Yes is too contradicted across the current structural layers for SJ Earthquakes vs Vancouver Whitecaps, so the clean read is caution rather than action. Primary support comes from both attack units live, while the main caution remains btts pressure weak.",
+    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: Cards.",
     "caution_line": "Main caution: Btts Pressure Weak.",
-    "telegram_summary": "SJ Earthquakes vs Vancouver Whitecaps — BTTS Yes (Avoid, 32% agreement). Support: structural caution. Caution: Btts Pressure Weak.",
-    "premium_summary": "BTTS Yes is carrying a 32% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from btts pressure weak, goal environment soft."
+    "telegram_summary": "SJ Earthquakes vs Vancouver Whitecaps — BTTS Yes (Avoid, 42% agreement). Support: Both Attack Units Live. Caution: Btts Pressure Weak.",
+    "premium_summary": "BTTS Yes is carrying a 42% agreement read across the published decision layers. Support is currently led by both attack units live, while caution is still coming from btts pressure weak, goal environment soft."
   }
 }

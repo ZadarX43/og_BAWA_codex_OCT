@@ -74,7 +74,40 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Silkeborg",
+      "player": "Tonni Adamsen",
+      "role": "Forward",
+      "power": 88,
+      "driver_metric": "Goal Threat",
+      "driver_value": 92
+    },
+    {
+      "team": "Silkeborg",
+      "player": "Pedro Ganchas",
+      "role": "Centre Back",
+      "power": 68,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 70
+    },
+    {
+      "team": "København",
+      "player": "Jordan Larsson",
+      "role": "Forward",
+      "power": 83,
+      "driver_metric": "Goal Threat",
+      "driver_value": 89
+    },
+    {
+      "team": "København",
+      "player": "Mohamed Elyounoussi",
+      "role": "Forward",
+      "power": 81,
+      "driver_metric": "Goal Threat",
+      "driver_value": 83
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

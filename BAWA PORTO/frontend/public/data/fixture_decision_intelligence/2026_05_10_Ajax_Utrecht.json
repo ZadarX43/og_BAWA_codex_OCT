@@ -3,14 +3,15 @@
   "fixture": "Ajax vs Utrecht",
   "primary_signal": "Over 2.5",
   "signal_state": "AVOID",
-  "agreement_score": 32,
+  "agreement_score": 38,
   "confidence_band": "LOW",
-  "supporting_layers": [],
+  "supporting_layers": [
+    "H2H_OVER_SUPPORT"
+  ],
   "caution_layers": [
     "OVER25_HEAT_SOFT",
     "CHAOS_ENVIRONMENT_SOFT",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "LINEUP_DATA_MISSING"
   ],
   "profile_tags": {
     "home": [
@@ -73,12 +74,34 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Ajax",
+      "player": "Youri Baas",
+      "role": "Centre Back",
+      "power": 59,
+      "driver_metric": "Midfield Engine",
+      "driver_value": 61
+    },
+    {
+      "team": "Ajax",
+      "player": "Kasper Dolberg",
+      "role": "Forward",
+      "power": 56,
+      "driver_metric": "Goal Threat",
+      "driver_value": 61
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
-    "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "available": true,
+    "summary": "Using the latest available same-team-pair historical regime (1 prior meeting) as supporting context for this current fixture.",
+    "sample_size": 1,
+    "goal_environment": 4,
+    "btts_regime": 100,
+    "over25_rate": 100,
+    "draw_rate": 100,
+    "booking_heat": 0
   },
   "market_suitability": {
     "ftr": {
@@ -119,36 +142,42 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 62,
+      "alignment_score": 68,
       "state": "MIXED",
       "model_lean": "HOME",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_OVER_SUPPORT"
+      ],
       "cautions": [
         "OVER25_HEAT_SOFT",
         "CHAOS_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "FTR has partial support from structural support, but over 2.5 heat soft keeps it from reading clean.",
+      "public_summary": "FTR has partial support from h2h over support, but over 2.5 heat soft keeps it from reading clean.",
       "rating": 80,
       "band": "Strong"
     },
     "btts": {
-      "alignment_score": 40,
-      "state": "AVOID",
+      "alignment_score": 46,
+      "state": "FRAGILE",
       "model_lean": "NO",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_OVER_SUPPORT"
+      ],
       "cautions": [
         "OVER25_HEAT_SOFT",
         "CHAOS_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "BTTS is too contradicted by over 2.5 heat soft to present as a clean public read.",
+      "public_summary": "BTTS has some structural support from h2h over support, but the overall layer fit remains fragile.",
       "rating": 50,
       "band": "Weak"
     },
     "ou25": {
-      "alignment_score": 36,
+      "alignment_score": 40,
       "state": "AVOID",
       "model_lean": "OVER25",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_OVER_SUPPORT"
+      ],
       "cautions": [
         "OVER25_HEAT_SOFT",
         "CHAOS_ENVIRONMENT_SOFT"
@@ -158,34 +187,40 @@
       "band": "Weak"
     },
     "team_goals": {
-      "alignment_score": 46,
+      "alignment_score": 52,
       "state": "FRAGILE",
       "model_lean": "Ajax 1.5+",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_OVER_SUPPORT"
+      ],
       "cautions": [
         "LINEUP_DATA_MISSING"
       ],
-      "public_summary": "Team Goals has some structural support from structural support, but the overall layer fit remains fragile.",
+      "public_summary": "Team Goals has some structural support from h2h over support, but the overall layer fit remains fragile.",
       "rating": 54,
       "band": "Weak"
     },
     "correct_score": {
-      "alignment_score": 81,
+      "alignment_score": 87,
       "state": "SUPPORTED",
       "model_lean": "STRUCTURED",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_OVER_SUPPORT"
+      ],
       "cautions": [
         "CHAOS_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Correct Score is well supported by structural support, with caution still coming from chaos environment soft.",
+      "public_summary": "Correct Score is well supported by h2h over support, with caution still coming from chaos environment soft.",
       "rating": 100,
       "band": "Elite"
     },
     "corners": {
-      "alignment_score": 38,
+      "alignment_score": 44,
       "state": "AVOID",
       "model_lean": "ELEVATED",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_OVER_SUPPORT"
+      ],
       "cautions": [
         "OVER25_HEAT_SOFT",
         "CHAOS_ENVIRONMENT_SOFT"
@@ -195,10 +230,12 @@
       "band": "Weak"
     },
     "cards": {
-      "alignment_score": 33,
+      "alignment_score": 39,
       "state": "AVOID",
       "model_lean": "ELEVATED",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_OVER_SUPPORT"
+      ],
       "cautions": [
         "CHAOS_ENVIRONMENT_SOFT"
       ],
@@ -216,23 +253,23 @@
   },
   "public_safe_summary": "Over 2.5 is too contradicted across the current structural layers for Ajax vs Utrecht, so the clean read is caution rather than action.",
   "internal_reason_tokens": [
+    "H2H_OVER_SUPPORT",
     "OVER25_HEAT_SOFT",
     "CHAOS_ENVIRONMENT_SOFT",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "LINEUP_DATA_MISSING"
   ],
   "summary": {
-    "support_count": 0,
-    "caution_count": 4,
+    "support_count": 1,
+    "caution_count": 3,
     "lineup_available": false,
-    "h2h_available": false
+    "h2h_available": true
   },
   "preview": {
     "headline": "Ajax vs Utrecht: Over 2.5 avoid",
-    "short_summary": "Over 2.5 is too contradicted across the current structural layers for Ajax vs Utrecht, so the clean read is caution rather than action. Primary support comes from structural caution, while the main caution remains over25 heat soft.",
+    "short_summary": "Over 2.5 is too contradicted across the current structural layers for Ajax vs Utrecht, so the clean read is caution rather than action. Primary support comes from h2h over support, while the main caution remains over25 heat soft.",
     "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: FTR. Weakest read: Cards.",
     "caution_line": "Main caution: Over25 Heat Soft.",
-    "telegram_summary": "Ajax vs Utrecht — Over 2.5 (Avoid, 32% agreement). Support: structural caution. Caution: Over25 Heat Soft.",
-    "premium_summary": "Over 2.5 is carrying a 32% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from over25 heat soft, chaos environment soft."
+    "telegram_summary": "Ajax vs Utrecht — Over 2.5 (Avoid, 38% agreement). Support: H2H Over Support. Caution: Over25 Heat Soft.",
+    "premium_summary": "Over 2.5 is carrying a 38% agreement read across the published decision layers. Support is currently led by h2h over support, while caution is still coming from over25 heat soft, chaos environment soft."
   }
 }

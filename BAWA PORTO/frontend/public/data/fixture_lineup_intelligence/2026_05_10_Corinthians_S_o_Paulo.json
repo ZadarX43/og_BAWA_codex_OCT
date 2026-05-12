@@ -1,0 +1,91 @@
+{
+  "fixture_key": "2026_05_10_Corinthians_S_o_Paulo",
+  "fixture_id": 1492252,
+  "competition": "Brazil Serie A",
+  "competition_key": "brazil_serie_a",
+  "season": "2026",
+  "home_team": "Corinthians",
+  "away_team": "S\u00e3o Paulo",
+  "home_team_id": 131,
+  "away_team_id": 126,
+  "home_formation": NaN,
+  "away_formation": NaN,
+  "home_units": {
+    "attack_unit": 25,
+    "midfield_control": 73,
+    "defensive_unit": 73,
+    "wide_threat": 35,
+    "central_threat": 25,
+    "discipline_risk": 53
+  },
+  "away_units": {
+    "attack_unit": 46,
+    "midfield_control": 67,
+    "defensive_unit": 67,
+    "wide_threat": 65,
+    "central_threat": 45,
+    "discipline_risk": 39
+  },
+  "home_resolution": {
+    "starting_xi_count": 0,
+    "resolved_profiles": 0,
+    "fallback_profiles": 0
+  },
+  "away_resolution": {
+    "starting_xi_count": 0,
+    "resolved_profiles": 0,
+    "fallback_profiles": 0
+  },
+  "key_mismatches": [
+    {
+      "zone": "Corinthians attack vs Sao Paulo defence",
+      "advantage": "Sao Paulo",
+      "mismatch_score": 42,
+      "left_label": "Corinthians attack",
+      "left_value": 25,
+      "right_label": "Sao Paulo defence",
+      "right_value": 67,
+      "summary": "Sao Paulo defensive resistance is suppressing the home attack"
+    },
+    {
+      "zone": "Corinthians wide threat vs Sao Paulo resistance",
+      "advantage": "Sao Paulo",
+      "mismatch_score": 32,
+      "left_label": "Corinthians wide threat",
+      "left_value": 35,
+      "right_label": "Sao Paulo resistance",
+      "right_value": 67,
+      "summary": "Sao Paulo can neutralize the wide-channel pressure"
+    },
+    {
+      "zone": "Sao Paulo attack vs Corinthians defence",
+      "advantage": "Corinthians",
+      "mismatch_score": 27,
+      "left_label": "Sao Paulo attack",
+      "left_value": 46,
+      "right_label": "Corinthians defence",
+      "right_value": 73,
+      "summary": "Corinthians defensive resistance is suppressing the away attack"
+    },
+    {
+      "zone": "Sao Paulo wide threat vs Corinthians resistance",
+      "advantage": "Corinthians",
+      "mismatch_score": 8,
+      "left_label": "Sao Paulo wide threat",
+      "left_value": 65,
+      "right_label": "Corinthians resistance",
+      "right_value": 73,
+      "summary": "Corinthians can neutralize the wide-channel pressure"
+    }
+  ],
+  "player_matchups": [],
+  "home_lineup_profiles": [],
+  "away_lineup_profiles": [],
+  "formation_context": {
+    "same_formation_flag": 0,
+    "formation_mismatch_flag": 0,
+    "formation_attack_delta": 0.0,
+    "formation_defence_delta": 0.0
+  },
+  "site_alias_source_fixture_key": "2026-05-10_corinthians_sao_paulo"
+}

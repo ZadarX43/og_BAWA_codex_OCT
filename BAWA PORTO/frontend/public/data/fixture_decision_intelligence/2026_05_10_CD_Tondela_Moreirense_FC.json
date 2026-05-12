@@ -3,11 +3,10 @@
   "fixture": "CD Tondela vs Moreirense FC",
   "primary_signal": "Fixture read",
   "signal_state": "FRAGILE",
-  "agreement_score": 44,
+  "agreement_score": 48,
   "confidence_band": "LOW",
   "supporting_layers": [],
   "caution_layers": [
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -53,9 +52,69 @@
       "leader": "Moreirense FC"
     }
   ],
-  "unit_battle_summary": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 50,
+      "away_value": 44,
+      "delta": 6
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 50,
+      "away_value": 51,
+      "delta": -1
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 39,
+      "away_value": 50,
+      "delta": -11
+    }
+  ],
   "key_player_drivers": [],
-  "key_mismatches": [],
+  "key_mismatches": [
+    {
+      "zone": "Moreirense wide threat vs Tondela resistance",
+      "advantage": "Tondela",
+      "mismatch_score": 29,
+      "left_label": "Moreirense wide threat",
+      "left_value": 21,
+      "right_label": "Tondela resistance",
+      "right_value": 50,
+      "summary": "Tondela can neutralize the wide-channel pressure"
+    },
+    {
+      "zone": "Moreirense attack vs Tondela defence",
+      "advantage": "Tondela",
+      "mismatch_score": 11,
+      "left_label": "Moreirense attack",
+      "left_value": 39,
+      "right_label": "Tondela defence",
+      "right_value": 50,
+      "summary": "Tondela defensive resistance is suppressing the away attack"
+    },
+    {
+      "zone": "Tondela attack vs Moreirense defence",
+      "advantage": "Tondela",
+      "mismatch_score": 6,
+      "left_label": "Tondela attack",
+      "left_value": 50,
+      "right_label": "Moreirense defence",
+      "right_value": 44,
+      "summary": "Major Tondela attacking advantage"
+    },
+    {
+      "zone": "Tondela wide threat vs Moreirense resistance",
+      "advantage": "Tondela",
+      "mismatch_score": 6,
+      "left_label": "Tondela wide threat",
+      "left_value": 50,
+      "right_label": "Moreirense resistance",
+      "right_value": 44,
+      "summary": "Tondela wide channel has a live attacking edge"
+    }
+  ],
   "h2h_context": {
     "available": false,
     "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
@@ -78,7 +137,7 @@
       "read": "Driven by combined goal environment and tempo."
     },
     "team_goals": {
-      "rating": 40,
+      "rating": 50,
       "label": "Weak",
       "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
     },
@@ -100,89 +159,83 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 41,
-      "state": "AVOID",
+      "alignment_score": 45,
+      "state": "FRAGILE",
       "model_lean": "AWAY",
       "structural_support": [],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "FTR is too contradicted by lineup data missing to present as a clean public read.",
+      "public_summary": "FTR has some structural support from structural support, but the overall layer fit remains fragile.",
       "rating": 52,
       "band": "Weak"
     },
     "btts": {
-      "alignment_score": 33,
+      "alignment_score": 37,
       "state": "AVOID",
       "model_lean": "NO",
       "structural_support": [],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "BTTS is too contradicted by lineup data missing to present as a clean public read.",
+      "public_summary": "BTTS is too contradicted by h2h unavailable to present as a clean public read.",
       "rating": 41,
       "band": "Weak"
     },
     "ou25": {
-      "alignment_score": 30,
+      "alignment_score": 34,
       "state": "AVOID",
       "model_lean": "UNDER25",
       "structural_support": [],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Over 2.5 is too contradicted by lineup data missing to present as a clean public read.",
+      "public_summary": "Over 2.5 is too contradicted by h2h unavailable to present as a clean public read.",
       "rating": 38,
       "band": "Red Flag"
     },
     "team_goals": {
-      "alignment_score": 36,
+      "alignment_score": 44,
       "state": "AVOID",
-      "model_lean": "Moreirense FC 1.5+",
+      "model_lean": "CD Tondela 1.5+",
       "structural_support": [],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Team Goals is too contradicted by lineup data missing to present as a clean public read.",
-      "rating": 40,
+      "public_summary": "Team Goals is too contradicted by h2h unavailable to present as a clean public read.",
+      "rating": 50,
       "band": "Weak"
     },
     "correct_score": {
-      "alignment_score": 58,
-      "state": "FRAGILE",
+      "alignment_score": 62,
+      "state": "MIXED",
       "model_lean": "OPEN",
       "structural_support": [],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Correct Score has some structural support from structural support, but the overall layer fit remains fragile.",
+      "public_summary": "Correct Score has partial support from structural support, but h2h unavailable keeps it from reading clean.",
       "rating": 75,
       "band": "Positive"
     },
     "corners": {
-      "alignment_score": 24,
+      "alignment_score": 28,
       "state": "AVOID",
       "model_lean": "ELEVATED",
       "structural_support": [],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Corners is too contradicted by lineup data missing to present as a clean public read.",
+      "public_summary": "Corners is too contradicted by h2h unavailable to present as a clean public read.",
       "rating": 30,
       "band": "Red Flag"
     },
     "cards": {
-      "alignment_score": 48,
+      "alignment_score": 52,
       "state": "FRAGILE",
       "model_lean": "ELEVATED",
       "structural_support": [],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "Cards has some structural support from structural support, but the overall layer fit remains fragile.",
@@ -199,21 +252,20 @@
   },
   "public_safe_summary": "Fixture read has some live shape in CD Tondela vs Moreirense FC, but the supporting layers remain fragile and need discipline.",
   "internal_reason_tokens": [
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
     "support_count": 0,
-    "caution_count": 2,
-    "lineup_available": false,
+    "caution_count": 1,
+    "lineup_available": true,
     "h2h_available": false
   },
   "preview": {
     "headline": "CD Tondela vs Moreirense FC: Fixture read fragile",
-    "short_summary": "Fixture read has some live shape in CD Tondela vs Moreirense FC, but the supporting layers remain fragile and need discipline. Primary support comes from structural caution, while the main caution remains lineup data missing.",
-    "market_summary": "Best aligned market: Correct Score (Fragile). Secondary support: Cards. Weakest read: Corners.",
-    "caution_line": "Main caution: Lineup Data Missing.",
-    "telegram_summary": "CD Tondela vs Moreirense FC — Fixture read (Fragile, 44% agreement). Support: structural caution. Caution: Lineup Data Missing.",
-    "premium_summary": "Fixture read is carrying a 44% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from lineup data missing, h2h unavailable."
+    "short_summary": "Fixture read has some live shape in CD Tondela vs Moreirense FC, but the supporting layers remain fragile and need discipline. Primary support comes from structural caution, while the main caution remains h2h unavailable.",
+    "market_summary": "Best aligned market: Correct Score (Mixed). Secondary support: Cards. Weakest read: Corners.",
+    "caution_line": "Main caution: H2H Unavailable.",
+    "telegram_summary": "CD Tondela vs Moreirense FC — Fixture read (Fragile, 48% agreement). Support: structural caution. Caution: H2H Unavailable.",
+    "premium_summary": "Fixture read is carrying a 48% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from h2h unavailable."
   }
 }

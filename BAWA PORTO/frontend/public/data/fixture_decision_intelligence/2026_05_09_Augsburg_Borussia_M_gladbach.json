@@ -72,7 +72,24 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Borussia M'gladbach",
+      "player": "Alassane Pléa",
+      "role": "Forward",
+      "power": 64,
+      "driver_metric": "Goal Threat",
+      "driver_value": 67
+    },
+    {
+      "team": "Borussia M'gladbach",
+      "player": "Marcus Thuram",
+      "role": "Forward",
+      "power": 62,
+      "driver_metric": "Goal Threat",
+      "driver_value": 66
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

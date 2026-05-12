@@ -3,14 +3,13 @@
   "fixture": "Cagliari vs Udinese",
   "primary_signal": "Cagliari Win",
   "signal_state": "AVOID",
-  "agreement_score": 32,
+  "agreement_score": 34,
   "confidence_band": "LOW",
   "supporting_layers": [],
   "caution_layers": [
     "TEAM_POWER_NOT_DECISIVE",
     "AWAY_TRAVEL_THREAT",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "LINEUP_DATA_MISSING"
   ],
   "profile_tags": {
     "home": [
@@ -76,9 +75,14 @@
   "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
-    "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "available": true,
+    "summary": "Using the latest available same-team-pair historical regime (1 prior meeting) as supporting context for this current fixture.",
+    "sample_size": 1,
+    "goal_environment": 2,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 6
   },
   "market_suitability": {
     "ftr": {
@@ -119,7 +123,7 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 40,
+      "alignment_score": 42,
       "state": "AVOID",
       "model_lean": "HOME",
       "structural_support": [],
@@ -219,21 +223,20 @@
   "internal_reason_tokens": [
     "TEAM_POWER_NOT_DECISIVE",
     "AWAY_TRAVEL_THREAT",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "LINEUP_DATA_MISSING"
   ],
   "summary": {
     "support_count": 0,
-    "caution_count": 4,
+    "caution_count": 3,
     "lineup_available": false,
-    "h2h_available": false
+    "h2h_available": true
   },
   "preview": {
     "headline": "Cagliari vs Udinese: Cagliari Win avoid",
     "short_summary": "Cagliari Win is too contradicted across the current structural layers for Cagliari vs Udinese, so the clean read is caution rather than action. Primary support comes from structural caution, while the main caution remains team power not decisive.",
     "market_summary": "Best aligned market: Correct Score (Mixed). Secondary support: Cards. Weakest read: Corners.",
     "caution_line": "Main caution: Team Power Not Decisive.",
-    "telegram_summary": "Cagliari vs Udinese — Cagliari Win (Avoid, 32% agreement). Support: structural caution. Caution: Team Power Not Decisive.",
-    "premium_summary": "Cagliari Win is carrying a 32% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from team power not decisive, away travel threat."
+    "telegram_summary": "Cagliari vs Udinese — Cagliari Win (Avoid, 34% agreement). Support: structural caution. Caution: Team Power Not Decisive.",
+    "premium_summary": "Cagliari Win is carrying a 34% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from team power not decisive, away travel threat."
   }
 }

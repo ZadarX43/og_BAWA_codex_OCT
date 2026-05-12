@@ -2,17 +2,16 @@
   "fixture_key": "2026_05_10_Bahia_Cruzeiro",
   "fixture": "Bahia vs Cruzeiro",
   "primary_signal": "Over 2.5",
-  "signal_state": "FRAGILE",
-  "agreement_score": 56,
-  "confidence_band": "LOW",
+  "signal_state": "WATCHLIST",
+  "agreement_score": 72,
+  "confidence_band": "MEDIUM",
   "supporting_layers": [
     "OVER25_HEAT_SUPPORT",
-    "CHAOS_ENVIRONMENT_SUPPORT"
+    "CHAOS_ENVIRONMENT_SUPPORT",
+    "LINEUP_GOAL_PRESSURE_SUPPORT",
+    "H2H_OVER_SUPPORT"
   ],
-  "caution_layers": [
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
-  ],
+  "caution_layers": [],
   "profile_tags": {
     "home": [
       "Mixed Team Profile"
@@ -72,13 +71,111 @@
       "leader": "Bahia"
     }
   ],
-  "unit_battle_summary": [],
-  "key_player_drivers": [],
-  "key_mismatches": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 64,
+      "away_value": 44,
+      "delta": 20
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 46,
+      "away_value": 47,
+      "delta": -1
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 57,
+      "away_value": 48,
+      "delta": 9
+    }
+  ],
+  "key_player_drivers": [
+    {
+      "team": "Bahia",
+      "player": "Cristian Olivera",
+      "role": "Forward",
+      "power": 69,
+      "driver_metric": "Goal Threat",
+      "driver_value": 66
+    },
+    {
+      "team": "Bahia",
+      "player": "Leonardo Da Silva Vieira",
+      "role": "Goalkeeper",
+      "power": 66,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 51
+    },
+    {
+      "team": "Cruzeiro",
+      "player": "Matheus Fellipe Costa Pereira",
+      "role": "Central Midfielder",
+      "power": 65,
+      "driver_metric": "Goal Threat",
+      "driver_value": 70
+    },
+    {
+      "team": "Cruzeiro",
+      "player": "Kaio Jorge",
+      "role": "Forward",
+      "power": 64,
+      "driver_metric": "Goal Threat",
+      "driver_value": 68
+    }
+  ],
+  "key_mismatches": [
+    {
+      "zone": "Bahia wide threat vs Cruzeiro resistance",
+      "advantage": "Bahia",
+      "mismatch_score": 21,
+      "left_label": "Bahia wide threat",
+      "left_value": 65,
+      "right_label": "Cruzeiro resistance",
+      "right_value": 44,
+      "summary": "Bahia wide channel has a live attacking edge"
+    },
+    {
+      "zone": "Bahia attack vs Cruzeiro defence",
+      "advantage": "Bahia",
+      "mismatch_score": 20,
+      "left_label": "Bahia attack",
+      "left_value": 64,
+      "right_label": "Cruzeiro defence",
+      "right_value": 44,
+      "summary": "Major Bahia attacking advantage"
+    },
+    {
+      "zone": "Cruzeiro attack vs Bahia defence",
+      "advantage": "Cruzeiro",
+      "mismatch_score": 9,
+      "left_label": "Cruzeiro attack",
+      "left_value": 57,
+      "right_label": "Bahia defence",
+      "right_value": 48,
+      "summary": "Major Cruzeiro attacking advantage"
+    },
+    {
+      "zone": "Cruzeiro wide threat vs Bahia resistance",
+      "advantage": "Cruzeiro",
+      "mismatch_score": 2,
+      "left_label": "Cruzeiro wide threat",
+      "left_value": 50,
+      "right_label": "Bahia resistance",
+      "right_value": 48,
+      "summary": "Cruzeiro wide channel has a live attacking edge"
+    }
+  ],
   "h2h_context": {
-    "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "available": true,
+    "summary": "Using the latest available same-team-pair historical regime (1 prior meeting) as supporting context for this current fixture.",
+    "sample_size": 1,
+    "goal_environment": 5,
+    "btts_regime": 100,
+    "over25_rate": 100,
+    "draw_rate": 0,
+    "booking_heat": 4
   },
   "market_suitability": {
     "ftr": {
@@ -119,141 +216,124 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 61,
-      "state": "FRAGILE",
+      "alignment_score": 69,
+      "state": "MIXED",
       "model_lean": "HOME",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
-      "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
-      ],
-      "public_summary": "FTR has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
+      "cautions": [],
+      "public_summary": "FTR has partial support from over 2.5 heat support, but no major caution published keeps it from reading clean.",
       "rating": 63,
       "band": "Mixed"
     },
     "btts": {
-      "alignment_score": 56,
+      "alignment_score": 58,
       "state": "FRAGILE",
       "model_lean": "YES",
       "structural_support": [
-        "OVER25_HEAT_SUPPORT",
-        "CHAOS_ENVIRONMENT_SUPPORT"
+        "LINEUP_GOAL_PRESSURE_SUPPORT"
       ],
-      "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
-      ],
-      "public_summary": "BTTS has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
+      "cautions": [],
+      "public_summary": "BTTS has some structural support from lineup goal pressure support, but the overall layer fit remains fragile.",
       "rating": 56,
       "band": "Mixed"
     },
     "ou25": {
-      "alignment_score": 59,
-      "state": "FRAGILE",
+      "alignment_score": 69,
+      "state": "WATCHLIST",
       "model_lean": "OVER25",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
-        "CHAOS_ENVIRONMENT_SUPPORT"
+        "CHAOS_ENVIRONMENT_SUPPORT",
+        "LINEUP_GOAL_PRESSURE_SUPPORT"
       ],
-      "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
-      ],
-      "public_summary": "Over 2.5 has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
+      "cautions": [],
+      "public_summary": "Over 2.5 is interesting enough to monitor, but current support is better treated as watch-first because of no major caution published.",
       "rating": 64,
       "band": "Mixed"
     },
     "team_goals": {
-      "alignment_score": 68,
+      "alignment_score": 66,
       "state": "MIXED",
-      "model_lean": "Cruzeiro 1.5+",
+      "model_lean": "Bahia 1.5+",
       "structural_support": [
-        "OVER25_HEAT_SUPPORT",
-        "CHAOS_ENVIRONMENT_SUPPORT"
+        "LINEUP_GOAL_PRESSURE_SUPPORT"
       ],
-      "cautions": [
-        "LINEUP_DATA_MISSING"
-      ],
-      "public_summary": "Team Goals has partial support from over 2.5 heat support, but lineup data missing keeps it from reading clean.",
+      "cautions": [],
+      "public_summary": "Team Goals has partial support from lineup goal pressure support, but no major caution published keeps it from reading clean.",
       "rating": 66,
       "band": "Mixed"
     },
     "correct_score": {
-      "alignment_score": 72,
-      "state": "MIXED",
+      "alignment_score": 86,
+      "state": "SUPPORTED",
       "model_lean": "OPEN",
       "structural_support": [
-        "CHAOS_ENVIRONMENT_SUPPORT"
+        "CHAOS_ENVIRONMENT_SUPPORT",
+        "LINEUP_GOAL_PRESSURE_SUPPORT"
       ],
-      "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
-      ],
-      "public_summary": "Correct Score has partial support from chaos environment support, but lineup data missing keeps it from reading clean.",
+      "cautions": [],
+      "public_summary": "Correct Score is well supported by chaos environment support, with caution still coming from no major caution published.",
       "rating": 86,
       "band": "Strong"
     },
     "corners": {
-      "alignment_score": 57,
+      "alignment_score": 59,
       "state": "FRAGILE",
       "model_lean": "ELEVATED",
       "structural_support": [
-        "OVER25_HEAT_SUPPORT",
-        "CHAOS_ENVIRONMENT_SUPPORT"
+        "LINEUP_GOAL_PRESSURE_SUPPORT"
       ],
-      "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
-      ],
-      "public_summary": "Corners has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
+      "cautions": [],
+      "public_summary": "Corners has some structural support from lineup goal pressure support, but the overall layer fit remains fragile.",
       "rating": 57,
       "band": "Mixed"
     },
     "cards": {
-      "alignment_score": 51,
+      "alignment_score": 59,
       "state": "FRAGILE",
       "model_lean": "ELEVATED",
       "structural_support": [
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
-      "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
-      ],
+      "cautions": [],
       "public_summary": "Cards has some structural support from chaos environment support, but the overall layer fit remains fragile.",
       "rating": 57,
       "band": "Mixed"
     }
   },
   "watchlist": {
-    "active": false,
+    "active": true,
     "summary": "No watchlist layer is active for this fixture.",
-    "trigger_signals": [],
-    "public_state": "No watchlist flag",
-    "mode": ""
+    "trigger_signals": [
+      "Watch for early tempo and repeat penalty-box entries.",
+      "Escalate only if control signals fail to settle the game.",
+      "Treat a quiet opening phase as a downgrade rather than a delay."
+    ],
+    "public_state": "Watchlist: wait for live confirmation",
+    "mode": "OU25:OVER25"
   },
-  "public_safe_summary": "Over 2.5 has some live shape in Bahia vs Cruzeiro, but the supporting layers remain fragile and need discipline.",
+  "public_safe_summary": "Over 2.5 has useful structure for Bahia vs Cruzeiro, but the current layer fit is better treated as watch-first than pre-match deploy.",
   "internal_reason_tokens": [
     "OVER25_HEAT_SUPPORT",
     "CHAOS_ENVIRONMENT_SUPPORT",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "LINEUP_GOAL_PRESSURE_SUPPORT",
+    "H2H_OVER_SUPPORT"
   ],
   "summary": {
-    "support_count": 2,
-    "caution_count": 2,
-    "lineup_available": false,
-    "h2h_available": false
+    "support_count": 4,
+    "caution_count": 0,
+    "lineup_available": true,
+    "h2h_available": true
   },
   "preview": {
-    "headline": "Bahia vs Cruzeiro: Over 2.5 fragile",
-    "short_summary": "Over 2.5 has some live shape in Bahia vs Cruzeiro, but the supporting layers remain fragile and need discipline. Primary support comes from over25 heat support, while the main caution remains lineup data missing.",
-    "market_summary": "Best aligned market: Correct Score (Mixed). Secondary support: Team Goals. Weakest read: Cards.",
-    "caution_line": "Main caution: Lineup Data Missing.",
-    "telegram_summary": "Bahia vs Cruzeiro — Over 2.5 (Fragile, 56% agreement). Support: Over25 Heat Support. Caution: Lineup Data Missing.",
-    "premium_summary": "Over 2.5 is carrying a 56% agreement read across the published decision layers. Support is currently led by over25 heat support, chaos environment support, while caution is still coming from lineup data missing, h2h unavailable."
+    "headline": "Bahia vs Cruzeiro: Over 2.5 watchlist",
+    "short_summary": "Over 2.5 has useful structure for Bahia vs Cruzeiro, but the current layer fit is better treated as watch-first than pre-match deploy. Primary support comes from over25 heat support, while the main caution remains structural caution.",
+    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Over 2.5. Weakest read: BTTS.",
+    "caution_line": "Main caution: structural caution.",
+    "telegram_summary": "Bahia vs Cruzeiro — Over 2.5 (Watchlist, 72% agreement). Support: Over25 Heat Support. Caution: structural caution.",
+    "premium_summary": "Over 2.5 is carrying a 72% agreement read across the published decision layers. Support is currently led by over25 heat support, chaos environment support, while caution is still coming from no major caution published."
   }
 }

@@ -2,15 +2,16 @@
   "fixture_key": "2026_05_10_FC_Dallas_Real_Salt_Lake",
   "fixture": "FC Dallas vs Real Salt Lake",
   "primary_signal": "BTTS Yes",
-  "signal_state": "AVOID",
-  "agreement_score": 32,
+  "signal_state": "FRAGILE",
+  "agreement_score": 48,
   "confidence_band": "ELITE",
-  "supporting_layers": [],
+  "supporting_layers": [
+    "BOTH_ATTACK_UNITS_LIVE",
+    "H2H_BTTS_SUPPORT"
+  ],
   "caution_layers": [
     "BTTS_PRESSURE_WEAK",
-    "GOAL_ENVIRONMENT_SOFT",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "GOAL_ENVIRONMENT_SOFT"
   ],
   "profile_tags": {
     "home": [
@@ -71,7 +72,26 @@
       "leader": "Real Salt Lake"
     }
   ],
-  "unit_battle_summary": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 59,
+      "away_value": 49,
+      "delta": 10
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 57,
+      "away_value": 44,
+      "delta": 13
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 70,
+      "away_value": 59,
+      "delta": 11
+    }
+  ],
   "key_player_drivers": [
     {
       "team": "FC Dallas",
@@ -106,11 +126,57 @@
       "driver_value": 62
     }
   ],
-  "key_mismatches": [],
+  "key_mismatches": [
+    {
+      "zone": "Midfield control battle",
+      "advantage": "FC Dallas",
+      "mismatch_score": 13,
+      "left_label": "FC Dallas midfield",
+      "left_value": 57,
+      "right_label": "Real Salt Lake midfield",
+      "right_value": 44,
+      "summary": "FC Dallas should control more of the central game-state"
+    },
+    {
+      "zone": "Real Salt Lake attack vs FC Dallas defence",
+      "advantage": "Real Salt Lake",
+      "mismatch_score": 11,
+      "left_label": "Real Salt Lake attack",
+      "left_value": 70,
+      "right_label": "FC Dallas defence",
+      "right_value": 59,
+      "summary": "Major Real Salt Lake attacking advantage"
+    },
+    {
+      "zone": "FC Dallas attack vs Real Salt Lake defence",
+      "advantage": "FC Dallas",
+      "mismatch_score": 10,
+      "left_label": "FC Dallas attack",
+      "left_value": 59,
+      "right_label": "Real Salt Lake defence",
+      "right_value": 49,
+      "summary": "Major FC Dallas attacking advantage"
+    },
+    {
+      "zone": "Real Salt Lake wide threat vs FC Dallas resistance",
+      "advantage": "FC Dallas",
+      "mismatch_score": 5,
+      "left_label": "Real Salt Lake wide threat",
+      "left_value": 54,
+      "right_label": "FC Dallas resistance",
+      "right_value": 59,
+      "summary": "FC Dallas can neutralize the wide-channel pressure"
+    }
+  ],
   "h2h_context": {
-    "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "available": true,
+    "summary": "Using the latest available same-team-pair historical regime (1 prior meeting) as supporting context for this current fixture.",
+    "sample_size": 1,
+    "goal_environment": 6,
+    "btts_regime": 100,
+    "over25_rate": 100,
+    "draw_rate": 100,
+    "booking_heat": 4
   },
   "market_suitability": {
     "ftr": {
@@ -129,7 +195,7 @@
       "read": "Driven by combined goal environment and tempo."
     },
     "team_goals": {
-      "rating": 59,
+      "rating": 70,
       "label": "Mixed",
       "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
     },
@@ -151,90 +217,109 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 48,
+      "alignment_score": 60,
       "state": "FRAGILE",
       "model_lean": "DRAW",
-      "structural_support": [],
+      "structural_support": [
+        "BOTH_ATTACK_UNITS_LIVE",
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
         "GOAL_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "FTR has some structural support from structural support, but the overall layer fit remains fragile.",
+      "public_summary": "FTR has some structural support from both attack units live, but the overall layer fit remains fragile.",
       "rating": 61,
       "band": "Mixed"
     },
     "btts": {
-      "alignment_score": 40,
-      "state": "AVOID",
+      "alignment_score": 50,
+      "state": "FRAGILE",
       "model_lean": "YES",
-      "structural_support": [],
+      "structural_support": [
+        "BOTH_ATTACK_UNITS_LIVE",
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
         "GOAL_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "BTTS is too contradicted by btts pressure weak to present as a clean public read.",
+      "public_summary": "BTTS has some structural support from both attack units live, but the overall layer fit remains fragile.",
       "rating": 52,
       "band": "Weak"
     },
     "ou25": {
-      "alignment_score": 45,
+      "alignment_score": 57,
       "state": "FRAGILE",
       "model_lean": "UNDER25",
-      "structural_support": [],
+      "structural_support": [
+        "BOTH_ATTACK_UNITS_LIVE",
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "GOAL_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Over 2.5 has some structural support from structural support, but the overall layer fit remains fragile.",
+      "public_summary": "Over 2.5 has some structural support from both attack units live, but the overall layer fit remains fragile.",
       "rating": 52,
       "band": "Weak"
     },
     "team_goals": {
-      "alignment_score": 46,
-      "state": "FRAGILE",
+      "alignment_score": 64,
+      "state": "MIXED",
       "model_lean": "Real Salt Lake 1.5+",
-      "structural_support": [],
-      "cautions": [
-        "GOAL_ENVIRONMENT_SOFT",
-        "LINEUP_DATA_MISSING"
+      "structural_support": [
+        "BOTH_ATTACK_UNITS_LIVE"
       ],
-      "public_summary": "Team Goals has some structural support from structural support, but the overall layer fit remains fragile.",
-      "rating": 59,
-      "band": "Mixed"
-    },
-    "correct_score": {
-      "alignment_score": 81,
-      "state": "SUPPORTED",
-      "model_lean": "OPEN",
-      "structural_support": [],
       "cautions": [
         "GOAL_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Correct Score is well supported by structural support, with caution still coming from goal environment soft.",
+      "public_summary": "Team Goals has partial support from both attack units live, but goal environment soft keeps it from reading clean.",
+      "rating": 70,
+      "band": "Mixed"
+    },
+    "correct_score": {
+      "alignment_score": 93,
+      "state": "SUPPORTED",
+      "model_lean": "OPEN",
+      "structural_support": [
+        "BOTH_ATTACK_UNITS_LIVE",
+        "H2H_BTTS_SUPPORT"
+      ],
+      "cautions": [
+        "GOAL_ENVIRONMENT_SOFT"
+      ],
+      "public_summary": "Correct Score is well supported by both attack units live, with caution still coming from goal environment soft.",
       "rating": 100,
       "band": "Elite"
     },
     "corners": {
-      "alignment_score": 45,
+      "alignment_score": 57,
       "state": "FRAGILE",
       "model_lean": "ELEVATED",
-      "structural_support": [],
+      "structural_support": [
+        "BOTH_ATTACK_UNITS_LIVE",
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "BTTS_PRESSURE_WEAK"
       ],
-      "public_summary": "Corners has some structural support from structural support, but the overall layer fit remains fragile.",
+      "public_summary": "Corners has some structural support from both attack units live, but the overall layer fit remains fragile.",
       "rating": 52,
       "band": "Weak"
     },
     "cards": {
-      "alignment_score": 38,
-      "state": "AVOID",
+      "alignment_score": 50,
+      "state": "FRAGILE",
       "model_lean": "ELEVATED",
-      "structural_support": [],
+      "structural_support": [
+        "BOTH_ATTACK_UNITS_LIVE",
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
         "GOAL_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Cards is too contradicted by btts pressure weak to present as a clean public read.",
+      "public_summary": "Cards has some structural support from both attack units live, but the overall layer fit remains fragile.",
       "rating": 48,
       "band": "Weak"
     }
@@ -246,25 +331,25 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "BTTS Yes is too contradicted across the current structural layers for FC Dallas vs Real Salt Lake, so the clean read is caution rather than action.",
+  "public_safe_summary": "BTTS Yes has some live shape in FC Dallas vs Real Salt Lake, but the supporting layers remain fragile and need discipline.",
   "internal_reason_tokens": [
+    "BOTH_ATTACK_UNITS_LIVE",
+    "H2H_BTTS_SUPPORT",
     "BTTS_PRESSURE_WEAK",
-    "GOAL_ENVIRONMENT_SOFT",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "GOAL_ENVIRONMENT_SOFT"
   ],
   "summary": {
-    "support_count": 0,
-    "caution_count": 4,
-    "lineup_available": false,
-    "h2h_available": false
+    "support_count": 2,
+    "caution_count": 2,
+    "lineup_available": true,
+    "h2h_available": true
   },
   "preview": {
-    "headline": "FC Dallas vs Real Salt Lake: BTTS Yes avoid",
-    "short_summary": "BTTS Yes is too contradicted across the current structural layers for FC Dallas vs Real Salt Lake, so the clean read is caution rather than action. Primary support comes from structural caution, while the main caution remains btts pressure weak.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: FTR. Weakest read: Cards.",
+    "headline": "FC Dallas vs Real Salt Lake: BTTS Yes fragile",
+    "short_summary": "BTTS Yes has some live shape in FC Dallas vs Real Salt Lake, but the supporting layers remain fragile and need discipline. Primary support comes from both attack units live, while the main caution remains btts pressure weak.",
+    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: BTTS.",
     "caution_line": "Main caution: Btts Pressure Weak.",
-    "telegram_summary": "FC Dallas vs Real Salt Lake — BTTS Yes (Avoid, 32% agreement). Support: structural caution. Caution: Btts Pressure Weak.",
-    "premium_summary": "BTTS Yes is carrying a 32% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from btts pressure weak, goal environment soft."
+    "telegram_summary": "FC Dallas vs Real Salt Lake — BTTS Yes (Fragile, 48% agreement). Support: Both Attack Units Live. Caution: Btts Pressure Weak.",
+    "premium_summary": "BTTS Yes is carrying a 48% agreement read across the published decision layers. Support is currently led by both attack units live, h2h btts support, while caution is still coming from btts pressure weak, goal environment soft."
   }
 }

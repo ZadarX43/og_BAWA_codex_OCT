@@ -1,0 +1,91 @@
+{
+  "fixture_key": "2026_05_10_Rio_Ave_FC_Sporting_CP",
+  "fixture_id": 1396530,
+  "competition": "Portugal Liga",
+  "competition_key": "portugal_liga",
+  "season": "2025/2026",
+  "home_team": "Rio Ave FC",
+  "away_team": "Sporting CP",
+  "home_team_id": 226,
+  "away_team_id": 228,
+  "home_formation": NaN,
+  "away_formation": NaN,
+  "home_units": {
+    "attack_unit": 36,
+    "midfield_control": 31,
+    "defensive_unit": 28,
+    "wide_threat": 60,
+    "central_threat": 36,
+    "discipline_risk": 50
+  },
+  "away_units": {
+    "attack_unit": 95,
+    "midfield_control": 53,
+    "defensive_unit": 71,
+    "wide_threat": 91,
+    "central_threat": 95,
+    "discipline_risk": 41
+  },
+  "home_resolution": {
+    "starting_xi_count": 0,
+    "resolved_profiles": 0,
+    "fallback_profiles": 0
+  },
+  "away_resolution": {
+    "starting_xi_count": 0,
+    "resolved_profiles": 0,
+    "fallback_profiles": 0
+  },
+  "key_mismatches": [
+    {
+      "zone": "Sporting CP attack vs Rio Ave defence",
+      "advantage": "Sporting CP",
+      "mismatch_score": 67,
+      "left_label": "Sporting CP attack",
+      "left_value": 95,
+      "right_label": "Rio Ave defence",
+      "right_value": 28,
+      "summary": "Major Sporting CP attacking advantage"
+    },
+    {
+      "zone": "Sporting CP wide threat vs Rio Ave resistance",
+      "advantage": "Sporting CP",
+      "mismatch_score": 63,
+      "left_label": "Sporting CP wide threat",
+      "left_value": 91,
+      "right_label": "Rio Ave resistance",
+      "right_value": 28,
+      "summary": "Sporting CP wide channel has a live attacking edge"
+    },
+    {
+      "zone": "Rio Ave attack vs Sporting CP defence",
+      "advantage": "Sporting CP",
+      "mismatch_score": 35,
+      "left_label": "Rio Ave attack",
+      "left_value": 36,
+      "right_label": "Sporting CP defence",
+      "right_value": 71,
+      "summary": "Sporting CP defensive resistance is suppressing the home attack"
+    },
+    {
+      "zone": "Midfield control battle",
+      "advantage": "Sporting CP",
+      "mismatch_score": 22,
+      "left_label": "Rio Ave midfield",
+      "left_value": 31,
+      "right_label": "Sporting CP midfield",
+      "right_value": 53,
+      "summary": "Sporting CP should control more of the central game-state"
+    }
+  ],
+  "player_matchups": [],
+  "home_lineup_profiles": [],
+  "away_lineup_profiles": [],
+  "formation_context": {
+    "same_formation_flag": 0,
+    "formation_mismatch_flag": 0,
+    "formation_attack_delta": 0.0,
+    "formation_defence_delta": 0.0
+  },
+  "site_alias_source_fixture_key": "2026-05-11_rio_ave_sporting_cp"
+}

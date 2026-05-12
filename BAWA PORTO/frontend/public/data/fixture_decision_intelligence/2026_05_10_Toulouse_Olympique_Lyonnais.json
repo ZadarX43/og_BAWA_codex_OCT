@@ -74,7 +74,24 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Olympique Lyonnais",
+      "player": "Amine Gouiri",
+      "role": "Forward",
+      "power": 50,
+      "driver_metric": "Creative Spark",
+      "driver_value": 50
+    },
+    {
+      "team": "Olympique Lyonnais",
+      "player": "Anthony Lopes",
+      "role": "Goalkeeper",
+      "power": 50,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 50
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

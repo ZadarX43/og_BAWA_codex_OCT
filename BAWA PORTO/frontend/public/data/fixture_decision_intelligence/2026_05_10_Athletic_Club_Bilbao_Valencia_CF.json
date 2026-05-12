@@ -72,7 +72,40 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Athletic Club Bilbao",
+      "player": "Gorka Guruzeta",
+      "role": "Forward",
+      "power": 63,
+      "driver_metric": "Goal Threat",
+      "driver_value": 64
+    },
+    {
+      "team": "Athletic Club Bilbao",
+      "player": "Robert Navarro",
+      "role": "Forward",
+      "power": 59,
+      "driver_metric": "Goal Threat",
+      "driver_value": 63
+    },
+    {
+      "team": "Valencia CF",
+      "player": "Alessandro Florenzi",
+      "role": "Central Midfielder",
+      "power": 50,
+      "driver_metric": "Creative Spark",
+      "driver_value": 50
+    },
+    {
+      "team": "Valencia CF",
+      "player": "Carlos Soler",
+      "role": "Central Midfielder",
+      "power": 50,
+      "driver_metric": "Goal Threat",
+      "driver_value": 53
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

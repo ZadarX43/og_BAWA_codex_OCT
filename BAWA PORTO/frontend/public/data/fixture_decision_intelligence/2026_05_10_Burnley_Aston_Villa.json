@@ -2,15 +2,15 @@
   "fixture_key": "2026_05_10_Burnley_Aston_Villa",
   "fixture": "Burnley vs Aston Villa",
   "primary_signal": "BTTS Yes",
-  "signal_state": "AVOID",
-  "agreement_score": 32,
+  "signal_state": "FRAGILE",
+  "agreement_score": 42,
   "confidence_band": "LOW",
-  "supporting_layers": [],
+  "supporting_layers": [
+    "H2H_BTTS_SUPPORT"
+  ],
   "caution_layers": [
     "BTTS_PRESSURE_WEAK",
-    "GOAL_ENVIRONMENT_SOFT",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "GOAL_ENVIRONMENT_SOFT"
   ],
   "profile_tags": {
     "home": [
@@ -71,13 +71,111 @@
       "leader": "Burnley"
     }
   ],
-  "unit_battle_summary": [],
-  "key_player_drivers": [],
-  "key_mismatches": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 51,
+      "away_value": 56,
+      "delta": -5
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 44,
+      "away_value": 56,
+      "delta": -12
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 68,
+      "away_value": 44,
+      "delta": 24
+    }
+  ],
+  "key_player_drivers": [
+    {
+      "team": "Burnley",
+      "player": "Zian Flemming",
+      "role": "Forward",
+      "power": 77,
+      "driver_metric": "Goal Threat",
+      "driver_value": 94
+    },
+    {
+      "team": "Burnley",
+      "player": "Jaidon Anthony",
+      "role": "Forward",
+      "power": 75,
+      "driver_metric": "Goal Threat",
+      "driver_value": 82
+    },
+    {
+      "team": "Aston Villa",
+      "player": "Ollie Watkins",
+      "role": "Forward",
+      "power": 84,
+      "driver_metric": "Goal Threat",
+      "driver_value": 92
+    },
+    {
+      "team": "Aston Villa",
+      "player": "Emiliano Martínez",
+      "role": "Goalkeeper",
+      "power": 68,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 47
+    }
+  ],
+  "key_mismatches": [
+    {
+      "zone": "Aston Villa attack vs Burnley defence",
+      "advantage": "Aston Villa",
+      "mismatch_score": 24,
+      "left_label": "Aston Villa attack",
+      "left_value": 68,
+      "right_label": "Burnley defence",
+      "right_value": 44,
+      "summary": "Major Aston Villa attacking advantage"
+    },
+    {
+      "zone": "Aston Villa wide threat vs Burnley resistance",
+      "advantage": "Aston Villa",
+      "mismatch_score": 23,
+      "left_label": "Aston Villa wide threat",
+      "left_value": 67,
+      "right_label": "Burnley resistance",
+      "right_value": 44,
+      "summary": "Aston Villa wide channel has a live attacking edge"
+    },
+    {
+      "zone": "Midfield control battle",
+      "advantage": "Aston Villa",
+      "mismatch_score": 12,
+      "left_label": "Burnley midfield",
+      "left_value": 44,
+      "right_label": "Aston Villa midfield",
+      "right_value": 56,
+      "summary": "Aston Villa should control more of the central game-state"
+    },
+    {
+      "zone": "Burnley attack vs Aston Villa defence",
+      "advantage": "Aston Villa",
+      "mismatch_score": 5,
+      "left_label": "Burnley attack",
+      "left_value": 51,
+      "right_label": "Aston Villa defence",
+      "right_value": 56,
+      "summary": "Aston Villa defensive resistance is suppressing the home attack"
+    }
+  ],
   "h2h_context": {
-    "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "available": true,
+    "summary": "Using the latest available same-team-pair historical regime (1 prior meeting) as supporting context for this current fixture.",
+    "sample_size": 1,
+    "goal_environment": 4,
+    "btts_regime": 100,
+    "over25_rate": 100,
+    "draw_rate": 0,
+    "booking_heat": 2
   },
   "market_suitability": {
     "ftr": {
@@ -118,85 +216,98 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 49,
+      "alignment_score": 55,
       "state": "FRAGILE",
       "model_lean": "AWAY",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
         "GOAL_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "FTR has some structural support from structural support, but the overall layer fit remains fragile.",
+      "public_summary": "FTR has some structural support from h2h btts support, but the overall layer fit remains fragile.",
       "rating": 63,
       "band": "Mixed"
     },
     "btts": {
-      "alignment_score": 40,
-      "state": "AVOID",
+      "alignment_score": 46,
+      "state": "FRAGILE",
       "model_lean": "YES",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
         "GOAL_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "BTTS is too contradicted by btts pressure weak to present as a clean public read.",
+      "public_summary": "BTTS has some structural support from h2h btts support, but the overall layer fit remains fragile.",
       "rating": 52,
       "band": "Weak"
     },
     "ou25": {
-      "alignment_score": 46,
+      "alignment_score": 52,
       "state": "FRAGILE",
       "model_lean": "UNDER25",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "GOAL_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Over 2.5 has some structural support from structural support, but the overall layer fit remains fragile.",
+      "public_summary": "Over 2.5 has some structural support from h2h btts support, but the overall layer fit remains fragile.",
       "rating": 54,
       "band": "Weak"
     },
     "team_goals": {
-      "alignment_score": 54,
-      "state": "FRAGILE",
-      "model_lean": "Burnley 1.5+",
-      "structural_support": [],
-      "cautions": [
-        "GOAL_ENVIRONMENT_SOFT",
-        "LINEUP_DATA_MISSING"
+      "alignment_score": 64,
+      "state": "MIXED",
+      "model_lean": "Aston Villa 1.5+",
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
       ],
-      "public_summary": "Team Goals has some structural support from structural support, but the overall layer fit remains fragile.",
+      "cautions": [
+        "GOAL_ENVIRONMENT_SOFT"
+      ],
+      "public_summary": "Team Goals has partial support from h2h btts support, but goal environment soft keeps it from reading clean.",
       "rating": 69,
       "band": "Mixed"
     },
     "correct_score": {
-      "alignment_score": 73,
+      "alignment_score": 79,
       "state": "MIXED",
       "model_lean": "STRUCTURED",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "GOAL_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Correct Score has partial support from structural support, but goal environment soft keeps it from reading clean.",
+      "public_summary": "Correct Score has partial support from h2h btts support, but goal environment soft keeps it from reading clean.",
       "rating": 89,
       "band": "Strong"
     },
     "corners": {
-      "alignment_score": 39,
-      "state": "AVOID",
+      "alignment_score": 45,
+      "state": "FRAGILE",
       "model_lean": "ELEVATED",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "BTTS_PRESSURE_WEAK"
       ],
-      "public_summary": "Corners is too contradicted by btts pressure weak to present as a clean public read.",
+      "public_summary": "Corners has some structural support from h2h btts support, but the overall layer fit remains fragile.",
       "rating": 44,
       "band": "Weak"
     },
     "cards": {
-      "alignment_score": 34,
+      "alignment_score": 40,
       "state": "AVOID",
       "model_lean": "ELEVATED",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
         "GOAL_ENVIRONMENT_SOFT"
@@ -213,25 +324,24 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "BTTS Yes is too contradicted across the current structural layers for Burnley vs Aston Villa, so the clean read is caution rather than action.",
+  "public_safe_summary": "BTTS Yes has some live shape in Burnley vs Aston Villa, but the supporting layers remain fragile and need discipline.",
   "internal_reason_tokens": [
+    "H2H_BTTS_SUPPORT",
     "BTTS_PRESSURE_WEAK",
-    "GOAL_ENVIRONMENT_SOFT",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "GOAL_ENVIRONMENT_SOFT"
   ],
   "summary": {
-    "support_count": 0,
-    "caution_count": 4,
-    "lineup_available": false,
-    "h2h_available": false
+    "support_count": 1,
+    "caution_count": 2,
+    "lineup_available": true,
+    "h2h_available": true
   },
   "preview": {
-    "headline": "Burnley vs Aston Villa: BTTS Yes avoid",
-    "short_summary": "BTTS Yes is too contradicted across the current structural layers for Burnley vs Aston Villa, so the clean read is caution rather than action. Primary support comes from structural caution, while the main caution remains btts pressure weak.",
+    "headline": "Burnley vs Aston Villa: BTTS Yes fragile",
+    "short_summary": "BTTS Yes has some live shape in Burnley vs Aston Villa, but the supporting layers remain fragile and need discipline. Primary support comes from h2h btts support, while the main caution remains btts pressure weak.",
     "market_summary": "Best aligned market: Correct Score (Mixed). Secondary support: Team Goals. Weakest read: Cards.",
     "caution_line": "Main caution: Btts Pressure Weak.",
-    "telegram_summary": "Burnley vs Aston Villa — BTTS Yes (Avoid, 32% agreement). Support: structural caution. Caution: Btts Pressure Weak.",
-    "premium_summary": "BTTS Yes is carrying a 32% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from btts pressure weak, goal environment soft."
+    "telegram_summary": "Burnley vs Aston Villa — BTTS Yes (Fragile, 42% agreement). Support: H2H Btts Support. Caution: Btts Pressure Weak.",
+    "premium_summary": "BTTS Yes is carrying a 42% agreement read across the published decision layers. Support is currently led by h2h btts support, while caution is still coming from btts pressure weak, goal environment soft."
   }
 }

@@ -73,7 +73,40 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Young Boys",
+      "player": "Alan Virginius",
+      "role": "Forward",
+      "power": 60,
+      "driver_metric": "Goal Threat",
+      "driver_value": 62
+    },
+    {
+      "team": "Young Boys",
+      "player": "Filip Ugrinic",
+      "role": "Central Midfielder",
+      "power": 56,
+      "driver_metric": "Goal Threat",
+      "driver_value": 61
+    },
+    {
+      "team": "Basel",
+      "player": "Leo Leroy",
+      "role": "Central Midfielder",
+      "power": 54,
+      "driver_metric": "Goal Threat",
+      "driver_value": 55
+    },
+    {
+      "team": "Basel",
+      "player": "Xherdan Shaqiri",
+      "role": "Central Midfielder",
+      "power": 54,
+      "driver_metric": "Goal Threat",
+      "driver_value": 60
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

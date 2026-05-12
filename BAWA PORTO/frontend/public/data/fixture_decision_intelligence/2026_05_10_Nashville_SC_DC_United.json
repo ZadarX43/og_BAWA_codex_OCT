@@ -3,13 +3,10 @@
   "fixture": "Nashville SC vs DC United",
   "primary_signal": "Fixture read",
   "signal_state": "FRAGILE",
-  "agreement_score": 44,
+  "agreement_score": 50,
   "confidence_band": "LOW",
   "supporting_layers": [],
-  "caution_layers": [
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
-  ],
+  "caution_layers": [],
   "profile_tags": {
     "home": [
       "Low Chaos"
@@ -53,7 +50,26 @@
       "leader": "Nashville SC"
     }
   ],
-  "unit_battle_summary": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 60,
+      "away_value": 61,
+      "delta": -1
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 68,
+      "away_value": 60,
+      "delta": 8
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 30,
+      "away_value": 71,
+      "delta": -41
+    }
+  ],
   "key_player_drivers": [
     {
       "team": "Nashville SC",
@@ -88,11 +104,57 @@
       "driver_value": 62
     }
   ],
-  "key_mismatches": [],
+  "key_mismatches": [
+    {
+      "zone": "DC United attack vs Nashville SC defence",
+      "advantage": "Nashville SC",
+      "mismatch_score": 41,
+      "left_label": "DC United attack",
+      "left_value": 30,
+      "right_label": "Nashville SC defence",
+      "right_value": 71,
+      "summary": "Nashville SC defensive resistance is suppressing the away attack"
+    },
+    {
+      "zone": "DC United wide threat vs Nashville SC resistance",
+      "advantage": "Nashville SC",
+      "mismatch_score": 37,
+      "left_label": "DC United wide threat",
+      "left_value": 34,
+      "right_label": "Nashville SC resistance",
+      "right_value": 71,
+      "summary": "Nashville SC can neutralize the wide-channel pressure"
+    },
+    {
+      "zone": "Nashville SC wide threat vs DC United resistance",
+      "advantage": "DC United",
+      "mismatch_score": 20,
+      "left_label": "Nashville SC wide threat",
+      "left_value": 41,
+      "right_label": "DC United resistance",
+      "right_value": 61,
+      "summary": "DC United can neutralize the wide-channel pressure"
+    },
+    {
+      "zone": "Midfield control battle",
+      "advantage": "Nashville SC",
+      "mismatch_score": 8,
+      "left_label": "Nashville SC midfield",
+      "left_value": 68,
+      "right_label": "DC United midfield",
+      "right_value": 60,
+      "summary": "Nashville SC should control more of the central game-state"
+    }
+  ],
   "h2h_context": {
-    "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "available": true,
+    "summary": "Using the latest available same-team-pair historical regime (1 prior meeting) as supporting context for this current fixture.",
+    "sample_size": 1,
+    "goal_environment": 3,
+    "btts_regime": 100,
+    "over25_rate": 100,
+    "draw_rate": 0,
+    "booking_heat": 2
   },
   "market_suitability": {
     "ftr": {
@@ -111,7 +173,7 @@
       "read": "Driven by combined goal environment and tempo."
     },
     "team_goals": {
-      "rating": 37,
+      "rating": 60,
       "label": "Red Flag",
       "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
     },
@@ -133,92 +195,72 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 52,
+      "alignment_score": 60,
       "state": "FRAGILE",
       "model_lean": "HOME",
       "structural_support": [],
-      "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
-      ],
+      "cautions": [],
       "public_summary": "FTR has some structural support from structural support, but the overall layer fit remains fragile.",
       "rating": 67,
       "band": "Mixed"
     },
     "btts": {
-      "alignment_score": 29,
+      "alignment_score": 37,
       "state": "AVOID",
       "model_lean": "NO",
       "structural_support": [],
-      "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
-      ],
-      "public_summary": "BTTS is too contradicted by lineup data missing to present as a clean public read.",
+      "cautions": [],
+      "public_summary": "BTTS is too contradicted by no major caution published to present as a clean public read.",
       "rating": 36,
       "band": "Red Flag"
     },
     "ou25": {
-      "alignment_score": 28,
+      "alignment_score": 36,
       "state": "AVOID",
       "model_lean": "UNDER25",
       "structural_support": [],
-      "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
-      ],
-      "public_summary": "Over 2.5 is too contradicted by lineup data missing to present as a clean public read.",
+      "cautions": [],
+      "public_summary": "Over 2.5 is too contradicted by no major caution published to present as a clean public read.",
       "rating": 34,
       "band": "Red Flag"
     },
     "team_goals": {
-      "alignment_score": 34,
-      "state": "AVOID",
+      "alignment_score": 55,
+      "state": "FRAGILE",
       "model_lean": "Nashville SC 1.5+",
       "structural_support": [],
-      "cautions": [
-        "LINEUP_DATA_MISSING"
-      ],
-      "public_summary": "Team Goals is too contradicted by lineup data missing to present as a clean public read.",
-      "rating": 37,
+      "cautions": [],
+      "public_summary": "Team Goals has some structural support from structural support, but the overall layer fit remains fragile.",
+      "rating": 60,
       "band": "Red Flag"
     },
     "correct_score": {
-      "alignment_score": 66,
+      "alignment_score": 74,
       "state": "MIXED",
       "model_lean": "STRUCTURED",
       "structural_support": [],
-      "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
-      ],
-      "public_summary": "Correct Score has partial support from structural support, but lineup data missing keeps it from reading clean.",
+      "cautions": [],
+      "public_summary": "Correct Score has partial support from structural support, but no major caution published keeps it from reading clean.",
       "rating": 85,
       "band": "Strong"
     },
     "corners": {
-      "alignment_score": 30,
+      "alignment_score": 38,
       "state": "AVOID",
       "model_lean": "ELEVATED",
       "structural_support": [],
-      "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
-      ],
-      "public_summary": "Corners is too contradicted by lineup data missing to present as a clean public read.",
+      "cautions": [],
+      "public_summary": "Corners is too contradicted by no major caution published to present as a clean public read.",
       "rating": 37,
       "band": "Red Flag"
     },
     "cards": {
-      "alignment_score": 35,
+      "alignment_score": 43,
       "state": "AVOID",
       "model_lean": "ELEVATED",
       "structural_support": [],
-      "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
-      ],
-      "public_summary": "Cards is too contradicted by lineup data missing to present as a clean public read.",
+      "cautions": [],
+      "public_summary": "Cards is too contradicted by no major caution published to present as a clean public read.",
       "rating": 44,
       "band": "Weak"
     }
@@ -231,22 +273,19 @@
     "mode": ""
   },
   "public_safe_summary": "Fixture read has some live shape in Nashville SC vs DC United, but the supporting layers remain fragile and need discipline.",
-  "internal_reason_tokens": [
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
-  ],
+  "internal_reason_tokens": [],
   "summary": {
     "support_count": 0,
-    "caution_count": 2,
-    "lineup_available": false,
-    "h2h_available": false
+    "caution_count": 0,
+    "lineup_available": true,
+    "h2h_available": true
   },
   "preview": {
     "headline": "Nashville SC vs DC United: Fixture read fragile",
-    "short_summary": "Fixture read has some live shape in Nashville SC vs DC United, but the supporting layers remain fragile and need discipline. Primary support comes from structural caution, while the main caution remains lineup data missing.",
+    "short_summary": "Fixture read has some live shape in Nashville SC vs DC United, but the supporting layers remain fragile and need discipline. Primary support comes from structural caution, while the main caution remains structural caution.",
     "market_summary": "Best aligned market: Correct Score (Mixed). Secondary support: FTR. Weakest read: Over 2.5.",
-    "caution_line": "Main caution: Lineup Data Missing.",
-    "telegram_summary": "Nashville SC vs DC United — Fixture read (Fragile, 44% agreement). Support: structural caution. Caution: Lineup Data Missing.",
-    "premium_summary": "Fixture read is carrying a 44% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from lineup data missing, h2h unavailable."
+    "caution_line": "Main caution: structural caution.",
+    "telegram_summary": "Nashville SC vs DC United — Fixture read (Fragile, 50% agreement). Support: structural caution. Caution: structural caution.",
+    "premium_summary": "Fixture read is carrying a 50% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from no major caution published."
   }
 }

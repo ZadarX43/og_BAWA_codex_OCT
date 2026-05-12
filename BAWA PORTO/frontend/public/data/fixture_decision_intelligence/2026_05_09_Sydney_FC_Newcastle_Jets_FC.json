@@ -76,7 +76,40 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Sydney FC",
+      "player": "Harrison Devenish-Meares",
+      "role": "Goalkeeper",
+      "power": 75,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 53
+    },
+    {
+      "team": "Sydney FC",
+      "player": "Víctor Campuzano Bonilla",
+      "role": "Forward",
+      "power": 72,
+      "driver_metric": "Goal Threat",
+      "driver_value": 83
+    },
+    {
+      "team": "Newcastle Jets FC",
+      "player": "James Nicholas Delianov",
+      "role": "Goalkeeper",
+      "power": 70,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 52
+    },
+    {
+      "team": "Newcastle Jets FC",
+      "player": "Alexander Badolato",
+      "role": "Forward",
+      "power": 68,
+      "driver_metric": "Goal Threat",
+      "driver_value": 72
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

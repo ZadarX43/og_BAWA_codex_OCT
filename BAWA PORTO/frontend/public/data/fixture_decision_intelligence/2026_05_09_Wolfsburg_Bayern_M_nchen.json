@@ -78,7 +78,40 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Wolfsburg",
+      "player": "Maximilian Arnold",
+      "role": "Central Midfielder",
+      "power": 56,
+      "driver_metric": "Creative Spark",
+      "driver_value": 60
+    },
+    {
+      "team": "Wolfsburg",
+      "player": "Maxence Lacroix",
+      "role": "Centre Back",
+      "power": 54,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 58
+    },
+    {
+      "team": "Bayern München",
+      "player": "Harry Kane",
+      "role": "Forward",
+      "power": 82,
+      "driver_metric": "Goal Threat",
+      "driver_value": 83
+    },
+    {
+      "team": "Bayern München",
+      "player": "Michael Olise",
+      "role": "Forward",
+      "power": 81,
+      "driver_metric": "Goal Threat",
+      "driver_value": 81
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

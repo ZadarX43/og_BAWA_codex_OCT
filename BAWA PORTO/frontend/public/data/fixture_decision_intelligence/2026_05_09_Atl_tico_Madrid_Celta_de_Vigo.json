@@ -76,7 +76,24 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Atlético Madrid",
+      "player": "Julián Álvarez",
+      "role": "Forward",
+      "power": 86,
+      "driver_metric": "Goal Threat",
+      "driver_value": 87
+    },
+    {
+      "team": "Atlético Madrid",
+      "player": "Ademola Lookman",
+      "role": "Forward",
+      "power": 73,
+      "driver_metric": "Goal Threat",
+      "driver_value": 74
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

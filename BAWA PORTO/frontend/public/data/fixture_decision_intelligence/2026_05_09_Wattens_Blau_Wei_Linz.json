@@ -73,7 +73,40 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Wattens",
+      "player": "Nikolai Baden Frederiksen",
+      "role": "Forward",
+      "power": 86,
+      "driver_metric": "Goal Threat",
+      "driver_value": 93
+    },
+    {
+      "team": "Wattens",
+      "player": "Jamie Lawrence",
+      "role": "Centre Back",
+      "power": 75,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 77
+    },
+    {
+      "team": "Blau-Weiß Linz",
+      "player": "Ronivaldo Bernardo Sales",
+      "role": "Forward",
+      "power": 84,
+      "driver_metric": "Goal Threat",
+      "driver_value": 92
+    },
+    {
+      "team": "Blau-Weiß Linz",
+      "player": "Shon Weissman",
+      "role": "Forward",
+      "power": 79,
+      "driver_metric": "Goal Threat",
+      "driver_value": 86
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

@@ -2,15 +2,14 @@
   "fixture_key": "2026_05_10_Mirassol_Chapecoense",
   "fixture": "Mirassol vs Chapecoense",
   "primary_signal": "Over 2.5",
-  "signal_state": "FRAGILE",
-  "agreement_score": 56,
+  "signal_state": "WATCHLIST",
+  "agreement_score": 60,
   "confidence_band": "LOW",
   "supporting_layers": [
     "OVER25_HEAT_SUPPORT",
     "CHAOS_ENVIRONMENT_SUPPORT"
   ],
   "caution_layers": [
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -72,9 +71,102 @@
       "leader": "Mirassol"
     }
   ],
-  "unit_battle_summary": [],
-  "key_player_drivers": [],
-  "key_mismatches": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 47,
+      "away_value": 25,
+      "delta": 22
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 38,
+      "away_value": 35,
+      "delta": 3
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 32,
+      "away_value": 32,
+      "delta": 0
+    }
+  ],
+  "key_player_drivers": [
+    {
+      "team": "Mirassol",
+      "player": "João Victor Carroll Santana",
+      "role": "Centre Back",
+      "power": 67,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 68
+    },
+    {
+      "team": "Mirassol",
+      "player": "Igor Marques Paciencia Cardoso",
+      "role": "Central Midfielder",
+      "power": 63,
+      "driver_metric": "Goal Threat",
+      "driver_value": 67
+    },
+    {
+      "team": "Chapecoense",
+      "player": "Eduardo Vinicius Domachowski",
+      "role": "Centre Back",
+      "power": 61,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 62
+    },
+    {
+      "team": "Chapecoense",
+      "player": "Camilo Reijers de Olivera",
+      "role": "Central Midfielder",
+      "power": 58,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 59
+    }
+  ],
+  "key_mismatches": [
+    {
+      "zone": "Mirassol wide threat vs Chapecoense-sc resistance",
+      "advantage": "Mirassol",
+      "mismatch_score": 38,
+      "left_label": "Mirassol wide threat",
+      "left_value": 63,
+      "right_label": "Chapecoense-sc resistance",
+      "right_value": 25,
+      "summary": "Mirassol wide channel has a live attacking edge"
+    },
+    {
+      "zone": "Mirassol attack vs Chapecoense-sc defence",
+      "advantage": "Mirassol",
+      "mismatch_score": 22,
+      "left_label": "Mirassol attack",
+      "left_value": 47,
+      "right_label": "Chapecoense-sc defence",
+      "right_value": 25,
+      "summary": "Major Mirassol attacking advantage"
+    },
+    {
+      "zone": "Chapecoense-sc wide threat vs Mirassol resistance",
+      "advantage": "Chapecoense-sc",
+      "mismatch_score": 6,
+      "left_label": "Chapecoense-sc wide threat",
+      "left_value": 38,
+      "right_label": "Mirassol resistance",
+      "right_value": 32,
+      "summary": "Chapecoense-sc wide channel has a live attacking edge"
+    },
+    {
+      "zone": "Midfield control battle",
+      "advantage": "Mirassol",
+      "mismatch_score": 3,
+      "left_label": "Mirassol midfield",
+      "left_value": 38,
+      "right_label": "Chapecoense-sc midfield",
+      "right_value": 35,
+      "summary": "Mirassol should control more of the central game-state"
+    }
+  ],
   "h2h_context": {
     "available": false,
     "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
@@ -119,7 +211,7 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 40,
+      "alignment_score": 44,
       "state": "AVOID",
       "model_lean": "HOME",
       "structural_support": [
@@ -127,15 +219,14 @@
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "FTR is too contradicted by lineup data missing to present as a clean public read.",
+      "public_summary": "FTR is too contradicted by h2h unavailable to present as a clean public read.",
       "rating": 35,
       "band": "Red Flag"
     },
     "btts": {
-      "alignment_score": 56,
+      "alignment_score": 60,
       "state": "FRAGILE",
       "model_lean": "YES",
       "structural_support": [
@@ -143,7 +234,6 @@
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "BTTS has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
@@ -151,53 +241,51 @@
       "band": "Mixed"
     },
     "ou25": {
-      "alignment_score": 60,
-      "state": "FRAGILE",
+      "alignment_score": 62,
+      "state": "WATCHLIST",
       "model_lean": "OVER25",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Over 2.5 has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
+      "public_summary": "Over 2.5 is interesting enough to monitor, but current support is better treated as watch-first because of h2h unavailable.",
       "rating": 66,
       "band": "Mixed"
     },
     "team_goals": {
       "alignment_score": 69,
       "state": "MIXED",
-      "model_lean": "Chapecoense 1.5+",
+      "model_lean": "Mirassol 1.5+",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Team Goals has partial support from over 2.5 heat support, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Team Goals has partial support from over 2.5 heat support, but h2h unavailable keeps it from reading clean.",
       "rating": 68,
       "band": "Mixed"
     },
     "correct_score": {
-      "alignment_score": 77,
-      "state": "MIXED",
+      "alignment_score": 81,
+      "state": "SUPPORTED",
       "model_lean": "OPEN",
       "structural_support": [
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Correct Score has partial support from chaos environment support, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Correct Score is well supported by chaos environment support, with caution still coming from h2h unavailable.",
       "rating": 92,
       "band": "Elite"
     },
     "corners": {
-      "alignment_score": 53,
+      "alignment_score": 57,
       "state": "FRAGILE",
       "model_lean": "ELEVATED",
       "structural_support": [
@@ -205,7 +293,6 @@
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "Corners has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
@@ -213,14 +300,13 @@
       "band": "Weak"
     },
     "cards": {
-      "alignment_score": 53,
+      "alignment_score": 57,
       "state": "FRAGILE",
       "model_lean": "ELEVATED",
       "structural_support": [
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "Cards has some structural support from chaos environment support, but the overall layer fit remains fragile.",
@@ -229,31 +315,34 @@
     }
   },
   "watchlist": {
-    "active": false,
-    "summary": "No watchlist layer is active for this fixture.",
-    "trigger_signals": [],
-    "public_state": "No watchlist flag",
-    "mode": ""
+    "active": true,
+    "summary": "Over 2.5 is better treated as a watch-first structure because h2h unavailable.",
+    "trigger_signals": [
+      "Watch for early tempo and repeat penalty-box entries.",
+      "Escalate only if control signals fail to settle the game.",
+      "Treat a quiet opening phase as a downgrade rather than a delay."
+    ],
+    "public_state": "Watchlist: wait for live confirmation",
+    "mode": "OU25:OVER25"
   },
-  "public_safe_summary": "Over 2.5 has some live shape in Mirassol vs Chapecoense, but the supporting layers remain fragile and need discipline.",
+  "public_safe_summary": "Over 2.5 has useful structure for Mirassol vs Chapecoense, but the current layer fit is better treated as watch-first than pre-match deploy.",
   "internal_reason_tokens": [
     "OVER25_HEAT_SUPPORT",
     "CHAOS_ENVIRONMENT_SUPPORT",
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
     "support_count": 2,
-    "caution_count": 2,
-    "lineup_available": false,
+    "caution_count": 1,
+    "lineup_available": true,
     "h2h_available": false
   },
   "preview": {
-    "headline": "Mirassol vs Chapecoense: Over 2.5 fragile",
-    "short_summary": "Over 2.5 has some live shape in Mirassol vs Chapecoense, but the supporting layers remain fragile and need discipline. Primary support comes from over25 heat support, while the main caution remains lineup data missing.",
-    "market_summary": "Best aligned market: Correct Score (Mixed). Secondary support: Team Goals. Weakest read: FTR.",
-    "caution_line": "Main caution: Lineup Data Missing.",
-    "telegram_summary": "Mirassol vs Chapecoense — Over 2.5 (Fragile, 56% agreement). Support: Over25 Heat Support. Caution: Lineup Data Missing.",
-    "premium_summary": "Over 2.5 is carrying a 56% agreement read across the published decision layers. Support is currently led by over25 heat support, chaos environment support, while caution is still coming from lineup data missing, h2h unavailable."
+    "headline": "Mirassol vs Chapecoense: Over 2.5 watchlist",
+    "short_summary": "Over 2.5 has useful structure for Mirassol vs Chapecoense, but the current layer fit is better treated as watch-first than pre-match deploy. Primary support comes from over25 heat support, while the main caution remains h2h unavailable.",
+    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: FTR.",
+    "caution_line": "Main caution: H2H Unavailable.",
+    "telegram_summary": "Mirassol vs Chapecoense — Over 2.5 (Watchlist, 60% agreement). Support: Over25 Heat Support. Caution: H2H Unavailable.",
+    "premium_summary": "Over 2.5 is carrying a 60% agreement read across the published decision layers. Support is currently led by over25 heat support, chaos environment support, while caution is still coming from h2h unavailable."
   }
 }

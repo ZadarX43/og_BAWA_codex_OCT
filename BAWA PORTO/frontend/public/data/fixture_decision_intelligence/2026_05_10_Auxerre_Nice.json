@@ -3,14 +3,15 @@
   "fixture": "Auxerre vs Nice",
   "primary_signal": "BTTS Yes",
   "signal_state": "AVOID",
-  "agreement_score": 32,
+  "agreement_score": 38,
   "confidence_band": "LOW",
-  "supporting_layers": [],
+  "supporting_layers": [
+    "H2H_BTTS_SUPPORT"
+  ],
   "caution_layers": [
     "BTTS_PRESSURE_WEAK",
     "GOAL_ENVIRONMENT_SOFT",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "LINEUP_DATA_MISSING"
   ],
   "profile_tags": {
     "home": [
@@ -72,12 +73,34 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Nice",
+      "player": "Hicham Boudaoui",
+      "role": "Central Midfielder",
+      "power": 54,
+      "driver_metric": "Midfield Engine",
+      "driver_value": 53
+    },
+    {
+      "team": "Nice",
+      "player": "Terem Moffi",
+      "role": "Forward",
+      "power": 51,
+      "driver_metric": "Goal Threat",
+      "driver_value": 53
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
-    "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "available": true,
+    "summary": "Using the latest available same-team-pair historical regime (1 prior meeting) as supporting context for this current fixture.",
+    "sample_size": 1,
+    "goal_environment": 3,
+    "btts_regime": 100,
+    "over25_rate": 100,
+    "draw_rate": 0,
+    "booking_heat": 0
   },
   "market_suitability": {
     "ftr": {
@@ -118,10 +141,12 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 25,
+      "alignment_score": 31,
       "state": "AVOID",
       "model_lean": "DRAW",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
         "GOAL_ENVIRONMENT_SOFT"
@@ -131,10 +156,12 @@
       "band": "Red Flag"
     },
     "btts": {
-      "alignment_score": 39,
+      "alignment_score": 42,
       "state": "AVOID",
       "model_lean": "YES",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
         "GOAL_ENVIRONMENT_SOFT"
@@ -144,10 +171,12 @@
       "band": "Weak"
     },
     "ou25": {
-      "alignment_score": 37,
+      "alignment_score": 43,
       "state": "AVOID",
       "model_lean": "UNDER25",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "GOAL_ENVIRONMENT_SOFT"
       ],
@@ -156,52 +185,60 @@
       "band": "Weak"
     },
     "team_goals": {
-      "alignment_score": 50,
+      "alignment_score": 56,
       "state": "FRAGILE",
       "model_lean": "Nice 1.5+",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "GOAL_ENVIRONMENT_SOFT",
         "LINEUP_DATA_MISSING"
       ],
-      "public_summary": "Team Goals has some structural support from structural support, but the overall layer fit remains fragile.",
+      "public_summary": "Team Goals has some structural support from h2h btts support, but the overall layer fit remains fragile.",
       "rating": 64,
       "band": "Mixed"
     },
     "correct_score": {
-      "alignment_score": 81,
+      "alignment_score": 87,
       "state": "SUPPORTED",
       "model_lean": "STRUCTURED",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "GOAL_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Correct Score is well supported by structural support, with caution still coming from goal environment soft.",
+      "public_summary": "Correct Score is well supported by h2h btts support, with caution still coming from goal environment soft.",
       "rating": 100,
       "band": "Elite"
     },
     "corners": {
-      "alignment_score": 45,
+      "alignment_score": 51,
       "state": "FRAGILE",
       "model_lean": "ELEVATED",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "BTTS_PRESSURE_WEAK"
       ],
-      "public_summary": "Corners has some structural support from structural support, but the overall layer fit remains fragile.",
+      "public_summary": "Corners has some structural support from h2h btts support, but the overall layer fit remains fragile.",
       "rating": 52,
       "band": "Weak"
     },
     "cards": {
-      "alignment_score": 53,
+      "alignment_score": 59,
       "state": "FRAGILE",
       "model_lean": "ELEVATED",
-      "structural_support": [],
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
         "GOAL_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Cards has some structural support from structural support, but the overall layer fit remains fragile.",
+      "public_summary": "Cards has some structural support from h2h btts support, but the overall layer fit remains fragile.",
       "rating": 68,
       "band": "Mixed"
     }
@@ -215,23 +252,23 @@
   },
   "public_safe_summary": "BTTS Yes is too contradicted across the current structural layers for Auxerre vs Nice, so the clean read is caution rather than action.",
   "internal_reason_tokens": [
+    "H2H_BTTS_SUPPORT",
     "BTTS_PRESSURE_WEAK",
     "GOAL_ENVIRONMENT_SOFT",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "LINEUP_DATA_MISSING"
   ],
   "summary": {
-    "support_count": 0,
-    "caution_count": 4,
+    "support_count": 1,
+    "caution_count": 3,
     "lineup_available": false,
-    "h2h_available": false
+    "h2h_available": true
   },
   "preview": {
     "headline": "Auxerre vs Nice: BTTS Yes avoid",
-    "short_summary": "BTTS Yes is too contradicted across the current structural layers for Auxerre vs Nice, so the clean read is caution rather than action. Primary support comes from structural caution, while the main caution remains btts pressure weak.",
+    "short_summary": "BTTS Yes is too contradicted across the current structural layers for Auxerre vs Nice, so the clean read is caution rather than action. Primary support comes from h2h btts support, while the main caution remains btts pressure weak.",
     "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Cards. Weakest read: FTR.",
     "caution_line": "Main caution: Btts Pressure Weak.",
-    "telegram_summary": "Auxerre vs Nice — BTTS Yes (Avoid, 32% agreement). Support: structural caution. Caution: Btts Pressure Weak.",
-    "premium_summary": "BTTS Yes is carrying a 32% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from btts pressure weak, goal environment soft."
+    "telegram_summary": "Auxerre vs Nice — BTTS Yes (Avoid, 38% agreement). Support: H2H Btts Support. Caution: Btts Pressure Weak.",
+    "premium_summary": "BTTS Yes is carrying a 38% agreement read across the published decision layers. Support is currently led by h2h btts support, while caution is still coming from btts pressure weak, goal environment soft."
   }
 }

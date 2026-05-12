@@ -1,0 +1,23 @@
+{
+  "fixture_key": "2026_05_10_Celtic_Rangers",
+  "fixture_id": 1540028,
+  "competition": "Scotland Premiership",
+  "season": "2025",
+  "home_team": "Celtic",
+  "away_team": "Rangers",
+  "sample_size": 3,
+  "goal_environment": 4,
+  "btts_regime": 33,
+  "booking_heat": 5,
+  "foul_intensity": 23,
+  "style_conflict_index": 24,
+  "home_win_rate": 67,
+  "draw_rate": 0,
+  "over25_rate": 100,
+  "high_cards_rate": 33,
+  "same_referee_overlap": false,
+  "same_referee_count": 0,
+  "summary": "Using the latest available same-team-pair historical regime (3 prior meetings) as supporting context for this current fixture.",
+  "fallback_mode": "historical_team_pair",
+  "source_fixture_key": "2025-05-04_rangers_celtic"
+}

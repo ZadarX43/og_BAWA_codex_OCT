@@ -2,15 +2,15 @@
   "fixture_key": "2026_05_09_RAAL_La_Louvi_re_Cercle_Brugge",
   "fixture": "RAAL La Louvière vs Cercle Brugge",
   "primary_signal": "Cercle Brugge Win",
-  "signal_state": "AVOID",
-  "agreement_score": 44,
+  "signal_state": "FRAGILE",
+  "agreement_score": 54,
   "confidence_band": "LOW",
   "supporting_layers": [
-    "AWAY_THREAT_ADVANTAGE"
+    "AWAY_THREAT_ADVANTAGE",
+    "AWAY_ATTACK_MISMATCH"
   ],
   "caution_layers": [
     "AWAY_POWER_NOT_DECISIVE",
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -73,9 +73,102 @@
       "leader": "RAAL La Louvière"
     }
   ],
-  "unit_battle_summary": [],
-  "key_player_drivers": [],
-  "key_mismatches": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 12,
+      "away_value": 28,
+      "delta": -16
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 56,
+      "away_value": 22,
+      "delta": 34
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 69,
+      "away_value": 52,
+      "delta": 17
+    }
+  ],
+  "key_player_drivers": [
+    {
+      "team": "RAAL La Louvière",
+      "player": "Marcos Hernán Peano",
+      "role": "Goalkeeper",
+      "power": 67,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 48
+    },
+    {
+      "team": "RAAL La Louvière",
+      "player": "Yllan Okou",
+      "role": "Centre Back",
+      "power": 67,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 77
+    },
+    {
+      "team": "Cercle Brugge",
+      "player": "Steve Ngoura",
+      "role": "Forward",
+      "power": 77,
+      "driver_metric": "Goal Threat",
+      "driver_value": 85
+    },
+    {
+      "team": "Cercle Brugge",
+      "player": "Oumar Diakité",
+      "role": "Forward",
+      "power": 73,
+      "driver_metric": "Goal Threat",
+      "driver_value": 85
+    }
+  ],
+  "key_mismatches": [
+    {
+      "zone": "Midfield control battle",
+      "advantage": "RAAL La Louvière",
+      "mismatch_score": 34,
+      "left_label": "RAAL La Louvière midfield",
+      "left_value": 56,
+      "right_label": "Cercle Brugge midfield",
+      "right_value": 22,
+      "summary": "RAAL La Louvière should control more of the central game-state"
+    },
+    {
+      "zone": "Cercle Brugge attack vs RAAL La Louvière defence",
+      "advantage": "Cercle Brugge",
+      "mismatch_score": 17,
+      "left_label": "Cercle Brugge attack",
+      "left_value": 69,
+      "right_label": "RAAL La Louvière defence",
+      "right_value": 52,
+      "summary": "Major Cercle Brugge attacking advantage"
+    },
+    {
+      "zone": "Cercle Brugge wide threat vs RAAL La Louvière resistance",
+      "advantage": "Cercle Brugge",
+      "mismatch_score": 17,
+      "left_label": "Cercle Brugge wide threat",
+      "left_value": 69,
+      "right_label": "RAAL La Louvière resistance",
+      "right_value": 52,
+      "summary": "Cercle Brugge wide channel has a live attacking edge"
+    },
+    {
+      "zone": "RAAL La Louvière attack vs Cercle Brugge defence",
+      "advantage": "Cercle Brugge",
+      "mismatch_score": 16,
+      "left_label": "RAAL La Louvière attack",
+      "left_value": 12,
+      "right_label": "Cercle Brugge defence",
+      "right_value": 28,
+      "summary": "Cercle Brugge defensive resistance is suppressing the home attack"
+    }
+  ],
   "h2h_context": {
     "available": false,
     "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
@@ -120,16 +213,17 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 39,
-      "state": "AVOID",
+      "alignment_score": 45,
+      "state": "FRAGILE",
       "model_lean": "AWAY",
       "structural_support": [
-        "AWAY_THREAT_ADVANTAGE"
+        "AWAY_THREAT_ADVANTAGE",
+        "AWAY_ATTACK_MISMATCH"
       ],
       "cautions": [
         "AWAY_POWER_NOT_DECISIVE"
       ],
-      "public_summary": "FTR is too contradicted by away power not decisive to present as a clean public read.",
+      "public_summary": "FTR has some structural support from away threat advantage, but the overall layer fit remains fragile.",
       "rating": 32,
       "band": "Red Flag"
     },
@@ -138,51 +232,54 @@
       "state": "FRAGILE",
       "model_lean": "YES",
       "structural_support": [
-        "AWAY_THREAT_ADVANTAGE"
+        "AWAY_ATTACK_MISMATCH"
       ],
       "cautions": [
         "AWAY_POWER_NOT_DECISIVE",
-        "LINEUP_DATA_MISSING"
+        "H2H_UNAVAILABLE"
       ],
-      "public_summary": "BTTS has some structural support from away threat advantage, but the overall layer fit remains fragile.",
+      "public_summary": "BTTS has some structural support from away attack mismatch, but the overall layer fit remains fragile.",
       "rating": 54,
       "band": "Weak"
     },
     "ou25": {
-      "alignment_score": 50,
+      "alignment_score": 56,
       "state": "FRAGILE",
       "model_lean": "OVER25",
       "structural_support": [
-        "AWAY_THREAT_ADVANTAGE"
+        "AWAY_THREAT_ADVANTAGE",
+        "AWAY_ATTACK_MISMATCH"
       ],
       "cautions": [
         "AWAY_POWER_NOT_DECISIVE",
-        "LINEUP_DATA_MISSING"
+        "H2H_UNAVAILABLE"
       ],
       "public_summary": "Over 2.5 has some structural support from away threat advantage, but the overall layer fit remains fragile.",
       "rating": 56,
       "band": "Mixed"
     },
     "team_goals": {
-      "alignment_score": 72,
+      "alignment_score": 68,
       "state": "MIXED",
       "model_lean": "Cercle Brugge 1.5+",
       "structural_support": [
-        "AWAY_THREAT_ADVANTAGE"
+        "AWAY_ATTACK_MISMATCH"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "AWAY_POWER_NOT_DECISIVE",
+        "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Team Goals has partial support from away threat advantage, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Team Goals has partial support from away attack mismatch, but away power not decisive keeps it from reading clean.",
       "rating": 80,
       "band": "Strong"
     },
     "correct_score": {
-      "alignment_score": 87,
+      "alignment_score": 93,
       "state": "SUPPORTED",
       "model_lean": "STRUCTURED",
       "structural_support": [
-        "AWAY_THREAT_ADVANTAGE"
+        "AWAY_THREAT_ADVANTAGE",
+        "AWAY_ATTACK_MISMATCH"
       ],
       "cautions": [
         "AWAY_POWER_NOT_DECISIVE"
@@ -192,30 +289,32 @@
       "band": "Elite"
     },
     "corners": {
-      "alignment_score": 46,
+      "alignment_score": 52,
       "state": "FRAGILE",
       "model_lean": "ELEVATED",
       "structural_support": [
-        "AWAY_THREAT_ADVANTAGE"
+        "AWAY_THREAT_ADVANTAGE",
+        "AWAY_ATTACK_MISMATCH"
       ],
       "cautions": [
         "AWAY_POWER_NOT_DECISIVE",
-        "LINEUP_DATA_MISSING"
+        "H2H_UNAVAILABLE"
       ],
       "public_summary": "Corners has some structural support from away threat advantage, but the overall layer fit remains fragile.",
       "rating": 50,
       "band": "Weak"
     },
     "cards": {
-      "alignment_score": 48,
+      "alignment_score": 54,
       "state": "FRAGILE",
       "model_lean": "ELEVATED",
       "structural_support": [
-        "AWAY_THREAT_ADVANTAGE"
+        "AWAY_THREAT_ADVANTAGE",
+        "AWAY_ATTACK_MISMATCH"
       ],
       "cautions": [
         "AWAY_POWER_NOT_DECISIVE",
-        "LINEUP_DATA_MISSING"
+        "H2H_UNAVAILABLE"
       ],
       "public_summary": "Cards has some structural support from away threat advantage, but the overall layer fit remains fragile.",
       "rating": 54,
@@ -229,25 +328,25 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "Cercle Brugge Win is too contradicted across the current structural layers for RAAL La Louvière vs Cercle Brugge, so the clean read is caution rather than action.",
+  "public_safe_summary": "Cercle Brugge Win has some live shape in RAAL La Louvière vs Cercle Brugge, but the supporting layers remain fragile and need discipline.",
   "internal_reason_tokens": [
     "AWAY_THREAT_ADVANTAGE",
+    "AWAY_ATTACK_MISMATCH",
     "AWAY_POWER_NOT_DECISIVE",
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
-    "support_count": 1,
-    "caution_count": 3,
-    "lineup_available": false,
+    "support_count": 2,
+    "caution_count": 2,
+    "lineup_available": true,
     "h2h_available": false
   },
   "preview": {
-    "headline": "RAAL La Louvière vs Cercle Brugge: Cercle Brugge Win avoid",
-    "short_summary": "Cercle Brugge Win is too contradicted across the current structural layers for RAAL La Louvière vs Cercle Brugge, so the clean read is caution rather than action. Primary support comes from away threat advantage, while the main caution remains away power not decisive.",
+    "headline": "RAAL La Louvière vs Cercle Brugge: Cercle Brugge Win fragile",
+    "short_summary": "Cercle Brugge Win has some live shape in RAAL La Louvière vs Cercle Brugge, but the supporting layers remain fragile and need discipline. Primary support comes from away threat advantage, while the main caution remains away power not decisive.",
     "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: FTR.",
     "caution_line": "Main caution: Away Power Not Decisive.",
-    "telegram_summary": "RAAL La Louvière vs Cercle Brugge — Cercle Brugge Win (Avoid, 44% agreement). Support: Away Threat Advantage. Caution: Away Power Not Decisive.",
-    "premium_summary": "Cercle Brugge Win is carrying a 44% agreement read across the published decision layers. Support is currently led by away threat advantage, while caution is still coming from away power not decisive, lineup data missing."
+    "telegram_summary": "RAAL La Louvière vs Cercle Brugge — Cercle Brugge Win (Fragile, 54% agreement). Support: Away Threat Advantage. Caution: Away Power Not Decisive.",
+    "premium_summary": "Cercle Brugge Win is carrying a 54% agreement read across the published decision layers. Support is currently led by away threat advantage, away attack mismatch, while caution is still coming from away power not decisive, h2h unavailable."
   }
 }

@@ -72,7 +72,40 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "KRC Genk",
+      "player": "Bryan Heynen",
+      "role": "Central Midfielder",
+      "power": 72,
+      "driver_metric": "Midfield Engine",
+      "driver_value": 69
+    },
+    {
+      "team": "KRC Genk",
+      "player": "Junya Ito",
+      "role": "Forward",
+      "power": 72,
+      "driver_metric": "Goal Threat",
+      "driver_value": 78
+    },
+    {
+      "team": "KVC Westerlo",
+      "player": "Nacho Ferri",
+      "role": "Forward",
+      "power": 86,
+      "driver_metric": "Goal Threat",
+      "driver_value": 90
+    },
+    {
+      "team": "KVC Westerlo",
+      "player": "Allahyar Sayyadmanesh",
+      "role": "Forward",
+      "power": 73,
+      "driver_metric": "Goal Threat",
+      "driver_value": 80
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

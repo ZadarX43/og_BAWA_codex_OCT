@@ -74,7 +74,40 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Tottenham Hotspur",
+      "player": "Guglielmo Vicario",
+      "role": "Goalkeeper",
+      "power": 63,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 54
+    },
+    {
+      "team": "Tottenham Hotspur",
+      "player": "Cristian Romero",
+      "role": "Centre Back",
+      "power": 62,
+      "driver_metric": "Goal Threat",
+      "driver_value": 63
+    },
+    {
+      "team": "Leeds United",
+      "player": "Jaka Bijol",
+      "role": "Centre Back",
+      "power": 62,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 55
+    },
+    {
+      "team": "Leeds United",
+      "player": "Ethan Ampadu",
+      "role": "Central Midfielder",
+      "power": 59,
+      "driver_metric": "Midfield Engine",
+      "driver_value": 56
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,

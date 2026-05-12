@@ -57,7 +57,24 @@
     }
   ],
   "unit_battle_summary": [],
-  "key_player_drivers": [],
+  "key_player_drivers": [
+    {
+      "team": "Galatasaray",
+      "player": "Victor Osimhen",
+      "role": "Forward",
+      "power": 76,
+      "driver_metric": "Goal Threat",
+      "driver_value": 75
+    },
+    {
+      "team": "Galatasaray",
+      "player": "Barış Alper Yılmaz",
+      "role": "Forward",
+      "power": 68,
+      "driver_metric": "Goal Threat",
+      "driver_value": 68
+    }
+  ],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,
