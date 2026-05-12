@@ -2235,6 +2235,59 @@
       .sort((left, right) => right.rating - left.rating || left.label.localeCompare(right.label));
   };
 
+  const decisionMarketPosture = (decision) => {
+    const items = decisionMarketSuitabilityItems(decision);
+    if (!items.length) {
+      return null;
+    }
+    const best = items[0] || null;
+    const secondary = items[1] || null;
+    const avoidCandidate =
+      items.find((item) => String(item.band || "").toUpperCase() === "AVOID") ||
+      [...items].reverse().find((item) => Number.isFinite(item.rating) && item.rating <= 44) ||
+      null;
+    const weakCandidate =
+      items.find((item) => String(item.band || "").toUpperCase() === "FRAGILE") ||
+      items.find((item) => String(item.band || "").toUpperCase() === "MIXED") ||
+      items[Math.max(items.length - 1, 0)] ||
+      null;
+    return {
+      best,
+      secondary,
+      weak: weakCandidate,
+      avoid: avoidCandidate,
+    };
+  };
+
+  const renderTeamOverviewDrivers = (payload) => {
+    if (!payload || !Array.isArray(payload.players) || !payload.players.length) {
+      return "";
+    }
+    const featuredPlayers = payload.players.slice(0, 3);
+    return `
+      <section class="section">
+        <div class="split">
+          <article class="panel">
+            <h3>Player drivers</h3>
+            <p class="section-copy">This is the first player layer for the team desk: who is carrying the squad profile, where the threat sits, and where the caution lives.</p>
+            <ul class="feature-list compact-list">
+              ${renderSquadLeaderList("Power", payload?.leaders?.power)}
+              ${renderSquadLeaderList("Goal threat", payload?.leaders?.goal_threat)}
+              ${renderSquadLeaderList("Creative spark", payload?.leaders?.creative_spark)}
+              ${renderSquadLeaderList("Discipline risk", payload?.leaders?.discipline_risk)}
+            </ul>
+          </article>
+          <article class="panel">
+            <h3>Featured squad profiles</h3>
+            <div class="card-grid card-grid-compact">
+              ${featuredPlayers.map((player) => renderPlayerIntelligenceCard(player)).join("")}
+            </div>
+          </article>
+        </div>
+      </section>
+    `;
+  };
+
   const renderFixtureHeroScoreboard = (fixture, clarity) => {
     const decision = state.selectedFixtureDecisionIntelligence || null;
     const leagueBadge = safeLogoUrl(fixture.league_logo_url || fixture.league_flag_url);
@@ -4010,6 +4063,133 @@
     `;
   };
 
+  const renderFixtureOverviewPrimer = (fixture, clarity) => {
+    const decision = state.selectedFixtureDecisionIntelligence || null;
+    const lineup = state.selectedFixtureLineupIntelligence || null;
+    const preview = decision?.preview || null;
+    const posture = decisionMarketPosture(decision);
+    const watchlist = decision?.watchlist || null;
+    const supportRows = decisionReasonRows(decision, 4);
+    const primaryMismatch = Array.isArray(decision?.key_mismatches) ? decision.key_mismatches[0] : null;
+    const lineupMismatch = Array.isArray(lineup?.key_mismatches) ? lineup.key_mismatches[0] : null;
+
+    if (!decision) {
+      return `
+        <section class="section">
+          <div class="split">
+            <article class="panel">
+              <h3>Fixture primer</h3>
+              <p class="section-copy">${escapeHtml(clarity.action_copy)}</p>
+              <div class="notice">The reconciled fixture decision layer has not been published for this fixture yet.</div>
+            </article>
+          </div>
+        </section>
+      `;
+    }
+
+    return `
+      <section class="section">
+        <div class="split">
+          <article class="panel">
+            <span class="metric-label">Fixture primer</span>
+            <h3>${escapeHtml(preview?.headline || decision.primary_signal || "Published fixture read")}</h3>
+            <p class="section-copy">${escapeHtml(preview?.short_summary || decision.public_safe_summary || "No published public-safe summary is available yet.")}</p>
+            <ul class="feature-list compact-list fixture-ratings-verdict-list">
+              ${supportRows.length
+                ? supportRows
+                    .map(
+                      (row) => `
+                        <li class="fixture-ratings-verdict-item fixture-ratings-verdict-item-${escapeHtml(row.tone)}">
+                          <strong>${escapeHtml(row.tone === "support" ? "✓" : "✗")}</strong>
+                          <span>${escapeHtml(row.text)}</span>
+                        </li>
+                      `
+                    )
+                    .join("")
+                : `<li>No published agreement stack is available yet.</li>`}
+            </ul>
+          </article>
+          <article class="panel">
+            <span class="metric-label">Market posture</span>
+            <h3>${escapeHtml(preview?.market_summary || "No published market summary yet.")}</h3>
+            ${renderEntitySurfaceTiles([
+              {
+                label: "Best market",
+                value: posture?.best ? `${posture.best.label} · ${posture.best.rating}%` : "Pending",
+                meta: posture?.best?.band || "No published read yet",
+                tone: posture?.best ? scoreTone(posture.best.rating) : "reference",
+              },
+              {
+                label: "Secondary",
+                value: posture?.secondary ? `${posture.secondary.label} · ${posture.secondary.rating}%` : "Pending",
+                meta: posture?.secondary?.band || "No published read yet",
+                tone: posture?.secondary ? scoreTone(posture.secondary.rating) : "reference",
+              },
+              {
+                label: "Weak read",
+                value: posture?.weak ? `${posture.weak.label} · ${posture.weak.rating}%` : "Pending",
+                meta: posture?.weak?.band || "No published read yet",
+                tone: posture?.weak ? scoreTone(posture.weak.rating) : "reference",
+              },
+              {
+                label: "Avoid / caution",
+                value: posture?.avoid ? `${posture.avoid.label} · ${posture.avoid.rating}%` : "None flagged",
+                meta: posture?.avoid?.band || "No market in avoid state",
+                tone: posture?.avoid ? "observe" : "reference",
+              },
+            ])}
+            <p class="section-copy"><strong>Main caution:</strong> ${escapeHtml(preview?.caution_line || decisionTopCaution(decision))}</p>
+          </article>
+        </div>
+      </section>
+      <section class="section">
+        <div class="split">
+          <article class="panel">
+            <h3>Key structural edge</h3>
+            ${
+              primaryMismatch
+                ? `
+                  <div class="feature-list compact-list">
+                    <li><strong>${escapeHtml(primaryMismatch.summary || primaryMismatch.zone || "Mismatch edge")}</strong><br /><span class="muted">${escapeHtml(`${primaryMismatch.advantage || "Advantage"} • ${primaryMismatch.mismatch_score ?? "—"} points`)}</span></li>
+                  </div>
+                `
+                : `<div class="notice">No published fixture mismatch summary is available yet.</div>`
+            }
+            ${
+              lineupMismatch
+                ? `<p class="section-copy"><strong>Lineup layer:</strong> ${escapeHtml(lineupMismatch.summary || lineupMismatch.zone || "A lineup mismatch has been published.")}</p>`
+                : ""
+            }
+          </article>
+          <article class="panel">
+            <h3>Watchlist posture</h3>
+            ${
+              watchlist
+                ? `
+                  ${renderEntitySurfaceTiles([
+                    {
+                      label: "Watch state",
+                      value: safeTitleLabel(watchlist.state || decision.signal_state, "Pending"),
+                      meta: watchlist.label || "Live confirmation layer",
+                      tone: decisionStateTone(watchlist.state || decision.signal_state),
+                    },
+                    {
+                      label: "Readiness",
+                      value: `${watchlist.readiness_score ?? decision.agreement_score ?? "—"}%`,
+                      meta: "Pre-match watch posture",
+                      tone: scoreTone(watchlist.readiness_score ?? decision.agreement_score),
+                    },
+                  ])}
+                  <p class="section-copy">${escapeHtml(watchlist.public_summary || "Pre-match is not clean enough for full deployment, but the shape is interesting enough to monitor live.")}</p>
+                `
+                : `<p class="section-copy">No separate watchlist layer is published for this fixture, so the page is relying on the main decision state and caution framing.</p>`
+            }
+          </article>
+        </div>
+      </section>
+    `;
+  };
+
   const renderFixtureDecisionCompanion = (fixture, clarity) => {
     const decision = state.selectedFixtureDecisionIntelligence || null;
     const bundle = state.selectedFixtureDecisionSupport || null;
@@ -4778,6 +4958,7 @@
       : "";
     const overviewContent = `
       ${intelligenceOverviewSection}
+      ${renderTeamOverviewDrivers(squadIntelligence)}
       <section class="section">
         <div class="split">
           <article class="panel">
@@ -7430,7 +7611,7 @@
       ["form", "Form"],
       ["context", "Context"],
     ];
-    const activeFixtureTab = fixtureTabs.some(([key]) => key === selectedFixtureTab) ? selectedFixtureTab : "intelligence";
+    const activeFixtureTab = fixtureTabs.some(([key]) => key === selectedFixtureTab) ? selectedFixtureTab : "overview";
     const followMatchLabel = matchedEntry ? matchedEntry.reasons.join(" / ") : "Not followed";
     const fixtureSummaryNotice = renderNotice(
       state.runtime.fixtureAlertMessage,
@@ -7454,16 +7635,21 @@
     const activeTabContent = (() => {
       if (activeFixtureTab === "overview") {
         return `
+          ${renderFixtureOverviewPrimer(fixture, clarity)}
+          ${renderFixtureTeamFaceOff(fixture, state.selectedFixtureDecisionIntelligence || null)}
+          ${renderFixtureUnitBattle(state.selectedFixtureDecisionIntelligence || null)}
+          ${renderDecisionKeyPlayerDrivers(state.selectedFixtureDecisionIntelligence || null)}
+          ${renderDecisionMarketSuitability(state.selectedFixtureDecisionIntelligence || null)}
           <section class="section">
             ${fixtureSummaryNotice}
             <div class="fixture-detail-grid">
               <article class="panel">
-                <h3>Overview</h3>
-                <p class="muted">${escapeHtml(headline)}</p>
+                <h3>Published overview</h3>
+                <p class="muted">${escapeHtml(state.selectedFixtureDecisionIntelligence?.preview?.premium_summary || headline)}</p>
                 <div class="card-grid">
                   <article class="panel">
-                    <h4>Published summary</h4>
-                    <p class="muted">${escapeHtml(fixture.signal_summary?.summary_text || headline)}</p>
+                    <h4>Telegram / comms preview</h4>
+                    <p class="muted">${escapeHtml(state.selectedFixtureDecisionIntelligence?.preview?.telegram_summary || fixture.signal_summary?.summary_text || headline)}</p>
                   </article>
               <article class="panel">
                 <h4>State snapshot</h4>
@@ -7482,7 +7668,7 @@
                 </div>
               </article>
               <article class="panel">
-                <h3>Market snapshot</h3>
+                <h3>Published market snapshot</h3>
                 <div class="prediction-meta-grid dashboard-odds-grid">
                   <div class="signal-cell">
                     <span class="signal-label">1X2</span>
@@ -7513,6 +7699,7 @@
               </article>
             </div>
           </section>
+          ${renderDecisionKeyMismatches(state.selectedFixtureDecisionIntelligence || null)}
         `;
       }
       if (activeFixtureTab === "lineups") {
