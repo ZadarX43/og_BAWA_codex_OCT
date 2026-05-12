@@ -30,6 +30,9 @@
     weeklyResults: null,
     teamIntelligenceIndex: [],
     clubSquadIntelligenceIndex: [],
+    fixtureDecisionIndex: [],
+    fixtureLineupIndex: [],
+    fixtureH2HIndex: [],
     selectedTeamIntelligence: null,
     selectedTeamSquadIntelligence: null,
     selectedFixtureLineupIntelligence: null,
@@ -580,6 +583,127 @@
     away_threat_rating: "Away Threat",
   };
 
+  const stripClubTokens = (value) =>
+    String(value || "")
+      .split(" ")
+      .filter(
+        (token) =>
+          token &&
+          !["fc", "cf", "sc", "afc", "vfl", "sv", "ac", "as", "ss", "fk", "rc", "cd", "ca", "if", "bk", "sk", "nk", "ks"].includes(token)
+      )
+      .join(" ");
+
+  const fixtureDateToken = (value) => {
+    const raw = String(value || "").trim();
+    if (!raw) return "";
+    const isoMatch = raw.match(/(\d{4})[-_](\d{2})[-_](\d{2})/);
+    if (isoMatch) {
+      return `${isoMatch[1]} ${isoMatch[2]} ${isoMatch[3]}`;
+    }
+    const kickoffMatch = raw.match(/(\d{4})-(\d{2})-(\d{2})/);
+    if (kickoffMatch) {
+      return `${kickoffMatch[1]} ${kickoffMatch[2]} ${kickoffMatch[3]}`;
+    }
+    return "";
+  };
+
+  const findFixtureRowBySelectedKey = () => {
+    const direct = state.fixtureIntelligence.find((row) => String(row.fixture_key || "") === String(selectedFixtureKey || ""));
+    if (direct) {
+      return direct;
+    }
+    const target = normalizePreferenceText(selectedFixtureKey);
+    return state.fixtureIntelligence.find((row) => normalizePreferenceText(row.fixture_key) === target) || null;
+  };
+
+  const fixtureIndexScore = (entry, fixture, selectedKey, options = {}) => {
+    let score = 0;
+    const allowHistoricalPairFallback = Boolean(options.allowHistoricalPairFallback);
+    const selectedKeyRaw = String(selectedKey || "").trim();
+    const selectedKeyNormalized = normalizePreferenceText(selectedKeyRaw);
+    const entryKeyRaw = String(entry?.fixture_key || "").trim();
+    const entryKeyNormalized = normalizePreferenceText(entryKeyRaw);
+    if (selectedKeyRaw && entryKeyRaw === selectedKeyRaw) {
+      score += 100;
+    } else if (selectedKeyNormalized && entryKeyNormalized === selectedKeyNormalized) {
+      score += 85;
+    }
+
+    const fixtureId = String(fixture?.api_fixture_id || fixture?.fixture_id || "").trim();
+    const entryFixtureId = String(entry?.fixture_id || "").trim();
+    if (fixtureId && entryFixtureId && fixtureId === entryFixtureId) {
+      score += 100;
+    }
+
+    const fixtureDate = fixtureDateToken(fixture?.kickoff_time || selectedKeyRaw);
+    const entryDate = fixtureDateToken(entryKeyRaw);
+    if (fixtureDate && entryDate && fixtureDate === entryDate) {
+      score += 12;
+    }
+
+    const fixtureHome = normalizePreferenceText(fixture?.home_team || "");
+    const fixtureAway = normalizePreferenceText(fixture?.away_team || "");
+    const fixtureHomeLoose = stripClubTokens(fixtureHome);
+    const fixtureAwayLoose = stripClubTokens(fixtureAway);
+    const entryHome = normalizePreferenceText(entry?.home_team || "");
+    const entryAway = normalizePreferenceText(entry?.away_team || "");
+    const entryHomeLoose = stripClubTokens(entryHome);
+    const entryAwayLoose = stripClubTokens(entryAway);
+    const entryFixtureLabel = normalizePreferenceText(entry?.fixture || "");
+    const desiredFixtureLabel = normalizePreferenceText(
+      fixture?.home_team && fixture?.away_team ? `${fixture.home_team} vs ${fixture.away_team}` : ""
+    );
+
+    if (desiredFixtureLabel && entryFixtureLabel === desiredFixtureLabel) {
+      score += 24;
+    }
+    if (fixtureHome && entryHome && fixtureHome === entryHome) {
+      score += 12;
+    } else if (fixtureHomeLoose && entryHomeLoose && fixtureHomeLoose === entryHomeLoose) {
+      score += 8;
+    }
+    if (fixtureAway && entryAway && fixtureAway === entryAway) {
+      score += 12;
+    } else if (fixtureAwayLoose && entryAwayLoose && fixtureAwayLoose === entryAwayLoose) {
+      score += 8;
+    }
+
+    if (allowHistoricalPairFallback && score > 0 && score < 24) {
+      score += 8;
+    }
+
+    return score;
+  };
+
+  const findFixtureIndexRecord = (rows, fixture, selectedKey, options = {}) => {
+    const matches = (rows || [])
+      .map((entry) => ({ entry, score: fixtureIndexScore(entry, fixture, selectedKey, options) }))
+      .filter((item) => item.score > 0)
+      .sort(
+        (left, right) =>
+          right.score - left.score ||
+          String(right.entry?.season || "").localeCompare(String(left.entry?.season || "")) ||
+          String(right.entry?.fixture_key || "").localeCompare(String(left.entry?.fixture_key || ""))
+      );
+    const best = matches[0] || null;
+    if (!best) {
+      return null;
+    }
+    if (!options.allowHistoricalPairFallback && best.score < 24) {
+      return null;
+    }
+    return best.entry;
+  };
+
+  const loadFixturePayloadFromIndex = async (section, indexRows, fixture, selectedKey, options = {}) => {
+    const record = findFixtureIndexRecord(indexRows, fixture, selectedKey, options);
+    if (!record?.fixture_key) {
+      return null;
+    }
+    const payload = await fetchOptionalJson(`${DATA_ROOT}/${section}/${encodeURIComponent(record.fixture_key)}.json`);
+    return payload ? { payload, record } : null;
+  };
+
   const scoreTone = (value) => {
     const numeric = Number(value);
     if (!Number.isFinite(numeric)) return "reference";
@@ -698,9 +822,21 @@
     if (page !== "fixture" || !selectedFixtureKey) {
       return;
     }
-    state.selectedFixtureLineupIntelligence = await fetchOptionalJson(
+    const fixture = findFixtureRowBySelectedKey();
+    const direct = await fetchOptionalJson(
       `${DATA_ROOT}/fixture_lineup_intelligence/${encodeURIComponent(selectedFixtureKey)}.json`
     );
+    if (direct) {
+      state.selectedFixtureLineupIntelligence = direct;
+      return;
+    }
+    const resolved = await loadFixturePayloadFromIndex(
+      "fixture_lineup_intelligence",
+      state.fixtureLineupIndex,
+      fixture,
+      selectedFixtureKey
+    );
+    state.selectedFixtureLineupIntelligence = resolved?.payload || null;
   };
 
   const loadSelectedFixtureDecisionIntelligence = async () => {
@@ -709,10 +845,22 @@
     if (page !== "fixture" || !selectedFixtureKey) {
       return;
     }
-    state.selectedFixtureDecisionIntelligence = await fetchOptionalJson(
+    const fixture = findFixtureRowBySelectedKey();
+    const directDecision = await fetchOptionalJson(
       `${DATA_ROOT}/fixture_decision_intelligence/${encodeURIComponent(selectedFixtureKey)}.json`
     );
-    const fixture = state.fixtureIntelligence.find((row) => String(row.fixture_key || "") === String(selectedFixtureKey || ""));
+    if (directDecision) {
+      state.selectedFixtureDecisionIntelligence = directDecision;
+    } else {
+      const resolvedDecision = await loadFixturePayloadFromIndex(
+        "fixture_decision_intelligence",
+        state.fixtureDecisionIndex,
+        fixture,
+        selectedFixtureKey,
+        { allowHistoricalPairFallback: false }
+      );
+      state.selectedFixtureDecisionIntelligence = resolvedDecision?.payload || null;
+    }
     if (!fixture) {
       return;
     }
@@ -725,7 +873,7 @@
     const homeSquadIndex = findBestClubSquadIndexRecord(fixture.home_team, { ...options, teamIndexRecord: homeTeamIndex });
     const awaySquadIndex = findBestClubSquadIndexRecord(fixture.away_team, { ...options, teamIndexRecord: awayTeamIndex });
 
-    const [homeTeamIntelligence, awayTeamIntelligence, homeSquadIntelligence, awaySquadIntelligence, h2hSupport] = await Promise.all([
+    const [homeTeamIntelligence, awayTeamIntelligence, homeSquadIntelligence, awaySquadIntelligence, directH2H] = await Promise.all([
       homeTeamIndex?.competition_key && homeTeamIndex?.season && homeTeamIndex?.team_slug
         ? fetchOptionalJson(
             `${DATA_ROOT}/team_intelligence/teams/${homeTeamIndex.competition_key}/${homeTeamIndex.season}/${homeTeamIndex.team_slug}.json`
@@ -748,6 +896,23 @@
         : Promise.resolve(null),
       fetchOptionalJson(`${DATA_ROOT}/fixture_h2h_support/${encodeURIComponent(selectedFixtureKey)}.json`),
     ]);
+
+    let h2hSupport = directH2H;
+    if (!h2hSupport) {
+      const resolvedH2H = await loadFixturePayloadFromIndex(
+        "fixture_h2h_support",
+        state.fixtureH2HIndex,
+        fixture,
+        selectedFixtureKey,
+        { allowHistoricalPairFallback: true }
+      );
+      h2hSupport = resolvedH2H?.payload
+        ? {
+            ...resolvedH2H.payload,
+            fallback_mode: resolvedH2H.record?.fixture_key !== selectedFixtureKey ? "historical_team_pair" : "",
+          }
+        : null;
+    }
 
     state.selectedFixtureDecisionSupport = {
       homeTeamIntelligence,
@@ -3932,7 +4097,28 @@
   };
 
   const renderDecisionKeyPlayerDrivers = (decision) => {
-    const drivers = Array.isArray(decision?.key_player_drivers) ? decision.key_player_drivers.slice(0, 6) : [];
+    let drivers = Array.isArray(decision?.key_player_drivers) ? decision.key_player_drivers.slice(0, 6) : [];
+    if (!drivers.length) {
+      const support = state.selectedFixtureDecisionSupport || {};
+      const collectSquadFallback = (squadPayload, teamLabel) => {
+        const players = Array.isArray(squadPayload?.players) ? squadPayload.players : [];
+        return players.slice(0, 2).map((player) => ({
+          team: teamLabel,
+          player: player.surname || player.name || "Profile pending",
+          role: player.position_group || player.position || "Utility",
+          driver_metric:
+            Number(player?.ratings?.goal_threat || 0) >= Number(player?.ratings?.creative_spark || 0)
+              ? "Goal Threat"
+              : "Creative Spark",
+          driver_value: Math.max(Number(player?.ratings?.goal_threat || 0), Number(player?.ratings?.creative_spark || 0)) || Number(player?.ratings?.og_player_power || 0),
+          power: Number(player?.ratings?.og_player_power || 0),
+        }));
+      };
+      drivers = [
+        ...collectSquadFallback(support.homeSquadIntelligence, support.homeTeamIntelligence?.team || "Home"),
+        ...collectSquadFallback(support.awaySquadIntelligence, support.awayTeamIntelligence?.team || "Away"),
+      ].slice(0, 6);
+    }
     if (!drivers.length) {
       return `
         <section class="section">
@@ -3947,7 +4133,7 @@
       <section class="section">
         <article class="panel">
           <h3>Key player drivers</h3>
-          <p class="section-copy">These are the players the reconciler sees as carrying the structural edge or caution inside the fixture.</p>
+          <p class="section-copy">These are the players carrying the structural edge or caution inside the fixture. If lineup data is missing, the page falls back to the best publish-safe squad profiles instead of going blank.</p>
           <div class="fixture-driver-grid">
             ${drivers
               .map(
@@ -4040,7 +4226,9 @@
           <section class="section">
             <article class="panel">
               <h3>H2H context</h3>
-              <div class="notice">${escapeHtml(context.summary || "No publish-safe H2H regime summary is available for this fixture yet.")}</div>
+              <div class="notice">${escapeHtml((h2hSupport?.fallback_mode === "historical_team_pair"
+                ? "Exact fixture H2H is not published yet, so this layer is falling back to the latest available same-team-pair historical context."
+                : context.summary) || "No publish-safe H2H regime summary is available for this fixture yet.")}</div>
             </article>
           </section>
         `;
@@ -10228,12 +10416,18 @@
         premiumPredictions,
         teamIntelligenceIndex,
         clubSquadIntelligenceIndex,
+        fixtureDecisionIndex,
+        fixtureLineupIndex,
+        fixtureH2HIndex,
       ] = await Promise.all([
         fetchJson(`${DATA_ROOT}/publish_summary.json`),
         fetchJson(`${DATA_ROOT}/public_predictions.json`),
         premiumDemoMode ? fetchOptionalJson(`${DATA_ROOT}/premium_predictions.json`) : Promise.resolve([]),
         fetchOptionalJson(`${DATA_ROOT}/team_intelligence/team_ratings_index.json`),
         fetchOptionalJson(`${DATA_ROOT}/player_intelligence/club_squad_ratings.json`),
+        fetchOptionalJson(`${DATA_ROOT}/fixture_decision_intelligence/index.json`),
+        fetchOptionalJson(`${DATA_ROOT}/fixture_lineup_intelligence/index.json`),
+        fetchOptionalJson(`${DATA_ROOT}/fixture_h2h_support/index.json`),
       ]);
       const weeklyResults = await fetchOptionalJson(`${DATA_ROOT}/weekly_results.json`);
       const fixtureIntelligence = await fetchOptionalJson(`${DATA_ROOT}/fixture_intelligence_public.json`);
@@ -10244,6 +10438,9 @@
       state.fixtureIntelligence = Array.isArray(fixtureIntelligence?.fixtures) ? fixtureIntelligence.fixtures : [];
       state.teamIntelligenceIndex = Array.isArray(teamIntelligenceIndex) ? teamIntelligenceIndex : [];
       state.clubSquadIntelligenceIndex = Array.isArray(clubSquadIntelligenceIndex) ? clubSquadIntelligenceIndex : [];
+      state.fixtureDecisionIndex = Array.isArray(fixtureDecisionIndex) ? fixtureDecisionIndex : [];
+      state.fixtureLineupIndex = Array.isArray(fixtureLineupIndex) ? fixtureLineupIndex : [];
+      state.fixtureH2HIndex = Array.isArray(fixtureH2HIndex) ? fixtureH2HIndex : [];
       await loadSelectedTeamIntelligence();
       await loadSelectedFixtureLineupIntelligence();
       await loadSelectedFixtureDecisionIntelligence();
