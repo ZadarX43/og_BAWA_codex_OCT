@@ -1,5 +1,5 @@
 fixture_id,fixture_key,league,league_id,season,match_date,home_team_id,away_team_id,home_team_name,away_team_name,kickoff_ts_utc,status,venue_id,venue_name,referee_name
-1396525,2026-05-10_avs_fc_porto,Primeira Liga,94,2025,2026-05-10,21595,212,AVS,FC Porto,2026-05-10T18:00:00+01:00,1H,1272,Estádio Clube Desportivo das Aves,C. Macedo
+1396525,2026-05-10_avs_fc_porto,Primeira Liga,94,2025,2026-05-10,21595,212,AVS,FC Porto,2026-05-10T18:00:00+01:00,NS,1272,Estádio Clube Desportivo das Aves,C. Macedo
 1396526,2026-05-10_alverca_estoril,Primeira Liga,94,2025,2026-05-10,4724,230,Alverca,Estoril,2026-05-10T20:30:00+01:00,NS,3572,FC Alverca Sports Complex,I. Vasilica
 1396527,2026-05-11_benfica_sc_braga,Primeira Liga,94,2025,2026-05-11,211,217,Benfica,SC Braga,2026-05-11T20:15:00+01:00,NS,0,Estádio do Sport Lisboa e Benfica,J. Pinheiro
 1396528,2026-05-11_estrela_famalicao,Primeira Liga,94,2025,2026-05-11,15130,242,Estrela,Famalicao,2026-05-11T20:15:00+01:00,NS,19187,Estádio José Gomes,F. Verissimo
@@ -8,3 +8,22 @@ fixture_id,fixture_key,league,league_id,season,match_date,home_team_id,away_team
 1396531,2026-05-11_santa_clara_nacional,Primeira Liga,94,2025,2026-05-11,227,225,Santa Clara,Nacional,2026-05-11T20:15:00+01:00,NS,1289,Estádio de São Miguel,H. Carvalho
 1396532,2026-05-11_tondela_moreirense,Primeira Liga,94,2025,2026-05-11,218,215,Tondela,Moreirense,2026-05-11T20:15:00+01:00,NS,1271,Estádio João Cardoso,R. Baixinho
 1396533,2026-05-11_guimaraes_casa_pia,Primeira Liga,94,2025,2026-05-11,224,4716,Guimaraes,Casa Pia,2026-05-11T20:15:00+01:00,NS,1295,Estádio Dom Afonso Henriques,L. M. Branco Godinho
+1396508,2026-04-24_alverca_arouca,Primeira Liga,94,2025,2026-04-24,4724,240,Alverca,Arouca,2026-04-24T20:15:00+01:00,FT,3572,FC Alverca Sports Complex,"Diogo Rosa, Portugal"
+1396509,2026-04-25_benfica_moreirense,Primeira Liga,94,2025,2026-04-25,211,215,Benfica,Moreirense,2026-04-25T18:00:00+01:00,FT,0,Estádio da Luz,"Vasilica Iancu, Portugal"
+1396514,2026-04-25_tondela_nacional,Primeira Liga,94,2025,2026-04-25,218,225,Tondela,Nacional,2026-04-25T15:30:00+01:00,FT,1271,Estádio João Cardoso,"Helder Malheiro, Portugal"
+1396515,2026-04-25_guimaraes_rio_ave,Primeira Liga,94,2025,2026-04-25,224,226,Guimaraes,Rio Ave,2026-04-25T20:30:00+01:00,FT,1295,Estádio Dom Afonso Henriques,"David Rafael Oliveira da Silva, Portugal"
+1396507,2026-04-26_avs_sporting_cp,Primeira Liga,94,2025,2026-04-26,21595,228,AVS,Sporting CP,2026-04-26T20:30:00+01:00,FT,1272,Estádio Clube Desportivo das Aves,"Pedro Ramalho, Portugal"
+1396510,2026-04-26_estoril_famalicao,Primeira Liga,94,2025,2026-04-26,230,242,Estoril,Famalicao,2026-04-26T15:30:00+01:00,FT,1274,Estádio António Coimbra da Mota,"Carlos Macedo, Portugal"
+1396511,2026-04-26_estrela_fc_porto,Primeira Liga,94,2025,2026-04-26,15130,212,Estrela,FC Porto,2026-04-26T18:00:00+01:00,FT,19187,Estádio José Gomes,"Helder Filipe Claudio Carvalho, Portugal"
+1396513,2026-04-26_santa_clara_sc_braga,Primeira Liga,94,2025,2026-04-26,227,217,Santa Clara,SC Braga,2026-04-26T18:00:00+01:00,FT,1289,Estádio de São Miguel,"Luís Godinho, Portugal"
+1396512,2026-04-27_gil_vicente_casa_pia,Primeira Liga,94,2025,2026-04-27,762,4716,GIL Vicente,Casa Pia,2026-04-27T20:15:00+01:00,FT,2811,Estádio Cidade de Barcelos,"Bruno Jose Ribeiro Pires Costa, Portugal"
+1396469,2026-04-29_sporting_cp_tondela,Primeira Liga,94,2025,2026-04-29,228,218,Sporting CP,Tondela,2026-04-29T20:15:00+01:00,FT,1293,Estádio José Alvalade,"Fabio Jose Costa Verissimo, Portugal"
+1396516,2026-05-02_arouca_santa_clara,Primeira Liga,94,2025,2026-05-02,240,227,Arouca,Santa Clara,2026-05-02T15:30:00+01:00,FT,1275,Estádio Municipal de Arouca,"Ricardo Baixinho, Portugal"
+1396519,2026-05-02_famalicao_benfica,Primeira Liga,94,2025,2026-05-02,242,211,Famalicao,Benfica,2026-05-02T18:00:00+01:00,FT,1276,Estadio Municipal de Famalicao,"Gustavo Correia, Portugal"
+1396520,2026-05-02_fc_porto_alverca,Primeira Liga,94,2025,2026-05-02,212,4724,FC Porto,Alverca,2026-05-02T20:30:00+01:00,FT,1286,Estádio Do Dragão,"David Rafael Oliveira da Silva, Portugal"
+1396521,2026-05-02_moreirense_estrela,Primeira Liga,94,2025,2026-05-02,215,15130,Moreirense,Estrela,2026-05-02T15:30:00+01:00,FT,1280,Parque Joaquim de Almeida Freitas,"Helder Malheiro, Portugal"
+1396522,2026-05-02_nacional_avs,Primeira Liga,94,2025,2026-05-02,225,21595,Nacional,AVS,2026-05-02T15:30:00+01:00,FT,0,Estádio da Madeira,"Marcio Torres, Portugal"
+1396517,2026-05-03_sc_braga_estoril,Primeira Liga,94,2025,2026-05-03,217,230,SC Braga,Estoril,2026-05-03T18:00:00+01:00,FT,1291,Estádio Municipal de Braga,"Anzhony Rodrigues, Portugal"
+1396518,2026-05-03_casa_pia_tondela,Primeira Liga,94,2025,2026-05-03,4716,218,Casa Pia,Tondela,2026-05-03T15:30:00+01:00,FT,3565,Estádio Municipal de Rio Maior,"Andre Filipe Domingues Narciso, Portugal"
+1396523,2026-05-03_rio_ave_gil_vicente,Primeira Liga,94,2025,2026-05-03,226,762,Rio Ave,GIL Vicente,2026-05-03T20:30:00+01:00,FT,1288,Estádio do Rio Ave Futebol Clube,"Fabio Jose Costa Verissimo, Portugal"
+1396524,2026-05-04_sporting_cp_guimaraes,Primeira Liga,94,2025,2026-05-04,228,224,Sporting CP,Guimaraes,2026-05-04T20:15:00+01:00,FT,1293,Estádio José Alvalade,"Antonio Nobre, Portugal"

@@ -99,6 +99,30 @@ Current upstream gap exposed by the launch filter:
 
 This is correct behavior for launch safety. It means the database is not silently filling the product with older historical rows. The next data job is to refresh/import current-season provider match stats and lineups for the 22 active competitions, then rerun this same exporter.
 
+Current-site normalized import was added to close that gap from existing report-scoped API-Football outputs:
+
+```bash
+python3 scripts/api_football/import_current_site_normalized.py --write
+python3 scripts/export_site_sqlite.py --output /private/tmp/odds_genius_current_stats_slice.sqlite
+```
+
+Measured after import:
+
+- SQLite size: ~143MB
+- D1 SQL chunks: ~132MB across 33 chunks
+- `site_lineup_slots`: 12,063
+- `site_player_match_stats`: 12,066
+- `site_team_match_stats`: 26
+- `team_lineup_snapshots`: 282
+- `site_player_identity_map`: 15,190
+
+Current coverage truth:
+
+- report-scoped current lineups/player stats exist for 14 of 22 active competitions
+- current team stats exist only where `/fixtures/statistics` had already been fetched, mainly small EPL/Bundesliga settled windows
+- no current lineups/player stats were found locally yet for Australia A-League, Austria Bundesliga, Denmark Superliga, Germany Bundesliga 2, Saudi Pro League, South Korea K League, Swiss Super League, or Turkey Super Lig
+- those remaining gaps require a fresh current-context API-Football refresh, not a website/exporter rewrite
+
 Why this matters:
 
 - Cloudflare D1 Free currently has a 500MB per-database limit

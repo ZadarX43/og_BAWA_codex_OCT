@@ -1,16 +1,46 @@
 fixture_id,fixture_key,league,league_id,season,match_date,home_team_id,away_team_id,home_team_name,away_team_name,kickoff_ts_utc,status,venue_id,venue_name,referee_name
-1490266,2026-05-09_chicago_fire_new_york_red_bulls,Major League Soccer,253,2026,2026-05-09,1607,1602,Chicago Fire,New York Red Bulls,2026-05-09T19:30:00+01:00,FT,0,Soldier Field,A. Chapman
-1490267,2026-05-09_toronto_fc_inter_miami,Major League Soccer,253,2026,2026-05-09,1601,9568,Toronto FC,Inter Miami,2026-05-09T18:00:00+01:00,FT,0,BMO Field,V. Rivas
-1490268,2026-05-09_cf_montreal_orlando_city_sc,Major League Soccer,253,2026,2026-05-09,1614,1598,CF Montreal,Orlando City SC,2026-05-09T21:30:00+01:00,FT,0,Saputo Stadium,M. De Oliveira
-1490269,2026-05-10_atlanta_united_fc_los_angeles_galaxy,Major League Soccer,253,2026,2026-05-10,1608,1605,Atlanta United FC,Los Angeles Galaxy,2026-05-10T00:30:00+01:00,FT,0,Mercedes-Benz Stadium,F. Bazakos
-1490270,2026-05-10_charlotte_fc_cincinnati,Major League Soccer,253,2026,2026-05-10,18310,2242,Charlotte,FC Cincinnati,2026-05-10T00:30:00+01:00,FT,0,Bank of America Stadium,I. Elfath
-1490271,2026-05-10_new_england_revolution_philadelphia_union,Major League Soccer,253,2026,2026-05-10,1609,1599,New England Revolution,Philadelphia Union,2026-05-10T00:30:00+01:00,FT,0,Gillette Stadium,T. Penso
-1490272,2026-05-10_fc_dallas_real_salt_lake,Major League Soccer,253,2026,2026-05-10,1597,1606,FC Dallas,Real Salt Lake,2026-05-10T01:30:00+01:00,FT,0,Toyota Stadium,J. Dickerson
-1490273,2026-05-10_nashville_sc_dc_united,Major League Soccer,253,2026,2026-05-10,9569,1615,Nashville SC,DC United,2026-05-10T02:15:00+01:00,FT,0,Geodis Park,"Joshua Encarnacion, USA"
-1490274,2026-05-10_colorado_rapids_st_louis_city,Major League Soccer,253,2026,2026-05-10,1610,20787,Colorado Rapids,St. Louis City,2026-05-10T02:30:00+01:00,FT,0,,T. Ford
-1490275,2026-05-10_seattle_sounders_san_diego,Major League Soccer,253,2026,2026-05-10,1595,25484,Seattle Sounders,San Diego,2026-05-10T03:30:00+01:00,FT,0,Lumen Field,"Armando Villarrea, USA"
-1490276,2026-05-10_san_jose_earthquakes_vancouver_whitecaps,Major League Soccer,253,2026,2026-05-10,1596,1603,San Jose Earthquakes,Vancouver Whitecaps,2026-05-10T03:30:00+01:00,FT,0,PayPal Park,"Malik Badawi, USA"
-1490277,2026-05-10_portland_timbers_sporting_kansas_city,Major League Soccer,253,2026,2026-05-10,1617,1611,Portland Timbers,Sporting Kansas City,2026-05-10T03:30:00+01:00,FT,0,Providence Park,"Ramy Touchan, USA"
+1490266,2026-05-09_chicago_fire_new_york_red_bulls,Major League Soccer,253,2026,2026-05-09,1607,1602,Chicago Fire,New York Red Bulls,2026-05-09T19:30:00+01:00,NS,0,Soldier Field,A. Chapman
+1490267,2026-05-09_toronto_fc_inter_miami,Major League Soccer,253,2026,2026-05-09,1601,9568,Toronto FC,Inter Miami,2026-05-09T18:00:00+01:00,NS,0,BMO Field,V. Rivas
+1490268,2026-05-09_cf_montreal_orlando_city_sc,Major League Soccer,253,2026,2026-05-09,1614,1598,CF Montreal,Orlando City SC,2026-05-09T21:30:00+01:00,NS,0,Saputo Stadium,M. De Oliveira
+1490269,2026-05-10_atlanta_united_fc_los_angeles_galaxy,Major League Soccer,253,2026,2026-05-10,1608,1605,Atlanta United FC,Los Angeles Galaxy,2026-05-10T00:30:00+01:00,NS,0,Mercedes-Benz Stadium,F. Bazakos
+1490270,2026-05-10_charlotte_fc_cincinnati,Major League Soccer,253,2026,2026-05-10,18310,2242,Charlotte,FC Cincinnati,2026-05-10T00:30:00+01:00,NS,0,Bank of America Stadium,I. Elfath
+1490271,2026-05-10_new_england_revolution_philadelphia_union,Major League Soccer,253,2026,2026-05-10,1609,1599,New England Revolution,Philadelphia Union,2026-05-10T00:30:00+01:00,NS,0,Gillette Stadium,T. Penso
+1490272,2026-05-10_fc_dallas_real_salt_lake,Major League Soccer,253,2026,2026-05-10,1597,1606,FC Dallas,Real Salt Lake,2026-05-10T01:30:00+01:00,NS,0,Toyota Stadium,J. Dickerson
+1490273,2026-05-10_nashville_sc_dc_united,Major League Soccer,253,2026,2026-05-10,9569,1615,Nashville SC,DC United,2026-05-10T02:15:00+01:00,NS,0,Geodis Park,
+1490274,2026-05-10_colorado_rapids_st_louis_city,Major League Soccer,253,2026,2026-05-10,1610,20787,Colorado Rapids,St. Louis City,2026-05-10T02:30:00+01:00,NS,0,,T. Ford
+1490275,2026-05-10_seattle_sounders_san_diego,Major League Soccer,253,2026,2026-05-10,1595,25484,Seattle Sounders,San Diego,2026-05-10T03:30:00+01:00,NS,0,Lumen Field,A. Villarreal
+1490276,2026-05-10_san_jose_earthquakes_vancouver_whitecaps,Major League Soccer,253,2026,2026-05-10,1596,1603,San Jose Earthquakes,Vancouver Whitecaps,2026-05-10T03:30:00+01:00,NS,0,PayPal Park,M. Badawi
+1490277,2026-05-10_portland_timbers_sporting_kansas_city,Major League Soccer,253,2026,2026-05-10,1617,1611,Portland Timbers,Sporting Kansas City,2026-05-10T03:30:00+01:00,NS,0,Providence Park,R. Touchan
 1490278,2026-05-10_new_york_city_fc_columbus_crew,Major League Soccer,253,2026,2026-05-10,1604,1613,New York City FC,Columbus Crew,2026-05-10T21:30:00+01:00,NS,0,Yankee Stadium,R. Vasquez
 1490279,2026-05-11_minnesota_united_fc_austin,Major League Soccer,253,2026,2026-05-11,1612,16489,Minnesota United FC,Austin,2026-05-11T00:00:00+01:00,NS,0,Allianz Field,C. Penso
 1490280,2026-05-11_los_angeles_fc_houston_dynamo,Major League Soccer,253,2026,2026-05-11,1616,1600,Los Angeles FC,Houston Dynamo,2026-05-11T02:00:00+01:00,NS,0,BMO Stadium,D. Fischer
+1490236,2026-04-25_minnesota_united_fc_los_angeles_fc,Major League Soccer,253,2026,2026-04-25,1612,1616,Minnesota United FC,Los Angeles FC,2026-04-25T21:45:00+01:00,FT,0,Allianz Field,G. J. Gonzalez
+1490237,2026-04-25_toronto_fc_atlanta_united_fc,Major League Soccer,253,2026,2026-04-25,1601,1608,Toronto FC,Atlanta United FC,2026-04-25T18:00:00+01:00,FT,0,BMO Field,I. Elfath
+1490238,2026-04-25_cf_montreal_new_york_city_fc,Major League Soccer,253,2026,2026-04-25,1614,1604,CF Montreal,New York City FC,2026-04-25T19:30:00+01:00,FT,0,Saputo Stadium,R. Touchan
+1490239,2026-04-26_inter_miami_new_england_revolution,Major League Soccer,253,2026,2026-04-26,9568,1609,Inter Miami,New England Revolution,2026-04-26T00:30:00+01:00,FT,0,Nu Stadium,R. Vazquez
+1490240,2026-04-26_columbus_crew_philadelphia_union,Major League Soccer,253,2026,2026-04-26,1613,1599,Columbus Crew,Philadelphia Union,2026-04-26T00:30:00+01:00,FT,0,ScottsMiracle-Gro Field,F. Dujic
+1490241,2026-04-26_fc_cincinnati_new_york_red_bulls,Major League Soccer,253,2026,2026-04-26,2242,1602,FC Cincinnati,New York Red Bulls,2026-04-26T00:30:00+01:00,FT,0,TQL Stadium,F. Bazakos
+1490242,2026-04-26_dc_united_orlando_city_sc,Major League Soccer,253,2026,2026-04-26,1615,1598,DC United,Orlando City SC,2026-04-26T00:30:00+01:00,FT,0,Audi Field,C. Penso
+1490243,2026-04-26_nashville_sc_charlotte,Major League Soccer,253,2026,2026-04-26,9569,18310,Nashville SC,Charlotte,2026-04-26T01:30:00+01:00,FT,0,Geodis Park,J. Dickerson
+1490244,2026-04-26_chicago_fire_sporting_kansas_city,Major League Soccer,253,2026,2026-04-26,1607,1611,Chicago Fire,Sporting Kansas City,2026-04-26T01:30:00+01:00,FT,0,Soldier Field,B. Stevis
+1490245,2026-04-26_austin_houston_dynamo,Major League Soccer,253,2026,2026-04-26,16489,1600,Austin,Houston Dynamo,2026-04-26T01:30:00+01:00,FT,0,Q2 Stadium,A. Da Silva
+1490246,2026-04-26_st_louis_city_san_jose_earthquakes,Major League Soccer,253,2026,2026-04-26,20787,1596,St. Louis City,San Jose Earthquakes,2026-04-26T01:30:00+01:00,FT,0,CITYPARK,D. Fischer
+1490247,2026-04-26_san_diego_portland_timbers,Major League Soccer,253,2026,2026-04-26,25484,1617,San Diego,Portland Timbers,2026-04-26T02:30:00+01:00,FT,0,Snapdragon Stadium,J. Freemon
+1490248,2026-04-26_seattle_sounders_fc_dallas,Major League Soccer,253,2026,2026-04-26,1595,1597,Seattle Sounders,FC Dallas,2026-04-26T03:30:00+01:00,FT,0,Lumen Field,J. Freemon
+1490249,2026-04-26_vancouver_whitecaps_colorado_rapids,Major League Soccer,253,2026,2026-04-26,1603,1610,Vancouver Whitecaps,Colorado Rapids,2026-04-26T03:30:00+01:00,FT,0,BC Place,L. Hernandez
+1490250,2026-04-27_los_angeles_galaxy_real_salt_lake,Major League Soccer,253,2026,2026-04-27,1605,1606,Los Angeles Galaxy,Real Salt Lake,2026-04-27T00:00:00+01:00,FT,0,Dignity Health Sports Park,V. Rivas
+1490251,2026-05-02_sporting_kansas_city_seattle_sounders,Major League Soccer,253,2026,2026-05-02,1611,1595,Sporting Kansas City,Seattle Sounders,2026-05-02T19:30:00+01:00,FT,0,,S. Demianchuk
+1490252,2026-05-02_toronto_fc_san_jose_earthquakes,Major League Soccer,253,2026,2026-05-02,1601,1596,Toronto FC,San Jose Earthquakes,2026-05-02T18:00:00+01:00,FT,0,BMO Field,M. Venne
+1490253,2026-05-02_real_salt_lake_portland_timbers,Major League Soccer,253,2026,2026-05-02,1606,1617,Real Salt Lake,Portland Timbers,2026-05-02T21:45:00+01:00,FT,0,America First Field,R. Mendoza
+1490254,2026-05-03_inter_miami_orlando_city_sc,Major League Soccer,253,2026,2026-05-03,9568,1598,Inter Miami,Orlando City SC,2026-05-03T00:15:00+01:00,FT,0,Nu Stadium,G. J. Gonzalez
+1490255,2026-05-03_philadelphia_union_nashville_sc,Major League Soccer,253,2026,2026-05-03,1599,9569,Philadelphia Union,Nashville SC,2026-05-03T00:30:00+01:00,FT,0,Subaru Park,E. Arreguin
+1490256,2026-05-03_columbus_crew_minnesota_united_fc,Major League Soccer,253,2026,2026-05-03,1613,1612,Columbus Crew,Minnesota United FC,2026-05-03T00:30:00+01:00,FT,0,ScottsMiracle-Gro Field,S. Boiko
+1490257,2026-05-03_atlanta_united_fc_cf_montreal,Major League Soccer,253,2026,2026-05-03,1608,1614,Atlanta United FC,CF Montreal,2026-05-03T00:30:00+01:00,FT,0,Mercedes-Benz Stadium,R. Vazquez
+1490258,2026-05-03_new_york_red_bulls_fc_dallas,Major League Soccer,253,2026,2026-05-03,1602,1597,New York Red Bulls,FC Dallas,2026-05-03T00:30:00+01:00,FT,0,Sports Illustrated Stadium,J. Marrufo
+1490259,2026-05-03_new_england_revolution_charlotte,Major League Soccer,253,2026,2026-05-03,1609,18310,New England Revolution,Charlotte,2026-05-03T00:30:00+01:00,FT,0,Gillette Stadium,P. Lauziere
+1490260,2026-05-03_chicago_fire_fc_cincinnati,Major League Soccer,253,2026,2026-05-03,1607,2242,Chicago Fire,FC Cincinnati,2026-05-03T01:30:00+01:00,FT,0,Soldier Field,J. Dickerson
+1490261,2026-05-03_houston_dynamo_colorado_rapids,Major League Soccer,253,2026,2026-05-03,1600,1610,Houston Dynamo,Colorado Rapids,2026-05-03T01:30:00+01:00,FT,0,Shell Energy Stadium,A. Chapman
+1490262,2026-05-03_san_diego_los_angeles_fc,Major League Soccer,253,2026,2026-05-03,25484,1616,San Diego,Los Angeles FC,2026-05-03T02:30:00+01:00,FT,0,Snapdragon Stadium,F. Dujic
+1490263,2026-05-03_los_angeles_galaxy_vancouver_whitecaps,Major League Soccer,253,2026,2026-05-03,1605,1603,Los Angeles Galaxy,Vancouver Whitecaps,2026-05-03T03:30:00+01:00,FT,0,Dignity Health Sports Park,A. Da Silva
+1490264,2026-05-03_new_york_city_fc_dc_united,Major League Soccer,253,2026,2026-05-03,1604,1615,New York City FC,DC United,2026-05-03T20:00:00+01:00,FT,0,Yankee Stadium,I. Elfath
+1490265,2026-05-03_austin_st_louis_city,Major League Soccer,253,2026,2026-05-03,16489,20787,Austin,St. Louis City,2026-05-03T22:30:00+01:00,FT,0,Q2 Stadium,J. Freemon

@@ -1,11 +1,31 @@
 fixture_id,fixture_key,league,league_id,season,match_date,home_team_id,away_team_id,home_team_name,away_team_name,kickoff_ts_utc,status,venue_id,venue_name,referee_name
-1492253,2026-05-09_coritiba_internacional,Serie A,71,2026,2026-05-09,147,119,Coritiba,Internacional,2026-05-09T20:00:00+01:00,FT,0,Estádio Major Antônio Couto Pereira,"Wagner do Nascimento Magalhaes, Brazil"
-1492254,2026-05-09_fluminense_vitoria,Serie A,71,2026,2026-05-09,124,136,Fluminense,Vitoria,2026-05-09T22:00:00+01:00,FT,0,Estádio do Maracanã,"Braulio Da Silva Machado, Brazil"
+1492253,2026-05-09_coritiba_internacional,Serie A,71,2026,2026-05-09,147,119,Coritiba,Internacional,2026-05-09T20:00:00+01:00,NS,0,,W. do Nascimento
+1492254,2026-05-09_fluminense_vitoria,Serie A,71,2026,2026-05-09,124,136,Fluminense,Vitoria,2026-05-09T22:00:00+01:00,NS,0,,B. Machado
 1492250,2026-05-10_atletico_mg_botafogo,Serie A,71,2026,2026-05-10,1062,120,Atletico-MG,Botafogo,2026-05-10T20:00:00+01:00,NS,0,MRV Arena,R. Abatti
-1492251,2026-05-10_bahia_cruzeiro,Serie A,71,2026,2026-05-10,118,135,Bahia,Cruzeiro,2026-05-10T01:00:00+01:00,FT,0,Arena Fonte Nova,"Rodrigo Jose Pereira de Lima, Brazil"
+1492251,2026-05-10_bahia_cruzeiro,Serie A,71,2026,2026-05-10,118,135,Bahia,Cruzeiro,2026-05-10T01:00:00+01:00,NS,0,Arena Fonte Nova,R. Pereira
 1492252,2026-05-10_corinthians_sao_paulo,Serie A,71,2026,2026-05-10,131,126,Corinthians,Sao Paulo,2026-05-10T22:30:00+01:00,NS,0,Neo Quimica Arena,A. Daronco
 1492255,2026-05-10_gremio_flamengo,Serie A,71,2026,2026-05-10,130,127,Gremio,Flamengo,2026-05-10T23:30:00+01:00,NS,0,,D. Lacerda
 1492256,2026-05-10_mirassol_chapecoense_sc,Serie A,71,2026,2026-05-10,7848,132,Mirassol,Chapecoense-sc,2026-05-10T22:30:00+01:00,NS,0,,F. Fernandes de Lima
 1492257,2026-05-10_remo_palmeiras,Serie A,71,2026,2026-05-10,1198,121,Remo,Palmeiras,2026-05-10T20:00:00+01:00,NS,0,Estadio Evandro Almeida,R. Klein
 1492258,2026-05-10_santos_rb_bragantino,Serie A,71,2026,2026-05-10,128,794,Santos,RB Bragantino,2026-05-10T22:30:00+01:00,NS,0,Estadio Urbano Caldeira,A. Gomes Stefano
 1492259,2026-05-11_vasco_da_gama_atletico_paranaense,Serie A,71,2026,2026-05-11,133,134,Vasco DA Gama,Atletico Paranaense,2026-05-11T00:30:00+01:00,NS,0,,R. Claus
+1492232,2026-04-25_bahia_santos,Serie A,71,2026,2026-04-25,118,128,Bahia,Santos,2026-04-25T22:30:00+01:00,FT,0,Arena Fonte Nova,R. Abatti
+1492233,2026-04-25_botafogo_internacional,Serie A,71,2026,2026-04-25,120,119,Botafogo,Internacional,2026-04-25T22:30:00+01:00,FT,0,Estadio Olimpico Nilton Santos,F. Mendes
+1492238,2026-04-25_remo_cruzeiro,Serie A,71,2026,2026-04-25,1198,135,Remo,Cruzeiro,2026-04-25T22:30:00+01:00,FT,0,Estadio Evandro Almeida,W. Sampaio
+1492230,2026-04-26_atletico_paranaense_vitoria,Serie A,71,2026,2026-04-26,134,136,Atletico Paranaense,Vitoria,2026-04-26T22:30:00+01:00,FT,0,Arena da Baixada,B. Arleu
+1492234,2026-04-26_rb_bragantino_palmeiras,Serie A,71,2026,2026-04-26,794,121,RB Bragantino,Palmeiras,2026-04-26T22:30:00+01:00,FT,0,Estádio Cícero de Souza Marques,J. Vitor Gobi
+1492235,2026-04-26_corinthians_vasco_da_gama,Serie A,71,2026,2026-04-26,131,133,Corinthians,Vasco DA Gama,2026-04-26T20:00:00+01:00,FT,0,Neo Quimica Arena,D. Lacerda
+1492237,2026-04-26_gremio_coritiba,Serie A,71,2026,2026-04-26,130,147,Gremio,Coritiba,2026-04-26T20:00:00+01:00,FT,0,Arena do Grêmio,F. Fernandes de Lima
+1492239,2026-04-26_sao_paulo_mirassol,Serie A,71,2026,2026-04-26,126,7848,Sao Paulo,Mirassol,2026-04-26T01:00:00+01:00,FT,0,Estádio Brinco de Ouro da Princesa,R. Claus
+1492231,2026-04-27_atletico_mg_flamengo,Serie A,71,2026,2026-04-27,1062,127,Atletico-MG,Flamengo,2026-04-27T00:30:00+01:00,FT,0,MRV Arena,R. Klein
+1492236,2026-04-27_fluminense_chapecoense_sc,Serie A,71,2026,2026-04-27,124,132,Fluminense,Chapecoense-sc,2026-04-27T00:30:00+01:00,FT,0,Estádio do Maracanã,S. Sampaio
+1492241,2026-05-02_botafogo_remo,Serie A,71,2026,2026-05-02,120,1198,Botafogo,Remo,2026-05-02T20:00:00+01:00,FT,0,Estadio Olimpico Nilton Santos,R. Pereira
+1492247,2026-05-02_palmeiras_santos,Serie A,71,2026,2026-05-02,121,128,Palmeiras,Santos,2026-05-02T22:30:00+01:00,FT,0,Allianz Parque,R. Claus
+1492249,2026-05-02_vitoria_coritiba,Serie A,71,2026,2026-05-02,136,147,Vitoria,Coritiba,2026-05-02T22:30:00+01:00,FT,0,Barradao,R. Klein
+1492240,2026-05-03_atletico_paranaense_gremio,Serie A,71,2026,2026-05-03,134,130,Atletico Paranaense,Gremio,2026-05-03T00:30:00+01:00,FT,0,Arena da Baixada,S. Sampaio
+1492242,2026-05-03_chapecoense_sc_rb_bragantino,Serie A,71,2026,2026-05-03,132,794,Chapecoense-sc,RB Bragantino,2026-05-03T22:30:00+01:00,FT,0,Arena Condá,P. Zanovelli
+1492243,2026-05-03_cruzeiro_atletico_mg,Serie A,71,2026,2026-05-03,135,1062,Cruzeiro,Atletico-MG,2026-05-03T01:00:00+01:00,FT,0,Governador Magalhães Pinto,F. Rodrigues
+1492244,2026-05-03_flamengo_vasco_da_gama,Serie A,71,2026,2026-05-03,127,133,Flamengo,Vasco DA Gama,2026-05-03T20:00:00+01:00,FT,0,Estádio do Maracanã,W. Sampaio
+1492245,2026-05-03_internacional_fluminense,Serie A,71,2026,2026-05-03,119,124,Internacional,Fluminense,2026-05-03T22:30:00+01:00,FT,0,Estádio Beira-Rio,F. Fernandes de Lima
+1492248,2026-05-03_sao_paulo_bahia,Serie A,71,2026,2026-05-03,126,118,Sao Paulo,Bahia,2026-05-03T20:00:00+01:00,FT,0,Estádio Cícero de Souza Marques,D. Lacerda
+1492246,2026-05-04_mirassol_corinthians,Serie A,71,2026,2026-05-04,7848,131,Mirassol,Corinthians,2026-05-04T00:30:00+01:00,FT,0,Estádio José Maria de Campos Maia,M. Delgado
