@@ -2518,13 +2518,14 @@
         data-api-league-id="${escapeHtml(apiLeagueId)}"
         data-api-season="${escapeHtml(apiSeason)}"
       >
-        <div class="widget-reference-head">
+        <div class="widget-reference-head fixture-table-reference-head">
           <div>
             <span class="metric-label">Reference layer</span>
             <h4>League table</h4>
+            <p class="muted">Reference context for this fixture. Use this as orientation, not as the decision layer.</p>
           </div>
+          <span class="chip chip-reference">Table orientation</span>
         </div>
-        <p class="muted">Reference context for this fixture. Use this as orientation, not as the decision layer. If the fit is strong, lineups and formations can sit beside it later.</p>
         <div class="widget-reference-frame">
           <div class="notice reference-loading">Loading league table…</div>
         </div>
@@ -9492,7 +9493,62 @@
           if (!Array.isArray(tableRows) || !tableRows.length) {
             throw new Error("League table reference is not available for this competition yet.");
           }
+          const isFixtureTeamRow = (row) => {
+            const rowTeamId = String(row?.team?.id || "").trim();
+            const rowTeamName = normalizePreferenceText(row?.team?.name || "");
+            return (
+              (rowTeamId && (rowTeamId === homeTeamId || rowTeamId === awayTeamId)) ||
+              rowTeamName === homeName ||
+              rowTeamName === awayName
+            );
+          };
+          const matchSpecificTeam = (teamId, teamName) =>
+            tableRows.find((row) => {
+              const rowTeamId = String(row?.team?.id || "").trim();
+              const rowTeamName = normalizePreferenceText(row?.team?.name || "");
+              return (teamId && rowTeamId === teamId) || rowTeamName === teamName;
+            }) || null;
+          const homeActiveRow = matchSpecificTeam(homeTeamId, homeName);
+          const awayActiveRow = matchSpecificTeam(awayTeamId, awayName);
+          const activeRows = [homeActiveRow, awayActiveRow].filter(Boolean);
+          const formSequenceMarkup = (formString) =>
+            String(formString || "")
+              .split("")
+              .filter(Boolean)
+              .slice(0, 5)
+              .map((letter) => `<span class="form-pill form-pill-${escapeHtml(letter.toLowerCase())}">${escapeHtml(letter)}</span>`)
+              .join("") || `<span class="muted">No form string</span>`;
+          const standingSpotlightCard = (row, index) => {
+            const team = row?.team || {};
+            const all = row?.all || {};
+            const goals = all?.goals || {};
+            return `
+              <article class="standings-spotlight-card ${index === 1 ? "standings-spotlight-card-away" : ""}">
+                <div class="standings-spotlight-team">
+                  ${badgeMarkup(team.logo, team.name || "Team", "lineup-team-badge standings-team-badge-lg")}
+                  <div>
+                    <span class="metric-label">${index === 1 ? "Away table read" : "Home table read"}</span>
+                    <h4>${escapeHtml(team.name || "Team")}</h4>
+                    <p class="muted">${escapeHtml(all.played ?? "—")} played · ${escapeHtml(goals.for ?? "—")}:${escapeHtml(goals.against ?? "—")} goals</p>
+                  </div>
+                </div>
+                <div class="standings-spotlight-stats">
+                  <span><strong>${escapeHtml(row.rank ?? "—")}</strong><small>Position</small></span>
+                  <span><strong>${escapeHtml(row.points ?? "—")}</strong><small>Points</small></span>
+                  <span><strong>${escapeHtml(row.goalsDiff ?? "—")}</strong><small>Goal diff</small></span>
+                </div>
+                <div class="standings-form-sequence standings-form-sequence-large">
+                  ${formSequenceMarkup(row.form)}
+                </div>
+              </article>
+            `;
+          };
           frame.innerHTML = `
+            ${
+              activeRows.length
+                ? `<div class="standings-spotlight-grid">${activeRows.map((row, index) => standingSpotlightCard(row, index)).join("")}</div>`
+                : ""
+            }
             <div class="standings-reference-table">
               <div class="standings-reference-head">
                 <span>Pos</span>
@@ -9505,27 +9561,18 @@
               ${tableRows
                 .slice(0, 8)
                 .map((row) => {
-                  const rowTeamId = String(row?.team?.id || "").trim();
-                  const rowTeamName = normalizePreferenceText(row?.team?.name || "");
-                  const isActiveTeam =
-                    (rowTeamId && (rowTeamId === homeTeamId || rowTeamId === awayTeamId)) ||
-                    rowTeamName === homeName ||
-                    rowTeamName === awayName;
+                  const isActiveTeam = isFixtureTeamRow(row);
                   return `
                     <div class="standings-reference-row ${isActiveTeam ? "standings-reference-row-active" : ""}">
                       <span>${escapeHtml(row.rank ?? "")}</span>
-                      <strong>${escapeHtml(row.team?.name || "")}</strong>
+                      <strong class="standings-reference-team">
+                        ${badgeMarkup(row.team?.logo, row.team?.name || "Team", "lineup-team-badge standings-team-badge")}
+                        <span>${escapeHtml(row.team?.name || "")}</span>
+                      </strong>
                       <span>${escapeHtml(row.all?.played ?? "")}</span>
                       <span>${escapeHtml(row.goalsDiff ?? "")}</span>
                       <span>${escapeHtml(row.points ?? "")}</span>
-                      <span class="standings-form-sequence">${
-                        String(row.form || "")
-                          .split("")
-                          .filter(Boolean)
-                          .slice(0, 5)
-                          .map((letter) => `<span class="form-pill form-pill-${escapeHtml(letter.toLowerCase())}">${escapeHtml(letter)}</span>`)
-                          .join("") || "—"
-                      }</span>
+                      <span class="standings-form-sequence">${formSequenceMarkup(row.form)}</span>
                     </div>
                   `;
                 })
