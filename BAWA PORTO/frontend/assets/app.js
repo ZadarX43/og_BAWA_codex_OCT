@@ -4496,7 +4496,7 @@
       return `
         <section class="section">
           <article class="panel">
-            <h3>Team rating face-off</h3>
+            <h3>Team Ratings</h3>
             <div class="notice">Published team face-off ratings are not available for this fixture yet.</div>
           </article>
         </section>
@@ -4508,20 +4508,20 @@
         const awayValue = Number(entry.away_value);
         return `
           <div class="fixture-faceoff-row">
-            <div class="fixture-faceoff-team fixture-faceoff-team-home">
+            <div class="fixture-faceoff-side fixture-faceoff-side-home">
               <strong>${escapeHtml(Number.isFinite(homeValue) ? Math.round(homeValue) : "—")}</strong>
-              <span>${escapeHtml(fixture.home_team)}</span>
+              <div class="fixture-faceoff-track fixture-faceoff-track-home" aria-hidden="true">
+                <span class="fixture-faceoff-bar fixture-faceoff-bar-home" style="width:${Math.max(0, Math.min(100, Number.isFinite(homeValue) ? homeValue : 0))}%"></span>
+              </div>
             </div>
             <div class="fixture-faceoff-center">
               <span class="metric-label">${escapeHtml(entry.label || safeTitleLabel(entry.metric))}</span>
-              <div class="fixture-faceoff-track" aria-hidden="true">
-                <span class="fixture-faceoff-bar fixture-faceoff-bar-home" style="width:${Math.max(0, Math.min(100, Number.isFinite(homeValue) ? homeValue : 0))}%"></span>
+            </div>
+            <div class="fixture-faceoff-side fixture-faceoff-side-away">
+              <div class="fixture-faceoff-track fixture-faceoff-track-away" aria-hidden="true">
                 <span class="fixture-faceoff-bar fixture-faceoff-bar-away" style="width:${Math.max(0, Math.min(100, Number.isFinite(awayValue) ? awayValue : 0))}%"></span>
               </div>
-            </div>
-            <div class="fixture-faceoff-team fixture-faceoff-team-away">
               <strong>${escapeHtml(Number.isFinite(awayValue) ? Math.round(awayValue) : "—")}</strong>
-              <span>${escapeHtml(fixture.away_team)}</span>
             </div>
           </div>
         `;
@@ -4530,8 +4530,25 @@
     return `
       <section class="section">
         <article class="panel">
-          <h3>Team rating face-off</h3>
+          <h3>Team Ratings</h3>
           <p class="section-copy">Only the ratings most diagnostic for this market are surfaced here, so the page reads like a decision tool rather than a generic data dump.</p>
+          <div class="fixture-faceoff-head">
+            <div class="fixture-faceoff-head-team fixture-faceoff-head-home">
+              ${badgeMarkup(fixture.home_team_logo_url, fixture.home_team, "lineup-team-badge")}
+              <div>
+                <span class="metric-label">Home</span>
+                <strong>${escapeHtml(fixture.home_team)}</strong>
+              </div>
+            </div>
+            <span class="fixture-faceoff-head-center">vs</span>
+            <div class="fixture-faceoff-head-team fixture-faceoff-head-away">
+              <div>
+                <span class="metric-label">Away</span>
+                <strong>${escapeHtml(fixture.away_team)}</strong>
+              </div>
+              ${badgeMarkup(fixture.away_team_logo_url, fixture.away_team, "lineup-team-badge")}
+            </div>
+          </div>
           <div class="fixture-faceoff-grid">
             ${rows}
           </div>
