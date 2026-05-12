@@ -60,9 +60,9 @@ def competition_key(value: object) -> str:
 
 def team_key(value: object) -> str:
     text = normalize_text(value)
-    for token in (" fc ", " cf ", " sc ", " afc ", " club ", " vfl ", " sv ", " as "):
-        text = text.replace(token, " ")
-    return " ".join(text.split())
+    club_tokens = {"fc", "cf", "sc", "afc", "club", "vfl", "sv", "as", "kv", "kvc", "krc"}
+    tokens = [token for token in text.split() if token not in club_tokens]
+    return " ".join(tokens)
 
 
 def load_fixture_feed_rows(fixture_feed_path: Path | None) -> list[dict]:
@@ -261,7 +261,8 @@ def publish(payloads: dict[str, dict], index_rows: list[dict], output_root: Path
         for path in target_dir.glob("*.json"):
             if path.name not in keep:
                 path.unlink()
-    (target_dir / "index.json").write_text(json.dumps(index_rows, indent=2, ensure_ascii=False))
+    stable_index = sorted(index_rows, key=lambda row: str(row.get("fixture_key") or ""))
+    (target_dir / "index.json").write_text(json.dumps(stable_index, indent=2, ensure_ascii=False))
 
 
 def parse_args() -> argparse.Namespace:
