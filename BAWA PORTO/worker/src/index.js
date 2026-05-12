@@ -39,7 +39,7 @@ import {
   updateNotificationPreferences,
 } from "./account_store.js";
 import { issuePremiumToken, verifyPremiumAccess } from "./auth.js";
-import { getCurrentFixtures, getFixtureDetail, getTeamDetail } from "./site_data_store.js";
+import { getCurrentFixtures, getFixtureDetail, getFixtureStats, getTeamDetail, getTeamPremiumData } from "./site_data_store.js";
 
 const STRIPE_WEBHOOK_TOLERANCE_SECONDS = 300;
 const PREMIUM_CACHE_TTL_SECONDS = 300;
@@ -269,6 +269,19 @@ const handleSiteFixtureDetail = async (_request, env, fixtureKey) => {
   return json({ ok: true, fixture_key: fixtureKey, meta: { worker_elapsed_ms: elapsedMs(started) }, data }, 200, siteDataCacheHeaders);
 };
 
+const handleSiteFixtureStats = async (_request, env, fixtureKey) => {
+  const db = getSiteDataDb(env);
+  if (!db) {
+    return siteDataDbRequired();
+  }
+  const started = performance.now();
+  const data = await getFixtureStats(db, fixtureKey);
+  if (!data.team_stats.length && !data.player_stats.length && !data.lineup_slots.length) {
+    return requestError("Premium fixture stats were not found in the site data store.", { fixture_key: fixtureKey }, 404);
+  }
+  return json({ ok: true, fixture_key: fixtureKey, meta: { worker_elapsed_ms: elapsedMs(started) }, data }, 200, siteDataCacheHeaders);
+};
+
 const handleSiteTeamDetail = async (_request, env, competitionKey, teamSlug) => {
   const db = getSiteDataDb(env);
   if (!db) {
@@ -279,6 +292,29 @@ const handleSiteTeamDetail = async (_request, env, competitionKey, teamSlug) => 
   if (!data.team && !data.squad && !data.lineup_snapshot) {
     return requestError(
       "Team was not found in the site data store.",
+      { competition_key: competitionKey, team_slug: teamSlug },
+      404
+    );
+  }
+  return json(
+    { ok: true, competition_key: competitionKey, team_slug: teamSlug, meta: { worker_elapsed_ms: elapsedMs(started) }, data },
+    200,
+    siteDataCacheHeaders
+  );
+};
+
+const handleSiteTeamPremium = async (request, env, competitionKey, teamSlug) => {
+  const db = getSiteDataDb(env);
+  if (!db) {
+    return siteDataDbRequired();
+  }
+  const url = new URL(request.url);
+  const limit = Number(url.searchParams.get("limit") || 20);
+  const started = performance.now();
+  const data = await getTeamPremiumData(db, competitionKey, teamSlug, { limit });
+  if (!data.players.length && !data.recent_team_stats.length && !data.recent_lineup_slots.length) {
+    return requestError(
+      "Premium team data was not found in the site data store.",
       { competition_key: competitionKey, team_slug: teamSlug },
       404
     );
@@ -4564,7 +4600,9 @@ async function handleRequest(request, env) {
         "POST /api/account/telegram/fixture-alert",
         "GET /api/site/fixtures/current",
         "GET /api/site/fixtures/:fixture_key",
+        "GET /api/site/fixtures/:fixture_key/stats",
         "GET /api/site/teams/:competition_key/:team_slug",
+        "GET /api/site/teams/:competition_key/:team_slug/premium",
         "GET /api/widgets/football/standings",
         "GET /api/widgets/football/fixture-lookup",
         "POST /api/telegram/webhook",
@@ -4865,6 +4903,35 @@ async function handleRequest(request, env) {
     }
     response = await handleCachedSiteData(request, () =>
       handleSiteFixtureDetail(request, env, decodeURIComponent(siteFixtureMatch[1] || ""))
+    );
+    return withCors(response, request, env);
+  }
+
+  const siteFixtureStatsMatch = pathname.match(/^\/api\/site\/fixtures\/([^/]+)\/stats$/);
+  if (siteFixtureStatsMatch) {
+    if (request.method !== "GET") {
+      response = methodNotAllowed("GET");
+      return withCors(response, request, env);
+    }
+    response = await handleCachedSiteData(request, () =>
+      handleSiteFixtureStats(request, env, decodeURIComponent(siteFixtureStatsMatch[1] || ""))
+    );
+    return withCors(response, request, env);
+  }
+
+  const siteTeamPremiumMatch = pathname.match(/^\/api\/site\/teams\/([^/]+)\/([^/]+)\/premium$/);
+  if (siteTeamPremiumMatch) {
+    if (request.method !== "GET") {
+      response = methodNotAllowed("GET");
+      return withCors(response, request, env);
+    }
+    response = await handleCachedSiteData(request, () =>
+      handleSiteTeamPremium(
+        request,
+        env,
+        decodeURIComponent(siteTeamPremiumMatch[1] || ""),
+        decodeURIComponent(siteTeamPremiumMatch[2] || "")
+      )
     );
     return withCors(response, request, env);
   }

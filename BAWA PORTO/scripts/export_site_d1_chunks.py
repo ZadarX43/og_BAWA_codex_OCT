@@ -23,6 +23,11 @@ TABLES = (
     "team_intelligence",
     "club_squads",
     "team_lineup_snapshots",
+    "site_player_identity_map",
+    "site_player_match_stats",
+    "site_team_match_stats",
+    "site_lineup_slots",
+    "site_formation_slots",
 )
 
 

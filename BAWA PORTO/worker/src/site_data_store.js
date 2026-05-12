@@ -120,6 +120,104 @@ export const getTeamDetail = async (db, competitionKey, teamSlug) => {
   };
 };
 
+export const getFixtureStats = async (db, fixtureKey) => {
+  const [teamStats, playerStats, lineupSlots] = await Promise.all([
+    all(
+      db
+        .prepare(
+          `
+          SELECT payload_json
+          FROM site_team_match_stats
+          WHERE fixture_key = ?
+          ORDER BY is_home DESC, team_name
+          `
+        )
+        .bind(fixtureKey)
+    ),
+    all(
+      db
+        .prepare(
+          `
+          SELECT payload_json
+          FROM site_player_match_stats
+          WHERE fixture_key = ?
+          ORDER BY is_home DESC, started_flag DESC, minutes DESC, rating DESC, player_key
+          `
+        )
+        .bind(fixtureKey)
+    ),
+    all(
+      db
+        .prepare(
+          `
+          SELECT payload_json
+          FROM site_lineup_slots
+          WHERE fixture_key = ?
+          ORDER BY is_home DESC, is_starting_xi DESC, broad_position, slot_code, player_name
+          `
+        )
+        .bind(fixtureKey)
+    ),
+  ]);
+
+  return {
+    team_stats: teamStats.map((row) => parsePayload(row)).filter(Boolean),
+    player_stats: playerStats.map((row) => parsePayload(row)).filter(Boolean),
+    lineup_slots: lineupSlots.map((row) => parsePayload(row)).filter(Boolean),
+  };
+};
+
+export const getTeamPremiumData = async (db, competitionKey, teamSlug, { limit = 20 } = {}) => {
+  const safeLimit = Math.max(1, Math.min(Number(limit) || 20, 80));
+  const [players, teamStats, lineupSlots] = await Promise.all([
+    all(
+      db
+        .prepare(
+          `
+          SELECT payload_json
+          FROM site_player_identity_map
+          WHERE competition_key = ? AND club_slug = ?
+          ORDER BY rating_power DESC, rank_club ASC, name
+          LIMIT ?
+          `
+        )
+        .bind(competitionKey, teamSlug, safeLimit)
+    ),
+    all(
+      db
+        .prepare(
+          `
+          SELECT payload_json
+          FROM site_team_match_stats
+          WHERE team_slug = ?
+          ORDER BY fixture_key DESC
+          LIMIT ?
+          `
+        )
+        .bind(teamSlug, safeLimit)
+    ),
+    all(
+      db
+        .prepare(
+          `
+          SELECT payload_json
+          FROM site_lineup_slots
+          WHERE team_slug = ?
+          ORDER BY fixture_key DESC, is_starting_xi DESC, broad_position, slot_code, player_name
+          LIMIT ?
+          `
+        )
+        .bind(teamSlug, safeLimit * 2)
+    ),
+  ]);
+
+  return {
+    players: players.map((row) => parsePayload(row)).filter(Boolean),
+    recent_team_stats: teamStats.map((row) => parsePayload(row)).filter(Boolean),
+    recent_lineup_slots: lineupSlots.map((row) => parsePayload(row)).filter(Boolean),
+  };
+};
+
 export const getCurrentFixtures = async (db, { leagueKey = "", limit = 80 } = {}) => {
   const safeLimit = Math.max(1, Math.min(Number(limit) || 80, 200));
   const rows = leagueKey
