@@ -1,0 +1,1679 @@
+{
+  "club": "Milsami",
+  "club_slug": "milsami",
+  "competition": "Europa League",
+  "competition_key": "europa_league",
+  "season": "2018/2019",
+  "players": [
+    {
+      "player_id": "europa_league_milsami_alexandru_antoniuc_2018/2019",
+      "name": "Alexandru Antoniuc",
+      "surname": "Antoniuc",
+      "club": "Milsami",
+      "club_slug": "milsami",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2018/2019",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 171
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 950,
+        "creative_spark_rank": 323,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 561
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Antoniuc",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_league_milsami_anatol_chirinciuc_2018/2019",
+      "name": "Anatol Chirinciuc",
+      "surname": "Chirinciuc",
+      "club": "Milsami",
+      "club_slug": "milsami",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2018/2019",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 950,
+        "creative_spark_rank": 323,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 561
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Chirinciuc",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_league_milsami_andrei_cojocari_2018/2019",
+      "name": "Andrei Cojocari",
+      "surname": "Cojocari",
+      "club": "Milsami",
+      "club_slug": "milsami",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2018/2019",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 53,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 950,
+        "creative_spark_rank": 323,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 561
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Cojocari",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_league_milsami_andrei_rusnac_2018/2019",
+      "name": "Andrei Rusnac",
+      "surname": "Rusnac",
+      "club": "Milsami",
+      "club_slug": "milsami",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2018/2019",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 53,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 950,
+        "creative_spark_rank": 323,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 81
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Rusnac",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_league_milsami_artur_cr_ciun_2018/2019",
+      "name": "Artur Cr\u0103ciun",
+      "surname": "Cr\u0103ciun",
+      "club": "Milsami",
+      "club_slug": "milsami",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2018/2019",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 53,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 950,
+        "creative_spark_rank": 323,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 561
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Cr\u0103ciun",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_league_milsami_constantin_bogdan_2018/2019",
+      "name": "Constantin Bogdan",
+      "surname": "Bogdan",
+      "club": "Milsami",
+      "club_slug": "milsami",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2018/2019",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 144
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 950,
+        "creative_spark_rank": 323,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 561
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Bogdan",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_league_milsami_daniel_ciobanu_2018/2019",
+      "name": "Daniel Ciobanu",
+      "surname": "Ciobanu",
+      "club": "Milsami",
+      "club_slug": "milsami",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2018/2019",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 950,
+        "creative_spark_rank": 323,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 561
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Ciobanu",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_league_milsami_dinu_graur_2018/2019",
+      "name": "Dinu Graur",
+      "surname": "Graur",
+      "club": "Milsami",
+      "club_slug": "milsami",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2018/2019",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 950,
+        "creative_spark_rank": 323,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 561
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Graur",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_league_milsami_gheorghe_andronic_2018/2019",
+      "name": "Gheorghe Andronic",
+      "surname": "Andronic",
+      "club": "Milsami",
+      "club_slug": "milsami",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2018/2019",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 58
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 950,
+        "creative_spark_rank": 323,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 561
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Andronic",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_league_milsami_igor_bugaiov_2018/2019",
+      "name": "Igor Bugaiov",
+      "surname": "Bugaiov",
+      "club": "Milsami",
+      "club_slug": "milsami",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2018/2019",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 146
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 53,
+        "shot_threat": 50,
+        "xg_threat": 52,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 51,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 337,
+        "creative_spark_rank": 323,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 561
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Bugaiov",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_league_milsami_ion_ibrian_2018/2019",
+      "name": "Ion Ibrian",
+      "surname": "Ibrian",
+      "club": "Milsami",
+      "club_slug": "milsami",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2018/2019",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 9
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 950,
+        "creative_spark_rank": 323,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 561
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Ibrian",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_league_milsami_maxim_antoniuc_2018/2019",
+      "name": "Maxim Antoniuc",
+      "surname": "Antoniuc",
+      "club": "Milsami",
+      "club_slug": "milsami",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2018/2019",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 46
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 950,
+        "creative_spark_rank": 323,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 561
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Antoniuc",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_league_milsami_mihail_pl_tic_2018/2019",
+      "name": "Mihail Pl\u0103tic\u0103",
+      "surname": "Pl\u0103tic\u0103",
+      "club": "Milsami",
+      "club_slug": "milsami",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2018/2019",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 53,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 950,
+        "creative_spark_rank": 323,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 561
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Pl\u0103tic\u0103",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_league_milsami_oleg_andronic_2018/2019",
+      "name": "Oleg Andronic",
+      "surname": "Andronic",
+      "club": "Milsami",
+      "club_slug": "milsami",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2018/2019",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 950,
+        "creative_spark_rank": 323,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 561
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Andronic",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_league_milsami_radu_m_u_2018/2019",
+      "name": "Radu M\u00ee\u0163u",
+      "surname": "M\u00ee\u0163u",
+      "club": "Milsami",
+      "club_slug": "milsami",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2018/2019",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 950,
+        "creative_spark_rank": 323,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 561
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "M\u00ee\u0163u",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_league_milsami_romeo_constantin_surdu_2018/2019",
+      "name": "Romeo Constantin Surdu",
+      "surname": "Surdu",
+      "club": "Milsami",
+      "club_slug": "milsami",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2018/2019",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 66
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 54,
+        "shot_threat": 50,
+        "xg_threat": 52,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 51,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 148,
+        "creative_spark_rank": 323,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 561
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Surdu",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_league_milsami_sergiu_pl_tic_2018/2019",
+      "name": "Sergiu Pl\u0103tic\u0103",
+      "surname": "Pl\u0103tic\u0103",
+      "club": "Milsami",
+      "club_slug": "milsami",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2018/2019",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 126
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 53,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 950,
+        "creative_spark_rank": 323,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 81
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Pl\u0103tic\u0103",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_league_milsami_vadim_bolohan_2018/2019",
+      "name": "Vadim Bolohan",
+      "surname": "Bolohan",
+      "club": "Milsami",
+      "club_slug": "milsami",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2018/2019",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 53,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 950,
+        "creative_spark_rank": 323,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 561
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Bolohan",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_league_milsami_vadim_ra_2018/2019",
+      "name": "Vadim Ra\u0163\u0103",
+      "surname": "Ra\u0163\u0103",
+      "club": "Milsami",
+      "club_slug": "milsami",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2018/2019",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 950,
+        "creative_spark_rank": 323,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 561
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Ra\u0163\u0103",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_league_milsami_vasile_jardan_2018/2019",
+      "name": "Vasile Jardan",
+      "surname": "Jardan",
+      "club": "Milsami",
+      "club_slug": "milsami",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2018/2019",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 44
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 950,
+        "creative_spark_rank": 323,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 561
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Jardan",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Antoniuc",
+      "Chirinciuc",
+      "Cojocari",
+      "Rusnac",
+      "Cr\u0103ciun"
+    ],
+    "goal_threat": [
+      "Surdu",
+      "Bugaiov",
+      "Antoniuc",
+      "Chirinciuc",
+      "Cojocari"
+    ],
+    "creative_spark": [
+      "Antoniuc",
+      "Chirinciuc",
+      "Cojocari",
+      "Rusnac",
+      "Cr\u0103ciun"
+    ],
+    "discipline_risk": [
+      "Cojocari",
+      "Rusnac",
+      "Cr\u0103ciun",
+      "Pl\u0103tic\u0103",
+      "Pl\u0103tic\u0103"
+    ]
+  }
+}

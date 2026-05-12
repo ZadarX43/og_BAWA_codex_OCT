@@ -1,0 +1,1433 @@
+{
+  "club": "Wigan Athletic",
+  "club_slug": "wigan_athletic",
+  "competition": "England FA Cup",
+  "competition_key": "england_fa_cup",
+  "season": "2020/2021",
+  "players": [
+    {
+      "player_id": "england_fa_cup_wigan_athletic_adam_long_2020/2021",
+      "name": "Adam Long",
+      "surname": "Long",
+      "club": "Wigan Athletic",
+      "club_slug": "wigan_athletic",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2020/2021",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 41
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 50,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 55,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 411,
+        "creative_spark_rank": 153,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 4
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Long",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_wigan_athletic_alex_perry_2020/2021",
+      "name": "Alex Perry",
+      "surname": "Perry",
+      "club": "Wigan Athletic",
+      "club_slug": "wigan_athletic",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2020/2021",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 112
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 50,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 411,
+        "creative_spark_rank": 153,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 21
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Perry",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_wigan_athletic_charlie_jolley_2020/2021",
+      "name": "Charlie Jolley",
+      "surname": "Jolley",
+      "club": "Wigan Athletic",
+      "club_slug": "wigan_athletic",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2020/2021",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 50,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 411,
+        "creative_spark_rank": 153,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 21
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Jolley",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_wigan_athletic_christopher_merrie_2020/2021",
+      "name": "Christopher Merrie",
+      "surname": "Merrie",
+      "club": "Wigan Athletic",
+      "club_slug": "wigan_athletic",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2020/2021",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 44
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 50,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 411,
+        "creative_spark_rank": 153,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 21
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Merrie",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_wigan_athletic_chukwuemeka_david_obi_2020/2021",
+      "name": "Chukwuemeka David Obi",
+      "surname": "Obi",
+      "club": "Wigan Athletic",
+      "club_slug": "wigan_athletic",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2020/2021",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 50,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 54,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 411,
+        "creative_spark_rank": 153,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 21
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Obi",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_wigan_athletic_danny_gardner_2020/2021",
+      "name": "Danny Gardner",
+      "surname": "Gardner",
+      "club": "Wigan Athletic",
+      "club_slug": "wigan_athletic",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2020/2021",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 51,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 52,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 306,
+        "creative_spark_rank": 2,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 21
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Gardner",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_wigan_athletic_gavin_massey_2020/2021",
+      "name": "Gavin Massey",
+      "surname": "Massey",
+      "club": "Wigan Athletic",
+      "club_slug": "wigan_athletic",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2020/2021",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 50,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 411,
+        "creative_spark_rank": 153,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 21
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Massey",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_wigan_athletic_harry_mchugh_2020/2021",
+      "name": "Harry McHugh",
+      "surname": "McHugh",
+      "club": "Wigan Athletic",
+      "club_slug": "wigan_athletic",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2020/2021",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": -22
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 50,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 411,
+        "creative_spark_rank": 153,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 21
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "McHugh",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_wigan_athletic_joe_garner_2020/2021",
+      "name": "Joe Garner",
+      "surname": "Garner",
+      "club": "Wigan Athletic",
+      "club_slug": "wigan_athletic",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2020/2021",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 105
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 53,
+        "shot_threat": 50,
+        "xg_threat": 52,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 51,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 39,
+        "creative_spark_rank": 153,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 21
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Garner",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_wigan_athletic_kyle_joseph_2020/2021",
+      "name": "Kyle Joseph",
+      "surname": "Joseph",
+      "club": "Wigan Athletic",
+      "club_slug": "wigan_athletic",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2020/2021",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 65
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 50,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 411,
+        "creative_spark_rank": 153,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 21
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Joseph",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_wigan_athletic_luke_robinson_2020/2021",
+      "name": "Luke Robinson",
+      "surname": "Robinson",
+      "club": "Wigan Athletic",
+      "club_slug": "wigan_athletic",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2020/2021",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 50,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 411,
+        "creative_spark_rank": 153,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 21
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Robinson",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_wigan_athletic_owen_evans_2020/2021",
+      "name": "Owen Evans",
+      "surname": "Evans",
+      "club": "Wigan Athletic",
+      "club_slug": "wigan_athletic",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2020/2021",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 50,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 411,
+        "creative_spark_rank": 153,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 21
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Evans",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_wigan_athletic_sam_tickle_2020/2021",
+      "name": "Sam Tickle",
+      "surname": "Tickle",
+      "club": "Wigan Athletic",
+      "club_slug": "wigan_athletic",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2020/2021",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 50,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 411,
+        "creative_spark_rank": 153,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 21
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Tickle",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_wigan_athletic_thelo_aasgaard_2020/2021",
+      "name": "Thelo Aasgaard",
+      "surname": "Aasgaard",
+      "club": "Wigan Athletic",
+      "club_slug": "wigan_athletic",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2020/2021",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 25
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 50,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 411,
+        "creative_spark_rank": 153,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 21
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Aasgaard",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_wigan_athletic_thomas_james_2020/2021",
+      "name": "Thomas James",
+      "surname": "James",
+      "club": "Wigan Athletic",
+      "club_slug": "wigan_athletic",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2020/2021",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 53,
+        "shot_threat": 50,
+        "xg_threat": 52,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 51,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 54,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 39,
+        "creative_spark_rank": 153,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 21
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "James",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_wigan_athletic_tom_pearce_2020/2021",
+      "name": "Tom Pearce",
+      "surname": "Pearce",
+      "club": "Wigan Athletic",
+      "club_slug": "wigan_athletic",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2020/2021",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 50,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 411,
+        "creative_spark_rank": 153,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 21
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Pearce",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_wigan_athletic_will_keane_2020/2021",
+      "name": "Will Keane",
+      "surname": "Keane",
+      "club": "Wigan Athletic",
+      "club_slug": "wigan_athletic",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2020/2021",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": -15
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 50,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 411,
+        "creative_spark_rank": 153,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 21
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Keane",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Long",
+      "Perry",
+      "Jolley",
+      "Merrie",
+      "Obi"
+    ],
+    "goal_threat": [
+      "Garner",
+      "James",
+      "Gardner",
+      "Long",
+      "Perry"
+    ],
+    "creative_spark": [
+      "Gardner",
+      "Long",
+      "Perry",
+      "Jolley",
+      "Merrie"
+    ],
+    "discipline_risk": [
+      "Long",
+      "Obi",
+      "James",
+      "Perry",
+      "Jolley"
+    ]
+  }
+}

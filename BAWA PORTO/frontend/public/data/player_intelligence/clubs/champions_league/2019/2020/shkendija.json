@@ -1,0 +1,1679 @@
+{
+  "club": "Shkendija",
+  "club_slug": "shkendija",
+  "competition": "Champions League",
+  "competition_key": "champions_league",
+  "season": "2019/2020",
+  "players": [
+    {
+      "player_id": "champions_league_shkendija_agim_ibraimi_2019/2020",
+      "name": "Agim Ibraimi",
+      "surname": "Ibraimi",
+      "club": "Shkendija",
+      "club_slug": "shkendija",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2019/2020",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 53,
+        "shot_threat": 50,
+        "xg_threat": 52,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 51,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 147,
+        "creative_spark_rank": 214,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 203
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Ibraimi",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_shkendija_arbin_zejnulai_2019/2020",
+      "name": "Arbin Zejnulai",
+      "surname": "Zejnulai",
+      "club": "Shkendija",
+      "club_slug": "shkendija",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2019/2020",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 5
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 436,
+        "creative_spark_rank": 214,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 203
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Zejnulai",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_shkendija_armend_alimi_2019/2020",
+      "name": "Armend Alimi",
+      "surname": "Alimi",
+      "club": "Shkendija",
+      "club_slug": "shkendija",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2019/2020",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 436,
+        "creative_spark_rank": 214,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 203
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Alimi",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_shkendija_bekim_redjepi_2019/2020",
+      "name": "Bekim Redjepi",
+      "surname": "Redjepi",
+      "club": "Shkendija",
+      "club_slug": "shkendija",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2019/2020",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 436,
+        "creative_spark_rank": 214,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 203
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Redjepi",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_shkendija_besart_ibraimi_2019/2020",
+      "name": "Besart Ibraimi",
+      "surname": "Ibraimi",
+      "club": "Shkendija",
+      "club_slug": "shkendija",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2019/2020",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 140
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 436,
+        "creative_spark_rank": 214,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 203
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Ibraimi",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_shkendija_egzon_bejtulai_2019/2020",
+      "name": "Egzon Bejtulai",
+      "surname": "Bejtulai",
+      "club": "Shkendija",
+      "club_slug": "shkendija",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2019/2020",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 53,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 436,
+        "creative_spark_rank": 214,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 203
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Bejtulai",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_shkendija_ennur_totre_2019/2020",
+      "name": "Ennur Totre",
+      "surname": "Totre",
+      "club": "Shkendija",
+      "club_slug": "shkendija",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2019/2020",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 175
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 436,
+        "creative_spark_rank": 214,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 203
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Totre",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_shkendija_gledi_mici_2019/2020",
+      "name": "Gledi Mici",
+      "surname": "Mici",
+      "club": "Shkendija",
+      "club_slug": "shkendija",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2019/2020",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 436,
+        "creative_spark_rank": 214,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 203
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Mici",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_shkendija_juan_felipe_alves_ribeiro_2019/2020",
+      "name": "Juan Felipe Alves Ribeiro",
+      "surname": "Ribeiro",
+      "club": "Shkendija",
+      "club_slug": "shkendija",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2019/2020",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 436,
+        "creative_spark_rank": 214,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 203
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Ribeiro",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_shkendija_konstantin_cheshmedzhiev_2019/2020",
+      "name": "Konstantin Cheshmedzhiev",
+      "surname": "Cheshmedzhiev",
+      "club": "Shkendija",
+      "club_slug": "shkendija",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2019/2020",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 436,
+        "creative_spark_rank": 214,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 203
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Cheshmedzhiev",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_shkendija_kostadin_zahov_2019/2020",
+      "name": "Kostadin Zahov",
+      "surname": "Zahov",
+      "club": "Shkendija",
+      "club_slug": "shkendija",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2019/2020",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 436,
+        "creative_spark_rank": 214,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 203
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Zahov",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_shkendija_leard_sadriu_2019/2020",
+      "name": "Leard Sadriu",
+      "surname": "Sadriu",
+      "club": "Shkendija",
+      "club_slug": "shkendija",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2019/2020",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 436,
+        "creative_spark_rank": 214,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 203
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Sadriu",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_shkendija_marjan_radeski_2019/2020",
+      "name": "Marjan Radeski",
+      "surname": "Radeski",
+      "club": "Shkendija",
+      "club_slug": "shkendija",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2019/2020",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 53,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 436,
+        "creative_spark_rank": 214,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 203
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Radeski",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_shkendija_mevlan_murati_2019/2020",
+      "name": "Mevlan Murati",
+      "surname": "Murati",
+      "club": "Shkendija",
+      "club_slug": "shkendija",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2019/2020",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 53,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 436,
+        "creative_spark_rank": 214,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 203
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Murati",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_shkendija_omar_imeri_2019/2020",
+      "name": "Omar Imeri",
+      "surname": "Imeri",
+      "club": "Shkendija",
+      "club_slug": "shkendija",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2019/2020",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 436,
+        "creative_spark_rank": 214,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 203
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Imeri",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_shkendija_shefit_shefiti_2019/2020",
+      "name": "Shefit Shefiti",
+      "surname": "Shefiti",
+      "club": "Shkendija",
+      "club_slug": "shkendija",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2019/2020",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 436,
+        "creative_spark_rank": 214,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 203
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Shefiti",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_shkendija_stenio_marcos_da_fonseca_salazar_junior_2019/2020",
+      "name": "Stenio Marcos da Fonseca Salazar Junior",
+      "surname": "Junior",
+      "club": "Shkendija",
+      "club_slug": "shkendija",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2019/2020",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 27
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 436,
+        "creative_spark_rank": 214,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 203
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Junior",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_shkendija_valmir_nafiu_2019/2020",
+      "name": "Valmir Nafiu",
+      "surname": "Nafiu",
+      "club": "Shkendija",
+      "club_slug": "shkendija",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2019/2020",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 57
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 436,
+        "creative_spark_rank": 214,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 203
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Nafiu",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_shkendija_visar_musliu_2019/2020",
+      "name": "Visar Musliu",
+      "surname": "Musliu",
+      "club": "Shkendija",
+      "club_slug": "shkendija",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2019/2020",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 436,
+        "creative_spark_rank": 214,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 203
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Musliu",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_shkendija_zeni_husmani_2019/2020",
+      "name": "Zeni Husmani",
+      "surname": "Husmani",
+      "club": "Shkendija",
+      "club_slug": "shkendija",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2019/2020",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 136
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 436,
+        "creative_spark_rank": 214,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 203
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Husmani",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Ibraimi",
+      "Zejnulai",
+      "Alimi",
+      "Redjepi",
+      "Ibraimi"
+    ],
+    "goal_threat": [
+      "Ibraimi",
+      "Zejnulai",
+      "Alimi",
+      "Redjepi",
+      "Ibraimi"
+    ],
+    "creative_spark": [
+      "Ibraimi",
+      "Zejnulai",
+      "Alimi",
+      "Redjepi",
+      "Ibraimi"
+    ],
+    "discipline_risk": [
+      "Bejtulai",
+      "Radeski",
+      "Murati",
+      "Ibraimi",
+      "Zejnulai"
+    ]
+  }
+}

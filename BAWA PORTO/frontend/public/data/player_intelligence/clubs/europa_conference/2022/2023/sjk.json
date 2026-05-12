@@ -1,0 +1,1679 @@
+{
+  "club": "SJK",
+  "club_slug": "sjk",
+  "competition": "Europa Conference",
+  "competition_key": "europa_conference",
+  "season": "2022/2023",
+  "players": [
+    {
+      "player_id": "europa_conference_sjk_alfie_bates_2022/2023",
+      "name": "Alfie Bates",
+      "surname": "Bates",
+      "club": "SJK",
+      "club_slug": "sjk",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2022/2023",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 14
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 54,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 731,
+        "creative_spark_rank": 207,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 1
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Bates",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_sjk_bradley_diallo_2022/2023",
+      "name": "Bradley Diallo",
+      "surname": "Diallo",
+      "club": "SJK",
+      "club_slug": "sjk",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2022/2023",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 731,
+        "creative_spark_rank": 207,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 484
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Diallo",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_sjk_daniel_h_kans_2022/2023",
+      "name": "Daniel H\u00e5kans",
+      "surname": "H\u00e5kans",
+      "club": "SJK",
+      "club_slug": "sjk",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2022/2023",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 210
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 731,
+        "creative_spark_rank": 207,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 484
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "H\u00e5kans",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_sjk_diego_nicol_s_rojas_orellana_2022/2023",
+      "name": "Diego Nicol\u00e1s Rojas Orellana",
+      "surname": "Orellana",
+      "club": "SJK",
+      "club_slug": "sjk",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2022/2023",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 270
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 53,
+        "shot_threat": 50,
+        "xg_threat": 52,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 51,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 53,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 272,
+        "creative_spark_rank": 207,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 484
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Orellana",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_sjk_felipe_aspegren_2022/2023",
+      "name": "Felipe Aspegren",
+      "surname": "Aspegren",
+      "club": "SJK",
+      "club_slug": "sjk",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2022/2023",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 60
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 731,
+        "creative_spark_rank": 207,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 484
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Aspegren",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_sjk_jake_dunwoody_2022/2023",
+      "name": "Jake Dunwoody",
+      "surname": "Dunwoody",
+      "club": "SJK",
+      "club_slug": "sjk",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2022/2023",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 117
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 54,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 731,
+        "creative_spark_rank": 207,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 39
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Dunwoody",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_sjk_jake_jervis_2022/2023",
+      "name": "Jake Jervis",
+      "surname": "Jervis",
+      "club": "SJK",
+      "club_slug": "sjk",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2022/2023",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 360
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 53,
+        "shot_threat": 50,
+        "xg_threat": 52,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 51,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 272,
+        "creative_spark_rank": 207,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 484
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Jervis",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_sjk_jesse_st_2022/2023",
+      "name": "Jesse \u00d6st",
+      "surname": "\u00d6st",
+      "club": "SJK",
+      "club_slug": "sjk",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2022/2023",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 316
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 731,
+        "creative_spark_rank": 207,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 484
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "\u00d6st",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_sjk_jos_pablo_monreal_villablanca_2022/2023",
+      "name": "Jos\u00e9 Pablo Monreal Villablanca",
+      "surname": "Villablanca",
+      "club": "SJK",
+      "club_slug": "sjk",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2022/2023",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 50,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 731,
+        "creative_spark_rank": 207,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 484
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Villablanca",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_sjk_markus_uusitalo_2022/2023",
+      "name": "Markus Uusitalo",
+      "surname": "Uusitalo",
+      "club": "SJK",
+      "club_slug": "sjk",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2022/2023",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 44
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 731,
+        "creative_spark_rank": 207,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 484
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Uusitalo",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_sjk_martti_haukioja_2022/2023",
+      "name": "Martti Haukioja",
+      "surname": "Haukioja",
+      "club": "SJK",
+      "club_slug": "sjk",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2022/2023",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 136
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 731,
+        "creative_spark_rank": 207,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 484
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Haukioja",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_sjk_matej_hradecky_2022/2023",
+      "name": "Matej Hradecky",
+      "surname": "Hradecky",
+      "club": "SJK",
+      "club_slug": "sjk",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2022/2023",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 360
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 52,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 731,
+        "creative_spark_rank": 207,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 3691
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Hradecky",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_sjk_mehmet_hetemaj_2022/2023",
+      "name": "Mehmet Hetemaj",
+      "surname": "Hetemaj",
+      "club": "SJK",
+      "club_slug": "sjk",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2022/2023",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 265
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 53,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 731,
+        "creative_spark_rank": 207,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 484
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Hetemaj",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_sjk_niko_markkula_2022/2023",
+      "name": "Niko Markkula",
+      "surname": "Markkula",
+      "club": "SJK",
+      "club_slug": "sjk",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2022/2023",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 46
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 731,
+        "creative_spark_rank": 207,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 484
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Markkula",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_sjk_nooa_laine_2022/2023",
+      "name": "Nooa Laine",
+      "surname": "Laine",
+      "club": "SJK",
+      "club_slug": "sjk",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2022/2023",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 371
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 53,
+        "shot_threat": 50,
+        "xg_threat": 52,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 51,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 52,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 272,
+        "creative_spark_rank": 207,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 3691
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Laine",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_sjk_pablo_andrade_plaza_da_silva_2022/2023",
+      "name": "Pablo Andrade Plaza da Silva",
+      "surname": "Silva",
+      "club": "SJK",
+      "club_slug": "sjk",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2022/2023",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 264
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 731,
+        "creative_spark_rank": 207,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 484
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Silva",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_sjk_pyry_hannola_2022/2023",
+      "name": "Pyry Hannola",
+      "surname": "Hannola",
+      "club": "SJK",
+      "club_slug": "sjk",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2022/2023",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 348
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 52,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 731,
+        "creative_spark_rank": 207,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 3691
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Hannola",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_sjk_tuomas_kaukua_2022/2023",
+      "name": "Tuomas Kaukua",
+      "surname": "Kaukua",
+      "club": "SJK",
+      "club_slug": "sjk",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2022/2023",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 191
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 731,
+        "creative_spark_rank": 207,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 484
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Kaukua",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_sjk_tuomas_p_yh_nen_2022/2023",
+      "name": "Tuomas P\u00f6yh\u00f6nen",
+      "surname": "P\u00f6yh\u00f6nen",
+      "club": "SJK",
+      "club_slug": "sjk",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2022/2023",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 731,
+        "creative_spark_rank": 207,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 484
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "P\u00f6yh\u00f6nen",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_sjk_ville_tikkanen_2022/2023",
+      "name": "Ville Tikkanen",
+      "surname": "Tikkanen",
+      "club": "SJK",
+      "club_slug": "sjk",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2022/2023",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 224
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 53,
+        "shot_threat": 50,
+        "xg_threat": 52,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 51,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 272,
+        "creative_spark_rank": 207,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 484
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Tikkanen",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Bates",
+      "Diallo",
+      "H\u00e5kans",
+      "Orellana",
+      "Aspegren"
+    ],
+    "goal_threat": [
+      "Orellana",
+      "Jervis",
+      "Laine",
+      "Tikkanen",
+      "Bates"
+    ],
+    "creative_spark": [
+      "Bates",
+      "Diallo",
+      "H\u00e5kans",
+      "Orellana",
+      "Aspegren"
+    ],
+    "discipline_risk": [
+      "Bates",
+      "Dunwoody",
+      "Orellana",
+      "Hetemaj",
+      "Hradecky"
+    ]
+  }
+}

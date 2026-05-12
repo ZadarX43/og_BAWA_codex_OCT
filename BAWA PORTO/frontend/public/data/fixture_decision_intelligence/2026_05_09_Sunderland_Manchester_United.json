@@ -1,0 +1,240 @@
+{
+  "fixture_key": "2026_05_09_Sunderland_Manchester_United",
+  "fixture": "Sunderland vs Manchester United",
+  "primary_signal": "BTTS Yes",
+  "signal_state": "AVOID",
+  "agreement_score": 32,
+  "confidence_band": "LOW",
+  "supporting_layers": [],
+  "caution_layers": [
+    "BTTS_PRESSURE_WEAK",
+    "GOAL_ENVIRONMENT_SOFT",
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "profile_tags": {
+    "home": [
+      "Low Chaos"
+    ],
+    "away": [
+      "Attack-Led Side",
+      "Strong First Goal",
+      "Open Match Profile",
+      "Two-Way Scoring Profile"
+    ]
+  },
+  "profile_narrative": "Sunderland bring a low chaos into a matchup with Manchester United's attack-led side. The cleaner read is two-way scoring access.",
+  "team_faceoff_summary": [
+    {
+      "metric": "goal_heat_rating",
+      "label": "Goal Heat",
+      "home_value": 19,
+      "away_value": 89,
+      "delta": 70,
+      "leader": "Manchester United"
+    },
+    {
+      "metric": "btts_pressure_rating",
+      "label": "BTTS Pressure",
+      "home_value": 28,
+      "away_value": 82,
+      "delta": 54,
+      "leader": "Manchester United"
+    },
+    {
+      "metric": "attack_flow_rating",
+      "label": "Attack Flow",
+      "home_value": 17,
+      "away_value": 90,
+      "delta": 73,
+      "leader": "Manchester United"
+    },
+    {
+      "metric": "defensive_lock_rating",
+      "label": "Defensive Lock",
+      "home_value": 59,
+      "away_value": 39,
+      "delta": 20,
+      "leader": "Sunderland"
+    },
+    {
+      "metric": "first_strike_rating",
+      "label": "First Strike",
+      "home_value": 19,
+      "away_value": 83,
+      "delta": 64,
+      "leader": "Manchester United"
+    },
+    {
+      "metric": "chaos_rating",
+      "label": "Chaos Rating",
+      "home_value": 32,
+      "away_value": 74,
+      "delta": 42,
+      "leader": "Manchester United"
+    }
+  ],
+  "unit_battle_summary": [],
+  "key_player_drivers": [],
+  "key_mismatches": [],
+  "h2h_context": {
+    "available": false,
+    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
+    "sample_size": 0
+  },
+  "market_suitability": {
+    "ftr": {
+      "rating": 70,
+      "label": "Positive",
+      "read": "Stronger when one side owns a clear team-power edge."
+    },
+    "btts": {
+      "rating": 55,
+      "label": "Mixed",
+      "read": "Driven by two-way access and reduced suppression."
+    },
+    "ou25": {
+      "rating": 54,
+      "label": "Weak",
+      "read": "Driven by combined goal environment and tempo."
+    },
+    "team_goals": {
+      "rating": 89,
+      "label": "Strong",
+      "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
+    },
+    "correct_score": {
+      "rating": 100,
+      "label": "Elite",
+      "read": "Better when the shape is structured and the likely scoring zone is narrow."
+    },
+    "corners": {
+      "rating": 32,
+      "label": "Red Flag",
+      "read": "Driven by territory and wide-channel pressure."
+    },
+    "cards": {
+      "rating": 48,
+      "label": "Weak",
+      "read": "Driven by discipline heat, fouling, and volatility."
+    }
+  },
+  "market_intelligence": {
+    "ftr": {
+      "alignment_score": 54,
+      "state": "FRAGILE",
+      "model_lean": "AWAY",
+      "structural_support": [],
+      "cautions": [
+        "BTTS_PRESSURE_WEAK",
+        "GOAL_ENVIRONMENT_SOFT"
+      ],
+      "public_summary": "FTR has some structural support from structural support, but the overall layer fit remains fragile.",
+      "rating": 70,
+      "band": "Positive"
+    },
+    "btts": {
+      "alignment_score": 41,
+      "state": "AVOID",
+      "model_lean": "YES",
+      "structural_support": [],
+      "cautions": [
+        "BTTS_PRESSURE_WEAK",
+        "GOAL_ENVIRONMENT_SOFT"
+      ],
+      "public_summary": "BTTS is too contradicted by btts pressure weak to present as a clean public read.",
+      "rating": 55,
+      "band": "Mixed"
+    },
+    "ou25": {
+      "alignment_score": 46,
+      "state": "FRAGILE",
+      "model_lean": "UNDER25",
+      "structural_support": [],
+      "cautions": [
+        "GOAL_ENVIRONMENT_SOFT"
+      ],
+      "public_summary": "Over 2.5 has some structural support from structural support, but the overall layer fit remains fragile.",
+      "rating": 54,
+      "band": "Weak"
+    },
+    "team_goals": {
+      "alignment_score": 69,
+      "state": "MIXED",
+      "model_lean": "Manchester United 1.5+",
+      "structural_support": [],
+      "cautions": [
+        "GOAL_ENVIRONMENT_SOFT",
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Team Goals has partial support from structural support, but goal environment soft keeps it from reading clean.",
+      "rating": 89,
+      "band": "Strong"
+    },
+    "correct_score": {
+      "alignment_score": 81,
+      "state": "SUPPORTED",
+      "model_lean": "STRUCTURED",
+      "structural_support": [],
+      "cautions": [
+        "GOAL_ENVIRONMENT_SOFT"
+      ],
+      "public_summary": "Correct Score is well supported by structural support, with caution still coming from goal environment soft.",
+      "rating": 100,
+      "band": "Elite"
+    },
+    "corners": {
+      "alignment_score": 30,
+      "state": "AVOID",
+      "model_lean": "ELEVATED",
+      "structural_support": [],
+      "cautions": [
+        "BTTS_PRESSURE_WEAK"
+      ],
+      "public_summary": "Corners is too contradicted by btts pressure weak to present as a clean public read.",
+      "rating": 32,
+      "band": "Red Flag"
+    },
+    "cards": {
+      "alignment_score": 38,
+      "state": "AVOID",
+      "model_lean": "ELEVATED",
+      "structural_support": [],
+      "cautions": [
+        "BTTS_PRESSURE_WEAK",
+        "GOAL_ENVIRONMENT_SOFT"
+      ],
+      "public_summary": "Cards is too contradicted by btts pressure weak to present as a clean public read.",
+      "rating": 48,
+      "band": "Weak"
+    }
+  },
+  "watchlist": {
+    "active": false,
+    "summary": "No watchlist layer is active for this fixture.",
+    "trigger_signals": [],
+    "public_state": "No watchlist flag",
+    "mode": ""
+  },
+  "public_safe_summary": "BTTS Yes is too contradicted across the current structural layers for Sunderland vs Manchester United, so the clean read is caution rather than action.",
+  "internal_reason_tokens": [
+    "BTTS_PRESSURE_WEAK",
+    "GOAL_ENVIRONMENT_SOFT",
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "summary": {
+    "support_count": 0,
+    "caution_count": 4,
+    "lineup_available": false,
+    "h2h_available": false
+  },
+  "preview": {
+    "headline": "Sunderland vs Manchester United: BTTS Yes avoid",
+    "short_summary": "BTTS Yes is too contradicted across the current structural layers for Sunderland vs Manchester United, so the clean read is caution rather than action. Primary support comes from structural caution, while the main caution remains btts pressure weak.",
+    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: Corners.",
+    "caution_line": "Main caution: Btts Pressure Weak.",
+    "telegram_summary": "Sunderland vs Manchester United — BTTS Yes (Avoid, 32% agreement). Support: structural caution. Caution: Btts Pressure Weak.",
+    "premium_summary": "BTTS Yes is carrying a 32% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from btts pressure weak, goal environment soft."
+  }
+}

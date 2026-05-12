@@ -1,0 +1,2082 @@
+{
+  "competition_key": "turkey_super_lig",
+  "season": "2020/2021",
+  "teams": [
+    {
+      "team": "Fenerbah\u00e7e",
+      "team_slug": "fenerbah_e",
+      "competition": "Turkey Super Lig",
+      "competition_key": "turkey_super_lig",
+      "season": "2020/2021",
+      "country": "Turkey",
+      "matches_played": 40,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 40
+      },
+      "ratings": {
+        "og_power_rating": 76,
+        "attack_flow_rating": 87,
+        "defensive_lock_rating": 67,
+        "goal_heat_rating": 68,
+        "btts_pressure_rating": 65,
+        "over25_heat_rating": 69,
+        "control_rating": 41,
+        "first_strike_rating": 81,
+        "corner_pressure_rating": 96,
+        "card_heat_rating": 37,
+        "chaos_rating": 50,
+        "home_fortress_rating": 67,
+        "away_threat_rating": 91
+      },
+      "rating_bands": {
+        "og_power_rating": "Positive",
+        "attack_flow_rating": "Strong",
+        "defensive_lock_rating": "Mixed",
+        "goal_heat_rating": "Mixed",
+        "btts_pressure_rating": "Mixed",
+        "over25_heat_rating": "Mixed",
+        "control_rating": "Weak",
+        "first_strike_rating": "Strong",
+        "corner_pressure_rating": "Elite",
+        "card_heat_rating": "Red Flag",
+        "chaos_rating": "Weak",
+        "home_fortress_rating": "Mixed",
+        "away_threat_rating": "Elite"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Positive team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Strong attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Mixed defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Mixed goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Mixed two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Mixed 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Weak match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Strong early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Elite territory and corner-generation profile.",
+        "card_heat_rating": "Red Flag discipline and card volatility profile.",
+        "chaos_rating": "Weak volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Mixed home-ground control profile.",
+        "away_threat_rating": "Elite travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Attack-Led Side",
+        "Strong First Goal",
+        "Travels Well",
+        "Corner Pressure Side"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 76%",
+        "profile": "Positive team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Corner Pressure",
+          "Away Threat",
+          "Attack Flow"
+        ],
+        "main_caution": "Chaos Rating sits at 50%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Positive",
+        "btts_lean": "Mixed",
+        "over25_lean": "Mixed",
+        "under_control": "Weak",
+        "team_goals_15": "Strong",
+        "corners": "Strong",
+        "cards": "Mixed"
+      },
+      "home_profile": {
+        "power": 67,
+        "attack": 87,
+        "defence": 67,
+        "goal_heat": 68
+      },
+      "away_profile": {
+        "power": 91,
+        "attack": 89,
+        "defence": 58,
+        "goal_heat": 68
+      },
+      "timing_profile": {
+        "early_threat": 84,
+        "half_time_control": 40,
+        "late_surge": 68,
+        "late_fragility": 44
+      }
+    },
+    {
+      "team": "Be\u015fikta\u015f",
+      "team_slug": "be_ikta",
+      "competition": "Turkey Super Lig",
+      "competition_key": "turkey_super_lig",
+      "season": "2020/2021",
+      "country": "Turkey",
+      "matches_played": 40,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 40
+      },
+      "ratings": {
+        "og_power_rating": 90,
+        "attack_flow_rating": 93,
+        "defensive_lock_rating": 74,
+        "goal_heat_rating": 84,
+        "btts_pressure_rating": 53,
+        "over25_heat_rating": 94,
+        "control_rating": 48,
+        "first_strike_rating": 97,
+        "corner_pressure_rating": 58,
+        "card_heat_rating": 57,
+        "chaos_rating": 64,
+        "home_fortress_rating": 96,
+        "away_threat_rating": 84
+      },
+      "rating_bands": {
+        "og_power_rating": "Elite",
+        "attack_flow_rating": "Elite",
+        "defensive_lock_rating": "Positive",
+        "goal_heat_rating": "Strong",
+        "btts_pressure_rating": "Weak",
+        "over25_heat_rating": "Elite",
+        "control_rating": "Weak",
+        "first_strike_rating": "Elite",
+        "corner_pressure_rating": "Mixed",
+        "card_heat_rating": "Mixed",
+        "chaos_rating": "Mixed",
+        "home_fortress_rating": "Elite",
+        "away_threat_rating": "Strong"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Elite team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Elite attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Positive defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Strong goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Weak two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Elite 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Weak match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Elite early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Mixed territory and corner-generation profile.",
+        "card_heat_rating": "Mixed discipline and card volatility profile.",
+        "chaos_rating": "Mixed volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Elite home-ground control profile.",
+        "away_threat_rating": "Strong travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Elite Control Side",
+        "Attack-Led Side",
+        "Strong First Goal",
+        "Home Dominant",
+        "Travels Well"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 90%",
+        "profile": "Elite team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "First Strike",
+          "Home Fortress",
+          "Over25 Heat"
+        ],
+        "main_caution": "Chaos Rating sits at 64%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Strong",
+        "btts_lean": "Weak",
+        "over25_lean": "Strong",
+        "under_control": "Weak",
+        "team_goals_15": "Strong",
+        "corners": "Mixed",
+        "cards": "Weak"
+      },
+      "home_profile": {
+        "power": 96,
+        "attack": 93,
+        "defence": 74,
+        "goal_heat": 84
+      },
+      "away_profile": {
+        "power": 84,
+        "attack": 88,
+        "defence": 55,
+        "goal_heat": 89
+      },
+      "timing_profile": {
+        "early_threat": 95,
+        "half_time_control": 46,
+        "late_surge": 89,
+        "late_fragility": 60
+      }
+    },
+    {
+      "team": "Trabzonspor",
+      "team_slug": "trabzonspor",
+      "competition": "Turkey Super Lig",
+      "competition_key": "turkey_super_lig",
+      "season": "2020/2021",
+      "country": "Turkey",
+      "matches_played": 40,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 40
+      },
+      "ratings": {
+        "og_power_rating": 78,
+        "attack_flow_rating": 60,
+        "defensive_lock_rating": 75,
+        "goal_heat_rating": 31,
+        "btts_pressure_rating": 45,
+        "over25_heat_rating": 24,
+        "control_rating": 80,
+        "first_strike_rating": 60,
+        "corner_pressure_rating": 73,
+        "card_heat_rating": 16,
+        "chaos_rating": 16,
+        "home_fortress_rating": 68,
+        "away_threat_rating": 75
+      },
+      "rating_bands": {
+        "og_power_rating": "Positive",
+        "attack_flow_rating": "Mixed",
+        "defensive_lock_rating": "Positive",
+        "goal_heat_rating": "Red Flag",
+        "btts_pressure_rating": "Weak",
+        "over25_heat_rating": "Red Flag",
+        "control_rating": "Strong",
+        "first_strike_rating": "Mixed",
+        "corner_pressure_rating": "Positive",
+        "card_heat_rating": "Red Flag",
+        "chaos_rating": "Red Flag",
+        "home_fortress_rating": "Mixed",
+        "away_threat_rating": "Positive"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Positive team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Mixed attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Positive defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Red Flag goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Weak two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Red Flag 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Strong match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Mixed early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Positive territory and corner-generation profile.",
+        "card_heat_rating": "Red Flag discipline and card volatility profile.",
+        "chaos_rating": "Red Flag volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Mixed home-ground control profile.",
+        "away_threat_rating": "Positive travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Low Chaos"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 78%",
+        "profile": "Positive team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Control",
+          "Og Power",
+          "Defensive Lock"
+        ],
+        "main_caution": "Chaos Rating sits at 16%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Positive",
+        "btts_lean": "Weak",
+        "over25_lean": "Red Flag",
+        "under_control": "Positive",
+        "team_goals_15": "Mixed",
+        "corners": "Positive",
+        "cards": "Positive"
+      },
+      "home_profile": {
+        "power": 68,
+        "attack": 60,
+        "defence": 75,
+        "goal_heat": 31
+      },
+      "away_profile": {
+        "power": 75,
+        "attack": 68,
+        "defence": 80,
+        "goal_heat": 28
+      },
+      "timing_profile": {
+        "early_threat": 60,
+        "half_time_control": 58,
+        "late_surge": 28,
+        "late_fragility": 16
+      }
+    },
+    {
+      "team": "Galatasaray",
+      "team_slug": "galatasaray",
+      "competition": "Turkey Super Lig",
+      "competition_key": "turkey_super_lig",
+      "season": "2020/2021",
+      "country": "Turkey",
+      "matches_played": 40,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 40
+      },
+      "ratings": {
+        "og_power_rating": 93,
+        "attack_flow_rating": 95,
+        "defensive_lock_rating": 91,
+        "goal_heat_rating": 65,
+        "btts_pressure_rating": 43,
+        "over25_heat_rating": 76,
+        "control_rating": 62,
+        "first_strike_rating": 96,
+        "corner_pressure_rating": 91,
+        "card_heat_rating": 37,
+        "chaos_rating": 38,
+        "home_fortress_rating": 90,
+        "away_threat_rating": 93
+      },
+      "rating_bands": {
+        "og_power_rating": "Elite",
+        "attack_flow_rating": "Elite",
+        "defensive_lock_rating": "Elite",
+        "goal_heat_rating": "Mixed",
+        "btts_pressure_rating": "Weak",
+        "over25_heat_rating": "Positive",
+        "control_rating": "Mixed",
+        "first_strike_rating": "Elite",
+        "corner_pressure_rating": "Elite",
+        "card_heat_rating": "Red Flag",
+        "chaos_rating": "Red Flag",
+        "home_fortress_rating": "Elite",
+        "away_threat_rating": "Elite"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Elite team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Elite attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Elite defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Mixed goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Weak two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Positive 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Mixed match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Elite early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Elite territory and corner-generation profile.",
+        "card_heat_rating": "Red Flag discipline and card volatility profile.",
+        "chaos_rating": "Red Flag volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Elite home-ground control profile.",
+        "away_threat_rating": "Elite travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Elite Control Side",
+        "Defensive Wall",
+        "Attack-Led Side",
+        "Strong First Goal",
+        "Home Dominant"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 93%",
+        "profile": "Elite team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "First Strike",
+          "Attack Flow",
+          "Og Power"
+        ],
+        "main_caution": "Chaos Rating sits at 38%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Strong",
+        "btts_lean": "Weak",
+        "over25_lean": "Positive",
+        "under_control": "Mixed",
+        "team_goals_15": "Strong",
+        "corners": "Strong",
+        "cards": "Mixed"
+      },
+      "home_profile": {
+        "power": 90,
+        "attack": 95,
+        "defence": 91,
+        "goal_heat": 65
+      },
+      "away_profile": {
+        "power": 93,
+        "attack": 94,
+        "defence": 76,
+        "goal_heat": 70
+      },
+      "timing_profile": {
+        "early_threat": 96,
+        "half_time_control": 55,
+        "late_surge": 70,
+        "late_fragility": 38
+      }
+    },
+    {
+      "team": "Alanyaspor",
+      "team_slug": "alanyaspor",
+      "competition": "Turkey Super Lig",
+      "competition_key": "turkey_super_lig",
+      "season": "2020/2021",
+      "country": "Turkey",
+      "matches_played": 40,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 40
+      },
+      "ratings": {
+        "og_power_rating": 62,
+        "attack_flow_rating": 71,
+        "defensive_lock_rating": 75,
+        "goal_heat_rating": 41,
+        "btts_pressure_rating": 40,
+        "over25_heat_rating": 48,
+        "control_rating": 70,
+        "first_strike_rating": 48,
+        "corner_pressure_rating": 77,
+        "card_heat_rating": 31,
+        "chaos_rating": 26,
+        "home_fortress_rating": 84,
+        "away_threat_rating": 53
+      },
+      "rating_bands": {
+        "og_power_rating": "Mixed",
+        "attack_flow_rating": "Positive",
+        "defensive_lock_rating": "Positive",
+        "goal_heat_rating": "Weak",
+        "btts_pressure_rating": "Weak",
+        "over25_heat_rating": "Weak",
+        "control_rating": "Positive",
+        "first_strike_rating": "Weak",
+        "corner_pressure_rating": "Positive",
+        "card_heat_rating": "Red Flag",
+        "chaos_rating": "Red Flag",
+        "home_fortress_rating": "Strong",
+        "away_threat_rating": "Weak"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Mixed team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Positive attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Positive defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Weak goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Weak two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Weak 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Positive match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Weak early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Positive territory and corner-generation profile.",
+        "card_heat_rating": "Red Flag discipline and card volatility profile.",
+        "chaos_rating": "Red Flag volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Strong home-ground control profile.",
+        "away_threat_rating": "Weak travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Low Chaos"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 62%",
+        "profile": "Mixed team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Home Fortress",
+          "Corner Pressure",
+          "Defensive Lock"
+        ],
+        "main_caution": "Card Heat sits at 31%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Mixed",
+        "btts_lean": "Weak",
+        "over25_lean": "Weak",
+        "under_control": "Positive",
+        "team_goals_15": "Positive",
+        "corners": "Positive",
+        "cards": "Mixed"
+      },
+      "home_profile": {
+        "power": 84,
+        "attack": 71,
+        "defence": 75,
+        "goal_heat": 41
+      },
+      "away_profile": {
+        "power": 53,
+        "attack": 62,
+        "defence": 74,
+        "goal_heat": 44
+      },
+      "timing_profile": {
+        "early_threat": 60,
+        "half_time_control": 50,
+        "late_surge": 44,
+        "late_fragility": 28
+      }
+    },
+    {
+      "team": "Rizespor",
+      "team_slug": "rizespor",
+      "competition": "Turkey Super Lig",
+      "competition_key": "turkey_super_lig",
+      "season": "2020/2021",
+      "country": "Turkey",
+      "matches_played": 40,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 40
+      },
+      "ratings": {
+        "og_power_rating": 39,
+        "attack_flow_rating": 46,
+        "defensive_lock_rating": 23,
+        "goal_heat_rating": 64,
+        "btts_pressure_rating": 57,
+        "over25_heat_rating": 61,
+        "control_rating": 36,
+        "first_strike_rating": 54,
+        "corner_pressure_rating": 26,
+        "card_heat_rating": 62,
+        "chaos_rating": 64,
+        "home_fortress_rating": 33,
+        "away_threat_rating": 40
+      },
+      "rating_bands": {
+        "og_power_rating": "Red Flag",
+        "attack_flow_rating": "Weak",
+        "defensive_lock_rating": "Red Flag",
+        "goal_heat_rating": "Mixed",
+        "btts_pressure_rating": "Mixed",
+        "over25_heat_rating": "Mixed",
+        "control_rating": "Red Flag",
+        "first_strike_rating": "Weak",
+        "corner_pressure_rating": "Red Flag",
+        "card_heat_rating": "Mixed",
+        "chaos_rating": "Mixed",
+        "home_fortress_rating": "Red Flag",
+        "away_threat_rating": "Weak"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Weak attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Red Flag defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Mixed goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Mixed two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Mixed 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Red Flag match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Weak early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Red Flag territory and corner-generation profile.",
+        "card_heat_rating": "Mixed discipline and card volatility profile.",
+        "chaos_rating": "Mixed volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Red Flag home-ground control profile.",
+        "away_threat_rating": "Weak travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Mixed Team Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 39%",
+        "profile": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Goal Heat",
+          "Chaos",
+          "Card Heat"
+        ],
+        "main_caution": "Chaos Rating sits at 64%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Red Flag",
+        "btts_lean": "Mixed",
+        "over25_lean": "Mixed",
+        "under_control": "Red Flag",
+        "team_goals_15": "Weak",
+        "corners": "Red Flag",
+        "cards": "Red Flag"
+      },
+      "home_profile": {
+        "power": 33,
+        "attack": 46,
+        "defence": 23,
+        "goal_heat": 64
+      },
+      "away_profile": {
+        "power": 40,
+        "attack": 43,
+        "defence": 30,
+        "goal_heat": 62
+      },
+      "timing_profile": {
+        "early_threat": 50,
+        "half_time_control": 30,
+        "late_surge": 62,
+        "late_fragility": 63
+      }
+    },
+    {
+      "team": "Kayserispor",
+      "team_slug": "kayserispor",
+      "competition": "Turkey Super Lig",
+      "competition_key": "turkey_super_lig",
+      "season": "2020/2021",
+      "country": "Turkey",
+      "matches_played": 40,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 40
+      },
+      "ratings": {
+        "og_power_rating": 36,
+        "attack_flow_rating": 22,
+        "defensive_lock_rating": 54,
+        "goal_heat_rating": 13,
+        "btts_pressure_rating": 24,
+        "over25_heat_rating": 15,
+        "control_rating": 65,
+        "first_strike_rating": 39,
+        "corner_pressure_rating": 29,
+        "card_heat_rating": 50,
+        "chaos_rating": 27,
+        "home_fortress_rating": 29,
+        "away_threat_rating": 32
+      },
+      "rating_bands": {
+        "og_power_rating": "Red Flag",
+        "attack_flow_rating": "Red Flag",
+        "defensive_lock_rating": "Weak",
+        "goal_heat_rating": "Red Flag",
+        "btts_pressure_rating": "Red Flag",
+        "over25_heat_rating": "Red Flag",
+        "control_rating": "Mixed",
+        "first_strike_rating": "Red Flag",
+        "corner_pressure_rating": "Red Flag",
+        "card_heat_rating": "Weak",
+        "chaos_rating": "Red Flag",
+        "home_fortress_rating": "Red Flag",
+        "away_threat_rating": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Red Flag attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Weak defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Red Flag goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Red Flag two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Red Flag 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Mixed match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Red Flag early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Red Flag territory and corner-generation profile.",
+        "card_heat_rating": "Weak discipline and card volatility profile.",
+        "chaos_rating": "Red Flag volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Red Flag home-ground control profile.",
+        "away_threat_rating": "Red Flag travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Low Chaos"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 36%",
+        "profile": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Control",
+          "Defensive Lock",
+          "Card Heat"
+        ],
+        "main_caution": "Card Heat sits at 50%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Red Flag",
+        "btts_lean": "Red Flag",
+        "over25_lean": "Red Flag",
+        "under_control": "Mixed",
+        "team_goals_15": "Red Flag",
+        "corners": "Red Flag",
+        "cards": "Weak"
+      },
+      "home_profile": {
+        "power": 29,
+        "attack": 22,
+        "defence": 54,
+        "goal_heat": 13
+      },
+      "away_profile": {
+        "power": 32,
+        "attack": 27,
+        "defence": 64,
+        "goal_heat": 14
+      },
+      "timing_profile": {
+        "early_threat": 30,
+        "half_time_control": 48,
+        "late_surge": 14,
+        "late_fragility": 38
+      }
+    },
+    {
+      "team": "Konyaspor",
+      "team_slug": "konyaspor",
+      "competition": "Turkey Super Lig",
+      "competition_key": "turkey_super_lig",
+      "season": "2020/2021",
+      "country": "Turkey",
+      "matches_played": 40,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 40
+      },
+      "ratings": {
+        "og_power_rating": 53,
+        "attack_flow_rating": 40,
+        "defensive_lock_rating": 69,
+        "goal_heat_rating": 34,
+        "btts_pressure_rating": 33,
+        "over25_heat_rating": 30,
+        "control_rating": 77,
+        "first_strike_rating": 14,
+        "corner_pressure_rating": 42,
+        "card_heat_rating": 45,
+        "chaos_rating": 44,
+        "home_fortress_rating": 57,
+        "away_threat_rating": 50
+      },
+      "rating_bands": {
+        "og_power_rating": "Weak",
+        "attack_flow_rating": "Weak",
+        "defensive_lock_rating": "Mixed",
+        "goal_heat_rating": "Red Flag",
+        "btts_pressure_rating": "Red Flag",
+        "over25_heat_rating": "Red Flag",
+        "control_rating": "Positive",
+        "first_strike_rating": "Red Flag",
+        "corner_pressure_rating": "Weak",
+        "card_heat_rating": "Weak",
+        "chaos_rating": "Weak",
+        "home_fortress_rating": "Mixed",
+        "away_threat_rating": "Weak"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Weak attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Mixed defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Red Flag goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Red Flag two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Red Flag 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Positive match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Red Flag early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Weak territory and corner-generation profile.",
+        "card_heat_rating": "Weak discipline and card volatility profile.",
+        "chaos_rating": "Weak volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Mixed home-ground control profile.",
+        "away_threat_rating": "Weak travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Mixed Team Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 53%",
+        "profile": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Control",
+          "Defensive Lock",
+          "Home Fortress"
+        ],
+        "main_caution": "Card Heat sits at 45%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Weak",
+        "btts_lean": "Red Flag",
+        "over25_lean": "Red Flag",
+        "under_control": "Positive",
+        "team_goals_15": "Weak",
+        "corners": "Weak",
+        "cards": "Mixed"
+      },
+      "home_profile": {
+        "power": 57,
+        "attack": 40,
+        "defence": 69,
+        "goal_heat": 34
+      },
+      "away_profile": {
+        "power": 50,
+        "attack": 45,
+        "defence": 62,
+        "goal_heat": 32
+      },
+      "timing_profile": {
+        "early_threat": 27,
+        "half_time_control": 46,
+        "late_surge": 32,
+        "late_fragility": 44
+      }
+    },
+    {
+      "team": "Antalyaspor",
+      "team_slug": "antalyaspor",
+      "competition": "Turkey Super Lig",
+      "competition_key": "turkey_super_lig",
+      "season": "2020/2021",
+      "country": "Turkey",
+      "matches_played": 40,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 40
+      },
+      "ratings": {
+        "og_power_rating": 41,
+        "attack_flow_rating": 20,
+        "defensive_lock_rating": 53,
+        "goal_heat_rating": 24,
+        "btts_pressure_rating": 31,
+        "over25_heat_rating": 21,
+        "control_rating": 70,
+        "first_strike_rating": 30,
+        "corner_pressure_rating": 19,
+        "card_heat_rating": 61,
+        "chaos_rating": 38,
+        "home_fortress_rating": 29,
+        "away_threat_rating": 37
+      },
+      "rating_bands": {
+        "og_power_rating": "Weak",
+        "attack_flow_rating": "Red Flag",
+        "defensive_lock_rating": "Weak",
+        "goal_heat_rating": "Red Flag",
+        "btts_pressure_rating": "Red Flag",
+        "over25_heat_rating": "Red Flag",
+        "control_rating": "Positive",
+        "first_strike_rating": "Red Flag",
+        "corner_pressure_rating": "Red Flag",
+        "card_heat_rating": "Mixed",
+        "chaos_rating": "Red Flag",
+        "home_fortress_rating": "Red Flag",
+        "away_threat_rating": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Red Flag attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Weak defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Red Flag goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Red Flag two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Red Flag 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Positive match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Red Flag early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Red Flag territory and corner-generation profile.",
+        "card_heat_rating": "Mixed discipline and card volatility profile.",
+        "chaos_rating": "Red Flag volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Red Flag home-ground control profile.",
+        "away_threat_rating": "Red Flag travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Mixed Team Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 41%",
+        "profile": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Control",
+          "Card Heat",
+          "Defensive Lock"
+        ],
+        "main_caution": "Card Heat sits at 61%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Weak",
+        "btts_lean": "Red Flag",
+        "over25_lean": "Red Flag",
+        "under_control": "Positive",
+        "team_goals_15": "Red Flag",
+        "corners": "Red Flag",
+        "cards": "Red Flag"
+      },
+      "home_profile": {
+        "power": 29,
+        "attack": 20,
+        "defence": 53,
+        "goal_heat": 24
+      },
+      "away_profile": {
+        "power": 37,
+        "attack": 28,
+        "defence": 58,
+        "goal_heat": 22
+      },
+      "timing_profile": {
+        "early_threat": 25,
+        "half_time_control": 48,
+        "late_surge": 22,
+        "late_fragility": 50
+      }
+    },
+    {
+      "team": "\u0130stanbul Ba\u015fak\u015fehir",
+      "team_slug": "i_stanbul_ba_ak_ehir",
+      "competition": "Turkey Super Lig",
+      "competition_key": "turkey_super_lig",
+      "season": "2020/2021",
+      "country": "Turkey",
+      "matches_played": 40,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 40
+      },
+      "ratings": {
+        "og_power_rating": 45,
+        "attack_flow_rating": 48,
+        "defensive_lock_rating": 51,
+        "goal_heat_rating": 34,
+        "btts_pressure_rating": 37,
+        "over25_heat_rating": 39,
+        "control_rating": 68,
+        "first_strike_rating": 29,
+        "corner_pressure_rating": 54,
+        "card_heat_rating": 32,
+        "chaos_rating": 35,
+        "home_fortress_rating": 32,
+        "away_threat_rating": 65
+      },
+      "rating_bands": {
+        "og_power_rating": "Weak",
+        "attack_flow_rating": "Weak",
+        "defensive_lock_rating": "Weak",
+        "goal_heat_rating": "Red Flag",
+        "btts_pressure_rating": "Red Flag",
+        "over25_heat_rating": "Red Flag",
+        "control_rating": "Mixed",
+        "first_strike_rating": "Red Flag",
+        "corner_pressure_rating": "Weak",
+        "card_heat_rating": "Red Flag",
+        "chaos_rating": "Red Flag",
+        "home_fortress_rating": "Red Flag",
+        "away_threat_rating": "Mixed"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Weak attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Weak defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Red Flag goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Red Flag two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Red Flag 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Mixed match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Red Flag early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Weak territory and corner-generation profile.",
+        "card_heat_rating": "Red Flag discipline and card volatility profile.",
+        "chaos_rating": "Red Flag volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Red Flag home-ground control profile.",
+        "away_threat_rating": "Mixed travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Low Chaos"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 45%",
+        "profile": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Control",
+          "Away Threat",
+          "Corner Pressure"
+        ],
+        "main_caution": "Chaos Rating sits at 35%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Weak",
+        "btts_lean": "Red Flag",
+        "over25_lean": "Red Flag",
+        "under_control": "Mixed",
+        "team_goals_15": "Weak",
+        "corners": "Weak",
+        "cards": "Mixed"
+      },
+      "home_profile": {
+        "power": 32,
+        "attack": 48,
+        "defence": 51,
+        "goal_heat": 34
+      },
+      "away_profile": {
+        "power": 65,
+        "attack": 56,
+        "defence": 58,
+        "goal_heat": 36
+      },
+      "timing_profile": {
+        "early_threat": 38,
+        "half_time_control": 46,
+        "late_surge": 36,
+        "late_fragility": 34
+      }
+    },
+    {
+      "team": "Kas\u0131mpa\u015fa",
+      "team_slug": "kas_mpa_a",
+      "competition": "Turkey Super Lig",
+      "competition_key": "turkey_super_lig",
+      "season": "2020/2021",
+      "country": "Turkey",
+      "matches_played": 40,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 40
+      },
+      "ratings": {
+        "og_power_rating": 42,
+        "attack_flow_rating": 52,
+        "defensive_lock_rating": 36,
+        "goal_heat_rating": 46,
+        "btts_pressure_rating": 47,
+        "over25_heat_rating": 52,
+        "control_rating": 46,
+        "first_strike_rating": 53,
+        "corner_pressure_rating": 36,
+        "card_heat_rating": 70,
+        "chaos_rating": 56,
+        "home_fortress_rating": 55,
+        "away_threat_rating": 26
+      },
+      "rating_bands": {
+        "og_power_rating": "Weak",
+        "attack_flow_rating": "Weak",
+        "defensive_lock_rating": "Red Flag",
+        "goal_heat_rating": "Weak",
+        "btts_pressure_rating": "Weak",
+        "over25_heat_rating": "Weak",
+        "control_rating": "Weak",
+        "first_strike_rating": "Weak",
+        "corner_pressure_rating": "Red Flag",
+        "card_heat_rating": "Positive",
+        "chaos_rating": "Mixed",
+        "home_fortress_rating": "Mixed",
+        "away_threat_rating": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Weak attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Red Flag defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Weak goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Weak two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Weak 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Weak match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Weak early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Red Flag territory and corner-generation profile.",
+        "card_heat_rating": "Positive discipline and card volatility profile.",
+        "chaos_rating": "Mixed volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Mixed home-ground control profile.",
+        "away_threat_rating": "Red Flag travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Mixed Team Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 42%",
+        "profile": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Card Heat",
+          "Chaos",
+          "Home Fortress"
+        ],
+        "main_caution": "Card Heat sits at 70%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Weak",
+        "btts_lean": "Weak",
+        "over25_lean": "Weak",
+        "under_control": "Weak",
+        "team_goals_15": "Weak",
+        "corners": "Red Flag",
+        "cards": "Red Flag"
+      },
+      "home_profile": {
+        "power": 55,
+        "attack": 52,
+        "defence": 36,
+        "goal_heat": 46
+      },
+      "away_profile": {
+        "power": 26,
+        "attack": 39,
+        "defence": 40,
+        "goal_heat": 49
+      },
+      "timing_profile": {
+        "early_threat": 52,
+        "half_time_control": 38,
+        "late_surge": 49,
+        "late_fragility": 63
+      }
+    },
+    {
+      "team": "Gen\u00e7lerbirli\u011fi",
+      "team_slug": "gen_lerbirli_i",
+      "competition": "Turkey Super Lig",
+      "competition_key": "turkey_super_lig",
+      "season": "2020/2021",
+      "country": "Turkey",
+      "matches_played": 40,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 40
+      },
+      "ratings": {
+        "og_power_rating": 15,
+        "attack_flow_rating": 27,
+        "defensive_lock_rating": 5,
+        "goal_heat_rating": 75,
+        "btts_pressure_rating": 74,
+        "over25_heat_rating": 77,
+        "control_rating": 8,
+        "first_strike_rating": 18,
+        "corner_pressure_rating": 39,
+        "card_heat_rating": 78,
+        "chaos_rating": 88,
+        "home_fortress_rating": 18,
+        "away_threat_rating": 17
+      },
+      "rating_bands": {
+        "og_power_rating": "Red Flag",
+        "attack_flow_rating": "Red Flag",
+        "defensive_lock_rating": "Red Flag",
+        "goal_heat_rating": "Positive",
+        "btts_pressure_rating": "Positive",
+        "over25_heat_rating": "Positive",
+        "control_rating": "Red Flag",
+        "first_strike_rating": "Red Flag",
+        "corner_pressure_rating": "Red Flag",
+        "card_heat_rating": "Positive",
+        "chaos_rating": "Strong",
+        "home_fortress_rating": "Red Flag",
+        "away_threat_rating": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Red Flag attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Red Flag defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Positive goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Positive two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Positive 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Red Flag match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Red Flag early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Red Flag territory and corner-generation profile.",
+        "card_heat_rating": "Positive discipline and card volatility profile.",
+        "chaos_rating": "Strong volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Red Flag home-ground control profile.",
+        "away_threat_rating": "Red Flag travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Open Match Profile",
+        "Two-Way Scoring Profile",
+        "High Chaos Side",
+        "Card Heat Risk"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 15%",
+        "profile": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Chaos",
+          "Card Heat",
+          "Over25 Heat"
+        ],
+        "main_caution": "Chaos Rating sits at 88%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Red Flag",
+        "btts_lean": "Positive",
+        "over25_lean": "Positive",
+        "under_control": "Red Flag",
+        "team_goals_15": "Red Flag",
+        "corners": "Red Flag",
+        "cards": "Red Flag"
+      },
+      "home_profile": {
+        "power": 18,
+        "attack": 27,
+        "defence": 5,
+        "goal_heat": 75
+      },
+      "away_profile": {
+        "power": 17,
+        "attack": 22,
+        "defence": 8,
+        "goal_heat": 76
+      },
+      "timing_profile": {
+        "early_threat": 22,
+        "half_time_control": 13,
+        "late_surge": 76,
+        "late_fragility": 83
+      }
+    },
+    {
+      "team": "Sivasspor",
+      "team_slug": "sivasspor",
+      "competition": "Turkey Super Lig",
+      "competition_key": "turkey_super_lig",
+      "season": "2020/2021",
+      "country": "Turkey",
+      "matches_played": 40,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 40
+      },
+      "ratings": {
+        "og_power_rating": 75,
+        "attack_flow_rating": 57,
+        "defensive_lock_rating": 73,
+        "goal_heat_rating": 31,
+        "btts_pressure_rating": 41,
+        "over25_heat_rating": 29,
+        "control_rating": 64,
+        "first_strike_rating": 64,
+        "corner_pressure_rating": 47,
+        "card_heat_rating": 17,
+        "chaos_rating": 27,
+        "home_fortress_rating": 56,
+        "away_threat_rating": 74
+      },
+      "rating_bands": {
+        "og_power_rating": "Positive",
+        "attack_flow_rating": "Mixed",
+        "defensive_lock_rating": "Positive",
+        "goal_heat_rating": "Red Flag",
+        "btts_pressure_rating": "Weak",
+        "over25_heat_rating": "Red Flag",
+        "control_rating": "Mixed",
+        "first_strike_rating": "Mixed",
+        "corner_pressure_rating": "Weak",
+        "card_heat_rating": "Red Flag",
+        "chaos_rating": "Red Flag",
+        "home_fortress_rating": "Mixed",
+        "away_threat_rating": "Positive"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Positive team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Mixed attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Positive defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Red Flag goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Weak two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Red Flag 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Mixed match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Mixed early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Weak territory and corner-generation profile.",
+        "card_heat_rating": "Red Flag discipline and card volatility profile.",
+        "chaos_rating": "Red Flag volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Mixed home-ground control profile.",
+        "away_threat_rating": "Positive travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Low Chaos"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 75%",
+        "profile": "Positive team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Og Power",
+          "Away Threat",
+          "Defensive Lock"
+        ],
+        "main_caution": "Chaos Rating sits at 27%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Positive",
+        "btts_lean": "Weak",
+        "over25_lean": "Red Flag",
+        "under_control": "Mixed",
+        "team_goals_15": "Mixed",
+        "corners": "Weak",
+        "cards": "Positive"
+      },
+      "home_profile": {
+        "power": 56,
+        "attack": 57,
+        "defence": 73,
+        "goal_heat": 31
+      },
+      "away_profile": {
+        "power": 74,
+        "attack": 66,
+        "defence": 73,
+        "goal_heat": 30
+      },
+      "timing_profile": {
+        "early_threat": 60,
+        "half_time_control": 52,
+        "late_surge": 30,
+        "late_fragility": 22
+      }
+    },
+    {
+      "team": "Denizlispor",
+      "team_slug": "denizlispor",
+      "competition": "Turkey Super Lig",
+      "competition_key": "turkey_super_lig",
+      "season": "2020/2021",
+      "country": "Turkey",
+      "matches_played": 40,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 40
+      },
+      "ratings": {
+        "og_power_rating": 12,
+        "attack_flow_rating": 28,
+        "defensive_lock_rating": 15,
+        "goal_heat_rating": 57,
+        "btts_pressure_rating": 52,
+        "over25_heat_rating": 60,
+        "control_rating": 37,
+        "first_strike_rating": 17,
+        "corner_pressure_rating": 54,
+        "card_heat_rating": 80,
+        "chaos_rating": 72,
+        "home_fortress_rating": 18,
+        "away_threat_rating": 16
+      },
+      "rating_bands": {
+        "og_power_rating": "Red Flag",
+        "attack_flow_rating": "Red Flag",
+        "defensive_lock_rating": "Red Flag",
+        "goal_heat_rating": "Mixed",
+        "btts_pressure_rating": "Weak",
+        "over25_heat_rating": "Mixed",
+        "control_rating": "Red Flag",
+        "first_strike_rating": "Red Flag",
+        "corner_pressure_rating": "Weak",
+        "card_heat_rating": "Strong",
+        "chaos_rating": "Positive",
+        "home_fortress_rating": "Red Flag",
+        "away_threat_rating": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Red Flag attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Red Flag defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Mixed goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Weak two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Mixed 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Red Flag match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Red Flag early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Weak territory and corner-generation profile.",
+        "card_heat_rating": "Strong discipline and card volatility profile.",
+        "chaos_rating": "Positive volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Red Flag home-ground control profile.",
+        "away_threat_rating": "Red Flag travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Card Heat Risk"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 12%",
+        "profile": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Card Heat",
+          "Chaos",
+          "Over25 Heat"
+        ],
+        "main_caution": "Card Heat sits at 80%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Red Flag",
+        "btts_lean": "Weak",
+        "over25_lean": "Mixed",
+        "under_control": "Red Flag",
+        "team_goals_15": "Red Flag",
+        "corners": "Weak",
+        "cards": "Red Flag"
+      },
+      "home_profile": {
+        "power": 18,
+        "attack": 28,
+        "defence": 15,
+        "goal_heat": 57
+      },
+      "away_profile": {
+        "power": 16,
+        "attack": 22,
+        "defence": 22,
+        "goal_heat": 58
+      },
+      "timing_profile": {
+        "early_threat": 22,
+        "half_time_control": 30,
+        "late_surge": 58,
+        "late_fragility": 76
+      }
+    },
+    {
+      "team": "Yeni Malatyaspor",
+      "team_slug": "yeni_malatyaspor",
+      "competition": "Turkey Super Lig",
+      "competition_key": "turkey_super_lig",
+      "season": "2020/2021",
+      "country": "Turkey",
+      "matches_played": 40,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 40
+      },
+      "ratings": {
+        "og_power_rating": 34,
+        "attack_flow_rating": 34,
+        "defensive_lock_rating": 37,
+        "goal_heat_rating": 46,
+        "btts_pressure_rating": 57,
+        "over25_heat_rating": 43,
+        "control_rating": 44,
+        "first_strike_rating": 36,
+        "corner_pressure_rating": 44,
+        "card_heat_rating": 50,
+        "chaos_rating": 53,
+        "home_fortress_rating": 41,
+        "away_threat_rating": 30
+      },
+      "rating_bands": {
+        "og_power_rating": "Red Flag",
+        "attack_flow_rating": "Red Flag",
+        "defensive_lock_rating": "Red Flag",
+        "goal_heat_rating": "Weak",
+        "btts_pressure_rating": "Mixed",
+        "over25_heat_rating": "Weak",
+        "control_rating": "Weak",
+        "first_strike_rating": "Red Flag",
+        "corner_pressure_rating": "Weak",
+        "card_heat_rating": "Weak",
+        "chaos_rating": "Weak",
+        "home_fortress_rating": "Weak",
+        "away_threat_rating": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Red Flag attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Red Flag defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Weak goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Mixed two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Weak 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Weak match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Red Flag early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Weak territory and corner-generation profile.",
+        "card_heat_rating": "Weak discipline and card volatility profile.",
+        "chaos_rating": "Weak volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Weak home-ground control profile.",
+        "away_threat_rating": "Red Flag travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Mixed Team Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 34%",
+        "profile": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Btts Pressure",
+          "Chaos",
+          "Card Heat"
+        ],
+        "main_caution": "Chaos Rating sits at 53%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Red Flag",
+        "btts_lean": "Mixed",
+        "over25_lean": "Weak",
+        "under_control": "Weak",
+        "team_goals_15": "Red Flag",
+        "corners": "Weak",
+        "cards": "Weak"
+      },
+      "home_profile": {
+        "power": 41,
+        "attack": 34,
+        "defence": 37,
+        "goal_heat": 46
+      },
+      "away_profile": {
+        "power": 30,
+        "attack": 32,
+        "defence": 42,
+        "goal_heat": 44
+      },
+      "timing_profile": {
+        "early_threat": 35,
+        "half_time_control": 32,
+        "late_surge": 44,
+        "late_fragility": 52
+      }
+    },
+    {
+      "team": "Gaziantep FK",
+      "team_slug": "gaziantep_fk",
+      "competition": "Turkey Super Lig",
+      "competition_key": "turkey_super_lig",
+      "season": "2020/2021",
+      "country": "Turkey",
+      "matches_played": 40,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 40
+      },
+      "ratings": {
+        "og_power_rating": 61,
+        "attack_flow_rating": 53,
+        "defensive_lock_rating": 61,
+        "goal_heat_rating": 62,
+        "btts_pressure_rating": 57,
+        "over25_heat_rating": 57,
+        "control_rating": 50,
+        "first_strike_rating": 66,
+        "corner_pressure_rating": 63,
+        "card_heat_rating": 41,
+        "chaos_rating": 46,
+        "home_fortress_rating": 65,
+        "away_threat_rating": 59
+      },
+      "rating_bands": {
+        "og_power_rating": "Mixed",
+        "attack_flow_rating": "Weak",
+        "defensive_lock_rating": "Mixed",
+        "goal_heat_rating": "Mixed",
+        "btts_pressure_rating": "Mixed",
+        "over25_heat_rating": "Mixed",
+        "control_rating": "Weak",
+        "first_strike_rating": "Mixed",
+        "corner_pressure_rating": "Mixed",
+        "card_heat_rating": "Weak",
+        "chaos_rating": "Weak",
+        "home_fortress_rating": "Mixed",
+        "away_threat_rating": "Mixed"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Mixed team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Weak attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Mixed defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Mixed goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Mixed two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Mixed 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Weak match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Mixed early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Mixed territory and corner-generation profile.",
+        "card_heat_rating": "Weak discipline and card volatility profile.",
+        "chaos_rating": "Weak volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Mixed home-ground control profile.",
+        "away_threat_rating": "Mixed travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Mixed Team Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 61%",
+        "profile": "Mixed team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "First Strike",
+          "Home Fortress",
+          "Corner Pressure"
+        ],
+        "main_caution": "Chaos Rating sits at 46%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Mixed",
+        "btts_lean": "Mixed",
+        "over25_lean": "Mixed",
+        "under_control": "Weak",
+        "team_goals_15": "Weak",
+        "corners": "Mixed",
+        "cards": "Mixed"
+      },
+      "home_profile": {
+        "power": 65,
+        "attack": 53,
+        "defence": 61,
+        "goal_heat": 62
+      },
+      "away_profile": {
+        "power": 59,
+        "attack": 56,
+        "defence": 58,
+        "goal_heat": 60
+      },
+      "timing_profile": {
+        "early_threat": 60,
+        "half_time_control": 40,
+        "late_surge": 60,
+        "late_fragility": 44
+      }
+    },
+    {
+      "team": "G\u00f6ztepe",
+      "team_slug": "g_ztepe",
+      "competition": "Turkey Super Lig",
+      "competition_key": "turkey_super_lig",
+      "season": "2020/2021",
+      "country": "Turkey",
+      "matches_played": 40,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 40
+      },
+      "ratings": {
+        "og_power_rating": 49,
+        "attack_flow_rating": 45,
+        "defensive_lock_rating": 34,
+        "goal_heat_rating": 62,
+        "btts_pressure_rating": 70,
+        "over25_heat_rating": 55,
+        "control_rating": 29,
+        "first_strike_rating": 80,
+        "corner_pressure_rating": 52,
+        "card_heat_rating": 49,
+        "chaos_rating": 62,
+        "home_fortress_rating": 42,
+        "away_threat_rating": 46
+      },
+      "rating_bands": {
+        "og_power_rating": "Weak",
+        "attack_flow_rating": "Weak",
+        "defensive_lock_rating": "Red Flag",
+        "goal_heat_rating": "Mixed",
+        "btts_pressure_rating": "Positive",
+        "over25_heat_rating": "Mixed",
+        "control_rating": "Red Flag",
+        "first_strike_rating": "Strong",
+        "corner_pressure_rating": "Weak",
+        "card_heat_rating": "Weak",
+        "chaos_rating": "Mixed",
+        "home_fortress_rating": "Weak",
+        "away_threat_rating": "Weak"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Weak attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Red Flag defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Mixed goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Positive two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Mixed 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Red Flag match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Strong early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Weak territory and corner-generation profile.",
+        "card_heat_rating": "Weak discipline and card volatility profile.",
+        "chaos_rating": "Mixed volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Weak home-ground control profile.",
+        "away_threat_rating": "Weak travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Strong First Goal",
+        "Two-Way Scoring Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 49%",
+        "profile": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "First Strike",
+          "Btts Pressure",
+          "Goal Heat"
+        ],
+        "main_caution": "Chaos Rating sits at 62%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Weak",
+        "btts_lean": "Positive",
+        "over25_lean": "Mixed",
+        "under_control": "Red Flag",
+        "team_goals_15": "Weak",
+        "corners": "Weak",
+        "cards": "Weak"
+      },
+      "home_profile": {
+        "power": 42,
+        "attack": 45,
+        "defence": 34,
+        "goal_heat": 62
+      },
+      "away_profile": {
+        "power": 46,
+        "attack": 46,
+        "defence": 36,
+        "goal_heat": 58
+      },
+      "timing_profile": {
+        "early_threat": 62,
+        "half_time_control": 34,
+        "late_surge": 58,
+        "late_fragility": 56
+      }
+    },
+    {
+      "team": "Ankarag\u00fcc\u00fc",
+      "team_slug": "ankarag_c",
+      "competition": "Turkey Super Lig",
+      "competition_key": "turkey_super_lig",
+      "season": "2020/2021",
+      "country": "Turkey",
+      "matches_played": 40,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 40
+      },
+      "ratings": {
+        "og_power_rating": 29,
+        "attack_flow_rating": 43,
+        "defensive_lock_rating": 25,
+        "goal_heat_rating": 53,
+        "btts_pressure_rating": 60,
+        "over25_heat_rating": 46,
+        "control_rating": 36,
+        "first_strike_rating": 47,
+        "corner_pressure_rating": 28,
+        "card_heat_rating": 77,
+        "chaos_rating": 67,
+        "home_fortress_rating": 39,
+        "away_threat_rating": 20
+      },
+      "rating_bands": {
+        "og_power_rating": "Red Flag",
+        "attack_flow_rating": "Weak",
+        "defensive_lock_rating": "Red Flag",
+        "goal_heat_rating": "Weak",
+        "btts_pressure_rating": "Mixed",
+        "over25_heat_rating": "Weak",
+        "control_rating": "Red Flag",
+        "first_strike_rating": "Weak",
+        "corner_pressure_rating": "Red Flag",
+        "card_heat_rating": "Positive",
+        "chaos_rating": "Mixed",
+        "home_fortress_rating": "Red Flag",
+        "away_threat_rating": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Weak attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Red Flag defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Weak goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Mixed two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Weak 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Red Flag match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Weak early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Red Flag territory and corner-generation profile.",
+        "card_heat_rating": "Positive discipline and card volatility profile.",
+        "chaos_rating": "Mixed volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Red Flag home-ground control profile.",
+        "away_threat_rating": "Red Flag travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Card Heat Risk"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 29%",
+        "profile": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Card Heat",
+          "Chaos",
+          "Btts Pressure"
+        ],
+        "main_caution": "Card Heat sits at 77%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Red Flag",
+        "btts_lean": "Mixed",
+        "over25_lean": "Weak",
+        "under_control": "Red Flag",
+        "team_goals_15": "Weak",
+        "corners": "Red Flag",
+        "cards": "Red Flag"
+      },
+      "home_profile": {
+        "power": 39,
+        "attack": 43,
+        "defence": 25,
+        "goal_heat": 53
+      },
+      "away_profile": {
+        "power": 20,
+        "attack": 32,
+        "defence": 29,
+        "goal_heat": 50
+      },
+      "timing_profile": {
+        "early_threat": 45,
+        "half_time_control": 28,
+        "late_surge": 50,
+        "late_fragility": 72
+      }
+    },
+    {
+      "team": "BB Erzurumspor",
+      "team_slug": "bb_erzurumspor",
+      "competition": "Turkey Super Lig",
+      "competition_key": "turkey_super_lig",
+      "season": "2020/2021",
+      "country": "Turkey",
+      "matches_played": 40,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 40
+      },
+      "ratings": {
+        "og_power_rating": 25,
+        "attack_flow_rating": 44,
+        "defensive_lock_rating": 23,
+        "goal_heat_rating": 69,
+        "btts_pressure_rating": 66,
+        "over25_heat_rating": 66,
+        "control_rating": 30,
+        "first_strike_rating": 25,
+        "corner_pressure_rating": 62,
+        "card_heat_rating": 80,
+        "chaos_rating": 82,
+        "home_fortress_rating": 18,
+        "away_threat_rating": 53
+      },
+      "rating_bands": {
+        "og_power_rating": "Red Flag",
+        "attack_flow_rating": "Weak",
+        "defensive_lock_rating": "Red Flag",
+        "goal_heat_rating": "Mixed",
+        "btts_pressure_rating": "Mixed",
+        "over25_heat_rating": "Mixed",
+        "control_rating": "Red Flag",
+        "first_strike_rating": "Red Flag",
+        "corner_pressure_rating": "Mixed",
+        "card_heat_rating": "Strong",
+        "chaos_rating": "Strong",
+        "home_fortress_rating": "Red Flag",
+        "away_threat_rating": "Weak"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Weak attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Red Flag defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Mixed goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Mixed two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Mixed 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Red Flag match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Red Flag early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Mixed territory and corner-generation profile.",
+        "card_heat_rating": "Strong discipline and card volatility profile.",
+        "chaos_rating": "Strong volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Red Flag home-ground control profile.",
+        "away_threat_rating": "Weak travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "High Chaos Side",
+        "Card Heat Risk"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 25%",
+        "profile": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Chaos",
+          "Card Heat",
+          "Goal Heat"
+        ],
+        "main_caution": "Chaos Rating sits at 82%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Red Flag",
+        "btts_lean": "Mixed",
+        "over25_lean": "Mixed",
+        "under_control": "Red Flag",
+        "team_goals_15": "Weak",
+        "corners": "Mixed",
+        "cards": "Red Flag"
+      },
+      "home_profile": {
+        "power": 18,
+        "attack": 44,
+        "defence": 23,
+        "goal_heat": 69
+      },
+      "away_profile": {
+        "power": 53,
+        "attack": 48,
+        "defence": 20,
+        "goal_heat": 68
+      },
+      "timing_profile": {
+        "early_threat": 34,
+        "half_time_control": 26,
+        "late_surge": 68,
+        "late_fragility": 81
+      }
+    },
+    {
+      "team": "Hatayspor",
+      "team_slug": "hatayspor",
+      "competition": "Turkey Super Lig",
+      "competition_key": "turkey_super_lig",
+      "season": "2020/2021",
+      "country": "Turkey",
+      "matches_played": 40,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 40
+      },
+      "ratings": {
+        "og_power_rating": 63,
+        "attack_flow_rating": 59,
+        "defensive_lock_rating": 54,
+        "goal_heat_rating": 62,
+        "btts_pressure_rating": 47,
+        "over25_heat_rating": 63,
+        "control_rating": 52,
+        "first_strike_rating": 54,
+        "corner_pressure_rating": 28,
+        "card_heat_rating": 70,
+        "chaos_rating": 63,
+        "home_fortress_rating": 58,
+        "away_threat_rating": 64
+      },
+      "rating_bands": {
+        "og_power_rating": "Mixed",
+        "attack_flow_rating": "Mixed",
+        "defensive_lock_rating": "Weak",
+        "goal_heat_rating": "Mixed",
+        "btts_pressure_rating": "Weak",
+        "over25_heat_rating": "Mixed",
+        "control_rating": "Weak",
+        "first_strike_rating": "Weak",
+        "corner_pressure_rating": "Red Flag",
+        "card_heat_rating": "Positive",
+        "chaos_rating": "Mixed",
+        "home_fortress_rating": "Mixed",
+        "away_threat_rating": "Mixed"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Mixed team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Mixed attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Weak defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Mixed goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Weak two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Mixed 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Weak match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Weak early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Red Flag territory and corner-generation profile.",
+        "card_heat_rating": "Positive discipline and card volatility profile.",
+        "chaos_rating": "Mixed volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Mixed home-ground control profile.",
+        "away_threat_rating": "Mixed travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Mixed Team Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 63%",
+        "profile": "Mixed team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Card Heat",
+          "Away Threat",
+          "Og Power"
+        ],
+        "main_caution": "Card Heat sits at 70%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Mixed",
+        "btts_lean": "Weak",
+        "over25_lean": "Mixed",
+        "under_control": "Weak",
+        "team_goals_15": "Mixed",
+        "corners": "Red Flag",
+        "cards": "Red Flag"
+      },
+      "home_profile": {
+        "power": 58,
+        "attack": 59,
+        "defence": 54,
+        "goal_heat": 62
+      },
+      "away_profile": {
+        "power": 64,
+        "attack": 62,
+        "defence": 46,
+        "goal_heat": 62
+      },
+      "timing_profile": {
+        "early_threat": 56,
+        "half_time_control": 40,
+        "late_surge": 62,
+        "late_fragility": 66
+      }
+    },
+    {
+      "team": "Fatih Karag\u00fcmr\u00fck",
+      "team_slug": "fatih_karag_mr_k",
+      "competition": "Turkey Super Lig",
+      "competition_key": "turkey_super_lig",
+      "season": "2020/2021",
+      "country": "Turkey",
+      "matches_played": 40,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 40
+      },
+      "ratings": {
+        "og_power_rating": 61,
+        "attack_flow_rating": 76,
+        "defensive_lock_rating": 44,
+        "goal_heat_rating": 78,
+        "btts_pressure_rating": 75,
+        "over25_heat_rating": 74,
+        "control_rating": 32,
+        "first_strike_rating": 77,
+        "corner_pressure_rating": 81,
+        "card_heat_rating": 60,
+        "chaos_rating": 69,
+        "home_fortress_rating": 73,
+        "away_threat_rating": 45
+      },
+      "rating_bands": {
+        "og_power_rating": "Mixed",
+        "attack_flow_rating": "Positive",
+        "defensive_lock_rating": "Weak",
+        "goal_heat_rating": "Positive",
+        "btts_pressure_rating": "Positive",
+        "over25_heat_rating": "Positive",
+        "control_rating": "Red Flag",
+        "first_strike_rating": "Positive",
+        "corner_pressure_rating": "Strong",
+        "card_heat_rating": "Mixed",
+        "chaos_rating": "Mixed",
+        "home_fortress_rating": "Positive",
+        "away_threat_rating": "Weak"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Mixed team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Positive attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Weak defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Positive goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Positive two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Positive 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Red Flag match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Positive early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Strong territory and corner-generation profile.",
+        "card_heat_rating": "Mixed discipline and card volatility profile.",
+        "chaos_rating": "Mixed volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Positive home-ground control profile.",
+        "away_threat_rating": "Weak travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Corner Pressure Side",
+        "Open Match Profile",
+        "Two-Way Scoring Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 61%",
+        "profile": "Mixed team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Corner Pressure",
+          "Goal Heat",
+          "First Strike"
+        ],
+        "main_caution": "Chaos Rating sits at 69%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Mixed",
+        "btts_lean": "Positive",
+        "over25_lean": "Positive",
+        "under_control": "Red Flag",
+        "team_goals_15": "Positive",
+        "corners": "Positive",
+        "cards": "Weak"
+      },
+      "home_profile": {
+        "power": 73,
+        "attack": 76,
+        "defence": 44,
+        "goal_heat": 78
+      },
+      "away_profile": {
+        "power": 45,
+        "attack": 60,
+        "defence": 38,
+        "goal_heat": 76
+      },
+      "timing_profile": {
+        "early_threat": 76,
+        "half_time_control": 34,
+        "late_surge": 76,
+        "late_fragility": 64
+      }
+    }
+  ]
+}

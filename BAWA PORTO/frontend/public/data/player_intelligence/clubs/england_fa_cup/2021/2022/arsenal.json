@@ -1,0 +1,1679 @@
+{
+  "club": "Arsenal",
+  "club_slug": "arsenal",
+  "competition": "England FA Cup",
+  "competition_key": "england_fa_cup",
+  "season": "2021/2022",
+  "players": [
+    {
+      "player_id": "england_fa_cup_arsenal_aaron_ramsdale_2021/2022",
+      "name": "Aaron Ramsdale",
+      "surname": "Ramsdale",
+      "club": "Arsenal",
+      "club_slug": "arsenal",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2021/2022",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 535,
+        "creative_spark_rank": 222,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 40
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Ramsdale",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_arsenal_albert_sambi_lokonga_2021/2022",
+      "name": "Albert Sambi Lokonga",
+      "surname": "Lokonga",
+      "club": "Arsenal",
+      "club_slug": "arsenal",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2021/2022",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 535,
+        "creative_spark_rank": 222,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 40
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Lokonga",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_arsenal_alexandre_lacazette_2021/2022",
+      "name": "Alexandre Lacazette",
+      "surname": "Lacazette",
+      "club": "Arsenal",
+      "club_slug": "arsenal",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2021/2022",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 21
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 535,
+        "creative_spark_rank": 222,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 40
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Lacazette",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_arsenal_ben_white_2021/2022",
+      "name": "Ben White",
+      "surname": "White",
+      "club": "Arsenal",
+      "club_slug": "arsenal",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2021/2022",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 535,
+        "creative_spark_rank": 222,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 40
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "White",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_arsenal_bernd_leno_2021/2022",
+      "name": "Bernd Leno",
+      "surname": "Leno",
+      "club": "Arsenal",
+      "club_slug": "arsenal",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2021/2022",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 535,
+        "creative_spark_rank": 222,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 40
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Leno",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_arsenal_bukayo_saka_2021/2022",
+      "name": "Bukayo Saka",
+      "surname": "Saka",
+      "club": "Arsenal",
+      "club_slug": "arsenal",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2021/2022",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 535,
+        "creative_spark_rank": 222,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 40
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Saka",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_arsenal_calum_chambers_2021/2022",
+      "name": "Calum Chambers",
+      "surname": "Chambers",
+      "club": "Arsenal",
+      "club_slug": "arsenal",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2021/2022",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 535,
+        "creative_spark_rank": 222,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 40
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Chambers",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_arsenal_cedric_soares_2021/2022",
+      "name": "Cedric Soares",
+      "surname": "Soares",
+      "club": "Arsenal",
+      "club_slug": "arsenal",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2021/2022",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 535,
+        "creative_spark_rank": 222,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 40
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Soares",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_arsenal_charlie_patino_2021/2022",
+      "name": "Charlie Patino",
+      "surname": "Patino",
+      "club": "Arsenal",
+      "club_slug": "arsenal",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2021/2022",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 69
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 535,
+        "creative_spark_rank": 222,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 40
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Patino",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_arsenal_edward_nketiah_2021/2022",
+      "name": "Edward Nketiah",
+      "surname": "Nketiah",
+      "club": "Arsenal",
+      "club_slug": "arsenal",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2021/2022",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 535,
+        "creative_spark_rank": 222,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 40
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Nketiah",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_arsenal_gabriel_martinelli_2021/2022",
+      "name": "Gabriel Martinelli",
+      "surname": "Martinelli",
+      "club": "Arsenal",
+      "club_slug": "arsenal",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2021/2022",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 54,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 535,
+        "creative_spark_rank": 222,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 40
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Martinelli",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_arsenal_kieran_tierney_2021/2022",
+      "name": "Kieran Tierney",
+      "surname": "Tierney",
+      "club": "Arsenal",
+      "club_slug": "arsenal",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2021/2022",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 55
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 535,
+        "creative_spark_rank": 222,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 40
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Tierney",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_arsenal_martin_degaard_2021/2022",
+      "name": "Martin \u00d8degaard",
+      "surname": "\u00d8degaard",
+      "club": "Arsenal",
+      "club_slug": "arsenal",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2021/2022",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 535,
+        "creative_spark_rank": 222,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 40
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "\u00d8degaard",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_arsenal_mika_bieveth_2021/2022",
+      "name": "Mika Bieveth",
+      "surname": "Bieveth",
+      "club": "Arsenal",
+      "club_slug": "arsenal",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2021/2022",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 535,
+        "creative_spark_rank": 222,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 40
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Bieveth",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_arsenal_nuno_tavares_2021/2022",
+      "name": "Nuno Tavares",
+      "surname": "Tavares",
+      "club": "Arsenal",
+      "club_slug": "arsenal",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2021/2022",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 35
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 535,
+        "creative_spark_rank": 222,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 40
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Tavares",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_arsenal_omari_giraud_hutchinson_2021/2022",
+      "name": "Omari Giraud-Hutchinson",
+      "surname": "Giraud-Hutchinson",
+      "club": "Arsenal",
+      "club_slug": "arsenal",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2021/2022",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 535,
+        "creative_spark_rank": 222,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 40
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Giraud-Hutchinson",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_arsenal_pablo_mar_2021/2022",
+      "name": "Pablo Mar\u00ed",
+      "surname": "Mar\u00ed",
+      "club": "Arsenal",
+      "club_slug": "arsenal",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2021/2022",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 535,
+        "creative_spark_rank": 222,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 40
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Mar\u00ed",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_arsenal_rob_holding_2021/2022",
+      "name": "Rob Holding",
+      "surname": "Holding",
+      "club": "Arsenal",
+      "club_slug": "arsenal",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2021/2022",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 535,
+        "creative_spark_rank": 222,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 40
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Holding",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_arsenal_salah_oulad_m_hand_2021/2022",
+      "name": "Salah Oulad M'Hand",
+      "surname": "M'Hand",
+      "club": "Arsenal",
+      "club_slug": "arsenal",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2021/2022",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 535,
+        "creative_spark_rank": 222,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 40
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "M'Hand",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_arsenal_sead_kola_inac_2021/2022",
+      "name": "Sead Kola\u0161inac",
+      "surname": "Kola\u0161inac",
+      "club": "Arsenal",
+      "club_slug": "arsenal",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2021/2022",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 535,
+        "creative_spark_rank": 222,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 40
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Kola\u0161inac",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Ramsdale",
+      "Lokonga",
+      "Lacazette",
+      "White",
+      "Leno"
+    ],
+    "goal_threat": [
+      "Ramsdale",
+      "Lokonga",
+      "Lacazette",
+      "White",
+      "Leno"
+    ],
+    "creative_spark": [
+      "Ramsdale",
+      "Lokonga",
+      "Lacazette",
+      "White",
+      "Leno"
+    ],
+    "discipline_risk": [
+      "Martinelli",
+      "Ramsdale",
+      "Lokonga",
+      "Lacazette",
+      "White"
+    ]
+  }
+}

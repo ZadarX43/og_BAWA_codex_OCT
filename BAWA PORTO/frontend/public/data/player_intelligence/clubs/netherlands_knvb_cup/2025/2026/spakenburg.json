@@ -1,0 +1,1761 @@
+{
+  "club": "Spakenburg",
+  "club_slug": "spakenburg",
+  "competition": "Netherlands KNVB Cup",
+  "competition_key": "netherlands_knvb_cup",
+  "season": "2025/2026",
+  "players": [
+    {
+      "player_id": "netherlands_knvb_cup_spakenburg_sam_van_huffel_2025/2026",
+      "name": "Sam van Huffel",
+      "surname": "Huffel",
+      "club": "Spakenburg",
+      "club_slug": "spakenburg",
+      "competition": "Netherlands KNVB Cup",
+      "competition_key": "netherlands_knvb_cup",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 54,
+        "goal_threat": 60,
+        "shot_threat": 59,
+        "xg_threat": 60,
+        "creative_spark": 53,
+        "xa_threat": 54,
+        "midfield_engine": 53,
+        "defensive_lock": 49,
+        "pressing_heat": 52,
+        "ball_progression": 53,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 56,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 47,
+        "position_rank": 10,
+        "club_rank": 1,
+        "goal_threat_rank": 40,
+        "creative_spark_rank": 127,
+        "defensive_lock_rank": 731,
+        "pressing_heat_rank": 105,
+        "booking_heat_rank": 91
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Huffel",
+        "badge_score": 54,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "netherlands_knvb_cup_spakenburg_floris_van_der_linden_2025/2026",
+      "name": "Floris van der Linden",
+      "surname": "Linden",
+      "club": "Spakenburg",
+      "club_slug": "spakenburg",
+      "competition": "Netherlands KNVB Cup",
+      "competition_key": "netherlands_knvb_cup",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 103
+      },
+      "ratings": {
+        "og_player_power": 53,
+        "goal_threat": 62,
+        "shot_threat": 61,
+        "xg_threat": 62,
+        "creative_spark": 47,
+        "xa_threat": 46,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 52,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 66,
+        "position_rank": 32,
+        "club_rank": 2,
+        "goal_threat_rank": 1,
+        "creative_spark_rank": 881,
+        "defensive_lock_rank": 731,
+        "pressing_heat_rank": 907,
+        "booking_heat_rank": 874
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Linden",
+        "badge_score": 53,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "netherlands_knvb_cup_spakenburg_tim_linthorst_2025/2026",
+      "name": "Tim Linthorst",
+      "surname": "Linthorst",
+      "club": "Spakenburg",
+      "club_slug": "spakenburg",
+      "competition": "Netherlands KNVB Cup",
+      "competition_key": "netherlands_knvb_cup",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 115
+      },
+      "ratings": {
+        "og_player_power": 53,
+        "goal_threat": 47,
+        "shot_threat": 45,
+        "xg_threat": 45,
+        "creative_spark": 54,
+        "xa_threat": 55,
+        "midfield_engine": 55,
+        "defensive_lock": 54,
+        "pressing_heat": 52,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 54,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 66,
+        "position_rank": 13,
+        "club_rank": 2,
+        "goal_threat_rank": 730,
+        "creative_spark_rank": 80,
+        "defensive_lock_rank": 30,
+        "pressing_heat_rank": 105,
+        "booking_heat_rank": 293
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Linthorst",
+        "badge_score": 53,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "netherlands_knvb_cup_spakenburg_des_kunst_2025/2026",
+      "name": "Des Kunst",
+      "surname": "Kunst",
+      "club": "Spakenburg",
+      "club_slug": "spakenburg",
+      "competition": "Netherlands KNVB Cup",
+      "competition_key": "netherlands_knvb_cup",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 51
+      },
+      "ratings": {
+        "og_player_power": 52,
+        "goal_threat": 57,
+        "shot_threat": 54,
+        "xg_threat": 57,
+        "creative_spark": 56,
+        "xa_threat": 55,
+        "midfield_engine": 54,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 55,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Weak",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 92,
+        "position_rank": 30,
+        "club_rank": 4,
+        "goal_threat_rank": 111,
+        "creative_spark_rank": 7,
+        "defensive_lock_rank": 324,
+        "pressing_heat_rank": 341,
+        "booking_heat_rank": 293
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Kunst",
+        "badge_score": 52,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "netherlands_knvb_cup_spakenburg_koen_wesdorp_2025/2026",
+      "name": "Koen Wesdorp",
+      "surname": "Wesdorp",
+      "club": "Spakenburg",
+      "club_slug": "spakenburg",
+      "competition": "Netherlands KNVB Cup",
+      "competition_key": "netherlands_knvb_cup",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 128
+      },
+      "ratings": {
+        "og_player_power": 52,
+        "goal_threat": 61,
+        "shot_threat": 60,
+        "xg_threat": 61,
+        "creative_spark": 53,
+        "xa_threat": 53,
+        "midfield_engine": 51,
+        "defensive_lock": 50,
+        "pressing_heat": 49,
+        "ball_progression": 50,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 92,
+        "position_rank": 30,
+        "club_rank": 4,
+        "goal_threat_rank": 17,
+        "creative_spark_rank": 127,
+        "defensive_lock_rank": 324,
+        "pressing_heat_rank": 761,
+        "booking_heat_rank": 874
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Wesdorp",
+        "badge_score": 52,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "netherlands_knvb_cup_spakenburg_ahmed_el_azzouti_2025/2026",
+      "name": "Ahmed El Azzouti",
+      "surname": "Azzouti",
+      "club": "Spakenburg",
+      "club_slug": "spakenburg",
+      "competition": "Netherlands KNVB Cup",
+      "competition_key": "netherlands_knvb_cup",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 65
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 132,
+        "position_rank": 43,
+        "club_rank": 6,
+        "goal_threat_rank": 389,
+        "creative_spark_rank": 312,
+        "defensive_lock_rank": 324,
+        "pressing_heat_rank": 341,
+        "booking_heat_rank": 293
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Azzouti",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "netherlands_knvb_cup_spakenburg_dwayne_green_2025/2026",
+      "name": "Dwayne Green",
+      "surname": "Green",
+      "club": "Spakenburg",
+      "club_slug": "spakenburg",
+      "competition": "Netherlands KNVB Cup",
+      "competition_key": "netherlands_knvb_cup",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 53,
+        "shot_threat": 56,
+        "xg_threat": 54,
+        "creative_spark": 55,
+        "xa_threat": 55,
+        "midfield_engine": 53,
+        "defensive_lock": 50,
+        "pressing_heat": 49,
+        "ball_progression": 52,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 49,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Mixed",
+        "xg_threat": "Weak",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 132,
+        "position_rank": 32,
+        "club_rank": 6,
+        "goal_threat_rank": 188,
+        "creative_spark_rank": 39,
+        "defensive_lock_rank": 324,
+        "pressing_heat_rank": 761,
+        "booking_heat_rank": 747
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Green",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "netherlands_knvb_cup_spakenburg_floris_hein_johannes_herman_quaedvlieg_2025/2026",
+      "name": "Floris Hein Johannes Herman Quaedvlieg",
+      "surname": "Quaedvlieg",
+      "club": "Spakenburg",
+      "club_slug": "spakenburg",
+      "competition": "Netherlands KNVB Cup",
+      "competition_key": "netherlands_knvb_cup",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 132,
+        "position_rank": 43,
+        "club_rank": 6,
+        "goal_threat_rank": 389,
+        "creative_spark_rank": 312,
+        "defensive_lock_rank": 324,
+        "pressing_heat_rank": 341,
+        "booking_heat_rank": 293
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Quaedvlieg",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "netherlands_knvb_cup_spakenburg_kevin_van_dieren_2025/2026",
+      "name": "Kevin van Dieren",
+      "surname": "Dieren",
+      "club": "Spakenburg",
+      "club_slug": "spakenburg",
+      "competition": "Netherlands KNVB Cup",
+      "competition_key": "netherlands_knvb_cup",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 132,
+        "position_rank": 49,
+        "club_rank": 6,
+        "goal_threat_rank": 389,
+        "creative_spark_rank": 312,
+        "defensive_lock_rank": 324,
+        "pressing_heat_rank": 341,
+        "booking_heat_rank": 293
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Dieren",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "netherlands_knvb_cup_spakenburg_kyan_van_dorp_2025/2026",
+      "name": "Kyan van Dorp",
+      "surname": "Dorp",
+      "club": "Spakenburg",
+      "club_slug": "spakenburg",
+      "competition": "Netherlands KNVB Cup",
+      "competition_key": "netherlands_knvb_cup",
+      "season": "2025/2026",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 132,
+        "position_rank": 11,
+        "club_rank": 6,
+        "goal_threat_rank": 389,
+        "creative_spark_rank": 312,
+        "defensive_lock_rank": 324,
+        "pressing_heat_rank": 341,
+        "booking_heat_rank": 293
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Dorp",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "netherlands_knvb_cup_spakenburg_menno_heus_2025/2026",
+      "name": "Menno Heus",
+      "surname": "Heus",
+      "club": "Spakenburg",
+      "club_slug": "spakenburg",
+      "competition": "Netherlands KNVB Cup",
+      "competition_key": "netherlands_knvb_cup",
+      "season": "2025/2026",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 132,
+        "position_rank": 11,
+        "club_rank": 6,
+        "goal_threat_rank": 389,
+        "creative_spark_rank": 312,
+        "defensive_lock_rank": 324,
+        "pressing_heat_rank": 341,
+        "booking_heat_rank": 293
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Heus",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "netherlands_knvb_cup_spakenburg_olaf_kok_2025/2026",
+      "name": "Olaf Kok",
+      "surname": "Kok",
+      "club": "Spakenburg",
+      "club_slug": "spakenburg",
+      "competition": "Netherlands KNVB Cup",
+      "competition_key": "netherlands_knvb_cup",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 77
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 51,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 55,
+        "xa_threat": 56,
+        "midfield_engine": 51,
+        "defensive_lock": 52,
+        "pressing_heat": 51,
+        "ball_progression": 53,
+        "aerial_dominance": 51,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 48,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 132,
+        "position_rank": 43,
+        "club_rank": 6,
+        "goal_threat_rank": 292,
+        "creative_spark_rank": 39,
+        "defensive_lock_rank": 148,
+        "pressing_heat_rank": 226,
+        "booking_heat_rank": 747
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Kok",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "netherlands_knvb_cup_spakenburg_killian_van_mil_2025/2026",
+      "name": "Killian van Mil",
+      "surname": "Mil",
+      "club": "Spakenburg",
+      "club_slug": "spakenburg",
+      "competition": "Netherlands KNVB Cup",
+      "competition_key": "netherlands_knvb_cup",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 49,
+        "goal_threat": 60,
+        "shot_threat": 59,
+        "xg_threat": 60,
+        "creative_spark": 51,
+        "xa_threat": 53,
+        "midfield_engine": 48,
+        "defensive_lock": 45,
+        "pressing_heat": 49,
+        "ball_progression": 50,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 54,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 435,
+        "position_rank": 187,
+        "club_rank": 13,
+        "goal_threat_rank": 40,
+        "creative_spark_rank": 256,
+        "defensive_lock_rank": 1074,
+        "pressing_heat_rank": 761,
+        "booking_heat_rank": 293
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Mil",
+        "badge_score": 49,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "netherlands_knvb_cup_spakenburg_jeffrey_puriel_2025/2026",
+      "name": "Jeffrey Puriel",
+      "surname": "Puriel",
+      "club": "Spakenburg",
+      "club_slug": "spakenburg",
+      "competition": "Netherlands KNVB Cup",
+      "competition_key": "netherlands_knvb_cup",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 70
+      },
+      "ratings": {
+        "og_player_power": 48,
+        "goal_threat": 62,
+        "shot_threat": 61,
+        "xg_threat": 62,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 51,
+        "defensive_lock": 51,
+        "pressing_heat": 47,
+        "ball_progression": 49,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 449,
+        "position_rank": 190,
+        "club_rank": 14,
+        "goal_threat_rank": 1,
+        "creative_spark_rank": 772,
+        "defensive_lock_rank": 233,
+        "pressing_heat_rank": 907,
+        "booking_heat_rank": 874
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Puriel",
+        "badge_score": 48,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "netherlands_knvb_cup_spakenburg_jens_guiting_2025/2026",
+      "name": "Jens Guiting",
+      "surname": "Guiting",
+      "club": "Spakenburg",
+      "club_slug": "spakenburg",
+      "competition": "Netherlands KNVB Cup",
+      "competition_key": "netherlands_knvb_cup",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 47,
+        "goal_threat": 46,
+        "shot_threat": 45,
+        "xg_threat": 45,
+        "creative_spark": 49,
+        "xa_threat": 49,
+        "midfield_engine": 54,
+        "defensive_lock": 55,
+        "pressing_heat": 53,
+        "ball_progression": 48,
+        "aerial_dominance": 52,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 56,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 475,
+        "position_rank": 198,
+        "club_rank": 15,
+        "goal_threat_rank": 751,
+        "creative_spark_rank": 683,
+        "defensive_lock_rank": 13,
+        "pressing_heat_rank": 34,
+        "booking_heat_rank": 91
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Guiting",
+        "badge_score": 47,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "netherlands_knvb_cup_spakenburg_ravelino_junte_2025/2026",
+      "name": "Ravelino Junte",
+      "surname": "Junte",
+      "club": "Spakenburg",
+      "club_slug": "spakenburg",
+      "competition": "Netherlands KNVB Cup",
+      "competition_key": "netherlands_knvb_cup",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 71
+      },
+      "ratings": {
+        "og_player_power": 46,
+        "goal_threat": 52,
+        "shot_threat": 51,
+        "xg_threat": 51,
+        "creative_spark": 56,
+        "xa_threat": 57,
+        "midfield_engine": 50,
+        "defensive_lock": 48,
+        "pressing_heat": 52,
+        "ball_progression": 50,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 47,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 501,
+        "position_rank": 115,
+        "club_rank": 16,
+        "goal_threat_rank": 237,
+        "creative_spark_rank": 7,
+        "defensive_lock_rank": 838,
+        "pressing_heat_rank": 105,
+        "booking_heat_rank": 293
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Junte",
+        "badge_score": 46,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "netherlands_knvb_cup_spakenburg_cody_claver_2025/2026",
+      "name": "Cody Claver",
+      "surname": "Claver",
+      "club": "Spakenburg",
+      "club_slug": "spakenburg",
+      "competition": "Netherlands KNVB Cup",
+      "competition_key": "netherlands_knvb_cup",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 70
+      },
+      "ratings": {
+        "og_player_power": 45,
+        "goal_threat": 51,
+        "shot_threat": 52,
+        "xg_threat": 52,
+        "creative_spark": 53,
+        "xa_threat": 55,
+        "midfield_engine": 49,
+        "defensive_lock": 49,
+        "pressing_heat": 47,
+        "ball_progression": 50,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 536,
+        "position_rank": 101,
+        "club_rank": 17,
+        "goal_threat_rank": 292,
+        "creative_spark_rank": 127,
+        "defensive_lock_rank": 731,
+        "pressing_heat_rank": 907,
+        "booking_heat_rank": 874
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Claver",
+        "badge_score": 45,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "netherlands_knvb_cup_spakenburg_mitch_apau_2025/2026",
+      "name": "Mitch Apau",
+      "surname": "Apau",
+      "club": "Spakenburg",
+      "club_slug": "spakenburg",
+      "competition": "Netherlands KNVB Cup",
+      "competition_key": "netherlands_knvb_cup",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 43,
+        "goal_threat": 46,
+        "shot_threat": 45,
+        "xg_threat": 45,
+        "creative_spark": 49,
+        "xa_threat": 49,
+        "midfield_engine": 51,
+        "defensive_lock": 51,
+        "pressing_heat": 49,
+        "ball_progression": 49,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 589,
+        "position_rank": 114,
+        "club_rank": 18,
+        "goal_threat_rank": 751,
+        "creative_spark_rank": 683,
+        "defensive_lock_rank": 233,
+        "pressing_heat_rank": 761,
+        "booking_heat_rank": 874
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Apau",
+        "badge_score": 43,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "netherlands_knvb_cup_spakenburg_hero_van_lopik_2025/2026",
+      "name": "Hero van Lopik",
+      "surname": "Lopik",
+      "club": "Spakenburg",
+      "club_slug": "spakenburg",
+      "competition": "Netherlands KNVB Cup",
+      "competition_key": "netherlands_knvb_cup",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 65
+      },
+      "ratings": {
+        "og_player_power": 39,
+        "goal_threat": 50,
+        "shot_threat": 45,
+        "xg_threat": 47,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 51,
+        "defensive_lock": 49,
+        "pressing_heat": 47,
+        "ball_progression": 49,
+        "aerial_dominance": 51,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 797,
+        "position_rank": 352,
+        "club_rank": 19,
+        "goal_threat_rank": 337,
+        "creative_spark_rank": 312,
+        "defensive_lock_rank": 731,
+        "pressing_heat_rank": 907,
+        "booking_heat_rank": 874
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Lopik",
+        "badge_score": 39,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "netherlands_knvb_cup_spakenburg_jay_den_haan_2025/2026",
+      "name": "Jay den Haan",
+      "surname": "Haan",
+      "club": "Spakenburg",
+      "club_slug": "spakenburg",
+      "competition": "Netherlands KNVB Cup",
+      "competition_key": "netherlands_knvb_cup",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 85
+      },
+      "ratings": {
+        "og_player_power": 37,
+        "goal_threat": 46,
+        "shot_threat": 45,
+        "xg_threat": 45,
+        "creative_spark": 50,
+        "xa_threat": 49,
+        "midfield_engine": 51,
+        "defensive_lock": 45,
+        "pressing_heat": 52,
+        "ball_progression": 48,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 53,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 995,
+        "position_rank": 221,
+        "club_rank": 20,
+        "goal_threat_rank": 751,
+        "creative_spark_rank": 312,
+        "defensive_lock_rank": 1074,
+        "pressing_heat_rank": 105,
+        "booking_heat_rank": 39
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Haan",
+        "badge_score": 37,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "netherlands_knvb_cup_spakenburg_joey_houweling_2025/2026",
+      "name": "Joey Houweling",
+      "surname": "Houweling",
+      "club": "Spakenburg",
+      "club_slug": "spakenburg",
+      "competition": "Netherlands KNVB Cup",
+      "competition_key": "netherlands_knvb_cup",
+      "season": "2025/2026",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 34,
+        "goal_threat": 46,
+        "shot_threat": 45,
+        "xg_threat": 45,
+        "creative_spark": 47,
+        "xa_threat": 45,
+        "midfield_engine": 45,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1082,
+        "position_rank": 112,
+        "club_rank": 21,
+        "goal_threat_rank": 751,
+        "creative_spark_rank": 881,
+        "defensive_lock_rank": 928,
+        "pressing_heat_rank": 907,
+        "booking_heat_rank": 874
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Houweling",
+        "badge_score": 34,
+        "tier": "RED_FLAG"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Huffel",
+      "Linden",
+      "Linthorst",
+      "Kunst",
+      "Wesdorp"
+    ],
+    "goal_threat": [
+      "Linden",
+      "Puriel",
+      "Wesdorp",
+      "Huffel",
+      "Mil"
+    ],
+    "creative_spark": [
+      "Kunst",
+      "Junte",
+      "Green",
+      "Kok",
+      "Linthorst"
+    ],
+    "discipline_risk": [
+      "Huffel",
+      "Guiting",
+      "Linthorst",
+      "Mil",
+      "Haan"
+    ]
+  }
+}

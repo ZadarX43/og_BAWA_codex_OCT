@@ -1,0 +1,252 @@
+{
+  "fixture_key": "2026_05_09_Bolton_Wanderers_Bradford_City",
+  "fixture": "Bolton Wanderers vs Bradford City",
+  "primary_signal": "BTTS Yes",
+  "signal_state": "AVOID",
+  "agreement_score": 44,
+  "confidence_band": "LOW",
+  "supporting_layers": [
+    "BTTS_PRESSURE_SUPPORT"
+  ],
+  "caution_layers": [
+    "GOAL_ENVIRONMENT_SOFT",
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "profile_tags": {
+    "home": [
+      "Corner Pressure Side"
+    ],
+    "away": [
+      "Mixed Team Profile"
+    ]
+  },
+  "profile_narrative": "Bolton Wanderers bring a corner pressure side into a matchup with Bradford City's mixed team profile. The cleaner read is two-way scoring access.",
+  "team_faceoff_summary": [
+    {
+      "metric": "goal_heat_rating",
+      "label": "Goal Heat",
+      "home_value": 63,
+      "away_value": 40,
+      "delta": 23,
+      "leader": "Bolton Wanderers"
+    },
+    {
+      "metric": "btts_pressure_rating",
+      "label": "BTTS Pressure",
+      "home_value": 66,
+      "away_value": 52,
+      "delta": 14,
+      "leader": "Bolton Wanderers"
+    },
+    {
+      "metric": "attack_flow_rating",
+      "label": "Attack Flow",
+      "home_value": 80,
+      "away_value": 62,
+      "delta": 18,
+      "leader": "Bolton Wanderers"
+    },
+    {
+      "metric": "defensive_lock_rating",
+      "label": "Defensive Lock",
+      "home_value": 64,
+      "away_value": 70,
+      "delta": 6,
+      "leader": "Bradford City"
+    },
+    {
+      "metric": "first_strike_rating",
+      "label": "First Strike",
+      "home_value": 59,
+      "away_value": 64,
+      "delta": 5,
+      "leader": "Bradford City"
+    },
+    {
+      "metric": "chaos_rating",
+      "label": "Chaos Rating",
+      "home_value": 48,
+      "away_value": 42,
+      "delta": 6,
+      "leader": "Bolton Wanderers"
+    }
+  ],
+  "unit_battle_summary": [],
+  "key_player_drivers": [],
+  "key_mismatches": [],
+  "h2h_context": {
+    "available": false,
+    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
+    "sample_size": 0
+  },
+  "market_suitability": {
+    "ftr": {
+      "rating": 68,
+      "label": "Mixed",
+      "read": "Stronger when one side owns a clear team-power edge."
+    },
+    "btts": {
+      "rating": 59,
+      "label": "Mixed",
+      "read": "Driven by two-way access and reduced suppression."
+    },
+    "ou25": {
+      "rating": 52,
+      "label": "Weak",
+      "read": "Driven by combined goal environment and tempo."
+    },
+    "team_goals": {
+      "rating": 63,
+      "label": "Mixed",
+      "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
+    },
+    "correct_score": {
+      "rating": 100,
+      "label": "Elite",
+      "read": "Better when the shape is structured and the likely scoring zone is narrow."
+    },
+    "corners": {
+      "rating": 76,
+      "label": "Positive",
+      "read": "Driven by territory and wide-channel pressure."
+    },
+    "cards": {
+      "rating": 36,
+      "label": "Red Flag",
+      "read": "Driven by discipline heat, fouling, and volatility."
+    }
+  },
+  "market_intelligence": {
+    "ftr": {
+      "alignment_score": 59,
+      "state": "FRAGILE",
+      "model_lean": "DRAW",
+      "structural_support": [
+        "BTTS_PRESSURE_SUPPORT"
+      ],
+      "cautions": [
+        "GOAL_ENVIRONMENT_SOFT",
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "FTR has some structural support from btts pressure support, but the overall layer fit remains fragile.",
+      "rating": 68,
+      "band": "Mixed"
+    },
+    "btts": {
+      "alignment_score": 50,
+      "state": "AVOID",
+      "model_lean": "YES",
+      "structural_support": [
+        "BTTS_PRESSURE_SUPPORT"
+      ],
+      "cautions": [
+        "GOAL_ENVIRONMENT_SOFT"
+      ],
+      "public_summary": "BTTS is too contradicted by goal environment soft to present as a clean public read.",
+      "rating": 59,
+      "band": "Mixed"
+    },
+    "ou25": {
+      "alignment_score": 51,
+      "state": "FRAGILE",
+      "model_lean": "UNDER25",
+      "structural_support": [
+        "BTTS_PRESSURE_SUPPORT"
+      ],
+      "cautions": [
+        "GOAL_ENVIRONMENT_SOFT"
+      ],
+      "public_summary": "Over 2.5 has some structural support from btts pressure support, but the overall layer fit remains fragile.",
+      "rating": 52,
+      "band": "Weak"
+    },
+    "team_goals": {
+      "alignment_score": 55,
+      "state": "FRAGILE",
+      "model_lean": "Bolton Wanderers 1.5+",
+      "structural_support": [
+        "BTTS_PRESSURE_SUPPORT"
+      ],
+      "cautions": [
+        "GOAL_ENVIRONMENT_SOFT",
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Team Goals has some structural support from btts pressure support, but the overall layer fit remains fragile.",
+      "rating": 63,
+      "band": "Mixed"
+    },
+    "correct_score": {
+      "alignment_score": 87,
+      "state": "SUPPORTED",
+      "model_lean": "STRUCTURED",
+      "structural_support": [
+        "BTTS_PRESSURE_SUPPORT"
+      ],
+      "cautions": [
+        "GOAL_ENVIRONMENT_SOFT"
+      ],
+      "public_summary": "Correct Score is well supported by btts pressure support, with caution still coming from goal environment soft.",
+      "rating": 100,
+      "band": "Elite"
+    },
+    "corners": {
+      "alignment_score": 65,
+      "state": "MIXED",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "BTTS_PRESSURE_SUPPORT"
+      ],
+      "cautions": [
+        "GOAL_ENVIRONMENT_SOFT",
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Corners has partial support from btts pressure support, but goal environment soft keeps it from reading clean.",
+      "rating": 76,
+      "band": "Positive"
+    },
+    "cards": {
+      "alignment_score": 35,
+      "state": "AVOID",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "BTTS_PRESSURE_SUPPORT"
+      ],
+      "cautions": [
+        "GOAL_ENVIRONMENT_SOFT",
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Cards is too contradicted by goal environment soft to present as a clean public read.",
+      "rating": 36,
+      "band": "Red Flag"
+    }
+  },
+  "watchlist": {
+    "active": false,
+    "summary": "No watchlist layer is active for this fixture.",
+    "trigger_signals": [],
+    "public_state": "No watchlist flag",
+    "mode": ""
+  },
+  "public_safe_summary": "BTTS Yes is too contradicted across the current structural layers for Bolton Wanderers vs Bradford City, so the clean read is caution rather than action.",
+  "internal_reason_tokens": [
+    "BTTS_PRESSURE_SUPPORT",
+    "GOAL_ENVIRONMENT_SOFT",
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "summary": {
+    "support_count": 1,
+    "caution_count": 3,
+    "lineup_available": false,
+    "h2h_available": false
+  },
+  "preview": {
+    "headline": "Bolton Wanderers vs Bradford City: BTTS Yes avoid",
+    "short_summary": "BTTS Yes is too contradicted across the current structural layers for Bolton Wanderers vs Bradford City, so the clean read is caution rather than action. Primary support comes from btts pressure support, while the main caution remains goal environment soft.",
+    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Corners. Weakest read: Cards.",
+    "caution_line": "Main caution: Goal Environment Soft.",
+    "telegram_summary": "Bolton Wanderers vs Bradford City — BTTS Yes (Avoid, 44% agreement). Support: Btts Pressure Support. Caution: Goal Environment Soft.",
+    "premium_summary": "BTTS Yes is carrying a 44% agreement read across the published decision layers. Support is currently led by btts pressure support, while caution is still coming from goal environment soft, lineup data missing."
+  }
+}

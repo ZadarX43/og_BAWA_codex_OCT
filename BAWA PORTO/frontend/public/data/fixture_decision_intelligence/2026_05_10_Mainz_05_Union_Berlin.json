@@ -1,0 +1,253 @@
+{
+  "fixture_key": "2026_05_10_Mainz_05_Union_Berlin",
+  "fixture": "Mainz 05 vs Union Berlin",
+  "primary_signal": "Mainz 05 Win",
+  "signal_state": "AVOID",
+  "agreement_score": 44,
+  "confidence_band": "LOW",
+  "supporting_layers": [
+    "TEAM_POWER_ADVANTAGE"
+  ],
+  "caution_layers": [
+    "AWAY_TRAVEL_THREAT",
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "profile_tags": {
+    "home": [
+      "Mixed Team Profile"
+    ],
+    "away": [
+      "Mixed Team Profile"
+    ]
+  },
+  "profile_narrative": "Mainz 05 bring a mixed team profile into a matchup with Union Berlin's mixed team profile. The structural lean comes from Mainz 05's home-side control against the away profile.",
+  "team_faceoff_summary": [
+    {
+      "metric": "og_power_rating",
+      "label": "OG Power Rating",
+      "home_value": 49,
+      "away_value": 33,
+      "delta": 16,
+      "leader": "Mainz 05"
+    },
+    {
+      "metric": "home_fortress_rating",
+      "label": "Home Fortress",
+      "home_value": 30,
+      "away_value": 35,
+      "delta": 5,
+      "leader": "Union Berlin"
+    },
+    {
+      "metric": "away_threat_rating",
+      "label": "Away Threat",
+      "home_value": 53,
+      "away_value": 41,
+      "delta": 12,
+      "leader": "Mainz 05"
+    },
+    {
+      "metric": "defensive_lock_rating",
+      "label": "Defensive Lock",
+      "home_value": 39,
+      "away_value": 38,
+      "delta": 1,
+      "leader": "Mainz 05"
+    },
+    {
+      "metric": "first_strike_rating",
+      "label": "First Strike",
+      "home_value": 54,
+      "away_value": 26,
+      "delta": 28,
+      "leader": "Mainz 05"
+    },
+    {
+      "metric": "control_rating",
+      "label": "Control Rating",
+      "home_value": 47,
+      "away_value": 52,
+      "delta": 5,
+      "leader": "Union Berlin"
+    }
+  ],
+  "unit_battle_summary": [],
+  "key_player_drivers": [],
+  "key_mismatches": [],
+  "h2h_context": {
+    "available": false,
+    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
+    "sample_size": 0
+  },
+  "market_suitability": {
+    "ftr": {
+      "rating": 49,
+      "label": "Weak",
+      "read": "Stronger when one side owns a clear team-power edge."
+    },
+    "btts": {
+      "rating": 50,
+      "label": "Weak",
+      "read": "Driven by two-way access and reduced suppression."
+    },
+    "ou25": {
+      "rating": 40,
+      "label": "Weak",
+      "read": "Driven by combined goal environment and tempo."
+    },
+    "team_goals": {
+      "rating": 46,
+      "label": "Weak",
+      "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
+    },
+    "correct_score": {
+      "rating": 96,
+      "label": "Elite",
+      "read": "Better when the shape is structured and the likely scoring zone is narrow."
+    },
+    "corners": {
+      "rating": 48,
+      "label": "Weak",
+      "read": "Driven by territory and wide-channel pressure."
+    },
+    "cards": {
+      "rating": 68,
+      "label": "Mixed",
+      "read": "Driven by discipline heat, fouling, and volatility."
+    }
+  },
+  "market_intelligence": {
+    "ftr": {
+      "alignment_score": 46,
+      "state": "AVOID",
+      "model_lean": "HOME",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE"
+      ],
+      "cautions": [
+        "AWAY_TRAVEL_THREAT"
+      ],
+      "public_summary": "FTR is too contradicted by away travel threat to present as a clean public read.",
+      "rating": 49,
+      "band": "Weak"
+    },
+    "btts": {
+      "alignment_score": 46,
+      "state": "FRAGILE",
+      "model_lean": "NO",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE"
+      ],
+      "cautions": [
+        "AWAY_TRAVEL_THREAT",
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "BTTS has some structural support from team power advantage, but the overall layer fit remains fragile.",
+      "rating": 50,
+      "band": "Weak"
+    },
+    "ou25": {
+      "alignment_score": 38,
+      "state": "AVOID",
+      "model_lean": "UNDER25",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE"
+      ],
+      "cautions": [
+        "AWAY_TRAVEL_THREAT",
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Over 2.5 is too contradicted by away travel threat to present as a clean public read.",
+      "rating": 40,
+      "band": "Weak"
+    },
+    "team_goals": {
+      "alignment_score": 46,
+      "state": "FRAGILE",
+      "model_lean": "Union Berlin 1.5+",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Team Goals has some structural support from team power advantage, but the overall layer fit remains fragile.",
+      "rating": 46,
+      "band": "Weak"
+    },
+    "correct_score": {
+      "alignment_score": 80,
+      "state": "SUPPORTED",
+      "model_lean": "OPEN",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE"
+      ],
+      "cautions": [
+        "AWAY_TRAVEL_THREAT",
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Correct Score is well supported by team power advantage, with caution still coming from away travel threat.",
+      "rating": 96,
+      "band": "Elite"
+    },
+    "corners": {
+      "alignment_score": 44,
+      "state": "AVOID",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE"
+      ],
+      "cautions": [
+        "AWAY_TRAVEL_THREAT",
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Corners is too contradicted by away travel threat to present as a clean public read.",
+      "rating": 48,
+      "band": "Weak"
+    },
+    "cards": {
+      "alignment_score": 59,
+      "state": "FRAGILE",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE"
+      ],
+      "cautions": [
+        "AWAY_TRAVEL_THREAT",
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Cards has some structural support from team power advantage, but the overall layer fit remains fragile.",
+      "rating": 68,
+      "band": "Mixed"
+    }
+  },
+  "watchlist": {
+    "active": false,
+    "summary": "No watchlist layer is active for this fixture.",
+    "trigger_signals": [],
+    "public_state": "No watchlist flag",
+    "mode": ""
+  },
+  "public_safe_summary": "Mainz 05 Win is too contradicted across the current structural layers for Mainz 05 vs Union Berlin, so the clean read is caution rather than action.",
+  "internal_reason_tokens": [
+    "TEAM_POWER_ADVANTAGE",
+    "AWAY_TRAVEL_THREAT",
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "summary": {
+    "support_count": 1,
+    "caution_count": 3,
+    "lineup_available": false,
+    "h2h_available": false
+  },
+  "preview": {
+    "headline": "Mainz 05 vs Union Berlin: Mainz 05 Win avoid",
+    "short_summary": "Mainz 05 Win is too contradicted across the current structural layers for Mainz 05 vs Union Berlin, so the clean read is caution rather than action. Primary support comes from team power advantage, while the main caution remains away travel threat.",
+    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Cards. Weakest read: Over 2.5.",
+    "caution_line": "Main caution: Away Travel Threat.",
+    "telegram_summary": "Mainz 05 vs Union Berlin — Mainz 05 Win (Avoid, 44% agreement). Support: Team Power Advantage. Caution: Away Travel Threat.",
+    "premium_summary": "Mainz 05 Win is carrying a 44% agreement read across the published decision layers. Support is currently led by team power advantage, while caution is still coming from away travel threat, lineup data missing."
+  }
+}

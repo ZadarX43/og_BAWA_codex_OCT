@@ -1,0 +1,941 @@
+{
+  "club": "Braintree Town",
+  "club_slug": "braintree_town",
+  "competition": "England FA Cup",
+  "competition_key": "england_fa_cup",
+  "season": "2023/2024",
+  "players": [
+    {
+      "player_id": "england_fa_cup_braintree_town_alfred_edward_payne_2023/2024",
+      "name": "Alfred Edward Payne",
+      "surname": "Payne",
+      "club": "Braintree Town",
+      "club_slug": "braintree_town",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2023/2024",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 186
+      },
+      "ratings": {
+        "og_player_power": 38,
+        "goal_threat": 49,
+        "shot_threat": 49,
+        "xg_threat": 49,
+        "creative_spark": 49,
+        "xa_threat": 49,
+        "midfield_engine": 49,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1653,
+        "position_rank": 456,
+        "club_rank": 1,
+        "goal_threat_rank": 632,
+        "creative_spark_rank": 1694,
+        "defensive_lock_rank": 176,
+        "pressing_heat_rank": 159,
+        "booking_heat_rank": 176
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Payne",
+        "badge_score": 38,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_braintree_town_marvin_herschel_2023/2024",
+      "name": "Marvin Herschel",
+      "surname": "Herschel",
+      "club": "Braintree Town",
+      "club_slug": "braintree_town",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2023/2024",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": -6
+      },
+      "ratings": {
+        "og_player_power": 38,
+        "goal_threat": 49,
+        "shot_threat": 49,
+        "xg_threat": 49,
+        "creative_spark": 49,
+        "xa_threat": 49,
+        "midfield_engine": 49,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1653,
+        "position_rank": 456,
+        "club_rank": 1,
+        "goal_threat_rank": 632,
+        "creative_spark_rank": 1694,
+        "defensive_lock_rank": 176,
+        "pressing_heat_rank": 159,
+        "booking_heat_rank": 176
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Herschel",
+        "badge_score": 38,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_braintree_town_will_davies_2023/2024",
+      "name": "Will Davies",
+      "surname": "Davies",
+      "club": "Braintree Town",
+      "club_slug": "braintree_town",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2023/2024",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 186
+      },
+      "ratings": {
+        "og_player_power": 38,
+        "goal_threat": 49,
+        "shot_threat": 49,
+        "xg_threat": 49,
+        "creative_spark": 49,
+        "xa_threat": 49,
+        "midfield_engine": 49,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1653,
+        "position_rank": 456,
+        "club_rank": 1,
+        "goal_threat_rank": 632,
+        "creative_spark_rank": 1694,
+        "defensive_lock_rank": 176,
+        "pressing_heat_rank": 159,
+        "booking_heat_rank": 176
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Davies",
+        "badge_score": 38,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_braintree_town_ben_joseph_tompkins_2023/2024",
+      "name": "Ben Joseph Tompkins",
+      "surname": "Tompkins",
+      "club": "Braintree Town",
+      "club_slug": "braintree_town",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2023/2024",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 37,
+        "goal_threat": 49,
+        "shot_threat": 49,
+        "xg_threat": 49,
+        "creative_spark": 49,
+        "xa_threat": 49,
+        "midfield_engine": 49,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1901,
+        "position_rank": 479,
+        "club_rank": 4,
+        "goal_threat_rank": 632,
+        "creative_spark_rank": 1694,
+        "defensive_lock_rank": 176,
+        "pressing_heat_rank": 159,
+        "booking_heat_rank": 176
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Tompkins",
+        "badge_score": 37,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_braintree_town_ben_mason_2023/2024",
+      "name": "Ben Mason",
+      "surname": "Mason",
+      "club": "Braintree Town",
+      "club_slug": "braintree_town",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2023/2024",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 37,
+        "goal_threat": 49,
+        "shot_threat": 49,
+        "xg_threat": 49,
+        "creative_spark": 49,
+        "xa_threat": 49,
+        "midfield_engine": 49,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1901,
+        "position_rank": 479,
+        "club_rank": 4,
+        "goal_threat_rank": 632,
+        "creative_spark_rank": 1694,
+        "defensive_lock_rank": 176,
+        "pressing_heat_rank": 159,
+        "booking_heat_rank": 176
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Mason",
+        "badge_score": 37,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_braintree_town_daniel_sparkes_2023/2024",
+      "name": "Daniel Sparkes",
+      "surname": "Sparkes",
+      "club": "Braintree Town",
+      "club_slug": "braintree_town",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2023/2024",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 8
+      },
+      "ratings": {
+        "og_player_power": 37,
+        "goal_threat": 49,
+        "shot_threat": 49,
+        "xg_threat": 49,
+        "creative_spark": 49,
+        "xa_threat": 49,
+        "midfield_engine": 49,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1901,
+        "position_rank": 548,
+        "club_rank": 4,
+        "goal_threat_rank": 632,
+        "creative_spark_rank": 1694,
+        "defensive_lock_rank": 176,
+        "pressing_heat_rank": 159,
+        "booking_heat_rank": 176
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Sparkes",
+        "badge_score": 37,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_braintree_town_john_white_2023/2024",
+      "name": "John White",
+      "surname": "White",
+      "club": "Braintree Town",
+      "club_slug": "braintree_town",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2023/2024",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": -18
+      },
+      "ratings": {
+        "og_player_power": 37,
+        "goal_threat": 49,
+        "shot_threat": 49,
+        "xg_threat": 49,
+        "creative_spark": 49,
+        "xa_threat": 49,
+        "midfield_engine": 49,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1901,
+        "position_rank": 479,
+        "club_rank": 4,
+        "goal_threat_rank": 632,
+        "creative_spark_rank": 1694,
+        "defensive_lock_rank": 176,
+        "pressing_heat_rank": 159,
+        "booking_heat_rank": 176
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "White",
+        "badge_score": 37,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_braintree_town_leon_davies_2023/2024",
+      "name": "Leon Davies",
+      "surname": "Davies",
+      "club": "Braintree Town",
+      "club_slug": "braintree_town",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2023/2024",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 4
+      },
+      "ratings": {
+        "og_player_power": 37,
+        "goal_threat": 49,
+        "shot_threat": 49,
+        "xg_threat": 49,
+        "creative_spark": 49,
+        "xa_threat": 49,
+        "midfield_engine": 49,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1901,
+        "position_rank": 479,
+        "club_rank": 4,
+        "goal_threat_rank": 632,
+        "creative_spark_rank": 1694,
+        "defensive_lock_rank": 176,
+        "pressing_heat_rank": 159,
+        "booking_heat_rank": 176
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Davies",
+        "badge_score": 37,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_braintree_town_matthew_carson_2023/2024",
+      "name": "Matthew Carson",
+      "surname": "Carson",
+      "club": "Braintree Town",
+      "club_slug": "braintree_town",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2023/2024",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 108
+      },
+      "ratings": {
+        "og_player_power": 37,
+        "goal_threat": 49,
+        "shot_threat": 49,
+        "xg_threat": 49,
+        "creative_spark": 49,
+        "xa_threat": 49,
+        "midfield_engine": 49,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1901,
+        "position_rank": 548,
+        "club_rank": 4,
+        "goal_threat_rank": 632,
+        "creative_spark_rank": 1694,
+        "defensive_lock_rank": 176,
+        "pressing_heat_rank": 159,
+        "booking_heat_rank": 176
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Carson",
+        "badge_score": 37,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_braintree_town_toby_stevenson_2023/2024",
+      "name": "Toby Stevenson",
+      "surname": "Stevenson",
+      "club": "Braintree Town",
+      "club_slug": "braintree_town",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2023/2024",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 37,
+        "goal_threat": 49,
+        "shot_threat": 49,
+        "xg_threat": 49,
+        "creative_spark": 49,
+        "xa_threat": 49,
+        "midfield_engine": 49,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 52,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1901,
+        "position_rank": 479,
+        "club_rank": 4,
+        "goal_threat_rank": 632,
+        "creative_spark_rank": 1694,
+        "defensive_lock_rank": 176,
+        "pressing_heat_rank": 159,
+        "booking_heat_rank": 176
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Stevenson",
+        "badge_score": 37,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_braintree_town_vicente_reyes_2023/2024",
+      "name": "Vicente Reyes",
+      "surname": "Reyes",
+      "club": "Braintree Town",
+      "club_slug": "braintree_town",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2023/2024",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 35,
+        "goal_threat": 49,
+        "shot_threat": 49,
+        "xg_threat": 49,
+        "creative_spark": 49,
+        "xa_threat": 49,
+        "midfield_engine": 49,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2870,
+        "position_rank": 211,
+        "club_rank": 11,
+        "goal_threat_rank": 632,
+        "creative_spark_rank": 1694,
+        "defensive_lock_rank": 176,
+        "pressing_heat_rank": 159,
+        "booking_heat_rank": 176
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Reyes",
+        "badge_score": 35,
+        "tier": "RED_FLAG"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Payne",
+      "Herschel",
+      "Davies",
+      "Tompkins",
+      "Mason"
+    ],
+    "goal_threat": [
+      "Payne",
+      "Herschel",
+      "Davies",
+      "Tompkins",
+      "Mason"
+    ],
+    "creative_spark": [
+      "Payne",
+      "Herschel",
+      "Davies",
+      "Tompkins",
+      "Mason"
+    ],
+    "discipline_risk": [
+      "Payne",
+      "Herschel",
+      "Davies",
+      "Tompkins",
+      "Mason"
+    ]
+  }
+}

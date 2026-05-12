@@ -1,0 +1,1187 @@
+{
+  "club": "Horsham",
+  "club_slug": "horsham",
+  "competition": "England FA Cup",
+  "competition_key": "england_fa_cup",
+  "season": "2023/2024",
+  "players": [
+    {
+      "player_id": "england_fa_cup_horsham_charlie_harris_2023/2024",
+      "name": "Charlie Harris",
+      "surname": "Harris",
+      "club": "Horsham",
+      "club_slug": "horsham",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2023/2024",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 632,
+        "creative_spark_rank": 445,
+        "defensive_lock_rank": 176,
+        "pressing_heat_rank": 159,
+        "booking_heat_rank": 176
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Harris",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_horsham_shamir_fenelon_2023/2024",
+      "name": "Shamir Fenelon",
+      "surname": "Fenelon",
+      "club": "Horsham",
+      "club_slug": "horsham",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2023/2024",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 301
+      },
+      "ratings": {
+        "og_player_power": 43,
+        "goal_threat": 57,
+        "shot_threat": 53,
+        "xg_threat": 59,
+        "creative_spark": 49,
+        "xa_threat": 49,
+        "midfield_engine": 52,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 51,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Weak",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1407,
+        "position_rank": 343,
+        "club_rank": 2,
+        "goal_threat_rank": 41,
+        "creative_spark_rank": 1694,
+        "defensive_lock_rank": 176,
+        "pressing_heat_rank": 159,
+        "booking_heat_rank": 176
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Fenelon",
+        "badge_score": 43,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_horsham_james_hammond_2023/2024",
+      "name": "James Hammond",
+      "surname": "Hammond",
+      "club": "Horsham",
+      "club_slug": "horsham",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2023/2024",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 329
+      },
+      "ratings": {
+        "og_player_power": 41,
+        "goal_threat": 56,
+        "shot_threat": 52,
+        "xg_threat": 59,
+        "creative_spark": 54,
+        "xa_threat": 56,
+        "midfield_engine": 56,
+        "defensive_lock": 54,
+        "pressing_heat": 55,
+        "ball_progression": 56,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 53,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Weak",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1422,
+        "position_rank": 470,
+        "club_rank": 3,
+        "goal_threat_rank": 53,
+        "creative_spark_rank": 59,
+        "defensive_lock_rank": 46,
+        "pressing_heat_rank": 3,
+        "booking_heat_rank": 35
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Hammond",
+        "badge_score": 41,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_horsham_daniel_ajakaiye_2023/2024",
+      "name": "Daniel Ajakaiye",
+      "surname": "Ajakaiye",
+      "club": "Horsham",
+      "club_slug": "horsham",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2023/2024",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 334
+      },
+      "ratings": {
+        "og_player_power": 40,
+        "goal_threat": 60,
+        "shot_threat": 62,
+        "xg_threat": 61,
+        "creative_spark": 54,
+        "xa_threat": 53,
+        "midfield_engine": 55,
+        "defensive_lock": 50,
+        "pressing_heat": 52,
+        "ball_progression": 54,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 51,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1465,
+        "position_rank": 495,
+        "club_rank": 4,
+        "goal_threat_rank": 27,
+        "creative_spark_rank": 59,
+        "defensive_lock_rank": 176,
+        "pressing_heat_rank": 93,
+        "booking_heat_rank": 103
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Ajakaiye",
+        "badge_score": 40,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_horsham_danny_ryan_barker_2023/2024",
+      "name": "Danny Ryan Barker",
+      "surname": "Barker",
+      "club": "Horsham",
+      "club_slug": "horsham",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2023/2024",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 139
+      },
+      "ratings": {
+        "og_player_power": 39,
+        "goal_threat": 49,
+        "shot_threat": 49,
+        "xg_threat": 49,
+        "creative_spark": 51,
+        "xa_threat": 53,
+        "midfield_engine": 55,
+        "defensive_lock": 53,
+        "pressing_heat": 53,
+        "ball_progression": 51,
+        "aerial_dominance": 52,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 60,
+        "booking_heat": 56
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1608,
+        "position_rank": 456,
+        "club_rank": 5,
+        "goal_threat_rank": 632,
+        "creative_spark_rank": 276,
+        "defensive_lock_rank": 54,
+        "pressing_heat_rank": 48,
+        "booking_heat_rank": 8
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Barker",
+        "badge_score": 39,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_horsham_tommy_kavanagh_2023/2024",
+      "name": "Tommy Kavanagh",
+      "surname": "Kavanagh",
+      "club": "Horsham",
+      "club_slug": "horsham",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2023/2024",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 147
+      },
+      "ratings": {
+        "og_player_power": 39,
+        "goal_threat": 49,
+        "shot_threat": 49,
+        "xg_threat": 49,
+        "creative_spark": 51,
+        "xa_threat": 53,
+        "midfield_engine": 53,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 51,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1608,
+        "position_rank": 531,
+        "club_rank": 5,
+        "goal_threat_rank": 632,
+        "creative_spark_rank": 276,
+        "defensive_lock_rank": 176,
+        "pressing_heat_rank": 159,
+        "booking_heat_rank": 176
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Kavanagh",
+        "badge_score": 39,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_horsham_jack_mazzone_2023/2024",
+      "name": "Jack Mazzone",
+      "surname": "Mazzone",
+      "club": "Horsham",
+      "club_slug": "horsham",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2023/2024",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 11
+      },
+      "ratings": {
+        "og_player_power": 38,
+        "goal_threat": 49,
+        "shot_threat": 49,
+        "xg_threat": 49,
+        "creative_spark": 49,
+        "xa_threat": 49,
+        "midfield_engine": 49,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1653,
+        "position_rank": 456,
+        "club_rank": 7,
+        "goal_threat_rank": 632,
+        "creative_spark_rank": 1694,
+        "defensive_lock_rank": 176,
+        "pressing_heat_rank": 159,
+        "booking_heat_rank": 176
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Mazzone",
+        "badge_score": 38,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_horsham_kadell_ebony_daniel_2023/2024",
+      "name": "Kadell Ebony Daniel",
+      "surname": "Daniel",
+      "club": "Horsham",
+      "club_slug": "horsham",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2023/2024",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 70
+      },
+      "ratings": {
+        "og_player_power": 38,
+        "goal_threat": 49,
+        "shot_threat": 49,
+        "xg_threat": 49,
+        "creative_spark": 51,
+        "xa_threat": 53,
+        "midfield_engine": 55,
+        "defensive_lock": 51,
+        "pressing_heat": 53,
+        "ball_progression": 53,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 53,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1653,
+        "position_rank": 469,
+        "club_rank": 7,
+        "goal_threat_rank": 632,
+        "creative_spark_rank": 276,
+        "defensive_lock_rank": 122,
+        "pressing_heat_rank": 48,
+        "booking_heat_rank": 35
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Daniel",
+        "badge_score": 38,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_horsham_lewis_carey_2023/2024",
+      "name": "Lewis Carey",
+      "surname": "Carey",
+      "club": "Horsham",
+      "club_slug": "horsham",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2023/2024",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 360
+      },
+      "ratings": {
+        "og_player_power": 38,
+        "goal_threat": 49,
+        "shot_threat": 49,
+        "xg_threat": 49,
+        "creative_spark": 51,
+        "xa_threat": 53,
+        "midfield_engine": 53,
+        "defensive_lock": 51,
+        "pressing_heat": 50,
+        "ball_progression": 51,
+        "aerial_dominance": 52,
+        "goalkeeper_shield": 55,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Mixed",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Mixed shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1653,
+        "position_rank": 187,
+        "club_rank": 7,
+        "goal_threat_rank": 632,
+        "creative_spark_rank": 276,
+        "defensive_lock_rank": 122,
+        "pressing_heat_rank": 159,
+        "booking_heat_rank": 176
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Carey",
+        "badge_score": 38,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_horsham_reece_christopher_myles_meekums_2023/2024",
+      "name": "Reece Christopher Myles-Meekums",
+      "surname": "Myles-Meekums",
+      "club": "Horsham",
+      "club_slug": "horsham",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2023/2024",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 114
+      },
+      "ratings": {
+        "og_player_power": 38,
+        "goal_threat": 49,
+        "shot_threat": 49,
+        "xg_threat": 49,
+        "creative_spark": 49,
+        "xa_threat": 49,
+        "midfield_engine": 54,
+        "defensive_lock": 51,
+        "pressing_heat": 50,
+        "ball_progression": 55,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1653,
+        "position_rank": 456,
+        "club_rank": 7,
+        "goal_threat_rank": 632,
+        "creative_spark_rank": 1694,
+        "defensive_lock_rank": 122,
+        "pressing_heat_rank": 159,
+        "booking_heat_rank": 176
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Myles-Meekums",
+        "badge_score": 38,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_horsham_tom_richards_2023/2024",
+      "name": "Tom Richards",
+      "surname": "Richards",
+      "club": "Horsham",
+      "club_slug": "horsham",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2023/2024",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 40
+      },
+      "ratings": {
+        "og_player_power": 38,
+        "goal_threat": 57,
+        "shot_threat": 53,
+        "xg_threat": 60,
+        "creative_spark": 49,
+        "xa_threat": 49,
+        "midfield_engine": 52,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 51,
+        "aerial_dominance": 51,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Mixed",
+        "shot_threat": "Weak",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1653,
+        "position_rank": 544,
+        "club_rank": 7,
+        "goal_threat_rank": 41,
+        "creative_spark_rank": 1694,
+        "defensive_lock_rank": 176,
+        "pressing_heat_rank": 159,
+        "booking_heat_rank": 176
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Richards",
+        "badge_score": 38,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_horsham_alex_malins_2023/2024",
+      "name": "Alex Malins",
+      "surname": "Malins",
+      "club": "Horsham",
+      "club_slug": "horsham",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2023/2024",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 37,
+        "goal_threat": 49,
+        "shot_threat": 49,
+        "xg_threat": 49,
+        "creative_spark": 49,
+        "xa_threat": 49,
+        "midfield_engine": 49,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 52,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1901,
+        "position_rank": 479,
+        "club_rank": 12,
+        "goal_threat_rank": 632,
+        "creative_spark_rank": 1694,
+        "defensive_lock_rank": 176,
+        "pressing_heat_rank": 159,
+        "booking_heat_rank": 176
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Malins",
+        "badge_score": 37,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_horsham_charlie_hester_cook_2023/2024",
+      "name": "Charlie Hester-Cook",
+      "surname": "Hester-Cook",
+      "club": "Horsham",
+      "club_slug": "horsham",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2023/2024",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 179
+      },
+      "ratings": {
+        "og_player_power": 37,
+        "goal_threat": 49,
+        "shot_threat": 49,
+        "xg_threat": 49,
+        "creative_spark": 49,
+        "xa_threat": 49,
+        "midfield_engine": 49,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 53,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1901,
+        "position_rank": 548,
+        "club_rank": 12,
+        "goal_threat_rank": 632,
+        "creative_spark_rank": 1694,
+        "defensive_lock_rank": 176,
+        "pressing_heat_rank": 159,
+        "booking_heat_rank": 176
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Hester-Cook",
+        "badge_score": 37,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_horsham_sami_el_abd_2023/2024",
+      "name": "Sami El-Abd",
+      "surname": "El-Abd",
+      "club": "Horsham",
+      "club_slug": "horsham",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2023/2024",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 37,
+        "goal_threat": 49,
+        "shot_threat": 49,
+        "xg_threat": 49,
+        "creative_spark": 49,
+        "xa_threat": 49,
+        "midfield_engine": 49,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 52,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1901,
+        "position_rank": 479,
+        "club_rank": 12,
+        "goal_threat_rank": 632,
+        "creative_spark_rank": 1694,
+        "defensive_lock_rank": 176,
+        "pressing_heat_rank": 159,
+        "booking_heat_rank": 176
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "El-Abd",
+        "badge_score": 37,
+        "tier": "RED_FLAG"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Harris",
+      "Fenelon",
+      "Hammond",
+      "Ajakaiye",
+      "Barker"
+    ],
+    "goal_threat": [
+      "Ajakaiye",
+      "Fenelon",
+      "Richards",
+      "Hammond",
+      "Harris"
+    ],
+    "creative_spark": [
+      "Hammond",
+      "Ajakaiye",
+      "Barker",
+      "Kavanagh",
+      "Daniel"
+    ],
+    "discipline_risk": [
+      "Barker",
+      "Hammond",
+      "Daniel",
+      "Hester-Cook",
+      "Ajakaiye"
+    ]
+  }
+}

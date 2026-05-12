@@ -1,0 +1,1843 @@
+{
+  "club": "Lugano",
+  "club_slug": "lugano",
+  "competition": "Champions League",
+  "competition_key": "champions_league",
+  "season": "2024/2025",
+  "players": [
+    {
+      "player_id": "champions_league_lugano_albian_hajdari_2024/2025",
+      "name": "Albian Hajdari",
+      "surname": "Hajdari",
+      "club": "Lugano",
+      "club_slug": "lugano",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 67
+      },
+      "ratings": {
+        "og_player_power": 53,
+        "goal_threat": 48,
+        "shot_threat": 48,
+        "xg_threat": 48,
+        "creative_spark": 51,
+        "xa_threat": 52,
+        "midfield_engine": 56,
+        "defensive_lock": 56,
+        "pressing_heat": 53,
+        "ball_progression": 54,
+        "aerial_dominance": 55,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 70,
+        "position_rank": 16,
+        "club_rank": 1,
+        "goal_threat_rank": 584,
+        "creative_spark_rank": 202,
+        "defensive_lock_rank": 13,
+        "pressing_heat_rank": 129,
+        "booking_heat_rank": 267
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Hajdari",
+        "badge_score": 53,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_lugano_uran_bislimi_2024/2025",
+      "name": "Uran Bislimi",
+      "surname": "Bislimi",
+      "club": "Lugano",
+      "club_slug": "lugano",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 144
+      },
+      "ratings": {
+        "og_player_power": 52,
+        "goal_threat": 61,
+        "shot_threat": 61,
+        "xg_threat": 61,
+        "creative_spark": 53,
+        "xa_threat": 55,
+        "midfield_engine": 55,
+        "defensive_lock": 54,
+        "pressing_heat": 54,
+        "ball_progression": 53,
+        "aerial_dominance": 55,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 51,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 80,
+        "position_rank": 26,
+        "club_rank": 2,
+        "goal_threat_rank": 35,
+        "creative_spark_rank": 123,
+        "defensive_lock_rank": 61,
+        "pressing_heat_rank": 56,
+        "booking_heat_rank": 148
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Bislimi",
+        "badge_score": 52,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_lugano_diego_mina_2024/2025",
+      "name": "Diego Mina",
+      "surname": "Mina",
+      "club": "Lugano",
+      "club_slug": "lugano",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2024/2025",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 106,
+        "position_rank": 10,
+        "club_rank": 3,
+        "goal_threat_rank": 297,
+        "creative_spark_rank": 283,
+        "defensive_lock_rank": 261,
+        "pressing_heat_rank": 259,
+        "booking_heat_rank": 267
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Mina",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_lugano_martim_alexandre_costa_marques_2024/2025",
+      "name": "Martim Alexandre Costa Marques",
+      "surname": "Marques",
+      "club": "Lugano",
+      "club_slug": "lugano",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 106,
+        "position_rank": 35,
+        "club_rank": 3,
+        "goal_threat_rank": 297,
+        "creative_spark_rank": 283,
+        "defensive_lock_rank": 261,
+        "pressing_heat_rank": 259,
+        "booking_heat_rank": 267
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Marques",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_lugano_roman_macek_2024/2025",
+      "name": "Roman Macek",
+      "surname": "Macek",
+      "club": "Lugano",
+      "club_slug": "lugano",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 106,
+        "position_rank": 35,
+        "club_rank": 3,
+        "goal_threat_rank": 297,
+        "creative_spark_rank": 283,
+        "defensive_lock_rank": 261,
+        "pressing_heat_rank": 259,
+        "booking_heat_rank": 267
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Macek",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_lugano_sebastian_ogenna_osigwe_2024/2025",
+      "name": "Sebastian Ogenna Osigwe",
+      "surname": "Osigwe",
+      "club": "Lugano",
+      "club_slug": "lugano",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2024/2025",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 106,
+        "position_rank": 10,
+        "club_rank": 3,
+        "goal_threat_rank": 297,
+        "creative_spark_rank": 283,
+        "defensive_lock_rank": 261,
+        "pressing_heat_rank": 259,
+        "booking_heat_rank": 267
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Osigwe",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_lugano_yannis_ryter_2024/2025",
+      "name": "Yannis Ryter",
+      "surname": "Ryter",
+      "club": "Lugano",
+      "club_slug": "lugano",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 106,
+        "position_rank": 35,
+        "club_rank": 3,
+        "goal_threat_rank": 297,
+        "creative_spark_rank": 283,
+        "defensive_lock_rank": 261,
+        "pressing_heat_rank": 259,
+        "booking_heat_rank": 267
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Ryter",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_lugano_zachary_brault_guillard_2024/2025",
+      "name": "Zachary Brault-Guillard",
+      "surname": "Brault-Guillard",
+      "club": "Lugano",
+      "club_slug": "lugano",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 106,
+        "position_rank": 35,
+        "club_rank": 3,
+        "goal_threat_rank": 297,
+        "creative_spark_rank": 283,
+        "defensive_lock_rank": 261,
+        "pressing_heat_rank": 259,
+        "booking_heat_rank": 267
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Brault-Guillard",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_lugano_anto_grgic_2024/2025",
+      "name": "Anto Grgic",
+      "surname": "Grgic",
+      "club": "Lugano",
+      "club_slug": "lugano",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 103
+      },
+      "ratings": {
+        "og_player_power": 44,
+        "goal_threat": 55,
+        "shot_threat": 54,
+        "xg_threat": 55,
+        "creative_spark": 57,
+        "xa_threat": 56,
+        "midfield_engine": 56,
+        "defensive_lock": 52,
+        "pressing_heat": 54,
+        "ball_progression": 52,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 47,
+        "discipline_risk": 59,
+        "booking_heat": 56
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Weak",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 439,
+        "position_rank": 135,
+        "club_rank": 9,
+        "goal_threat_rank": 112,
+        "creative_spark_rank": 12,
+        "defensive_lock_rank": 158,
+        "pressing_heat_rank": 56,
+        "booking_heat_rank": 11
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Grgic",
+        "badge_score": 44,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_lugano_antonios_papadopoulos_2024/2025",
+      "name": "Antonios Papadopoulos",
+      "surname": "Papadopoulos",
+      "club": "Lugano",
+      "club_slug": "lugano",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 43,
+        "goal_threat": 55,
+        "shot_threat": 60,
+        "xg_threat": 57,
+        "creative_spark": 51,
+        "xa_threat": 52,
+        "midfield_engine": 56,
+        "defensive_lock": 53,
+        "pressing_heat": 55,
+        "ball_progression": 54,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 59,
+        "booking_heat": 55
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 461,
+        "position_rank": 131,
+        "club_rank": 10,
+        "goal_threat_rank": 112,
+        "creative_spark_rank": 202,
+        "defensive_lock_rank": 102,
+        "pressing_heat_rank": 15,
+        "booking_heat_rank": 31
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Papadopoulos",
+        "badge_score": 43,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_lugano_ousmane_doumbia_2024/2025",
+      "name": "Ousmane Doumbia",
+      "surname": "Doumbia",
+      "club": "Lugano",
+      "club_slug": "lugano",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 43,
+        "goal_threat": 48,
+        "shot_threat": 48,
+        "xg_threat": 48,
+        "creative_spark": 54,
+        "xa_threat": 55,
+        "midfield_engine": 55,
+        "defensive_lock": 53,
+        "pressing_heat": 54,
+        "ball_progression": 55,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 59,
+        "booking_heat": 55
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 461,
+        "position_rank": 141,
+        "club_rank": 10,
+        "goal_threat_rank": 584,
+        "creative_spark_rank": 82,
+        "defensive_lock_rank": 102,
+        "pressing_heat_rank": 56,
+        "booking_heat_rank": 31
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Doumbia",
+        "badge_score": 43,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_lugano_daniel_dos_santos_correia_2024/2025",
+      "name": "Daniel Dos Santos Correia",
+      "surname": "Correia",
+      "club": "Lugano",
+      "club_slug": "lugano",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 36
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 54,
+        "shot_threat": 55,
+        "xg_threat": 56,
+        "creative_spark": 53,
+        "xa_threat": 56,
+        "midfield_engine": 54,
+        "defensive_lock": 49,
+        "pressing_heat": 53,
+        "ball_progression": 55,
+        "aerial_dominance": 52,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 52,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 484,
+        "position_rank": 153,
+        "club_rank": 12,
+        "goal_threat_rank": 140,
+        "creative_spark_rank": 123,
+        "defensive_lock_rank": 551,
+        "pressing_heat_rank": 129,
+        "booking_heat_rank": 103
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Correia",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_lugano_kacper_przyby_ko_2024/2025",
+      "name": "Kacper Przyby\u0142ko",
+      "surname": "Przyby\u0142ko",
+      "club": "Lugano",
+      "club_slug": "lugano",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2024/2025",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 48
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 54,
+        "shot_threat": 55,
+        "xg_threat": 55,
+        "creative_spark": 50,
+        "xa_threat": 51,
+        "midfield_engine": 52,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 51,
+        "aerial_dominance": 52,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 50,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 484,
+        "position_rank": 97,
+        "club_rank": 12,
+        "goal_threat_rank": 140,
+        "creative_spark_rank": 283,
+        "defensive_lock_rank": 261,
+        "pressing_heat_rank": 259,
+        "booking_heat_rank": 215
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Przyby\u0142ko",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_lugano_mattia_bottani_2024/2025",
+      "name": "Mattia Bottani",
+      "surname": "Bottani",
+      "club": "Lugano",
+      "club_slug": "lugano",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 132
+      },
+      "ratings": {
+        "og_player_power": 41,
+        "goal_threat": 57,
+        "shot_threat": 60,
+        "xg_threat": 58,
+        "creative_spark": 55,
+        "xa_threat": 56,
+        "midfield_engine": 54,
+        "defensive_lock": 50,
+        "pressing_heat": 54,
+        "ball_progression": 55,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 59,
+        "booking_heat": 56
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 530,
+        "position_rank": 172,
+        "club_rank": 14,
+        "goal_threat_rank": 71,
+        "creative_spark_rank": 47,
+        "defensive_lock_rank": 261,
+        "pressing_heat_rank": 56,
+        "booking_heat_rank": 11
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Bottani",
+        "badge_score": 41,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_lugano_yanis_cimignani_2024/2025",
+      "name": "Yanis Cimignani",
+      "surname": "Cimignani",
+      "club": "Lugano",
+      "club_slug": "lugano",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 84
+      },
+      "ratings": {
+        "og_player_power": 41,
+        "goal_threat": 48,
+        "shot_threat": 48,
+        "xg_threat": 48,
+        "creative_spark": 55,
+        "xa_threat": 56,
+        "midfield_engine": 55,
+        "defensive_lock": 52,
+        "pressing_heat": 55,
+        "ball_progression": 55,
+        "aerial_dominance": 51,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 52,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 530,
+        "position_rank": 172,
+        "club_rank": 14,
+        "goal_threat_rank": 584,
+        "creative_spark_rank": 47,
+        "defensive_lock_rank": 158,
+        "pressing_heat_rank": 15,
+        "booking_heat_rank": 103
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Cimignani",
+        "badge_score": 41,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_lugano_hicham_mahou_2024/2025",
+      "name": "Hicham Mahou",
+      "surname": "Mahou",
+      "club": "Lugano",
+      "club_slug": "lugano",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 35
+      },
+      "ratings": {
+        "og_player_power": 40,
+        "goal_threat": 56,
+        "shot_threat": 62,
+        "xg_threat": 59,
+        "creative_spark": 53,
+        "xa_threat": 56,
+        "midfield_engine": 53,
+        "defensive_lock": 51,
+        "pressing_heat": 49,
+        "ball_progression": 56,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 47,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 553,
+        "position_rank": 182,
+        "club_rank": 16,
+        "goal_threat_rank": 84,
+        "creative_spark_rank": 123,
+        "defensive_lock_rank": 200,
+        "pressing_heat_rank": 543,
+        "booking_heat_rank": 616
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Mahou",
+        "badge_score": 40,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_lugano_mattia_zanotti_2024/2025",
+      "name": "Mattia Zanotti",
+      "surname": "Zanotti",
+      "club": "Lugano",
+      "club_slug": "lugano",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 40,
+        "goal_threat": 48,
+        "shot_threat": 48,
+        "xg_threat": 48,
+        "creative_spark": 54,
+        "xa_threat": 55,
+        "midfield_engine": 55,
+        "defensive_lock": 53,
+        "pressing_heat": 55,
+        "ball_progression": 55,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 60,
+        "booking_heat": 57
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 553,
+        "position_rank": 170,
+        "club_rank": 16,
+        "goal_threat_rank": 584,
+        "creative_spark_rank": 82,
+        "defensive_lock_rank": 102,
+        "pressing_heat_rank": 15,
+        "booking_heat_rank": 3
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Zanotti",
+        "badge_score": 40,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_lugano_milton_nahuel_valenzuela_2024/2025",
+      "name": "Milton Nahuel Valenzuela",
+      "surname": "Valenzuela",
+      "club": "Lugano",
+      "club_slug": "lugano",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 40,
+        "goal_threat": 60,
+        "shot_threat": 60,
+        "xg_threat": 61,
+        "creative_spark": 52,
+        "xa_threat": 52,
+        "midfield_engine": 54,
+        "defensive_lock": 52,
+        "pressing_heat": 53,
+        "ball_progression": 54,
+        "aerial_dominance": 55,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 52,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 553,
+        "position_rank": 170,
+        "club_rank": 16,
+        "goal_threat_rank": 51,
+        "creative_spark_rank": 176,
+        "defensive_lock_rank": 158,
+        "pressing_heat_rank": 129,
+        "booking_heat_rank": 148
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Valenzuela",
+        "badge_score": 40,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_lugano_ayman_el_wafi_2024/2025",
+      "name": "Ayman El Wafi",
+      "surname": "Wafi",
+      "club": "Lugano",
+      "club_slug": "lugano",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 39,
+        "goal_threat": 60,
+        "shot_threat": 60,
+        "xg_threat": 61,
+        "creative_spark": 51,
+        "xa_threat": 52,
+        "midfield_engine": 54,
+        "defensive_lock": 51,
+        "pressing_heat": 52,
+        "ball_progression": 50,
+        "aerial_dominance": 55,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 58,
+        "booking_heat": 55
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 608,
+        "position_rank": 186,
+        "club_rank": 19,
+        "goal_threat_rank": 51,
+        "creative_spark_rank": 202,
+        "defensive_lock_rank": 200,
+        "pressing_heat_rank": 176,
+        "booking_heat_rank": 31
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Wafi",
+        "badge_score": 39,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "champions_league_lugano_ignacio_aliseda_2024/2025",
+      "name": "Ignacio Aliseda",
+      "surname": "Aliseda",
+      "club": "Lugano",
+      "club_slug": "lugano",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 145
+      },
+      "ratings": {
+        "og_player_power": 39,
+        "goal_threat": 53,
+        "shot_threat": 54,
+        "xg_threat": 55,
+        "creative_spark": 53,
+        "xa_threat": 55,
+        "midfield_engine": 52,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 52,
+        "aerial_dominance": 52,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 57,
+        "booking_heat": 54
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 608,
+        "position_rank": 204,
+        "club_rank": 19,
+        "goal_threat_rank": 158,
+        "creative_spark_rank": 123,
+        "defensive_lock_rank": 261,
+        "pressing_heat_rank": 259,
+        "booking_heat_rank": 73
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Aliseda",
+        "badge_score": 39,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "champions_league_lugano_amir_saipi_2024/2025",
+      "name": "Amir Saipi",
+      "surname": "Saipi",
+      "club": "Lugano",
+      "club_slug": "lugano",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2024/2025",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 38,
+        "goal_threat": 48,
+        "shot_threat": 48,
+        "xg_threat": 48,
+        "creative_spark": 51,
+        "xa_threat": 52,
+        "midfield_engine": 52,
+        "defensive_lock": 49,
+        "pressing_heat": 49,
+        "ball_progression": 50,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 54,
+        "discipline_risk": 47,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 670,
+        "position_rank": 111,
+        "club_rank": 21,
+        "goal_threat_rank": 584,
+        "creative_spark_rank": 202,
+        "defensive_lock_rank": 551,
+        "pressing_heat_rank": 543,
+        "booking_heat_rank": 616
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Saipi",
+        "badge_score": 38,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "champions_league_lugano_lars_lukas_mai_2024/2025",
+      "name": "Lars Lukas Mai",
+      "surname": "Mai",
+      "club": "Lugano",
+      "club_slug": "lugano",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 29
+      },
+      "ratings": {
+        "og_player_power": 38,
+        "goal_threat": 48,
+        "shot_threat": 48,
+        "xg_threat": 48,
+        "creative_spark": 53,
+        "xa_threat": 56,
+        "midfield_engine": 55,
+        "defensive_lock": 50,
+        "pressing_heat": 51,
+        "ball_progression": 52,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 47,
+        "discipline_risk": 49,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 670,
+        "position_rank": 200,
+        "club_rank": 21,
+        "goal_threat_rank": 584,
+        "creative_spark_rank": 123,
+        "defensive_lock_rank": 261,
+        "pressing_heat_rank": 211,
+        "booking_heat_rank": 215
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Mai",
+        "badge_score": 38,
+        "tier": "RED_FLAG"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Hajdari",
+      "Bislimi",
+      "Mina",
+      "Marques",
+      "Macek"
+    ],
+    "goal_threat": [
+      "Bislimi",
+      "Valenzuela",
+      "Wafi",
+      "Bottani",
+      "Mahou"
+    ],
+    "creative_spark": [
+      "Grgic",
+      "Bottani",
+      "Cimignani",
+      "Doumbia",
+      "Zanotti"
+    ],
+    "discipline_risk": [
+      "Zanotti",
+      "Grgic",
+      "Papadopoulos",
+      "Doumbia",
+      "Bottani"
+    ]
+  }
+}

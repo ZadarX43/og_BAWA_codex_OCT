@@ -1,0 +1,253 @@
+{
+  "fixture_key": "2026_05_09_RAAL_La_Louvi_re_Cercle_Brugge",
+  "fixture": "RAAL La Louvière vs Cercle Brugge",
+  "primary_signal": "Cercle Brugge Win",
+  "signal_state": "AVOID",
+  "agreement_score": 44,
+  "confidence_band": "LOW",
+  "supporting_layers": [
+    "AWAY_THREAT_ADVANTAGE"
+  ],
+  "caution_layers": [
+    "AWAY_POWER_NOT_DECISIVE",
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "profile_tags": {
+    "home": [
+      "Mixed Team Profile"
+    ],
+    "away": [
+      "Open Match Profile",
+      "Two-Way Scoring Profile"
+    ]
+  },
+  "profile_narrative": "RAAL La Louvière bring a mixed team profile into a matchup with Cercle Brugge's open match profile. The structural lean comes from Cercle Brugge's travelling profile against the home-side resistance.",
+  "team_faceoff_summary": [
+    {
+      "metric": "og_power_rating",
+      "label": "OG Power Rating",
+      "home_value": 31,
+      "away_value": 32,
+      "delta": 1,
+      "leader": "Cercle Brugge"
+    },
+    {
+      "metric": "away_threat_rating",
+      "label": "Away Threat",
+      "home_value": 19,
+      "away_value": 74,
+      "delta": 55,
+      "leader": "Cercle Brugge"
+    },
+    {
+      "metric": "home_fortress_rating",
+      "label": "Home Fortress",
+      "home_value": 35,
+      "away_value": 23,
+      "delta": 12,
+      "leader": "RAAL La Louvière"
+    },
+    {
+      "metric": "defensive_lock_rating",
+      "label": "Defensive Lock",
+      "home_value": 52,
+      "away_value": 28,
+      "delta": 24,
+      "leader": "RAAL La Louvière"
+    },
+    {
+      "metric": "first_strike_rating",
+      "label": "First Strike",
+      "home_value": 6,
+      "away_value": 62,
+      "delta": 56,
+      "leader": "Cercle Brugge"
+    },
+    {
+      "metric": "control_rating",
+      "label": "Control Rating",
+      "home_value": 62,
+      "away_value": 17,
+      "delta": 45,
+      "leader": "RAAL La Louvière"
+    }
+  ],
+  "unit_battle_summary": [],
+  "key_player_drivers": [],
+  "key_mismatches": [],
+  "h2h_context": {
+    "available": false,
+    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
+    "sample_size": 0
+  },
+  "market_suitability": {
+    "ftr": {
+      "rating": 32,
+      "label": "Red Flag",
+      "read": "Stronger when one side owns a clear team-power edge."
+    },
+    "btts": {
+      "rating": 54,
+      "label": "Weak",
+      "read": "Driven by two-way access and reduced suppression."
+    },
+    "ou25": {
+      "rating": 56,
+      "label": "Mixed",
+      "read": "Driven by combined goal environment and tempo."
+    },
+    "team_goals": {
+      "rating": 80,
+      "label": "Strong",
+      "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
+    },
+    "correct_score": {
+      "rating": 100,
+      "label": "Elite",
+      "read": "Better when the shape is structured and the likely scoring zone is narrow."
+    },
+    "corners": {
+      "rating": 50,
+      "label": "Weak",
+      "read": "Driven by territory and wide-channel pressure."
+    },
+    "cards": {
+      "rating": 54,
+      "label": "Weak",
+      "read": "Driven by discipline heat, fouling, and volatility."
+    }
+  },
+  "market_intelligence": {
+    "ftr": {
+      "alignment_score": 39,
+      "state": "AVOID",
+      "model_lean": "AWAY",
+      "structural_support": [
+        "AWAY_THREAT_ADVANTAGE"
+      ],
+      "cautions": [
+        "AWAY_POWER_NOT_DECISIVE"
+      ],
+      "public_summary": "FTR is too contradicted by away power not decisive to present as a clean public read.",
+      "rating": 32,
+      "band": "Red Flag"
+    },
+    "btts": {
+      "alignment_score": 48,
+      "state": "FRAGILE",
+      "model_lean": "YES",
+      "structural_support": [
+        "AWAY_THREAT_ADVANTAGE"
+      ],
+      "cautions": [
+        "AWAY_POWER_NOT_DECISIVE",
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "BTTS has some structural support from away threat advantage, but the overall layer fit remains fragile.",
+      "rating": 54,
+      "band": "Weak"
+    },
+    "ou25": {
+      "alignment_score": 50,
+      "state": "FRAGILE",
+      "model_lean": "OVER25",
+      "structural_support": [
+        "AWAY_THREAT_ADVANTAGE"
+      ],
+      "cautions": [
+        "AWAY_POWER_NOT_DECISIVE",
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Over 2.5 has some structural support from away threat advantage, but the overall layer fit remains fragile.",
+      "rating": 56,
+      "band": "Mixed"
+    },
+    "team_goals": {
+      "alignment_score": 72,
+      "state": "MIXED",
+      "model_lean": "Cercle Brugge 1.5+",
+      "structural_support": [
+        "AWAY_THREAT_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Team Goals has partial support from away threat advantage, but lineup data missing keeps it from reading clean.",
+      "rating": 80,
+      "band": "Strong"
+    },
+    "correct_score": {
+      "alignment_score": 87,
+      "state": "SUPPORTED",
+      "model_lean": "STRUCTURED",
+      "structural_support": [
+        "AWAY_THREAT_ADVANTAGE"
+      ],
+      "cautions": [
+        "AWAY_POWER_NOT_DECISIVE"
+      ],
+      "public_summary": "Correct Score is well supported by away threat advantage, with caution still coming from away power not decisive.",
+      "rating": 100,
+      "band": "Elite"
+    },
+    "corners": {
+      "alignment_score": 46,
+      "state": "FRAGILE",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "AWAY_THREAT_ADVANTAGE"
+      ],
+      "cautions": [
+        "AWAY_POWER_NOT_DECISIVE",
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Corners has some structural support from away threat advantage, but the overall layer fit remains fragile.",
+      "rating": 50,
+      "band": "Weak"
+    },
+    "cards": {
+      "alignment_score": 48,
+      "state": "FRAGILE",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "AWAY_THREAT_ADVANTAGE"
+      ],
+      "cautions": [
+        "AWAY_POWER_NOT_DECISIVE",
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Cards has some structural support from away threat advantage, but the overall layer fit remains fragile.",
+      "rating": 54,
+      "band": "Weak"
+    }
+  },
+  "watchlist": {
+    "active": false,
+    "summary": "No watchlist layer is active for this fixture.",
+    "trigger_signals": [],
+    "public_state": "No watchlist flag",
+    "mode": ""
+  },
+  "public_safe_summary": "Cercle Brugge Win is too contradicted across the current structural layers for RAAL La Louvière vs Cercle Brugge, so the clean read is caution rather than action.",
+  "internal_reason_tokens": [
+    "AWAY_THREAT_ADVANTAGE",
+    "AWAY_POWER_NOT_DECISIVE",
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "summary": {
+    "support_count": 1,
+    "caution_count": 3,
+    "lineup_available": false,
+    "h2h_available": false
+  },
+  "preview": {
+    "headline": "RAAL La Louvière vs Cercle Brugge: Cercle Brugge Win avoid",
+    "short_summary": "Cercle Brugge Win is too contradicted across the current structural layers for RAAL La Louvière vs Cercle Brugge, so the clean read is caution rather than action. Primary support comes from away threat advantage, while the main caution remains away power not decisive.",
+    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: FTR.",
+    "caution_line": "Main caution: Away Power Not Decisive.",
+    "telegram_summary": "RAAL La Louvière vs Cercle Brugge — Cercle Brugge Win (Avoid, 44% agreement). Support: Away Threat Advantage. Caution: Away Power Not Decisive.",
+    "premium_summary": "Cercle Brugge Win is carrying a 44% agreement read across the published decision layers. Support is currently led by away threat advantage, while caution is still coming from away power not decisive, lineup data missing."
+  }
+}

@@ -1,0 +1,531 @@
+{
+  "club": "Chelmsford City",
+  "club_slug": "chelmsford_city",
+  "competition": "England FA Cup",
+  "competition_key": "england_fa_cup",
+  "season": "2025/2026",
+  "players": [
+    {
+      "player_id": "england_fa_cup_chelmsford_city_lyle_taylor_2025/2026",
+      "name": "Lyle Taylor",
+      "surname": "Taylor",
+      "club": "Chelmsford City",
+      "club_slug": "chelmsford_city",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 59,
+        "goal_threat": 61,
+        "shot_threat": 61,
+        "xg_threat": 62,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 49,
+        "defensive_lock": 48,
+        "pressing_heat": 51,
+        "ball_progression": 48,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 50,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 20,
+        "position_rank": 17,
+        "club_rank": 1,
+        "goal_threat_rank": 29,
+        "creative_spark_rank": 1351,
+        "defensive_lock_rank": 1315,
+        "pressing_heat_rank": 532,
+        "booking_heat_rank": 426
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Taylor",
+        "badge_score": 59,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_chelmsford_city_kian_ronan_2025/2026",
+      "name": "Kian Ronan",
+      "surname": "Ronan",
+      "club": "Chelmsford City",
+      "club_slug": "chelmsford_city",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 44,
+        "goal_threat": 47,
+        "shot_threat": 46,
+        "xg_threat": 46,
+        "creative_spark": 52,
+        "xa_threat": 52,
+        "midfield_engine": 50,
+        "defensive_lock": 52,
+        "pressing_heat": 49,
+        "ball_progression": 49,
+        "aerial_dominance": 52,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1096,
+        "position_rank": 327,
+        "club_rank": 2,
+        "goal_threat_rank": 1082,
+        "creative_spark_rank": 394,
+        "defensive_lock_rank": 353,
+        "pressing_heat_rank": 1195,
+        "booking_heat_rank": 1381
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Ronan",
+        "badge_score": 44,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_chelmsford_city_ricky_holmes_2025/2026",
+      "name": "Ricky Holmes",
+      "surname": "Holmes",
+      "club": "Chelmsford City",
+      "club_slug": "chelmsford_city",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 163
+      },
+      "ratings": {
+        "og_player_power": 44,
+        "goal_threat": 47,
+        "shot_threat": 46,
+        "xg_threat": 46,
+        "creative_spark": 54,
+        "xa_threat": 55,
+        "midfield_engine": 50,
+        "defensive_lock": 49,
+        "pressing_heat": 51,
+        "ball_progression": 50,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 51,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1096,
+        "position_rank": 288,
+        "club_rank": 2,
+        "goal_threat_rank": 1082,
+        "creative_spark_rank": 139,
+        "defensive_lock_rank": 1154,
+        "pressing_heat_rank": 532,
+        "booking_heat_rank": 426
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Holmes",
+        "badge_score": 44,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_chelmsford_city_jack_barham_2025/2026",
+      "name": "Jack Barham",
+      "surname": "Barham",
+      "club": "Chelmsford City",
+      "club_slug": "chelmsford_city",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 26
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 47,
+        "shot_threat": 46,
+        "xg_threat": 46,
+        "creative_spark": 47,
+        "xa_threat": 46,
+        "midfield_engine": 46,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 47,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1263,
+        "position_rank": 324,
+        "club_rank": 4,
+        "goal_threat_rank": 1082,
+        "creative_spark_rank": 1474,
+        "defensive_lock_rank": 1315,
+        "pressing_heat_rank": 1362,
+        "booking_heat_rank": 1381
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Barham",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_chelmsford_city_shiloh_remy_2025/2026",
+      "name": "Shiloh Remy",
+      "surname": "Remy",
+      "club": "Chelmsford City",
+      "club_slug": "chelmsford_city",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 17
+      },
+      "ratings": {
+        "og_player_power": 39,
+        "goal_threat": 53,
+        "shot_threat": 54,
+        "xg_threat": 54,
+        "creative_spark": 49,
+        "xa_threat": 49,
+        "midfield_engine": 52,
+        "defensive_lock": 50,
+        "pressing_heat": 53,
+        "ball_progression": 53,
+        "aerial_dominance": 52,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 53,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1702,
+        "position_rank": 606,
+        "club_rank": 5,
+        "goal_threat_rank": 406,
+        "creative_spark_rank": 1090,
+        "defensive_lock_rank": 698,
+        "pressing_heat_rank": 133,
+        "booking_heat_rank": 146
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Remy",
+        "badge_score": 39,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_chelmsford_city_archie_tamplin_2025/2026",
+      "name": "Archie Tamplin",
+      "surname": "Tamplin",
+      "club": "Chelmsford City",
+      "club_slug": "chelmsford_city",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 35,
+        "goal_threat": 47,
+        "shot_threat": 46,
+        "xg_threat": 46,
+        "creative_spark": 48,
+        "xa_threat": 46,
+        "midfield_engine": 46,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 47,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1966,
+        "position_rank": 668,
+        "club_rank": 6,
+        "goal_threat_rank": 1082,
+        "creative_spark_rank": 1351,
+        "defensive_lock_rank": 1315,
+        "pressing_heat_rank": 1362,
+        "booking_heat_rank": 1381
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Tamplin",
+        "badge_score": 35,
+        "tier": "RED_FLAG"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Taylor",
+      "Ronan",
+      "Holmes",
+      "Barham",
+      "Remy"
+    ],
+    "goal_threat": [
+      "Taylor",
+      "Remy",
+      "Ronan",
+      "Holmes",
+      "Barham"
+    ],
+    "creative_spark": [
+      "Holmes",
+      "Ronan",
+      "Remy",
+      "Taylor",
+      "Tamplin"
+    ],
+    "discipline_risk": [
+      "Remy",
+      "Holmes",
+      "Taylor",
+      "Ronan",
+      "Barham"
+    ]
+  }
+}

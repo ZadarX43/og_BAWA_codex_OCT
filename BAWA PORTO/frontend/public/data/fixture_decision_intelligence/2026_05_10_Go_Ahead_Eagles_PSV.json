@@ -1,0 +1,262 @@
+{
+  "fixture_key": "2026_05_10_Go_Ahead_Eagles_PSV",
+  "fixture": "Go Ahead Eagles vs PSV",
+  "primary_signal": "Over 2.5",
+  "signal_state": "FRAGILE",
+  "agreement_score": 56,
+  "confidence_band": "STANDARD",
+  "supporting_layers": [
+    "OVER25_HEAT_SUPPORT",
+    "CHAOS_ENVIRONMENT_SUPPORT"
+  ],
+  "caution_layers": [
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "profile_tags": {
+    "home": [
+      "Mixed Team Profile"
+    ],
+    "away": [
+      "Elite Control Side",
+      "Attack-Led Side",
+      "Strong First Goal",
+      "Travels Well"
+    ]
+  },
+  "profile_narrative": "Go Ahead Eagles bring a mixed team profile into a matchup with PSV's elite control side. The shape points toward a live goal environment.",
+  "team_faceoff_summary": [
+    {
+      "metric": "goal_heat_rating",
+      "label": "Goal Heat",
+      "home_value": 61,
+      "away_value": 90,
+      "delta": 29,
+      "leader": "PSV"
+    },
+    {
+      "metric": "over25_heat_rating",
+      "label": "Over 2.5 Heat",
+      "home_value": 62,
+      "away_value": 96,
+      "delta": 34,
+      "leader": "PSV"
+    },
+    {
+      "metric": "attack_flow_rating",
+      "label": "Attack Flow",
+      "home_value": 47,
+      "away_value": 98,
+      "delta": 51,
+      "leader": "PSV"
+    },
+    {
+      "metric": "defensive_lock_rating",
+      "label": "Defensive Lock",
+      "home_value": 57,
+      "away_value": 64,
+      "delta": 7,
+      "leader": "PSV"
+    },
+    {
+      "metric": "chaos_rating",
+      "label": "Chaos Rating",
+      "home_value": 47,
+      "away_value": 72,
+      "delta": 25,
+      "leader": "PSV"
+    },
+    {
+      "metric": "first_strike_rating",
+      "label": "First Strike",
+      "home_value": 47,
+      "away_value": 99,
+      "delta": 52,
+      "leader": "PSV"
+    }
+  ],
+  "unit_battle_summary": [],
+  "key_player_drivers": [],
+  "key_mismatches": [],
+  "h2h_context": {
+    "available": false,
+    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
+    "sample_size": 0
+  },
+  "market_suitability": {
+    "ftr": {
+      "rating": 91,
+      "label": "Elite",
+      "read": "Stronger when one side owns a clear team-power edge."
+    },
+    "btts": {
+      "rating": 56,
+      "label": "Mixed",
+      "read": "Driven by two-way access and reduced suppression."
+    },
+    "ou25": {
+      "rating": 76,
+      "label": "Positive",
+      "read": "Driven by combined goal environment and tempo."
+    },
+    "team_goals": {
+      "rating": 90,
+      "label": "Strong",
+      "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
+    },
+    "correct_score": {
+      "rating": 90,
+      "label": "Elite",
+      "read": "Better when the shape is structured and the likely scoring zone is narrow."
+    },
+    "corners": {
+      "rating": 81,
+      "label": "Strong",
+      "read": "Driven by territory and wide-channel pressure."
+    },
+    "cards": {
+      "rating": 42,
+      "label": "Weak",
+      "read": "Driven by discipline heat, fouling, and volatility."
+    }
+  },
+  "market_intelligence": {
+    "ftr": {
+      "alignment_score": 82,
+      "state": "SUPPORTED",
+      "model_lean": "AWAY",
+      "structural_support": [
+        "OVER25_HEAT_SUPPORT",
+        "CHAOS_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "FTR is well supported by over 2.5 heat support, with caution still coming from lineup data missing.",
+      "rating": 91,
+      "band": "Elite"
+    },
+    "btts": {
+      "alignment_score": 56,
+      "state": "FRAGILE",
+      "model_lean": "YES",
+      "structural_support": [
+        "OVER25_HEAT_SUPPORT",
+        "CHAOS_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "BTTS has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
+      "rating": 56,
+      "band": "Mixed"
+    },
+    "ou25": {
+      "alignment_score": 64,
+      "state": "FRAGILE",
+      "model_lean": "OVER25",
+      "structural_support": [
+        "OVER25_HEAT_SUPPORT",
+        "CHAOS_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Over 2.5 has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
+      "rating": 76,
+      "band": "Positive"
+    },
+    "team_goals": {
+      "alignment_score": 86,
+      "state": "SUPPORTED",
+      "model_lean": "PSV 1.5+",
+      "structural_support": [
+        "OVER25_HEAT_SUPPORT",
+        "CHAOS_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Team Goals is well supported by over 2.5 heat support, with caution still coming from lineup data missing.",
+      "rating": 90,
+      "band": "Strong"
+    },
+    "correct_score": {
+      "alignment_score": 76,
+      "state": "MIXED",
+      "model_lean": "OPEN",
+      "structural_support": [
+        "CHAOS_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Correct Score has partial support from chaos environment support, but lineup data missing keeps it from reading clean.",
+      "rating": 90,
+      "band": "Elite"
+    },
+    "corners": {
+      "alignment_score": 75,
+      "state": "MIXED",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "OVER25_HEAT_SUPPORT",
+        "CHAOS_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Corners has partial support from over 2.5 heat support, but lineup data missing keeps it from reading clean.",
+      "rating": 81,
+      "band": "Strong"
+    },
+    "cards": {
+      "alignment_score": 40,
+      "state": "AVOID",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "CHAOS_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Cards is too contradicted by lineup data missing to present as a clean public read.",
+      "rating": 42,
+      "band": "Weak"
+    }
+  },
+  "watchlist": {
+    "active": false,
+    "summary": "No watchlist layer is active for this fixture.",
+    "trigger_signals": [],
+    "public_state": "No watchlist flag",
+    "mode": ""
+  },
+  "public_safe_summary": "Over 2.5 has some live shape in Go Ahead Eagles vs PSV, but the supporting layers remain fragile and need discipline.",
+  "internal_reason_tokens": [
+    "OVER25_HEAT_SUPPORT",
+    "CHAOS_ENVIRONMENT_SUPPORT",
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "summary": {
+    "support_count": 2,
+    "caution_count": 2,
+    "lineup_available": false,
+    "h2h_available": false
+  },
+  "preview": {
+    "headline": "Go Ahead Eagles vs PSV: Over 2.5 fragile",
+    "short_summary": "Over 2.5 has some live shape in Go Ahead Eagles vs PSV, but the supporting layers remain fragile and need discipline. Primary support comes from over25 heat support, while the main caution remains lineup data missing.",
+    "market_summary": "Best aligned market: Team Goals (Supported). Secondary support: FTR. Weakest read: Cards.",
+    "caution_line": "Main caution: Lineup Data Missing.",
+    "telegram_summary": "Go Ahead Eagles vs PSV — Over 2.5 (Fragile, 56% agreement). Support: Over25 Heat Support. Caution: Lineup Data Missing.",
+    "premium_summary": "Over 2.5 is carrying a 56% agreement read across the published decision layers. Support is currently led by over25 heat support, chaos environment support, while caution is still coming from lineup data missing, h2h unavailable."
+  }
+}

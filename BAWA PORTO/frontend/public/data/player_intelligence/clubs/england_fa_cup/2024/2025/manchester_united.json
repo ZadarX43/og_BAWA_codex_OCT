@@ -1,0 +1,1843 @@
+{
+  "club": "Manchester United",
+  "club_slug": "manchester_united",
+  "competition": "England FA Cup",
+  "competition_key": "england_fa_cup",
+  "season": "2024/2025",
+  "players": [
+    {
+      "player_id": "england_fa_cup_manchester_united_bruno_fernandes_2024/2025",
+      "name": "Bruno Fernandes",
+      "surname": "Fernandes",
+      "club": "Manchester United",
+      "club_slug": "manchester_united",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 270
+      },
+      "ratings": {
+        "og_player_power": 56,
+        "goal_threat": 61,
+        "shot_threat": 61,
+        "xg_threat": 61,
+        "creative_spark": 57,
+        "xa_threat": 56,
+        "midfield_engine": 54,
+        "defensive_lock": 52,
+        "pressing_heat": 54,
+        "ball_progression": 55,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 59,
+        "booking_heat": 55
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 24,
+        "position_rank": 3,
+        "club_rank": 1,
+        "goal_threat_rank": 34,
+        "creative_spark_rank": 4,
+        "defensive_lock_rank": 364,
+        "pressing_heat_rank": 60,
+        "booking_heat_rank": 39
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Fernandes",
+        "badge_score": 56,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_manchester_united_altay_bay_nd_r_2024/2025",
+      "name": "Altay Bay\u0131nd\u0131r",
+      "surname": "Bay\u0131nd\u0131r",
+      "club": "Manchester United",
+      "club_slug": "manchester_united",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 53,
+        "goal_threat": 48,
+        "shot_threat": 48,
+        "xg_threat": 48,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 49,
+        "ball_progression": 49,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 56,
+        "discipline_risk": 48,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Mixed",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Mixed shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 69,
+        "position_rank": 3,
+        "club_rank": 2,
+        "goal_threat_rank": 1015,
+        "creative_spark_rank": 600,
+        "defensive_lock_rank": 649,
+        "pressing_heat_rank": 1137,
+        "booking_heat_rank": 1109
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Bay\u0131nd\u0131r",
+        "badge_score": 53,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_manchester_united_antony_matheus_2024/2025",
+      "name": "Antony Matheus",
+      "surname": "Matheus",
+      "club": "Manchester United",
+      "club_slug": "manchester_united",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 50,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 141,
+        "position_rank": 42,
+        "club_rank": 3,
+        "goal_threat_rank": 586,
+        "creative_spark_rank": 600,
+        "defensive_lock_rank": 649,
+        "pressing_heat_rank": 667,
+        "booking_heat_rank": 644
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Matheus",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_manchester_united_hubert_graczyk_2024/2025",
+      "name": "Hubert Graczyk",
+      "surname": "Graczyk",
+      "club": "Manchester United",
+      "club_slug": "manchester_united",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 50,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 141,
+        "position_rank": 49,
+        "club_rank": 3,
+        "goal_threat_rank": 586,
+        "creative_spark_rank": 600,
+        "defensive_lock_rank": 649,
+        "pressing_heat_rank": 667,
+        "booking_heat_rank": 644
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Graczyk",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_manchester_united_matthijs_de_ligt_2024/2025",
+      "name": "Matthijs de Ligt",
+      "surname": "Ligt",
+      "club": "Manchester United",
+      "club_slug": "manchester_united",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 48,
+        "shot_threat": 48,
+        "xg_threat": 48,
+        "creative_spark": 52,
+        "xa_threat": 54,
+        "midfield_engine": 54,
+        "defensive_lock": 56,
+        "pressing_heat": 54,
+        "ball_progression": 51,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 52,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 141,
+        "position_rank": 44,
+        "club_rank": 3,
+        "goal_threat_rank": 1015,
+        "creative_spark_rank": 374,
+        "defensive_lock_rank": 16,
+        "pressing_heat_rank": 60,
+        "booking_heat_rank": 266
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Ligt",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_manchester_united_william_stephen_murdock_2024/2025",
+      "name": "William Stephen Murdock",
+      "surname": "Murdock",
+      "club": "Manchester United",
+      "club_slug": "manchester_united",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 50,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 141,
+        "position_rank": 9,
+        "club_rank": 3,
+        "goal_threat_rank": 586,
+        "creative_spark_rank": 600,
+        "defensive_lock_rank": 649,
+        "pressing_heat_rank": 667,
+        "booking_heat_rank": 644
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Murdock",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_manchester_united_harry_maguire_2024/2025",
+      "name": "Harry Maguire",
+      "surname": "Maguire",
+      "club": "Manchester United",
+      "club_slug": "manchester_united",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 285
+      },
+      "ratings": {
+        "og_player_power": 49,
+        "goal_threat": 60,
+        "shot_threat": 60,
+        "xg_threat": 60,
+        "creative_spark": 50,
+        "xa_threat": 51,
+        "midfield_engine": 54,
+        "defensive_lock": 54,
+        "pressing_heat": 53,
+        "ball_progression": 53,
+        "aerial_dominance": 56,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 58,
+        "booking_heat": 54
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 516,
+        "position_rank": 141,
+        "club_rank": 7,
+        "goal_threat_rank": 87,
+        "creative_spark_rank": 600,
+        "defensive_lock_rank": 119,
+        "pressing_heat_rank": 224,
+        "booking_heat_rank": 100
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Maguire",
+        "badge_score": 49,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_manchester_united_joshua_zirkzee_2024/2025",
+      "name": "Joshua Zirkzee",
+      "surname": "Zirkzee",
+      "club": "Manchester United",
+      "club_slug": "manchester_united",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 125
+      },
+      "ratings": {
+        "og_player_power": 49,
+        "goal_threat": 61,
+        "shot_threat": 61,
+        "xg_threat": 61,
+        "creative_spark": 52,
+        "xa_threat": 54,
+        "midfield_engine": 53,
+        "defensive_lock": 53,
+        "pressing_heat": 54,
+        "ball_progression": 54,
+        "aerial_dominance": 55,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 52,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 516,
+        "position_rank": 93,
+        "club_rank": 7,
+        "goal_threat_rank": 34,
+        "creative_spark_rank": 374,
+        "defensive_lock_rank": 235,
+        "pressing_heat_rank": 60,
+        "booking_heat_rank": 266
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Zirkzee",
+        "badge_score": 49,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_manchester_united_noussair_mazraoui_2024/2025",
+      "name": "Noussair Mazraoui",
+      "surname": "Mazraoui",
+      "club": "Manchester United",
+      "club_slug": "manchester_united",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 270
+      },
+      "ratings": {
+        "og_player_power": 49,
+        "goal_threat": 54,
+        "shot_threat": 59,
+        "xg_threat": 57,
+        "creative_spark": 53,
+        "xa_threat": 54,
+        "midfield_engine": 55,
+        "defensive_lock": 54,
+        "pressing_heat": 55,
+        "ball_progression": 54,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 53,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 516,
+        "position_rank": 141,
+        "club_rank": 7,
+        "goal_threat_rank": 319,
+        "creative_spark_rank": 246,
+        "defensive_lock_rank": 119,
+        "pressing_heat_rank": 2,
+        "booking_heat_rank": 140
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Mazraoui",
+        "badge_score": 49,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_manchester_united_alejandro_garnacho_2024/2025",
+      "name": "Alejandro Garnacho",
+      "surname": "Garnacho",
+      "club": "Manchester United",
+      "club_slug": "manchester_united",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 161
+      },
+      "ratings": {
+        "og_player_power": 46,
+        "goal_threat": 58,
+        "shot_threat": 61,
+        "xg_threat": 59,
+        "creative_spark": 55,
+        "xa_threat": 56,
+        "midfield_engine": 53,
+        "defensive_lock": 51,
+        "pressing_heat": 54,
+        "ball_progression": 54,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 52,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 609,
+        "position_rank": 132,
+        "club_rank": 10,
+        "goal_threat_rank": 132,
+        "creative_spark_rank": 68,
+        "defensive_lock_rank": 555,
+        "pressing_heat_rank": 60,
+        "booking_heat_rank": 266
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Garnacho",
+        "badge_score": 46,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_manchester_united_amad_diallo_traor_2024/2025",
+      "name": "Amad Diallo Traor\u00e9",
+      "surname": "Traor\u00e9",
+      "club": "Manchester United",
+      "club_slug": "manchester_united",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 100
+      },
+      "ratings": {
+        "og_player_power": 45,
+        "goal_threat": 53,
+        "shot_threat": 54,
+        "xg_threat": 55,
+        "creative_spark": 53,
+        "xa_threat": 56,
+        "midfield_engine": 54,
+        "defensive_lock": 52,
+        "pressing_heat": 52,
+        "ball_progression": 56,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 52,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 652,
+        "position_rank": 144,
+        "club_rank": 11,
+        "goal_threat_rank": 375,
+        "creative_spark_rank": 246,
+        "defensive_lock_rank": 364,
+        "pressing_heat_rank": 385,
+        "booking_heat_rank": 266
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Traor\u00e9",
+        "badge_score": 45,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_manchester_united_victor_lindel_f_2024/2025",
+      "name": "Victor Lindel\u00f6f",
+      "surname": "Lindel\u00f6f",
+      "club": "Manchester United",
+      "club_slug": "manchester_united",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 37
+      },
+      "ratings": {
+        "og_player_power": 44,
+        "goal_threat": 48,
+        "shot_threat": 48,
+        "xg_threat": 48,
+        "creative_spark": 50,
+        "xa_threat": 51,
+        "midfield_engine": 54,
+        "defensive_lock": 53,
+        "pressing_heat": 51,
+        "ball_progression": 50,
+        "aerial_dominance": 51,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 50,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 702,
+        "position_rank": 194,
+        "club_rank": 12,
+        "goal_threat_rank": 1015,
+        "creative_spark_rank": 600,
+        "defensive_lock_rank": 235,
+        "pressing_heat_rank": 536,
+        "booking_heat_rank": 464
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Lindel\u00f6f",
+        "badge_score": 44,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_manchester_united_leny_yoro_2024/2025",
+      "name": "Leny Yoro",
+      "surname": "Yoro",
+      "club": "Manchester United",
+      "club_slug": "manchester_united",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 129
+      },
+      "ratings": {
+        "og_player_power": 41,
+        "goal_threat": 48,
+        "shot_threat": 48,
+        "xg_threat": 48,
+        "creative_spark": 51,
+        "xa_threat": 52,
+        "midfield_engine": 55,
+        "defensive_lock": 56,
+        "pressing_heat": 54,
+        "ball_progression": 51,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 52,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 862,
+        "position_rank": 248,
+        "club_rank": 13,
+        "goal_threat_rank": 1015,
+        "creative_spark_rank": 485,
+        "defensive_lock_rank": 16,
+        "pressing_heat_rank": 60,
+        "booking_heat_rank": 266
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Yoro",
+        "badge_score": 41,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_manchester_united_lisandro_mart_nez_2024/2025",
+      "name": "Lisandro Mart\u00ednez",
+      "surname": "Mart\u00ednez",
+      "club": "Manchester United",
+      "club_slug": "manchester_united",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 41,
+        "goal_threat": 48,
+        "shot_threat": 48,
+        "xg_threat": 48,
+        "creative_spark": 52,
+        "xa_threat": 54,
+        "midfield_engine": 53,
+        "defensive_lock": 53,
+        "pressing_heat": 52,
+        "ball_progression": 54,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 52,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 862,
+        "position_rank": 248,
+        "club_rank": 13,
+        "goal_threat_rank": 1015,
+        "creative_spark_rank": 374,
+        "defensive_lock_rank": 235,
+        "pressing_heat_rank": 385,
+        "booking_heat_rank": 140
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Mart\u00ednez",
+        "badge_score": 41,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_manchester_united_manuel_ugarte_2024/2025",
+      "name": "Manuel Ugarte",
+      "surname": "Ugarte",
+      "club": "Manchester United",
+      "club_slug": "manchester_united",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 233
+      },
+      "ratings": {
+        "og_player_power": 41,
+        "goal_threat": 52,
+        "shot_threat": 53,
+        "xg_threat": 54,
+        "creative_spark": 53,
+        "xa_threat": 55,
+        "midfield_engine": 55,
+        "defensive_lock": 52,
+        "pressing_heat": 55,
+        "ball_progression": 53,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 60,
+        "booking_heat": 56
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 862,
+        "position_rank": 275,
+        "club_rank": 13,
+        "goal_threat_rank": 454,
+        "creative_spark_rank": 246,
+        "defensive_lock_rank": 364,
+        "pressing_heat_rank": 2,
+        "booking_heat_rank": 8
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Ugarte",
+        "badge_score": 41,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_manchester_united_patrick_chinazaekpere_dorgu_2024/2025",
+      "name": "Patrick Chinazaekpere Dorgu",
+      "surname": "Dorgu",
+      "club": "Manchester United",
+      "club_slug": "manchester_united",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 46
+      },
+      "ratings": {
+        "og_player_power": 41,
+        "goal_threat": 53,
+        "shot_threat": 55,
+        "xg_threat": 55,
+        "creative_spark": 50,
+        "xa_threat": 51,
+        "midfield_engine": 56,
+        "defensive_lock": 53,
+        "pressing_heat": 55,
+        "ball_progression": 51,
+        "aerial_dominance": 52,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 53,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 862,
+        "position_rank": 275,
+        "club_rank": 13,
+        "goal_threat_rank": 375,
+        "creative_spark_rank": 600,
+        "defensive_lock_rank": 235,
+        "pressing_heat_rank": 2,
+        "booking_heat_rank": 140
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Dorgu",
+        "badge_score": 41,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_manchester_united_rasmus_h_jlund_2024/2025",
+      "name": "Rasmus H\u00f8jlund",
+      "surname": "H\u00f8jlund",
+      "club": "Manchester United",
+      "club_slug": "manchester_united",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 261
+      },
+      "ratings": {
+        "og_player_power": 41,
+        "goal_threat": 52,
+        "shot_threat": 53,
+        "xg_threat": 54,
+        "creative_spark": 51,
+        "xa_threat": 53,
+        "midfield_engine": 51,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 54,
+        "aerial_dominance": 51,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 50,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 862,
+        "position_rank": 217,
+        "club_rank": 13,
+        "goal_threat_rank": 454,
+        "creative_spark_rank": 485,
+        "defensive_lock_rank": 649,
+        "pressing_heat_rank": 667,
+        "booking_heat_rank": 644
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "H\u00f8jlund",
+        "badge_score": 41,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_manchester_united_casemiro_2024/2025",
+      "name": "Casemiro",
+      "surname": "Casemiro",
+      "club": "Manchester United",
+      "club_slug": "manchester_united",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 22
+      },
+      "ratings": {
+        "og_player_power": 40,
+        "goal_threat": 53,
+        "shot_threat": 54,
+        "xg_threat": 55,
+        "creative_spark": 53,
+        "xa_threat": 56,
+        "midfield_engine": 55,
+        "defensive_lock": 53,
+        "pressing_heat": 53,
+        "ball_progression": 51,
+        "aerial_dominance": 51,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 50,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 920,
+        "position_rank": 302,
+        "club_rank": 18,
+        "goal_threat_rank": 375,
+        "creative_spark_rank": 246,
+        "defensive_lock_rank": 235,
+        "pressing_heat_rank": 224,
+        "booking_heat_rank": 464
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Casemiro",
+        "badge_score": 40,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_manchester_united_christian_eriksen_2024/2025",
+      "name": "Christian Eriksen",
+      "surname": "Eriksen",
+      "club": "Manchester United",
+      "club_slug": "manchester_united",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 68
+      },
+      "ratings": {
+        "og_player_power": 40,
+        "goal_threat": 55,
+        "shot_threat": 61,
+        "xg_threat": 58,
+        "creative_spark": 55,
+        "xa_threat": 56,
+        "midfield_engine": 51,
+        "defensive_lock": 48,
+        "pressing_heat": 49,
+        "ball_progression": 52,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 48,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 920,
+        "position_rank": 302,
+        "club_rank": 18,
+        "goal_threat_rank": 242,
+        "creative_spark_rank": 68,
+        "defensive_lock_rank": 1229,
+        "pressing_heat_rank": 1137,
+        "booking_heat_rank": 1109
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Eriksen",
+        "badge_score": 40,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_manchester_united_diogo_dalot_2024/2025",
+      "name": "Diogo Dalot",
+      "surname": "Dalot",
+      "club": "Manchester United",
+      "club_slug": "manchester_united",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 241
+      },
+      "ratings": {
+        "og_player_power": 40,
+        "goal_threat": 54,
+        "shot_threat": 53,
+        "xg_threat": 54,
+        "creative_spark": 56,
+        "xa_threat": 56,
+        "midfield_engine": 54,
+        "defensive_lock": 53,
+        "pressing_heat": 54,
+        "ball_progression": 54,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 59,
+        "booking_heat": 55
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 920,
+        "position_rank": 269,
+        "club_rank": 18,
+        "goal_threat_rank": 319,
+        "creative_spark_rank": 46,
+        "defensive_lock_rank": 235,
+        "pressing_heat_rank": 60,
+        "booking_heat_rank": 39
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Dalot",
+        "badge_score": 40,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_manchester_united_tyrell_malacia_2024/2025",
+      "name": "Tyrell Malacia",
+      "surname": "Malacia",
+      "club": "Manchester United",
+      "club_slug": "manchester_united",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 39,
+        "goal_threat": 48,
+        "shot_threat": 48,
+        "xg_threat": 48,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 51,
+        "defensive_lock": 52,
+        "pressing_heat": 51,
+        "ball_progression": 50,
+        "aerial_dominance": 51,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 50,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1031,
+        "position_rank": 319,
+        "club_rank": 21,
+        "goal_threat_rank": 1015,
+        "creative_spark_rank": 600,
+        "defensive_lock_rank": 364,
+        "pressing_heat_rank": 536,
+        "booking_heat_rank": 464
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Malacia",
+        "badge_score": 39,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_manchester_united_andr_onana_2024/2025",
+      "name": "Andr\u00e9 Onana",
+      "surname": "Onana",
+      "club": "Manchester United",
+      "club_slug": "manchester_united",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 38,
+        "goal_threat": 48,
+        "shot_threat": 48,
+        "xg_threat": 48,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 49,
+        "ball_progression": 49,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 55,
+        "discipline_risk": 48,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Mixed",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Mixed shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1221,
+        "position_rank": 137,
+        "club_rank": 22,
+        "goal_threat_rank": 1015,
+        "creative_spark_rank": 600,
+        "defensive_lock_rank": 649,
+        "pressing_heat_rank": 1137,
+        "booking_heat_rank": 1109
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Onana",
+        "badge_score": 38,
+        "tier": "RED_FLAG"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Fernandes",
+      "Bay\u0131nd\u0131r",
+      "Matheus",
+      "Graczyk",
+      "Ligt"
+    ],
+    "goal_threat": [
+      "Fernandes",
+      "Zirkzee",
+      "Maguire",
+      "Garnacho",
+      "Eriksen"
+    ],
+    "creative_spark": [
+      "Fernandes",
+      "Dalot",
+      "Garnacho",
+      "Eriksen",
+      "Mazraoui"
+    ],
+    "discipline_risk": [
+      "Ugarte",
+      "Fernandes",
+      "Dalot",
+      "Maguire",
+      "Mazraoui"
+    ]
+  }
+}

@@ -1,0 +1,941 @@
+{
+  "club": "Maldon & Tiptree",
+  "club_slug": "maldon_tiptree",
+  "competition": "England FA Cup",
+  "competition_key": "england_fa_cup",
+  "season": "2025/2026",
+  "players": [
+    {
+      "player_id": "england_fa_cup_maldon_tiptree_macauley_bonne_2025/2026",
+      "name": "Macauley Bonne",
+      "surname": "Bonne",
+      "club": "Maldon & Tiptree",
+      "club_slug": "maldon_tiptree",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 329,
+        "position_rank": 130,
+        "club_rank": 1,
+        "goal_threat_rank": 764,
+        "creative_spark_rank": 661,
+        "defensive_lock_rank": 698,
+        "pressing_heat_rank": 728,
+        "booking_heat_rank": 672
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Bonne",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_maldon_tiptree_tommy_dixon_hodge_2025/2026",
+      "name": "Tommy Dixon-Hodge",
+      "surname": "Dixon-Hodge",
+      "club": "Maldon & Tiptree",
+      "club_slug": "maldon_tiptree",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 329,
+        "position_rank": 15,
+        "club_rank": 1,
+        "goal_threat_rank": 764,
+        "creative_spark_rank": 661,
+        "defensive_lock_rank": 698,
+        "pressing_heat_rank": 728,
+        "booking_heat_rank": 672
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Dixon-Hodge",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_maldon_tiptree_elliot_justham_2025/2026",
+      "name": "Elliot Justham",
+      "surname": "Justham",
+      "club": "Maldon & Tiptree",
+      "club_slug": "maldon_tiptree",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 49,
+        "goal_threat": 47,
+        "shot_threat": 46,
+        "xg_threat": 46,
+        "creative_spark": 49,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 49,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 54,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 655,
+        "position_rank": 100,
+        "club_rank": 3,
+        "goal_threat_rank": 1082,
+        "creative_spark_rank": 1090,
+        "defensive_lock_rank": 1315,
+        "pressing_heat_rank": 1362,
+        "booking_heat_rank": 1381
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Justham",
+        "badge_score": 49,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_maldon_tiptree_courtney_senior_2025/2026",
+      "name": "Courtney Senior",
+      "surname": "Senior",
+      "club": "Maldon & Tiptree",
+      "club_slug": "maldon_tiptree",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 47,
+        "goal_threat": 51,
+        "shot_threat": 51,
+        "xg_threat": 52,
+        "creative_spark": 49,
+        "xa_threat": 49,
+        "midfield_engine": 54,
+        "defensive_lock": 51,
+        "pressing_heat": 53,
+        "ball_progression": 52,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 817,
+        "position_rank": 235,
+        "club_rank": 4,
+        "goal_threat_rank": 595,
+        "creative_spark_rank": 1090,
+        "defensive_lock_rank": 528,
+        "pressing_heat_rank": 133,
+        "booking_heat_rank": 672
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Senior",
+        "badge_score": 47,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_maldon_tiptree_freddie_sears_2025/2026",
+      "name": "Freddie Sears",
+      "surname": "Sears",
+      "club": "Maldon & Tiptree",
+      "club_slug": "maldon_tiptree",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 45,
+        "goal_threat": 51,
+        "shot_threat": 51,
+        "xg_threat": 52,
+        "creative_spark": 50,
+        "xa_threat": 49,
+        "midfield_engine": 52,
+        "defensive_lock": 52,
+        "pressing_heat": 50,
+        "ball_progression": 49,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1001,
+        "position_rank": 272,
+        "club_rank": 5,
+        "goal_threat_rank": 595,
+        "creative_spark_rank": 661,
+        "defensive_lock_rank": 353,
+        "pressing_heat_rank": 728,
+        "booking_heat_rank": 1381
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Sears",
+        "badge_score": 45,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_maldon_tiptree_jack_cawley_2025/2026",
+      "name": "Jack Cawley",
+      "surname": "Cawley",
+      "club": "Maldon & Tiptree",
+      "club_slug": "maldon_tiptree",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 44,
+        "goal_threat": 47,
+        "shot_threat": 46,
+        "xg_threat": 46,
+        "creative_spark": 49,
+        "xa_threat": 49,
+        "midfield_engine": 52,
+        "defensive_lock": 50,
+        "pressing_heat": 52,
+        "ball_progression": 48,
+        "aerial_dominance": 55,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 51,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1096,
+        "position_rank": 327,
+        "club_rank": 6,
+        "goal_threat_rank": 1082,
+        "creative_spark_rank": 1090,
+        "defensive_lock_rank": 698,
+        "pressing_heat_rank": 320,
+        "booking_heat_rank": 251
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Cawley",
+        "badge_score": 44,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_maldon_tiptree_louis_anthony_dunne_2025/2026",
+      "name": "Louis Anthony Dunne",
+      "surname": "Dunne",
+      "club": "Maldon & Tiptree",
+      "club_slug": "maldon_tiptree",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 44,
+        "goal_threat": 47,
+        "shot_threat": 46,
+        "xg_threat": 46,
+        "creative_spark": 50,
+        "xa_threat": 49,
+        "midfield_engine": 53,
+        "defensive_lock": 52,
+        "pressing_heat": 52,
+        "ball_progression": 48,
+        "aerial_dominance": 52,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1096,
+        "position_rank": 366,
+        "club_rank": 6,
+        "goal_threat_rank": 1082,
+        "creative_spark_rank": 661,
+        "defensive_lock_rank": 353,
+        "pressing_heat_rank": 320,
+        "booking_heat_rank": 672
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Dunne",
+        "badge_score": 44,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_maldon_tiptree_tom_eastman_2025/2026",
+      "name": "Tom Eastman",
+      "surname": "Eastman",
+      "club": "Maldon & Tiptree",
+      "club_slug": "maldon_tiptree",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 44,
+        "goal_threat": 47,
+        "shot_threat": 46,
+        "xg_threat": 46,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 48,
+        "defensive_lock": 53,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1096,
+        "position_rank": 327,
+        "club_rank": 6,
+        "goal_threat_rank": 1082,
+        "creative_spark_rank": 1351,
+        "defensive_lock_rank": 221,
+        "pressing_heat_rank": 1362,
+        "booking_heat_rank": 1381
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Eastman",
+        "badge_score": 44,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_maldon_tiptree_cameron_lewis_james_2025/2026",
+      "name": "Cameron Lewis James",
+      "surname": "James",
+      "club": "Maldon & Tiptree",
+      "club_slug": "maldon_tiptree",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 43,
+        "goal_threat": 48,
+        "shot_threat": 46,
+        "xg_threat": 46,
+        "creative_spark": 56,
+        "xa_threat": 55,
+        "midfield_engine": 53,
+        "defensive_lock": 52,
+        "pressing_heat": 54,
+        "ball_progression": 49,
+        "aerial_dominance": 55,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 52,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1194,
+        "position_rank": 358,
+        "club_rank": 9,
+        "goal_threat_rank": 1030,
+        "creative_spark_rank": 31,
+        "defensive_lock_rank": 353,
+        "pressing_heat_rank": 28,
+        "booking_heat_rank": 251
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "James",
+        "badge_score": 43,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_maldon_tiptree_anthony_wordsworth_2025/2026",
+      "name": "Anthony Wordsworth",
+      "surname": "Wordsworth",
+      "club": "Maldon & Tiptree",
+      "club_slug": "maldon_tiptree",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 35,
+        "goal_threat": 47,
+        "shot_threat": 46,
+        "xg_threat": 46,
+        "creative_spark": 48,
+        "xa_threat": 46,
+        "midfield_engine": 46,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 47,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1966,
+        "position_rank": 668,
+        "club_rank": 10,
+        "goal_threat_rank": 1082,
+        "creative_spark_rank": 1351,
+        "defensive_lock_rank": 1315,
+        "pressing_heat_rank": 1362,
+        "booking_heat_rank": 1381
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Wordsworth",
+        "badge_score": 35,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_maldon_tiptree_dylan_williams_2025/2026",
+      "name": "Dylan Williams",
+      "surname": "Williams",
+      "club": "Maldon & Tiptree",
+      "club_slug": "maldon_tiptree",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 35,
+        "goal_threat": 47,
+        "shot_threat": 46,
+        "xg_threat": 46,
+        "creative_spark": 47,
+        "xa_threat": 46,
+        "midfield_engine": 46,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 47,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 47,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1966,
+        "position_rank": 668,
+        "club_rank": 10,
+        "goal_threat_rank": 1082,
+        "creative_spark_rank": 1474,
+        "defensive_lock_rank": 1315,
+        "pressing_heat_rank": 1362,
+        "booking_heat_rank": 1381
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Williams",
+        "badge_score": 35,
+        "tier": "RED_FLAG"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Bonne",
+      "Dixon-Hodge",
+      "Justham",
+      "Senior",
+      "Sears"
+    ],
+    "goal_threat": [
+      "Senior",
+      "Sears",
+      "Bonne",
+      "Dixon-Hodge",
+      "James"
+    ],
+    "creative_spark": [
+      "James",
+      "Bonne",
+      "Dixon-Hodge",
+      "Sears",
+      "Dunne"
+    ],
+    "discipline_risk": [
+      "James",
+      "Cawley",
+      "Bonne",
+      "Dixon-Hodge",
+      "Senior"
+    ]
+  }
+}

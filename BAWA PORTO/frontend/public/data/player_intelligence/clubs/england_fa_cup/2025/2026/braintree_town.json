@@ -1,0 +1,695 @@
+{
+  "club": "Braintree Town",
+  "club_slug": "braintree_town",
+  "competition": "England FA Cup",
+  "competition_key": "england_fa_cup",
+  "season": "2025/2026",
+  "players": [
+    {
+      "player_id": "england_fa_cup_braintree_town_john_akinde_2025/2026",
+      "name": "John Akinde",
+      "surname": "Akinde",
+      "club": "Braintree Town",
+      "club_slug": "braintree_town",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 57,
+        "goal_threat": 60,
+        "shot_threat": 60,
+        "xg_threat": 60,
+        "creative_spark": 49,
+        "xa_threat": 48,
+        "midfield_engine": 49,
+        "defensive_lock": 51,
+        "pressing_heat": 50,
+        "ball_progression": 52,
+        "aerial_dominance": 55,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 50,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 58,
+        "position_rank": 53,
+        "club_rank": 1,
+        "goal_threat_rank": 88,
+        "creative_spark_rank": 1090,
+        "defensive_lock_rank": 528,
+        "pressing_heat_rank": 728,
+        "booking_heat_rank": 426
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Akinde",
+        "badge_score": 57,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_braintree_town_unknown_player_2025/2026",
+      "name": "Unknown Player",
+      "surname": "Player",
+      "club": "Braintree Town",
+      "club_slug": "braintree_town",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 3240
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 60,
+        "shot_threat": 50,
+        "xg_threat": 56,
+        "creative_spark": 49,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 47,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Weak",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 329,
+        "position_rank": 104,
+        "club_rank": 2,
+        "goal_threat_rank": 88,
+        "creative_spark_rank": 1090,
+        "defensive_lock_rank": 698,
+        "pressing_heat_rank": 728,
+        "booking_heat_rank": 672
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Player",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_braintree_town_chay_cooper_2025/2026",
+      "name": "Chay Cooper",
+      "surname": "Cooper",
+      "club": "Braintree Town",
+      "club_slug": "braintree_town",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 48,
+        "goal_threat": 55,
+        "shot_threat": 59,
+        "xg_threat": 57,
+        "creative_spark": 53,
+        "xa_threat": 53,
+        "midfield_engine": 49,
+        "defensive_lock": 49,
+        "pressing_heat": 49,
+        "ball_progression": 50,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 715,
+        "position_rank": 209,
+        "club_rank": 3,
+        "goal_threat_rank": 241,
+        "creative_spark_rank": 239,
+        "defensive_lock_rank": 1154,
+        "pressing_heat_rank": 1195,
+        "booking_heat_rank": 672
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Cooper",
+        "badge_score": 48,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_braintree_town_george_langston_2025/2026",
+      "name": "George Langston",
+      "surname": "Langston",
+      "club": "Braintree Town",
+      "club_slug": "braintree_town",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 48,
+        "goal_threat": 47,
+        "shot_threat": 46,
+        "xg_threat": 46,
+        "creative_spark": 52,
+        "xa_threat": 53,
+        "midfield_engine": 52,
+        "defensive_lock": 54,
+        "pressing_heat": 52,
+        "ball_progression": 52,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 52,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 715,
+        "position_rank": 197,
+        "club_rank": 3,
+        "goal_threat_rank": 1082,
+        "creative_spark_rank": 394,
+        "defensive_lock_rank": 109,
+        "pressing_heat_rank": 320,
+        "booking_heat_rank": 251
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Langston",
+        "badge_score": 48,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_braintree_town_elliot_thorpe_2025/2026",
+      "name": "Elliot Thorpe",
+      "surname": "Thorpe",
+      "club": "Braintree Town",
+      "club_slug": "braintree_town",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 38
+      },
+      "ratings": {
+        "og_player_power": 46,
+        "goal_threat": 55,
+        "shot_threat": 60,
+        "xg_threat": 58,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 52,
+        "defensive_lock": 51,
+        "pressing_heat": 55,
+        "ball_progression": 49,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 52,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 910,
+        "position_rank": 285,
+        "club_rank": 5,
+        "goal_threat_rank": 241,
+        "creative_spark_rank": 1351,
+        "defensive_lock_rank": 528,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 146
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Thorpe",
+        "badge_score": 46,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_braintree_town_james_vennings_2025/2026",
+      "name": "James Vennings",
+      "surname": "Vennings",
+      "club": "Braintree Town",
+      "club_slug": "braintree_town",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 44,
+        "goal_threat": 47,
+        "shot_threat": 46,
+        "xg_threat": 46,
+        "creative_spark": 49,
+        "xa_threat": 49,
+        "midfield_engine": 54,
+        "defensive_lock": 54,
+        "pressing_heat": 52,
+        "ball_progression": 49,
+        "aerial_dominance": 52,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 48,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1096,
+        "position_rank": 366,
+        "club_rank": 6,
+        "goal_threat_rank": 1082,
+        "creative_spark_rank": 1090,
+        "defensive_lock_rank": 109,
+        "pressing_heat_rank": 320,
+        "booking_heat_rank": 1219
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Vennings",
+        "badge_score": 44,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_braintree_town_tommy_smith_2025/2026",
+      "name": "Tommy Smith",
+      "surname": "Smith",
+      "club": "Braintree Town",
+      "club_slug": "braintree_town",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 22
+      },
+      "ratings": {
+        "og_player_power": 43,
+        "goal_threat": 47,
+        "shot_threat": 46,
+        "xg_threat": 46,
+        "creative_spark": 49,
+        "xa_threat": 49,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 52,
+        "ball_progression": 48,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 50,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1194,
+        "position_rank": 358,
+        "club_rank": 7,
+        "goal_threat_rank": 1082,
+        "creative_spark_rank": 1090,
+        "defensive_lock_rank": 698,
+        "pressing_heat_rank": 320,
+        "booking_heat_rank": 426
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Smith",
+        "badge_score": 43,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_braintree_town_lewis_walker_2025/2026",
+      "name": "Lewis Walker",
+      "surname": "Walker",
+      "club": "Braintree Town",
+      "club_slug": "braintree_town",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 44
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 47,
+        "shot_threat": 46,
+        "xg_threat": 46,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 51,
+        "defensive_lock": 49,
+        "pressing_heat": 52,
+        "ball_progression": 48,
+        "aerial_dominance": 51,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 52,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1263,
+        "position_rank": 324,
+        "club_rank": 8,
+        "goal_threat_rank": 1082,
+        "creative_spark_rank": 1351,
+        "defensive_lock_rank": 1154,
+        "pressing_heat_rank": 320,
+        "booking_heat_rank": 251
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Walker",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Akinde",
+      "Player",
+      "Cooper",
+      "Langston",
+      "Thorpe"
+    ],
+    "goal_threat": [
+      "Akinde",
+      "Player",
+      "Cooper",
+      "Thorpe",
+      "Langston"
+    ],
+    "creative_spark": [
+      "Cooper",
+      "Langston",
+      "Akinde",
+      "Player",
+      "Vennings"
+    ],
+    "discipline_risk": [
+      "Langston",
+      "Thorpe",
+      "Walker",
+      "Akinde",
+      "Smith"
+    ]
+  }
+}

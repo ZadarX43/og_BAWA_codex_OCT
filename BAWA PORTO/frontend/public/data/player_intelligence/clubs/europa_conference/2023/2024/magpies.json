@@ -1,0 +1,1761 @@
+{
+  "club": "Magpies",
+  "club_slug": "magpies",
+  "competition": "Europa Conference",
+  "competition_key": "europa_conference",
+  "season": "2023/2024",
+  "players": [
+    {
+      "player_id": "europa_conference_magpies_luke_bautista_2023/2024",
+      "name": "Luke Bautista",
+      "surname": "Bautista",
+      "club": "Magpies",
+      "club_slug": "magpies",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 506,
+        "position_rank": 187,
+        "club_rank": 1,
+        "goal_threat_rank": 1253,
+        "creative_spark_rank": 1026,
+        "defensive_lock_rank": 1109,
+        "pressing_heat_rank": 1150,
+        "booking_heat_rank": 1116
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Bautista",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_magpies_matthew_silva_2023/2024",
+      "name": "Matthew Silva",
+      "surname": "Silva",
+      "club": "Magpies",
+      "club_slug": "magpies",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 50,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 506,
+        "position_rank": 46,
+        "club_rank": 1,
+        "goal_threat_rank": 1253,
+        "creative_spark_rank": 1026,
+        "defensive_lock_rank": 1109,
+        "pressing_heat_rank": 1150,
+        "booking_heat_rank": 1116
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Silva",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_magpies_shay_jones_2023/2024",
+      "name": "Shay Jones",
+      "surname": "Jones",
+      "club": "Magpies",
+      "club_slug": "magpies",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 506,
+        "position_rank": 187,
+        "club_rank": 1,
+        "goal_threat_rank": 1253,
+        "creative_spark_rank": 1026,
+        "defensive_lock_rank": 1109,
+        "pressing_heat_rank": 1150,
+        "booking_heat_rank": 1116
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Jones",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_magpies_anthony_hernandez_2023/2024",
+      "name": "Anthony Hernandez",
+      "surname": "Hernandez",
+      "club": "Magpies",
+      "club_slug": "magpies",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 21
+      },
+      "ratings": {
+        "og_player_power": 37,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 52,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2558,
+        "position_rank": 577,
+        "club_rank": 4,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2512
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Hernandez",
+        "badge_score": 37,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_magpies_jack_storer_2023/2024",
+      "name": "Jack Storer",
+      "surname": "Storer",
+      "club": "Magpies",
+      "club_slug": "magpies",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 136
+      },
+      "ratings": {
+        "og_player_power": 37,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 51,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2558,
+        "position_rank": 577,
+        "club_rank": 4,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2224
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Storer",
+        "badge_score": 37,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_magpies_jamie_coombes_2023/2024",
+      "name": "Jamie Coombes",
+      "surname": "Coombes",
+      "club": "Magpies",
+      "club_slug": "magpies",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 175
+      },
+      "ratings": {
+        "og_player_power": 37,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 52,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2558,
+        "position_rank": 577,
+        "club_rank": 4,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2224
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Coombes",
+        "badge_score": 37,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_magpies_jos_ngel_gir_ldez_prieto_2023/2024",
+      "name": "Jos\u00e9 \u00c1ngel Gir\u00e1ldez Prieto",
+      "surname": "Prieto",
+      "club": "Magpies",
+      "club_slug": "magpies",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 93
+      },
+      "ratings": {
+        "og_player_power": 37,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2558,
+        "position_rank": 577,
+        "club_rank": 4,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2512
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Prieto",
+        "badge_score": 37,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_magpies_kyle_casciaro_2023/2024",
+      "name": "Kyle Casciaro",
+      "surname": "Casciaro",
+      "club": "Magpies",
+      "club_slug": "magpies",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 60
+      },
+      "ratings": {
+        "og_player_power": 37,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 52,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2558,
+        "position_rank": 577,
+        "club_rank": 4,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2512
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Casciaro",
+        "badge_score": 37,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_magpies_liam_alexander_nash_2023/2024",
+      "name": "Liam Alexander Nash",
+      "surname": "Nash",
+      "club": "Magpies",
+      "club_slug": "magpies",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 134
+      },
+      "ratings": {
+        "og_player_power": 37,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2558,
+        "position_rank": 577,
+        "club_rank": 4,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2512
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Nash",
+        "badge_score": 37,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_magpies_andr_luiz_dos_santos_2023/2024",
+      "name": "Andr\u00e9 Luiz dos Santos",
+      "surname": "Santos",
+      "club": "Magpies",
+      "club_slug": "magpies",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 51,
+        "shot_threat": 47,
+        "xg_threat": 49,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 51,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2874,
+        "position_rank": 1030,
+        "club_rank": 10,
+        "goal_threat_rank": 931,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2512
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Santos",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_magpies_carlos_garc_a_quesada_2023/2024",
+      "name": "Carlos Garc\u00eda Quesada",
+      "surname": "Quesada",
+      "club": "Magpies",
+      "club_slug": "magpies",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 109
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2874,
+        "position_rank": 1030,
+        "club_rank": 10,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2512
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Quesada",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_magpies_dan_bent_2023/2024",
+      "name": "Dan Bent",
+      "surname": "Bent",
+      "club": "Magpies",
+      "club_slug": "magpies",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 86
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2874,
+        "position_rank": 639,
+        "club_rank": 10,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2512
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Bent",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_magpies_francisco_z_iga_2023/2024",
+      "name": "Francisco Z\u00fa\u00f1iga",
+      "surname": "Z\u00fa\u00f1iga",
+      "club": "Magpies",
+      "club_slug": "magpies",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 82
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2874,
+        "position_rank": 639,
+        "club_rank": 10,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2512
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Z\u00fa\u00f1iga",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_magpies_jos_manuel_mart_nez_oliver_2023/2024",
+      "name": "Jos\u00e9 Manuel Mart\u00ednez Oliver",
+      "surname": "Oliver",
+      "club": "Magpies",
+      "club_slug": "magpies",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 165
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 51,
+        "shot_threat": 47,
+        "xg_threat": 49,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 51,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2874,
+        "position_rank": 639,
+        "club_rank": 10,
+        "goal_threat_rank": 931,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2224
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Oliver",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_magpies_joseph_luis_chipolina_2023/2024",
+      "name": "Joseph Luis Chipolina",
+      "surname": "Chipolina",
+      "club": "Magpies",
+      "club_slug": "magpies",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 97
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2874,
+        "position_rank": 639,
+        "club_rank": 10,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2512
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Chipolina",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_magpies_juan_jes_s_arg_ez_ruiz_2023/2024",
+      "name": "Juan Jes\u00fas Arg\u00fcez Ruiz",
+      "surname": "Ruiz",
+      "club": "Magpies",
+      "club_slug": "magpies",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 101
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2874,
+        "position_rank": 1030,
+        "club_rank": 10,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2512
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Ruiz",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_magpies_julian_del_rio_2023/2024",
+      "name": "Julian Del Rio",
+      "surname": "Rio",
+      "club": "Magpies",
+      "club_slug": "magpies",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 5
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2874,
+        "position_rank": 1030,
+        "club_rank": 10,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2512
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Rio",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_magpies_olmo_gonz_lez_casado_2023/2024",
+      "name": "Olmo Gonz\u00e1lez Casado",
+      "surname": "Casado",
+      "club": "Magpies",
+      "club_slug": "magpies",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 175
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2874,
+        "position_rank": 639,
+        "club_rank": 10,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2512
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Casado",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_magpies_rub_n_d_az_menacho_2023/2024",
+      "name": "Rub\u00e9n D\u00edaz Menacho",
+      "surname": "Menacho",
+      "club": "Magpies",
+      "club_slug": "magpies",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 51,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2874,
+        "position_rank": 639,
+        "club_rank": 10,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2512
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Menacho",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_magpies_scott_ballantyne_2023/2024",
+      "name": "Scott Ballantyne",
+      "surname": "Ballantyne",
+      "club": "Magpies",
+      "club_slug": "magpies",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 1
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 52,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2874,
+        "position_rank": 1030,
+        "club_rank": 10,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2512
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Ballantyne",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_magpies_jaylan_hankins_2023/2024",
+      "name": "Jaylan Hankins",
+      "surname": "Hankins",
+      "club": "Magpies",
+      "club_slug": "magpies",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 34,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 51,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 4097,
+        "position_rank": 371,
+        "club_rank": 21,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2512
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Hankins",
+        "badge_score": 34,
+        "tier": "RED_FLAG"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Bautista",
+      "Silva",
+      "Jones",
+      "Hernandez",
+      "Storer"
+    ],
+    "goal_threat": [
+      "Santos",
+      "Oliver",
+      "Bautista",
+      "Silva",
+      "Jones"
+    ],
+    "creative_spark": [
+      "Bautista",
+      "Silva",
+      "Jones",
+      "Hernandez",
+      "Storer"
+    ],
+    "discipline_risk": [
+      "Coombes",
+      "Storer",
+      "Santos",
+      "Oliver",
+      "Menacho"
+    ]
+  }
+}

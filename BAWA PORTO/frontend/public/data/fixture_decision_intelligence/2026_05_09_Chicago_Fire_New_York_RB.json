@@ -1,0 +1,292 @@
+{
+  "fixture_key": "2026_05_09_Chicago_Fire_New_York_RB",
+  "fixture": "Chicago Fire vs New York RB",
+  "primary_signal": "Over 2.5",
+  "signal_state": "FRAGILE",
+  "agreement_score": 56,
+  "confidence_band": "LOW",
+  "supporting_layers": [
+    "OVER25_HEAT_SUPPORT",
+    "CHAOS_ENVIRONMENT_SUPPORT"
+  ],
+  "caution_layers": [
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "profile_tags": {
+    "home": [
+      "Mixed Team Profile"
+    ],
+    "away": [
+      "Mixed Team Profile"
+    ]
+  },
+  "profile_narrative": "Chicago Fire bring a mixed team profile into a matchup with New York RB's mixed team profile. The shape points toward a live goal environment.",
+  "team_faceoff_summary": [
+    {
+      "metric": "goal_heat_rating",
+      "label": "Goal Heat",
+      "home_value": 51,
+      "away_value": 66,
+      "delta": 15,
+      "leader": "New York RB"
+    },
+    {
+      "metric": "over25_heat_rating",
+      "label": "Over 2.5 Heat",
+      "home_value": 53,
+      "away_value": 67,
+      "delta": 14,
+      "leader": "New York RB"
+    },
+    {
+      "metric": "attack_flow_rating",
+      "label": "Attack Flow",
+      "home_value": 63,
+      "away_value": 58,
+      "delta": 5,
+      "leader": "Chicago Fire"
+    },
+    {
+      "metric": "defensive_lock_rating",
+      "label": "Defensive Lock",
+      "home_value": 63,
+      "away_value": 33,
+      "delta": 30,
+      "leader": "Chicago Fire"
+    },
+    {
+      "metric": "chaos_rating",
+      "label": "Chaos Rating",
+      "home_value": 51,
+      "away_value": 56,
+      "delta": 5,
+      "leader": "New York RB"
+    },
+    {
+      "metric": "first_strike_rating",
+      "label": "First Strike",
+      "home_value": 67,
+      "away_value": 45,
+      "delta": 22,
+      "leader": "Chicago Fire"
+    }
+  ],
+  "unit_battle_summary": [],
+  "key_player_drivers": [
+    {
+      "team": "Chicago Fire",
+      "player": "Philip Zinckernagel",
+      "role": "Forward",
+      "power": 71,
+      "driver_metric": "Goal Threat",
+      "driver_value": 72
+    },
+    {
+      "team": "Chicago Fire",
+      "player": "Hugo Cuypers",
+      "role": "Forward",
+      "power": 69,
+      "driver_metric": "Goal Threat",
+      "driver_value": 70
+    },
+    {
+      "team": "New York RB",
+      "player": "Emil Forsberg",
+      "role": "Forward",
+      "power": 64,
+      "driver_metric": "Goal Threat",
+      "driver_value": 65
+    },
+    {
+      "team": "New York RB",
+      "player": "Adri Mehmeti",
+      "role": "Central Midfielder",
+      "power": 60,
+      "driver_metric": "Midfield Engine",
+      "driver_value": 60
+    }
+  ],
+  "key_mismatches": [],
+  "h2h_context": {
+    "available": false,
+    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
+    "sample_size": 0
+  },
+  "market_suitability": {
+    "ftr": {
+      "rating": 60,
+      "label": "Mixed",
+      "read": "Stronger when one side owns a clear team-power edge."
+    },
+    "btts": {
+      "rating": 54,
+      "label": "Weak",
+      "read": "Driven by two-way access and reduced suppression."
+    },
+    "ou25": {
+      "rating": 58,
+      "label": "Mixed",
+      "read": "Driven by combined goal environment and tempo."
+    },
+    "team_goals": {
+      "rating": 66,
+      "label": "Mixed",
+      "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
+    },
+    "correct_score": {
+      "rating": 96,
+      "label": "Elite",
+      "read": "Better when the shape is structured and the likely scoring zone is narrow."
+    },
+    "corners": {
+      "rating": 64,
+      "label": "Mixed",
+      "read": "Driven by territory and wide-channel pressure."
+    },
+    "cards": {
+      "rating": 52,
+      "label": "Weak",
+      "read": "Driven by discipline heat, fouling, and volatility."
+    }
+  },
+  "market_intelligence": {
+    "ftr": {
+      "alignment_score": 59,
+      "state": "FRAGILE",
+      "model_lean": "HOME",
+      "structural_support": [
+        "OVER25_HEAT_SUPPORT",
+        "CHAOS_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "FTR has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
+      "rating": 60,
+      "band": "Mixed"
+    },
+    "btts": {
+      "alignment_score": 54,
+      "state": "FRAGILE",
+      "model_lean": "YES",
+      "structural_support": [
+        "OVER25_HEAT_SUPPORT",
+        "CHAOS_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "BTTS has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
+      "rating": 54,
+      "band": "Weak"
+    },
+    "ou25": {
+      "alignment_score": 57,
+      "state": "FRAGILE",
+      "model_lean": "OVER25",
+      "structural_support": [
+        "OVER25_HEAT_SUPPORT",
+        "CHAOS_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Over 2.5 has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
+      "rating": 58,
+      "band": "Mixed"
+    },
+    "team_goals": {
+      "alignment_score": 68,
+      "state": "MIXED",
+      "model_lean": "New York RB 1.5+",
+      "structural_support": [
+        "OVER25_HEAT_SUPPORT",
+        "CHAOS_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Team Goals has partial support from over 2.5 heat support, but lineup data missing keeps it from reading clean.",
+      "rating": 66,
+      "band": "Mixed"
+    },
+    "correct_score": {
+      "alignment_score": 80,
+      "state": "SUPPORTED",
+      "model_lean": "OPEN",
+      "structural_support": [
+        "CHAOS_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Correct Score is well supported by chaos environment support, with caution still coming from lineup data missing.",
+      "rating": 96,
+      "band": "Elite"
+    },
+    "corners": {
+      "alignment_score": 62,
+      "state": "MIXED",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "OVER25_HEAT_SUPPORT",
+        "CHAOS_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Corners has partial support from over 2.5 heat support, but lineup data missing keeps it from reading clean.",
+      "rating": 64,
+      "band": "Mixed"
+    },
+    "cards": {
+      "alignment_score": 47,
+      "state": "FRAGILE",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "CHAOS_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Cards has some structural support from chaos environment support, but the overall layer fit remains fragile.",
+      "rating": 52,
+      "band": "Weak"
+    }
+  },
+  "watchlist": {
+    "active": false,
+    "summary": "No watchlist layer is active for this fixture.",
+    "trigger_signals": [],
+    "public_state": "No watchlist flag",
+    "mode": ""
+  },
+  "public_safe_summary": "Over 2.5 has some live shape in Chicago Fire vs New York RB, but the supporting layers remain fragile and need discipline.",
+  "internal_reason_tokens": [
+    "OVER25_HEAT_SUPPORT",
+    "CHAOS_ENVIRONMENT_SUPPORT",
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "summary": {
+    "support_count": 2,
+    "caution_count": 2,
+    "lineup_available": false,
+    "h2h_available": false
+  },
+  "preview": {
+    "headline": "Chicago Fire vs New York RB: Over 2.5 fragile",
+    "short_summary": "Over 2.5 has some live shape in Chicago Fire vs New York RB, but the supporting layers remain fragile and need discipline. Primary support comes from over25 heat support, while the main caution remains lineup data missing.",
+    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: Cards.",
+    "caution_line": "Main caution: Lineup Data Missing.",
+    "telegram_summary": "Chicago Fire vs New York RB — Over 2.5 (Fragile, 56% agreement). Support: Over25 Heat Support. Caution: Lineup Data Missing.",
+    "premium_summary": "Over 2.5 is carrying a 56% agreement read across the published decision layers. Support is currently led by over25 heat support, chaos environment support, while caution is still coming from lineup data missing, h2h unavailable."
+  }
+}

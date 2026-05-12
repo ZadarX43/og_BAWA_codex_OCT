@@ -1,0 +1,1843 @@
+{
+  "club": "Olimpija",
+  "club_slug": "olimpija",
+  "competition": "Europa Conference",
+  "competition_key": "europa_conference",
+  "season": "2023/2024",
+  "players": [
+    {
+      "player_id": "europa_conference_olimpija_pedro_lucas_schwaizer_2023/2024",
+      "name": "Pedro Lucas Schwaizer",
+      "surname": "Schwaizer",
+      "club": "Olimpija",
+      "club_slug": "olimpija",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 164
+      },
+      "ratings": {
+        "og_player_power": 58,
+        "goal_threat": 62,
+        "shot_threat": 61,
+        "xg_threat": 62,
+        "creative_spark": 55,
+        "xa_threat": 55,
+        "midfield_engine": 51,
+        "defensive_lock": 52,
+        "pressing_heat": 48,
+        "ball_progression": 54,
+        "aerial_dominance": 55,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 187,
+        "position_rank": 60,
+        "club_rank": 1,
+        "goal_threat_rank": 172,
+        "creative_spark_rank": 322,
+        "defensive_lock_rank": 706,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2512
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Schwaizer",
+        "badge_score": 58,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "europa_conference_olimpija_matev_vidov_ek_2023/2024",
+      "name": "Matev\u017e Vidov\u0161ek",
+      "surname": "Vidov\u0161ek",
+      "club": "Olimpija",
+      "club_slug": "olimpija",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 51,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 49,
+        "xa_threat": 50,
+        "midfield_engine": 51,
+        "defensive_lock": 52,
+        "pressing_heat": 50,
+        "ball_progression": 49,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 56,
+        "discipline_risk": 56,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Mixed",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Mixed shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 461,
+        "position_rank": 39,
+        "club_rank": 2,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 2305,
+        "defensive_lock_rank": 706,
+        "pressing_heat_rank": 1150,
+        "booking_heat_rank": 559
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Vidov\u0161ek",
+        "badge_score": 51,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_olimpija_marko_brest_2023/2024",
+      "name": "Marko Brest",
+      "surname": "Brest",
+      "club": "Olimpija",
+      "club_slug": "olimpija",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 240
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 54,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 506,
+        "position_rank": 134,
+        "club_rank": 3,
+        "goal_threat_rank": 1253,
+        "creative_spark_rank": 1026,
+        "defensive_lock_rank": 1109,
+        "pressing_heat_rank": 1150,
+        "booking_heat_rank": 932
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Brest",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_olimpija_mateo_karamatic_2023/2024",
+      "name": "Mateo Karamatic",
+      "surname": "Karamatic",
+      "club": "Olimpija",
+      "club_slug": "olimpija",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 506,
+        "position_rank": 134,
+        "club_rank": 3,
+        "goal_threat_rank": 1253,
+        "creative_spark_rank": 1026,
+        "defensive_lock_rank": 1109,
+        "pressing_heat_rank": 1150,
+        "booking_heat_rank": 1116
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Karamatic",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_olimpija_an_mauricio_2023/2024",
+      "name": "\u017dan Mauricio",
+      "surname": "Mauricio",
+      "club": "Olimpija",
+      "club_slug": "olimpija",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 506,
+        "position_rank": 46,
+        "club_rank": 3,
+        "goal_threat_rank": 1253,
+        "creative_spark_rank": 1026,
+        "defensive_lock_rank": 1109,
+        "pressing_heat_rank": 1150,
+        "booking_heat_rank": 1116
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Mauricio",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_olimpija_mustafa_nuki_2023/2024",
+      "name": "Mustafa Nuki\u0107",
+      "surname": "Nuki\u0107",
+      "club": "Olimpija",
+      "club_slug": "olimpija",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 135
+      },
+      "ratings": {
+        "og_player_power": 48,
+        "goal_threat": 61,
+        "shot_threat": 61,
+        "xg_threat": 61,
+        "creative_spark": 52,
+        "xa_threat": 54,
+        "midfield_engine": 52,
+        "defensive_lock": 51,
+        "pressing_heat": 52,
+        "ball_progression": 55,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 51,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1521,
+        "position_rank": 269,
+        "club_rank": 6,
+        "goal_threat_rank": 234,
+        "creative_spark_rank": 740,
+        "defensive_lock_rank": 932,
+        "pressing_heat_rank": 842,
+        "booking_heat_rank": 706
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Nuki\u0107",
+        "badge_score": 48,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_olimpija_ahmet_muhamedbegovi_2023/2024",
+      "name": "Ahmet Muhamedbegovi\u0107",
+      "surname": "Muhamedbegovi\u0107",
+      "club": "Olimpija",
+      "club_slug": "olimpija",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 540
+      },
+      "ratings": {
+        "og_player_power": 47,
+        "goal_threat": 48,
+        "shot_threat": 46,
+        "xg_threat": 45,
+        "creative_spark": 53,
+        "xa_threat": 53,
+        "midfield_engine": 58,
+        "defensive_lock": 57,
+        "pressing_heat": 54,
+        "ball_progression": 54,
+        "aerial_dominance": 56,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 50,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1574,
+        "position_rank": 361,
+        "club_rank": 7,
+        "goal_threat_rank": 2228,
+        "creative_spark_rank": 557,
+        "defensive_lock_rank": 117,
+        "pressing_heat_rank": 355,
+        "booking_heat_rank": 706
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Muhamedbegovi\u0107",
+        "badge_score": 47,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_olimpija_rui_pedro_da_silva_e_sousa_2023/2024",
+      "name": "Rui Pedro da Silva e Sousa",
+      "surname": "Sousa",
+      "club": "Olimpija",
+      "club_slug": "olimpija",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 483
+      },
+      "ratings": {
+        "og_player_power": 47,
+        "goal_threat": 56,
+        "shot_threat": 61,
+        "xg_threat": 58,
+        "creative_spark": 58,
+        "xa_threat": 57,
+        "midfield_engine": 55,
+        "defensive_lock": 51,
+        "pressing_heat": 54,
+        "ball_progression": 56,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 59,
+        "booking_heat": 55
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1574,
+        "position_rank": 285,
+        "club_rank": 7,
+        "goal_threat_rank": 456,
+        "creative_spark_rank": 146,
+        "defensive_lock_rank": 932,
+        "pressing_heat_rank": 355,
+        "booking_heat_rank": 283
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Sousa",
+        "badge_score": 47,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_olimpija_marcel_ratnik_2023/2024",
+      "name": "Marcel Ratnik",
+      "surname": "Ratnik",
+      "club": "Olimpija",
+      "club_slug": "olimpija",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 540
+      },
+      "ratings": {
+        "og_player_power": 45,
+        "goal_threat": 46,
+        "shot_threat": 46,
+        "xg_threat": 45,
+        "creative_spark": 52,
+        "xa_threat": 55,
+        "midfield_engine": 56,
+        "defensive_lock": 55,
+        "pressing_heat": 53,
+        "ball_progression": 51,
+        "aerial_dominance": 55,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 58,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1708,
+        "position_rank": 696,
+        "club_rank": 9,
+        "goal_threat_rank": 4061,
+        "creative_spark_rank": 740,
+        "defensive_lock_rank": 260,
+        "pressing_heat_rank": 607,
+        "booking_heat_rank": 559
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Ratnik",
+        "badge_score": 45,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_olimpija_nemanja_motika_2023/2024",
+      "name": "Nemanja Motika",
+      "surname": "Motika",
+      "club": "Olimpija",
+      "club_slug": "olimpija",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 399
+      },
+      "ratings": {
+        "og_player_power": 45,
+        "goal_threat": 54,
+        "shot_threat": 60,
+        "xg_threat": 57,
+        "creative_spark": 51,
+        "xa_threat": 52,
+        "midfield_engine": 54,
+        "defensive_lock": 52,
+        "pressing_heat": 55,
+        "ball_progression": 54,
+        "aerial_dominance": 52,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 58,
+        "booking_heat": 54
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1708,
+        "position_rank": 320,
+        "club_rank": 9,
+        "goal_threat_rank": 654,
+        "creative_spark_rank": 911,
+        "defensive_lock_rank": 706,
+        "pressing_heat_rank": 199,
+        "booking_heat_rank": 417
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Motika",
+        "badge_score": 45,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_olimpija_timi_el_nik_2023/2024",
+      "name": "Timi El\u0161nik",
+      "surname": "El\u0161nik",
+      "club": "Olimpija",
+      "club_slug": "olimpija",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 432
+      },
+      "ratings": {
+        "og_player_power": 45,
+        "goal_threat": 51,
+        "shot_threat": 52,
+        "xg_threat": 53,
+        "creative_spark": 52,
+        "xa_threat": 55,
+        "midfield_engine": 55,
+        "defensive_lock": 54,
+        "pressing_heat": 54,
+        "ball_progression": 54,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 60,
+        "booking_heat": 56
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1708,
+        "position_rank": 320,
+        "club_rank": 9,
+        "goal_threat_rank": 931,
+        "creative_spark_rank": 740,
+        "defensive_lock_rank": 372,
+        "pressing_heat_rank": 355,
+        "booking_heat_rank": 151
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "El\u0161nik",
+        "badge_score": 45,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_olimpija_redi_kasa_2023/2024",
+      "name": "Redi Kasa",
+      "surname": "Kasa",
+      "club": "Olimpija",
+      "club_slug": "olimpija",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 238
+      },
+      "ratings": {
+        "og_player_power": 44,
+        "goal_threat": 61,
+        "shot_threat": 61,
+        "xg_threat": 62,
+        "creative_spark": 53,
+        "xa_threat": 55,
+        "midfield_engine": 54,
+        "defensive_lock": 50,
+        "pressing_heat": 53,
+        "ball_progression": 55,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 52,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1762,
+        "position_rank": 715,
+        "club_rank": 12,
+        "goal_threat_rank": 234,
+        "creative_spark_rank": 557,
+        "defensive_lock_rank": 1109,
+        "pressing_heat_rank": 607,
+        "booking_heat_rank": 559
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Kasa",
+        "badge_score": 44,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_olimpija_admir_bristri_2023/2024",
+      "name": "Admir Bristri\u0107",
+      "surname": "Bristri\u0107",
+      "club": "Olimpija",
+      "club_slug": "olimpija",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 312
+      },
+      "ratings": {
+        "og_player_power": 43,
+        "goal_threat": 54,
+        "shot_threat": 58,
+        "xg_threat": 56,
+        "creative_spark": 51,
+        "xa_threat": 53,
+        "midfield_engine": 51,
+        "defensive_lock": 52,
+        "pressing_heat": 51,
+        "ball_progression": 54,
+        "aerial_dominance": 52,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 59,
+        "booking_heat": 56
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1823,
+        "position_rank": 355,
+        "club_rank": 13,
+        "goal_threat_rank": 654,
+        "creative_spark_rank": 911,
+        "defensive_lock_rank": 706,
+        "pressing_heat_rank": 1027,
+        "booking_heat_rank": 151
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Bristri\u0107",
+        "badge_score": 43,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_olimpija_agust_n_doffo_2023/2024",
+      "name": "Agust\u00edn Doffo",
+      "surname": "Doffo",
+      "club": "Olimpija",
+      "club_slug": "olimpija",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 435
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 52,
+        "shot_threat": 53,
+        "xg_threat": 53,
+        "creative_spark": 52,
+        "xa_threat": 54,
+        "midfield_engine": 55,
+        "defensive_lock": 54,
+        "pressing_heat": 55,
+        "ball_progression": 54,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 59,
+        "booking_heat": 55
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1909,
+        "position_rank": 782,
+        "club_rank": 14,
+        "goal_threat_rank": 825,
+        "creative_spark_rank": 740,
+        "defensive_lock_rank": 372,
+        "pressing_heat_rank": 199,
+        "booking_heat_rank": 283
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Doffo",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_olimpija_david_sena_fernandes_sualehe_2023/2024",
+      "name": "David Sena Fernandes Sualehe",
+      "surname": "Sualehe",
+      "club": "Olimpija",
+      "club_slug": "olimpija",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 335
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 59,
+        "shot_threat": 59,
+        "xg_threat": 59,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 54,
+        "defensive_lock": 54,
+        "pressing_heat": 54,
+        "ball_progression": 52,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 51,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1909,
+        "position_rank": 456,
+        "club_rank": 14,
+        "goal_threat_rank": 369,
+        "creative_spark_rank": 1026,
+        "defensive_lock_rank": 372,
+        "pressing_heat_rank": 355,
+        "booking_heat_rank": 706
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Sualehe",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_olimpija_jorge_silva_2023/2024",
+      "name": "Jorge Silva",
+      "surname": "Silva",
+      "club": "Olimpija",
+      "club_slug": "olimpija",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 422
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 54,
+        "shot_threat": 59,
+        "xg_threat": 56,
+        "creative_spark": 52,
+        "xa_threat": 53,
+        "midfield_engine": 54,
+        "defensive_lock": 53,
+        "pressing_heat": 54,
+        "ball_progression": 54,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 51,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1909,
+        "position_rank": 456,
+        "club_rank": 14,
+        "goal_threat_rank": 654,
+        "creative_spark_rank": 740,
+        "defensive_lock_rank": 527,
+        "pressing_heat_rank": 355,
+        "booking_heat_rank": 706
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Silva",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_olimpija_marko_mijailovi_2023/2024",
+      "name": "Marko Mijailovi\u0107",
+      "surname": "Mijailovi\u0107",
+      "club": "Olimpija",
+      "club_slug": "olimpija",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 64
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 50,
+        "xa_threat": 51,
+        "midfield_engine": 54,
+        "defensive_lock": 56,
+        "pressing_heat": 52,
+        "ball_progression": 50,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1909,
+        "position_rank": 456,
+        "club_rank": 14,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 1026,
+        "defensive_lock_rank": 174,
+        "pressing_heat_rank": 842,
+        "booking_heat_rank": 1116
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Mijailovi\u0107",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_olimpija_alja_krefl_2023/2024",
+      "name": "Alja\u017e Krefl",
+      "surname": "Krefl",
+      "club": "Olimpija",
+      "club_slug": "olimpija",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 129
+      },
+      "ratings": {
+        "og_player_power": 41,
+        "goal_threat": 52,
+        "shot_threat": 53,
+        "xg_threat": 53,
+        "creative_spark": 54,
+        "xa_threat": 55,
+        "midfield_engine": 52,
+        "defensive_lock": 51,
+        "pressing_heat": 48,
+        "ball_progression": 54,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2012,
+        "position_rank": 828,
+        "club_rank": 18,
+        "goal_threat_rank": 825,
+        "creative_spark_rank": 422,
+        "defensive_lock_rank": 932,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2512
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Krefl",
+        "badge_score": 41,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_olimpija_diogo_pinto_2023/2024",
+      "name": "Diogo Pinto",
+      "surname": "Pinto",
+      "club": "Olimpija",
+      "club_slug": "olimpija",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 55
+      },
+      "ratings": {
+        "og_player_power": 41,
+        "goal_threat": 56,
+        "shot_threat": 62,
+        "xg_threat": 59,
+        "creative_spark": 49,
+        "xa_threat": 50,
+        "midfield_engine": 53,
+        "defensive_lock": 51,
+        "pressing_heat": 53,
+        "ball_progression": 53,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 52,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2012,
+        "position_rank": 828,
+        "club_rank": 18,
+        "goal_threat_rank": 456,
+        "creative_spark_rank": 2305,
+        "defensive_lock_rank": 932,
+        "pressing_heat_rank": 607,
+        "booking_heat_rank": 559
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Pinto",
+        "badge_score": 41,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_olimpija_ivan_posavec_2023/2024",
+      "name": "Ivan Posavec",
+      "surname": "Posavec",
+      "club": "Olimpija",
+      "club_slug": "olimpija",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 185
+      },
+      "ratings": {
+        "og_player_power": 41,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 53,
+        "xa_threat": 55,
+        "midfield_engine": 54,
+        "defensive_lock": 51,
+        "pressing_heat": 53,
+        "ball_progression": 55,
+        "aerial_dominance": 52,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 51,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2012,
+        "position_rank": 494,
+        "club_rank": 18,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 557,
+        "defensive_lock_rank": 932,
+        "pressing_heat_rank": 607,
+        "booking_heat_rank": 706
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Posavec",
+        "badge_score": 41,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_olimpija_sa_ar_fadida_2023/2024",
+      "name": "Sa'ar Fadida",
+      "surname": "Fadida",
+      "club": "Olimpija",
+      "club_slug": "olimpija",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 262
+      },
+      "ratings": {
+        "og_player_power": 40,
+        "goal_threat": 53,
+        "shot_threat": 54,
+        "xg_threat": 54,
+        "creative_spark": 54,
+        "xa_threat": 55,
+        "midfield_engine": 55,
+        "defensive_lock": 52,
+        "pressing_heat": 54,
+        "ball_progression": 51,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 57,
+        "booking_heat": 54
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2142,
+        "position_rank": 898,
+        "club_rank": 21,
+        "goal_threat_rank": 755,
+        "creative_spark_rank": 422,
+        "defensive_lock_rank": 706,
+        "pressing_heat_rank": 355,
+        "booking_heat_rank": 417
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Fadida",
+        "badge_score": 40,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_olimpija_justas_lasickas_2023/2024",
+      "name": "Justas Lasickas",
+      "surname": "Lasickas",
+      "club": "Olimpija",
+      "club_slug": "olimpija",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 210
+      },
+      "ratings": {
+        "og_player_power": 39,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 53,
+        "xa_threat": 53,
+        "midfield_engine": 53,
+        "defensive_lock": 52,
+        "pressing_heat": 53,
+        "ball_progression": 51,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 50,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2277,
+        "position_rank": 956,
+        "club_rank": 22,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 557,
+        "defensive_lock_rank": 706,
+        "pressing_heat_rank": 607,
+        "booking_heat_rank": 932
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Lasickas",
+        "badge_score": 39,
+        "tier": "RED_FLAG"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Schwaizer",
+      "Vidov\u0161ek",
+      "Brest",
+      "Karamatic",
+      "Mauricio"
+    ],
+    "goal_threat": [
+      "Schwaizer",
+      "Nuki\u0107",
+      "Kasa",
+      "Sualehe",
+      "Sousa"
+    ],
+    "creative_spark": [
+      "Sousa",
+      "Schwaizer",
+      "Krefl",
+      "Fadida",
+      "Muhamedbegovi\u0107"
+    ],
+    "discipline_risk": [
+      "El\u0161nik",
+      "Sousa",
+      "Bristri\u0107",
+      "Doffo",
+      "Ratnik"
+    ]
+  }
+}

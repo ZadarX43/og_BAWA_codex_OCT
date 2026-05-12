@@ -1,0 +1,1597 @@
+{
+  "club": "Dukagjini",
+  "club_slug": "dukagjini",
+  "competition": "Europa Conference",
+  "competition_key": "europa_conference",
+  "season": "2023/2024",
+  "players": [
+    {
+      "player_id": "europa_conference_dukagjini_rion_selimi_2023/2024",
+      "name": "Rion Selimi",
+      "surname": "Selimi",
+      "club": "Dukagjini",
+      "club_slug": "dukagjini",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 506,
+        "position_rank": 187,
+        "club_rank": 1,
+        "goal_threat_rank": 1253,
+        "creative_spark_rank": 1026,
+        "defensive_lock_rank": 1109,
+        "pressing_heat_rank": 1150,
+        "booking_heat_rank": 1116
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Selimi",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_dukagjini_iljasa_zufiji_2023/2024",
+      "name": "Iljasa Zufiji",
+      "surname": "Zufiji",
+      "club": "Dukagjini",
+      "club_slug": "dukagjini",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 345
+      },
+      "ratings": {
+        "og_player_power": 39,
+        "goal_threat": 51,
+        "shot_threat": 47,
+        "xg_threat": 49,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2277,
+        "position_rank": 413,
+        "club_rank": 2,
+        "goal_threat_rank": 931,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2512
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Zufiji",
+        "badge_score": 39,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_dukagjini_altin_merlaku_2023/2024",
+      "name": "Altin Merlaku",
+      "surname": "Merlaku",
+      "club": "Dukagjini",
+      "club_slug": "dukagjini",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 242
+      },
+      "ratings": {
+        "og_player_power": 38,
+        "goal_threat": 49,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 50,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 52,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2462,
+        "position_rank": 524,
+        "club_rank": 3,
+        "goal_threat_rank": 1253,
+        "creative_spark_rank": 1026,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2224
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Merlaku",
+        "badge_score": 38,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_dukagjini_ahmed_januzi_2023/2024",
+      "name": "Ahmed Januzi",
+      "surname": "Januzi",
+      "club": "Dukagjini",
+      "club_slug": "dukagjini",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 80
+      },
+      "ratings": {
+        "og_player_power": 37,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2558,
+        "position_rank": 577,
+        "club_rank": 4,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2512
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Januzi",
+        "badge_score": 37,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_dukagjini_albion_pllana_2023/2024",
+      "name": "Albion Pllana",
+      "surname": "Pllana",
+      "club": "Dukagjini",
+      "club_slug": "dukagjini",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 36
+      },
+      "ratings": {
+        "og_player_power": 37,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 47,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2558,
+        "position_rank": 577,
+        "club_rank": 4,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2512
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Pllana",
+        "badge_score": 37,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_dukagjini_marclei_cesar_chaves_santos_2023/2024",
+      "name": "Marclei Cesar Chaves Santos",
+      "surname": "Santos",
+      "club": "Dukagjini",
+      "club_slug": "dukagjini",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 144
+      },
+      "ratings": {
+        "og_player_power": 37,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2558,
+        "position_rank": 577,
+        "club_rank": 4,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2512
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Santos",
+        "badge_score": 37,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_dukagjini_arb_r_shala_2023/2024",
+      "name": "Arb\u00ebr Shala",
+      "surname": "Shala",
+      "club": "Dukagjini",
+      "club_slug": "dukagjini",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 227
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 51,
+        "shot_threat": 47,
+        "xg_threat": 49,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 52,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2874,
+        "position_rank": 639,
+        "club_rank": 7,
+        "goal_threat_rank": 931,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2224
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Shala",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_dukagjini_ardin_dallku_2023/2024",
+      "name": "Ardin Dallku",
+      "surname": "Dallku",
+      "club": "Dukagjini",
+      "club_slug": "dukagjini",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 270
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 52,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2874,
+        "position_rank": 639,
+        "club_rank": 7,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2224
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Dallku",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_dukagjini_blerind_morina_2023/2024",
+      "name": "Blerind Morina",
+      "surname": "Morina",
+      "club": "Dukagjini",
+      "club_slug": "dukagjini",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 88
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 47,
+        "discipline_risk": 52,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2874,
+        "position_rank": 1030,
+        "club_rank": 7,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 1116
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Morina",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_dukagjini_bujar_shabani_2023/2024",
+      "name": "Bujar Shabani",
+      "surname": "Shabani",
+      "club": "Dukagjini",
+      "club_slug": "dukagjini",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 119
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 51,
+        "shot_threat": 47,
+        "xg_threat": 49,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 52,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2874,
+        "position_rank": 1030,
+        "club_rank": 7,
+        "goal_threat_rank": 931,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2224
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Shabani",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_dukagjini_cendrim_kameraj_2023/2024",
+      "name": "Cendrim Kameraj",
+      "surname": "Kameraj",
+      "club": "Dukagjini",
+      "club_slug": "dukagjini",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 258
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 52,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2874,
+        "position_rank": 1030,
+        "club_rank": 7,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2224
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Kameraj",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_dukagjini_dardan_morina_2023/2024",
+      "name": "Dardan Morina",
+      "surname": "Morina",
+      "club": "Dukagjini",
+      "club_slug": "dukagjini",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 9
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2874,
+        "position_rank": 1030,
+        "club_rank": 7,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2512
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Morina",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_dukagjini_dren_feka_2023/2024",
+      "name": "Dren Feka",
+      "surname": "Feka",
+      "club": "Dukagjini",
+      "club_slug": "dukagjini",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 211
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 51,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2874,
+        "position_rank": 1030,
+        "club_rank": 7,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2512
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Feka",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_dukagjini_elton_basriu_2023/2024",
+      "name": "Elton Basriu",
+      "surname": "Basriu",
+      "club": "Dukagjini",
+      "club_slug": "dukagjini",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 360
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 51,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2874,
+        "position_rank": 639,
+        "club_rank": 7,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2512
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Basriu",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_dukagjini_faton_neziri_2023/2024",
+      "name": "Faton Neziri",
+      "surname": "Neziri",
+      "club": "Dukagjini",
+      "club_slug": "dukagjini",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 58
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 47,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2874,
+        "position_rank": 1030,
+        "club_rank": 7,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2512
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Neziri",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_dukagjini_kenan_haxhihamza_2023/2024",
+      "name": "Kenan Haxhihamza",
+      "surname": "Haxhihamza",
+      "club": "Dukagjini",
+      "club_slug": "dukagjini",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 359
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 50,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2874,
+        "position_rank": 1030,
+        "club_rank": 7,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 4010
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Haxhihamza",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_dukagjini_rinor_kuqi_2023/2024",
+      "name": "Rinor Kuqi",
+      "surname": "Kuqi",
+      "club": "Dukagjini",
+      "club_slug": "dukagjini",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2874,
+        "position_rank": 1030,
+        "club_rank": 7,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2512
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Kuqi",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_dukagjini_vitor_hugo_leite_perusses_2023/2024",
+      "name": "Vitor Hugo Leite Perusses",
+      "surname": "Perusses",
+      "club": "Dukagjini",
+      "club_slug": "dukagjini",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 331
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 50,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2874,
+        "position_rank": 639,
+        "club_rank": 7,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 4010
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Perusses",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_dukagjini_altik_muhaxhiri_2023/2024",
+      "name": "Altik Muhaxhiri",
+      "surname": "Muhaxhiri",
+      "club": "Dukagjini",
+      "club_slug": "dukagjini",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2023/2024",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 1
+      },
+      "ratings": {
+        "og_player_power": 35,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 4068,
+        "position_rank": 342,
+        "club_rank": 19,
+        "goal_threat_rank": 2294,
+        "creative_spark_rank": 2503,
+        "defensive_lock_rank": 2264,
+        "pressing_heat_rank": 2198,
+        "booking_heat_rank": 2512
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Muhaxhiri",
+        "badge_score": 35,
+        "tier": "RED_FLAG"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Selimi",
+      "Zufiji",
+      "Merlaku",
+      "Januzi",
+      "Pllana"
+    ],
+    "goal_threat": [
+      "Zufiji",
+      "Shala",
+      "Shabani",
+      "Selimi",
+      "Merlaku"
+    ],
+    "creative_spark": [
+      "Selimi",
+      "Merlaku",
+      "Zufiji",
+      "Januzi",
+      "Pllana"
+    ],
+    "discipline_risk": [
+      "Merlaku",
+      "Shala",
+      "Dallku",
+      "Morina",
+      "Shabani"
+    ]
+  }
+}

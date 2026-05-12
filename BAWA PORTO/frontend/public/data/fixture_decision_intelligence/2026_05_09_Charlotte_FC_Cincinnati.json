@@ -1,0 +1,292 @@
+{
+  "fixture_key": "2026_05_09_Charlotte_FC_Cincinnati",
+  "fixture": "Charlotte vs FC Cincinnati",
+  "primary_signal": "Over 2.5",
+  "signal_state": "FRAGILE",
+  "agreement_score": 56,
+  "confidence_band": "ELITE",
+  "supporting_layers": [
+    "OVER25_HEAT_SUPPORT",
+    "CHAOS_ENVIRONMENT_SUPPORT"
+  ],
+  "caution_layers": [
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "profile_tags": {
+    "home": [
+      "Mixed Team Profile"
+    ],
+    "away": [
+      "Mixed Team Profile"
+    ]
+  },
+  "profile_narrative": "Charlotte bring a mixed team profile into a matchup with FC Cincinnati's mixed team profile. The shape points toward a live goal environment.",
+  "team_faceoff_summary": [
+    {
+      "metric": "goal_heat_rating",
+      "label": "Goal Heat",
+      "home_value": 61,
+      "away_value": 69,
+      "delta": 8,
+      "leader": "FC Cincinnati"
+    },
+    {
+      "metric": "over25_heat_rating",
+      "label": "Over 2.5 Heat",
+      "home_value": 58,
+      "away_value": 65,
+      "delta": 7,
+      "leader": "FC Cincinnati"
+    },
+    {
+      "metric": "attack_flow_rating",
+      "label": "Attack Flow",
+      "home_value": 43,
+      "away_value": 58,
+      "delta": 15,
+      "leader": "FC Cincinnati"
+    },
+    {
+      "metric": "defensive_lock_rating",
+      "label": "Defensive Lock",
+      "home_value": 39,
+      "away_value": 37,
+      "delta": 2,
+      "leader": "Charlotte"
+    },
+    {
+      "metric": "chaos_rating",
+      "label": "Chaos Rating",
+      "home_value": 58,
+      "away_value": 63,
+      "delta": 5,
+      "leader": "FC Cincinnati"
+    },
+    {
+      "metric": "first_strike_rating",
+      "label": "First Strike",
+      "home_value": 37,
+      "away_value": 40,
+      "delta": 3,
+      "leader": "FC Cincinnati"
+    }
+  ],
+  "unit_battle_summary": [],
+  "key_player_drivers": [
+    {
+      "team": "Charlotte",
+      "player": "Wilfried Zaha",
+      "role": "Forward",
+      "power": 67,
+      "driver_metric": "Goal Threat",
+      "driver_value": 67
+    },
+    {
+      "team": "Charlotte",
+      "player": "Kristijan Kahlina",
+      "role": "Goalkeeper",
+      "power": 63,
+      "driver_metric": "Defensive Lock",
+      "driver_value": 49
+    },
+    {
+      "team": "FC Cincinnati",
+      "player": "Ahoueke Denkey",
+      "role": "Forward",
+      "power": 71,
+      "driver_metric": "Goal Threat",
+      "driver_value": 72
+    },
+    {
+      "team": "FC Cincinnati",
+      "player": "Bryan Josías Ramírez León",
+      "role": "Central Midfielder",
+      "power": 64,
+      "driver_metric": "Creative Spark",
+      "driver_value": 60
+    }
+  ],
+  "key_mismatches": [],
+  "h2h_context": {
+    "available": false,
+    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
+    "sample_size": 0
+  },
+  "market_suitability": {
+    "ftr": {
+      "rating": 47,
+      "label": "Weak",
+      "read": "Stronger when one side owns a clear team-power edge."
+    },
+    "btts": {
+      "rating": 61,
+      "label": "Mixed",
+      "read": "Driven by two-way access and reduced suppression."
+    },
+    "ou25": {
+      "rating": 65,
+      "label": "Mixed",
+      "read": "Driven by combined goal environment and tempo."
+    },
+    "team_goals": {
+      "rating": 69,
+      "label": "Mixed",
+      "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
+    },
+    "correct_score": {
+      "rating": 100,
+      "label": "Elite",
+      "read": "Better when the shape is structured and the likely scoring zone is narrow."
+    },
+    "corners": {
+      "rating": 46,
+      "label": "Weak",
+      "read": "Driven by territory and wide-channel pressure."
+    },
+    "cards": {
+      "rating": 56,
+      "label": "Mixed",
+      "read": "Driven by discipline heat, fouling, and volatility."
+    }
+  },
+  "market_intelligence": {
+    "ftr": {
+      "alignment_score": 49,
+      "state": "FRAGILE",
+      "model_lean": "DRAW",
+      "structural_support": [
+        "OVER25_HEAT_SUPPORT",
+        "CHAOS_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "FTR has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
+      "rating": 47,
+      "band": "Weak"
+    },
+    "btts": {
+      "alignment_score": 60,
+      "state": "FRAGILE",
+      "model_lean": "YES",
+      "structural_support": [
+        "OVER25_HEAT_SUPPORT",
+        "CHAOS_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "BTTS has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
+      "rating": 61,
+      "band": "Mixed"
+    },
+    "ou25": {
+      "alignment_score": 60,
+      "state": "FRAGILE",
+      "model_lean": "OVER25",
+      "structural_support": [
+        "OVER25_HEAT_SUPPORT",
+        "CHAOS_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Over 2.5 has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
+      "rating": 65,
+      "band": "Mixed"
+    },
+    "team_goals": {
+      "alignment_score": 70,
+      "state": "MIXED",
+      "model_lean": "FC Cincinnati 1.5+",
+      "structural_support": [
+        "OVER25_HEAT_SUPPORT",
+        "CHAOS_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Team Goals has partial support from over 2.5 heat support, but lineup data missing keeps it from reading clean.",
+      "rating": 69,
+      "band": "Mixed"
+    },
+    "correct_score": {
+      "alignment_score": 83,
+      "state": "SUPPORTED",
+      "model_lean": "OPEN",
+      "structural_support": [
+        "CHAOS_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Correct Score is well supported by chaos environment support, with caution still coming from lineup data missing.",
+      "rating": 100,
+      "band": "Elite"
+    },
+    "corners": {
+      "alignment_score": 48,
+      "state": "FRAGILE",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "OVER25_HEAT_SUPPORT",
+        "CHAOS_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Corners has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
+      "rating": 46,
+      "band": "Weak"
+    },
+    "cards": {
+      "alignment_score": 50,
+      "state": "FRAGILE",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "CHAOS_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Cards has some structural support from chaos environment support, but the overall layer fit remains fragile.",
+      "rating": 56,
+      "band": "Mixed"
+    }
+  },
+  "watchlist": {
+    "active": false,
+    "summary": "No watchlist layer is active for this fixture.",
+    "trigger_signals": [],
+    "public_state": "No watchlist flag",
+    "mode": ""
+  },
+  "public_safe_summary": "Over 2.5 has some live shape in Charlotte vs FC Cincinnati, but the supporting layers remain fragile and need discipline.",
+  "internal_reason_tokens": [
+    "OVER25_HEAT_SUPPORT",
+    "CHAOS_ENVIRONMENT_SUPPORT",
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "summary": {
+    "support_count": 2,
+    "caution_count": 2,
+    "lineup_available": false,
+    "h2h_available": false
+  },
+  "preview": {
+    "headline": "Charlotte vs FC Cincinnati: Over 2.5 fragile",
+    "short_summary": "Over 2.5 has some live shape in Charlotte vs FC Cincinnati, but the supporting layers remain fragile and need discipline. Primary support comes from over25 heat support, while the main caution remains lineup data missing.",
+    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: Corners.",
+    "caution_line": "Main caution: Lineup Data Missing.",
+    "telegram_summary": "Charlotte vs FC Cincinnati — Over 2.5 (Fragile, 56% agreement). Support: Over25 Heat Support. Caution: Lineup Data Missing.",
+    "premium_summary": "Over 2.5 is carrying a 56% agreement read across the published decision layers. Support is currently led by over25 heat support, chaos environment support, while caution is still coming from lineup data missing, h2h unavailable."
+  }
+}

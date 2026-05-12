@@ -1,0 +1,1761 @@
+{
+  "club": "Southport",
+  "club_slug": "southport",
+  "competition": "England National League North",
+  "competition_key": "england_national_league_north",
+  "season": "2025/2026",
+  "players": [
+    {
+      "player_id": "england_national_league_north_southport_arthur_gnahoua_2025/2026",
+      "name": "Arthur Gnahoua",
+      "surname": "Gnahoua",
+      "club": "Southport",
+      "club_slug": "southport",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 1583
+      },
+      "ratings": {
+        "og_player_power": 80,
+        "goal_threat": 87,
+        "shot_threat": 86,
+        "xg_threat": 89,
+        "creative_spark": 58,
+        "xa_threat": 55,
+        "midfield_engine": 39,
+        "defensive_lock": 40,
+        "pressing_heat": 36,
+        "ball_progression": 64,
+        "aerial_dominance": 56,
+        "goalkeeper_shield": 44,
+        "discipline_risk": 40,
+        "booking_heat": 32
+      },
+      "rating_bands": {
+        "og_player_power": "Strong",
+        "goal_threat": "Strong",
+        "shot_threat": "Strong",
+        "xg_threat": "Strong",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Red Flag",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Red Flag",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_player_power": "Strong headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Strong scoring profile with xG and shot support.",
+        "shot_threat": "Strong shooting volume and on-target pressure.",
+        "xg_threat": "Strong chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Red Flag central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Red Flag pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Red Flag booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 10,
+        "position_rank": 10,
+        "club_rank": 1,
+        "goal_threat_rank": 13,
+        "creative_spark_rank": 78,
+        "defensive_lock_rank": 384,
+        "pressing_heat_rank": 409,
+        "booking_heat_rank": 402
+      },
+      "tags": [
+        "Elite Goal Threat"
+      ],
+      "ui": {
+        "pitch_label": "Gnahoua",
+        "badge_score": 80,
+        "tier": "STRONG"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_southport_jordan_michael_slew_2025/2026",
+      "name": "Jordan Michael Slew",
+      "surname": "Slew",
+      "club": "Southport",
+      "club_slug": "southport",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 1572
+      },
+      "ratings": {
+        "og_player_power": 79,
+        "goal_threat": 85,
+        "shot_threat": 81,
+        "xg_threat": 87,
+        "creative_spark": 64,
+        "xa_threat": 63,
+        "midfield_engine": 46,
+        "defensive_lock": 35,
+        "pressing_heat": 44,
+        "ball_progression": 65,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 47,
+        "discipline_risk": 56,
+        "booking_heat": 45
+      },
+      "rating_bands": {
+        "og_player_power": "Positive",
+        "goal_threat": "Strong",
+        "shot_threat": "Strong",
+        "xg_threat": "Strong",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Red Flag",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Positive headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Strong scoring profile with xG and shot support.",
+        "shot_threat": "Strong shooting volume and on-target pressure.",
+        "xg_threat": "Strong chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Red Flag defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 11,
+        "position_rank": 11,
+        "club_rank": 2,
+        "goal_threat_rank": 16,
+        "creative_spark_rank": 38,
+        "defensive_lock_rank": 405,
+        "pressing_heat_rank": 375,
+        "booking_heat_rank": 314
+      },
+      "tags": [
+        "Elite Goal Threat"
+      ],
+      "ui": {
+        "pitch_label": "Slew",
+        "badge_score": 79,
+        "tier": "POSITIVE"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_southport_sonny_hilton_2025/2026",
+      "name": "Sonny Hilton",
+      "surname": "Hilton",
+      "club": "Southport",
+      "club_slug": "southport",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2051
+      },
+      "ratings": {
+        "og_player_power": 65,
+        "goal_threat": 70,
+        "shot_threat": 65,
+        "xg_threat": 70,
+        "creative_spark": 64,
+        "xa_threat": 62,
+        "midfield_engine": 60,
+        "defensive_lock": 48,
+        "pressing_heat": 56,
+        "ball_progression": 63,
+        "aerial_dominance": 42,
+        "goalkeeper_shield": 44,
+        "discipline_risk": 57,
+        "booking_heat": 46
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Positive",
+        "shot_threat": "Mixed",
+        "xg_threat": "Positive",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Positive scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Positive chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 57,
+        "position_rank": 12,
+        "club_rank": 3,
+        "goal_threat_rank": 59,
+        "creative_spark_rank": 38,
+        "defensive_lock_rank": 255,
+        "pressing_heat_rank": 48,
+        "booking_heat_rank": 297
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Hilton",
+        "badge_score": 65,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_southport_luke_griffiths_2025/2026",
+      "name": "Luke Griffiths",
+      "surname": "Griffiths",
+      "club": "Southport",
+      "club_slug": "southport",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Trusted sample",
+        "minutes_played": 1434
+      },
+      "ratings": {
+        "og_player_power": 64,
+        "goal_threat": 51,
+        "shot_threat": 45,
+        "xg_threat": 49,
+        "creative_spark": 61,
+        "xa_threat": 72,
+        "midfield_engine": 69,
+        "defensive_lock": 58,
+        "pressing_heat": 65,
+        "ball_progression": 57,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 44,
+        "discipline_risk": 84,
+        "booking_heat": 77
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Mixed",
+        "xa_threat": "Positive",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Strong",
+        "booking_heat": "Positive"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Positive assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Strong foul and discipline exposure profile.",
+        "booking_heat": "Positive booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 67,
+        "position_rank": 16,
+        "club_rank": 4,
+        "goal_threat_rank": 173,
+        "creative_spark_rank": 58,
+        "defensive_lock_rank": 64,
+        "pressing_heat_rank": 3,
+        "booking_heat_rank": 1
+      },
+      "tags": [
+        "Booking Risk"
+      ],
+      "ui": {
+        "pitch_label": "Griffiths",
+        "badge_score": 64,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_southport_chris_renshaw_2025/2026",
+      "name": "Chris Renshaw",
+      "surname": "Renshaw",
+      "club": "Southport",
+      "club_slug": "southport",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2430
+      },
+      "ratings": {
+        "og_player_power": 59,
+        "goal_threat": 15,
+        "shot_threat": 10,
+        "xg_threat": 12,
+        "creative_spark": 32,
+        "xa_threat": 31,
+        "midfield_engine": 52,
+        "defensive_lock": 48,
+        "pressing_heat": 39,
+        "ball_progression": 38,
+        "aerial_dominance": 37,
+        "goalkeeper_shield": 69,
+        "discipline_risk": 34,
+        "booking_heat": 26
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Red Flag",
+        "shot_threat": "Red Flag",
+        "xg_threat": "Red Flag",
+        "creative_spark": "Red Flag",
+        "xa_threat": "Red Flag",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Red Flag",
+        "ball_progression": "Red Flag",
+        "aerial_dominance": "Red Flag",
+        "goalkeeper_shield": "Mixed",
+        "discipline_risk": "Red Flag",
+        "booking_heat": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Red Flag scoring profile with xG and shot support.",
+        "shot_threat": "Red Flag shooting volume and on-target pressure.",
+        "xg_threat": "Red Flag chance-quality profile.",
+        "creative_spark": "Red Flag creation profile for final-third value.",
+        "xa_threat": "Red Flag assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Red Flag pressure and regain activity profile.",
+        "ball_progression": "Red Flag carrying and forward progression profile.",
+        "aerial_dominance": "Red Flag aerial and set-piece profile.",
+        "goalkeeper_shield": "Mixed shot-stopping and resistance profile.",
+        "discipline_risk": "Red Flag foul and discipline exposure profile.",
+        "booking_heat": "Red Flag booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 113,
+        "position_rank": 12,
+        "club_rank": 5,
+        "goal_threat_rank": 405,
+        "creative_spark_rank": 408,
+        "defensive_lock_rank": 255,
+        "pressing_heat_rank": 403,
+        "booking_heat_rank": 414
+      },
+      "tags": [
+        "Goalkeeper Profile"
+      ],
+      "ui": {
+        "pitch_label": "Renshaw",
+        "badge_score": 59,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_southport_chris_sze_2025/2026",
+      "name": "Chris Sze",
+      "surname": "Sze",
+      "club": "Southport",
+      "club_slug": "southport",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 327
+      },
+      "ratings": {
+        "og_player_power": 58,
+        "goal_threat": 61,
+        "shot_threat": 62,
+        "xg_threat": 62,
+        "creative_spark": 47,
+        "xa_threat": 48,
+        "midfield_engine": 45,
+        "defensive_lock": 45,
+        "pressing_heat": 48,
+        "ball_progression": 52,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 51,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 121,
+        "position_rank": 42,
+        "club_rank": 6,
+        "goal_threat_rank": 92,
+        "creative_spark_rank": 277,
+        "defensive_lock_rank": 335,
+        "pressing_heat_rank": 286,
+        "booking_heat_rank": 165
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Sze",
+        "badge_score": 58,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_southport_jordan_keane_2025/2026",
+      "name": "Jordan Keane",
+      "surname": "Keane",
+      "club": "Southport",
+      "club_slug": "southport",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 1639
+      },
+      "ratings": {
+        "og_player_power": 58,
+        "goal_threat": 40,
+        "shot_threat": 29,
+        "xg_threat": 35,
+        "creative_spark": 40,
+        "xa_threat": 42,
+        "midfield_engine": 61,
+        "defensive_lock": 69,
+        "pressing_heat": 50,
+        "ball_progression": 45,
+        "aerial_dominance": 65,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 60,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Weak",
+        "shot_threat": "Red Flag",
+        "xg_threat": "Red Flag",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Red Flag shooting volume and on-target pressure.",
+        "xg_threat": "Red Flag chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 121,
+        "position_rank": 34,
+        "club_rank": 6,
+        "goal_threat_rank": 346,
+        "creative_spark_rank": 380,
+        "defensive_lock_rank": 12,
+        "pressing_heat_rank": 191,
+        "booking_heat_rank": 150
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Keane",
+        "badge_score": 58,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_southport_danny_lloyd_2025/2026",
+      "name": "Danny Lloyd",
+      "surname": "Lloyd",
+      "club": "Southport",
+      "club_slug": "southport",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Trusted sample",
+        "minutes_played": 1212
+      },
+      "ratings": {
+        "og_player_power": 53,
+        "goal_threat": 78,
+        "shot_threat": 82,
+        "xg_threat": 82,
+        "creative_spark": 71,
+        "xa_threat": 71,
+        "midfield_engine": 49,
+        "defensive_lock": 41,
+        "pressing_heat": 53,
+        "ball_progression": 61,
+        "aerial_dominance": 41,
+        "goalkeeper_shield": 43,
+        "discipline_risk": 62,
+        "booking_heat": 54
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Positive",
+        "shot_threat": "Strong",
+        "xg_threat": "Strong",
+        "creative_spark": "Positive",
+        "xa_threat": "Positive",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Positive scoring profile with xG and shot support.",
+        "shot_threat": "Strong shooting volume and on-target pressure.",
+        "xg_threat": "Strong chance-quality profile.",
+        "creative_spark": "Positive creation profile for final-third value.",
+        "xa_threat": "Positive assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 161,
+        "position_rank": 54,
+        "club_rank": 8,
+        "goal_threat_rank": 36,
+        "creative_spark_rank": 15,
+        "defensive_lock_rank": 378,
+        "pressing_heat_rank": 102,
+        "booking_heat_rank": 108
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Lloyd",
+        "badge_score": 53,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_southport_momodou_touray_2025/2026",
+      "name": "Momodou Touray",
+      "surname": "Touray",
+      "club": "Southport",
+      "club_slug": "southport",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Medium sample",
+        "minutes_played": 736
+      },
+      "ratings": {
+        "og_player_power": 52,
+        "goal_threat": 60,
+        "shot_threat": 61,
+        "xg_threat": 60,
+        "creative_spark": 54,
+        "xa_threat": 52,
+        "midfield_engine": 47,
+        "defensive_lock": 42,
+        "pressing_heat": 46,
+        "ball_progression": 55,
+        "aerial_dominance": 46,
+        "goalkeeper_shield": 45,
+        "discipline_risk": 43,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 178,
+        "position_rank": 55,
+        "club_rank": 9,
+        "goal_threat_rank": 100,
+        "creative_spark_rank": 121,
+        "defensive_lock_rank": 370,
+        "pressing_heat_rank": 337,
+        "booking_heat_rank": 250
+      },
+      "tags": [
+        "Forward Profile"
+      ],
+      "ui": {
+        "pitch_label": "Touray",
+        "badge_score": 52,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_southport_samuel_joseph_minihan_2025/2026",
+      "name": "Samuel Joseph Minihan",
+      "surname": "Minihan",
+      "club": "Southport",
+      "club_slug": "southport",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 1800
+      },
+      "ratings": {
+        "og_player_power": 51,
+        "goal_threat": 27,
+        "shot_threat": 24,
+        "xg_threat": 23,
+        "creative_spark": 52,
+        "xa_threat": 45,
+        "midfield_engine": 56,
+        "defensive_lock": 51,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 52,
+        "goalkeeper_shield": 46,
+        "discipline_risk": 62,
+        "booking_heat": 54
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Red Flag",
+        "shot_threat": "Red Flag",
+        "xg_threat": "Red Flag",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Red Flag scoring profile with xG and shot support.",
+        "shot_threat": "Red Flag shooting volume and on-target pressure.",
+        "xg_threat": "Red Flag chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 192,
+        "position_rank": 53,
+        "club_rank": 10,
+        "goal_threat_rank": 389,
+        "creative_spark_rank": 144,
+        "defensive_lock_rank": 149,
+        "pressing_heat_rank": 308,
+        "booking_heat_rank": 108
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Minihan",
+        "badge_score": 51,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_southport_antony_mcmillan_2025/2026",
+      "name": "Antony McMillan",
+      "surname": "McMillan",
+      "club": "Southport",
+      "club_slug": "southport",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 48,
+        "shot_threat": 50,
+        "xg_threat": 49,
+        "creative_spark": 49,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 52,
+        "discipline_risk": 47,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 205,
+        "position_rank": 21,
+        "club_rank": 11,
+        "goal_threat_rank": 208,
+        "creative_spark_rank": 198,
+        "defensive_lock_rank": 169,
+        "pressing_heat_rank": 191,
+        "booking_heat_rank": 165
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "McMillan",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_southport_dan_pike_2025/2026",
+      "name": "Dan Pike",
+      "surname": "Pike",
+      "club": "Southport",
+      "club_slug": "southport",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 401
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 56,
+        "shot_threat": 55,
+        "xg_threat": 56,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 51,
+        "defensive_lock": 53,
+        "pressing_heat": 52,
+        "ball_progression": 51,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 47,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 205,
+        "position_rank": 71,
+        "club_rank": 11,
+        "goal_threat_rank": 132,
+        "creative_spark_rank": 257,
+        "defensive_lock_rank": 116,
+        "pressing_heat_rank": 133,
+        "booking_heat_rank": 225
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Pike",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_southport_jake_taylor_2025/2026",
+      "name": "Jake Taylor",
+      "surname": "Taylor",
+      "club": "Southport",
+      "club_slug": "southport",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 48,
+        "shot_threat": 50,
+        "xg_threat": 49,
+        "creative_spark": 49,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 52,
+        "discipline_risk": 47,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 205,
+        "position_rank": 71,
+        "club_rank": 11,
+        "goal_threat_rank": 208,
+        "creative_spark_rank": 198,
+        "defensive_lock_rank": 169,
+        "pressing_heat_rank": 191,
+        "booking_heat_rank": 165
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Taylor",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_southport_callum_steven_edwards_2025/2026",
+      "name": "Callum Steven Edwards",
+      "surname": "Edwards",
+      "club": "Southport",
+      "club_slug": "southport",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Medium sample",
+        "minutes_played": 802
+      },
+      "ratings": {
+        "og_player_power": 47,
+        "goal_threat": 42,
+        "shot_threat": 48,
+        "xg_threat": 44,
+        "creative_spark": 53,
+        "xa_threat": 55,
+        "midfield_engine": 54,
+        "defensive_lock": 50,
+        "pressing_heat": 53,
+        "ball_progression": 55,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 45,
+        "discipline_risk": 55,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 285,
+        "position_rank": 111,
+        "club_rank": 14,
+        "goal_threat_rank": 304,
+        "creative_spark_rank": 133,
+        "defensive_lock_rank": 169,
+        "pressing_heat_rank": 102,
+        "booking_heat_rank": 165
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Edwards",
+        "badge_score": 47,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_southport_luke_burgess_2025/2026",
+      "name": "Luke Burgess",
+      "surname": "Burgess",
+      "club": "Southport",
+      "club_slug": "southport",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Medium sample",
+        "minutes_played": 694
+      },
+      "ratings": {
+        "og_player_power": 45,
+        "goal_threat": 36,
+        "shot_threat": 34,
+        "xg_threat": 35,
+        "creative_spark": 48,
+        "xa_threat": 52,
+        "midfield_engine": 55,
+        "defensive_lock": 49,
+        "pressing_heat": 54,
+        "ball_progression": 53,
+        "aerial_dominance": 45,
+        "goalkeeper_shield": 46,
+        "discipline_risk": 64,
+        "booking_heat": 62
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Red Flag",
+        "shot_threat": "Red Flag",
+        "xg_threat": "Red Flag",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Red Flag scoring profile with xG and shot support.",
+        "shot_threat": "Red Flag shooting volume and on-target pressure.",
+        "xg_threat": "Red Flag chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 309,
+        "position_rank": 126,
+        "club_rank": 15,
+        "goal_threat_rank": 364,
+        "creative_spark_rank": 257,
+        "defensive_lock_rank": 236,
+        "pressing_heat_rank": 76,
+        "booking_heat_rank": 41
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Burgess",
+        "badge_score": 45,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_southport_hallam_hope_2025/2026",
+      "name": "Hallam Hope",
+      "surname": "Hope",
+      "club": "Southport",
+      "club_slug": "southport",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 434
+      },
+      "ratings": {
+        "og_player_power": 43,
+        "goal_threat": 51,
+        "shot_threat": 58,
+        "xg_threat": 54,
+        "creative_spark": 49,
+        "xa_threat": 51,
+        "midfield_engine": 48,
+        "defensive_lock": 46,
+        "pressing_heat": 50,
+        "ball_progression": 51,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 47,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Mixed",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 328,
+        "position_rank": 75,
+        "club_rank": 16,
+        "goal_threat_rank": 173,
+        "creative_spark_rank": 198,
+        "defensive_lock_rank": 312,
+        "pressing_heat_rank": 191,
+        "booking_heat_rank": 225
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Hope",
+        "badge_score": 43,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_southport_luke_tabone_2025/2026",
+      "name": "Luke Tabone",
+      "surname": "Tabone",
+      "club": "Southport",
+      "club_slug": "southport",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Medium sample",
+        "minutes_played": 630
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 51,
+        "shot_threat": 47,
+        "xg_threat": 48,
+        "creative_spark": 45,
+        "xa_threat": 47,
+        "midfield_engine": 60,
+        "defensive_lock": 58,
+        "pressing_heat": 56,
+        "ball_progression": 48,
+        "aerial_dominance": 59,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 56,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 339,
+        "position_rank": 137,
+        "club_rank": 17,
+        "goal_threat_rank": 173,
+        "creative_spark_rank": 317,
+        "defensive_lock_rank": 64,
+        "pressing_heat_rank": 48,
+        "booking_heat_rank": 120
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Tabone",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_southport_max_woltman_2025/2026",
+      "name": "Max Woltman",
+      "surname": "Woltman",
+      "club": "Southport",
+      "club_slug": "southport",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 336
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 48,
+        "shot_threat": 50,
+        "xg_threat": 49,
+        "creative_spark": 53,
+        "xa_threat": 55,
+        "midfield_engine": 51,
+        "defensive_lock": 48,
+        "pressing_heat": 52,
+        "ball_progression": 54,
+        "aerial_dominance": 46,
+        "goalkeeper_shield": 47,
+        "discipline_risk": 56,
+        "booking_heat": 55
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 339,
+        "position_rank": 137,
+        "club_rank": 17,
+        "goal_threat_rank": 208,
+        "creative_spark_rank": 133,
+        "defensive_lock_rank": 255,
+        "pressing_heat_rank": 133,
+        "booking_heat_rank": 99
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Woltman",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_southport_dana_de_oliveira_amaral_2025/2026",
+      "name": "Dana De Oliveira Amaral",
+      "surname": "Amaral",
+      "club": "Southport",
+      "club_slug": "southport",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 107
+      },
+      "ratings": {
+        "og_player_power": 40,
+        "goal_threat": 45,
+        "shot_threat": 45,
+        "xg_threat": 44,
+        "creative_spark": 49,
+        "xa_threat": 52,
+        "midfield_engine": 52,
+        "defensive_lock": 53,
+        "pressing_heat": 50,
+        "ball_progression": 49,
+        "aerial_dominance": 51,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 44,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 355,
+        "position_rank": 148,
+        "club_rank": 19,
+        "goal_threat_rank": 277,
+        "creative_spark_rank": 198,
+        "defensive_lock_rank": 116,
+        "pressing_heat_rank": 191,
+        "booking_heat_rank": 273
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Amaral",
+        "badge_score": 40,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_southport_ne_jai_tucker_2025/2026",
+      "name": "Ne-Jai Tucker",
+      "surname": "Tucker",
+      "club": "Southport",
+      "club_slug": "southport",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 72
+      },
+      "ratings": {
+        "og_player_power": 38,
+        "goal_threat": 54,
+        "shot_threat": 62,
+        "xg_threat": 59,
+        "creative_spark": 48,
+        "xa_threat": 49,
+        "midfield_engine": 53,
+        "defensive_lock": 48,
+        "pressing_heat": 49,
+        "ball_progression": 48,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 42,
+        "booking_heat": 45
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 376,
+        "position_rank": 164,
+        "club_rank": 20,
+        "goal_threat_rank": 147,
+        "creative_spark_rank": 257,
+        "defensive_lock_rank": 255,
+        "pressing_heat_rank": 261,
+        "booking_heat_rank": 314
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Tucker",
+        "badge_score": 38,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_southport_edy_maieco_2025/2026",
+      "name": "Edy Maieco",
+      "surname": "Maieco",
+      "club": "Southport",
+      "club_slug": "southport",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 21
+      },
+      "ratings": {
+        "og_player_power": 35,
+        "goal_threat": 51,
+        "shot_threat": 52,
+        "xg_threat": 54,
+        "creative_spark": 45,
+        "xa_threat": 44,
+        "midfield_engine": 47,
+        "defensive_lock": 44,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 44,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 47,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 404,
+        "position_rank": 175,
+        "club_rank": 21,
+        "goal_threat_rank": 173,
+        "creative_spark_rank": 317,
+        "defensive_lock_rank": 347,
+        "pressing_heat_rank": 286,
+        "booking_heat_rank": 225
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Maieco",
+        "badge_score": 35,
+        "tier": "RED_FLAG"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Gnahoua",
+      "Slew",
+      "Hilton",
+      "Griffiths",
+      "Renshaw"
+    ],
+    "goal_threat": [
+      "Gnahoua",
+      "Slew",
+      "Lloyd",
+      "Hilton",
+      "Sze"
+    ],
+    "creative_spark": [
+      "Lloyd",
+      "Slew",
+      "Hilton",
+      "Griffiths",
+      "Gnahoua"
+    ],
+    "discipline_risk": [
+      "Griffiths",
+      "Burgess",
+      "Lloyd",
+      "Minihan",
+      "Keane"
+    ]
+  }
+}

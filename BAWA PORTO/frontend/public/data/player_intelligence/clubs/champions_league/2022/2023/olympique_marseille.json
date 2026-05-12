@@ -1,0 +1,1761 @@
+{
+  "club": "Olympique Marseille",
+  "club_slug": "olympique_marseille",
+  "competition": "Champions League",
+  "competition_key": "champions_league",
+  "season": "2022/2023",
+  "players": [
+    {
+      "player_id": "champions_league_olympique_marseille_alexis_sanchez_2022/2023",
+      "name": "Alexis Sanchez",
+      "surname": "Sanchez",
+      "club": "Olympique Marseille",
+      "club_slug": "olympique_marseille",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2022/2023",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 419
+      },
+      "ratings": {
+        "og_player_power": 59,
+        "goal_threat": 62,
+        "shot_threat": 62,
+        "xg_threat": 62,
+        "creative_spark": 54,
+        "xa_threat": 55,
+        "midfield_engine": 51,
+        "defensive_lock": 49,
+        "pressing_heat": 51,
+        "ball_progression": 54,
+        "aerial_dominance": 51,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 50,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 108,
+        "position_rank": 45,
+        "club_rank": 1,
+        "goal_threat_rank": 115,
+        "creative_spark_rank": 239,
+        "defensive_lock_rank": 1102,
+        "pressing_heat_rank": 608,
+        "booking_heat_rank": 474
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Sanchez",
+        "badge_score": 59,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "champions_league_olympique_marseille_jordan_veretout_2022/2023",
+      "name": "Jordan Veretout",
+      "surname": "Veretout",
+      "club": "Olympique Marseille",
+      "club_slug": "olympique_marseille",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2022/2023",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 490
+      },
+      "ratings": {
+        "og_player_power": 57,
+        "goal_threat": 54,
+        "shot_threat": 59,
+        "xg_threat": 55,
+        "creative_spark": 58,
+        "xa_threat": 57,
+        "midfield_engine": 57,
+        "defensive_lock": 54,
+        "pressing_heat": 55,
+        "ball_progression": 55,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 61,
+        "booking_heat": 57
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Weak",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 142,
+        "position_rank": 37,
+        "club_rank": 2,
+        "goal_threat_rank": 343,
+        "creative_spark_rank": 73,
+        "defensive_lock_rank": 222,
+        "pressing_heat_rank": 97,
+        "booking_heat_rank": 55
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Veretout",
+        "badge_score": 57,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "champions_league_olympique_marseille_valentin_rongier_2022/2023",
+      "name": "Valentin Rongier",
+      "surname": "Rongier",
+      "club": "Olympique Marseille",
+      "club_slug": "olympique_marseille",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2022/2023",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 471
+      },
+      "ratings": {
+        "og_player_power": 57,
+        "goal_threat": 53,
+        "shot_threat": 57,
+        "xg_threat": 55,
+        "creative_spark": 52,
+        "xa_threat": 55,
+        "midfield_engine": 57,
+        "defensive_lock": 55,
+        "pressing_heat": 56,
+        "ball_progression": 55,
+        "aerial_dominance": 52,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 52,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Weak",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 142,
+        "position_rank": 37,
+        "club_rank": 2,
+        "goal_threat_rank": 397,
+        "creative_spark_rank": 410,
+        "defensive_lock_rank": 150,
+        "pressing_heat_rank": 52,
+        "booking_heat_rank": 283
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Rongier",
+        "badge_score": 57,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "champions_league_olympique_marseille_amine_harit_2022/2023",
+      "name": "Amine Harit",
+      "surname": "Harit",
+      "club": "Olympique Marseille",
+      "club_slug": "olympique_marseille",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2022/2023",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 379
+      },
+      "ratings": {
+        "og_player_power": 54,
+        "goal_threat": 60,
+        "shot_threat": 60,
+        "xg_threat": 60,
+        "creative_spark": 57,
+        "xa_threat": 57,
+        "midfield_engine": 54,
+        "defensive_lock": 54,
+        "pressing_heat": 52,
+        "ball_progression": 56,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 214,
+        "position_rank": 57,
+        "club_rank": 4,
+        "goal_threat_rank": 183,
+        "creative_spark_rank": 95,
+        "defensive_lock_rank": 222,
+        "pressing_heat_rank": 491,
+        "booking_heat_rank": 600
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Harit",
+        "badge_score": 54,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_olympique_marseille_leonardo_balerdi_2022/2023",
+      "name": "Leonardo Balerdi",
+      "surname": "Balerdi",
+      "club": "Olympique Marseille",
+      "club_slug": "olympique_marseille",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2022/2023",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 490
+      },
+      "ratings": {
+        "og_player_power": 54,
+        "goal_threat": 60,
+        "shot_threat": 59,
+        "xg_threat": 61,
+        "creative_spark": 49,
+        "xa_threat": 50,
+        "midfield_engine": 57,
+        "defensive_lock": 56,
+        "pressing_heat": 55,
+        "ball_progression": 49,
+        "aerial_dominance": 57,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 58,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 214,
+        "position_rank": 69,
+        "club_rank": 4,
+        "goal_threat_rank": 183,
+        "creative_spark_rank": 1096,
+        "defensive_lock_rank": 88,
+        "pressing_heat_rank": 97,
+        "booking_heat_rank": 283
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Balerdi",
+        "badge_score": 54,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_olympique_marseille_chancel_mbemba_2022/2023",
+      "name": "Chancel Mbemba",
+      "surname": "Mbemba",
+      "club": "Olympique Marseille",
+      "club_slug": "olympique_marseille",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2022/2023",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 407
+      },
+      "ratings": {
+        "og_player_power": 52,
+        "goal_threat": 60,
+        "shot_threat": 59,
+        "xg_threat": 61,
+        "creative_spark": 55,
+        "xa_threat": 55,
+        "midfield_engine": 55,
+        "defensive_lock": 56,
+        "pressing_heat": 54,
+        "ball_progression": 53,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 55,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 288,
+        "position_rank": 101,
+        "club_rank": 6,
+        "goal_threat_rank": 183,
+        "creative_spark_rank": 190,
+        "defensive_lock_rank": 88,
+        "pressing_heat_rank": 169,
+        "booking_heat_rank": 474
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Mbemba",
+        "badge_score": 52,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_olympique_marseille_matteo_guendouzi_2022/2023",
+      "name": "Matteo Guendouzi",
+      "surname": "Guendouzi",
+      "club": "Olympique Marseille",
+      "club_slug": "olympique_marseille",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2022/2023",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 419
+      },
+      "ratings": {
+        "og_player_power": 51,
+        "goal_threat": 61,
+        "shot_threat": 60,
+        "xg_threat": 61,
+        "creative_spark": 53,
+        "xa_threat": 54,
+        "midfield_engine": 54,
+        "defensive_lock": 53,
+        "pressing_heat": 52,
+        "ball_progression": 51,
+        "aerial_dominance": 52,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 55,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 324,
+        "position_rank": 96,
+        "club_rank": 7,
+        "goal_threat_rank": 150,
+        "creative_spark_rank": 299,
+        "defensive_lock_rank": 293,
+        "pressing_heat_rank": 491,
+        "booking_heat_rank": 368
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Guendouzi",
+        "badge_score": 51,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_olympique_marseille_rub_n_blanco_2022/2023",
+      "name": "Rub\u00e9n Blanco",
+      "surname": "Blanco",
+      "club": "Olympique Marseille",
+      "club_slug": "olympique_marseille",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2022/2023",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 357,
+        "position_rank": 34,
+        "club_rank": 8,
+        "goal_threat_rank": 684,
+        "creative_spark_rank": 602,
+        "defensive_lock_rank": 609,
+        "pressing_heat_rank": 691,
+        "booking_heat_rank": 600
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Blanco",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_olympique_marseille_simon_ngapandouetnbu_2022/2023",
+      "name": "Simon Ngapandouetnbu",
+      "surname": "Ngapandouetnbu",
+      "club": "Olympique Marseille",
+      "club_slug": "olympique_marseille",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2022/2023",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 357,
+        "position_rank": 34,
+        "club_rank": 8,
+        "goal_threat_rank": 684,
+        "creative_spark_rank": 602,
+        "defensive_lock_rank": 609,
+        "pressing_heat_rank": 691,
+        "booking_heat_rank": 600
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Ngapandouetnbu",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_olympique_marseille_cengiz_nder_2022/2023",
+      "name": "Cengiz \u00dcnder",
+      "surname": "\u00dcnder",
+      "club": "Olympique Marseille",
+      "club_slug": "olympique_marseille",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2022/2023",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 167
+      },
+      "ratings": {
+        "og_player_power": 49,
+        "goal_threat": 54,
+        "shot_threat": 58,
+        "xg_threat": 56,
+        "creative_spark": 54,
+        "xa_threat": 55,
+        "midfield_engine": 54,
+        "defensive_lock": 50,
+        "pressing_heat": 52,
+        "ball_progression": 54,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 56,
+        "booking_heat": 54
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 782,
+        "position_rank": 139,
+        "club_rank": 10,
+        "goal_threat_rank": 343,
+        "creative_spark_rank": 239,
+        "defensive_lock_rank": 609,
+        "pressing_heat_rank": 491,
+        "booking_heat_rank": 210
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "\u00dcnder",
+        "badge_score": 49,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_olympique_marseille_pau_l_pez_2022/2023",
+      "name": "Pau L\u00f3pez",
+      "surname": "L\u00f3pez",
+      "club": "Olympique Marseille",
+      "club_slug": "olympique_marseille",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2022/2023",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 540
+      },
+      "ratings": {
+        "og_player_power": 48,
+        "goal_threat": 45,
+        "shot_threat": 44,
+        "xg_threat": 44,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 50,
+        "defensive_lock": 53,
+        "pressing_heat": 47,
+        "ball_progression": 51,
+        "aerial_dominance": 52,
+        "goalkeeper_shield": 57,
+        "discipline_risk": 44,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Mixed",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Mixed shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 821,
+        "position_rank": 185,
+        "club_rank": 11,
+        "goal_threat_rank": 1903,
+        "creative_spark_rank": 1239,
+        "defensive_lock_rank": 293,
+        "pressing_heat_rank": 1900,
+        "booking_heat_rank": 1866
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "L\u00f3pez",
+        "badge_score": 48,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_olympique_marseille_dimitri_payet_2022/2023",
+      "name": "Dimitri Payet",
+      "surname": "Payet",
+      "club": "Olympique Marseille",
+      "club_slug": "olympique_marseille",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2022/2023",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 78
+      },
+      "ratings": {
+        "og_player_power": 47,
+        "goal_threat": 52,
+        "shot_threat": 52,
+        "xg_threat": 53,
+        "creative_spark": 53,
+        "xa_threat": 54,
+        "midfield_engine": 54,
+        "defensive_lock": 49,
+        "pressing_heat": 51,
+        "ball_progression": 54,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 47,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 853,
+        "position_rank": 242,
+        "club_rank": 12,
+        "goal_threat_rank": 450,
+        "creative_spark_rank": 299,
+        "defensive_lock_rank": 1102,
+        "pressing_heat_rank": 608,
+        "booking_heat_rank": 1134
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Payet",
+        "badge_score": 47,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_olympique_marseille_eric_bailly_2022/2023",
+      "name": "Eric Bailly",
+      "surname": "Bailly",
+      "club": "Olympique Marseille",
+      "club_slug": "olympique_marseille",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2022/2023",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 305
+      },
+      "ratings": {
+        "og_player_power": 46,
+        "goal_threat": 46,
+        "shot_threat": 46,
+        "xg_threat": 46,
+        "creative_spark": 49,
+        "xa_threat": 50,
+        "midfield_engine": 55,
+        "defensive_lock": 56,
+        "pressing_heat": 54,
+        "ball_progression": 49,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 58,
+        "booking_heat": 55
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 894,
+        "position_rank": 284,
+        "club_rank": 13,
+        "goal_threat_rank": 1136,
+        "creative_spark_rank": 1096,
+        "defensive_lock_rank": 88,
+        "pressing_heat_rank": 169,
+        "booking_heat_rank": 142
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Bailly",
+        "badge_score": 46,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_olympique_marseille_jonathan_clauss_2022/2023",
+      "name": "Jonathan Clauss",
+      "surname": "Clauss",
+      "club": "Olympique Marseille",
+      "club_slug": "olympique_marseille",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2022/2023",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 416
+      },
+      "ratings": {
+        "og_player_power": 46,
+        "goal_threat": 54,
+        "shot_threat": 57,
+        "xg_threat": 54,
+        "creative_spark": 56,
+        "xa_threat": 55,
+        "midfield_engine": 53,
+        "defensive_lock": 53,
+        "pressing_heat": 53,
+        "ball_progression": 54,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 55,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Mixed",
+        "xg_threat": "Weak",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 894,
+        "position_rank": 284,
+        "club_rank": 13,
+        "goal_threat_rank": 343,
+        "creative_spark_rank": 140,
+        "defensive_lock_rank": 293,
+        "pressing_heat_rank": 311,
+        "booking_heat_rank": 368
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Clauss",
+        "badge_score": 46,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_olympique_marseille_nuno_tavares_2022/2023",
+      "name": "Nuno Tavares",
+      "surname": "Tavares",
+      "club": "Olympique Marseille",
+      "club_slug": "olympique_marseille",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2022/2023",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 540
+      },
+      "ratings": {
+        "og_player_power": 46,
+        "goal_threat": 55,
+        "shot_threat": 60,
+        "xg_threat": 57,
+        "creative_spark": 53,
+        "xa_threat": 53,
+        "midfield_engine": 55,
+        "defensive_lock": 53,
+        "pressing_heat": 54,
+        "ball_progression": 56,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 58,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 894,
+        "position_rank": 284,
+        "club_rank": 13,
+        "goal_threat_rank": 295,
+        "creative_spark_rank": 299,
+        "defensive_lock_rank": 293,
+        "pressing_heat_rank": 169,
+        "booking_heat_rank": 283
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Tavares",
+        "badge_score": 46,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_olympique_marseille_luis_su_rez_2022/2023",
+      "name": "Luis Su\u00e1rez",
+      "surname": "Su\u00e1rez",
+      "club": "Olympique Marseille",
+      "club_slug": "olympique_marseille",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2022/2023",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 113
+      },
+      "ratings": {
+        "og_player_power": 43,
+        "goal_threat": 54,
+        "shot_threat": 59,
+        "xg_threat": 56,
+        "creative_spark": 52,
+        "xa_threat": 55,
+        "midfield_engine": 50,
+        "defensive_lock": 51,
+        "pressing_heat": 51,
+        "ball_progression": 54,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 58,
+        "booking_heat": 55
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1011,
+        "position_rank": 202,
+        "club_rank": 16,
+        "goal_threat_rank": 343,
+        "creative_spark_rank": 410,
+        "defensive_lock_rank": 506,
+        "pressing_heat_rank": 608,
+        "booking_heat_rank": 142
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Su\u00e1rez",
+        "badge_score": 43,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_olympique_marseille_samuel_gigot_2022/2023",
+      "name": "Samuel Gigot",
+      "surname": "Gigot",
+      "club": "Olympique Marseille",
+      "club_slug": "olympique_marseille",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2022/2023",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 250
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 50,
+        "shot_threat": 50,
+        "xg_threat": 51,
+        "creative_spark": 49,
+        "xa_threat": 50,
+        "midfield_engine": 54,
+        "defensive_lock": 55,
+        "pressing_heat": 51,
+        "ball_progression": 50,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 48,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1048,
+        "position_rank": 332,
+        "club_rank": 17,
+        "goal_threat_rank": 573,
+        "creative_spark_rank": 1096,
+        "defensive_lock_rank": 150,
+        "pressing_heat_rank": 608,
+        "booking_heat_rank": 1134
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Gigot",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_olympique_marseille_gerson_2022/2023",
+      "name": "Gerson",
+      "surname": "Gerson",
+      "club": "Olympique Marseille",
+      "club_slug": "olympique_marseille",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2022/2023",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 122
+      },
+      "ratings": {
+        "og_player_power": 40,
+        "goal_threat": 46,
+        "shot_threat": 46,
+        "xg_threat": 46,
+        "creative_spark": 51,
+        "xa_threat": 50,
+        "midfield_engine": 52,
+        "defensive_lock": 50,
+        "pressing_heat": 51,
+        "ball_progression": 50,
+        "aerial_dominance": 51,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 50,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1129,
+        "position_rank": 344,
+        "club_rank": 18,
+        "goal_threat_rank": 1136,
+        "creative_spark_rank": 513,
+        "defensive_lock_rank": 609,
+        "pressing_heat_rank": 608,
+        "booking_heat_rank": 474
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Gerson",
+        "badge_score": 40,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_olympique_marseille_pape_gueye_2022/2023",
+      "name": "Pape Gueye",
+      "surname": "Gueye",
+      "club": "Olympique Marseille",
+      "club_slug": "olympique_marseille",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2022/2023",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 34
+      },
+      "ratings": {
+        "og_player_power": 40,
+        "goal_threat": 46,
+        "shot_threat": 46,
+        "xg_threat": 46,
+        "creative_spark": 50,
+        "xa_threat": 52,
+        "midfield_engine": 56,
+        "defensive_lock": 53,
+        "pressing_heat": 55,
+        "ball_progression": 50,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 51,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1129,
+        "position_rank": 344,
+        "club_rank": 18,
+        "goal_threat_rank": 1136,
+        "creative_spark_rank": 602,
+        "defensive_lock_rank": 293,
+        "pressing_heat_rank": 97,
+        "booking_heat_rank": 368
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Gueye",
+        "badge_score": 40,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_olympique_marseille_sead_kola_inac_2022/2023",
+      "name": "Sead Kola\u0161inac",
+      "surname": "Kola\u0161inac",
+      "club": "Olympique Marseille",
+      "club_slug": "olympique_marseille",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2022/2023",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 149
+      },
+      "ratings": {
+        "og_player_power": 40,
+        "goal_threat": 51,
+        "shot_threat": 51,
+        "xg_threat": 52,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 55,
+        "defensive_lock": 52,
+        "pressing_heat": 54,
+        "ball_progression": 50,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 51,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1129,
+        "position_rank": 368,
+        "club_rank": 18,
+        "goal_threat_rank": 506,
+        "creative_spark_rank": 602,
+        "defensive_lock_rank": 390,
+        "pressing_heat_rank": 169,
+        "booking_heat_rank": 368
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Kola\u0161inac",
+        "badge_score": 40,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_olympique_marseille_issa_kabore_2022/2023",
+      "name": "Issa Kabore",
+      "surname": "Kabore",
+      "club": "Olympique Marseille",
+      "club_slug": "olympique_marseille",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2022/2023",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 108
+      },
+      "ratings": {
+        "og_player_power": 38,
+        "goal_threat": 51,
+        "shot_threat": 52,
+        "xg_threat": 52,
+        "creative_spark": 49,
+        "xa_threat": 49,
+        "midfield_engine": 53,
+        "defensive_lock": 47,
+        "pressing_heat": 52,
+        "ball_progression": 52,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 51,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1246,
+        "position_rank": 411,
+        "club_rank": 21,
+        "goal_threat_rank": 506,
+        "creative_spark_rank": 1096,
+        "defensive_lock_rank": 1904,
+        "pressing_heat_rank": 491,
+        "booking_heat_rank": 368
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Kabore",
+        "badge_score": 38,
+        "tier": "RED_FLAG"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Sanchez",
+      "Veretout",
+      "Rongier",
+      "Harit",
+      "Balerdi"
+    ],
+    "goal_threat": [
+      "Sanchez",
+      "Guendouzi",
+      "Harit",
+      "Balerdi",
+      "Mbemba"
+    ],
+    "creative_spark": [
+      "Veretout",
+      "Harit",
+      "Clauss",
+      "Mbemba",
+      "Sanchez"
+    ],
+    "discipline_risk": [
+      "Veretout",
+      "Balerdi",
+      "Bailly",
+      "Tavares",
+      "Su\u00e1rez"
+    ]
+  }
+}

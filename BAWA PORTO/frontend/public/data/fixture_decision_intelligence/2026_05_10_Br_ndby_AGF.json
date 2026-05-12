@@ -1,0 +1,263 @@
+{
+  "fixture_key": "2026_05_10_Br_ndby_AGF",
+  "fixture": "Brøndby vs AGF",
+  "primary_signal": "AGF Win",
+  "signal_state": "FRAGILE",
+  "agreement_score": 56,
+  "confidence_band": "LOW",
+  "supporting_layers": [
+    "AWAY_POWER_ADVANTAGE",
+    "AWAY_THREAT_ADVANTAGE"
+  ],
+  "caution_layers": [
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "profile_tags": {
+    "home": [
+      "Low Chaos"
+    ],
+    "away": [
+      "Strong Table Profile",
+      "Attack-Led Side",
+      "Strong First Goal",
+      "Home Dominant"
+    ]
+  },
+  "profile_narrative": "Brøndby bring a low chaos into a matchup with AGF's strong table profile. The structural lean comes from AGF's travelling profile against the home-side resistance.",
+  "team_faceoff_summary": [
+    {
+      "metric": "og_power_rating",
+      "label": "OG Power Rating",
+      "home_value": 64,
+      "away_value": 84,
+      "delta": 20,
+      "leader": "AGF"
+    },
+    {
+      "metric": "away_threat_rating",
+      "label": "Away Threat",
+      "home_value": 70,
+      "away_value": 80,
+      "delta": 10,
+      "leader": "AGF"
+    },
+    {
+      "metric": "home_fortress_rating",
+      "label": "Home Fortress",
+      "home_value": 56,
+      "away_value": 90,
+      "delta": 34,
+      "leader": "AGF"
+    },
+    {
+      "metric": "defensive_lock_rating",
+      "label": "Defensive Lock",
+      "home_value": 84,
+      "away_value": 71,
+      "delta": 13,
+      "leader": "Brøndby"
+    },
+    {
+      "metric": "first_strike_rating",
+      "label": "First Strike",
+      "home_value": 47,
+      "away_value": 93,
+      "delta": 46,
+      "leader": "AGF"
+    },
+    {
+      "metric": "control_rating",
+      "label": "Control Rating",
+      "home_value": 86,
+      "away_value": 64,
+      "delta": 22,
+      "leader": "Brøndby"
+    }
+  ],
+  "unit_battle_summary": [],
+  "key_player_drivers": [],
+  "key_mismatches": [],
+  "h2h_context": {
+    "available": false,
+    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
+    "sample_size": 0
+  },
+  "market_suitability": {
+    "ftr": {
+      "rating": 84,
+      "label": "Strong",
+      "read": "Stronger when one side owns a clear team-power edge."
+    },
+    "btts": {
+      "rating": 43,
+      "label": "Weak",
+      "read": "Driven by two-way access and reduced suppression."
+    },
+    "ou25": {
+      "rating": 36,
+      "label": "Red Flag",
+      "read": "Driven by combined goal environment and tempo."
+    },
+    "team_goals": {
+      "rating": 49,
+      "label": "Weak",
+      "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
+    },
+    "correct_score": {
+      "rating": 100,
+      "label": "Elite",
+      "read": "Better when the shape is structured and the likely scoring zone is narrow."
+    },
+    "corners": {
+      "rating": 54,
+      "label": "Weak",
+      "read": "Driven by territory and wide-channel pressure."
+    },
+    "cards": {
+      "rating": 47,
+      "label": "Weak",
+      "read": "Driven by discipline heat, fouling, and volatility."
+    }
+  },
+  "market_intelligence": {
+    "ftr": {
+      "alignment_score": 67,
+      "state": "FRAGILE",
+      "model_lean": "AWAY",
+      "structural_support": [
+        "AWAY_POWER_ADVANTAGE",
+        "AWAY_THREAT_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "FTR has some structural support from away power advantage, but the overall layer fit remains fragile.",
+      "rating": 84,
+      "band": "Strong"
+    },
+    "btts": {
+      "alignment_score": 46,
+      "state": "FRAGILE",
+      "model_lean": "NO",
+      "structural_support": [
+        "AWAY_POWER_ADVANTAGE",
+        "AWAY_THREAT_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "BTTS has some structural support from away power advantage, but the overall layer fit remains fragile.",
+      "rating": 43,
+      "band": "Weak"
+    },
+    "ou25": {
+      "alignment_score": 41,
+      "state": "AVOID",
+      "model_lean": "UNDER25",
+      "structural_support": [
+        "AWAY_POWER_ADVANTAGE",
+        "AWAY_THREAT_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Over 2.5 is too contradicted by lineup data missing to present as a clean public read.",
+      "rating": 36,
+      "band": "Red Flag"
+    },
+    "team_goals": {
+      "alignment_score": 55,
+      "state": "FRAGILE",
+      "model_lean": "AGF 1.5+",
+      "structural_support": [
+        "AWAY_POWER_ADVANTAGE",
+        "AWAY_THREAT_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Team Goals has some structural support from away power advantage, but the overall layer fit remains fragile.",
+      "rating": 49,
+      "band": "Weak"
+    },
+    "correct_score": {
+      "alignment_score": 83,
+      "state": "SUPPORTED",
+      "model_lean": "STRUCTURED",
+      "structural_support": [
+        "AWAY_POWER_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Correct Score is well supported by away power advantage, with caution still coming from lineup data missing.",
+      "rating": 100,
+      "band": "Elite"
+    },
+    "corners": {
+      "alignment_score": 54,
+      "state": "FRAGILE",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "AWAY_POWER_ADVANTAGE",
+        "AWAY_THREAT_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Corners has some structural support from away power advantage, but the overall layer fit remains fragile.",
+      "rating": 54,
+      "band": "Weak"
+    },
+    "cards": {
+      "alignment_score": 49,
+      "state": "FRAGILE",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "AWAY_POWER_ADVANTAGE",
+        "AWAY_THREAT_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Cards has some structural support from away power advantage, but the overall layer fit remains fragile.",
+      "rating": 47,
+      "band": "Weak"
+    }
+  },
+  "watchlist": {
+    "active": false,
+    "summary": "No watchlist layer is active for this fixture.",
+    "trigger_signals": [],
+    "public_state": "No watchlist flag",
+    "mode": ""
+  },
+  "public_safe_summary": "AGF Win has some live shape in Brøndby vs AGF, but the supporting layers remain fragile and need discipline.",
+  "internal_reason_tokens": [
+    "AWAY_POWER_ADVANTAGE",
+    "AWAY_THREAT_ADVANTAGE",
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "summary": {
+    "support_count": 2,
+    "caution_count": 2,
+    "lineup_available": false,
+    "h2h_available": false
+  },
+  "preview": {
+    "headline": "Brøndby vs AGF: AGF Win fragile",
+    "short_summary": "AGF Win has some live shape in Brøndby vs AGF, but the supporting layers remain fragile and need discipline. Primary support comes from away power advantage, while the main caution remains lineup data missing.",
+    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: FTR. Weakest read: Over 2.5.",
+    "caution_line": "Main caution: Lineup Data Missing.",
+    "telegram_summary": "Brøndby vs AGF — AGF Win (Fragile, 56% agreement). Support: Away Power Advantage. Caution: Lineup Data Missing.",
+    "premium_summary": "AGF Win is carrying a 56% agreement read across the published decision layers. Support is currently led by away power advantage, away threat advantage, while caution is still coming from lineup data missing, h2h unavailable."
+  }
+}

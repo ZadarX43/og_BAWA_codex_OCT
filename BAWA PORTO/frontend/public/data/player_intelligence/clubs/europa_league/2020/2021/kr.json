@@ -1,0 +1,1433 @@
+{
+  "club": "KR",
+  "club_slug": "kr",
+  "competition": "Europa League",
+  "competition_key": "europa_league",
+  "season": "2020/2021",
+  "players": [
+    {
+      "player_id": "europa_league_kr_alex_freyr_hilmarsson_2020/2021",
+      "name": "Alex Freyr Hilmarsson",
+      "surname": "Hilmarsson",
+      "club": "KR",
+      "club_slug": "kr",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2020/2021",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 561,
+        "position_rank": 194,
+        "club_rank": 1,
+        "goal_threat_rank": 1133,
+        "creative_spark_rank": 1011,
+        "defensive_lock_rank": 1029,
+        "pressing_heat_rank": 1011,
+        "booking_heat_rank": 784
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Hilmarsson",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_league_kr_gudj_n_orri_sigurj_nsson_2020/2021",
+      "name": "Gudj\u00f3n Orri Sigurj\u00f3nsson",
+      "surname": "Sigurj\u00f3nsson",
+      "club": "KR",
+      "club_slug": "kr",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2020/2021",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 561,
+        "position_rank": 35,
+        "club_rank": 1,
+        "goal_threat_rank": 1133,
+        "creative_spark_rank": 1011,
+        "defensive_lock_rank": 1029,
+        "pressing_heat_rank": 1011,
+        "booking_heat_rank": 784
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Sigurj\u00f3nsson",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_league_kr_hjalti_sigur_sson_2020/2021",
+      "name": "Hjalti Sigur\u00f0sson",
+      "surname": "Sigur\u00f0sson",
+      "club": "KR",
+      "club_slug": "kr",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2020/2021",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 561,
+        "position_rank": 167,
+        "club_rank": 1,
+        "goal_threat_rank": 1133,
+        "creative_spark_rank": 1011,
+        "defensive_lock_rank": 1029,
+        "pressing_heat_rank": 1011,
+        "booking_heat_rank": 784
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Sigur\u00f0sson",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_league_kr_j_hannes_kristinn_bjarnason_2020/2021",
+      "name": "J\u00f3hannes Kristinn Bjarnason",
+      "surname": "Bjarnason",
+      "club": "KR",
+      "club_slug": "kr",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2020/2021",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 561,
+        "position_rank": 194,
+        "club_rank": 1,
+        "goal_threat_rank": 1133,
+        "creative_spark_rank": 1011,
+        "defensive_lock_rank": 1029,
+        "pressing_heat_rank": 1011,
+        "booking_heat_rank": 784
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Bjarnason",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_league_kr_kristj_n_fl_ki_finnbogason_2020/2021",
+      "name": "Kristj\u00e1n Fl\u00f3ki Finnbogason",
+      "surname": "Finnbogason",
+      "club": "KR",
+      "club_slug": "kr",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2020/2021",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 39,
+        "goal_threat": 52,
+        "shot_threat": 47,
+        "xg_threat": 50,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 49,
+        "ball_progression": 48,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 53,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2047,
+        "position_rank": 399,
+        "club_rank": 5,
+        "goal_threat_rank": 806,
+        "creative_spark_rank": 2123,
+        "defensive_lock_rank": 2003,
+        "pressing_heat_rank": 1949,
+        "booking_heat_rank": 784
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Finnbogason",
+        "badge_score": 39,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_league_kr_arn_r_sveinn_adalsteinsson_2020/2021",
+      "name": "Arn\u00f3r Sveinn Adalsteinsson",
+      "surname": "Adalsteinsson",
+      "club": "KR",
+      "club_slug": "kr",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2020/2021",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 37,
+        "goal_threat": 48,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 49,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2236,
+        "position_rank": 636,
+        "club_rank": 6,
+        "goal_threat_rank": 2010,
+        "creative_spark_rank": 2123,
+        "defensive_lock_rank": 2003,
+        "pressing_heat_rank": 1949,
+        "booking_heat_rank": 784
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Adalsteinsson",
+        "badge_score": 37,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_league_kr_kristinn_j_nsson_2020/2021",
+      "name": "Kristinn J\u00f3nsson",
+      "surname": "J\u00f3nsson",
+      "club": "KR",
+      "club_slug": "kr",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2020/2021",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 37,
+        "goal_threat": 48,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 49,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2236,
+        "position_rank": 636,
+        "club_rank": 6,
+        "goal_threat_rank": 2010,
+        "creative_spark_rank": 2123,
+        "defensive_lock_rank": 2003,
+        "pressing_heat_rank": 1949,
+        "booking_heat_rank": 784
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "J\u00f3nsson",
+        "badge_score": 37,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_league_kr_stef_n_rni_geirsson_2020/2021",
+      "name": "Stef\u00e1n \u00c1rni Geirsson",
+      "surname": "Geirsson",
+      "club": "KR",
+      "club_slug": "kr",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2020/2021",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 37,
+        "goal_threat": 48,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 49,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2236,
+        "position_rank": 636,
+        "club_rank": 6,
+        "goal_threat_rank": 2010,
+        "creative_spark_rank": 2123,
+        "defensive_lock_rank": 2003,
+        "pressing_heat_rank": 1949,
+        "booking_heat_rank": 784
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Geirsson",
+        "badge_score": 37,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_league_kr_gir_jarl_j_nasson_2020/2021",
+      "name": "\u00c6gir Jarl J\u00f3nasson",
+      "surname": "J\u00f3nasson",
+      "club": "KR",
+      "club_slug": "kr",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2020/2021",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 58
+      },
+      "ratings": {
+        "og_player_power": 37,
+        "goal_threat": 48,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 49,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 54,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2236,
+        "position_rank": 555,
+        "club_rank": 6,
+        "goal_threat_rank": 2010,
+        "creative_spark_rank": 2123,
+        "defensive_lock_rank": 2003,
+        "pressing_heat_rank": 1949,
+        "booking_heat_rank": 488
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "J\u00f3nasson",
+        "badge_score": 37,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_league_kr_atli_sigurj_nsson_2020/2021",
+      "name": "Atli Sigurj\u00f3nsson",
+      "surname": "Sigurj\u00f3nsson",
+      "club": "KR",
+      "club_slug": "kr",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2020/2021",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 48,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 49,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 3266,
+        "position_rank": 698,
+        "club_rank": 10,
+        "goal_threat_rank": 2010,
+        "creative_spark_rank": 2123,
+        "defensive_lock_rank": 2003,
+        "pressing_heat_rank": 1949,
+        "booking_heat_rank": 784
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Sigurj\u00f3nsson",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_league_kr_finnur_orri_margeirsson_2020/2021",
+      "name": "Finnur Orri Margeirsson",
+      "surname": "Margeirsson",
+      "club": "KR",
+      "club_slug": "kr",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2020/2021",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 6
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 48,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 49,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 3266,
+        "position_rank": 698,
+        "club_rank": 10,
+        "goal_threat_rank": 2010,
+        "creative_spark_rank": 2123,
+        "defensive_lock_rank": 2003,
+        "pressing_heat_rank": 1949,
+        "booking_heat_rank": 784
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Margeirsson",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_league_kr_finnur_t_mas_p_lmason_2020/2021",
+      "name": "Finnur T\u00f3mas P\u00e1lmason",
+      "surname": "P\u00e1lmason",
+      "club": "KR",
+      "club_slug": "kr",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2020/2021",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 66
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 48,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 49,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 3266,
+        "position_rank": 1203,
+        "club_rank": 10,
+        "goal_threat_rank": 2010,
+        "creative_spark_rank": 2123,
+        "defensive_lock_rank": 2003,
+        "pressing_heat_rank": 1949,
+        "booking_heat_rank": 784
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "P\u00e1lmason",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_league_kr_kennie_chopart_2020/2021",
+      "name": "Kennie Chopart",
+      "surname": "Chopart",
+      "club": "KR",
+      "club_slug": "kr",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2020/2021",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 48,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 49,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 53,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 3266,
+        "position_rank": 698,
+        "club_rank": 10,
+        "goal_threat_rank": 2010,
+        "creative_spark_rank": 2123,
+        "defensive_lock_rank": 2003,
+        "pressing_heat_rank": 1949,
+        "booking_heat_rank": 784
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Chopart",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_league_kr_skar_hauksson_2020/2021",
+      "name": "\u00d3skar Hauksson",
+      "surname": "Hauksson",
+      "club": "KR",
+      "club_slug": "kr",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2020/2021",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 24
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 48,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 49,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 3266,
+        "position_rank": 698,
+        "club_rank": 10,
+        "goal_threat_rank": 2010,
+        "creative_spark_rank": 2123,
+        "defensive_lock_rank": 2003,
+        "pressing_heat_rank": 1949,
+        "booking_heat_rank": 784
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Hauksson",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_league_kr_pablo_punyed_2020/2021",
+      "name": "Pablo Punyed",
+      "surname": "Punyed",
+      "club": "KR",
+      "club_slug": "kr",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2020/2021",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 84
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 48,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 49,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 53,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 3266,
+        "position_rank": 698,
+        "club_rank": 10,
+        "goal_threat_rank": 2010,
+        "creative_spark_rank": 2123,
+        "defensive_lock_rank": 2003,
+        "pressing_heat_rank": 1949,
+        "booking_heat_rank": 488
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Punyed",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_league_kr_p_lmi_rafn_p_lmason_2020/2021",
+      "name": "P\u00e1lmi Rafn P\u00e1lmason",
+      "surname": "P\u00e1lmason",
+      "club": "KR",
+      "club_slug": "kr",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2020/2021",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 48,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 49,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 3266,
+        "position_rank": 698,
+        "club_rank": 10,
+        "goal_threat_rank": 2010,
+        "creative_spark_rank": 2123,
+        "defensive_lock_rank": 2003,
+        "pressing_heat_rank": 1949,
+        "booking_heat_rank": 784
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "P\u00e1lmason",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_league_kr_beitir_lafsson_2020/2021",
+      "name": "Beitir \u00d3lafsson",
+      "surname": "\u00d3lafsson",
+      "club": "KR",
+      "club_slug": "kr",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2020/2021",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 34,
+        "goal_threat": 48,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 49,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 4437,
+        "position_rank": 423,
+        "club_rank": 17,
+        "goal_threat_rank": 2010,
+        "creative_spark_rank": 2123,
+        "defensive_lock_rank": 2003,
+        "pressing_heat_rank": 1949,
+        "booking_heat_rank": 784
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "\u00d3lafsson",
+        "badge_score": 34,
+        "tier": "RED_FLAG"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Hilmarsson",
+      "Sigurj\u00f3nsson",
+      "Sigur\u00f0sson",
+      "Bjarnason",
+      "Finnbogason"
+    ],
+    "goal_threat": [
+      "Finnbogason",
+      "Hilmarsson",
+      "Sigurj\u00f3nsson",
+      "Sigur\u00f0sson",
+      "Bjarnason"
+    ],
+    "creative_spark": [
+      "Hilmarsson",
+      "Sigurj\u00f3nsson",
+      "Sigur\u00f0sson",
+      "Bjarnason",
+      "Finnbogason"
+    ],
+    "discipline_risk": [
+      "J\u00f3nasson",
+      "Finnbogason",
+      "Chopart",
+      "Punyed",
+      "Hilmarsson"
+    ]
+  }
+}

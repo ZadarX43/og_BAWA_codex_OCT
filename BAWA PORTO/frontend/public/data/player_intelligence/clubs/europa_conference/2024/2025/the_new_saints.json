@@ -1,0 +1,1843 @@
+{
+  "club": "The New Saints",
+  "club_slug": "the_new_saints",
+  "competition": "Europa Conference",
+  "competition_key": "europa_conference",
+  "season": "2024/2025",
+  "players": [
+    {
+      "player_id": "europa_conference_the_new_saints_connor_roberts_2024/2025",
+      "name": "Connor Roberts",
+      "surname": "Roberts",
+      "club": "The New Saints",
+      "club_slug": "the_new_saints",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2024/2025",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Medium sample",
+        "minutes_played": 720
+      },
+      "ratings": {
+        "og_player_power": 61,
+        "goal_threat": 45,
+        "shot_threat": 45,
+        "xg_threat": 45,
+        "creative_spark": 50,
+        "xa_threat": 51,
+        "midfield_engine": 53,
+        "defensive_lock": 51,
+        "pressing_heat": 47,
+        "ball_progression": 49,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 62,
+        "discipline_risk": 57,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Mixed",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Mixed shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 177,
+        "position_rank": 19,
+        "club_rank": 1,
+        "goal_threat_rank": 4746,
+        "creative_spark_rank": 1079,
+        "defensive_lock_rank": 1032,
+        "pressing_heat_rank": 4760,
+        "booking_heat_rank": 1034
+      },
+      "tags": [
+        "Goalkeeper Profile"
+      ],
+      "ui": {
+        "pitch_label": "Roberts",
+        "badge_score": 61,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "europa_conference_the_new_saints_rory_holden_2024/2025",
+      "name": "Rory Holden",
+      "surname": "Holden",
+      "club": "The New Saints",
+      "club_slug": "the_new_saints",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2024/2025",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Medium sample",
+        "minutes_played": 602
+      },
+      "ratings": {
+        "og_player_power": 60,
+        "goal_threat": 66,
+        "shot_threat": 66,
+        "xg_threat": 67,
+        "creative_spark": 55,
+        "xa_threat": 56,
+        "midfield_engine": 57,
+        "defensive_lock": 54,
+        "pressing_heat": 56,
+        "ball_progression": 57,
+        "aerial_dominance": 57,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 60,
+        "booking_heat": 54
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 193,
+        "position_rank": 63,
+        "club_rank": 2,
+        "goal_threat_rank": 168,
+        "creative_spark_rank": 422,
+        "defensive_lock_rank": 481,
+        "pressing_heat_rank": 246,
+        "booking_heat_rank": 522
+      },
+      "tags": [
+        "Forward Profile"
+      ],
+      "ui": {
+        "pitch_label": "Holden",
+        "badge_score": 60,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "europa_conference_the_new_saints_daniel_patrick_williams_2024/2025",
+      "name": "Daniel Patrick Williams",
+      "surname": "Williams",
+      "club": "The New Saints",
+      "club_slug": "the_new_saints",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Medium sample",
+        "minutes_played": 674
+      },
+      "ratings": {
+        "og_player_power": 57,
+        "goal_threat": 66,
+        "shot_threat": 66,
+        "xg_threat": 66,
+        "creative_spark": 53,
+        "xa_threat": 57,
+        "midfield_engine": 59,
+        "defensive_lock": 58,
+        "pressing_heat": 58,
+        "ball_progression": 57,
+        "aerial_dominance": 57,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 62,
+        "booking_heat": 56
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 277,
+        "position_rank": 77,
+        "club_rank": 3,
+        "goal_threat_rank": 168,
+        "creative_spark_rank": 653,
+        "defensive_lock_rank": 147,
+        "pressing_heat_rank": 125,
+        "booking_heat_rank": 274
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Williams",
+        "badge_score": 57,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "europa_conference_the_new_saints_daniel_redmond_2024/2025",
+      "name": "Daniel Redmond",
+      "surname": "Redmond",
+      "club": "The New Saints",
+      "club_slug": "the_new_saints",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Medium sample",
+        "minutes_played": 689
+      },
+      "ratings": {
+        "og_player_power": 57,
+        "goal_threat": 53,
+        "shot_threat": 54,
+        "xg_threat": 56,
+        "creative_spark": 56,
+        "xa_threat": 57,
+        "midfield_engine": 59,
+        "defensive_lock": 58,
+        "pressing_heat": 58,
+        "ball_progression": 56,
+        "aerial_dominance": 57,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 63,
+        "booking_heat": 56
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 277,
+        "position_rank": 77,
+        "club_rank": 3,
+        "goal_threat_rank": 802,
+        "creative_spark_rank": 344,
+        "defensive_lock_rank": 147,
+        "pressing_heat_rank": 125,
+        "booking_heat_rank": 274
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Redmond",
+        "badge_score": 57,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "europa_conference_the_new_saints_joshua_tracey_2024/2025",
+      "name": "Joshua Tracey",
+      "surname": "Tracey",
+      "club": "The New Saints",
+      "club_slug": "the_new_saints",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2024/2025",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Medium sample",
+        "minutes_played": 709
+      },
+      "ratings": {
+        "og_player_power": 55,
+        "goal_threat": 56,
+        "shot_threat": 65,
+        "xg_threat": 61,
+        "creative_spark": 56,
+        "xa_threat": 58,
+        "midfield_engine": 58,
+        "defensive_lock": 57,
+        "pressing_heat": 56,
+        "ball_progression": 58,
+        "aerial_dominance": 58,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 64,
+        "booking_heat": 56
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 353,
+        "position_rank": 112,
+        "club_rank": 5,
+        "goal_threat_rank": 548,
+        "creative_spark_rank": 344,
+        "defensive_lock_rank": 192,
+        "pressing_heat_rank": 246,
+        "booking_heat_rank": 274
+      },
+      "tags": [
+        "Forward Profile"
+      ],
+      "ui": {
+        "pitch_label": "Tracey",
+        "badge_score": 55,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "europa_conference_the_new_saints_jack_bodenham_2024/2025",
+      "name": "Jack Bodenham",
+      "surname": "Bodenham",
+      "club": "The New Saints",
+      "club_slug": "the_new_saints",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 450
+      },
+      "ratings": {
+        "og_player_power": 52,
+        "goal_threat": 48,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 53,
+        "xa_threat": 53,
+        "midfield_engine": 55,
+        "defensive_lock": 57,
+        "pressing_heat": 52,
+        "ball_progression": 50,
+        "aerial_dominance": 55,
+        "goalkeeper_shield": 52,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 505,
+        "position_rank": 150,
+        "club_rank": 6,
+        "goal_threat_rank": 2326,
+        "creative_spark_rank": 653,
+        "defensive_lock_rank": 192,
+        "pressing_heat_rank": 967,
+        "booking_heat_rank": 1184
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Bodenham",
+        "badge_score": 52,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_the_new_saints_declan_mcmanus_2024/2025",
+      "name": "Declan McManus",
+      "surname": "McManus",
+      "club": "The New Saints",
+      "club_slug": "the_new_saints",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2024/2025",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 387
+      },
+      "ratings": {
+        "og_player_power": 51,
+        "goal_threat": 61,
+        "shot_threat": 62,
+        "xg_threat": 61,
+        "creative_spark": 55,
+        "xa_threat": 55,
+        "midfield_engine": 54,
+        "defensive_lock": 53,
+        "pressing_heat": 53,
+        "ball_progression": 55,
+        "aerial_dominance": 55,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 57,
+        "booking_heat": 54
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 559,
+        "position_rank": 157,
+        "club_rank": 7,
+        "goal_threat_rank": 319,
+        "creative_spark_rank": 422,
+        "defensive_lock_rank": 634,
+        "pressing_heat_rank": 780,
+        "booking_heat_rank": 522
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "McManus",
+        "badge_score": 51,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_the_new_saints_matthew_olosunde_2024/2025",
+      "name": "Matthew Olosunde",
+      "surname": "Olosunde",
+      "club": "The New Saints",
+      "club_slug": "the_new_saints",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 598,
+        "position_rank": 180,
+        "club_rank": 8,
+        "goal_threat_rank": 1310,
+        "creative_spark_rank": 1079,
+        "defensive_lock_rank": 1169,
+        "pressing_heat_rank": 1194,
+        "booking_heat_rank": 1184
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Olosunde",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_the_new_saints_nathan_doforo_2024/2025",
+      "name": "Nathan Doforo",
+      "surname": "Doforo",
+      "club": "The New Saints",
+      "club_slug": "the_new_saints",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 598,
+        "position_rank": 180,
+        "club_rank": 8,
+        "goal_threat_rank": 1310,
+        "creative_spark_rank": 1079,
+        "defensive_lock_rank": 1169,
+        "pressing_heat_rank": 1194,
+        "booking_heat_rank": 1184
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Doforo",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_the_new_saints_tom_jones_2024/2025",
+      "name": "Tom Jones",
+      "surname": "Jones",
+      "club": "The New Saints",
+      "club_slug": "the_new_saints",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2024/2025",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 598,
+        "position_rank": 162,
+        "club_rank": 8,
+        "goal_threat_rank": 1310,
+        "creative_spark_rank": 1079,
+        "defensive_lock_rank": 1169,
+        "pressing_heat_rank": 1194,
+        "booking_heat_rank": 1184
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Jones",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_the_new_saints_jordan_williams_2024/2025",
+      "name": "Jordan Williams",
+      "surname": "Williams",
+      "club": "The New Saints",
+      "club_slug": "the_new_saints",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 340
+      },
+      "ratings": {
+        "og_player_power": 48,
+        "goal_threat": 60,
+        "shot_threat": 59,
+        "xg_threat": 60,
+        "creative_spark": 57,
+        "xa_threat": 56,
+        "midfield_engine": 54,
+        "defensive_lock": 54,
+        "pressing_heat": 54,
+        "ball_progression": 54,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 51,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1577,
+        "position_rank": 671,
+        "club_rank": 11,
+        "goal_threat_rank": 406,
+        "creative_spark_rank": 247,
+        "defensive_lock_rank": 481,
+        "pressing_heat_rank": 505,
+        "booking_heat_rank": 802
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Williams",
+        "badge_score": 48,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_the_new_saints_josh_pask_2024/2025",
+      "name": "Josh Pask",
+      "surname": "Pask",
+      "club": "The New Saints",
+      "club_slug": "the_new_saints",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 325
+      },
+      "ratings": {
+        "og_player_power": 48,
+        "goal_threat": 53,
+        "shot_threat": 53,
+        "xg_threat": 54,
+        "creative_spark": 52,
+        "xa_threat": 51,
+        "midfield_engine": 56,
+        "defensive_lock": 57,
+        "pressing_heat": 55,
+        "ball_progression": 53,
+        "aerial_dominance": 51,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 51,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1577,
+        "position_rank": 349,
+        "club_rank": 11,
+        "goal_threat_rank": 802,
+        "creative_spark_rank": 807,
+        "defensive_lock_rank": 192,
+        "pressing_heat_rank": 327,
+        "booking_heat_rank": 802
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Pask",
+        "badge_score": 48,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_the_new_saints_leo_smith_2024/2025",
+      "name": "Leo Smith",
+      "surname": "Smith",
+      "club": "The New Saints",
+      "club_slug": "the_new_saints",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 563
+      },
+      "ratings": {
+        "og_player_power": 48,
+        "goal_threat": 55,
+        "shot_threat": 54,
+        "xg_threat": 55,
+        "creative_spark": 56,
+        "xa_threat": 53,
+        "midfield_engine": 57,
+        "defensive_lock": 56,
+        "pressing_heat": 55,
+        "ball_progression": 54,
+        "aerial_dominance": 55,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 51,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Weak",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1577,
+        "position_rank": 349,
+        "club_rank": 11,
+        "goal_threat_rank": 641,
+        "creative_spark_rank": 344,
+        "defensive_lock_rank": 273,
+        "pressing_heat_rank": 327,
+        "booking_heat_rank": 646
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Smith",
+        "badge_score": 48,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_the_new_saints_ashley_baker_2024/2025",
+      "name": "Ashley Baker",
+      "surname": "Baker",
+      "club": "The New Saints",
+      "club_slug": "the_new_saints",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 80
+      },
+      "ratings": {
+        "og_player_power": 47,
+        "goal_threat": 53,
+        "shot_threat": 55,
+        "xg_threat": 55,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 54,
+        "defensive_lock": 57,
+        "pressing_heat": 55,
+        "ball_progression": 49,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 51,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1628,
+        "position_rank": 363,
+        "club_rank": 14,
+        "goal_threat_rank": 802,
+        "creative_spark_rank": 1079,
+        "defensive_lock_rank": 192,
+        "pressing_heat_rank": 327,
+        "booking_heat_rank": 646
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Baker",
+        "badge_score": 47,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_the_new_saints_ryan_brobbel_2024/2025",
+      "name": "Ryan Brobbel",
+      "surname": "Brobbel",
+      "club": "The New Saints",
+      "club_slug": "the_new_saints",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 308
+      },
+      "ratings": {
+        "og_player_power": 46,
+        "goal_threat": 56,
+        "shot_threat": 59,
+        "xg_threat": 57,
+        "creative_spark": 57,
+        "xa_threat": 56,
+        "midfield_engine": 54,
+        "defensive_lock": 52,
+        "pressing_heat": 53,
+        "ball_progression": 55,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 54,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1680,
+        "position_rank": 711,
+        "club_rank": 15,
+        "goal_threat_rank": 548,
+        "creative_spark_rank": 247,
+        "defensive_lock_rank": 804,
+        "pressing_heat_rank": 780,
+        "booking_heat_rank": 1034
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Brobbel",
+        "badge_score": 46,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_the_new_saints_adam_wilson_2024/2025",
+      "name": "Adam Wilson",
+      "surname": "Wilson",
+      "club": "The New Saints",
+      "club_slug": "the_new_saints",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2024/2025",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 210
+      },
+      "ratings": {
+        "og_player_power": 45,
+        "goal_threat": 52,
+        "shot_threat": 53,
+        "xg_threat": 54,
+        "creative_spark": 52,
+        "xa_threat": 55,
+        "midfield_engine": 55,
+        "defensive_lock": 52,
+        "pressing_heat": 54,
+        "ball_progression": 56,
+        "aerial_dominance": 51,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 51,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1732,
+        "position_rank": 313,
+        "club_rank": 16,
+        "goal_threat_rank": 898,
+        "creative_spark_rank": 807,
+        "defensive_lock_rank": 804,
+        "pressing_heat_rank": 505,
+        "booking_heat_rank": 802
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Wilson",
+        "badge_score": 45,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_the_new_saints_ben_clark_2024/2025",
+      "name": "Ben Clark",
+      "surname": "Clark",
+      "club": "The New Saints",
+      "club_slug": "the_new_saints",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 375
+      },
+      "ratings": {
+        "og_player_power": 45,
+        "goal_threat": 60,
+        "shot_threat": 59,
+        "xg_threat": 60,
+        "creative_spark": 53,
+        "xa_threat": 53,
+        "midfield_engine": 54,
+        "defensive_lock": 52,
+        "pressing_heat": 54,
+        "ball_progression": 54,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 51,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1732,
+        "position_rank": 725,
+        "club_rank": 16,
+        "goal_threat_rank": 406,
+        "creative_spark_rank": 653,
+        "defensive_lock_rank": 804,
+        "pressing_heat_rank": 505,
+        "booking_heat_rank": 802
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Clark",
+        "badge_score": 45,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_the_new_saints_harrison_mcgahey_2024/2025",
+      "name": "Harrison McGahey",
+      "surname": "McGahey",
+      "club": "The New Saints",
+      "club_slug": "the_new_saints",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 41,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 52,
+        "xa_threat": 51,
+        "midfield_engine": 53,
+        "defensive_lock": 55,
+        "pressing_heat": 51,
+        "ball_progression": 50,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 56,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2011,
+        "position_rank": 475,
+        "club_rank": 18,
+        "goal_threat_rank": 2341,
+        "creative_spark_rank": 807,
+        "defensive_lock_rank": 356,
+        "pressing_heat_rank": 1109,
+        "booking_heat_rank": 646
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "McGahey",
+        "badge_score": 41,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_the_new_saints_sion_bradley_2024/2025",
+      "name": "Sion Bradley",
+      "surname": "Bradley",
+      "club": "The New Saints",
+      "club_slug": "the_new_saints",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 111
+      },
+      "ratings": {
+        "og_player_power": 41,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 55,
+        "xa_threat": 56,
+        "midfield_engine": 55,
+        "defensive_lock": 51,
+        "pressing_heat": 54,
+        "ball_progression": 56,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 58,
+        "booking_heat": 56
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2011,
+        "position_rank": 854,
+        "club_rank": 18,
+        "goal_threat_rank": 2341,
+        "creative_spark_rank": 422,
+        "defensive_lock_rank": 1032,
+        "pressing_heat_rank": 505,
+        "booking_heat_rank": 274
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Bradley",
+        "badge_score": 41,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_the_new_saints_adrian_cie_lewicz_2024/2025",
+      "name": "Adrian Cie\u015blewicz",
+      "surname": "Cie\u015blewicz",
+      "club": "The New Saints",
+      "club_slug": "the_new_saints",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 184
+      },
+      "ratings": {
+        "og_player_power": 40,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 52,
+        "xa_threat": 54,
+        "midfield_engine": 51,
+        "defensive_lock": 50,
+        "pressing_heat": 48,
+        "ball_progression": 54,
+        "aerial_dominance": 51,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2130,
+        "position_rank": 922,
+        "club_rank": 20,
+        "goal_threat_rank": 2341,
+        "creative_spark_rank": 807,
+        "defensive_lock_rank": 1169,
+        "pressing_heat_rank": 2184,
+        "booking_heat_rank": 2676
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Cie\u015blewicz",
+        "badge_score": 40,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_conference_the_new_saints_jordan_marshall_2024/2025",
+      "name": "Jordan Marshall",
+      "surname": "Marshall",
+      "club": "The New Saints",
+      "club_slug": "the_new_saints",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 183
+      },
+      "ratings": {
+        "og_player_power": 39,
+        "goal_threat": 52,
+        "shot_threat": 53,
+        "xg_threat": 54,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 53,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 55,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2237,
+        "position_rank": 543,
+        "club_rank": 21,
+        "goal_threat_rank": 898,
+        "creative_spark_rank": 1079,
+        "defensive_lock_rank": 1169,
+        "pressing_heat_rank": 1194,
+        "booking_heat_rank": 646
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Marshall",
+        "badge_score": 39,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_conference_the_new_saints_blaine_hudson_2024/2025",
+      "name": "Blaine Hudson",
+      "surname": "Hudson",
+      "club": "The New Saints",
+      "club_slug": "the_new_saints",
+      "competition": "Europa Conference",
+      "competition_key": "europa_conference",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 23
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 47,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 52,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2993,
+        "position_rank": 633,
+        "club_rank": 22,
+        "goal_threat_rank": 2341,
+        "creative_spark_rank": 2513,
+        "defensive_lock_rank": 2233,
+        "pressing_heat_rank": 2184,
+        "booking_heat_rank": 2676
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Hudson",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Roberts",
+      "Holden",
+      "Williams",
+      "Redmond",
+      "Tracey"
+    ],
+    "goal_threat": [
+      "Holden",
+      "Williams",
+      "McManus",
+      "Williams",
+      "Clark"
+    ],
+    "creative_spark": [
+      "Williams",
+      "Brobbel",
+      "Redmond",
+      "Tracey",
+      "Smith"
+    ],
+    "discipline_risk": [
+      "Tracey",
+      "Redmond",
+      "Williams",
+      "Holden",
+      "Bradley"
+    ]
+  }
+}

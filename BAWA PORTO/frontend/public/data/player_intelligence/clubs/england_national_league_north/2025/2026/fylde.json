@@ -1,0 +1,1351 @@
+{
+  "club": "Fylde",
+  "club_slug": "fylde",
+  "competition": "England National League North",
+  "competition_key": "england_national_league_north",
+  "season": "2025/2026",
+  "players": [
+    {
+      "player_id": "england_national_league_north_fylde_luca_ty_thomas_2025/2026",
+      "name": "Luca Ty Thomas",
+      "surname": "Thomas",
+      "club": "Fylde",
+      "club_slug": "fylde",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2050
+      },
+      "ratings": {
+        "og_player_power": 70,
+        "goal_threat": 94,
+        "shot_threat": 95,
+        "xg_threat": 97,
+        "creative_spark": 72,
+        "xa_threat": 73,
+        "midfield_engine": 58,
+        "defensive_lock": 40,
+        "pressing_heat": 53,
+        "ball_progression": 69,
+        "aerial_dominance": 41,
+        "goalkeeper_shield": 53,
+        "discipline_risk": 72,
+        "booking_heat": 62
+      },
+      "rating_bands": {
+        "og_player_power": "Positive",
+        "goal_threat": "Elite",
+        "shot_threat": "Elite",
+        "xg_threat": "Elite",
+        "creative_spark": "Positive",
+        "xa_threat": "Positive",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Positive",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Positive headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Elite scoring profile with xG and shot support.",
+        "shot_threat": "Elite shooting volume and on-target pressure.",
+        "xg_threat": "Elite chance-quality profile.",
+        "creative_spark": "Positive creation profile for final-third value.",
+        "xa_threat": "Positive assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Positive foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 30,
+        "position_rank": 4,
+        "club_rank": 1,
+        "goal_threat_rank": 4,
+        "creative_spark_rank": 10,
+        "defensive_lock_rank": 384,
+        "pressing_heat_rank": 102,
+        "booking_heat_rank": 41
+      },
+      "tags": [
+        "Elite Goal Threat"
+      ],
+      "ui": {
+        "pitch_label": "Thomas",
+        "badge_score": 70,
+        "tier": "POSITIVE"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_fylde_zac_maxwell_jones_2025/2026",
+      "name": "Zac Maxwell Jones",
+      "surname": "Jones",
+      "club": "Fylde",
+      "club_slug": "fylde",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2430
+      },
+      "ratings": {
+        "og_player_power": 70,
+        "goal_threat": 18,
+        "shot_threat": 10,
+        "xg_threat": 12,
+        "creative_spark": 41,
+        "xa_threat": 37,
+        "midfield_engine": 63,
+        "defensive_lock": 55,
+        "pressing_heat": 43,
+        "ball_progression": 43,
+        "aerial_dominance": 38,
+        "goalkeeper_shield": 78,
+        "discipline_risk": 34,
+        "booking_heat": 26
+      },
+      "rating_bands": {
+        "og_player_power": "Positive",
+        "goal_threat": "Red Flag",
+        "shot_threat": "Red Flag",
+        "xg_threat": "Red Flag",
+        "creative_spark": "Weak",
+        "xa_threat": "Red Flag",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Red Flag",
+        "goalkeeper_shield": "Positive",
+        "discipline_risk": "Red Flag",
+        "booking_heat": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_player_power": "Positive headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Red Flag scoring profile with xG and shot support.",
+        "shot_threat": "Red Flag shooting volume and on-target pressure.",
+        "xg_threat": "Red Flag chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Red Flag assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Red Flag aerial and set-piece profile.",
+        "goalkeeper_shield": "Positive shot-stopping and resistance profile.",
+        "discipline_risk": "Red Flag foul and discipline exposure profile.",
+        "booking_heat": "Red Flag booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 30,
+        "position_rank": 2,
+        "club_rank": 1,
+        "goal_threat_rank": 402,
+        "creative_spark_rank": 377,
+        "defensive_lock_rank": 87,
+        "pressing_heat_rank": 387,
+        "booking_heat_rank": 414
+      },
+      "tags": [
+        "Goalkeeper Profile"
+      ],
+      "ui": {
+        "pitch_label": "Jones",
+        "badge_score": 70,
+        "tier": "POSITIVE"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_fylde_christopher_merrie_2025/2026",
+      "name": "Christopher Merrie",
+      "surname": "Merrie",
+      "club": "Fylde",
+      "club_slug": "fylde",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 1718
+      },
+      "ratings": {
+        "og_player_power": 65,
+        "goal_threat": 51,
+        "shot_threat": 54,
+        "xg_threat": 49,
+        "creative_spark": 69,
+        "xa_threat": 70,
+        "midfield_engine": 68,
+        "defensive_lock": 56,
+        "pressing_heat": 54,
+        "ball_progression": 60,
+        "aerial_dominance": 46,
+        "goalkeeper_shield": 53,
+        "discipline_risk": 50,
+        "booking_heat": 41
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Mixed",
+        "xa_threat": "Positive",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Positive assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 57,
+        "position_rank": 12,
+        "club_rank": 3,
+        "goal_threat_rank": 173,
+        "creative_spark_rank": 21,
+        "defensive_lock_rank": 80,
+        "pressing_heat_rank": 76,
+        "booking_heat_rank": 370
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Merrie",
+        "badge_score": 65,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_fylde_corey_whelan_2025/2026",
+      "name": "Corey Whelan",
+      "surname": "Whelan",
+      "club": "Fylde",
+      "club_slug": "fylde",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2322
+      },
+      "ratings": {
+        "og_player_power": 65,
+        "goal_threat": 40,
+        "shot_threat": 40,
+        "xg_threat": 36,
+        "creative_spark": 46,
+        "xa_threat": 51,
+        "midfield_engine": 71,
+        "defensive_lock": 65,
+        "pressing_heat": 59,
+        "ball_progression": 46,
+        "aerial_dominance": 65,
+        "goalkeeper_shield": 52,
+        "discipline_risk": 78,
+        "booking_heat": 69
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Red Flag",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Positive",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Positive",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Red Flag chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Positive central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Positive foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 57,
+        "position_rank": 12,
+        "club_rank": 3,
+        "goal_threat_rank": 346,
+        "creative_spark_rank": 299,
+        "defensive_lock_rank": 24,
+        "pressing_heat_rank": 24,
+        "booking_heat_rank": 13
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Whelan",
+        "badge_score": 65,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_fylde_ethan_mitchell_2025/2026",
+      "name": "Ethan Mitchell",
+      "surname": "Mitchell",
+      "club": "Fylde",
+      "club_slug": "fylde",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2153
+      },
+      "ratings": {
+        "og_player_power": 63,
+        "goal_threat": 54,
+        "shot_threat": 53,
+        "xg_threat": 54,
+        "creative_spark": 62,
+        "xa_threat": 65,
+        "midfield_engine": 65,
+        "defensive_lock": 50,
+        "pressing_heat": 58,
+        "ball_progression": 58,
+        "aerial_dominance": 55,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 81,
+        "booking_heat": 70
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Strong",
+        "booking_heat": "Positive"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Strong foul and discipline exposure profile.",
+        "booking_heat": "Positive booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 78,
+        "position_rank": 20,
+        "club_rank": 5,
+        "goal_threat_rank": 147,
+        "creative_spark_rank": 48,
+        "defensive_lock_rank": 169,
+        "pressing_heat_rank": 34,
+        "booking_heat_rank": 11
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Mitchell",
+        "badge_score": 63,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_fylde_danny_mayor_2025/2026",
+      "name": "Danny Mayor",
+      "surname": "Mayor",
+      "club": "Fylde",
+      "club_slug": "fylde",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Trusted sample",
+        "minutes_played": 909
+      },
+      "ratings": {
+        "og_player_power": 59,
+        "goal_threat": 76,
+        "shot_threat": 75,
+        "xg_threat": 77,
+        "creative_spark": 64,
+        "xa_threat": 66,
+        "midfield_engine": 56,
+        "defensive_lock": 46,
+        "pressing_heat": 43,
+        "ball_progression": 64,
+        "aerial_dominance": 45,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 47,
+        "booking_heat": 42
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Positive",
+        "shot_threat": "Positive",
+        "xg_threat": "Positive",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Positive scoring profile with xG and shot support.",
+        "shot_threat": "Positive shooting volume and on-target pressure.",
+        "xg_threat": "Positive chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 113,
+        "position_rank": 32,
+        "club_rank": 6,
+        "goal_threat_rank": 40,
+        "creative_spark_rank": 38,
+        "defensive_lock_rank": 312,
+        "pressing_heat_rank": 387,
+        "booking_heat_rank": 364
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Mayor",
+        "badge_score": 59,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_fylde_max_dunne_2025/2026",
+      "name": "Max Dunne",
+      "surname": "Dunne",
+      "club": "Fylde",
+      "club_slug": "fylde",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2242
+      },
+      "ratings": {
+        "og_player_power": 58,
+        "goal_threat": 38,
+        "shot_threat": 44,
+        "xg_threat": 35,
+        "creative_spark": 52,
+        "xa_threat": 56,
+        "midfield_engine": 64,
+        "defensive_lock": 62,
+        "pressing_heat": 51,
+        "ball_progression": 46,
+        "aerial_dominance": 64,
+        "goalkeeper_shield": 53,
+        "discipline_risk": 74,
+        "booking_heat": 63
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Red Flag",
+        "shot_threat": "Weak",
+        "xg_threat": "Red Flag",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Positive",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Red Flag scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Red Flag chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Positive foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 121,
+        "position_rank": 32,
+        "club_rank": 7,
+        "goal_threat_rank": 357,
+        "creative_spark_rank": 144,
+        "defensive_lock_rank": 43,
+        "pressing_heat_rank": 160,
+        "booking_heat_rank": 36
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Dunne",
+        "badge_score": 58,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_fylde_conor_mcaleny_2025/2026",
+      "name": "Conor McAleny",
+      "surname": "McAleny",
+      "club": "Fylde",
+      "club_slug": "fylde",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 26
+      },
+      "ratings": {
+        "og_player_power": 57,
+        "goal_threat": 61,
+        "shot_threat": 59,
+        "xg_threat": 62,
+        "creative_spark": 52,
+        "xa_threat": 52,
+        "midfield_engine": 48,
+        "defensive_lock": 46,
+        "pressing_heat": 48,
+        "ball_progression": 54,
+        "aerial_dominance": 46,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 47,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 132,
+        "position_rank": 47,
+        "club_rank": 8,
+        "goal_threat_rank": 92,
+        "creative_spark_rank": 144,
+        "defensive_lock_rank": 312,
+        "pressing_heat_rank": 286,
+        "booking_heat_rank": 225
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "McAleny",
+        "badge_score": 57,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_fylde_jonathan_ustaba_2025/2026",
+      "name": "Jonathan Ustaba\u015f\u0131",
+      "surname": "Ustaba\u015f\u0131",
+      "club": "Fylde",
+      "club_slug": "fylde",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Trusted sample",
+        "minutes_played": 1031
+      },
+      "ratings": {
+        "og_player_power": 56,
+        "goal_threat": 83,
+        "shot_threat": 82,
+        "xg_threat": 84,
+        "creative_spark": 58,
+        "xa_threat": 64,
+        "midfield_engine": 48,
+        "defensive_lock": 46,
+        "pressing_heat": 53,
+        "ball_progression": 60,
+        "aerial_dominance": 46,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 45,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Strong",
+        "shot_threat": "Strong",
+        "xg_threat": "Strong",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Strong scoring profile with xG and shot support.",
+        "shot_threat": "Strong shooting volume and on-target pressure.",
+        "xg_threat": "Strong chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 141,
+        "position_rank": 44,
+        "club_rank": 9,
+        "goal_threat_rank": 21,
+        "creative_spark_rank": 78,
+        "defensive_lock_rank": 312,
+        "pressing_heat_rank": 102,
+        "booking_heat_rank": 150
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Ustaba\u015f\u0131",
+        "badge_score": 56,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_fylde_ryan_paul_colclough_2025/2026",
+      "name": "Ryan Paul Colclough",
+      "surname": "Colclough",
+      "club": "Fylde",
+      "club_slug": "fylde",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 557
+      },
+      "ratings": {
+        "og_player_power": 56,
+        "goal_threat": 68,
+        "shot_threat": 66,
+        "xg_threat": 68,
+        "creative_spark": 59,
+        "xa_threat": 59,
+        "midfield_engine": 56,
+        "defensive_lock": 50,
+        "pressing_heat": 53,
+        "ball_progression": 57,
+        "aerial_dominance": 45,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 54,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 141,
+        "position_rank": 48,
+        "club_rank": 9,
+        "goal_threat_rank": 65,
+        "creative_spark_rank": 68,
+        "defensive_lock_rank": 169,
+        "pressing_heat_rank": 102,
+        "booking_heat_rank": 134
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Colclough",
+        "badge_score": 56,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_fylde_adam_lewis_2025/2026",
+      "name": "Adam Lewis",
+      "surname": "Lewis",
+      "club": "Fylde",
+      "club_slug": "fylde",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 51,
+        "goal_threat": 54,
+        "shot_threat": 49,
+        "xg_threat": 52,
+        "creative_spark": 57,
+        "xa_threat": 57,
+        "midfield_engine": 51,
+        "defensive_lock": 49,
+        "pressing_heat": 47,
+        "ball_progression": 53,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 53,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 192,
+        "position_rank": 53,
+        "club_rank": 11,
+        "goal_threat_rank": 147,
+        "creative_spark_rank": 91,
+        "defensive_lock_rank": 236,
+        "pressing_heat_rank": 308,
+        "booking_heat_rank": 120
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Lewis",
+        "badge_score": 51,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_fylde_cullen_meadowcroft_2025/2026",
+      "name": "Cullen Meadowcroft",
+      "surname": "Meadowcroft",
+      "club": "Fylde",
+      "club_slug": "fylde",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 48,
+        "shot_threat": 50,
+        "xg_threat": 49,
+        "creative_spark": 49,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 52,
+        "discipline_risk": 47,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 205,
+        "position_rank": 58,
+        "club_rank": 12,
+        "goal_threat_rank": 208,
+        "creative_spark_rank": 198,
+        "defensive_lock_rank": 169,
+        "pressing_heat_rank": 191,
+        "booking_heat_rank": 165
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Meadowcroft",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_fylde_george_wilson_2025/2026",
+      "name": "George Wilson",
+      "surname": "Wilson",
+      "club": "Fylde",
+      "club_slug": "fylde",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Medium sample",
+        "minutes_played": 846
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 65,
+        "shot_threat": 64,
+        "xg_threat": 66,
+        "creative_spark": 61,
+        "xa_threat": 61,
+        "midfield_engine": 55,
+        "defensive_lock": 47,
+        "pressing_heat": 49,
+        "ball_progression": 59,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 53,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 205,
+        "position_rank": 71,
+        "club_rank": 12,
+        "goal_threat_rank": 80,
+        "creative_spark_rank": 58,
+        "defensive_lock_rank": 291,
+        "pressing_heat_rank": 261,
+        "booking_heat_rank": 225
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Wilson",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_fylde_max_fisher_2025/2026",
+      "name": "Max Fisher",
+      "surname": "Fisher",
+      "club": "Fylde",
+      "club_slug": "fylde",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 48,
+        "shot_threat": 50,
+        "xg_threat": 49,
+        "creative_spark": 49,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 52,
+        "discipline_risk": 47,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 205,
+        "position_rank": 71,
+        "club_rank": 12,
+        "goal_threat_rank": 208,
+        "creative_spark_rank": 198,
+        "defensive_lock_rank": 169,
+        "pressing_heat_rank": 191,
+        "booking_heat_rank": 165
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Fisher",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_fylde_lincoln_mcfayden_2025/2026",
+      "name": "Lincoln McFayden",
+      "surname": "McFayden",
+      "club": "Fylde",
+      "club_slug": "fylde",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Trusted sample",
+        "minutes_played": 1205
+      },
+      "ratings": {
+        "og_player_power": 44,
+        "goal_threat": 28,
+        "shot_threat": 22,
+        "xg_threat": 24,
+        "creative_spark": 64,
+        "xa_threat": 63,
+        "midfield_engine": 57,
+        "defensive_lock": 49,
+        "pressing_heat": 49,
+        "ball_progression": 57,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 52,
+        "booking_heat": 45
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Red Flag",
+        "shot_threat": "Red Flag",
+        "xg_threat": "Red Flag",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Red Flag scoring profile with xG and shot support.",
+        "shot_threat": "Red Flag shooting volume and on-target pressure.",
+        "xg_threat": "Red Flag chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 319,
+        "position_rank": 83,
+        "club_rank": 15,
+        "goal_threat_rank": 387,
+        "creative_spark_rank": 38,
+        "defensive_lock_rank": 236,
+        "pressing_heat_rank": 261,
+        "booking_heat_rank": 314
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "McFayden",
+        "badge_score": 44,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_national_league_north_fylde_will_lancaster_2025/2026",
+      "name": "Will Lancaster",
+      "surname": "Lancaster",
+      "club": "Fylde",
+      "club_slug": "fylde",
+      "competition": "England National League North",
+      "competition_key": "england_national_league_north",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 270
+      },
+      "ratings": {
+        "og_player_power": 44,
+        "goal_threat": 41,
+        "shot_threat": 40,
+        "xg_threat": 40,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 53,
+        "defensive_lock": 52,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 52,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 54,
+        "booking_heat": 54
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 319,
+        "position_rank": 130,
+        "club_rank": 15,
+        "goal_threat_rank": 312,
+        "creative_spark_rank": 179,
+        "defensive_lock_rank": 130,
+        "pressing_heat_rank": 191,
+        "booking_heat_rank": 108
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Lancaster",
+        "badge_score": 44,
+        "tier": "WEAK"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Thomas",
+      "Jones",
+      "Merrie",
+      "Whelan",
+      "Mitchell"
+    ],
+    "goal_threat": [
+      "Thomas",
+      "Ustaba\u015f\u0131",
+      "Mayor",
+      "Colclough",
+      "Wilson"
+    ],
+    "creative_spark": [
+      "Thomas",
+      "Merrie",
+      "Mayor",
+      "McFayden",
+      "Mitchell"
+    ],
+    "discipline_risk": [
+      "Mitchell",
+      "Whelan",
+      "Dunne",
+      "Thomas",
+      "Colclough"
+    ]
+  }
+}

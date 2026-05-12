@@ -1,0 +1,1269 @@
+{
+  "club": "Ilves",
+  "club_slug": "ilves",
+  "competition": "Europa League",
+  "competition_key": "europa_league",
+  "season": "2025/2026",
+  "players": [
+    {
+      "player_id": "europa_league_ilves_faris_krkalic_2025/2026",
+      "name": "Faris Krkalic",
+      "surname": "Krkalic",
+      "club": "Ilves",
+      "club_slug": "ilves",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2025/2026",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 490,
+        "position_rank": 36,
+        "club_rank": 1,
+        "goal_threat_rank": 762,
+        "creative_spark_rank": 681,
+        "defensive_lock_rank": 708,
+        "pressing_heat_rank": 814,
+        "booking_heat_rank": 712
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Krkalic",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_league_ilves_ville_kumpu_2025/2026",
+      "name": "Ville Kumpu",
+      "surname": "Kumpu",
+      "club": "Ilves",
+      "club_slug": "ilves",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 43,
+        "goal_threat": 45,
+        "shot_threat": 44,
+        "xg_threat": 44,
+        "creative_spark": 46,
+        "xa_threat": 45,
+        "midfield_engine": 45,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 46,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 45,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1233,
+        "position_rank": 484,
+        "club_rank": 2,
+        "goal_threat_rank": 1346,
+        "creative_spark_rank": 1595,
+        "defensive_lock_rank": 1491,
+        "pressing_heat_rank": 1465,
+        "booking_heat_rank": 1539
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Kumpu",
+        "badge_score": 43,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_league_ilves_joona_veteli_2025/2026",
+      "name": "Joona Veteli",
+      "surname": "Veteli",
+      "club": "Ilves",
+      "club_slug": "ilves",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 109
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 45,
+        "shot_threat": 44,
+        "xg_threat": 44,
+        "creative_spark": 46,
+        "xa_threat": 45,
+        "midfield_engine": 45,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 46,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 45,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1303,
+        "position_rank": 512,
+        "club_rank": 3,
+        "goal_threat_rank": 1346,
+        "creative_spark_rank": 1595,
+        "defensive_lock_rank": 1491,
+        "pressing_heat_rank": 1465,
+        "booking_heat_rank": 1539
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Veteli",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_league_ilves_kalle_wallius_2025/2026",
+      "name": "Kalle Wallius",
+      "surname": "Wallius",
+      "club": "Ilves",
+      "club_slug": "ilves",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 153
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 45,
+        "shot_threat": 44,
+        "xg_threat": 44,
+        "creative_spark": 46,
+        "xa_threat": 45,
+        "midfield_engine": 45,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 46,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 45,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1303,
+        "position_rank": 322,
+        "club_rank": 3,
+        "goal_threat_rank": 1346,
+        "creative_spark_rank": 1595,
+        "defensive_lock_rank": 1491,
+        "pressing_heat_rank": 1465,
+        "booking_heat_rank": 1539
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Wallius",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_league_ilves_maksim_stjopin_2025/2026",
+      "name": "Maksim Stjopin",
+      "surname": "Stjopin",
+      "club": "Ilves",
+      "club_slug": "ilves",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 131
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 45,
+        "shot_threat": 44,
+        "xg_threat": 44,
+        "creative_spark": 46,
+        "xa_threat": 45,
+        "midfield_engine": 45,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 46,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 45,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1303,
+        "position_rank": 512,
+        "club_rank": 3,
+        "goal_threat_rank": 1346,
+        "creative_spark_rank": 1595,
+        "defensive_lock_rank": 1491,
+        "pressing_heat_rank": 1465,
+        "booking_heat_rank": 1539
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Stjopin",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_league_ilves_anton_popovitch_2025/2026",
+      "name": "Anton Popovitch",
+      "surname": "Popovitch",
+      "club": "Ilves",
+      "club_slug": "ilves",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 149
+      },
+      "ratings": {
+        "og_player_power": 41,
+        "goal_threat": 45,
+        "shot_threat": 44,
+        "xg_threat": 44,
+        "creative_spark": 46,
+        "xa_threat": 45,
+        "midfield_engine": 45,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 46,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 45,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1439,
+        "position_rank": 564,
+        "club_rank": 6,
+        "goal_threat_rank": 1346,
+        "creative_spark_rank": 1595,
+        "defensive_lock_rank": 1491,
+        "pressing_heat_rank": 1465,
+        "booking_heat_rank": 1539
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Popovitch",
+        "badge_score": 41,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_league_ilves_lauri_ala_myllym_ki_2025/2026",
+      "name": "Lauri Ala-Myllym\u00e4ki",
+      "surname": "Ala-Myllym\u00e4ki",
+      "club": "Ilves",
+      "club_slug": "ilves",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 12
+      },
+      "ratings": {
+        "og_player_power": 41,
+        "goal_threat": 45,
+        "shot_threat": 44,
+        "xg_threat": 44,
+        "creative_spark": 46,
+        "xa_threat": 45,
+        "midfield_engine": 45,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 46,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 45,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1439,
+        "position_rank": 564,
+        "club_rank": 6,
+        "goal_threat_rank": 1346,
+        "creative_spark_rank": 1595,
+        "defensive_lock_rank": 1491,
+        "pressing_heat_rank": 1465,
+        "booking_heat_rank": 1539
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Ala-Myllym\u00e4ki",
+        "badge_score": 41,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_league_ilves_aapo_m_enp_2025/2026",
+      "name": "Aapo M\u00e4enp\u00e4\u00e4",
+      "surname": "M\u00e4enp\u00e4\u00e4",
+      "club": "Ilves",
+      "club_slug": "ilves",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 40,
+        "goal_threat": 45,
+        "shot_threat": 44,
+        "xg_threat": 44,
+        "creative_spark": 46,
+        "xa_threat": 45,
+        "midfield_engine": 45,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 46,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 45,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1532,
+        "position_rank": 386,
+        "club_rank": 8,
+        "goal_threat_rank": 1346,
+        "creative_spark_rank": 1595,
+        "defensive_lock_rank": 1491,
+        "pressing_heat_rank": 1465,
+        "booking_heat_rank": 1539
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "M\u00e4enp\u00e4\u00e4",
+        "badge_score": 40,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "europa_league_ilves_otso_virtanen_2025/2026",
+      "name": "Otso Virtanen",
+      "surname": "Virtanen",
+      "club": "Ilves",
+      "club_slug": "ilves",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2025/2026",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 39,
+        "goal_threat": 45,
+        "shot_threat": 44,
+        "xg_threat": 44,
+        "creative_spark": 46,
+        "xa_threat": 45,
+        "midfield_engine": 45,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 46,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 45,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1628,
+        "position_rank": 182,
+        "club_rank": 9,
+        "goal_threat_rank": 1346,
+        "creative_spark_rank": 1595,
+        "defensive_lock_rank": 1491,
+        "pressing_heat_rank": 1465,
+        "booking_heat_rank": 1539
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Virtanen",
+        "badge_score": 39,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_league_ilves_adeleke_akinola_akinyemi_2025/2026",
+      "name": "Adeleke Akinola Akinyemi",
+      "surname": "Akinyemi",
+      "club": "Ilves",
+      "club_slug": "ilves",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 22
+      },
+      "ratings": {
+        "og_player_power": 35,
+        "goal_threat": 45,
+        "shot_threat": 44,
+        "xg_threat": 44,
+        "creative_spark": 46,
+        "xa_threat": 45,
+        "midfield_engine": 45,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 46,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 45,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1848,
+        "position_rank": 408,
+        "club_rank": 10,
+        "goal_threat_rank": 1346,
+        "creative_spark_rank": 1595,
+        "defensive_lock_rank": 1491,
+        "pressing_heat_rank": 1465,
+        "booking_heat_rank": 1539
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Akinyemi",
+        "badge_score": 35,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_league_ilves_felipe_aspegren_2025/2026",
+      "name": "Felipe Aspegren",
+      "surname": "Aspegren",
+      "club": "Ilves",
+      "club_slug": "ilves",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 68
+      },
+      "ratings": {
+        "og_player_power": 35,
+        "goal_threat": 45,
+        "shot_threat": 44,
+        "xg_threat": 44,
+        "creative_spark": 46,
+        "xa_threat": 45,
+        "midfield_engine": 45,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 46,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 45,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1848,
+        "position_rank": 471,
+        "club_rank": 10,
+        "goal_threat_rank": 1346,
+        "creative_spark_rank": 1595,
+        "defensive_lock_rank": 1491,
+        "pressing_heat_rank": 1465,
+        "booking_heat_rank": 1539
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Aspegren",
+        "badge_score": 35,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_league_ilves_matias_rale_2025/2026",
+      "name": "Matias Rale",
+      "surname": "Rale",
+      "club": "Ilves",
+      "club_slug": "ilves",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 35,
+        "goal_threat": 45,
+        "shot_threat": 44,
+        "xg_threat": 44,
+        "creative_spark": 46,
+        "xa_threat": 45,
+        "midfield_engine": 45,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 46,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 45,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1848,
+        "position_rank": 471,
+        "club_rank": 10,
+        "goal_threat_rank": 1346,
+        "creative_spark_rank": 1595,
+        "defensive_lock_rank": 1491,
+        "pressing_heat_rank": 1465,
+        "booking_heat_rank": 1539
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Rale",
+        "badge_score": 35,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_league_ilves_roope_riski_2025/2026",
+      "name": "Roope Riski",
+      "surname": "Riski",
+      "club": "Ilves",
+      "club_slug": "ilves",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 78
+      },
+      "ratings": {
+        "og_player_power": 35,
+        "goal_threat": 45,
+        "shot_threat": 44,
+        "xg_threat": 44,
+        "creative_spark": 46,
+        "xa_threat": 45,
+        "midfield_engine": 45,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 46,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 45,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1848,
+        "position_rank": 408,
+        "club_rank": 10,
+        "goal_threat_rank": 1346,
+        "creative_spark_rank": 1595,
+        "defensive_lock_rank": 1491,
+        "pressing_heat_rank": 1465,
+        "booking_heat_rank": 1539
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Riski",
+        "badge_score": 35,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_league_ilves_sauli_v_is_nen_2025/2026",
+      "name": "Sauli V\u00e4is\u00e4nen",
+      "surname": "V\u00e4is\u00e4nen",
+      "club": "Ilves",
+      "club_slug": "ilves",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 35,
+        "goal_threat": 45,
+        "shot_threat": 44,
+        "xg_threat": 44,
+        "creative_spark": 46,
+        "xa_threat": 45,
+        "midfield_engine": 45,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 46,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 45,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1848,
+        "position_rank": 471,
+        "club_rank": 10,
+        "goal_threat_rank": 1346,
+        "creative_spark_rank": 1595,
+        "defensive_lock_rank": 1491,
+        "pressing_heat_rank": 1465,
+        "booking_heat_rank": 1539
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "V\u00e4is\u00e4nen",
+        "badge_score": 35,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "europa_league_ilves_tatu_miettunen_2025/2026",
+      "name": "Tatu Miettunen",
+      "surname": "Miettunen",
+      "club": "Ilves",
+      "club_slug": "ilves",
+      "competition": "Europa League",
+      "competition_key": "europa_league",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 35,
+        "goal_threat": 45,
+        "shot_threat": 44,
+        "xg_threat": 44,
+        "creative_spark": 46,
+        "xa_threat": 45,
+        "midfield_engine": 45,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 46,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 45,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1848,
+        "position_rank": 471,
+        "club_rank": 10,
+        "goal_threat_rank": 1346,
+        "creative_spark_rank": 1595,
+        "defensive_lock_rank": 1491,
+        "pressing_heat_rank": 1465,
+        "booking_heat_rank": 1539
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Miettunen",
+        "badge_score": 35,
+        "tier": "RED_FLAG"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Krkalic",
+      "Kumpu",
+      "Veteli",
+      "Wallius",
+      "Stjopin"
+    ],
+    "goal_threat": [
+      "Krkalic",
+      "Kumpu",
+      "Veteli",
+      "Wallius",
+      "Stjopin"
+    ],
+    "creative_spark": [
+      "Krkalic",
+      "Kumpu",
+      "Veteli",
+      "Wallius",
+      "Stjopin"
+    ],
+    "discipline_risk": [
+      "Krkalic",
+      "Kumpu",
+      "Veteli",
+      "Wallius",
+      "Stjopin"
+    ]
+  }
+}

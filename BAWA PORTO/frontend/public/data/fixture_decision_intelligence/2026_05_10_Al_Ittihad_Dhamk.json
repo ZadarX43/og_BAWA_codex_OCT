@@ -1,0 +1,260 @@
+{
+  "fixture_key": "2026_05_10_Al_Ittihad_Dhamk",
+  "fixture": "Al Ittihad vs Dhamk",
+  "primary_signal": "Al Ittihad Win",
+  "signal_state": "FRAGILE",
+  "agreement_score": 56,
+  "confidence_band": "STANDARD",
+  "supporting_layers": [
+    "TEAM_POWER_ADVANTAGE",
+    "HOME_FORTRESS_ADVANTAGE"
+  ],
+  "caution_layers": [
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "profile_tags": {
+    "home": [
+      "Low Chaos"
+    ],
+    "away": [
+      "Low Chaos"
+    ]
+  },
+  "profile_narrative": "Al Ittihad bring a low chaos into a matchup with Dhamk's low chaos. The structural lean comes from Al Ittihad's home-side control against the away profile.",
+  "team_faceoff_summary": [
+    {
+      "metric": "og_power_rating",
+      "label": "OG Power Rating",
+      "home_value": 69,
+      "away_value": 30,
+      "delta": 39,
+      "leader": "Al Ittihad"
+    },
+    {
+      "metric": "home_fortress_rating",
+      "label": "Home Fortress",
+      "home_value": 73,
+      "away_value": 32,
+      "delta": 41,
+      "leader": "Al Ittihad"
+    },
+    {
+      "metric": "away_threat_rating",
+      "label": "Away Threat",
+      "home_value": 66,
+      "away_value": 26,
+      "delta": 40,
+      "leader": "Al Ittihad"
+    },
+    {
+      "metric": "defensive_lock_rating",
+      "label": "Defensive Lock",
+      "home_value": 75,
+      "away_value": 48,
+      "delta": 27,
+      "leader": "Al Ittihad"
+    },
+    {
+      "metric": "first_strike_rating",
+      "label": "First Strike",
+      "home_value": 68,
+      "away_value": 20,
+      "delta": 48,
+      "leader": "Al Ittihad"
+    },
+    {
+      "metric": "control_rating",
+      "label": "Control Rating",
+      "home_value": 80,
+      "away_value": 60,
+      "delta": 20,
+      "leader": "Al Ittihad"
+    }
+  ],
+  "unit_battle_summary": [],
+  "key_player_drivers": [],
+  "key_mismatches": [],
+  "h2h_context": {
+    "available": false,
+    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
+    "sample_size": 0
+  },
+  "market_suitability": {
+    "ftr": {
+      "rating": 69,
+      "label": "Mixed",
+      "read": "Stronger when one side owns a clear team-power edge."
+    },
+    "btts": {
+      "rating": 40,
+      "label": "Weak",
+      "read": "Driven by two-way access and reduced suppression."
+    },
+    "ou25": {
+      "rating": 26,
+      "label": "Red Flag",
+      "read": "Driven by combined goal environment and tempo."
+    },
+    "team_goals": {
+      "rating": 33,
+      "label": "Red Flag",
+      "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
+    },
+    "correct_score": {
+      "rating": 76,
+      "label": "Positive",
+      "read": "Better when the shape is structured and the likely scoring zone is narrow."
+    },
+    "corners": {
+      "rating": 58,
+      "label": "Mixed",
+      "read": "Driven by territory and wide-channel pressure."
+    },
+    "cards": {
+      "rating": 46,
+      "label": "Weak",
+      "read": "Driven by discipline heat, fouling, and volatility."
+    }
+  },
+  "market_intelligence": {
+    "ftr": {
+      "alignment_score": 61,
+      "state": "FRAGILE",
+      "model_lean": "HOME",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE",
+        "HOME_FORTRESS_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "FTR has some structural support from team power advantage, but the overall layer fit remains fragile.",
+      "rating": 69,
+      "band": "Mixed"
+    },
+    "btts": {
+      "alignment_score": 44,
+      "state": "AVOID",
+      "model_lean": "NO",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE",
+        "HOME_FORTRESS_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "BTTS is too contradicted by lineup data missing to present as a clean public read.",
+      "rating": 40,
+      "band": "Weak"
+    },
+    "ou25": {
+      "alignment_score": 34,
+      "state": "AVOID",
+      "model_lean": "UNDER25",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE",
+        "HOME_FORTRESS_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Over 2.5 is too contradicted by lineup data missing to present as a clean public read.",
+      "rating": 26,
+      "band": "Red Flag"
+    },
+    "team_goals": {
+      "alignment_score": 43,
+      "state": "AVOID",
+      "model_lean": "Al Ittihad 1.5+",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE",
+        "HOME_FORTRESS_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Team Goals is too contradicted by lineup data missing to present as a clean public read.",
+      "rating": 33,
+      "band": "Red Flag"
+    },
+    "correct_score": {
+      "alignment_score": 65,
+      "state": "MIXED",
+      "model_lean": "STRUCTURED",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Correct Score has partial support from team power advantage, but lineup data missing keeps it from reading clean.",
+      "rating": 76,
+      "band": "Positive"
+    },
+    "corners": {
+      "alignment_score": 58,
+      "state": "FRAGILE",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE",
+        "HOME_FORTRESS_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Corners has some structural support from team power advantage, but the overall layer fit remains fragile.",
+      "rating": 58,
+      "band": "Mixed"
+    },
+    "cards": {
+      "alignment_score": 48,
+      "state": "FRAGILE",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE",
+        "HOME_FORTRESS_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Cards has some structural support from team power advantage, but the overall layer fit remains fragile.",
+      "rating": 46,
+      "band": "Weak"
+    }
+  },
+  "watchlist": {
+    "active": false,
+    "summary": "No watchlist layer is active for this fixture.",
+    "trigger_signals": [],
+    "public_state": "No watchlist flag",
+    "mode": ""
+  },
+  "public_safe_summary": "Al Ittihad Win has some live shape in Al Ittihad vs Dhamk, but the supporting layers remain fragile and need discipline.",
+  "internal_reason_tokens": [
+    "TEAM_POWER_ADVANTAGE",
+    "HOME_FORTRESS_ADVANTAGE",
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "summary": {
+    "support_count": 2,
+    "caution_count": 2,
+    "lineup_available": false,
+    "h2h_available": false
+  },
+  "preview": {
+    "headline": "Al Ittihad vs Dhamk: Al Ittihad Win fragile",
+    "short_summary": "Al Ittihad Win has some live shape in Al Ittihad vs Dhamk, but the supporting layers remain fragile and need discipline. Primary support comes from team power advantage, while the main caution remains lineup data missing.",
+    "market_summary": "Best aligned market: Correct Score (Mixed). Secondary support: FTR. Weakest read: Over 2.5.",
+    "caution_line": "Main caution: Lineup Data Missing.",
+    "telegram_summary": "Al Ittihad vs Dhamk — Al Ittihad Win (Fragile, 56% agreement). Support: Team Power Advantage. Caution: Lineup Data Missing.",
+    "premium_summary": "Al Ittihad Win is carrying a 56% agreement read across the published decision layers. Support is currently led by team power advantage, home fortress advantage, while caution is still coming from lineup data missing, h2h unavailable."
+  }
+}

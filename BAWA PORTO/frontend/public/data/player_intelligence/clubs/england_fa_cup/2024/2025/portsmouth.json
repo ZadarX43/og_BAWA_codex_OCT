@@ -1,0 +1,1269 @@
+{
+  "club": "Portsmouth",
+  "club_slug": "portsmouth",
+  "competition": "England FA Cup",
+  "competition_key": "england_fa_cup",
+  "season": "2024/2025",
+  "players": [
+    {
+      "player_id": "england_fa_cup_portsmouth_colby_bishop_2024/2025",
+      "name": "Colby Bishop",
+      "surname": "Bishop",
+      "club": "Portsmouth",
+      "club_slug": "portsmouth",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 50,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 141,
+        "position_rank": 42,
+        "club_rank": 1,
+        "goal_threat_rank": 586,
+        "creative_spark_rank": 600,
+        "defensive_lock_rank": 649,
+        "pressing_heat_rank": 667,
+        "booking_heat_rank": 644
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Bishop",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_portsmouth_connor_ogilvie_2024/2025",
+      "name": "Connor Ogilvie",
+      "surname": "Ogilvie",
+      "club": "Portsmouth",
+      "club_slug": "portsmouth",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 50,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 141,
+        "position_rank": 44,
+        "club_rank": 1,
+        "goal_threat_rank": 586,
+        "creative_spark_rank": 600,
+        "defensive_lock_rank": 649,
+        "pressing_heat_rank": 667,
+        "booking_heat_rank": 644
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Ogilvie",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_portsmouth_christain_saydee_2024/2025",
+      "name": "Christain Saydee",
+      "surname": "Saydee",
+      "club": "Portsmouth",
+      "club_slug": "portsmouth",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 38,
+        "goal_threat": 48,
+        "shot_threat": 48,
+        "xg_threat": 48,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 49,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 53,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1221,
+        "position_rank": 283,
+        "club_rank": 3,
+        "goal_threat_rank": 1015,
+        "creative_spark_rank": 1348,
+        "defensive_lock_rank": 1229,
+        "pressing_heat_rank": 1137,
+        "booking_heat_rank": 1109
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Saydee",
+        "badge_score": 38,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_portsmouth_patrick_lane_2024/2025",
+      "name": "Patrick Lane",
+      "surname": "Lane",
+      "club": "Portsmouth",
+      "club_slug": "portsmouth",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 76
+      },
+      "ratings": {
+        "og_player_power": 38,
+        "goal_threat": 48,
+        "shot_threat": 48,
+        "xg_threat": 48,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 49,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 48,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1221,
+        "position_rank": 283,
+        "club_rank": 3,
+        "goal_threat_rank": 1015,
+        "creative_spark_rank": 1348,
+        "defensive_lock_rank": 1229,
+        "pressing_heat_rank": 1137,
+        "booking_heat_rank": 1109
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Lane",
+        "badge_score": 38,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_portsmouth_abdoulaye_kamara_2024/2025",
+      "name": "Abdoulaye Kamara",
+      "surname": "Kamara",
+      "club": "Portsmouth",
+      "club_slug": "portsmouth",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 48,
+        "shot_threat": 48,
+        "xg_threat": 48,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 49,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 48,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1582,
+        "position_rank": 493,
+        "club_rank": 5,
+        "goal_threat_rank": 1015,
+        "creative_spark_rank": 1348,
+        "defensive_lock_rank": 1229,
+        "pressing_heat_rank": 1137,
+        "booking_heat_rank": 1109
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Kamara",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_portsmouth_andre_dozzell_2024/2025",
+      "name": "Andre Dozzell",
+      "surname": "Dozzell",
+      "club": "Portsmouth",
+      "club_slug": "portsmouth",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 44
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 48,
+        "shot_threat": 48,
+        "xg_threat": 48,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 49,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 48,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1582,
+        "position_rank": 493,
+        "club_rank": 5,
+        "goal_threat_rank": 1015,
+        "creative_spark_rank": 1348,
+        "defensive_lock_rank": 1229,
+        "pressing_heat_rank": 1137,
+        "booking_heat_rank": 1109
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Dozzell",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_portsmouth_jordan_williams_2024/2025",
+      "name": "Jordan Williams",
+      "surname": "Williams",
+      "club": "Portsmouth",
+      "club_slug": "portsmouth",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 62
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 48,
+        "shot_threat": 48,
+        "xg_threat": 48,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 49,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 48,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1582,
+        "position_rank": 392,
+        "club_rank": 5,
+        "goal_threat_rank": 1015,
+        "creative_spark_rank": 1348,
+        "defensive_lock_rank": 1229,
+        "pressing_heat_rank": 1137,
+        "booking_heat_rank": 1109
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Williams",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_portsmouth_matt_ritchie_2024/2025",
+      "name": "Matt Ritchie",
+      "surname": "Ritchie",
+      "club": "Portsmouth",
+      "club_slug": "portsmouth",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 48,
+        "shot_threat": 48,
+        "xg_threat": 48,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 49,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 48,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1582,
+        "position_rank": 493,
+        "club_rank": 5,
+        "goal_threat_rank": 1015,
+        "creative_spark_rank": 1348,
+        "defensive_lock_rank": 1229,
+        "pressing_heat_rank": 1137,
+        "booking_heat_rank": 1109
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Ritchie",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_portsmouth_owen_moxon_2024/2025",
+      "name": "Owen Moxon",
+      "surname": "Moxon",
+      "club": "Portsmouth",
+      "club_slug": "portsmouth",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 48,
+        "shot_threat": 48,
+        "xg_threat": 48,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 49,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 48,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1582,
+        "position_rank": 493,
+        "club_rank": 5,
+        "goal_threat_rank": 1015,
+        "creative_spark_rank": 1348,
+        "defensive_lock_rank": 1229,
+        "pressing_heat_rank": 1137,
+        "booking_heat_rank": 1109
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Moxon",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_portsmouth_robert_atkinson_2024/2025",
+      "name": "Robert Atkinson",
+      "surname": "Atkinson",
+      "club": "Portsmouth",
+      "club_slug": "portsmouth",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 46
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 48,
+        "shot_threat": 48,
+        "xg_threat": 48,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 49,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 48,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1582,
+        "position_rank": 392,
+        "club_rank": 5,
+        "goal_threat_rank": 1015,
+        "creative_spark_rank": 1348,
+        "defensive_lock_rank": 1229,
+        "pressing_heat_rank": 1137,
+        "booking_heat_rank": 1109
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Atkinson",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_portsmouth_terry_devlin_2024/2025",
+      "name": "Terry Devlin",
+      "surname": "Devlin",
+      "club": "Portsmouth",
+      "club_slug": "portsmouth",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 48,
+        "shot_threat": 48,
+        "xg_threat": 48,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 49,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 53,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1582,
+        "position_rank": 493,
+        "club_rank": 5,
+        "goal_threat_rank": 1015,
+        "creative_spark_rank": 1348,
+        "defensive_lock_rank": 1229,
+        "pressing_heat_rank": 1137,
+        "booking_heat_rank": 1109
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Devlin",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_portsmouth_thomas_mcintyre_2024/2025",
+      "name": "Thomas Mcintyre",
+      "surname": "Mcintyre",
+      "club": "Portsmouth",
+      "club_slug": "portsmouth",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 48,
+        "shot_threat": 48,
+        "xg_threat": 48,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 49,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 48,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1582,
+        "position_rank": 392,
+        "club_rank": 5,
+        "goal_threat_rank": 1015,
+        "creative_spark_rank": 1348,
+        "defensive_lock_rank": 1229,
+        "pressing_heat_rank": 1137,
+        "booking_heat_rank": 1109
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Mcintyre",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_portsmouth_zak_swanson_2024/2025",
+      "name": "Zak Swanson",
+      "surname": "Swanson",
+      "club": "Portsmouth",
+      "club_slug": "portsmouth",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 28
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 48,
+        "shot_threat": 48,
+        "xg_threat": 48,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 49,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 48,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1582,
+        "position_rank": 493,
+        "club_rank": 5,
+        "goal_threat_rank": 1015,
+        "creative_spark_rank": 1348,
+        "defensive_lock_rank": 1229,
+        "pressing_heat_rank": 1137,
+        "booking_heat_rank": 1109
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Swanson",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_portsmouth_nicolas_schmid_2024/2025",
+      "name": "Nicolas Schmid",
+      "surname": "Schmid",
+      "club": "Portsmouth",
+      "club_slug": "portsmouth",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 44
+      },
+      "ratings": {
+        "og_player_power": 35,
+        "goal_threat": 48,
+        "shot_threat": 48,
+        "xg_threat": 48,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 49,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 48,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2392,
+        "position_rank": 161,
+        "club_rank": 14,
+        "goal_threat_rank": 1015,
+        "creative_spark_rank": 1348,
+        "defensive_lock_rank": 1229,
+        "pressing_heat_rank": 1137,
+        "booking_heat_rank": 1109
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Schmid",
+        "badge_score": 35,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_portsmouth_jordan_archer_2024/2025",
+      "name": "Jordan Archer",
+      "surname": "Archer",
+      "club": "Portsmouth",
+      "club_slug": "portsmouth",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2024/2025",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 46
+      },
+      "ratings": {
+        "og_player_power": 34,
+        "goal_threat": 48,
+        "shot_threat": 48,
+        "xg_threat": 48,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 49,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 48,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2420,
+        "position_rank": 189,
+        "club_rank": 15,
+        "goal_threat_rank": 1015,
+        "creative_spark_rank": 1348,
+        "defensive_lock_rank": 1229,
+        "pressing_heat_rank": 1137,
+        "booking_heat_rank": 1109
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Archer",
+        "badge_score": 34,
+        "tier": "RED_FLAG"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Bishop",
+      "Ogilvie",
+      "Saydee",
+      "Lane",
+      "Kamara"
+    ],
+    "goal_threat": [
+      "Bishop",
+      "Ogilvie",
+      "Saydee",
+      "Lane",
+      "Kamara"
+    ],
+    "creative_spark": [
+      "Bishop",
+      "Ogilvie",
+      "Saydee",
+      "Lane",
+      "Kamara"
+    ],
+    "discipline_risk": [
+      "Saydee",
+      "Devlin",
+      "Bishop",
+      "Ogilvie",
+      "Lane"
+    ]
+  }
+}

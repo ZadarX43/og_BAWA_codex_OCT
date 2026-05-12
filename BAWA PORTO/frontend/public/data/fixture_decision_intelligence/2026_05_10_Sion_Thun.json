@@ -1,0 +1,242 @@
+{
+  "fixture_key": "2026_05_10_Sion_Thun",
+  "fixture": "Sion vs Thun",
+  "primary_signal": "Sion Win",
+  "signal_state": "AVOID",
+  "agreement_score": 32,
+  "confidence_band": "LOW",
+  "supporting_layers": [],
+  "caution_layers": [
+    "TEAM_POWER_NOT_DECISIVE",
+    "AWAY_TRAVEL_THREAT",
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "profile_tags": {
+    "home": [
+      "Defensive Wall",
+      "Low Chaos"
+    ],
+    "away": [
+      "Strong Table Profile",
+      "Attack-Led Side",
+      "Strong First Goal",
+      "Travels Well"
+    ]
+  },
+  "profile_narrative": "Sion bring a defensive wall into a matchup with Thun's strong table profile. The structural lean comes from Sion's home-side control against the away profile.",
+  "team_faceoff_summary": [
+    {
+      "metric": "og_power_rating",
+      "label": "OG Power Rating",
+      "home_value": 66,
+      "away_value": 84,
+      "delta": 18,
+      "leader": "Thun"
+    },
+    {
+      "metric": "home_fortress_rating",
+      "label": "Home Fortress",
+      "home_value": 64,
+      "away_value": 75,
+      "delta": 11,
+      "leader": "Thun"
+    },
+    {
+      "metric": "away_threat_rating",
+      "label": "Away Threat",
+      "home_value": 74,
+      "away_value": 91,
+      "delta": 17,
+      "leader": "Thun"
+    },
+    {
+      "metric": "defensive_lock_rating",
+      "label": "Defensive Lock",
+      "home_value": 92,
+      "away_value": 55,
+      "delta": 37,
+      "leader": "Sion"
+    },
+    {
+      "metric": "first_strike_rating",
+      "label": "First Strike",
+      "home_value": 58,
+      "away_value": 89,
+      "delta": 31,
+      "leader": "Thun"
+    },
+    {
+      "metric": "control_rating",
+      "label": "Control Rating",
+      "home_value": 85,
+      "away_value": 35,
+      "delta": 50,
+      "leader": "Sion"
+    }
+  ],
+  "unit_battle_summary": [],
+  "key_player_drivers": [],
+  "key_mismatches": [],
+  "h2h_context": {
+    "available": false,
+    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
+    "sample_size": 0
+  },
+  "market_suitability": {
+    "ftr": {
+      "rating": 84,
+      "label": "Strong",
+      "read": "Stronger when one side owns a clear team-power edge."
+    },
+    "btts": {
+      "rating": 46,
+      "label": "Weak",
+      "read": "Driven by two-way access and reduced suppression."
+    },
+    "ou25": {
+      "rating": 46,
+      "label": "Weak",
+      "read": "Driven by combined goal environment and tempo."
+    },
+    "team_goals": {
+      "rating": 74,
+      "label": "Strong",
+      "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
+    },
+    "correct_score": {
+      "rating": 100,
+      "label": "Elite",
+      "read": "Better when the shape is structured and the likely scoring zone is narrow."
+    },
+    "corners": {
+      "rating": 66,
+      "label": "Mixed",
+      "read": "Driven by territory and wide-channel pressure."
+    },
+    "cards": {
+      "rating": 42,
+      "label": "Weak",
+      "read": "Driven by discipline heat, fouling, and volatility."
+    }
+  },
+  "market_intelligence": {
+    "ftr": {
+      "alignment_score": 53,
+      "state": "AVOID",
+      "model_lean": "HOME",
+      "structural_support": [],
+      "cautions": [
+        "TEAM_POWER_NOT_DECISIVE",
+        "AWAY_TRAVEL_THREAT"
+      ],
+      "public_summary": "FTR is too contradicted by team power not decisive to present as a clean public read.",
+      "rating": 84,
+      "band": "Strong"
+    },
+    "btts": {
+      "alignment_score": 36,
+      "state": "AVOID",
+      "model_lean": "NO",
+      "structural_support": [],
+      "cautions": [
+        "TEAM_POWER_NOT_DECISIVE",
+        "AWAY_TRAVEL_THREAT"
+      ],
+      "public_summary": "BTTS is too contradicted by team power not decisive to present as a clean public read.",
+      "rating": 46,
+      "band": "Weak"
+    },
+    "ou25": {
+      "alignment_score": 36,
+      "state": "AVOID",
+      "model_lean": "UNDER25",
+      "structural_support": [],
+      "cautions": [
+        "TEAM_POWER_NOT_DECISIVE",
+        "AWAY_TRAVEL_THREAT"
+      ],
+      "public_summary": "Over 2.5 is too contradicted by team power not decisive to present as a clean public read.",
+      "rating": 46,
+      "band": "Weak"
+    },
+    "team_goals": {
+      "alignment_score": 62,
+      "state": "MIXED",
+      "model_lean": "Thun 1.5+",
+      "structural_support": [],
+      "cautions": [
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Team Goals has partial support from structural support, but lineup data missing keeps it from reading clean.",
+      "rating": 74,
+      "band": "Strong"
+    },
+    "correct_score": {
+      "alignment_score": 81,
+      "state": "SUPPORTED",
+      "model_lean": "STRUCTURED",
+      "structural_support": [],
+      "cautions": [
+        "TEAM_POWER_NOT_DECISIVE"
+      ],
+      "public_summary": "Correct Score is well supported by structural support, with caution still coming from team power not decisive.",
+      "rating": 100,
+      "band": "Elite"
+    },
+    "corners": {
+      "alignment_score": 52,
+      "state": "FRAGILE",
+      "model_lean": "ELEVATED",
+      "structural_support": [],
+      "cautions": [
+        "TEAM_POWER_NOT_DECISIVE",
+        "AWAY_TRAVEL_THREAT"
+      ],
+      "public_summary": "Corners has some structural support from structural support, but the overall layer fit remains fragile.",
+      "rating": 66,
+      "band": "Mixed"
+    },
+    "cards": {
+      "alignment_score": 34,
+      "state": "AVOID",
+      "model_lean": "ELEVATED",
+      "structural_support": [],
+      "cautions": [
+        "TEAM_POWER_NOT_DECISIVE",
+        "AWAY_TRAVEL_THREAT"
+      ],
+      "public_summary": "Cards is too contradicted by team power not decisive to present as a clean public read.",
+      "rating": 42,
+      "band": "Weak"
+    }
+  },
+  "watchlist": {
+    "active": false,
+    "summary": "No watchlist layer is active for this fixture.",
+    "trigger_signals": [],
+    "public_state": "No watchlist flag",
+    "mode": ""
+  },
+  "public_safe_summary": "Sion Win is too contradicted across the current structural layers for Sion vs Thun, so the clean read is caution rather than action.",
+  "internal_reason_tokens": [
+    "TEAM_POWER_NOT_DECISIVE",
+    "AWAY_TRAVEL_THREAT",
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "summary": {
+    "support_count": 0,
+    "caution_count": 4,
+    "lineup_available": false,
+    "h2h_available": false
+  },
+  "preview": {
+    "headline": "Sion vs Thun: Sion Win avoid",
+    "short_summary": "Sion Win is too contradicted across the current structural layers for Sion vs Thun, so the clean read is caution rather than action. Primary support comes from structural caution, while the main caution remains team power not decisive.",
+    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: Cards.",
+    "caution_line": "Main caution: Team Power Not Decisive.",
+    "telegram_summary": "Sion vs Thun — Sion Win (Avoid, 32% agreement). Support: structural caution. Caution: Team Power Not Decisive.",
+    "premium_summary": "Sion Win is carrying a 32% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from team power not decisive, away travel threat."
+  }
+}

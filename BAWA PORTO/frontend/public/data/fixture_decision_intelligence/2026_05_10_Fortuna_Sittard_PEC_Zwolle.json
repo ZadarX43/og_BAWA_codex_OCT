@@ -1,0 +1,262 @@
+{
+  "fixture_key": "2026_05_10_Fortuna_Sittard_PEC_Zwolle",
+  "fixture": "Fortuna Sittard vs PEC Zwolle",
+  "primary_signal": "Over 2.5",
+  "signal_state": "FRAGILE",
+  "agreement_score": 56,
+  "confidence_band": "STANDARD",
+  "supporting_layers": [
+    "OVER25_HEAT_SUPPORT",
+    "CHAOS_ENVIRONMENT_SUPPORT"
+  ],
+  "caution_layers": [
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "profile_tags": {
+    "home": [
+      "Two-Way Scoring Profile",
+      "High Chaos Side",
+      "Card Heat Risk"
+    ],
+    "away": [
+      "High Chaos Side",
+      "Card Heat Risk"
+    ]
+  },
+  "profile_narrative": "Fortuna Sittard bring a two-way scoring profile into a matchup with PEC Zwolle's high chaos side. The shape points toward a live goal environment.",
+  "team_faceoff_summary": [
+    {
+      "metric": "goal_heat_rating",
+      "label": "Goal Heat",
+      "home_value": 66,
+      "away_value": 60,
+      "delta": 6,
+      "leader": "Fortuna Sittard"
+    },
+    {
+      "metric": "over25_heat_rating",
+      "label": "Over 2.5 Heat",
+      "home_value": 64,
+      "away_value": 56,
+      "delta": 8,
+      "leader": "Fortuna Sittard"
+    },
+    {
+      "metric": "attack_flow_rating",
+      "label": "Attack Flow",
+      "home_value": 47,
+      "away_value": 32,
+      "delta": 15,
+      "leader": "Fortuna Sittard"
+    },
+    {
+      "metric": "defensive_lock_rating",
+      "label": "Defensive Lock",
+      "home_value": 18,
+      "away_value": 20,
+      "delta": 2,
+      "leader": "PEC Zwolle"
+    },
+    {
+      "metric": "chaos_rating",
+      "label": "Chaos Rating",
+      "home_value": 79,
+      "away_value": 75,
+      "delta": 4,
+      "leader": "Fortuna Sittard"
+    },
+    {
+      "metric": "first_strike_rating",
+      "label": "First Strike",
+      "home_value": 58,
+      "away_value": 60,
+      "delta": 2,
+      "leader": "PEC Zwolle"
+    }
+  ],
+  "unit_battle_summary": [],
+  "key_player_drivers": [],
+  "key_mismatches": [],
+  "h2h_context": {
+    "available": false,
+    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
+    "sample_size": 0
+  },
+  "market_suitability": {
+    "ftr": {
+      "rating": 36,
+      "label": "Red Flag",
+      "read": "Stronger when one side owns a clear team-power edge."
+    },
+    "btts": {
+      "rating": 67,
+      "label": "Mixed",
+      "read": "Driven by two-way access and reduced suppression."
+    },
+    "ou25": {
+      "rating": 63,
+      "label": "Mixed",
+      "read": "Driven by combined goal environment and tempo."
+    },
+    "team_goals": {
+      "rating": 66,
+      "label": "Mixed",
+      "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
+    },
+    "correct_score": {
+      "rating": 100,
+      "label": "Elite",
+      "read": "Better when the shape is structured and the likely scoring zone is narrow."
+    },
+    "corners": {
+      "rating": 28,
+      "label": "Red Flag",
+      "read": "Driven by territory and wide-channel pressure."
+    },
+    "cards": {
+      "rating": 80,
+      "label": "Strong",
+      "read": "Driven by discipline heat, fouling, and volatility."
+    }
+  },
+  "market_intelligence": {
+    "ftr": {
+      "alignment_score": 41,
+      "state": "AVOID",
+      "model_lean": "DRAW",
+      "structural_support": [
+        "OVER25_HEAT_SUPPORT",
+        "CHAOS_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "FTR is too contradicted by lineup data missing to present as a clean public read.",
+      "rating": 36,
+      "band": "Red Flag"
+    },
+    "btts": {
+      "alignment_score": 64,
+      "state": "MIXED",
+      "model_lean": "YES",
+      "structural_support": [
+        "OVER25_HEAT_SUPPORT",
+        "CHAOS_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "BTTS has partial support from over 2.5 heat support, but lineup data missing keeps it from reading clean.",
+      "rating": 67,
+      "band": "Mixed"
+    },
+    "ou25": {
+      "alignment_score": 59,
+      "state": "FRAGILE",
+      "model_lean": "OVER25",
+      "structural_support": [
+        "OVER25_HEAT_SUPPORT",
+        "CHAOS_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Over 2.5 has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
+      "rating": 63,
+      "band": "Mixed"
+    },
+    "team_goals": {
+      "alignment_score": 68,
+      "state": "MIXED",
+      "model_lean": "Fortuna Sittard 1.5+",
+      "structural_support": [
+        "OVER25_HEAT_SUPPORT",
+        "CHAOS_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Team Goals has partial support from over 2.5 heat support, but lineup data missing keeps it from reading clean.",
+      "rating": 66,
+      "band": "Mixed"
+    },
+    "correct_score": {
+      "alignment_score": 83,
+      "state": "SUPPORTED",
+      "model_lean": "OPEN",
+      "structural_support": [
+        "CHAOS_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Correct Score is well supported by chaos environment support, with caution still coming from lineup data missing.",
+      "rating": 100,
+      "band": "Elite"
+    },
+    "corners": {
+      "alignment_score": 35,
+      "state": "AVOID",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "OVER25_HEAT_SUPPORT",
+        "CHAOS_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Corners is too contradicted by lineup data missing to present as a clean public read.",
+      "rating": 28,
+      "band": "Red Flag"
+    },
+    "cards": {
+      "alignment_score": 68,
+      "state": "MIXED",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "CHAOS_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Cards has partial support from chaos environment support, but lineup data missing keeps it from reading clean.",
+      "rating": 80,
+      "band": "Strong"
+    }
+  },
+  "watchlist": {
+    "active": false,
+    "summary": "No watchlist layer is active for this fixture.",
+    "trigger_signals": [],
+    "public_state": "No watchlist flag",
+    "mode": ""
+  },
+  "public_safe_summary": "Over 2.5 has some live shape in Fortuna Sittard vs PEC Zwolle, but the supporting layers remain fragile and need discipline.",
+  "internal_reason_tokens": [
+    "OVER25_HEAT_SUPPORT",
+    "CHAOS_ENVIRONMENT_SUPPORT",
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "summary": {
+    "support_count": 2,
+    "caution_count": 2,
+    "lineup_available": false,
+    "h2h_available": false
+  },
+  "preview": {
+    "headline": "Fortuna Sittard vs PEC Zwolle: Over 2.5 fragile",
+    "short_summary": "Over 2.5 has some live shape in Fortuna Sittard vs PEC Zwolle, but the supporting layers remain fragile and need discipline. Primary support comes from over25 heat support, while the main caution remains lineup data missing.",
+    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: Corners.",
+    "caution_line": "Main caution: Lineup Data Missing.",
+    "telegram_summary": "Fortuna Sittard vs PEC Zwolle — Over 2.5 (Fragile, 56% agreement). Support: Over25 Heat Support. Caution: Lineup Data Missing.",
+    "premium_summary": "Over 2.5 is carrying a 56% agreement read across the published decision layers. Support is currently led by over25 heat support, chaos environment support, while caution is still coming from lineup data missing, h2h unavailable."
+  }
+}

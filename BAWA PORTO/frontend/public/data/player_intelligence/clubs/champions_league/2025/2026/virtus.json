@@ -1,0 +1,1679 @@
+{
+  "club": "Virtus",
+  "club_slug": "virtus",
+  "competition": "Champions League",
+  "competition_key": "champions_league",
+  "season": "2025/2026",
+  "players": [
+    {
+      "player_id": "champions_league_virtus_stefano_scappini_2025/2026",
+      "name": "Stefano Scappini",
+      "surname": "Scappini",
+      "club": "Virtus",
+      "club_slug": "virtus",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 112
+      },
+      "ratings": {
+        "og_player_power": 46,
+        "goal_threat": 51,
+        "shot_threat": 49,
+        "xg_threat": 51,
+        "creative_spark": 47,
+        "xa_threat": 46,
+        "midfield_engine": 46,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 45,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 896,
+        "position_rank": 248,
+        "club_rank": 1,
+        "goal_threat_rank": 697,
+        "creative_spark_rank": 1396,
+        "defensive_lock_rank": 1344,
+        "pressing_heat_rank": 1292,
+        "booking_heat_rank": 1417
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Scappini",
+        "badge_score": 46,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_virtus_riccardo_zulli_2025/2026",
+      "name": "Riccardo Zulli",
+      "surname": "Zulli",
+      "club": "Virtus",
+      "club_slug": "virtus",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 45,
+        "shot_threat": 45,
+        "xg_threat": 45,
+        "creative_spark": 47,
+        "xa_threat": 46,
+        "midfield_engine": 46,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 45,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1087,
+        "position_rank": 426,
+        "club_rank": 2,
+        "goal_threat_rank": 1241,
+        "creative_spark_rank": 1396,
+        "defensive_lock_rank": 1344,
+        "pressing_heat_rank": 1292,
+        "booking_heat_rank": 1417
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Zulli",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_virtus_alessandro_golinucci_2025/2026",
+      "name": "Alessandro Golinucci",
+      "surname": "Golinucci",
+      "club": "Virtus",
+      "club_slug": "virtus",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 23
+      },
+      "ratings": {
+        "og_player_power": 41,
+        "goal_threat": 45,
+        "shot_threat": 45,
+        "xg_threat": 45,
+        "creative_spark": 47,
+        "xa_threat": 46,
+        "midfield_engine": 46,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 45,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1195,
+        "position_rank": 470,
+        "club_rank": 3,
+        "goal_threat_rank": 1241,
+        "creative_spark_rank": 1396,
+        "defensive_lock_rank": 1344,
+        "pressing_heat_rank": 1292,
+        "booking_heat_rank": 1417
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Golinucci",
+        "badge_score": 41,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_virtus_andrea_montanari_2025/2026",
+      "name": "Andrea Montanari",
+      "surname": "Montanari",
+      "club": "Virtus",
+      "club_slug": "virtus",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 113
+      },
+      "ratings": {
+        "og_player_power": 41,
+        "goal_threat": 45,
+        "shot_threat": 45,
+        "xg_threat": 45,
+        "creative_spark": 47,
+        "xa_threat": 46,
+        "midfield_engine": 46,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 45,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1195,
+        "position_rank": 470,
+        "club_rank": 3,
+        "goal_threat_rank": 1241,
+        "creative_spark_rank": 1396,
+        "defensive_lock_rank": 1344,
+        "pressing_heat_rank": 1292,
+        "booking_heat_rank": 1417
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Montanari",
+        "badge_score": 41,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_virtus_armando_amati_2025/2026",
+      "name": "Armando Amati",
+      "surname": "Amati",
+      "club": "Virtus",
+      "club_slug": "virtus",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 157
+      },
+      "ratings": {
+        "og_player_power": 41,
+        "goal_threat": 45,
+        "shot_threat": 45,
+        "xg_threat": 45,
+        "creative_spark": 47,
+        "xa_threat": 46,
+        "midfield_engine": 46,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 53,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1195,
+        "position_rank": 470,
+        "club_rank": 3,
+        "goal_threat_rank": 1241,
+        "creative_spark_rank": 1396,
+        "defensive_lock_rank": 1344,
+        "pressing_heat_rank": 1292,
+        "booking_heat_rank": 609
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Amati",
+        "badge_score": 41,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_virtus_aron_giacomoni_2025/2026",
+      "name": "Aron Giacomoni",
+      "surname": "Giacomoni",
+      "club": "Virtus",
+      "club_slug": "virtus",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 98
+      },
+      "ratings": {
+        "og_player_power": 41,
+        "goal_threat": 45,
+        "shot_threat": 45,
+        "xg_threat": 45,
+        "creative_spark": 47,
+        "xa_threat": 46,
+        "midfield_engine": 46,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 45,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1195,
+        "position_rank": 298,
+        "club_rank": 3,
+        "goal_threat_rank": 1241,
+        "creative_spark_rank": 1396,
+        "defensive_lock_rank": 1344,
+        "pressing_heat_rank": 1292,
+        "booking_heat_rank": 1417
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Giacomoni",
+        "badge_score": 41,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_virtus_elia_ciacci_2025/2026",
+      "name": "Elia Ciacci",
+      "surname": "Ciacci",
+      "club": "Virtus",
+      "club_slug": "virtus",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 34
+      },
+      "ratings": {
+        "og_player_power": 41,
+        "goal_threat": 45,
+        "shot_threat": 45,
+        "xg_threat": 45,
+        "creative_spark": 47,
+        "xa_threat": 46,
+        "midfield_engine": 46,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 55,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1195,
+        "position_rank": 470,
+        "club_rank": 3,
+        "goal_threat_rank": 1241,
+        "creative_spark_rank": 1396,
+        "defensive_lock_rank": 1344,
+        "pressing_heat_rank": 1292,
+        "booking_heat_rank": 320
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Ciacci",
+        "badge_score": 41,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_virtus_ivan_buonocunto_2025/2026",
+      "name": "Ivan Buonocunto",
+      "surname": "Buonocunto",
+      "club": "Virtus",
+      "club_slug": "virtus",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 158
+      },
+      "ratings": {
+        "og_player_power": 41,
+        "goal_threat": 45,
+        "shot_threat": 45,
+        "xg_threat": 45,
+        "creative_spark": 47,
+        "xa_threat": 46,
+        "midfield_engine": 46,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 45,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1195,
+        "position_rank": 470,
+        "club_rank": 3,
+        "goal_threat_rank": 1241,
+        "creative_spark_rank": 1396,
+        "defensive_lock_rank": 1344,
+        "pressing_heat_rank": 1292,
+        "booking_heat_rank": 1417
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Buonocunto",
+        "badge_score": 41,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_virtus_simone_benincasa_2025/2026",
+      "name": "Simone Benincasa",
+      "surname": "Benincasa",
+      "club": "Virtus",
+      "club_slug": "virtus",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 41,
+        "goal_threat": 45,
+        "shot_threat": 45,
+        "xg_threat": 45,
+        "creative_spark": 47,
+        "xa_threat": 46,
+        "midfield_engine": 46,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 45,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1195,
+        "position_rank": 338,
+        "club_rank": 3,
+        "goal_threat_rank": 1241,
+        "creative_spark_rank": 1396,
+        "defensive_lock_rank": 1344,
+        "pressing_heat_rank": 1292,
+        "booking_heat_rank": 1417
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Benincasa",
+        "badge_score": 41,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_virtus_thomas_lombardi_2025/2026",
+      "name": "Thomas Lombardi",
+      "surname": "Lombardi",
+      "club": "Virtus",
+      "club_slug": "virtus",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 134
+      },
+      "ratings": {
+        "og_player_power": 41,
+        "goal_threat": 45,
+        "shot_threat": 45,
+        "xg_threat": 45,
+        "creative_spark": 47,
+        "xa_threat": 46,
+        "midfield_engine": 46,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 45,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1195,
+        "position_rank": 338,
+        "club_rank": 3,
+        "goal_threat_rank": 1241,
+        "creative_spark_rank": 1396,
+        "defensive_lock_rank": 1344,
+        "pressing_heat_rank": 1292,
+        "booking_heat_rank": 1417
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Lombardi",
+        "badge_score": 41,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_virtus_manuel_battistini_2025/2026",
+      "name": "Manuel Battistini",
+      "surname": "Battistini",
+      "club": "Virtus",
+      "club_slug": "virtus",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 40,
+        "goal_threat": 45,
+        "shot_threat": 45,
+        "xg_threat": 45,
+        "creative_spark": 47,
+        "xa_threat": 46,
+        "midfield_engine": 46,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 45,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1387,
+        "position_rank": 354,
+        "club_rank": 11,
+        "goal_threat_rank": 1241,
+        "creative_spark_rank": 1396,
+        "defensive_lock_rank": 1344,
+        "pressing_heat_rank": 1292,
+        "booking_heat_rank": 1417
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Battistini",
+        "badge_score": 40,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_virtus_michele_rinaldi_2025/2026",
+      "name": "Michele Rinaldi",
+      "surname": "Rinaldi",
+      "club": "Virtus",
+      "club_slug": "virtus",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 40,
+        "goal_threat": 45,
+        "shot_threat": 45,
+        "xg_threat": 45,
+        "creative_spark": 47,
+        "xa_threat": 46,
+        "midfield_engine": 46,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 53,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1387,
+        "position_rank": 354,
+        "club_rank": 11,
+        "goal_threat_rank": 1241,
+        "creative_spark_rank": 1396,
+        "defensive_lock_rank": 1344,
+        "pressing_heat_rank": 1292,
+        "booking_heat_rank": 609
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Rinaldi",
+        "badge_score": 40,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_virtus_nicola_gori_2025/2026",
+      "name": "Nicola Gori",
+      "surname": "Gori",
+      "club": "Virtus",
+      "club_slug": "virtus",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 124
+      },
+      "ratings": {
+        "og_player_power": 40,
+        "goal_threat": 45,
+        "shot_threat": 45,
+        "xg_threat": 45,
+        "creative_spark": 47,
+        "xa_threat": 46,
+        "midfield_engine": 46,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 55,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1387,
+        "position_rank": 354,
+        "club_rank": 11,
+        "goal_threat_rank": 1241,
+        "creative_spark_rank": 1396,
+        "defensive_lock_rank": 1344,
+        "pressing_heat_rank": 1292,
+        "booking_heat_rank": 426
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Gori",
+        "badge_score": 40,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_virtus_alex_passaniti_2025/2026",
+      "name": "Alex Passaniti",
+      "surname": "Passaniti",
+      "club": "Virtus",
+      "club_slug": "virtus",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2025/2026",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 37,
+        "goal_threat": 45,
+        "shot_threat": 45,
+        "xg_threat": 45,
+        "creative_spark": 47,
+        "xa_threat": 46,
+        "midfield_engine": 46,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 45,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1661,
+        "position_rank": 119,
+        "club_rank": 14,
+        "goal_threat_rank": 1241,
+        "creative_spark_rank": 1396,
+        "defensive_lock_rank": 1344,
+        "pressing_heat_rank": 1292,
+        "booking_heat_rank": 1417
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Passaniti",
+        "badge_score": 37,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "champions_league_virtus_jacopo_muggeo_2025/2026",
+      "name": "Jacopo Muggeo",
+      "surname": "Muggeo",
+      "club": "Virtus",
+      "club_slug": "virtus",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 79
+      },
+      "ratings": {
+        "og_player_power": 35,
+        "goal_threat": 45,
+        "shot_threat": 45,
+        "xg_threat": 45,
+        "creative_spark": 47,
+        "xa_threat": 46,
+        "midfield_engine": 46,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 45,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1772,
+        "position_rank": 712,
+        "club_rank": 15,
+        "goal_threat_rank": 1241,
+        "creative_spark_rank": 1396,
+        "defensive_lock_rank": 1344,
+        "pressing_heat_rank": 1292,
+        "booking_heat_rank": 1417
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Muggeo",
+        "badge_score": 35,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "champions_league_virtus_matteo_zenoni_2025/2026",
+      "name": "Matteo Zenoni",
+      "surname": "Zenoni",
+      "club": "Virtus",
+      "club_slug": "virtus",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 46
+      },
+      "ratings": {
+        "og_player_power": 35,
+        "goal_threat": 45,
+        "shot_threat": 45,
+        "xg_threat": 45,
+        "creative_spark": 47,
+        "xa_threat": 46,
+        "midfield_engine": 46,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 45,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1772,
+        "position_rank": 712,
+        "club_rank": 15,
+        "goal_threat_rank": 1241,
+        "creative_spark_rank": 1396,
+        "defensive_lock_rank": 1344,
+        "pressing_heat_rank": 1292,
+        "booking_heat_rank": 1417
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Zenoni",
+        "badge_score": 35,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "champions_league_virtus_roberto_sabato_2025/2026",
+      "name": "Roberto Sabato",
+      "surname": "Sabato",
+      "club": "Virtus",
+      "club_slug": "virtus",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 56
+      },
+      "ratings": {
+        "og_player_power": 35,
+        "goal_threat": 45,
+        "shot_threat": 45,
+        "xg_threat": 45,
+        "creative_spark": 47,
+        "xa_threat": 46,
+        "midfield_engine": 46,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 45,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1772,
+        "position_rank": 486,
+        "club_rank": 15,
+        "goal_threat_rank": 1241,
+        "creative_spark_rank": 1396,
+        "defensive_lock_rank": 1344,
+        "pressing_heat_rank": 1292,
+        "booking_heat_rank": 1417
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Sabato",
+        "badge_score": 35,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "champions_league_virtus_umberto_de_lucia_2025/2026",
+      "name": "Umberto De Lucia",
+      "surname": "Lucia",
+      "club": "Virtus",
+      "club_slug": "virtus",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 82
+      },
+      "ratings": {
+        "og_player_power": 35,
+        "goal_threat": 45,
+        "shot_threat": 45,
+        "xg_threat": 45,
+        "creative_spark": 47,
+        "xa_threat": 46,
+        "midfield_engine": 46,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 45,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1772,
+        "position_rank": 486,
+        "club_rank": 15,
+        "goal_threat_rank": 1241,
+        "creative_spark_rank": 1396,
+        "defensive_lock_rank": 1344,
+        "pressing_heat_rank": 1292,
+        "booking_heat_rank": 1417
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Lucia",
+        "badge_score": 35,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "champions_league_virtus_matteo_renzetti_2025/2026",
+      "name": "Matteo Renzetti",
+      "surname": "Renzetti",
+      "club": "Virtus",
+      "club_slug": "virtus",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2025/2026",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 34,
+        "goal_threat": 45,
+        "shot_threat": 45,
+        "xg_threat": 45,
+        "creative_spark": 47,
+        "xa_threat": 46,
+        "midfield_engine": 46,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 45,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1992,
+        "position_rank": 142,
+        "club_rank": 19,
+        "goal_threat_rank": 1241,
+        "creative_spark_rank": 1396,
+        "defensive_lock_rank": 1344,
+        "pressing_heat_rank": 1292,
+        "booking_heat_rank": 1417
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Renzetti",
+        "badge_score": 34,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "champions_league_virtus_mirco_de_angelis_2025/2026",
+      "name": "Mirco De Angelis",
+      "surname": "Angelis",
+      "club": "Virtus",
+      "club_slug": "virtus",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2025/2026",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 34,
+        "goal_threat": 45,
+        "shot_threat": 45,
+        "xg_threat": 45,
+        "creative_spark": 47,
+        "xa_threat": 46,
+        "midfield_engine": 46,
+        "defensive_lock": 47,
+        "pressing_heat": 47,
+        "ball_progression": 47,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 45,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1992,
+        "position_rank": 142,
+        "club_rank": 19,
+        "goal_threat_rank": 1241,
+        "creative_spark_rank": 1396,
+        "defensive_lock_rank": 1344,
+        "pressing_heat_rank": 1292,
+        "booking_heat_rank": 1417
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Angelis",
+        "badge_score": 34,
+        "tier": "RED_FLAG"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Scappini",
+      "Zulli",
+      "Golinucci",
+      "Montanari",
+      "Amati"
+    ],
+    "goal_threat": [
+      "Scappini",
+      "Zulli",
+      "Golinucci",
+      "Montanari",
+      "Amati"
+    ],
+    "creative_spark": [
+      "Scappini",
+      "Zulli",
+      "Golinucci",
+      "Montanari",
+      "Amati"
+    ],
+    "discipline_risk": [
+      "Ciacci",
+      "Gori",
+      "Amati",
+      "Rinaldi",
+      "Scappini"
+    ]
+  }
+}

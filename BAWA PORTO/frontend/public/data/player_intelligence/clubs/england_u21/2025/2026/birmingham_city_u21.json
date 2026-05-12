@@ -1,0 +1,277 @@
+{
+  "club": "Birmingham City U21",
+  "club_slug": "birmingham_city_u21",
+  "competition": "England U21",
+  "competition_key": "england_u21",
+  "season": "2025/2026",
+  "players": [
+    {
+      "player_id": "england_u21_birmingham_city_u21_alfie_chang_2025/2026",
+      "name": "Alfie Chang",
+      "surname": "Chang",
+      "club": "Birmingham City U21",
+      "club_slug": "birmingham_city_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 46,
+        "shot_threat": 47,
+        "xg_threat": 45,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 48,
+        "ball_progression": 49,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 46,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 169,
+        "position_rank": 111,
+        "club_rank": 1,
+        "goal_threat_rank": 179,
+        "creative_spark_rank": 139,
+        "defensive_lock_rank": 114,
+        "pressing_heat_rank": 178,
+        "booking_heat_rank": 195
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Chang",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_u21_birmingham_city_u21_cody_pennington_2025/2026",
+      "name": "Cody Pennington",
+      "surname": "Pennington",
+      "club": "Birmingham City U21",
+      "club_slug": "birmingham_city_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 60
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 46,
+        "shot_threat": 47,
+        "xg_threat": 45,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 51,
+        "ball_progression": 49,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 169,
+        "position_rank": 111,
+        "club_rank": 1,
+        "goal_threat_rank": 179,
+        "creative_spark_rank": 139,
+        "defensive_lock_rank": 114,
+        "pressing_heat_rank": 74,
+        "booking_heat_rank": 105
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Pennington",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_u21_birmingham_city_u21_bradley_mayo_2025/2026",
+      "name": "Bradley Mayo",
+      "surname": "Mayo",
+      "club": "Birmingham City U21",
+      "club_slug": "birmingham_city_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 270
+      },
+      "ratings": {
+        "og_player_power": 39,
+        "goal_threat": 46,
+        "shot_threat": 47,
+        "xg_threat": 45,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 48,
+        "ball_progression": 49,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 46,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 301,
+        "position_rank": 19,
+        "club_rank": 3,
+        "goal_threat_rank": 179,
+        "creative_spark_rank": 139,
+        "defensive_lock_rank": 114,
+        "pressing_heat_rank": 178,
+        "booking_heat_rank": 195
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Mayo",
+        "badge_score": 39,
+        "tier": "RED_FLAG"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Chang",
+      "Pennington",
+      "Mayo"
+    ],
+    "goal_threat": [
+      "Chang",
+      "Pennington",
+      "Mayo"
+    ],
+    "creative_spark": [
+      "Chang",
+      "Pennington",
+      "Mayo"
+    ],
+    "discipline_risk": [
+      "Pennington",
+      "Chang",
+      "Mayo"
+    ]
+  }
+}

@@ -1,0 +1,1843 @@
+{
+  "club": "Sarpsborg 08",
+  "club_slug": "sarpsborg_08",
+  "competition": "Norway Eliteserien",
+  "competition_key": "norway_eliteserien",
+  "season": "2026",
+  "players": [
+    {
+      "player_id": "norway_eliteserien_sarpsborg_08_aimar_sher_2026",
+      "name": "Aimar Sher",
+      "surname": "Sher",
+      "club": "Sarpsborg 08",
+      "club_slug": "sarpsborg_08",
+      "competition": "Norway Eliteserien",
+      "competition_key": "norway_eliteserien",
+      "season": "2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Medium sample",
+        "minutes_played": 627
+      },
+      "ratings": {
+        "og_player_power": 63,
+        "goal_threat": 60,
+        "shot_threat": 60,
+        "xg_threat": 60,
+        "creative_spark": 50,
+        "xa_threat": 51,
+        "midfield_engine": 57,
+        "defensive_lock": 57,
+        "pressing_heat": 55,
+        "ball_progression": 52,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 15,
+        "position_rank": 4,
+        "club_rank": 1,
+        "goal_threat_rank": 41,
+        "creative_spark_rank": 140,
+        "defensive_lock_rank": 13,
+        "pressing_heat_rank": 4,
+        "booking_heat_rank": 123
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Sher",
+        "badge_score": 63,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "norway_eliteserien_sarpsborg_08_bj_rn_inge_utvik_2026",
+      "name": "Bj\u00f8rn Inge Utvik",
+      "surname": "Utvik",
+      "club": "Sarpsborg 08",
+      "club_slug": "sarpsborg_08",
+      "competition": "Norway Eliteserien",
+      "competition_key": "norway_eliteserien",
+      "season": "2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Medium sample",
+        "minutes_played": 630
+      },
+      "ratings": {
+        "og_player_power": 62,
+        "goal_threat": 49,
+        "shot_threat": 52,
+        "xg_threat": 49,
+        "creative_spark": 54,
+        "xa_threat": 55,
+        "midfield_engine": 55,
+        "defensive_lock": 58,
+        "pressing_heat": 51,
+        "ball_progression": 48,
+        "aerial_dominance": 57,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 46,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 24,
+        "position_rank": 5,
+        "club_rank": 2,
+        "goal_threat_rank": 155,
+        "creative_spark_rank": 62,
+        "defensive_lock_rank": 5,
+        "pressing_heat_rank": 113,
+        "booking_heat_rank": 259
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Utvik",
+        "badge_score": 62,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "norway_eliteserien_sarpsborg_08_anders_hiim_2026",
+      "name": "Anders Hiim",
+      "surname": "Hiim",
+      "club": "Sarpsborg 08",
+      "club_slug": "sarpsborg_08",
+      "competition": "Norway Eliteserien",
+      "competition_key": "norway_eliteserien",
+      "season": "2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Medium sample",
+        "minutes_played": 630
+      },
+      "ratings": {
+        "og_player_power": 58,
+        "goal_threat": 46,
+        "shot_threat": 48,
+        "xg_threat": 46,
+        "creative_spark": 51,
+        "xa_threat": 51,
+        "midfield_engine": 54,
+        "defensive_lock": 56,
+        "pressing_heat": 55,
+        "ball_progression": 51,
+        "aerial_dominance": 51,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 56,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 52,
+        "position_rank": 22,
+        "club_rank": 3,
+        "goal_threat_rank": 239,
+        "creative_spark_rank": 113,
+        "defensive_lock_rank": 21,
+        "pressing_heat_rank": 4,
+        "booking_heat_rank": 98
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Hiim",
+        "badge_score": 58,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "norway_eliteserien_sarpsborg_08_sondre_s_rli_2026",
+      "name": "Sondre S\u00f8rli",
+      "surname": "S\u00f8rli",
+      "club": "Sarpsborg 08",
+      "club_slug": "sarpsborg_08",
+      "competition": "Norway Eliteserien",
+      "competition_key": "norway_eliteserien",
+      "season": "2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Medium sample",
+        "minutes_played": 613
+      },
+      "ratings": {
+        "og_player_power": 58,
+        "goal_threat": 60,
+        "shot_threat": 59,
+        "xg_threat": 60,
+        "creative_spark": 56,
+        "xa_threat": 54,
+        "midfield_engine": 44,
+        "defensive_lock": 45,
+        "pressing_heat": 47,
+        "ball_progression": 50,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 43,
+        "booking_heat": 46
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 52,
+        "position_rank": 15,
+        "club_rank": 3,
+        "goal_threat_rank": 41,
+        "creative_spark_rank": 25,
+        "defensive_lock_rank": 349,
+        "pressing_heat_rank": 305,
+        "booking_heat_rank": 308
+      },
+      "tags": [
+        "Forward Profile"
+      ],
+      "ui": {
+        "pitch_label": "S\u00f8rli",
+        "badge_score": 58,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "norway_eliteserien_sarpsborg_08_sigurd_rosted_2026",
+      "name": "Sigurd Rosted",
+      "surname": "Rosted",
+      "club": "Sarpsborg 08",
+      "club_slug": "sarpsborg_08",
+      "competition": "Norway Eliteserien",
+      "competition_key": "norway_eliteserien",
+      "season": "2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 523
+      },
+      "ratings": {
+        "og_player_power": 57,
+        "goal_threat": 49,
+        "shot_threat": 53,
+        "xg_threat": 50,
+        "creative_spark": 48,
+        "xa_threat": 49,
+        "midfield_engine": 54,
+        "defensive_lock": 57,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 44,
+        "booking_heat": 46
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 62,
+        "position_rank": 15,
+        "club_rank": 5,
+        "goal_threat_rank": 155,
+        "creative_spark_rank": 240,
+        "defensive_lock_rank": 13,
+        "pressing_heat_rank": 159,
+        "booking_heat_rank": 308
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Rosted",
+        "badge_score": 57,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "norway_eliteserien_sarpsborg_08_daniel_seland_karlsbakk_2026",
+      "name": "Daniel Seland Karlsbakk",
+      "surname": "Karlsbakk",
+      "club": "Sarpsborg 08",
+      "club_slug": "sarpsborg_08",
+      "competition": "Norway Eliteserien",
+      "competition_key": "norway_eliteserien",
+      "season": "2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Medium sample",
+        "minutes_played": 620
+      },
+      "ratings": {
+        "og_player_power": 56,
+        "goal_threat": 59,
+        "shot_threat": 62,
+        "xg_threat": 58,
+        "creative_spark": 47,
+        "xa_threat": 46,
+        "midfield_engine": 43,
+        "defensive_lock": 43,
+        "pressing_heat": 48,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 56,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 72,
+        "position_rank": 19,
+        "club_rank": 6,
+        "goal_threat_rank": 51,
+        "creative_spark_rank": 266,
+        "defensive_lock_rank": 361,
+        "pressing_heat_rank": 282,
+        "booking_heat_rank": 123
+      },
+      "tags": [
+        "Forward Profile"
+      ],
+      "ui": {
+        "pitch_label": "Karlsbakk",
+        "badge_score": 56,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "norway_eliteserien_sarpsborg_08_andreas_nibe_hansen_2026",
+      "name": "Andreas Nibe Hansen",
+      "surname": "Hansen",
+      "club": "Sarpsborg 08",
+      "club_slug": "sarpsborg_08",
+      "competition": "Norway Eliteserien",
+      "competition_key": "norway_eliteserien",
+      "season": "2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 544
+      },
+      "ratings": {
+        "og_player_power": 53,
+        "goal_threat": 48,
+        "shot_threat": 50,
+        "xg_threat": 49,
+        "creative_spark": 50,
+        "xa_threat": 49,
+        "midfield_engine": 51,
+        "defensive_lock": 48,
+        "pressing_heat": 50,
+        "ball_progression": 52,
+        "aerial_dominance": 46,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 44,
+        "booking_heat": 46
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 99,
+        "position_rank": 44,
+        "club_rank": 7,
+        "goal_threat_rank": 213,
+        "creative_spark_rank": 140,
+        "defensive_lock_rank": 252,
+        "pressing_heat_rank": 159,
+        "booking_heat_rank": 308
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Hansen",
+        "badge_score": 53,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "norway_eliteserien_sarpsborg_08_mamour_ndiaye_2026",
+      "name": "Mamour Ndiaye",
+      "surname": "Ndiaye",
+      "club": "Sarpsborg 08",
+      "club_slug": "sarpsborg_08",
+      "competition": "Norway Eliteserien",
+      "competition_key": "norway_eliteserien",
+      "season": "2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 540
+      },
+      "ratings": {
+        "og_player_power": 53,
+        "goal_threat": 43,
+        "shot_threat": 42,
+        "xg_threat": 43,
+        "creative_spark": 47,
+        "xa_threat": 45,
+        "midfield_engine": 45,
+        "defensive_lock": 48,
+        "pressing_heat": 45,
+        "ball_progression": 44,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 58,
+        "discipline_risk": 56,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Mixed",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Mixed shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 99,
+        "position_rank": 44,
+        "club_rank": 7,
+        "goal_threat_rank": 340,
+        "creative_spark_rank": 266,
+        "defensive_lock_rank": 252,
+        "pressing_heat_rank": 351,
+        "booking_heat_rank": 64
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Ndiaye",
+        "badge_score": 53,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "norway_eliteserien_sarpsborg_08_chris_kouakou_2026",
+      "name": "Chris Kouakou",
+      "surname": "Kouakou",
+      "club": "Sarpsborg 08",
+      "club_slug": "sarpsborg_08",
+      "competition": "Norway Eliteserien",
+      "competition_key": "norway_eliteserien",
+      "season": "2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 49,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 123,
+        "position_rank": 59,
+        "club_rank": 9,
+        "goal_threat_rank": 155,
+        "creative_spark_rank": 140,
+        "defensive_lock_rank": 132,
+        "pressing_heat_rank": 159,
+        "booking_heat_rank": 123
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Kouakou",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "norway_eliteserien_sarpsborg_08_niklas_sandberg_2026",
+      "name": "Niklas Sandberg",
+      "surname": "Sandberg",
+      "club": "Sarpsborg 08",
+      "club_slug": "sarpsborg_08",
+      "competition": "Norway Eliteserien",
+      "competition_key": "norway_eliteserien",
+      "season": "2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 49,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 123,
+        "position_rank": 30,
+        "club_rank": 9,
+        "goal_threat_rank": 155,
+        "creative_spark_rank": 140,
+        "defensive_lock_rank": 132,
+        "pressing_heat_rank": 159,
+        "booking_heat_rank": 123
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Sandberg",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "norway_eliteserien_sarpsborg_08_michael_opoku_2026",
+      "name": "Michael Opoku",
+      "surname": "Opoku",
+      "club": "Sarpsborg 08",
+      "club_slug": "sarpsborg_08",
+      "competition": "Norway Eliteserien",
+      "competition_key": "norway_eliteserien",
+      "season": "2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 173
+      },
+      "ratings": {
+        "og_player_power": 48,
+        "goal_threat": 53,
+        "shot_threat": 55,
+        "xg_threat": 53,
+        "creative_spark": 57,
+        "xa_threat": 56,
+        "midfield_engine": 48,
+        "defensive_lock": 50,
+        "pressing_heat": 53,
+        "ball_progression": 53,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 49,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Mixed",
+        "xg_threat": "Weak",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 185,
+        "position_rank": 41,
+        "club_rank": 11,
+        "goal_threat_rank": 101,
+        "creative_spark_rank": 16,
+        "defensive_lock_rank": 132,
+        "pressing_heat_rank": 32,
+        "booking_heat_rank": 98
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Opoku",
+        "badge_score": 48,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "norway_eliteserien_sarpsborg_08_sander_johan_christiansen_2026",
+      "name": "Sander Johan Christiansen",
+      "surname": "Christiansen",
+      "club": "Sarpsborg 08",
+      "club_slug": "sarpsborg_08",
+      "competition": "Norway Eliteserien",
+      "competition_key": "norway_eliteserien",
+      "season": "2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 314
+      },
+      "ratings": {
+        "og_player_power": 48,
+        "goal_threat": 57,
+        "shot_threat": 57,
+        "xg_threat": 58,
+        "creative_spark": 48,
+        "xa_threat": 47,
+        "midfield_engine": 51,
+        "defensive_lock": 51,
+        "pressing_heat": 49,
+        "ball_progression": 51,
+        "aerial_dominance": 51,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 46,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 185,
+        "position_rank": 87,
+        "club_rank": 11,
+        "goal_threat_rank": 71,
+        "creative_spark_rank": 240,
+        "defensive_lock_rank": 111,
+        "pressing_heat_rank": 246,
+        "booking_heat_rank": 259
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Christiansen",
+        "badge_score": 48,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "norway_eliteserien_sarpsborg_08_victor_emanuel_halvorsen_2026",
+      "name": "Victor Emanuel Halvorsen",
+      "surname": "Halvorsen",
+      "club": "Sarpsborg 08",
+      "club_slug": "sarpsborg_08",
+      "competition": "Norway Eliteserien",
+      "competition_key": "norway_eliteserien",
+      "season": "2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 387
+      },
+      "ratings": {
+        "og_player_power": 48,
+        "goal_threat": 47,
+        "shot_threat": 44,
+        "xg_threat": 45,
+        "creative_spark": 55,
+        "xa_threat": 54,
+        "midfield_engine": 51,
+        "defensive_lock": 50,
+        "pressing_heat": 52,
+        "ball_progression": 51,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 47,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Mixed",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 185,
+        "position_rank": 87,
+        "club_rank": 11,
+        "goal_threat_rank": 227,
+        "creative_spark_rank": 43,
+        "defensive_lock_rank": 132,
+        "pressing_heat_rank": 62,
+        "booking_heat_rank": 213
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Halvorsen",
+        "badge_score": 48,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "norway_eliteserien_sarpsborg_08_noa_williams_2026",
+      "name": "Noa Williams",
+      "surname": "Williams",
+      "club": "Sarpsborg 08",
+      "club_slug": "sarpsborg_08",
+      "competition": "Norway Eliteserien",
+      "competition_key": "norway_eliteserien",
+      "season": "2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 310
+      },
+      "ratings": {
+        "og_player_power": 45,
+        "goal_threat": 49,
+        "shot_threat": 51,
+        "xg_threat": 49,
+        "creative_spark": 51,
+        "xa_threat": 52,
+        "midfield_engine": 49,
+        "defensive_lock": 46,
+        "pressing_heat": 50,
+        "ball_progression": 53,
+        "aerial_dominance": 46,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 47,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 216,
+        "position_rank": 102,
+        "club_rank": 14,
+        "goal_threat_rank": 155,
+        "creative_spark_rank": 113,
+        "defensive_lock_rank": 307,
+        "pressing_heat_rank": 159,
+        "booking_heat_rank": 213
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Williams",
+        "badge_score": 45,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "norway_eliteserien_sarpsborg_08_claus_babo_niyukuri_2026",
+      "name": "Claus Babo Niyukuri",
+      "surname": "Niyukuri",
+      "club": "Sarpsborg 08",
+      "club_slug": "sarpsborg_08",
+      "competition": "Norway Eliteserien",
+      "competition_key": "norway_eliteserien",
+      "season": "2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 370
+      },
+      "ratings": {
+        "og_player_power": 44,
+        "goal_threat": 55,
+        "shot_threat": 52,
+        "xg_threat": 55,
+        "creative_spark": 47,
+        "xa_threat": 46,
+        "midfield_engine": 51,
+        "defensive_lock": 52,
+        "pressing_heat": 51,
+        "ball_progression": 50,
+        "aerial_dominance": 52,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Weak",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 223,
+        "position_rank": 105,
+        "club_rank": 15,
+        "goal_threat_rank": 87,
+        "creative_spark_rank": 266,
+        "defensive_lock_rank": 83,
+        "pressing_heat_rank": 113,
+        "booking_heat_rank": 123
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Niyukuri",
+        "badge_score": 44,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "norway_eliteserien_sarpsborg_08_jo_inge_berget_2026",
+      "name": "Jo Inge Berget",
+      "surname": "Berget",
+      "club": "Sarpsborg 08",
+      "club_slug": "sarpsborg_08",
+      "competition": "Norway Eliteserien",
+      "competition_key": "norway_eliteserien",
+      "season": "2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 121
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 50,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 51,
+        "midfield_engine": 46,
+        "defensive_lock": 49,
+        "pressing_heat": 48,
+        "ball_progression": 51,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 55,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 252,
+        "position_rank": 123,
+        "club_rank": 16,
+        "goal_threat_rank": 136,
+        "creative_spark_rank": 140,
+        "defensive_lock_rank": 208,
+        "pressing_heat_rank": 282,
+        "booking_heat_rank": 47
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Berget",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "norway_eliteserien_sarpsborg_08_eirik_wichne_2026",
+      "name": "Eirik Wichne",
+      "surname": "Wichne",
+      "club": "Sarpsborg 08",
+      "club_slug": "sarpsborg_08",
+      "competition": "Norway Eliteserien",
+      "competition_key": "norway_eliteserien",
+      "season": "2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 264
+      },
+      "ratings": {
+        "og_player_power": 40,
+        "goal_threat": 46,
+        "shot_threat": 46,
+        "xg_threat": 46,
+        "creative_spark": 49,
+        "xa_threat": 49,
+        "midfield_engine": 50,
+        "defensive_lock": 49,
+        "pressing_heat": 53,
+        "ball_progression": 48,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 58,
+        "booking_heat": 55
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 270,
+        "position_rank": 58,
+        "club_rank": 17,
+        "goal_threat_rank": 239,
+        "creative_spark_rank": 207,
+        "defensive_lock_rank": 208,
+        "pressing_heat_rank": 32,
+        "booking_heat_rank": 22
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Wichne",
+        "badge_score": 40,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "norway_eliteserien_sarpsborg_08_menno_koch_2026",
+      "name": "Menno Koch",
+      "surname": "Koch",
+      "club": "Sarpsborg 08",
+      "club_slug": "sarpsborg_08",
+      "competition": "Norway Eliteserien",
+      "competition_key": "norway_eliteserien",
+      "season": "2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 107
+      },
+      "ratings": {
+        "og_player_power": 40,
+        "goal_threat": 44,
+        "shot_threat": 42,
+        "xg_threat": 42,
+        "creative_spark": 47,
+        "xa_threat": 48,
+        "midfield_engine": 52,
+        "defensive_lock": 53,
+        "pressing_heat": 50,
+        "ball_progression": 52,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 53,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 270,
+        "position_rank": 58,
+        "club_rank": 17,
+        "goal_threat_rank": 270,
+        "creative_spark_rank": 266,
+        "defensive_lock_rank": 53,
+        "pressing_heat_rank": 159,
+        "booking_heat_rank": 98
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Koch",
+        "badge_score": 40,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "norway_eliteserien_sarpsborg_08_bop_gu_ye_2026",
+      "name": "Bop Gu\u00e8ye",
+      "surname": "Gu\u00e8ye",
+      "club": "Sarpsborg 08",
+      "club_slug": "sarpsborg_08",
+      "competition": "Norway Eliteserien",
+      "competition_key": "norway_eliteserien",
+      "season": "2026",
+      "position": "Attacking Midfield",
+      "position_group": "utility",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 44
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 55,
+        "shot_threat": 60,
+        "xg_threat": 58,
+        "creative_spark": 51,
+        "xa_threat": 53,
+        "midfield_engine": 50,
+        "defensive_lock": 48,
+        "pressing_heat": 50,
+        "ball_progression": 48,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 47,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 332,
+        "position_rank": 1,
+        "club_rank": 19,
+        "goal_threat_rank": 87,
+        "creative_spark_rank": 113,
+        "defensive_lock_rank": 252,
+        "pressing_heat_rank": 159,
+        "booking_heat_rank": 213
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Gu\u00e8ye",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "norway_eliteserien_sarpsborg_08_mathias_svenningsen_gr_nn_2026",
+      "name": "Mathias Svenningsen-Gr\u00f8nn",
+      "surname": "Svenningsen-Gr\u00f8nn",
+      "club": "Sarpsborg 08",
+      "club_slug": "sarpsborg_08",
+      "competition": "Norway Eliteserien",
+      "competition_key": "norway_eliteserien",
+      "season": "2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 10
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 44,
+        "shot_threat": 42,
+        "xg_threat": 42,
+        "creative_spark": 47,
+        "xa_threat": 47,
+        "midfield_engine": 48,
+        "defensive_lock": 46,
+        "pressing_heat": 46,
+        "ball_progression": 48,
+        "aerial_dominance": 45,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 44,
+        "booking_heat": 46
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 332,
+        "position_rank": 170,
+        "club_rank": 19,
+        "goal_threat_rank": 270,
+        "creative_spark_rank": 266,
+        "defensive_lock_rank": 307,
+        "pressing_heat_rank": 313,
+        "booking_heat_rank": 308
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Svenningsen-Gr\u00f8nn",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "norway_eliteserien_sarpsborg_08_leander_y_2026",
+      "name": "Leander \u00d8y",
+      "surname": "\u00d8y",
+      "club": "Sarpsborg 08",
+      "club_slug": "sarpsborg_08",
+      "competition": "Norway Eliteserien",
+      "competition_key": "norway_eliteserien",
+      "season": "2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 34,
+        "goal_threat": 44,
+        "shot_threat": 42,
+        "xg_threat": 42,
+        "creative_spark": 46,
+        "xa_threat": 45,
+        "midfield_engine": 45,
+        "defensive_lock": 46,
+        "pressing_heat": 46,
+        "ball_progression": 45,
+        "aerial_dominance": 45,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 44,
+        "booking_heat": 46
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 348,
+        "position_rank": 179,
+        "club_rank": 21,
+        "goal_threat_rank": 270,
+        "creative_spark_rank": 305,
+        "defensive_lock_rank": 307,
+        "pressing_heat_rank": 313,
+        "booking_heat_rank": 308
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "\u00d8y",
+        "badge_score": 34,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "norway_eliteserien_sarpsborg_08_magnar_degaard_2026",
+      "name": "Magnar \u00d8degaard",
+      "surname": "\u00d8degaard",
+      "club": "Sarpsborg 08",
+      "club_slug": "sarpsborg_08",
+      "competition": "Norway Eliteserien",
+      "competition_key": "norway_eliteserien",
+      "season": "2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 13
+      },
+      "ratings": {
+        "og_player_power": 34,
+        "goal_threat": 44,
+        "shot_threat": 42,
+        "xg_threat": 42,
+        "creative_spark": 49,
+        "xa_threat": 50,
+        "midfield_engine": 48,
+        "defensive_lock": 46,
+        "pressing_heat": 48,
+        "ball_progression": 46,
+        "aerial_dominance": 45,
+        "goalkeeper_shield": 53,
+        "discipline_risk": 48,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 348,
+        "position_rank": 79,
+        "club_rank": 21,
+        "goal_threat_rank": 270,
+        "creative_spark_rank": 207,
+        "defensive_lock_rank": 307,
+        "pressing_heat_rank": 282,
+        "booking_heat_rank": 213
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "\u00d8degaard",
+        "badge_score": 34,
+        "tier": "RED_FLAG"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Sher",
+      "Utvik",
+      "Hiim",
+      "S\u00f8rli",
+      "Rosted"
+    ],
+    "goal_threat": [
+      "Sher",
+      "S\u00f8rli",
+      "Karlsbakk",
+      "Christiansen",
+      "Niyukuri"
+    ],
+    "creative_spark": [
+      "Opoku",
+      "S\u00f8rli",
+      "Halvorsen",
+      "Utvik",
+      "Hiim"
+    ],
+    "discipline_risk": [
+      "Wichne",
+      "Hiim",
+      "Karlsbakk",
+      "Ndiaye",
+      "Berget"
+    ]
+  }
+}

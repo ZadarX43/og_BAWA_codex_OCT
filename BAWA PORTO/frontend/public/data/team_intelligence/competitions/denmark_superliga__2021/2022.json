@@ -1,0 +1,1192 @@
+{
+  "competition_key": "denmark_superliga",
+  "season": "2021/2022",
+  "teams": [
+    {
+      "team": "K\u00f8benhavn",
+      "team_slug": "k_benhavn",
+      "competition": "Denmark Superliga",
+      "competition_key": "denmark_superliga",
+      "season": "2021/2022",
+      "country": "Denmark",
+      "matches_played": 32,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 32
+      },
+      "ratings": {
+        "og_power_rating": 93,
+        "attack_flow_rating": 77,
+        "defensive_lock_rating": 94,
+        "goal_heat_rating": 27,
+        "btts_pressure_rating": 34,
+        "over25_heat_rating": 24,
+        "control_rating": 88,
+        "first_strike_rating": 85,
+        "corner_pressure_rating": 35,
+        "card_heat_rating": 27,
+        "chaos_rating": 18,
+        "home_fortress_rating": 95,
+        "away_threat_rating": 92
+      },
+      "rating_bands": {
+        "og_power_rating": "Elite",
+        "attack_flow_rating": "Positive",
+        "defensive_lock_rating": "Elite",
+        "goal_heat_rating": "Red Flag",
+        "btts_pressure_rating": "Red Flag",
+        "over25_heat_rating": "Red Flag",
+        "control_rating": "Strong",
+        "first_strike_rating": "Strong",
+        "corner_pressure_rating": "Red Flag",
+        "card_heat_rating": "Red Flag",
+        "chaos_rating": "Red Flag",
+        "home_fortress_rating": "Elite",
+        "away_threat_rating": "Elite"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Elite team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Positive attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Elite defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Red Flag goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Red Flag two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Red Flag 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Strong match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Strong early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Red Flag territory and corner-generation profile.",
+        "card_heat_rating": "Red Flag discipline and card volatility profile.",
+        "chaos_rating": "Red Flag volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Elite home-ground control profile.",
+        "away_threat_rating": "Elite travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Elite Control Side",
+        "Defensive Wall",
+        "Strong First Goal",
+        "Home Dominant",
+        "Travels Well"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 93%",
+        "profile": "Elite team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Home Fortress",
+          "Defensive Lock",
+          "Og Power"
+        ],
+        "main_caution": "Card Heat sits at 27%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Strong",
+        "btts_lean": "Red Flag",
+        "over25_lean": "Red Flag",
+        "under_control": "Strong",
+        "team_goals_15": "Positive",
+        "corners": "Red Flag",
+        "cards": "Positive"
+      },
+      "home_profile": {
+        "power": 95,
+        "attack": 77,
+        "defence": 94,
+        "goal_heat": 27
+      },
+      "away_profile": {
+        "power": 92,
+        "attack": 84,
+        "defence": 88,
+        "goal_heat": 26
+      },
+      "timing_profile": {
+        "early_threat": 81,
+        "half_time_control": 69,
+        "late_surge": 26,
+        "late_fragility": 22
+      }
+    },
+    {
+      "team": "Midtjylland",
+      "team_slug": "midtjylland",
+      "competition": "Denmark Superliga",
+      "competition_key": "denmark_superliga",
+      "season": "2021/2022",
+      "country": "Denmark",
+      "matches_played": 32,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 32
+      },
+      "ratings": {
+        "og_power_rating": 93,
+        "attack_flow_rating": 95,
+        "defensive_lock_rating": 82,
+        "goal_heat_rating": 81,
+        "btts_pressure_rating": 45,
+        "over25_heat_rating": 88,
+        "control_rating": 53,
+        "first_strike_rating": 90,
+        "corner_pressure_rating": 54,
+        "card_heat_rating": 37,
+        "chaos_rating": 48,
+        "home_fortress_rating": 86,
+        "away_threat_rating": 90
+      },
+      "rating_bands": {
+        "og_power_rating": "Elite",
+        "attack_flow_rating": "Elite",
+        "defensive_lock_rating": "Strong",
+        "goal_heat_rating": "Strong",
+        "btts_pressure_rating": "Weak",
+        "over25_heat_rating": "Strong",
+        "control_rating": "Weak",
+        "first_strike_rating": "Elite",
+        "corner_pressure_rating": "Weak",
+        "card_heat_rating": "Red Flag",
+        "chaos_rating": "Weak",
+        "home_fortress_rating": "Strong",
+        "away_threat_rating": "Elite"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Elite team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Elite attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Strong defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Strong goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Weak two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Strong 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Weak match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Elite early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Weak territory and corner-generation profile.",
+        "card_heat_rating": "Red Flag discipline and card volatility profile.",
+        "chaos_rating": "Weak volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Strong home-ground control profile.",
+        "away_threat_rating": "Elite travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Elite Control Side",
+        "Attack-Led Side",
+        "Strong First Goal",
+        "Home Dominant",
+        "Travels Well"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 93%",
+        "profile": "Elite team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Attack Flow",
+          "Og Power",
+          "First Strike"
+        ],
+        "main_caution": "Chaos Rating sits at 48%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Strong",
+        "btts_lean": "Weak",
+        "over25_lean": "Strong",
+        "under_control": "Weak",
+        "team_goals_15": "Strong",
+        "corners": "Weak",
+        "cards": "Mixed"
+      },
+      "home_profile": {
+        "power": 86,
+        "attack": 95,
+        "defence": 82,
+        "goal_heat": 81
+      },
+      "away_profile": {
+        "power": 90,
+        "attack": 92,
+        "defence": 67,
+        "goal_heat": 84
+      },
+      "timing_profile": {
+        "early_threat": 92,
+        "half_time_control": 48,
+        "late_surge": 84,
+        "late_fragility": 42
+      }
+    },
+    {
+      "team": "AaB",
+      "team_slug": "aab",
+      "competition": "Denmark Superliga",
+      "competition_key": "denmark_superliga",
+      "season": "2021/2022",
+      "country": "Denmark",
+      "matches_played": 33,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 33
+      },
+      "ratings": {
+        "og_power_rating": 58,
+        "attack_flow_rating": 54,
+        "defensive_lock_rating": 57,
+        "goal_heat_rating": 61,
+        "btts_pressure_rating": 48,
+        "over25_heat_rating": 65,
+        "control_rating": 42,
+        "first_strike_rating": 72,
+        "corner_pressure_rating": 75,
+        "card_heat_rating": 78,
+        "chaos_rating": 67,
+        "home_fortress_rating": 40,
+        "away_threat_rating": 65
+      },
+      "rating_bands": {
+        "og_power_rating": "Mixed",
+        "attack_flow_rating": "Weak",
+        "defensive_lock_rating": "Mixed",
+        "goal_heat_rating": "Mixed",
+        "btts_pressure_rating": "Weak",
+        "over25_heat_rating": "Mixed",
+        "control_rating": "Weak",
+        "first_strike_rating": "Positive",
+        "corner_pressure_rating": "Positive",
+        "card_heat_rating": "Positive",
+        "chaos_rating": "Mixed",
+        "home_fortress_rating": "Weak",
+        "away_threat_rating": "Mixed"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Mixed team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Weak attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Mixed defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Mixed goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Weak two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Mixed 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Weak match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Positive early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Positive territory and corner-generation profile.",
+        "card_heat_rating": "Positive discipline and card volatility profile.",
+        "chaos_rating": "Mixed volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Weak home-ground control profile.",
+        "away_threat_rating": "Mixed travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Card Heat Risk"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 58%",
+        "profile": "Mixed team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Card Heat",
+          "Corner Pressure",
+          "First Strike"
+        ],
+        "main_caution": "Card Heat sits at 78%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Mixed",
+        "btts_lean": "Weak",
+        "over25_lean": "Mixed",
+        "under_control": "Weak",
+        "team_goals_15": "Weak",
+        "corners": "Positive",
+        "cards": "Red Flag"
+      },
+      "home_profile": {
+        "power": 40,
+        "attack": 54,
+        "defence": 57,
+        "goal_heat": 61
+      },
+      "away_profile": {
+        "power": 65,
+        "attack": 60,
+        "defence": 45,
+        "goal_heat": 63
+      },
+      "timing_profile": {
+        "early_threat": 63,
+        "half_time_control": 38,
+        "late_surge": 63,
+        "late_fragility": 72
+      }
+    },
+    {
+      "team": "Nordsj\u00e6lland",
+      "team_slug": "nordsj_lland",
+      "competition": "Denmark Superliga",
+      "competition_key": "denmark_superliga",
+      "season": "2021/2022",
+      "country": "Denmark",
+      "matches_played": 32,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 32
+      },
+      "ratings": {
+        "og_power_rating": 41,
+        "attack_flow_rating": 45,
+        "defensive_lock_rating": 44,
+        "goal_heat_rating": 58,
+        "btts_pressure_rating": 54,
+        "over25_heat_rating": 52,
+        "control_rating": 60,
+        "first_strike_rating": 42,
+        "corner_pressure_rating": 47,
+        "card_heat_rating": 55,
+        "chaos_rating": 59,
+        "home_fortress_rating": 46,
+        "away_threat_rating": 38
+      },
+      "rating_bands": {
+        "og_power_rating": "Weak",
+        "attack_flow_rating": "Weak",
+        "defensive_lock_rating": "Weak",
+        "goal_heat_rating": "Mixed",
+        "btts_pressure_rating": "Weak",
+        "over25_heat_rating": "Weak",
+        "control_rating": "Mixed",
+        "first_strike_rating": "Weak",
+        "corner_pressure_rating": "Weak",
+        "card_heat_rating": "Mixed",
+        "chaos_rating": "Mixed",
+        "home_fortress_rating": "Weak",
+        "away_threat_rating": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Weak attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Weak defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Mixed goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Weak two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Weak 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Mixed match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Weak early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Weak territory and corner-generation profile.",
+        "card_heat_rating": "Mixed discipline and card volatility profile.",
+        "chaos_rating": "Mixed volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Weak home-ground control profile.",
+        "away_threat_rating": "Red Flag travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Mixed Team Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 41%",
+        "profile": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Control",
+          "Chaos",
+          "Goal Heat"
+        ],
+        "main_caution": "Chaos Rating sits at 59%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Weak",
+        "btts_lean": "Weak",
+        "over25_lean": "Weak",
+        "under_control": "Mixed",
+        "team_goals_15": "Weak",
+        "corners": "Weak",
+        "cards": "Weak"
+      },
+      "home_profile": {
+        "power": 46,
+        "attack": 45,
+        "defence": 44,
+        "goal_heat": 58
+      },
+      "away_profile": {
+        "power": 38,
+        "attack": 42,
+        "defence": 42,
+        "goal_heat": 55
+      },
+      "timing_profile": {
+        "early_threat": 44,
+        "half_time_control": 44,
+        "late_surge": 55,
+        "late_fragility": 57
+      }
+    },
+    {
+      "team": "AGF",
+      "team_slug": "agf",
+      "competition": "Denmark Superliga",
+      "competition_key": "denmark_superliga",
+      "season": "2021/2022",
+      "country": "Denmark",
+      "matches_played": 32,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 32
+      },
+      "ratings": {
+        "og_power_rating": 32,
+        "attack_flow_rating": 24,
+        "defensive_lock_rating": 47,
+        "goal_heat_rating": 23,
+        "btts_pressure_rating": 35,
+        "over25_heat_rating": 25,
+        "control_rating": 59,
+        "first_strike_rating": 35,
+        "corner_pressure_rating": 40,
+        "card_heat_rating": 70,
+        "chaos_rating": 39,
+        "home_fortress_rating": 31,
+        "away_threat_rating": 30
+      },
+      "rating_bands": {
+        "og_power_rating": "Red Flag",
+        "attack_flow_rating": "Red Flag",
+        "defensive_lock_rating": "Weak",
+        "goal_heat_rating": "Red Flag",
+        "btts_pressure_rating": "Red Flag",
+        "over25_heat_rating": "Red Flag",
+        "control_rating": "Mixed",
+        "first_strike_rating": "Red Flag",
+        "corner_pressure_rating": "Weak",
+        "card_heat_rating": "Positive",
+        "chaos_rating": "Red Flag",
+        "home_fortress_rating": "Red Flag",
+        "away_threat_rating": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Red Flag attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Weak defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Red Flag goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Red Flag two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Red Flag 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Mixed match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Red Flag early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Weak territory and corner-generation profile.",
+        "card_heat_rating": "Positive discipline and card volatility profile.",
+        "chaos_rating": "Red Flag volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Red Flag home-ground control profile.",
+        "away_threat_rating": "Red Flag travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Mixed Team Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 32%",
+        "profile": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Card Heat",
+          "Control",
+          "Defensive Lock"
+        ],
+        "main_caution": "Card Heat sits at 70%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Red Flag",
+        "btts_lean": "Red Flag",
+        "over25_lean": "Red Flag",
+        "under_control": "Mixed",
+        "team_goals_15": "Red Flag",
+        "corners": "Weak",
+        "cards": "Red Flag"
+      },
+      "home_profile": {
+        "power": 31,
+        "attack": 24,
+        "defence": 47,
+        "goal_heat": 23
+      },
+      "away_profile": {
+        "power": 30,
+        "attack": 27,
+        "defence": 54,
+        "goal_heat": 24
+      },
+      "timing_profile": {
+        "early_threat": 30,
+        "half_time_control": 42,
+        "late_surge": 24,
+        "late_fragility": 54
+      }
+    },
+    {
+      "team": "Br\u00f8ndby",
+      "team_slug": "br_ndby",
+      "competition": "Denmark Superliga",
+      "competition_key": "denmark_superliga",
+      "season": "2021/2022",
+      "country": "Denmark",
+      "matches_played": 32,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 32
+      },
+      "ratings": {
+        "og_power_rating": 52,
+        "attack_flow_rating": 53,
+        "defensive_lock_rating": 54,
+        "goal_heat_rating": 45,
+        "btts_pressure_rating": 57,
+        "over25_heat_rating": 43,
+        "control_rating": 51,
+        "first_strike_rating": 58,
+        "corner_pressure_rating": 49,
+        "card_heat_rating": 43,
+        "chaos_rating": 48,
+        "home_fortress_rating": 61,
+        "away_threat_rating": 50
+      },
+      "rating_bands": {
+        "og_power_rating": "Weak",
+        "attack_flow_rating": "Weak",
+        "defensive_lock_rating": "Weak",
+        "goal_heat_rating": "Weak",
+        "btts_pressure_rating": "Mixed",
+        "over25_heat_rating": "Weak",
+        "control_rating": "Weak",
+        "first_strike_rating": "Mixed",
+        "corner_pressure_rating": "Weak",
+        "card_heat_rating": "Weak",
+        "chaos_rating": "Weak",
+        "home_fortress_rating": "Mixed",
+        "away_threat_rating": "Weak"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Weak attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Weak defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Weak goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Mixed two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Weak 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Weak match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Mixed early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Weak territory and corner-generation profile.",
+        "card_heat_rating": "Weak discipline and card volatility profile.",
+        "chaos_rating": "Weak volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Mixed home-ground control profile.",
+        "away_threat_rating": "Weak travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Mixed Team Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 52%",
+        "profile": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Home Fortress",
+          "First Strike",
+          "Btts Pressure"
+        ],
+        "main_caution": "Chaos Rating sits at 48%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Weak",
+        "btts_lean": "Mixed",
+        "over25_lean": "Weak",
+        "under_control": "Weak",
+        "team_goals_15": "Weak",
+        "corners": "Weak",
+        "cards": "Mixed"
+      },
+      "home_profile": {
+        "power": 61,
+        "attack": 53,
+        "defence": 54,
+        "goal_heat": 45
+      },
+      "away_profile": {
+        "power": 50,
+        "attack": 52,
+        "defence": 53,
+        "goal_heat": 44
+      },
+      "timing_profile": {
+        "early_threat": 56,
+        "half_time_control": 41,
+        "late_surge": 44,
+        "late_fragility": 46
+      }
+    },
+    {
+      "team": "S\u00f8nderjyskE",
+      "team_slug": "s_nderjyske",
+      "competition": "Denmark Superliga",
+      "competition_key": "denmark_superliga",
+      "season": "2021/2022",
+      "country": "Denmark",
+      "matches_played": 32,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 32
+      },
+      "ratings": {
+        "og_power_rating": 20,
+        "attack_flow_rating": 30,
+        "defensive_lock_rating": 17,
+        "goal_heat_rating": 46,
+        "btts_pressure_rating": 53,
+        "over25_heat_rating": 46,
+        "control_rating": 38,
+        "first_strike_rating": 27,
+        "corner_pressure_rating": 55,
+        "card_heat_rating": 54,
+        "chaos_rating": 50,
+        "home_fortress_rating": 16,
+        "away_threat_rating": 20
+      },
+      "rating_bands": {
+        "og_power_rating": "Red Flag",
+        "attack_flow_rating": "Red Flag",
+        "defensive_lock_rating": "Red Flag",
+        "goal_heat_rating": "Weak",
+        "btts_pressure_rating": "Weak",
+        "over25_heat_rating": "Weak",
+        "control_rating": "Red Flag",
+        "first_strike_rating": "Red Flag",
+        "corner_pressure_rating": "Mixed",
+        "card_heat_rating": "Weak",
+        "chaos_rating": "Weak",
+        "home_fortress_rating": "Red Flag",
+        "away_threat_rating": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Red Flag attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Red Flag defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Weak goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Weak two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Weak 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Red Flag match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Red Flag early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Mixed territory and corner-generation profile.",
+        "card_heat_rating": "Weak discipline and card volatility profile.",
+        "chaos_rating": "Weak volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Red Flag home-ground control profile.",
+        "away_threat_rating": "Red Flag travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Mixed Team Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 20%",
+        "profile": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Corner Pressure",
+          "Card Heat",
+          "Btts Pressure"
+        ],
+        "main_caution": "Card Heat sits at 54%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Red Flag",
+        "btts_lean": "Weak",
+        "over25_lean": "Weak",
+        "under_control": "Red Flag",
+        "team_goals_15": "Red Flag",
+        "corners": "Mixed",
+        "cards": "Weak"
+      },
+      "home_profile": {
+        "power": 16,
+        "attack": 30,
+        "defence": 17,
+        "goal_heat": 46
+      },
+      "away_profile": {
+        "power": 20,
+        "attack": 25,
+        "defence": 34,
+        "goal_heat": 46
+      },
+      "timing_profile": {
+        "early_threat": 28,
+        "half_time_control": 28,
+        "late_surge": 46,
+        "late_fragility": 52
+      }
+    },
+    {
+      "team": "Randers",
+      "team_slug": "randers",
+      "competition": "Denmark Superliga",
+      "competition_key": "denmark_superliga",
+      "season": "2021/2022",
+      "country": "Denmark",
+      "matches_played": 32,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 32
+      },
+      "ratings": {
+        "og_power_rating": 47,
+        "attack_flow_rating": 41,
+        "defensive_lock_rating": 47,
+        "goal_heat_rating": 41,
+        "btts_pressure_rating": 52,
+        "over25_heat_rating": 45,
+        "control_rating": 43,
+        "first_strike_rating": 27,
+        "corner_pressure_rating": 58,
+        "card_heat_rating": 41,
+        "chaos_rating": 45,
+        "home_fortress_rating": 38,
+        "away_threat_rating": 59
+      },
+      "rating_bands": {
+        "og_power_rating": "Weak",
+        "attack_flow_rating": "Weak",
+        "defensive_lock_rating": "Weak",
+        "goal_heat_rating": "Weak",
+        "btts_pressure_rating": "Weak",
+        "over25_heat_rating": "Weak",
+        "control_rating": "Weak",
+        "first_strike_rating": "Red Flag",
+        "corner_pressure_rating": "Mixed",
+        "card_heat_rating": "Weak",
+        "chaos_rating": "Weak",
+        "home_fortress_rating": "Red Flag",
+        "away_threat_rating": "Mixed"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Weak attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Weak defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Weak goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Weak two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Weak 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Weak match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Red Flag early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Mixed territory and corner-generation profile.",
+        "card_heat_rating": "Weak discipline and card volatility profile.",
+        "chaos_rating": "Weak volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Red Flag home-ground control profile.",
+        "away_threat_rating": "Mixed travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Mixed Team Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 47%",
+        "profile": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Away Threat",
+          "Corner Pressure",
+          "Btts Pressure"
+        ],
+        "main_caution": "Chaos Rating sits at 45%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Weak",
+        "btts_lean": "Weak",
+        "over25_lean": "Weak",
+        "under_control": "Weak",
+        "team_goals_15": "Weak",
+        "corners": "Mixed",
+        "cards": "Mixed"
+      },
+      "home_profile": {
+        "power": 38,
+        "attack": 41,
+        "defence": 47,
+        "goal_heat": 41
+      },
+      "away_profile": {
+        "power": 59,
+        "attack": 50,
+        "defence": 51,
+        "goal_heat": 43
+      },
+      "timing_profile": {
+        "early_threat": 34,
+        "half_time_control": 34,
+        "late_surge": 43,
+        "late_fragility": 43
+      }
+    },
+    {
+      "team": "Silkeborg",
+      "team_slug": "silkeborg",
+      "competition": "Denmark Superliga",
+      "competition_key": "denmark_superliga",
+      "season": "2021/2022",
+      "country": "Denmark",
+      "matches_played": 32,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 32
+      },
+      "ratings": {
+        "og_power_rating": 73,
+        "attack_flow_rating": 68,
+        "defensive_lock_rating": 62,
+        "goal_heat_rating": 74,
+        "btts_pressure_rating": 55,
+        "over25_heat_rating": 71,
+        "control_rating": 52,
+        "first_strike_rating": 42,
+        "corner_pressure_rating": 58,
+        "card_heat_rating": 37,
+        "chaos_rating": 61,
+        "home_fortress_rating": 77,
+        "away_threat_rating": 64
+      },
+      "rating_bands": {
+        "og_power_rating": "Positive",
+        "attack_flow_rating": "Mixed",
+        "defensive_lock_rating": "Mixed",
+        "goal_heat_rating": "Positive",
+        "btts_pressure_rating": "Mixed",
+        "over25_heat_rating": "Positive",
+        "control_rating": "Weak",
+        "first_strike_rating": "Weak",
+        "corner_pressure_rating": "Mixed",
+        "card_heat_rating": "Red Flag",
+        "chaos_rating": "Mixed",
+        "home_fortress_rating": "Positive",
+        "away_threat_rating": "Mixed"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Positive team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Mixed attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Mixed defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Positive goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Mixed two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Positive 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Weak match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Weak early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Mixed territory and corner-generation profile.",
+        "card_heat_rating": "Red Flag discipline and card volatility profile.",
+        "chaos_rating": "Mixed volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Positive home-ground control profile.",
+        "away_threat_rating": "Mixed travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Mixed Team Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 73%",
+        "profile": "Positive team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Home Fortress",
+          "Goal Heat",
+          "Og Power"
+        ],
+        "main_caution": "Chaos Rating sits at 61%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Positive",
+        "btts_lean": "Mixed",
+        "over25_lean": "Positive",
+        "under_control": "Weak",
+        "team_goals_15": "Mixed",
+        "corners": "Mixed",
+        "cards": "Mixed"
+      },
+      "home_profile": {
+        "power": 77,
+        "attack": 68,
+        "defence": 62,
+        "goal_heat": 74
+      },
+      "away_profile": {
+        "power": 64,
+        "attack": 66,
+        "defence": 50,
+        "goal_heat": 72
+      },
+      "timing_profile": {
+        "early_threat": 55,
+        "half_time_control": 40,
+        "late_surge": 72,
+        "late_fragility": 49
+      }
+    },
+    {
+      "team": "OB",
+      "team_slug": "ob",
+      "competition": "Denmark Superliga",
+      "competition_key": "denmark_superliga",
+      "season": "2021/2022",
+      "country": "Denmark",
+      "matches_played": 32,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 32
+      },
+      "ratings": {
+        "og_power_rating": 43,
+        "attack_flow_rating": 64,
+        "defensive_lock_rating": 21,
+        "goal_heat_rating": 76,
+        "btts_pressure_rating": 82,
+        "over25_heat_rating": 71,
+        "control_rating": 28,
+        "first_strike_rating": 61,
+        "corner_pressure_rating": 69,
+        "card_heat_rating": 55,
+        "chaos_rating": 73,
+        "home_fortress_rating": 54,
+        "away_threat_rating": 32
+      },
+      "rating_bands": {
+        "og_power_rating": "Weak",
+        "attack_flow_rating": "Mixed",
+        "defensive_lock_rating": "Red Flag",
+        "goal_heat_rating": "Positive",
+        "btts_pressure_rating": "Strong",
+        "over25_heat_rating": "Positive",
+        "control_rating": "Red Flag",
+        "first_strike_rating": "Mixed",
+        "corner_pressure_rating": "Mixed",
+        "card_heat_rating": "Mixed",
+        "chaos_rating": "Positive",
+        "home_fortress_rating": "Weak",
+        "away_threat_rating": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Mixed attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Red Flag defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Positive goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Strong two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Positive 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Red Flag match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Mixed early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Mixed territory and corner-generation profile.",
+        "card_heat_rating": "Mixed discipline and card volatility profile.",
+        "chaos_rating": "Positive volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Weak home-ground control profile.",
+        "away_threat_rating": "Red Flag travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Open Match Profile",
+        "Two-Way Scoring Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 43%",
+        "profile": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Btts Pressure",
+          "Goal Heat",
+          "Chaos"
+        ],
+        "main_caution": "Chaos Rating sits at 73%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Weak",
+        "btts_lean": "Positive",
+        "over25_lean": "Positive",
+        "under_control": "Red Flag",
+        "team_goals_15": "Mixed",
+        "corners": "Mixed",
+        "cards": "Weak"
+      },
+      "home_profile": {
+        "power": 54,
+        "attack": 64,
+        "defence": 21,
+        "goal_heat": 76
+      },
+      "away_profile": {
+        "power": 32,
+        "attack": 48,
+        "defence": 24,
+        "goal_heat": 74
+      },
+      "timing_profile": {
+        "early_threat": 62,
+        "half_time_control": 28,
+        "late_surge": 74,
+        "late_fragility": 64
+      }
+    },
+    {
+      "team": "Viborg",
+      "team_slug": "viborg",
+      "competition": "Denmark Superliga",
+      "competition_key": "denmark_superliga",
+      "season": "2021/2022",
+      "country": "Denmark",
+      "matches_played": 33,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 33
+      },
+      "ratings": {
+        "og_power_rating": 60,
+        "attack_flow_rating": 81,
+        "defensive_lock_rating": 37,
+        "goal_heat_rating": 57,
+        "btts_pressure_rating": 73,
+        "over25_heat_rating": 54,
+        "control_rating": 45,
+        "first_strike_rating": 83,
+        "corner_pressure_rating": 77,
+        "card_heat_rating": 61,
+        "chaos_rating": 55,
+        "home_fortress_rating": 37,
+        "away_threat_rating": 66
+      },
+      "rating_bands": {
+        "og_power_rating": "Mixed",
+        "attack_flow_rating": "Strong",
+        "defensive_lock_rating": "Red Flag",
+        "goal_heat_rating": "Mixed",
+        "btts_pressure_rating": "Positive",
+        "over25_heat_rating": "Weak",
+        "control_rating": "Weak",
+        "first_strike_rating": "Strong",
+        "corner_pressure_rating": "Positive",
+        "card_heat_rating": "Mixed",
+        "chaos_rating": "Mixed",
+        "home_fortress_rating": "Red Flag",
+        "away_threat_rating": "Mixed"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Mixed team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Strong attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Red Flag defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Mixed goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Positive two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Weak 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Weak match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Strong early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Positive territory and corner-generation profile.",
+        "card_heat_rating": "Mixed discipline and card volatility profile.",
+        "chaos_rating": "Mixed volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Red Flag home-ground control profile.",
+        "away_threat_rating": "Mixed travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Strong First Goal",
+        "Two-Way Scoring Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 60%",
+        "profile": "Mixed team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "First Strike",
+          "Attack Flow",
+          "Corner Pressure"
+        ],
+        "main_caution": "Card Heat sits at 61%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Mixed",
+        "btts_lean": "Positive",
+        "over25_lean": "Weak",
+        "under_control": "Weak",
+        "team_goals_15": "Positive",
+        "corners": "Positive",
+        "cards": "Red Flag"
+      },
+      "home_profile": {
+        "power": 37,
+        "attack": 81,
+        "defence": 37,
+        "goal_heat": 57
+      },
+      "away_profile": {
+        "power": 66,
+        "attack": 74,
+        "defence": 41,
+        "goal_heat": 56
+      },
+      "timing_profile": {
+        "early_threat": 82,
+        "half_time_control": 38,
+        "late_surge": 56,
+        "late_fragility": 58
+      }
+    },
+    {
+      "team": "Vejle",
+      "team_slug": "vejle",
+      "competition": "Denmark Superliga",
+      "competition_key": "denmark_superliga",
+      "season": "2021/2022",
+      "country": "Denmark",
+      "matches_played": 32,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 32
+      },
+      "ratings": {
+        "og_power_rating": 19,
+        "attack_flow_rating": 18,
+        "defensive_lock_rating": 26,
+        "goal_heat_rating": 61,
+        "btts_pressure_rating": 36,
+        "over25_heat_rating": 67,
+        "control_rating": 36,
+        "first_strike_rating": 11,
+        "corner_pressure_rating": 33,
+        "card_heat_rating": 90,
+        "chaos_rating": 74,
+        "home_fortress_rating": 38,
+        "away_threat_rating": 12
+      },
+      "rating_bands": {
+        "og_power_rating": "Red Flag",
+        "attack_flow_rating": "Red Flag",
+        "defensive_lock_rating": "Red Flag",
+        "goal_heat_rating": "Mixed",
+        "btts_pressure_rating": "Red Flag",
+        "over25_heat_rating": "Mixed",
+        "control_rating": "Red Flag",
+        "first_strike_rating": "Red Flag",
+        "corner_pressure_rating": "Red Flag",
+        "card_heat_rating": "Elite",
+        "chaos_rating": "Positive",
+        "home_fortress_rating": "Red Flag",
+        "away_threat_rating": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Red Flag attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Red Flag defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Mixed goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Red Flag two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Mixed 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Red Flag match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Red Flag early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Red Flag territory and corner-generation profile.",
+        "card_heat_rating": "Elite discipline and card volatility profile.",
+        "chaos_rating": "Positive volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Red Flag home-ground control profile.",
+        "away_threat_rating": "Red Flag travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Card Heat Risk"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 19%",
+        "profile": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Card Heat",
+          "Chaos",
+          "Over25 Heat"
+        ],
+        "main_caution": "Card Heat sits at 90%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Red Flag",
+        "btts_lean": "Red Flag",
+        "over25_lean": "Mixed",
+        "under_control": "Red Flag",
+        "team_goals_15": "Red Flag",
+        "corners": "Red Flag",
+        "cards": "Red Flag"
+      },
+      "home_profile": {
+        "power": 38,
+        "attack": 18,
+        "defence": 26,
+        "goal_heat": 61
+      },
+      "away_profile": {
+        "power": 12,
+        "attack": 15,
+        "defence": 26,
+        "goal_heat": 64
+      },
+      "timing_profile": {
+        "early_threat": 14,
+        "half_time_control": 26,
+        "late_surge": 64,
+        "late_fragility": 82
+      }
+    }
+  ]
+}

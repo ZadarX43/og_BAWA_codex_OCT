@@ -1,0 +1,1761 @@
+{
+  "club": "Auckland",
+  "club_slug": "auckland",
+  "competition": "Australia A-League",
+  "competition_key": "australia_a_league",
+  "season": "2024/2025",
+  "players": [
+    {
+      "player_id": "australia_a_league_auckland_guillermo_luis_may_bartesaghi_2024/2025",
+      "name": "Guillermo Luis May Bartesaghi",
+      "surname": "Bartesaghi",
+      "club": "Auckland",
+      "club_slug": "auckland",
+      "competition": "Australia A-League",
+      "competition_key": "australia_a_league",
+      "season": "2024/2025",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2458
+      },
+      "ratings": {
+        "og_player_power": 82,
+        "goal_threat": 83,
+        "shot_threat": 80,
+        "xg_threat": 86,
+        "creative_spark": 56,
+        "xa_threat": 57,
+        "midfield_engine": 44,
+        "defensive_lock": 37,
+        "pressing_heat": 51,
+        "ball_progression": 63,
+        "aerial_dominance": 58,
+        "goalkeeper_shield": 58,
+        "discipline_risk": 35,
+        "booking_heat": 46
+      },
+      "rating_bands": {
+        "og_player_power": "Strong",
+        "goal_threat": "Strong",
+        "shot_threat": "Strong",
+        "xg_threat": "Strong",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Red Flag",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Mixed",
+        "discipline_risk": "Red Flag",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Strong headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Strong scoring profile with xG and shot support.",
+        "shot_threat": "Strong shooting volume and on-target pressure.",
+        "xg_threat": "Strong chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Red Flag defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Mixed shot-stopping and resistance profile.",
+        "discipline_risk": "Red Flag foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 4,
+        "position_rank": 4,
+        "club_rank": 1,
+        "goal_threat_rank": 13,
+        "creative_spark_rank": 71,
+        "defensive_lock_rank": 272,
+        "pressing_heat_rank": 114,
+        "booking_heat_rank": 186
+      },
+      "tags": [
+        "Forward Profile"
+      ],
+      "ui": {
+        "pitch_label": "Bartesaghi",
+        "badge_score": 82,
+        "tier": "STRONG"
+      }
+    },
+    {
+      "player_id": "australia_a_league_auckland_nando_pijnaker_2024/2025",
+      "name": "Nando Pijnaker",
+      "surname": "Pijnaker",
+      "club": "Auckland",
+      "club_slug": "auckland",
+      "competition": "Australia A-League",
+      "competition_key": "australia_a_league",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2326
+      },
+      "ratings": {
+        "og_player_power": 74,
+        "goal_threat": 64,
+        "shot_threat": 58,
+        "xg_threat": 63,
+        "creative_spark": 33,
+        "xa_threat": 34,
+        "midfield_engine": 59,
+        "defensive_lock": 76,
+        "pressing_heat": 53,
+        "ball_progression": 43,
+        "aerial_dominance": 72,
+        "goalkeeper_shield": 58,
+        "discipline_risk": 68,
+        "booking_heat": 59
+      },
+      "rating_bands": {
+        "og_player_power": "Positive",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Red Flag",
+        "xa_threat": "Red Flag",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Positive",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Positive",
+        "goalkeeper_shield": "Mixed",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Positive headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Red Flag creation profile for final-third value.",
+        "xa_threat": "Red Flag assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Positive defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Positive aerial and set-piece profile.",
+        "goalkeeper_shield": "Mixed shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 15,
+        "position_rank": 1,
+        "club_rank": 2,
+        "goal_threat_rank": 55,
+        "creative_spark_rank": 270,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 73,
+        "booking_heat_rank": 46
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Pijnaker",
+        "badge_score": 74,
+        "tier": "POSITIVE"
+      }
+    },
+    {
+      "player_id": "australia_a_league_auckland_logan_tipene_rogerson_2024/2025",
+      "name": "Logan Tipene Rogerson",
+      "surname": "Rogerson",
+      "club": "Auckland",
+      "club_slug": "auckland",
+      "competition": "Australia A-League",
+      "competition_key": "australia_a_league",
+      "season": "2024/2025",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 1945
+      },
+      "ratings": {
+        "og_player_power": 72,
+        "goal_threat": 78,
+        "shot_threat": 64,
+        "xg_threat": 78,
+        "creative_spark": 58,
+        "xa_threat": 54,
+        "midfield_engine": 45,
+        "defensive_lock": 49,
+        "pressing_heat": 56,
+        "ball_progression": 47,
+        "aerial_dominance": 56,
+        "goalkeeper_shield": 58,
+        "discipline_risk": 52,
+        "booking_heat": 43
+      },
+      "rating_bands": {
+        "og_player_power": "Positive",
+        "goal_threat": "Positive",
+        "shot_threat": "Mixed",
+        "xg_threat": "Positive",
+        "creative_spark": "Mixed",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Mixed",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Positive headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Positive scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Positive chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Mixed shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 18,
+        "position_rank": 16,
+        "club_rank": 3,
+        "goal_threat_rank": 23,
+        "creative_spark_rank": 56,
+        "defensive_lock_rank": 154,
+        "pressing_heat_rank": 38,
+        "booking_heat_rank": 224
+      },
+      "tags": [
+        "Forward Profile"
+      ],
+      "ui": {
+        "pitch_label": "Rogerson",
+        "badge_score": 72,
+        "tier": "POSITIVE"
+      }
+    },
+    {
+      "player_id": "australia_a_league_auckland_hiroki_sakai_2024/2025",
+      "name": "Hiroki Sakai",
+      "surname": "Sakai",
+      "club": "Auckland",
+      "club_slug": "auckland",
+      "competition": "Australia A-League",
+      "competition_key": "australia_a_league",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2189
+      },
+      "ratings": {
+        "og_player_power": 70,
+        "goal_threat": 57,
+        "shot_threat": 46,
+        "xg_threat": 52,
+        "creative_spark": 59,
+        "xa_threat": 55,
+        "midfield_engine": 59,
+        "defensive_lock": 67,
+        "pressing_heat": 61,
+        "ball_progression": 45,
+        "aerial_dominance": 66,
+        "goalkeeper_shield": 57,
+        "discipline_risk": 53,
+        "booking_heat": 43
+      },
+      "rating_bands": {
+        "og_player_power": "Positive",
+        "goal_threat": "Mixed",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Mixed",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Positive headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Mixed shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 21,
+        "position_rank": 3,
+        "club_rank": 4,
+        "goal_threat_rank": 87,
+        "creative_spark_rank": 53,
+        "defensive_lock_rank": 17,
+        "pressing_heat_rank": 12,
+        "booking_heat_rank": 224
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Sakai",
+        "badge_score": 70,
+        "tier": "POSITIVE"
+      }
+    },
+    {
+      "player_id": "australia_a_league_auckland_francis_de_vries_2024/2025",
+      "name": "Francis De Vries",
+      "surname": "Vries",
+      "club": "Auckland",
+      "club_slug": "auckland",
+      "competition": "Australia A-League",
+      "competition_key": "australia_a_league",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2377
+      },
+      "ratings": {
+        "og_player_power": 69,
+        "goal_threat": 55,
+        "shot_threat": 54,
+        "xg_threat": 51,
+        "creative_spark": 75,
+        "xa_threat": 72,
+        "midfield_engine": 58,
+        "defensive_lock": 69,
+        "pressing_heat": 65,
+        "ball_progression": 52,
+        "aerial_dominance": 64,
+        "goalkeeper_shield": 58,
+        "discipline_risk": 59,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Positive",
+        "xa_threat": "Positive",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Mixed",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Positive creation profile for final-third value.",
+        "xa_threat": "Positive assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Mixed shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 24,
+        "position_rank": 3,
+        "club_rank": 5,
+        "goal_threat_rank": 109,
+        "creative_spark_rank": 3,
+        "defensive_lock_rank": 13,
+        "pressing_heat_rank": 3,
+        "booking_heat_rank": 153
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Vries",
+        "badge_score": 69,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "australia_a_league_auckland_louis_verstraete_2024/2025",
+      "name": "Louis Verstraete",
+      "surname": "Verstraete",
+      "club": "Auckland",
+      "club_slug": "auckland",
+      "competition": "Australia A-League",
+      "competition_key": "australia_a_league",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 1934
+      },
+      "ratings": {
+        "og_player_power": 64,
+        "goal_threat": 54,
+        "shot_threat": 46,
+        "xg_threat": 53,
+        "creative_spark": 55,
+        "xa_threat": 52,
+        "midfield_engine": 62,
+        "defensive_lock": 58,
+        "pressing_heat": 70,
+        "ball_progression": 51,
+        "aerial_dominance": 55,
+        "goalkeeper_shield": 58,
+        "discipline_risk": 89,
+        "booking_heat": 80
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Mixed",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Positive",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Mixed",
+        "discipline_risk": "Strong",
+        "booking_heat": "Strong"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Positive pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Mixed shot-stopping and resistance profile.",
+        "discipline_risk": "Strong foul and discipline exposure profile.",
+        "booking_heat": "Strong booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 45,
+        "position_rank": 9,
+        "club_rank": 6,
+        "goal_threat_rank": 112,
+        "creative_spark_rank": 78,
+        "defensive_lock_rank": 50,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 1
+      },
+      "tags": [
+        "Booking Risk"
+      ],
+      "ui": {
+        "pitch_label": "Verstraete",
+        "badge_score": 64,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "australia_a_league_auckland_daniel_olatunji_hall_2024/2025",
+      "name": "Daniel Olatunji Hall",
+      "surname": "Hall",
+      "club": "Auckland",
+      "club_slug": "auckland",
+      "competition": "Australia A-League",
+      "competition_key": "australia_a_league",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Trusted sample",
+        "minutes_played": 1350
+      },
+      "ratings": {
+        "og_player_power": 62,
+        "goal_threat": 26,
+        "shot_threat": 41,
+        "xg_threat": 28,
+        "creative_spark": 33,
+        "xa_threat": 33,
+        "midfield_engine": 62,
+        "defensive_lock": 67,
+        "pressing_heat": 53,
+        "ball_progression": 40,
+        "aerial_dominance": 59,
+        "goalkeeper_shield": 58,
+        "discipline_risk": 53,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Red Flag",
+        "shot_threat": "Weak",
+        "xg_threat": "Red Flag",
+        "creative_spark": "Red Flag",
+        "xa_threat": "Red Flag",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Mixed",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Red Flag scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Red Flag chance-quality profile.",
+        "creative_spark": "Red Flag creation profile for final-third value.",
+        "xa_threat": "Red Flag assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Mixed shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 52,
+        "position_rank": 16,
+        "club_rank": 7,
+        "goal_threat_rank": 265,
+        "creative_spark_rank": 270,
+        "defensive_lock_rank": 17,
+        "pressing_heat_rank": 73,
+        "booking_heat_rank": 153
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Hall",
+        "badge_score": 62,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "australia_a_league_auckland_jake_brimmer_2024/2025",
+      "name": "Jake Brimmer",
+      "surname": "Brimmer",
+      "club": "Auckland",
+      "club_slug": "auckland",
+      "competition": "Australia A-League",
+      "competition_key": "australia_a_league",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 1548
+      },
+      "ratings": {
+        "og_player_power": 61,
+        "goal_threat": 67,
+        "shot_threat": 58,
+        "xg_threat": 67,
+        "creative_spark": 66,
+        "xa_threat": 64,
+        "midfield_engine": 59,
+        "defensive_lock": 42,
+        "pressing_heat": 59,
+        "ball_progression": 52,
+        "aerial_dominance": 40,
+        "goalkeeper_shield": 58,
+        "discipline_risk": 62,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Mixed",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Mixed shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 60,
+        "position_rank": 15,
+        "club_rank": 8,
+        "goal_threat_rank": 47,
+        "creative_spark_rank": 24,
+        "defensive_lock_rank": 248,
+        "pressing_heat_rank": 21,
+        "booking_heat_rank": 90
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Brimmer",
+        "badge_score": 61,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "australia_a_league_auckland_max_mata_2024/2025",
+      "name": "Max Mata",
+      "surname": "Mata",
+      "club": "Auckland",
+      "club_slug": "auckland",
+      "competition": "Australia A-League",
+      "competition_key": "australia_a_league",
+      "season": "2024/2025",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Medium sample",
+        "minutes_played": 802
+      },
+      "ratings": {
+        "og_player_power": 61,
+        "goal_threat": 69,
+        "shot_threat": 70,
+        "xg_threat": 71,
+        "creative_spark": 58,
+        "xa_threat": 61,
+        "midfield_engine": 43,
+        "defensive_lock": 45,
+        "pressing_heat": 51,
+        "ball_progression": 46,
+        "aerial_dominance": 56,
+        "goalkeeper_shield": 54,
+        "discipline_risk": 59,
+        "booking_heat": 56
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Positive",
+        "xg_threat": "Positive",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Positive shooting volume and on-target pressure.",
+        "xg_threat": "Positive chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 60,
+        "position_rank": 23,
+        "club_rank": 8,
+        "goal_threat_rank": 42,
+        "creative_spark_rank": 56,
+        "defensive_lock_rank": 212,
+        "pressing_heat_rank": 114,
+        "booking_heat_rank": 65
+      },
+      "tags": [
+        "Forward Profile"
+      ],
+      "ui": {
+        "pitch_label": "Mata",
+        "badge_score": 61,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "australia_a_league_auckland_neyder_stiven_moreno_betancur_2024/2025",
+      "name": "Neyder Stiven Moreno Betancur",
+      "surname": "Betancur",
+      "club": "Auckland",
+      "club_slug": "auckland",
+      "competition": "Australia A-League",
+      "competition_key": "australia_a_league",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Trusted sample",
+        "minutes_played": 1052
+      },
+      "ratings": {
+        "og_player_power": 57,
+        "goal_threat": 83,
+        "shot_threat": 77,
+        "xg_threat": 84,
+        "creative_spark": 63,
+        "xa_threat": 61,
+        "midfield_engine": 48,
+        "defensive_lock": 47,
+        "pressing_heat": 57,
+        "ball_progression": 57,
+        "aerial_dominance": 56,
+        "goalkeeper_shield": 53,
+        "discipline_risk": 51,
+        "booking_heat": 46
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Strong",
+        "shot_threat": "Positive",
+        "xg_threat": "Strong",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Strong scoring profile with xG and shot support.",
+        "shot_threat": "Positive shooting volume and on-target pressure.",
+        "xg_threat": "Strong chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 87,
+        "position_rank": 29,
+        "club_rank": 10,
+        "goal_threat_rank": 13,
+        "creative_spark_rank": 35,
+        "defensive_lock_rank": 194,
+        "pressing_heat_rank": 32,
+        "booking_heat_rank": 186
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Betancur",
+        "badge_score": 57,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "australia_a_league_auckland_jesse_randall_2024/2025",
+      "name": "Jesse Randall",
+      "surname": "Randall",
+      "club": "Auckland",
+      "club_slug": "auckland",
+      "competition": "Australia A-League",
+      "competition_key": "australia_a_league",
+      "season": "2024/2025",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Medium sample",
+        "minutes_played": 752
+      },
+      "ratings": {
+        "og_player_power": 54,
+        "goal_threat": 67,
+        "shot_threat": 66,
+        "xg_threat": 68,
+        "creative_spark": 55,
+        "xa_threat": 53,
+        "midfield_engine": 42,
+        "defensive_lock": 41,
+        "pressing_heat": 47,
+        "ball_progression": 53,
+        "aerial_dominance": 46,
+        "goalkeeper_shield": 54,
+        "discipline_risk": 47,
+        "booking_heat": 44
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 109,
+        "position_rank": 31,
+        "club_rank": 11,
+        "goal_threat_rank": 47,
+        "creative_spark_rank": 78,
+        "defensive_lock_rank": 253,
+        "pressing_heat_rank": 207,
+        "booking_heat_rank": 216
+      },
+      "tags": [
+        "Forward Profile"
+      ],
+      "ui": {
+        "pitch_label": "Randall",
+        "badge_score": 54,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "australia_a_league_auckland_luis_felipe_gallegos_leiva_2024/2025",
+      "name": "Luis Felipe Gallegos Leiva",
+      "surname": "Leiva",
+      "club": "Auckland",
+      "club_slug": "auckland",
+      "competition": "Australia A-League",
+      "competition_key": "australia_a_league",
+      "season": "2024/2025",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 1963
+      },
+      "ratings": {
+        "og_player_power": 53,
+        "goal_threat": 50,
+        "shot_threat": 48,
+        "xg_threat": 49,
+        "creative_spark": 60,
+        "xa_threat": 59,
+        "midfield_engine": 55,
+        "defensive_lock": 46,
+        "pressing_heat": 58,
+        "ball_progression": 53,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 57,
+        "discipline_risk": 75,
+        "booking_heat": 67
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Mixed",
+        "discipline_risk": "Positive",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Mixed shot-stopping and resistance profile.",
+        "discipline_risk": "Positive foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 119,
+        "position_rank": 33,
+        "club_rank": 12,
+        "goal_threat_rank": 128,
+        "creative_spark_rank": 45,
+        "defensive_lock_rank": 202,
+        "pressing_heat_rank": 25,
+        "booking_heat_rank": 16
+      },
+      "tags": [
+        "Forward Profile"
+      ],
+      "ui": {
+        "pitch_label": "Leiva",
+        "badge_score": 53,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "australia_a_league_auckland_marlee_francois_2024/2025",
+      "name": "Marlee Francois",
+      "surname": "Francois",
+      "club": "Auckland",
+      "club_slug": "auckland",
+      "competition": "Australia A-League",
+      "competition_key": "australia_a_league",
+      "season": "2024/2025",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Medium sample",
+        "minutes_played": 617
+      },
+      "ratings": {
+        "og_player_power": 52,
+        "goal_threat": 59,
+        "shot_threat": 62,
+        "xg_threat": 61,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 51,
+        "pressing_heat": 57,
+        "ball_progression": 54,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 52,
+        "discipline_risk": 59,
+        "booking_heat": 58
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 128,
+        "position_rank": 35,
+        "club_rank": 13,
+        "goal_threat_rank": 78,
+        "creative_spark_rank": 129,
+        "defensive_lock_rank": 105,
+        "pressing_heat_rank": 32,
+        "booking_heat_rank": 55
+      },
+      "tags": [
+        "Forward Profile"
+      ],
+      "ui": {
+        "pitch_label": "Francois",
+        "badge_score": 52,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "australia_a_league_auckland_callan_elliot_2024/2025",
+      "name": "Callan Elliot",
+      "surname": "Elliot",
+      "club": "Auckland",
+      "club_slug": "auckland",
+      "competition": "Australia A-League",
+      "competition_key": "australia_a_league",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Medium sample",
+        "minutes_played": 797
+      },
+      "ratings": {
+        "og_player_power": 51,
+        "goal_threat": 50,
+        "shot_threat": 45,
+        "xg_threat": 49,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 52,
+        "defensive_lock": 54,
+        "pressing_heat": 53,
+        "ball_progression": 48,
+        "aerial_dominance": 58,
+        "goalkeeper_shield": 54,
+        "discipline_risk": 56,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 136,
+        "position_rank": 38,
+        "club_rank": 14,
+        "goal_threat_rank": 128,
+        "creative_spark_rank": 164,
+        "defensive_lock_rank": 78,
+        "pressing_heat_rank": 73,
+        "booking_heat_rank": 84
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Elliot",
+        "badge_score": 51,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "australia_a_league_auckland_codey_phoenix_2024/2025",
+      "name": "Codey Phoenix",
+      "surname": "Phoenix",
+      "club": "Auckland",
+      "club_slug": "auckland",
+      "competition": "Australia A-League",
+      "competition_key": "australia_a_league",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 48,
+        "shot_threat": 50,
+        "xg_threat": 49,
+        "creative_spark": 49,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 52,
+        "discipline_risk": 47,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 144,
+        "position_rank": 42,
+        "club_rank": 15,
+        "goal_threat_rank": 143,
+        "creative_spark_rank": 137,
+        "defensive_lock_rank": 119,
+        "pressing_heat_rank": 130,
+        "booking_heat_rank": 114
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Phoenix",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "australia_a_league_auckland_michael_cornelis_woud_2024/2025",
+      "name": "Michael Cornelis Woud",
+      "surname": "Woud",
+      "club": "Auckland",
+      "club_slug": "auckland",
+      "competition": "Australia A-League",
+      "competition_key": "australia_a_league",
+      "season": "2024/2025",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 48,
+        "shot_threat": 50,
+        "xg_threat": 49,
+        "creative_spark": 49,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 52,
+        "discipline_risk": 47,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 144,
+        "position_rank": 13,
+        "club_rank": 15,
+        "goal_threat_rank": 143,
+        "creative_spark_rank": 137,
+        "defensive_lock_rank": 119,
+        "pressing_heat_rank": 130,
+        "booking_heat_rank": 114
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Woud",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "australia_a_league_auckland_tommy_smith_2024/2025",
+      "name": "Tommy Smith",
+      "surname": "Smith",
+      "club": "Auckland",
+      "club_slug": "auckland",
+      "competition": "Australia A-League",
+      "competition_key": "australia_a_league",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Trusted sample",
+        "minutes_played": 1216
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 26,
+        "shot_threat": 24,
+        "xg_threat": 25,
+        "creative_spark": 39,
+        "xa_threat": 41,
+        "midfield_engine": 53,
+        "defensive_lock": 63,
+        "pressing_heat": 42,
+        "ball_progression": 46,
+        "aerial_dominance": 62,
+        "goalkeeper_shield": 57,
+        "discipline_risk": 40,
+        "booking_heat": 34
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Red Flag",
+        "shot_threat": "Red Flag",
+        "xg_threat": "Red Flag",
+        "creative_spark": "Red Flag",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Mixed",
+        "discipline_risk": "Weak",
+        "booking_heat": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Red Flag scoring profile with xG and shot support.",
+        "shot_threat": "Red Flag shooting volume and on-target pressure.",
+        "xg_threat": "Red Flag chance-quality profile.",
+        "creative_spark": "Red Flag creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Mixed shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Red Flag booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 144,
+        "position_rank": 42,
+        "club_rank": 15,
+        "goal_threat_rank": 265,
+        "creative_spark_rank": 256,
+        "defensive_lock_rank": 25,
+        "pressing_heat_rank": 254,
+        "booking_heat_rank": 264
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Smith",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "australia_a_league_auckland_william_gillion_2024/2025",
+      "name": "William Gillion",
+      "surname": "Gillion",
+      "club": "Auckland",
+      "club_slug": "auckland",
+      "competition": "Australia A-League",
+      "competition_key": "australia_a_league",
+      "season": "2024/2025",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Trusted sample",
+        "minutes_played": 998
+      },
+      "ratings": {
+        "og_player_power": 45,
+        "goal_threat": 49,
+        "shot_threat": 57,
+        "xg_threat": 50,
+        "creative_spark": 51,
+        "xa_threat": 48,
+        "midfield_engine": 44,
+        "defensive_lock": 39,
+        "pressing_heat": 48,
+        "ball_progression": 54,
+        "aerial_dominance": 40,
+        "goalkeeper_shield": 56,
+        "discipline_risk": 35,
+        "booking_heat": 43
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Mixed",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Red Flag",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Mixed",
+        "discipline_risk": "Red Flag",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Red Flag defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Mixed shot-stopping and resistance profile.",
+        "discipline_risk": "Red Flag foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 204,
+        "position_rank": 44,
+        "club_rank": 18,
+        "goal_threat_rank": 137,
+        "creative_spark_rank": 116,
+        "defensive_lock_rank": 266,
+        "pressing_heat_rank": 189,
+        "booking_heat_rank": 224
+      },
+      "tags": [
+        "Forward Profile"
+      ],
+      "ui": {
+        "pitch_label": "Gillion",
+        "badge_score": 45,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "australia_a_league_auckland_cameron_howieson_2024/2025",
+      "name": "Cameron Howieson",
+      "surname": "Howieson",
+      "club": "Auckland",
+      "club_slug": "auckland",
+      "competition": "Australia A-League",
+      "competition_key": "australia_a_league",
+      "season": "2024/2025",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Medium sample",
+        "minutes_played": 615
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 48,
+        "shot_threat": 54,
+        "xg_threat": 51,
+        "creative_spark": 50,
+        "xa_threat": 52,
+        "midfield_engine": 48,
+        "defensive_lock": 48,
+        "pressing_heat": 52,
+        "ball_progression": 49,
+        "aerial_dominance": 52,
+        "goalkeeper_shield": 54,
+        "discipline_risk": 62,
+        "booking_heat": 60
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 234,
+        "position_rank": 96,
+        "club_rank": 19,
+        "goal_threat_rank": 143,
+        "creative_spark_rank": 129,
+        "defensive_lock_rank": 170,
+        "pressing_heat_rank": 93,
+        "booking_heat_rank": 42
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Howieson",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "australia_a_league_auckland_scott_galloway_2024/2025",
+      "name": "Scott Galloway",
+      "surname": "Galloway",
+      "club": "Auckland",
+      "club_slug": "auckland",
+      "competition": "Australia A-League",
+      "competition_key": "australia_a_league",
+      "season": "2024/2025",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 99
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 41,
+        "shot_threat": 40,
+        "xg_threat": 40,
+        "creative_spark": 47,
+        "xa_threat": 44,
+        "midfield_engine": 51,
+        "defensive_lock": 50,
+        "pressing_heat": 52,
+        "ball_progression": 47,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 45,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 234,
+        "position_rank": 70,
+        "club_rank": 19,
+        "goal_threat_rank": 206,
+        "creative_spark_rank": 189,
+        "defensive_lock_rank": 119,
+        "pressing_heat_rank": 93,
+        "booking_heat_rank": 153
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Galloway",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "australia_a_league_auckland_adama_coulibaly_2024/2025",
+      "name": "Adama Coulibaly",
+      "surname": "Coulibaly",
+      "club": "Auckland",
+      "club_slug": "auckland",
+      "competition": "Australia A-League",
+      "competition_key": "australia_a_league",
+      "season": "2024/2025",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 8
+      },
+      "ratings": {
+        "og_player_power": 33,
+        "goal_threat": 41,
+        "shot_threat": 40,
+        "xg_threat": 40,
+        "creative_spark": 46,
+        "xa_threat": 46,
+        "midfield_engine": 50,
+        "defensive_lock": 55,
+        "pressing_heat": 51,
+        "ball_progression": 45,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 53,
+        "discipline_risk": 57,
+        "booking_heat": 56
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 282,
+        "position_rank": 56,
+        "club_rank": 21,
+        "goal_threat_rank": 206,
+        "creative_spark_rank": 200,
+        "defensive_lock_rank": 70,
+        "pressing_heat_rank": 114,
+        "booking_heat_rank": 65
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Coulibaly",
+        "badge_score": 33,
+        "tier": "RED_FLAG"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Bartesaghi",
+      "Pijnaker",
+      "Rogerson",
+      "Sakai",
+      "Vries"
+    ],
+    "goal_threat": [
+      "Bartesaghi",
+      "Betancur",
+      "Rogerson",
+      "Mata",
+      "Brimmer"
+    ],
+    "creative_spark": [
+      "Vries",
+      "Brimmer",
+      "Betancur",
+      "Leiva",
+      "Sakai"
+    ],
+    "discipline_risk": [
+      "Verstraete",
+      "Leiva",
+      "Pijnaker",
+      "Brimmer",
+      "Howieson"
+    ]
+  }
+}

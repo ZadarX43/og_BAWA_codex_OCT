@@ -1,0 +1,191 @@
+{
+  "club": "Halsteren",
+  "club_slug": "halsteren",
+  "competition": "Netherlands KNVB Cup",
+  "competition_key": "netherlands_knvb_cup",
+  "season": "2025/2026",
+  "players": [
+    {
+      "player_id": "netherlands_knvb_cup_halsteren_doriano_marvin_kortstam_2025/2026",
+      "name": "Doriano Marvin Kortstam",
+      "surname": "Kortstam",
+      "club": "Halsteren",
+      "club_slug": "halsteren",
+      "competition": "Netherlands KNVB Cup",
+      "competition_key": "netherlands_knvb_cup",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 53,
+        "goal_threat": 46,
+        "shot_threat": 45,
+        "xg_threat": 45,
+        "creative_spark": 47,
+        "xa_threat": 47,
+        "midfield_engine": 51,
+        "defensive_lock": 55,
+        "pressing_heat": 51,
+        "ball_progression": 48,
+        "aerial_dominance": 55,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 49,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 66,
+        "position_rank": 13,
+        "club_rank": 1,
+        "goal_threat_rank": 751,
+        "creative_spark_rank": 881,
+        "defensive_lock_rank": 13,
+        "pressing_heat_rank": 226,
+        "booking_heat_rank": 747
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Kortstam",
+        "badge_score": 53,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "netherlands_knvb_cup_halsteren_rogier_benschop_2025/2026",
+      "name": "Rogier Benschop",
+      "surname": "Benschop",
+      "club": "Halsteren",
+      "club_slug": "halsteren",
+      "competition": "Netherlands KNVB Cup",
+      "competition_key": "netherlands_knvb_cup",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 47,
+        "goal_threat": 53,
+        "shot_threat": 57,
+        "xg_threat": 55,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 49,
+        "defensive_lock": 49,
+        "pressing_heat": 51,
+        "ball_progression": 52,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 57,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 475,
+        "position_rank": 105,
+        "club_rank": 2,
+        "goal_threat_rank": 188,
+        "creative_spark_rank": 312,
+        "defensive_lock_rank": 731,
+        "pressing_heat_rank": 226,
+        "booking_heat_rank": 39
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Benschop",
+        "badge_score": 47,
+        "tier": "WEAK"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Kortstam",
+      "Benschop"
+    ],
+    "goal_threat": [
+      "Benschop",
+      "Kortstam"
+    ],
+    "creative_spark": [
+      "Benschop",
+      "Kortstam"
+    ],
+    "discipline_risk": [
+      "Benschop",
+      "Kortstam"
+    ]
+  }
+}

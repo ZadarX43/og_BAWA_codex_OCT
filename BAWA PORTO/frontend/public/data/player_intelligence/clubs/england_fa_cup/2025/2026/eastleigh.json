@@ -1,0 +1,941 @@
+{
+  "club": "Eastleigh",
+  "club_slug": "eastleigh",
+  "competition": "England FA Cup",
+  "competition_key": "england_fa_cup",
+  "season": "2025/2026",
+  "players": [
+    {
+      "player_id": "england_fa_cup_eastleigh_harvey_saunders_2025/2026",
+      "name": "Harvey Saunders",
+      "surname": "Saunders",
+      "club": "Eastleigh",
+      "club_slug": "eastleigh",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 88
+      },
+      "ratings": {
+        "og_player_power": 49,
+        "goal_threat": 55,
+        "shot_threat": 60,
+        "xg_threat": 58,
+        "creative_spark": 52,
+        "xa_threat": 54,
+        "midfield_engine": 48,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 51,
+        "aerial_dominance": 52,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 50,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 655,
+        "position_rank": 190,
+        "club_rank": 1,
+        "goal_threat_rank": 241,
+        "creative_spark_rank": 394,
+        "defensive_lock_rank": 698,
+        "pressing_heat_rank": 728,
+        "booking_heat_rank": 672
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Saunders",
+        "badge_score": 49,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_eastleigh_ciaran_mcguckin_2025/2026",
+      "name": "Ciaran McGuckin",
+      "surname": "McGuckin",
+      "club": "Eastleigh",
+      "club_slug": "eastleigh",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 48,
+        "goal_threat": 54,
+        "shot_threat": 59,
+        "xg_threat": 57,
+        "creative_spark": 51,
+        "xa_threat": 52,
+        "midfield_engine": 48,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 51,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 715,
+        "position_rank": 209,
+        "club_rank": 2,
+        "goal_threat_rank": 329,
+        "creative_spark_rank": 541,
+        "defensive_lock_rank": 1315,
+        "pressing_heat_rank": 1362,
+        "booking_heat_rank": 1381
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "McGuckin",
+        "badge_score": 48,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_eastleigh_kieron_evans_2025/2026",
+      "name": "Kieron Evans",
+      "surname": "Evans",
+      "club": "Eastleigh",
+      "club_slug": "eastleigh",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 84
+      },
+      "ratings": {
+        "og_player_power": 48,
+        "goal_threat": 54,
+        "shot_threat": 59,
+        "xg_threat": 57,
+        "creative_spark": 49,
+        "xa_threat": 48,
+        "midfield_engine": 52,
+        "defensive_lock": 50,
+        "pressing_heat": 52,
+        "ball_progression": 50,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 51,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 715,
+        "position_rank": 197,
+        "club_rank": 2,
+        "goal_threat_rank": 329,
+        "creative_spark_rank": 1090,
+        "defensive_lock_rank": 698,
+        "pressing_heat_rank": 320,
+        "booking_heat_rank": 251
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Evans",
+        "badge_score": 48,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_eastleigh_aaron_pierre_2025/2026",
+      "name": "Aaron Pierre",
+      "surname": "Pierre",
+      "club": "Eastleigh",
+      "club_slug": "eastleigh",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 88
+      },
+      "ratings": {
+        "og_player_power": 47,
+        "goal_threat": 51,
+        "shot_threat": 51,
+        "xg_threat": 52,
+        "creative_spark": 52,
+        "xa_threat": 54,
+        "midfield_engine": 54,
+        "defensive_lock": 55,
+        "pressing_heat": 53,
+        "ball_progression": 51,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 59,
+        "booking_heat": 55
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 817,
+        "position_rank": 232,
+        "club_rank": 4,
+        "goal_threat_rank": 595,
+        "creative_spark_rank": 394,
+        "defensive_lock_rank": 42,
+        "pressing_heat_rank": 133,
+        "booking_heat_rank": 23
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Pierre",
+        "badge_score": 47,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_eastleigh_archie_harris_2025/2026",
+      "name": "Archie Harris",
+      "surname": "Harris",
+      "club": "Eastleigh",
+      "club_slug": "eastleigh",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 45,
+        "goal_threat": 47,
+        "shot_threat": 46,
+        "xg_threat": 46,
+        "creative_spark": 53,
+        "xa_threat": 53,
+        "midfield_engine": 53,
+        "defensive_lock": 54,
+        "pressing_heat": 53,
+        "ball_progression": 53,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 50,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1001,
+        "position_rank": 297,
+        "club_rank": 5,
+        "goal_threat_rank": 1082,
+        "creative_spark_rank": 239,
+        "defensive_lock_rank": 109,
+        "pressing_heat_rank": 133,
+        "booking_heat_rank": 426
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Harris",
+        "badge_score": 45,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_eastleigh_jake_vokins_2025/2026",
+      "name": "Jake Vokins",
+      "surname": "Vokins",
+      "club": "Eastleigh",
+      "club_slug": "eastleigh",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 62
+      },
+      "ratings": {
+        "og_player_power": 45,
+        "goal_threat": 47,
+        "shot_threat": 46,
+        "xg_threat": 46,
+        "creative_spark": 53,
+        "xa_threat": 53,
+        "midfield_engine": 52,
+        "defensive_lock": 52,
+        "pressing_heat": 52,
+        "ball_progression": 50,
+        "aerial_dominance": 51,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 48,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1001,
+        "position_rank": 297,
+        "club_rank": 5,
+        "goal_threat_rank": 1082,
+        "creative_spark_rank": 239,
+        "defensive_lock_rank": 353,
+        "pressing_heat_rank": 320,
+        "booking_heat_rank": 1219
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Vokins",
+        "badge_score": 45,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_eastleigh_josh_lundstram_2025/2026",
+      "name": "Josh Lundstram",
+      "surname": "Lundstram",
+      "club": "Eastleigh",
+      "club_slug": "eastleigh",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 45,
+        "goal_threat": 51,
+        "shot_threat": 52,
+        "xg_threat": 55,
+        "creative_spark": 51,
+        "xa_threat": 53,
+        "midfield_engine": 51,
+        "defensive_lock": 52,
+        "pressing_heat": 49,
+        "ball_progression": 52,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 48,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1001,
+        "position_rank": 325,
+        "club_rank": 5,
+        "goal_threat_rank": 595,
+        "creative_spark_rank": 541,
+        "defensive_lock_rank": 353,
+        "pressing_heat_rank": 1195,
+        "booking_heat_rank": 1219
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Lundstram",
+        "badge_score": 45,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_eastleigh_richard_michael_brindley_2025/2026",
+      "name": "Richard Michael Brindley",
+      "surname": "Brindley",
+      "club": "Eastleigh",
+      "club_slug": "eastleigh",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 45,
+        "goal_threat": 47,
+        "shot_threat": 46,
+        "xg_threat": 46,
+        "creative_spark": 49,
+        "xa_threat": 50,
+        "midfield_engine": 54,
+        "defensive_lock": 54,
+        "pressing_heat": 52,
+        "ball_progression": 48,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1001,
+        "position_rank": 297,
+        "club_rank": 5,
+        "goal_threat_rank": 1082,
+        "creative_spark_rank": 1090,
+        "defensive_lock_rank": 109,
+        "pressing_heat_rank": 320,
+        "booking_heat_rank": 672
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Brindley",
+        "badge_score": 45,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_eastleigh_jordan_cousins_2025/2026",
+      "name": "Jordan Cousins",
+      "surname": "Cousins",
+      "club": "Eastleigh",
+      "club_slug": "eastleigh",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 6
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 47,
+        "shot_threat": 46,
+        "xg_threat": 46,
+        "creative_spark": 47,
+        "xa_threat": 46,
+        "midfield_engine": 50,
+        "defensive_lock": 52,
+        "pressing_heat": 53,
+        "ball_progression": 47,
+        "aerial_dominance": 55,
+        "goalkeeper_shield": 52,
+        "discipline_risk": 53,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1263,
+        "position_rank": 429,
+        "club_rank": 9,
+        "goal_threat_rank": 1082,
+        "creative_spark_rank": 1474,
+        "defensive_lock_rank": 353,
+        "pressing_heat_rank": 133,
+        "booking_heat_rank": 146
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Cousins",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_eastleigh_nick_townsend_2025/2026",
+      "name": "Nick Townsend",
+      "surname": "Townsend",
+      "club": "Eastleigh",
+      "club_slug": "eastleigh",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 38,
+        "goal_threat": 47,
+        "shot_threat": 46,
+        "xg_threat": 46,
+        "creative_spark": 49,
+        "xa_threat": 49,
+        "midfield_engine": 49,
+        "defensive_lock": 49,
+        "pressing_heat": 48,
+        "ball_progression": 48,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1754,
+        "position_rank": 165,
+        "club_rank": 10,
+        "goal_threat_rank": 1082,
+        "creative_spark_rank": 1090,
+        "defensive_lock_rank": 1154,
+        "pressing_heat_rank": 1362,
+        "booking_heat_rank": 1381
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Townsend",
+        "badge_score": 38,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_fa_cup_eastleigh_temitope_eweka_2025/2026",
+      "name": "Temitope Eweka",
+      "surname": "Eweka",
+      "club": "Eastleigh",
+      "club_slug": "eastleigh",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 35,
+        "goal_threat": 47,
+        "shot_threat": 46,
+        "xg_threat": 46,
+        "creative_spark": 47,
+        "xa_threat": 46,
+        "midfield_engine": 46,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 47,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 47,
+        "discipline_risk": 47,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1966,
+        "position_rank": 668,
+        "club_rank": 11,
+        "goal_threat_rank": 1082,
+        "creative_spark_rank": 1474,
+        "defensive_lock_rank": 1315,
+        "pressing_heat_rank": 1362,
+        "booking_heat_rank": 1381
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Eweka",
+        "badge_score": 35,
+        "tier": "RED_FLAG"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Saunders",
+      "McGuckin",
+      "Evans",
+      "Pierre",
+      "Harris"
+    ],
+    "goal_threat": [
+      "Saunders",
+      "McGuckin",
+      "Evans",
+      "Pierre",
+      "Lundstram"
+    ],
+    "creative_spark": [
+      "Harris",
+      "Vokins",
+      "Saunders",
+      "Pierre",
+      "McGuckin"
+    ],
+    "discipline_risk": [
+      "Pierre",
+      "Cousins",
+      "Evans",
+      "Saunders",
+      "Harris"
+    ]
+  }
+}

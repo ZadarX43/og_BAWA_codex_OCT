@@ -1,0 +1,105 @@
+{
+  "club": "Seaham Red Star",
+  "club_slug": "seaham_red_star",
+  "competition": "England FA Cup",
+  "competition_key": "england_fa_cup",
+  "season": "2022/2023",
+  "players": [
+    {
+      "player_id": "england_fa_cup_seaham_red_star_unknown_player_2022/2023",
+      "name": "Unknown Player",
+      "surname": "Player",
+      "club": "Seaham Red Star",
+      "club_slug": "seaham_red_star",
+      "competition": "England FA Cup",
+      "competition_key": "england_fa_cup",
+      "season": "2022/2023",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 194828
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 48,
+        "shot_threat": 50,
+        "xg_threat": 49,
+        "creative_spark": 49,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 52,
+        "discipline_risk": 66,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 411,
+        "position_rank": 137,
+        "club_rank": 1,
+        "goal_threat_rank": 1277,
+        "creative_spark_rank": 1592,
+        "defensive_lock_rank": 764,
+        "pressing_heat_rank": 759,
+        "booking_heat_rank": 3087
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Player",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Player"
+    ],
+    "goal_threat": [
+      "Player"
+    ],
+    "creative_spark": [
+      "Player"
+    ],
+    "discipline_risk": [
+      "Player"
+    ]
+  }
+}

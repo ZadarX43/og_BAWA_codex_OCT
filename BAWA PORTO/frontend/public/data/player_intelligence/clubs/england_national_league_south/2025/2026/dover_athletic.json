@@ -1,0 +1,777 @@
+{
+  "club": "Dover Athletic",
+  "club_slug": "dover_athletic",
+  "competition": "England National League South",
+  "competition_key": "england_national_league_south",
+  "season": "2025/2026",
+  "players": [
+    {
+      "player_id": "england_national_league_south_dover_athletic_mitchell_walker_2025/2026",
+      "name": "Mitchell Walker",
+      "surname": "Walker",
+      "club": "Dover Athletic",
+      "club_slug": "dover_athletic",
+      "competition": "England National League South",
+      "competition_key": "england_national_league_south",
+      "season": "2025/2026",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2340
+      },
+      "ratings": {
+        "og_player_power": 66,
+        "goal_threat": 17,
+        "shot_threat": 9,
+        "xg_threat": 11,
+        "creative_spark": 36,
+        "xa_threat": 30,
+        "midfield_engine": 39,
+        "defensive_lock": 46,
+        "pressing_heat": 36,
+        "ball_progression": 33,
+        "aerial_dominance": 37,
+        "goalkeeper_shield": 66,
+        "discipline_risk": 21,
+        "booking_heat": 32
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Red Flag",
+        "shot_threat": "Red Flag",
+        "xg_threat": "Red Flag",
+        "creative_spark": "Red Flag",
+        "xa_threat": "Red Flag",
+        "midfield_engine": "Red Flag",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Red Flag",
+        "ball_progression": "Red Flag",
+        "aerial_dominance": "Red Flag",
+        "goalkeeper_shield": "Mixed",
+        "discipline_risk": "Red Flag",
+        "booking_heat": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Red Flag scoring profile with xG and shot support.",
+        "shot_threat": "Red Flag shooting volume and on-target pressure.",
+        "xg_threat": "Red Flag chance-quality profile.",
+        "creative_spark": "Red Flag creation profile for final-third value.",
+        "xa_threat": "Red Flag assist expectation profile.",
+        "midfield_engine": "Red Flag central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Red Flag pressure and regain activity profile.",
+        "ball_progression": "Red Flag carrying and forward progression profile.",
+        "aerial_dominance": "Red Flag aerial and set-piece profile.",
+        "goalkeeper_shield": "Mixed shot-stopping and resistance profile.",
+        "discipline_risk": "Red Flag foul and discipline exposure profile.",
+        "booking_heat": "Red Flag booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 36,
+        "position_rank": 5,
+        "club_rank": 1,
+        "goal_threat_rank": 339,
+        "creative_spark_rank": 331,
+        "defensive_lock_rank": 259,
+        "pressing_heat_rank": 345,
+        "booking_heat_rank": 344
+      },
+      "tags": [
+        "Goalkeeper Profile"
+      ],
+      "ui": {
+        "pitch_label": "Walker",
+        "badge_score": 66,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_national_league_south_dover_athletic_harry_beadle_2025/2026",
+      "name": "Harry Beadle",
+      "surname": "Beadle",
+      "club": "Dover Athletic",
+      "club_slug": "dover_athletic",
+      "competition": "England National League South",
+      "competition_key": "england_national_league_south",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Trusted sample",
+        "minutes_played": 1106
+      },
+      "ratings": {
+        "og_player_power": 58,
+        "goal_threat": 38,
+        "shot_threat": 36,
+        "xg_threat": 37,
+        "creative_spark": 46,
+        "xa_threat": 46,
+        "midfield_engine": 51,
+        "defensive_lock": 66,
+        "pressing_heat": 54,
+        "ball_progression": 45,
+        "aerial_dominance": 63,
+        "goalkeeper_shield": 45,
+        "discipline_risk": 69,
+        "booking_heat": 63
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Red Flag",
+        "shot_threat": "Red Flag",
+        "xg_threat": "Red Flag",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Red Flag scoring profile with xG and shot support.",
+        "shot_threat": "Red Flag shooting volume and on-target pressure.",
+        "xg_threat": "Red Flag chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 72,
+        "position_rank": 18,
+        "club_rank": 2,
+        "goal_threat_rank": 294,
+        "creative_spark_rank": 250,
+        "defensive_lock_rank": 24,
+        "pressing_heat_rank": 64,
+        "booking_heat_rank": 25
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Beadle",
+        "badge_score": 58,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_national_league_south_dover_athletic_jacob_mensah_2025/2026",
+      "name": "Jacob Mensah",
+      "surname": "Mensah",
+      "club": "Dover Athletic",
+      "club_slug": "dover_athletic",
+      "competition": "England National League South",
+      "competition_key": "england_national_league_south",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 1710
+      },
+      "ratings": {
+        "og_player_power": 56,
+        "goal_threat": 47,
+        "shot_threat": 45,
+        "xg_threat": 43,
+        "creative_spark": 33,
+        "xa_threat": 31,
+        "midfield_engine": 48,
+        "defensive_lock": 69,
+        "pressing_heat": 47,
+        "ball_progression": 34,
+        "aerial_dominance": 70,
+        "goalkeeper_shield": 43,
+        "discipline_risk": 55,
+        "booking_heat": 46
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Red Flag",
+        "xa_threat": "Red Flag",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Red Flag",
+        "aerial_dominance": "Positive",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Red Flag creation profile for final-third value.",
+        "xa_threat": "Red Flag assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Red Flag carrying and forward progression profile.",
+        "aerial_dominance": "Positive aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 95,
+        "position_rank": 26,
+        "club_rank": 3,
+        "goal_threat_rank": 213,
+        "creative_spark_rank": 337,
+        "defensive_lock_rank": 13,
+        "pressing_heat_rank": 271,
+        "booking_heat_rank": 253
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Mensah",
+        "badge_score": 56,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_national_league_south_dover_athletic_r_ben_j_nior_2025/2026",
+      "name": "R\u00faben J\u00fanior",
+      "surname": "J\u00fanior",
+      "club": "Dover Athletic",
+      "club_slug": "dover_athletic",
+      "competition": "England National League South",
+      "competition_key": "england_national_league_south",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 270
+      },
+      "ratings": {
+        "og_player_power": 56,
+        "goal_threat": 57,
+        "shot_threat": 54,
+        "xg_threat": 56,
+        "creative_spark": 51,
+        "xa_threat": 52,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 50,
+        "ball_progression": 51,
+        "aerial_dominance": 55,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 57,
+        "booking_heat": 56
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Weak",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 95,
+        "position_rank": 29,
+        "club_rank": 3,
+        "goal_threat_rank": 100,
+        "creative_spark_rank": 136,
+        "defensive_lock_rank": 223,
+        "pressing_heat_rank": 143,
+        "booking_heat_rank": 60
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "J\u00fanior",
+        "badge_score": 56,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_national_league_south_dover_athletic_jalen_jones_2025/2026",
+      "name": "Jalen Jones",
+      "surname": "Jones",
+      "club": "Dover Athletic",
+      "club_slug": "dover_athletic",
+      "competition": "England National League South",
+      "competition_key": "england_national_league_south",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2160
+      },
+      "ratings": {
+        "og_player_power": 52,
+        "goal_threat": 51,
+        "shot_threat": 37,
+        "xg_threat": 44,
+        "creative_spark": 43,
+        "xa_threat": 37,
+        "midfield_engine": 50,
+        "defensive_lock": 74,
+        "pressing_heat": 51,
+        "ball_progression": 36,
+        "aerial_dominance": 72,
+        "goalkeeper_shield": 43,
+        "discipline_risk": 29,
+        "booking_heat": 39
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Red Flag",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Red Flag",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Positive",
+        "pressing_heat": "Weak",
+        "ball_progression": "Red Flag",
+        "aerial_dominance": "Positive",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Red Flag",
+        "booking_heat": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Red Flag shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Red Flag assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Positive defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Red Flag carrying and forward progression profile.",
+        "aerial_dominance": "Positive aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Red Flag foul and discipline exposure profile.",
+        "booking_heat": "Red Flag booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 134,
+        "position_rank": 42,
+        "club_rank": 5,
+        "goal_threat_rank": 148,
+        "creative_spark_rank": 302,
+        "defensive_lock_rank": 4,
+        "pressing_heat_rank": 116,
+        "booking_heat_rank": 318
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Jones",
+        "badge_score": 52,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_national_league_south_dover_athletic_decarrey_musi_sheriff_2025/2026",
+      "name": "Decarrey Musi Sheriff",
+      "surname": "Sheriff",
+      "club": "Dover Athletic",
+      "club_slug": "dover_athletic",
+      "competition": "England National League South",
+      "competition_key": "england_national_league_south",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 48,
+        "goal_threat": 58,
+        "shot_threat": 57,
+        "xg_threat": 58,
+        "creative_spark": 54,
+        "xa_threat": 51,
+        "midfield_engine": 46,
+        "defensive_lock": 46,
+        "pressing_heat": 50,
+        "ball_progression": 51,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 57,
+        "booking_heat": 57
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 222,
+        "position_rank": 86,
+        "club_rank": 6,
+        "goal_threat_rank": 95,
+        "creative_spark_rank": 92,
+        "defensive_lock_rank": 259,
+        "pressing_heat_rank": 143,
+        "booking_heat_rank": 50
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Sheriff",
+        "badge_score": 48,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_national_league_south_dover_athletic_rolando_onu_2025/2026",
+      "name": "Rolando Onu",
+      "surname": "Onu",
+      "club": "Dover Athletic",
+      "club_slug": "dover_athletic",
+      "competition": "England National League South",
+      "competition_key": "england_national_league_south",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 360
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 52,
+        "shot_threat": 59,
+        "xg_threat": 55,
+        "creative_spark": 52,
+        "xa_threat": 55,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 50,
+        "ball_progression": 53,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 47,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 290,
+        "position_rank": 62,
+        "club_rank": 7,
+        "goal_threat_rank": 139,
+        "creative_spark_rank": 116,
+        "defensive_lock_rank": 200,
+        "pressing_heat_rank": 143,
+        "booking_heat_rank": 182
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Onu",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_national_league_south_dover_athletic_alfie_matthews_2025/2026",
+      "name": "Alfie Matthews",
+      "surname": "Matthews",
+      "club": "Dover Athletic",
+      "club_slug": "dover_athletic",
+      "competition": "England National League South",
+      "competition_key": "england_national_league_south",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 450
+      },
+      "ratings": {
+        "og_player_power": 40,
+        "goal_threat": 54,
+        "shot_threat": 50,
+        "xg_threat": 52,
+        "creative_spark": 53,
+        "xa_threat": 58,
+        "midfield_engine": 55,
+        "defensive_lock": 52,
+        "pressing_heat": 55,
+        "ball_progression": 48,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 47,
+        "discipline_risk": 50,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 304,
+        "position_rank": 128,
+        "club_rank": 8,
+        "goal_threat_rank": 121,
+        "creative_spark_rank": 104,
+        "defensive_lock_rank": 108,
+        "pressing_heat_rank": 51,
+        "booking_heat_rank": 98
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Matthews",
+        "badge_score": 40,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_national_league_south_dover_athletic_bivesh_gurung_2025/2026",
+      "name": "Bivesh Gurung",
+      "surname": "Gurung",
+      "club": "Dover Athletic",
+      "club_slug": "dover_athletic",
+      "competition": "England National League South",
+      "competition_key": "england_national_league_south",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 39,
+        "goal_threat": 44,
+        "shot_threat": 45,
+        "xg_threat": 44,
+        "creative_spark": 50,
+        "xa_threat": 49,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 50,
+        "ball_progression": 48,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 47,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 315,
+        "position_rank": 134,
+        "club_rank": 9,
+        "goal_threat_rank": 241,
+        "creative_spark_rank": 150,
+        "defensive_lock_rank": 200,
+        "pressing_heat_rank": 143,
+        "booking_heat_rank": 182
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Gurung",
+        "badge_score": 39,
+        "tier": "RED_FLAG"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Walker",
+      "Beadle",
+      "Mensah",
+      "J\u00fanior",
+      "Jones"
+    ],
+    "goal_threat": [
+      "Sheriff",
+      "J\u00fanior",
+      "Matthews",
+      "Onu",
+      "Jones"
+    ],
+    "creative_spark": [
+      "Sheriff",
+      "Matthews",
+      "Onu",
+      "J\u00fanior",
+      "Gurung"
+    ],
+    "discipline_risk": [
+      "Beadle",
+      "J\u00fanior",
+      "Sheriff",
+      "Mensah",
+      "Matthews"
+    ]
+  }
+}

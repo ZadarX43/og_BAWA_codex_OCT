@@ -1,0 +1,260 @@
+{
+  "fixture_key": "2026_05_10_K_ln_Heidenheim",
+  "fixture": "Köln vs Heidenheim",
+  "primary_signal": "Köln Win",
+  "signal_state": "FRAGILE",
+  "agreement_score": 56,
+  "confidence_band": "LOW",
+  "supporting_layers": [
+    "TEAM_POWER_ADVANTAGE",
+    "HOME_FORTRESS_ADVANTAGE"
+  ],
+  "caution_layers": [
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "profile_tags": {
+    "home": [
+      "Two-Way Scoring Profile"
+    ],
+    "away": [
+      "Mixed Team Profile"
+    ]
+  },
+  "profile_narrative": "Köln bring a two-way scoring profile into a matchup with Heidenheim's mixed team profile. The structural lean comes from Köln's home-side control against the away profile.",
+  "team_faceoff_summary": [
+    {
+      "metric": "og_power_rating",
+      "label": "OG Power Rating",
+      "home_value": 41,
+      "away_value": 10,
+      "delta": 31,
+      "leader": "Köln"
+    },
+    {
+      "metric": "home_fortress_rating",
+      "label": "Home Fortress",
+      "home_value": 40,
+      "away_value": 14,
+      "delta": 26,
+      "leader": "Köln"
+    },
+    {
+      "metric": "away_threat_rating",
+      "label": "Away Threat",
+      "home_value": 34,
+      "away_value": 12,
+      "delta": 22,
+      "leader": "Köln"
+    },
+    {
+      "metric": "defensive_lock_rating",
+      "label": "Defensive Lock",
+      "home_value": 32,
+      "away_value": 10,
+      "delta": 22,
+      "leader": "Köln"
+    },
+    {
+      "metric": "first_strike_rating",
+      "label": "First Strike",
+      "home_value": 48,
+      "away_value": 16,
+      "delta": 32,
+      "leader": "Köln"
+    },
+    {
+      "metric": "control_rating",
+      "label": "Control Rating",
+      "home_value": 37,
+      "away_value": 23,
+      "delta": 14,
+      "leader": "Köln"
+    }
+  ],
+  "unit_battle_summary": [],
+  "key_player_drivers": [],
+  "key_mismatches": [],
+  "h2h_context": {
+    "available": false,
+    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
+    "sample_size": 0
+  },
+  "market_suitability": {
+    "ftr": {
+      "rating": 41,
+      "label": "Weak",
+      "read": "Stronger when one side owns a clear team-power edge."
+    },
+    "btts": {
+      "rating": 66,
+      "label": "Mixed",
+      "read": "Driven by two-way access and reduced suppression."
+    },
+    "ou25": {
+      "rating": 64,
+      "label": "Mixed",
+      "read": "Driven by combined goal environment and tempo."
+    },
+    "team_goals": {
+      "rating": 67,
+      "label": "Mixed",
+      "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
+    },
+    "correct_score": {
+      "rating": 75,
+      "label": "Positive",
+      "read": "Better when the shape is structured and the likely scoring zone is narrow."
+    },
+    "corners": {
+      "rating": 38,
+      "label": "Red Flag",
+      "read": "Driven by territory and wide-channel pressure."
+    },
+    "cards": {
+      "rating": 44,
+      "label": "Weak",
+      "read": "Driven by discipline heat, fouling, and volatility."
+    }
+  },
+  "market_intelligence": {
+    "ftr": {
+      "alignment_score": 50,
+      "state": "FRAGILE",
+      "model_lean": "HOME",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE",
+        "HOME_FORTRESS_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "FTR has some structural support from team power advantage, but the overall layer fit remains fragile.",
+      "rating": 41,
+      "band": "Weak"
+    },
+    "btts": {
+      "alignment_score": 64,
+      "state": "MIXED",
+      "model_lean": "YES",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE",
+        "HOME_FORTRESS_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "BTTS has partial support from team power advantage, but lineup data missing keeps it from reading clean.",
+      "rating": 66,
+      "band": "Mixed"
+    },
+    "ou25": {
+      "alignment_score": 62,
+      "state": "MIXED",
+      "model_lean": "OVER25",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE",
+        "HOME_FORTRESS_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Over 2.5 has partial support from team power advantage, but lineup data missing keeps it from reading clean.",
+      "rating": 64,
+      "band": "Mixed"
+    },
+    "team_goals": {
+      "alignment_score": 68,
+      "state": "MIXED",
+      "model_lean": "Köln 1.5+",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE",
+        "HOME_FORTRESS_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Team Goals has partial support from team power advantage, but lineup data missing keeps it from reading clean.",
+      "rating": 67,
+      "band": "Mixed"
+    },
+    "correct_score": {
+      "alignment_score": 64,
+      "state": "MIXED",
+      "model_lean": "OPEN",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Correct Score has partial support from team power advantage, but lineup data missing keeps it from reading clean.",
+      "rating": 75,
+      "band": "Positive"
+    },
+    "corners": {
+      "alignment_score": 42,
+      "state": "AVOID",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE",
+        "HOME_FORTRESS_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Corners is too contradicted by lineup data missing to present as a clean public read.",
+      "rating": 38,
+      "band": "Red Flag"
+    },
+    "cards": {
+      "alignment_score": 47,
+      "state": "FRAGILE",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE",
+        "HOME_FORTRESS_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Cards has some structural support from team power advantage, but the overall layer fit remains fragile.",
+      "rating": 44,
+      "band": "Weak"
+    }
+  },
+  "watchlist": {
+    "active": false,
+    "summary": "No watchlist layer is active for this fixture.",
+    "trigger_signals": [],
+    "public_state": "No watchlist flag",
+    "mode": ""
+  },
+  "public_safe_summary": "Köln Win has some live shape in Köln vs Heidenheim, but the supporting layers remain fragile and need discipline.",
+  "internal_reason_tokens": [
+    "TEAM_POWER_ADVANTAGE",
+    "HOME_FORTRESS_ADVANTAGE",
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "summary": {
+    "support_count": 2,
+    "caution_count": 2,
+    "lineup_available": false,
+    "h2h_available": false
+  },
+  "preview": {
+    "headline": "Köln vs Heidenheim: Köln Win fragile",
+    "short_summary": "Köln Win has some live shape in Köln vs Heidenheim, but the supporting layers remain fragile and need discipline. Primary support comes from team power advantage, while the main caution remains lineup data missing.",
+    "market_summary": "Best aligned market: Team Goals (Mixed). Secondary support: Correct Score. Weakest read: Corners.",
+    "caution_line": "Main caution: Lineup Data Missing.",
+    "telegram_summary": "Köln vs Heidenheim — Köln Win (Fragile, 56% agreement). Support: Team Power Advantage. Caution: Lineup Data Missing.",
+    "premium_summary": "Köln Win is carrying a 56% agreement read across the published decision layers. Support is currently led by team power advantage, home fortress advantage, while caution is still coming from lineup data missing, h2h unavailable."
+  }
+}

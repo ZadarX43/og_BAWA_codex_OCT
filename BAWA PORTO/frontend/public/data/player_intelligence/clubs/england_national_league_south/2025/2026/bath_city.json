@@ -1,0 +1,1269 @@
+{
+  "club": "Bath City",
+  "club_slug": "bath_city",
+  "competition": "England National League South",
+  "competition_key": "england_national_league_south",
+  "season": "2025/2026",
+  "players": [
+    {
+      "player_id": "england_national_league_south_bath_city_jack_batten_2025/2026",
+      "name": "Jack Batten",
+      "surname": "Batten",
+      "club": "Bath City",
+      "club_slug": "bath_city",
+      "competition": "England National League South",
+      "competition_key": "england_national_league_south",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 1900
+      },
+      "ratings": {
+        "og_player_power": 72,
+        "goal_threat": 45,
+        "shot_threat": 49,
+        "xg_threat": 43,
+        "creative_spark": 30,
+        "xa_threat": 29,
+        "midfield_engine": 59,
+        "defensive_lock": 75,
+        "pressing_heat": 63,
+        "ball_progression": 37,
+        "aerial_dominance": 70,
+        "goalkeeper_shield": 53,
+        "discipline_risk": 63,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Positive",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Red Flag",
+        "xa_threat": "Red Flag",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Positive",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Red Flag",
+        "aerial_dominance": "Positive",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Positive headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Red Flag creation profile for final-third value.",
+        "xa_threat": "Red Flag assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Positive defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Red Flag carrying and forward progression profile.",
+        "aerial_dominance": "Positive aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 14,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 225,
+        "creative_spark_rank": 344,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 4,
+        "booking_heat_rank": 98
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Batten",
+        "badge_score": 72,
+        "tier": "POSITIVE"
+      }
+    },
+    {
+      "player_id": "england_national_league_south_bath_city_kieran_parselle_2025/2026",
+      "name": "Kieran Parselle",
+      "surname": "Parselle",
+      "club": "Bath City",
+      "club_slug": "bath_city",
+      "competition": "England National League South",
+      "competition_key": "england_national_league_south",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2205
+      },
+      "ratings": {
+        "og_player_power": 69,
+        "goal_threat": 49,
+        "shot_threat": 45,
+        "xg_threat": 47,
+        "creative_spark": 45,
+        "xa_threat": 37,
+        "midfield_engine": 48,
+        "defensive_lock": 68,
+        "pressing_heat": 51,
+        "ball_progression": 36,
+        "aerial_dominance": 69,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 57,
+        "booking_heat": 46
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Red Flag",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Red Flag",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Red Flag assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Red Flag carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 23,
+        "position_rank": 3,
+        "club_rank": 2,
+        "goal_threat_rank": 165,
+        "creative_spark_rank": 260,
+        "defensive_lock_rank": 15,
+        "pressing_heat_rank": 116,
+        "booking_heat_rank": 253
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Parselle",
+        "badge_score": 69,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_national_league_south_bath_city_joe_raynes_2025/2026",
+      "name": "Joe Raynes",
+      "surname": "Raynes",
+      "club": "Bath City",
+      "club_slug": "bath_city",
+      "competition": "England National League South",
+      "competition_key": "england_national_league_south",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2250
+      },
+      "ratings": {
+        "og_player_power": 61,
+        "goal_threat": 50,
+        "shot_threat": 52,
+        "xg_threat": 50,
+        "creative_spark": 53,
+        "xa_threat": 50,
+        "midfield_engine": 52,
+        "defensive_lock": 64,
+        "pressing_heat": 60,
+        "ball_progression": 48,
+        "aerial_dominance": 65,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 74,
+        "booking_heat": 64
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Positive",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Positive foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 56,
+        "position_rank": 13,
+        "club_rank": 3,
+        "goal_threat_rank": 155,
+        "creative_spark_rank": 104,
+        "defensive_lock_rank": 32,
+        "pressing_heat_rank": 18,
+        "booking_heat_rank": 20
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Raynes",
+        "badge_score": 61,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_national_league_south_bath_city_jordan_tillson_2025/2026",
+      "name": "Jordan Tillson",
+      "surname": "Tillson",
+      "club": "Bath City",
+      "club_slug": "bath_city",
+      "competition": "England National League South",
+      "competition_key": "england_national_league_south",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2156
+      },
+      "ratings": {
+        "og_player_power": 58,
+        "goal_threat": 38,
+        "shot_threat": 27,
+        "xg_threat": 33,
+        "creative_spark": 36,
+        "xa_threat": 36,
+        "midfield_engine": 58,
+        "defensive_lock": 61,
+        "pressing_heat": 67,
+        "ball_progression": 38,
+        "aerial_dominance": 61,
+        "goalkeeper_shield": 53,
+        "discipline_risk": 76,
+        "booking_heat": 65
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Red Flag",
+        "shot_threat": "Red Flag",
+        "xg_threat": "Red Flag",
+        "creative_spark": "Red Flag",
+        "xa_threat": "Red Flag",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Red Flag",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Positive",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Red Flag scoring profile with xG and shot support.",
+        "shot_threat": "Red Flag shooting volume and on-target pressure.",
+        "xg_threat": "Red Flag chance-quality profile.",
+        "creative_spark": "Red Flag creation profile for final-third value.",
+        "xa_threat": "Red Flag assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Red Flag carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Positive foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 72,
+        "position_rank": 20,
+        "club_rank": 4,
+        "goal_threat_rank": 294,
+        "creative_spark_rank": 331,
+        "defensive_lock_rank": 42,
+        "pressing_heat_rank": 1,
+        "booking_heat_rank": 17
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Tillson",
+        "badge_score": 58,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_national_league_south_bath_city_luke_cameron_russe_2025/2026",
+      "name": "Luke Cameron Russe",
+      "surname": "Russe",
+      "club": "Bath City",
+      "club_slug": "bath_city",
+      "competition": "England National League South",
+      "competition_key": "england_national_league_south",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2246
+      },
+      "ratings": {
+        "og_player_power": 58,
+        "goal_threat": 41,
+        "shot_threat": 45,
+        "xg_threat": 39,
+        "creative_spark": 60,
+        "xa_threat": 59,
+        "midfield_engine": 46,
+        "defensive_lock": 51,
+        "pressing_heat": 53,
+        "ball_progression": 42,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 53,
+        "discipline_risk": 67,
+        "booking_heat": 58
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Red Flag",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Red Flag chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 72,
+        "position_rank": 20,
+        "club_rank": 4,
+        "goal_threat_rank": 264,
+        "creative_spark_rank": 46,
+        "defensive_lock_rank": 126,
+        "pressing_heat_rank": 81,
+        "booking_heat_rank": 47
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Russe",
+        "badge_score": 58,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_national_league_south_bath_city_harvey_wiles_richards_2025/2026",
+      "name": "Harvey Wiles-Richards",
+      "surname": "Wiles-Richards",
+      "club": "Bath City",
+      "club_slug": "bath_city",
+      "competition": "England National League South",
+      "competition_key": "england_national_league_south",
+      "season": "2025/2026",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 1745
+      },
+      "ratings": {
+        "og_player_power": 57,
+        "goal_threat": 14,
+        "shot_threat": 9,
+        "xg_threat": 11,
+        "creative_spark": 30,
+        "xa_threat": 28,
+        "midfield_engine": 43,
+        "defensive_lock": 45,
+        "pressing_heat": 36,
+        "ball_progression": 35,
+        "aerial_dominance": 32,
+        "goalkeeper_shield": 73,
+        "discipline_risk": 40,
+        "booking_heat": 29
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Red Flag",
+        "shot_threat": "Red Flag",
+        "xg_threat": "Red Flag",
+        "creative_spark": "Red Flag",
+        "xa_threat": "Red Flag",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Red Flag",
+        "ball_progression": "Red Flag",
+        "aerial_dominance": "Red Flag",
+        "goalkeeper_shield": "Positive",
+        "discipline_risk": "Weak",
+        "booking_heat": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Red Flag scoring profile with xG and shot support.",
+        "shot_threat": "Red Flag shooting volume and on-target pressure.",
+        "xg_threat": "Red Flag chance-quality profile.",
+        "creative_spark": "Red Flag creation profile for final-third value.",
+        "xa_threat": "Red Flag assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Red Flag pressure and regain activity profile.",
+        "ball_progression": "Red Flag carrying and forward progression profile.",
+        "aerial_dominance": "Red Flag aerial and set-piece profile.",
+        "goalkeeper_shield": "Positive shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Red Flag booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 83,
+        "position_rank": 11,
+        "club_rank": 6,
+        "goal_threat_rank": 343,
+        "creative_spark_rank": 344,
+        "defensive_lock_rank": 279,
+        "pressing_heat_rank": 345,
+        "booking_heat_rank": 348
+      },
+      "tags": [
+        "Goalkeeper Profile"
+      ],
+      "ui": {
+        "pitch_label": "Wiles-Richards",
+        "badge_score": 57,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_national_league_south_bath_city_danny_greenslade_2025/2026",
+      "name": "Danny Greenslade",
+      "surname": "Greenslade",
+      "club": "Bath City",
+      "club_slug": "bath_city",
+      "competition": "England National League South",
+      "competition_key": "england_national_league_south",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 1708
+      },
+      "ratings": {
+        "og_player_power": 56,
+        "goal_threat": 24,
+        "shot_threat": 17,
+        "xg_threat": 19,
+        "creative_spark": 60,
+        "xa_threat": 59,
+        "midfield_engine": 41,
+        "defensive_lock": 54,
+        "pressing_heat": 47,
+        "ball_progression": 44,
+        "aerial_dominance": 59,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 59,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Red Flag",
+        "shot_threat": "Red Flag",
+        "xg_threat": "Red Flag",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Red Flag scoring profile with xG and shot support.",
+        "shot_threat": "Red Flag shooting volume and on-target pressure.",
+        "xg_threat": "Red Flag chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 95,
+        "position_rank": 26,
+        "club_rank": 7,
+        "goal_threat_rank": 335,
+        "creative_spark_rank": 46,
+        "defensive_lock_rank": 86,
+        "pressing_heat_rank": 271,
+        "booking_heat_rank": 134
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Greenslade",
+        "badge_score": 56,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_national_league_south_bath_city_alexander_anthony_fisher_2025/2026",
+      "name": "Alexander Anthony Fisher",
+      "surname": "Fisher",
+      "club": "Bath City",
+      "club_slug": "bath_city",
+      "competition": "England National League South",
+      "competition_key": "england_national_league_south",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 381
+      },
+      "ratings": {
+        "og_player_power": 55,
+        "goal_threat": 59,
+        "shot_threat": 59,
+        "xg_threat": 60,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 49,
+        "ball_progression": 49,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 45,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 106,
+        "position_rank": 32,
+        "club_rank": 8,
+        "goal_threat_rank": 84,
+        "creative_spark_rank": 150,
+        "defensive_lock_rank": 200,
+        "pressing_heat_rank": 214,
+        "booking_heat_rank": 218
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Fisher",
+        "badge_score": 55,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_national_league_south_bath_city_manny_yeboah_2025/2026",
+      "name": "Manny Yeboah",
+      "surname": "Yeboah",
+      "club": "Bath City",
+      "club_slug": "bath_city",
+      "competition": "England National League South",
+      "competition_key": "england_national_league_south",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 48,
+        "shot_threat": 50,
+        "xg_threat": 49,
+        "creative_spark": 49,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 52,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 163,
+        "position_rank": 58,
+        "club_rank": 9,
+        "goal_threat_rank": 172,
+        "creative_spark_rank": 169,
+        "defensive_lock_rank": 152,
+        "pressing_heat_rank": 143,
+        "booking_heat_rank": 134
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Yeboah",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_national_league_south_bath_city_moses_alexander_walker_2025/2026",
+      "name": "Moses Alexander-Walker",
+      "surname": "Alexander-Walker",
+      "club": "Bath City",
+      "club_slug": "bath_city",
+      "competition": "England National League South",
+      "competition_key": "england_national_league_south",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 48,
+        "shot_threat": 50,
+        "xg_threat": 49,
+        "creative_spark": 49,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 52,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 163,
+        "position_rank": 46,
+        "club_rank": 9,
+        "goal_threat_rank": 172,
+        "creative_spark_rank": 169,
+        "defensive_lock_rank": 152,
+        "pressing_heat_rank": 143,
+        "booking_heat_rank": 134
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Alexander-Walker",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_national_league_south_bath_city_harry_pell_2025/2026",
+      "name": "Harry Pell",
+      "surname": "Pell",
+      "club": "Bath City",
+      "club_slug": "bath_city",
+      "competition": "England National League South",
+      "competition_key": "england_national_league_south",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 48,
+        "goal_threat": 53,
+        "shot_threat": 60,
+        "xg_threat": 56,
+        "creative_spark": 45,
+        "xa_threat": 44,
+        "midfield_engine": 49,
+        "defensive_lock": 49,
+        "pressing_heat": 49,
+        "ball_progression": 47,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 52,
+        "discipline_risk": 47,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 222,
+        "position_rank": 86,
+        "club_rank": 11,
+        "goal_threat_rank": 132,
+        "creative_spark_rank": 260,
+        "defensive_lock_rank": 200,
+        "pressing_heat_rank": 214,
+        "booking_heat_rank": 182
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Pell",
+        "badge_score": 48,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_national_league_south_bath_city_bradley_ash_2025/2026",
+      "name": "Bradley Ash",
+      "surname": "Ash",
+      "club": "Bath City",
+      "club_slug": "bath_city",
+      "competition": "England National League South",
+      "competition_key": "england_national_league_south",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 1919
+      },
+      "ratings": {
+        "og_player_power": 46,
+        "goal_threat": 77,
+        "shot_threat": 76,
+        "xg_threat": 79,
+        "creative_spark": 48,
+        "xa_threat": 43,
+        "midfield_engine": 34,
+        "defensive_lock": 33,
+        "pressing_heat": 54,
+        "ball_progression": 52,
+        "aerial_dominance": 42,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 60,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Positive",
+        "shot_threat": "Positive",
+        "xg_threat": "Positive",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Red Flag",
+        "defensive_lock": "Red Flag",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Positive scoring profile with xG and shot support.",
+        "shot_threat": "Positive shooting volume and on-target pressure.",
+        "xg_threat": "Positive chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Red Flag central involvement and recycling profile.",
+        "defensive_lock": "Red Flag defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 242,
+        "position_rank": 67,
+        "club_rank": 12,
+        "goal_threat_rank": 23,
+        "creative_spark_rank": 214,
+        "defensive_lock_rank": 346,
+        "pressing_heat_rank": 64,
+        "booking_heat_rank": 218
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Ash",
+        "badge_score": 46,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_national_league_south_bath_city_matthew_bowman_2025/2026",
+      "name": "Matthew Bowman",
+      "surname": "Bowman",
+      "club": "Bath City",
+      "club_slug": "bath_city",
+      "competition": "England National League South",
+      "competition_key": "england_national_league_south",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 540
+      },
+      "ratings": {
+        "og_player_power": 44,
+        "goal_threat": 55,
+        "shot_threat": 54,
+        "xg_threat": 55,
+        "creative_spark": 53,
+        "xa_threat": 53,
+        "midfield_engine": 49,
+        "defensive_lock": 49,
+        "pressing_heat": 55,
+        "ball_progression": 52,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 54,
+        "discipline_risk": 64,
+        "booking_heat": 61
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Weak",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 268,
+        "position_rank": 107,
+        "club_rank": 13,
+        "goal_threat_rank": 116,
+        "creative_spark_rank": 104,
+        "defensive_lock_rank": 200,
+        "pressing_heat_rank": 51,
+        "booking_heat_rank": 34
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Bowman",
+        "badge_score": 44,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_national_league_south_bath_city_jaiden_putman_2025/2026",
+      "name": "Jaiden Putman",
+      "surname": "Putman",
+      "club": "Bath City",
+      "club_slug": "bath_city",
+      "competition": "England National League South",
+      "competition_key": "england_national_league_south",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 43,
+        "goal_threat": 45,
+        "shot_threat": 48,
+        "xg_threat": 45,
+        "creative_spark": 49,
+        "xa_threat": 48,
+        "midfield_engine": 47,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 47,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 280,
+        "position_rank": 114,
+        "club_rank": 14,
+        "goal_threat_rank": 225,
+        "creative_spark_rank": 169,
+        "defensive_lock_rank": 152,
+        "pressing_heat_rank": 143,
+        "booking_heat_rank": 182
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Putman",
+        "badge_score": 43,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_national_league_south_bath_city_ewan_clark_2025/2026",
+      "name": "Ewan Clark",
+      "surname": "Clark",
+      "club": "Bath City",
+      "club_slug": "bath_city",
+      "competition": "England National League South",
+      "competition_key": "england_national_league_south",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 250
+      },
+      "ratings": {
+        "og_player_power": 38,
+        "goal_threat": 59,
+        "shot_threat": 59,
+        "xg_threat": 59,
+        "creative_spark": 48,
+        "xa_threat": 46,
+        "midfield_engine": 46,
+        "defensive_lock": 48,
+        "pressing_heat": 46,
+        "ball_progression": 51,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 43,
+        "booking_heat": 46
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 326,
+        "position_rank": 141,
+        "club_rank": 15,
+        "goal_threat_rank": 84,
+        "creative_spark_rank": 214,
+        "defensive_lock_rank": 223,
+        "pressing_heat_rank": 287,
+        "booking_heat_rank": 253
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Clark",
+        "badge_score": 38,
+        "tier": "RED_FLAG"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Batten",
+      "Parselle",
+      "Raynes",
+      "Tillson",
+      "Russe"
+    ],
+    "goal_threat": [
+      "Ash",
+      "Fisher",
+      "Clark",
+      "Bowman",
+      "Pell"
+    ],
+    "creative_spark": [
+      "Russe",
+      "Greenslade",
+      "Raynes",
+      "Bowman",
+      "Fisher"
+    ],
+    "discipline_risk": [
+      "Tillson",
+      "Raynes",
+      "Russe",
+      "Bowman",
+      "Batten"
+    ]
+  }
+}

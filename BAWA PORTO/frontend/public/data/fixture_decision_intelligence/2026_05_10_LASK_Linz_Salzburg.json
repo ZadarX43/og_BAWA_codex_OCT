@@ -1,0 +1,261 @@
+{
+  "fixture_key": "2026_05_10_LASK_Linz_Salzburg",
+  "fixture": "LASK Linz vs Salzburg",
+  "primary_signal": "BTTS Yes",
+  "signal_state": "FRAGILE",
+  "agreement_score": 56,
+  "confidence_band": "LOW",
+  "supporting_layers": [
+    "BTTS_PRESSURE_SUPPORT",
+    "GOAL_ENVIRONMENT_SUPPORT"
+  ],
+  "caution_layers": [
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "profile_tags": {
+    "home": [
+      "Corner Pressure Side",
+      "Open Match Profile"
+    ],
+    "away": [
+      "Attack-Led Side",
+      "Strong First Goal",
+      "Travels Well",
+      "Open Match Profile"
+    ]
+  },
+  "profile_narrative": "LASK Linz bring a corner pressure side into a matchup with Salzburg's attack-led side. The cleaner read is two-way scoring access.",
+  "team_faceoff_summary": [
+    {
+      "metric": "goal_heat_rating",
+      "label": "Goal Heat",
+      "home_value": 85,
+      "away_value": 82,
+      "delta": 3,
+      "leader": "LASK Linz"
+    },
+    {
+      "metric": "btts_pressure_rating",
+      "label": "BTTS Pressure",
+      "home_value": 67,
+      "away_value": 76,
+      "delta": 9,
+      "leader": "Salzburg"
+    },
+    {
+      "metric": "attack_flow_rating",
+      "label": "Attack Flow",
+      "home_value": 81,
+      "away_value": 98,
+      "delta": 17,
+      "leader": "Salzburg"
+    },
+    {
+      "metric": "defensive_lock_rating",
+      "label": "Defensive Lock",
+      "home_value": 49,
+      "away_value": 48,
+      "delta": 1,
+      "leader": "LASK Linz"
+    },
+    {
+      "metric": "first_strike_rating",
+      "label": "First Strike",
+      "home_value": 68,
+      "away_value": 90,
+      "delta": 22,
+      "leader": "Salzburg"
+    },
+    {
+      "metric": "chaos_rating",
+      "label": "Chaos Rating",
+      "home_value": 61,
+      "away_value": 67,
+      "delta": 6,
+      "leader": "Salzburg"
+    }
+  ],
+  "unit_battle_summary": [],
+  "key_player_drivers": [],
+  "key_mismatches": [],
+  "h2h_context": {
+    "available": false,
+    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
+    "sample_size": 0
+  },
+  "market_suitability": {
+    "ftr": {
+      "rating": 79,
+      "label": "Positive",
+      "read": "Stronger when one side owns a clear team-power edge."
+    },
+    "btts": {
+      "rating": 72,
+      "label": "Positive",
+      "read": "Driven by two-way access and reduced suppression."
+    },
+    "ou25": {
+      "rating": 84,
+      "label": "Strong",
+      "read": "Driven by combined goal environment and tempo."
+    },
+    "team_goals": {
+      "rating": 85,
+      "label": "Strong",
+      "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
+    },
+    "correct_score": {
+      "rating": 95,
+      "label": "Elite",
+      "read": "Better when the shape is structured and the likely scoring zone is narrow."
+    },
+    "corners": {
+      "rating": 80,
+      "label": "Strong",
+      "read": "Driven by territory and wide-channel pressure."
+    },
+    "cards": {
+      "rating": 34,
+      "label": "Red Flag",
+      "read": "Driven by discipline heat, fouling, and volatility."
+    }
+  },
+  "market_intelligence": {
+    "ftr": {
+      "alignment_score": 73,
+      "state": "MIXED",
+      "model_lean": "AWAY",
+      "structural_support": [
+        "BTTS_PRESSURE_SUPPORT",
+        "GOAL_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "FTR has partial support from btts pressure support, but lineup data missing keeps it from reading clean.",
+      "rating": 79,
+      "band": "Positive"
+    },
+    "btts": {
+      "alignment_score": 62,
+      "state": "FRAGILE",
+      "model_lean": "YES",
+      "structural_support": [
+        "BTTS_PRESSURE_SUPPORT",
+        "GOAL_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "BTTS has some structural support from btts pressure support, but the overall layer fit remains fragile.",
+      "rating": 72,
+      "band": "Positive"
+    },
+    "ou25": {
+      "alignment_score": 71,
+      "state": "MIXED",
+      "model_lean": "OVER25",
+      "structural_support": [
+        "GOAL_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Over 2.5 has partial support from goal environment support, but lineup data missing keeps it from reading clean.",
+      "rating": 84,
+      "band": "Strong"
+    },
+    "team_goals": {
+      "alignment_score": 76,
+      "state": "MIXED",
+      "model_lean": "LASK Linz 1.5+",
+      "structural_support": [
+        "GOAL_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Team Goals has partial support from goal environment support, but lineup data missing keeps it from reading clean.",
+      "rating": 85,
+      "band": "Strong"
+    },
+    "correct_score": {
+      "alignment_score": 79,
+      "state": "MIXED",
+      "model_lean": "OPEN",
+      "structural_support": [
+        "GOAL_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Correct Score has partial support from goal environment support, but lineup data missing keeps it from reading clean.",
+      "rating": 95,
+      "band": "Elite"
+    },
+    "corners": {
+      "alignment_score": 68,
+      "state": "MIXED",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "BTTS_PRESSURE_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Corners has partial support from btts pressure support, but lineup data missing keeps it from reading clean.",
+      "rating": 80,
+      "band": "Strong"
+    },
+    "cards": {
+      "alignment_score": 40,
+      "state": "AVOID",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "BTTS_PRESSURE_SUPPORT",
+        "GOAL_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Cards is too contradicted by lineup data missing to present as a clean public read.",
+      "rating": 34,
+      "band": "Red Flag"
+    }
+  },
+  "watchlist": {
+    "active": false,
+    "summary": "No watchlist layer is active for this fixture.",
+    "trigger_signals": [],
+    "public_state": "No watchlist flag",
+    "mode": ""
+  },
+  "public_safe_summary": "BTTS Yes has some live shape in LASK Linz vs Salzburg, but the supporting layers remain fragile and need discipline.",
+  "internal_reason_tokens": [
+    "BTTS_PRESSURE_SUPPORT",
+    "GOAL_ENVIRONMENT_SUPPORT",
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "summary": {
+    "support_count": 2,
+    "caution_count": 2,
+    "lineup_available": false,
+    "h2h_available": false
+  },
+  "preview": {
+    "headline": "LASK Linz vs Salzburg: BTTS Yes fragile",
+    "short_summary": "BTTS Yes has some live shape in LASK Linz vs Salzburg, but the supporting layers remain fragile and need discipline. Primary support comes from btts pressure support, while the main caution remains lineup data missing.",
+    "market_summary": "Best aligned market: Correct Score (Mixed). Secondary support: Team Goals. Weakest read: Cards.",
+    "caution_line": "Main caution: Lineup Data Missing.",
+    "telegram_summary": "LASK Linz vs Salzburg — BTTS Yes (Fragile, 56% agreement). Support: Btts Pressure Support. Caution: Lineup Data Missing.",
+    "premium_summary": "BTTS Yes is carrying a 56% agreement read across the published decision layers. Support is currently led by btts pressure support, goal environment support, while caution is still coming from lineup data missing, h2h unavailable."
+  }
+}

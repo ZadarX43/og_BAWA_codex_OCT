@@ -1,0 +1,1189 @@
+{
+  "competition_key": "south_korea_k_league",
+  "season": "2024",
+  "teams": [
+    {
+      "team": "Gangwon",
+      "team_slug": "gangwon",
+      "competition": "South Korea K League",
+      "competition_key": "south_korea_k_league",
+      "season": "2024",
+      "country": "South Korea",
+      "matches_played": 38,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 38
+      },
+      "ratings": {
+        "og_power_rating": 68,
+        "attack_flow_rating": 84,
+        "defensive_lock_rating": 31,
+        "goal_heat_rating": 85,
+        "btts_pressure_rating": 76,
+        "over25_heat_rating": 82,
+        "control_rating": 27,
+        "first_strike_rating": 86,
+        "corner_pressure_rating": 39,
+        "card_heat_rating": 70,
+        "chaos_rating": 85,
+        "home_fortress_rating": 81,
+        "away_threat_rating": 47
+      },
+      "rating_bands": {
+        "og_power_rating": "Mixed",
+        "attack_flow_rating": "Strong",
+        "defensive_lock_rating": "Red Flag",
+        "goal_heat_rating": "Strong",
+        "btts_pressure_rating": "Positive",
+        "over25_heat_rating": "Strong",
+        "control_rating": "Red Flag",
+        "first_strike_rating": "Strong",
+        "corner_pressure_rating": "Red Flag",
+        "card_heat_rating": "Positive",
+        "chaos_rating": "Strong",
+        "home_fortress_rating": "Strong",
+        "away_threat_rating": "Weak"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Mixed team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Strong attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Red Flag defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Strong goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Positive two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Strong 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Red Flag match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Strong early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Red Flag territory and corner-generation profile.",
+        "card_heat_rating": "Positive discipline and card volatility profile.",
+        "chaos_rating": "Strong volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Strong home-ground control profile.",
+        "away_threat_rating": "Weak travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Strong First Goal",
+        "Open Match Profile",
+        "Two-Way Scoring Profile",
+        "High Chaos Side"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 68%",
+        "profile": "Mixed team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "First Strike",
+          "Goal Heat",
+          "Chaos"
+        ],
+        "main_caution": "Chaos Rating sits at 85%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Mixed",
+        "btts_lean": "Positive",
+        "over25_lean": "Positive",
+        "under_control": "Red Flag",
+        "team_goals_15": "Positive",
+        "corners": "Red Flag",
+        "cards": "Red Flag"
+      },
+      "home_profile": {
+        "power": 81,
+        "attack": 84,
+        "defence": 31,
+        "goal_heat": 85
+      },
+      "away_profile": {
+        "power": 47,
+        "attack": 66,
+        "defence": 23,
+        "goal_heat": 84
+      },
+      "timing_profile": {
+        "early_threat": 85,
+        "half_time_control": 26,
+        "late_surge": 84,
+        "late_fragility": 78
+      }
+    },
+    {
+      "team": "Jeju United",
+      "team_slug": "jeju_united",
+      "competition": "South Korea K League",
+      "competition_key": "south_korea_k_league",
+      "season": "2024",
+      "country": "South Korea",
+      "matches_played": 38,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 38
+      },
+      "ratings": {
+        "og_power_rating": 38,
+        "attack_flow_rating": 44,
+        "defensive_lock_rating": 43,
+        "goal_heat_rating": 44,
+        "btts_pressure_rating": 42,
+        "over25_heat_rating": 47,
+        "control_rating": 52,
+        "first_strike_rating": 35,
+        "corner_pressure_rating": 81,
+        "card_heat_rating": 60,
+        "chaos_rating": 42,
+        "home_fortress_rating": 55,
+        "away_threat_rating": 24
+      },
+      "rating_bands": {
+        "og_power_rating": "Red Flag",
+        "attack_flow_rating": "Weak",
+        "defensive_lock_rating": "Weak",
+        "goal_heat_rating": "Weak",
+        "btts_pressure_rating": "Weak",
+        "over25_heat_rating": "Weak",
+        "control_rating": "Weak",
+        "first_strike_rating": "Red Flag",
+        "corner_pressure_rating": "Strong",
+        "card_heat_rating": "Mixed",
+        "chaos_rating": "Weak",
+        "home_fortress_rating": "Mixed",
+        "away_threat_rating": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Weak attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Weak defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Weak goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Weak two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Weak 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Weak match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Red Flag early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Strong territory and corner-generation profile.",
+        "card_heat_rating": "Mixed discipline and card volatility profile.",
+        "chaos_rating": "Weak volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Mixed home-ground control profile.",
+        "away_threat_rating": "Red Flag travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Corner Pressure Side"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 38%",
+        "profile": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Corner Pressure",
+          "Card Heat",
+          "Home Fortress"
+        ],
+        "main_caution": "Card Heat sits at 60%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Red Flag",
+        "btts_lean": "Weak",
+        "over25_lean": "Weak",
+        "under_control": "Weak",
+        "team_goals_15": "Weak",
+        "corners": "Positive",
+        "cards": "Weak"
+      },
+      "home_profile": {
+        "power": 55,
+        "attack": 44,
+        "defence": 43,
+        "goal_heat": 44
+      },
+      "away_profile": {
+        "power": 24,
+        "attack": 34,
+        "defence": 50,
+        "goal_heat": 46
+      },
+      "timing_profile": {
+        "early_threat": 40,
+        "half_time_control": 34,
+        "late_surge": 46,
+        "late_fragility": 51
+      }
+    },
+    {
+      "team": "FC Seoul",
+      "team_slug": "fc_seoul",
+      "competition": "South Korea K League",
+      "competition_key": "south_korea_k_league",
+      "season": "2024",
+      "country": "South Korea",
+      "matches_played": 38,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 38
+      },
+      "ratings": {
+        "og_power_rating": 72,
+        "attack_flow_rating": 57,
+        "defensive_lock_rating": 70,
+        "goal_heat_rating": 44,
+        "btts_pressure_rating": 48,
+        "over25_heat_rating": 41,
+        "control_rating": 66,
+        "first_strike_rating": 60,
+        "corner_pressure_rating": 60,
+        "card_heat_rating": 65,
+        "chaos_rating": 50,
+        "home_fortress_rating": 62,
+        "away_threat_rating": 73
+      },
+      "rating_bands": {
+        "og_power_rating": "Positive",
+        "attack_flow_rating": "Mixed",
+        "defensive_lock_rating": "Positive",
+        "goal_heat_rating": "Weak",
+        "btts_pressure_rating": "Weak",
+        "over25_heat_rating": "Weak",
+        "control_rating": "Mixed",
+        "first_strike_rating": "Mixed",
+        "corner_pressure_rating": "Mixed",
+        "card_heat_rating": "Mixed",
+        "chaos_rating": "Weak",
+        "home_fortress_rating": "Mixed",
+        "away_threat_rating": "Positive"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Positive team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Mixed attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Positive defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Weak goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Weak two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Weak 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Mixed match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Mixed early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Mixed territory and corner-generation profile.",
+        "card_heat_rating": "Mixed discipline and card volatility profile.",
+        "chaos_rating": "Weak volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Mixed home-ground control profile.",
+        "away_threat_rating": "Positive travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Mixed Team Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 72%",
+        "profile": "Positive team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Away Threat",
+          "Og Power",
+          "Defensive Lock"
+        ],
+        "main_caution": "Card Heat sits at 65%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Positive",
+        "btts_lean": "Weak",
+        "over25_lean": "Weak",
+        "under_control": "Mixed",
+        "team_goals_15": "Mixed",
+        "corners": "Mixed",
+        "cards": "Red Flag"
+      },
+      "home_profile": {
+        "power": 62,
+        "attack": 57,
+        "defence": 70,
+        "goal_heat": 44
+      },
+      "away_profile": {
+        "power": 73,
+        "attack": 65,
+        "defence": 60,
+        "goal_heat": 42
+      },
+      "timing_profile": {
+        "early_threat": 58,
+        "half_time_control": 46,
+        "late_surge": 42,
+        "late_fragility": 58
+      }
+    },
+    {
+      "team": "Daegu",
+      "team_slug": "daegu",
+      "competition": "South Korea K League",
+      "competition_key": "south_korea_k_league",
+      "season": "2024",
+      "country": "South Korea",
+      "matches_played": 38,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 38
+      },
+      "ratings": {
+        "og_power_rating": 29,
+        "attack_flow_rating": 57,
+        "defensive_lock_rating": 28,
+        "goal_heat_rating": 67,
+        "btts_pressure_rating": 64,
+        "over25_heat_rating": 66,
+        "control_rating": 28,
+        "first_strike_rating": 26,
+        "corner_pressure_rating": 62,
+        "card_heat_rating": 60,
+        "chaos_rating": 64,
+        "home_fortress_rating": 32,
+        "away_threat_rating": 29
+      },
+      "rating_bands": {
+        "og_power_rating": "Red Flag",
+        "attack_flow_rating": "Mixed",
+        "defensive_lock_rating": "Red Flag",
+        "goal_heat_rating": "Mixed",
+        "btts_pressure_rating": "Mixed",
+        "over25_heat_rating": "Mixed",
+        "control_rating": "Red Flag",
+        "first_strike_rating": "Red Flag",
+        "corner_pressure_rating": "Mixed",
+        "card_heat_rating": "Mixed",
+        "chaos_rating": "Mixed",
+        "home_fortress_rating": "Red Flag",
+        "away_threat_rating": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Mixed attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Red Flag defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Mixed goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Mixed two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Mixed 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Red Flag match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Red Flag early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Mixed territory and corner-generation profile.",
+        "card_heat_rating": "Mixed discipline and card volatility profile.",
+        "chaos_rating": "Mixed volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Red Flag home-ground control profile.",
+        "away_threat_rating": "Red Flag travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Mixed Team Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 29%",
+        "profile": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Goal Heat",
+          "Over25 Heat",
+          "Btts Pressure"
+        ],
+        "main_caution": "Chaos Rating sits at 64%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Red Flag",
+        "btts_lean": "Mixed",
+        "over25_lean": "Mixed",
+        "under_control": "Red Flag",
+        "team_goals_15": "Mixed",
+        "corners": "Mixed",
+        "cards": "Weak"
+      },
+      "home_profile": {
+        "power": 32,
+        "attack": 57,
+        "defence": 28,
+        "goal_heat": 67
+      },
+      "away_profile": {
+        "power": 29,
+        "attack": 43,
+        "defence": 32,
+        "goal_heat": 66
+      },
+      "timing_profile": {
+        "early_threat": 42,
+        "half_time_control": 24,
+        "late_surge": 66,
+        "late_fragility": 62
+      }
+    },
+    {
+      "team": "Pohang Steelers",
+      "team_slug": "pohang_steelers",
+      "competition": "South Korea K League",
+      "competition_key": "south_korea_k_league",
+      "season": "2024",
+      "country": "South Korea",
+      "matches_played": 38,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 38
+      },
+      "ratings": {
+        "og_power_rating": 50,
+        "attack_flow_rating": 50,
+        "defensive_lock_rating": 35,
+        "goal_heat_rating": 69,
+        "btts_pressure_rating": 74,
+        "over25_heat_rating": 66,
+        "control_rating": 28,
+        "first_strike_rating": 57,
+        "corner_pressure_rating": 43,
+        "card_heat_rating": 39,
+        "chaos_rating": 64,
+        "home_fortress_rating": 39,
+        "away_threat_rating": 56
+      },
+      "rating_bands": {
+        "og_power_rating": "Weak",
+        "attack_flow_rating": "Weak",
+        "defensive_lock_rating": "Red Flag",
+        "goal_heat_rating": "Mixed",
+        "btts_pressure_rating": "Positive",
+        "over25_heat_rating": "Mixed",
+        "control_rating": "Red Flag",
+        "first_strike_rating": "Mixed",
+        "corner_pressure_rating": "Weak",
+        "card_heat_rating": "Red Flag",
+        "chaos_rating": "Mixed",
+        "home_fortress_rating": "Red Flag",
+        "away_threat_rating": "Mixed"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Weak attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Red Flag defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Mixed goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Positive two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Mixed 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Red Flag match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Mixed early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Weak territory and corner-generation profile.",
+        "card_heat_rating": "Red Flag discipline and card volatility profile.",
+        "chaos_rating": "Mixed volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Red Flag home-ground control profile.",
+        "away_threat_rating": "Mixed travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Two-Way Scoring Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 50%",
+        "profile": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Btts Pressure",
+          "Goal Heat",
+          "Over25 Heat"
+        ],
+        "main_caution": "Chaos Rating sits at 64%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Weak",
+        "btts_lean": "Positive",
+        "over25_lean": "Mixed",
+        "under_control": "Red Flag",
+        "team_goals_15": "Weak",
+        "corners": "Weak",
+        "cards": "Mixed"
+      },
+      "home_profile": {
+        "power": 39,
+        "attack": 50,
+        "defence": 35,
+        "goal_heat": 69
+      },
+      "away_profile": {
+        "power": 56,
+        "attack": 53,
+        "defence": 36,
+        "goal_heat": 68
+      },
+      "timing_profile": {
+        "early_threat": 54,
+        "half_time_control": 24,
+        "late_surge": 68,
+        "late_fragility": 52
+      }
+    },
+    {
+      "team": "Ulsan",
+      "team_slug": "ulsan",
+      "competition": "South Korea K League",
+      "competition_key": "south_korea_k_league",
+      "season": "2024",
+      "country": "South Korea",
+      "matches_played": 38,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 38
+      },
+      "ratings": {
+        "og_power_rating": 90,
+        "attack_flow_rating": 88,
+        "defensive_lock_rating": 84,
+        "goal_heat_rating": 56,
+        "btts_pressure_rating": 50,
+        "over25_heat_rating": 58,
+        "control_rating": 64,
+        "first_strike_rating": 92,
+        "corner_pressure_rating": 59,
+        "card_heat_rating": 36,
+        "chaos_rating": 44,
+        "home_fortress_rating": 88,
+        "away_threat_rating": 80
+      },
+      "rating_bands": {
+        "og_power_rating": "Elite",
+        "attack_flow_rating": "Strong",
+        "defensive_lock_rating": "Strong",
+        "goal_heat_rating": "Mixed",
+        "btts_pressure_rating": "Weak",
+        "over25_heat_rating": "Mixed",
+        "control_rating": "Mixed",
+        "first_strike_rating": "Elite",
+        "corner_pressure_rating": "Mixed",
+        "card_heat_rating": "Red Flag",
+        "chaos_rating": "Weak",
+        "home_fortress_rating": "Strong",
+        "away_threat_rating": "Strong"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Elite team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Strong attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Strong defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Mixed goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Weak two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Mixed 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Mixed match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Elite early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Mixed territory and corner-generation profile.",
+        "card_heat_rating": "Red Flag discipline and card volatility profile.",
+        "chaos_rating": "Weak volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Strong home-ground control profile.",
+        "away_threat_rating": "Strong travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Elite Control Side",
+        "Attack-Led Side",
+        "Strong First Goal",
+        "Home Dominant",
+        "Travels Well"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 90%",
+        "profile": "Elite team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "First Strike",
+          "Og Power",
+          "Attack Flow"
+        ],
+        "main_caution": "Chaos Rating sits at 44%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Strong",
+        "btts_lean": "Weak",
+        "over25_lean": "Mixed",
+        "under_control": "Mixed",
+        "team_goals_15": "Strong",
+        "corners": "Mixed",
+        "cards": "Mixed"
+      },
+      "home_profile": {
+        "power": 88,
+        "attack": 88,
+        "defence": 84,
+        "goal_heat": 56
+      },
+      "away_profile": {
+        "power": 80,
+        "attack": 84,
+        "defence": 70,
+        "goal_heat": 57
+      },
+      "timing_profile": {
+        "early_threat": 90,
+        "half_time_control": 50,
+        "late_surge": 57,
+        "late_fragility": 40
+      }
+    },
+    {
+      "team": "Jeonbuk Motors",
+      "team_slug": "jeonbuk_motors",
+      "competition": "South Korea K League",
+      "competition_key": "south_korea_k_league",
+      "season": "2024",
+      "country": "South Korea",
+      "matches_played": 38,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 38
+      },
+      "ratings": {
+        "og_power_rating": 31,
+        "attack_flow_rating": 40,
+        "defensive_lock_rating": 23,
+        "goal_heat_rating": 77,
+        "btts_pressure_rating": 51,
+        "over25_heat_rating": 80,
+        "control_rating": 34,
+        "first_strike_rating": 41,
+        "corner_pressure_rating": 49,
+        "card_heat_rating": 64,
+        "chaos_rating": 69,
+        "home_fortress_rating": 30,
+        "away_threat_rating": 29
+      },
+      "rating_bands": {
+        "og_power_rating": "Red Flag",
+        "attack_flow_rating": "Weak",
+        "defensive_lock_rating": "Red Flag",
+        "goal_heat_rating": "Positive",
+        "btts_pressure_rating": "Weak",
+        "over25_heat_rating": "Strong",
+        "control_rating": "Red Flag",
+        "first_strike_rating": "Weak",
+        "corner_pressure_rating": "Weak",
+        "card_heat_rating": "Mixed",
+        "chaos_rating": "Mixed",
+        "home_fortress_rating": "Red Flag",
+        "away_threat_rating": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Weak attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Red Flag defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Positive goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Weak two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Strong 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Red Flag match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Weak early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Weak territory and corner-generation profile.",
+        "card_heat_rating": "Mixed discipline and card volatility profile.",
+        "chaos_rating": "Mixed volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Red Flag home-ground control profile.",
+        "away_threat_rating": "Red Flag travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Open Match Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 31%",
+        "profile": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Over25 Heat",
+          "Goal Heat",
+          "Chaos"
+        ],
+        "main_caution": "Chaos Rating sits at 69%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Red Flag",
+        "btts_lean": "Weak",
+        "over25_lean": "Positive",
+        "under_control": "Red Flag",
+        "team_goals_15": "Weak",
+        "corners": "Weak",
+        "cards": "Red Flag"
+      },
+      "home_profile": {
+        "power": 30,
+        "attack": 40,
+        "defence": 23,
+        "goal_heat": 77
+      },
+      "away_profile": {
+        "power": 29,
+        "attack": 34,
+        "defence": 27,
+        "goal_heat": 78
+      },
+      "timing_profile": {
+        "early_threat": 40,
+        "half_time_control": 29,
+        "late_surge": 78,
+        "late_fragility": 66
+      }
+    },
+    {
+      "team": "Sangju Sangmu",
+      "team_slug": "sangju_sangmu",
+      "competition": "South Korea K League",
+      "competition_key": "south_korea_k_league",
+      "season": "2024",
+      "country": "South Korea",
+      "matches_played": 38,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 38
+      },
+      "ratings": {
+        "og_power_rating": 74,
+        "attack_flow_rating": 68,
+        "defensive_lock_rating": 84,
+        "goal_heat_rating": 47,
+        "btts_pressure_rating": 32,
+        "over25_heat_rating": 50,
+        "control_rating": 76,
+        "first_strike_rating": 62,
+        "corner_pressure_rating": 50,
+        "card_heat_rating": 43,
+        "chaos_rating": 39,
+        "home_fortress_rating": 81,
+        "away_threat_rating": 82
+      },
+      "rating_bands": {
+        "og_power_rating": "Positive",
+        "attack_flow_rating": "Mixed",
+        "defensive_lock_rating": "Strong",
+        "goal_heat_rating": "Weak",
+        "btts_pressure_rating": "Red Flag",
+        "over25_heat_rating": "Weak",
+        "control_rating": "Positive",
+        "first_strike_rating": "Mixed",
+        "corner_pressure_rating": "Weak",
+        "card_heat_rating": "Weak",
+        "chaos_rating": "Red Flag",
+        "home_fortress_rating": "Strong",
+        "away_threat_rating": "Strong"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Positive team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Mixed attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Strong defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Weak goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Red Flag two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Weak 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Positive match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Mixed early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Weak territory and corner-generation profile.",
+        "card_heat_rating": "Weak discipline and card volatility profile.",
+        "chaos_rating": "Red Flag volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Strong home-ground control profile.",
+        "away_threat_rating": "Strong travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Travels Well"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 74%",
+        "profile": "Positive team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Defensive Lock",
+          "Away Threat",
+          "Home Fortress"
+        ],
+        "main_caution": "Card Heat sits at 43%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Positive",
+        "btts_lean": "Red Flag",
+        "over25_lean": "Weak",
+        "under_control": "Positive",
+        "team_goals_15": "Mixed",
+        "corners": "Weak",
+        "cards": "Mixed"
+      },
+      "home_profile": {
+        "power": 81,
+        "attack": 68,
+        "defence": 84,
+        "goal_heat": 47
+      },
+      "away_profile": {
+        "power": 82,
+        "attack": 75,
+        "defence": 72,
+        "goal_heat": 48
+      },
+      "timing_profile": {
+        "early_threat": 65,
+        "half_time_control": 54,
+        "late_surge": 48,
+        "late_fragility": 41
+      }
+    },
+    {
+      "team": "Incheon United",
+      "team_slug": "incheon_united",
+      "competition": "South Korea K League",
+      "competition_key": "south_korea_k_league",
+      "season": "2024",
+      "country": "South Korea",
+      "matches_played": 38,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 38
+      },
+      "ratings": {
+        "og_power_rating": 33,
+        "attack_flow_rating": 21,
+        "defensive_lock_rating": 57,
+        "goal_heat_rating": 27,
+        "btts_pressure_rating": 32,
+        "over25_heat_rating": 24,
+        "control_rating": 70,
+        "first_strike_rating": 13,
+        "corner_pressure_rating": 57,
+        "card_heat_rating": 49,
+        "chaos_rating": 31,
+        "home_fortress_rating": 14,
+        "away_threat_rating": 60
+      },
+      "rating_bands": {
+        "og_power_rating": "Red Flag",
+        "attack_flow_rating": "Red Flag",
+        "defensive_lock_rating": "Mixed",
+        "goal_heat_rating": "Red Flag",
+        "btts_pressure_rating": "Red Flag",
+        "over25_heat_rating": "Red Flag",
+        "control_rating": "Positive",
+        "first_strike_rating": "Red Flag",
+        "corner_pressure_rating": "Mixed",
+        "card_heat_rating": "Weak",
+        "chaos_rating": "Red Flag",
+        "home_fortress_rating": "Red Flag",
+        "away_threat_rating": "Mixed"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Red Flag attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Mixed defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Red Flag goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Red Flag two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Red Flag 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Positive match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Red Flag early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Mixed territory and corner-generation profile.",
+        "card_heat_rating": "Weak discipline and card volatility profile.",
+        "chaos_rating": "Red Flag volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Red Flag home-ground control profile.",
+        "away_threat_rating": "Mixed travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Low Chaos"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 33%",
+        "profile": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Control",
+          "Away Threat",
+          "Defensive Lock"
+        ],
+        "main_caution": "Card Heat sits at 49%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Red Flag",
+        "btts_lean": "Red Flag",
+        "over25_lean": "Red Flag",
+        "under_control": "Positive",
+        "team_goals_15": "Red Flag",
+        "corners": "Mixed",
+        "cards": "Weak"
+      },
+      "home_profile": {
+        "power": 14,
+        "attack": 21,
+        "defence": 57,
+        "goal_heat": 27
+      },
+      "away_profile": {
+        "power": 60,
+        "attack": 40,
+        "defence": 63,
+        "goal_heat": 26
+      },
+      "timing_profile": {
+        "early_threat": 17,
+        "half_time_control": 44,
+        "late_surge": 26,
+        "late_fragility": 40
+      }
+    },
+    {
+      "team": "Gwangju",
+      "team_slug": "gwangju",
+      "competition": "South Korea K League",
+      "competition_key": "south_korea_k_league",
+      "season": "2024",
+      "country": "South Korea",
+      "matches_played": 38,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 38
+      },
+      "ratings": {
+        "og_power_rating": 44,
+        "attack_flow_rating": 36,
+        "defensive_lock_rating": 51,
+        "goal_heat_rating": 27,
+        "btts_pressure_rating": 36,
+        "over25_heat_rating": 26,
+        "control_rating": 72,
+        "first_strike_rating": 38,
+        "corner_pressure_rating": 58,
+        "card_heat_rating": 63,
+        "chaos_rating": 42,
+        "home_fortress_rating": 43,
+        "away_threat_rating": 49
+      },
+      "rating_bands": {
+        "og_power_rating": "Weak",
+        "attack_flow_rating": "Red Flag",
+        "defensive_lock_rating": "Weak",
+        "goal_heat_rating": "Red Flag",
+        "btts_pressure_rating": "Red Flag",
+        "over25_heat_rating": "Red Flag",
+        "control_rating": "Positive",
+        "first_strike_rating": "Red Flag",
+        "corner_pressure_rating": "Mixed",
+        "card_heat_rating": "Mixed",
+        "chaos_rating": "Weak",
+        "home_fortress_rating": "Weak",
+        "away_threat_rating": "Weak"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Red Flag attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Weak defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Red Flag goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Red Flag two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Red Flag 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Positive match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Red Flag early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Mixed territory and corner-generation profile.",
+        "card_heat_rating": "Mixed discipline and card volatility profile.",
+        "chaos_rating": "Weak volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Weak home-ground control profile.",
+        "away_threat_rating": "Weak travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Mixed Team Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 44%",
+        "profile": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Control",
+          "Card Heat",
+          "Corner Pressure"
+        ],
+        "main_caution": "Card Heat sits at 63%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Weak",
+        "btts_lean": "Red Flag",
+        "over25_lean": "Red Flag",
+        "under_control": "Positive",
+        "team_goals_15": "Red Flag",
+        "corners": "Mixed",
+        "cards": "Red Flag"
+      },
+      "home_profile": {
+        "power": 43,
+        "attack": 36,
+        "defence": 51,
+        "goal_heat": 27
+      },
+      "away_profile": {
+        "power": 49,
+        "attack": 42,
+        "defence": 54,
+        "goal_heat": 26
+      },
+      "timing_profile": {
+        "early_threat": 37,
+        "half_time_control": 44,
+        "late_surge": 26,
+        "late_fragility": 52
+      }
+    },
+    {
+      "team": "Suwon",
+      "team_slug": "suwon",
+      "competition": "South Korea K League",
+      "competition_key": "south_korea_k_league",
+      "season": "2024",
+      "country": "South Korea",
+      "matches_played": 38,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 38
+      },
+      "ratings": {
+        "og_power_rating": 45,
+        "attack_flow_rating": 63,
+        "defensive_lock_rating": 31,
+        "goal_heat_rating": 79,
+        "btts_pressure_rating": 69,
+        "over25_heat_rating": 83,
+        "control_rating": 28,
+        "first_strike_rating": 44,
+        "corner_pressure_rating": 67,
+        "card_heat_rating": 37,
+        "chaos_rating": 62,
+        "home_fortress_rating": 48,
+        "away_threat_rating": 54
+      },
+      "rating_bands": {
+        "og_power_rating": "Weak",
+        "attack_flow_rating": "Mixed",
+        "defensive_lock_rating": "Red Flag",
+        "goal_heat_rating": "Positive",
+        "btts_pressure_rating": "Mixed",
+        "over25_heat_rating": "Strong",
+        "control_rating": "Red Flag",
+        "first_strike_rating": "Weak",
+        "corner_pressure_rating": "Mixed",
+        "card_heat_rating": "Red Flag",
+        "chaos_rating": "Mixed",
+        "home_fortress_rating": "Weak",
+        "away_threat_rating": "Weak"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Mixed attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Red Flag defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Positive goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Mixed two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Strong 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Red Flag match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Weak early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Mixed territory and corner-generation profile.",
+        "card_heat_rating": "Red Flag discipline and card volatility profile.",
+        "chaos_rating": "Mixed volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Weak home-ground control profile.",
+        "away_threat_rating": "Weak travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Open Match Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 45%",
+        "profile": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Over25 Heat",
+          "Goal Heat",
+          "Btts Pressure"
+        ],
+        "main_caution": "Chaos Rating sits at 62%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Weak",
+        "btts_lean": "Mixed",
+        "over25_lean": "Positive",
+        "under_control": "Red Flag",
+        "team_goals_15": "Mixed",
+        "corners": "Mixed",
+        "cards": "Mixed"
+      },
+      "home_profile": {
+        "power": 48,
+        "attack": 63,
+        "defence": 31,
+        "goal_heat": 79
+      },
+      "away_profile": {
+        "power": 54,
+        "attack": 58,
+        "defence": 34,
+        "goal_heat": 81
+      },
+      "timing_profile": {
+        "early_threat": 54,
+        "half_time_control": 24,
+        "late_surge": 81,
+        "late_fragility": 50
+      }
+    },
+    {
+      "team": "Daejeon Citizen",
+      "team_slug": "daejeon_citizen",
+      "competition": "South Korea K League",
+      "competition_key": "south_korea_k_league",
+      "season": "2024",
+      "country": "South Korea",
+      "matches_played": 38,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 38
+      },
+      "ratings": {
+        "og_power_rating": 55,
+        "attack_flow_rating": 41,
+        "defensive_lock_rating": 52,
+        "goal_heat_rating": 29,
+        "btts_pressure_rating": 50,
+        "over25_heat_rating": 26,
+        "control_rating": 48,
+        "first_strike_rating": 77,
+        "corner_pressure_rating": 25,
+        "card_heat_rating": 62,
+        "chaos_rating": 48,
+        "home_fortress_rating": 46,
+        "away_threat_rating": 36
+      },
+      "rating_bands": {
+        "og_power_rating": "Mixed",
+        "attack_flow_rating": "Weak",
+        "defensive_lock_rating": "Weak",
+        "goal_heat_rating": "Red Flag",
+        "btts_pressure_rating": "Weak",
+        "over25_heat_rating": "Red Flag",
+        "control_rating": "Weak",
+        "first_strike_rating": "Positive",
+        "corner_pressure_rating": "Red Flag",
+        "card_heat_rating": "Mixed",
+        "chaos_rating": "Weak",
+        "home_fortress_rating": "Weak",
+        "away_threat_rating": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Mixed team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Weak attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Weak defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Red Flag goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Weak two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Red Flag 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Weak match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Positive early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Red Flag territory and corner-generation profile.",
+        "card_heat_rating": "Mixed discipline and card volatility profile.",
+        "chaos_rating": "Weak volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Weak home-ground control profile.",
+        "away_threat_rating": "Red Flag travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Mixed Team Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 55%",
+        "profile": "Mixed team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "First Strike",
+          "Card Heat",
+          "Og Power"
+        ],
+        "main_caution": "Card Heat sits at 62%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Mixed",
+        "btts_lean": "Weak",
+        "over25_lean": "Red Flag",
+        "under_control": "Weak",
+        "team_goals_15": "Weak",
+        "corners": "Red Flag",
+        "cards": "Red Flag"
+      },
+      "home_profile": {
+        "power": 46,
+        "attack": 41,
+        "defence": 52,
+        "goal_heat": 29
+      },
+      "away_profile": {
+        "power": 36,
+        "attack": 38,
+        "defence": 52,
+        "goal_heat": 28
+      },
+      "timing_profile": {
+        "early_threat": 59,
+        "half_time_control": 42,
+        "late_surge": 28,
+        "late_fragility": 55
+      }
+    }
+  ]
+}

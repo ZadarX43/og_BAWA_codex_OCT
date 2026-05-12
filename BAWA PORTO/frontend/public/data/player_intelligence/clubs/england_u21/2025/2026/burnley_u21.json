@@ -1,0 +1,1515 @@
+{
+  "club": "Burnley U21",
+  "club_slug": "burnley_u21",
+  "competition": "England U21",
+  "competition_key": "england_u21",
+  "season": "2025/2026",
+  "players": [
+    {
+      "player_id": "england_u21_burnley_u21_george_brierley_2025/2026",
+      "name": "George Brierley",
+      "surname": "Brierley",
+      "club": "Burnley U21",
+      "club_slug": "burnley_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Medium sample",
+        "minutes_played": 770
+      },
+      "ratings": {
+        "og_player_power": 61,
+        "goal_threat": 41,
+        "shot_threat": 43,
+        "xg_threat": 40,
+        "creative_spark": 54,
+        "xa_threat": 58,
+        "midfield_engine": 54,
+        "defensive_lock": 48,
+        "pressing_heat": 55,
+        "ball_progression": 54,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 47,
+        "discipline_risk": 67,
+        "booking_heat": 59
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 20,
+        "position_rank": 9,
+        "club_rank": 1,
+        "goal_threat_rank": 303,
+        "creative_spark_rank": 38,
+        "defensive_lock_rank": 278,
+        "pressing_heat_rank": 27,
+        "booking_heat_rank": 8
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Brierley",
+        "badge_score": 61,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_u21_burnley_u21_ellis_clark_2025/2026",
+      "name": "Ellis Clark",
+      "surname": "Clark",
+      "club": "Burnley U21",
+      "club_slug": "burnley_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Medium sample",
+        "minutes_played": 825
+      },
+      "ratings": {
+        "og_player_power": 60,
+        "goal_threat": 50,
+        "shot_threat": 53,
+        "xg_threat": 49,
+        "creative_spark": 59,
+        "xa_threat": 61,
+        "midfield_engine": 59,
+        "defensive_lock": 62,
+        "pressing_heat": 58,
+        "ball_progression": 54,
+        "aerial_dominance": 52,
+        "goalkeeper_shield": 47,
+        "discipline_risk": 49,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 23,
+        "position_rank": 12,
+        "club_rank": 2,
+        "goal_threat_rank": 117,
+        "creative_spark_rank": 9,
+        "defensive_lock_rank": 6,
+        "pressing_heat_rank": 7,
+        "booking_heat_rank": 74
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Clark",
+        "badge_score": 60,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_u21_burnley_u21_oliver_pimlott_2025/2026",
+      "name": "Oliver Pimlott",
+      "surname": "Pimlott",
+      "club": "Burnley U21",
+      "club_slug": "burnley_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Trusted sample",
+        "minutes_played": 982
+      },
+      "ratings": {
+        "og_player_power": 60,
+        "goal_threat": 49,
+        "shot_threat": 52,
+        "xg_threat": 49,
+        "creative_spark": 64,
+        "xa_threat": 62,
+        "midfield_engine": 59,
+        "defensive_lock": 65,
+        "pressing_heat": 58,
+        "ball_progression": 54,
+        "aerial_dominance": 52,
+        "goalkeeper_shield": 47,
+        "discipline_risk": 70,
+        "booking_heat": 62
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Positive",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Positive foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 23,
+        "position_rank": 12,
+        "club_rank": 2,
+        "goal_threat_rank": 141,
+        "creative_spark_rank": 2,
+        "defensive_lock_rank": 3,
+        "pressing_heat_rank": 7,
+        "booking_heat_rank": 3
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Pimlott",
+        "badge_score": 60,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_u21_burnley_u21_jaydon_banel_2025/2026",
+      "name": "Jaydon Banel",
+      "surname": "Banel",
+      "club": "Burnley U21",
+      "club_slug": "burnley_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 46
+      },
+      "ratings": {
+        "og_player_power": 56,
+        "goal_threat": 54,
+        "shot_threat": 61,
+        "xg_threat": 57,
+        "creative_spark": 50,
+        "xa_threat": 51,
+        "midfield_engine": 52,
+        "defensive_lock": 50,
+        "pressing_heat": 48,
+        "ball_progression": 50,
+        "aerial_dominance": 51,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 46,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Weak",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 41,
+        "position_rank": 7,
+        "club_rank": 4,
+        "goal_threat_rank": 79,
+        "creative_spark_rank": 82,
+        "defensive_lock_rank": 88,
+        "pressing_heat_rank": 178,
+        "booking_heat_rank": 195
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Banel",
+        "badge_score": 56,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_u21_burnley_u21_albert_blackie_2025/2026",
+      "name": "Albert Blackie",
+      "surname": "Blackie",
+      "club": "Burnley U21",
+      "club_slug": "burnley_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Medium sample",
+        "minutes_played": 661
+      },
+      "ratings": {
+        "og_player_power": 54,
+        "goal_threat": 44,
+        "shot_threat": 44,
+        "xg_threat": 42,
+        "creative_spark": 54,
+        "xa_threat": 53,
+        "midfield_engine": 53,
+        "defensive_lock": 54,
+        "pressing_heat": 52,
+        "ball_progression": 52,
+        "aerial_dominance": 51,
+        "goalkeeper_shield": 47,
+        "discipline_risk": 45,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 60,
+        "position_rank": 11,
+        "club_rank": 5,
+        "goal_threat_rank": 293,
+        "creative_spark_rank": 38,
+        "defensive_lock_rank": 44,
+        "pressing_heat_rank": 64,
+        "booking_heat_rank": 195
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Blackie",
+        "badge_score": 54,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_u21_burnley_u21_kian_mcmahon_brown_2025/2026",
+      "name": "Kian McMahon-Brown",
+      "surname": "McMahon-Brown",
+      "club": "Burnley U21",
+      "club_slug": "burnley_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Medium sample",
+        "minutes_played": 655
+      },
+      "ratings": {
+        "og_player_power": 53,
+        "goal_threat": 65,
+        "shot_threat": 66,
+        "xg_threat": 65,
+        "creative_spark": 47,
+        "xa_threat": 47,
+        "midfield_engine": 56,
+        "defensive_lock": 53,
+        "pressing_heat": 52,
+        "ball_progression": 53,
+        "aerial_dominance": 55,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 46,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 75,
+        "position_rank": 49,
+        "club_rank": 6,
+        "goal_threat_rank": 15,
+        "creative_spark_rank": 292,
+        "defensive_lock_rank": 50,
+        "pressing_heat_rank": 64,
+        "booking_heat_rank": 166
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "McMahon-Brown",
+        "badge_score": 53,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_u21_burnley_u21_charlie_veevers_2025/2026",
+      "name": "Charlie Veevers",
+      "surname": "Veevers",
+      "club": "Burnley U21",
+      "club_slug": "burnley_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 421
+      },
+      "ratings": {
+        "og_player_power": 48,
+        "goal_threat": 56,
+        "shot_threat": 52,
+        "xg_threat": 55,
+        "creative_spark": 53,
+        "xa_threat": 53,
+        "midfield_engine": 55,
+        "defensive_lock": 53,
+        "pressing_heat": 53,
+        "ball_progression": 51,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 57,
+        "booking_heat": 54
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Weak",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 122,
+        "position_rank": 79,
+        "club_rank": 7,
+        "goal_threat_rank": 67,
+        "creative_spark_rank": 59,
+        "defensive_lock_rank": 50,
+        "pressing_heat_rank": 45,
+        "booking_heat_rank": 36
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Veevers",
+        "badge_score": 48,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_u21_burnley_u21_manuel_benson_2025/2026",
+      "name": "Manuel Benson",
+      "surname": "Benson",
+      "club": "Burnley U21",
+      "club_slug": "burnley_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 154
+      },
+      "ratings": {
+        "og_player_power": 47,
+        "goal_threat": 54,
+        "shot_threat": 51,
+        "xg_threat": 58,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 48,
+        "ball_progression": 49,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 46,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 127,
+        "position_rank": 16,
+        "club_rank": 8,
+        "goal_threat_rank": 79,
+        "creative_spark_rank": 139,
+        "defensive_lock_rank": 114,
+        "pressing_heat_rank": 178,
+        "booking_heat_rank": 195
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Benson",
+        "badge_score": 47,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_u21_burnley_u21_enock_atta_agyei_2025/2026",
+      "name": "Enock Atta Agyei",
+      "surname": "Agyei",
+      "club": "Burnley U21",
+      "club_slug": "burnley_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 44,
+        "goal_threat": 50,
+        "shot_threat": 52,
+        "xg_threat": 50,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 50,
+        "ball_progression": 49,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 57,
+        "booking_heat": 55
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 148,
+        "position_rank": 22,
+        "club_rank": 9,
+        "goal_threat_rank": 117,
+        "creative_spark_rank": 139,
+        "defensive_lock_rank": 114,
+        "pressing_heat_rank": 90,
+        "booking_heat_rank": 23
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Agyei",
+        "badge_score": 44,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_u21_burnley_u21_jack_mcevilly_2025/2026",
+      "name": "Jack McEvilly",
+      "surname": "McEvilly",
+      "club": "Burnley U21",
+      "club_slug": "burnley_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 456
+      },
+      "ratings": {
+        "og_player_power": 44,
+        "goal_threat": 48,
+        "shot_threat": 46,
+        "xg_threat": 46,
+        "creative_spark": 53,
+        "xa_threat": 53,
+        "midfield_engine": 47,
+        "defensive_lock": 49,
+        "pressing_heat": 48,
+        "ball_progression": 49,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 45,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 148,
+        "position_rank": 95,
+        "club_rank": 9,
+        "goal_threat_rank": 165,
+        "creative_spark_rank": 59,
+        "defensive_lock_rank": 114,
+        "pressing_heat_rank": 178,
+        "booking_heat_rank": 293
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "McEvilly",
+        "badge_score": 44,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_u21_burnley_u21_oisin_cooney_2025/2026",
+      "name": "Oisin Cooney",
+      "surname": "Cooney",
+      "club": "Burnley U21",
+      "club_slug": "burnley_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 540
+      },
+      "ratings": {
+        "og_player_power": 43,
+        "goal_threat": 44,
+        "shot_threat": 45,
+        "xg_threat": 43,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 47,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 49,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 44,
+        "booking_heat": 46
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 159,
+        "position_rank": 13,
+        "club_rank": 11,
+        "goal_threat_rank": 293,
+        "creative_spark_rank": 139,
+        "defensive_lock_rank": 278,
+        "pressing_heat_rank": 178,
+        "booking_heat_rank": 298
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Cooney",
+        "badge_score": 43,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_u21_burnley_u21_hannes_delcroix_2025/2026",
+      "name": "Hannes Delcroix",
+      "surname": "Delcroix",
+      "club": "Burnley U21",
+      "club_slug": "burnley_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 226
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 47,
+        "shot_threat": 47,
+        "xg_threat": 45,
+        "creative_spark": 53,
+        "xa_threat": 53,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 48,
+        "ball_progression": 49,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 46,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 169,
+        "position_rank": 23,
+        "club_rank": 12,
+        "goal_threat_rank": 171,
+        "creative_spark_rank": 59,
+        "defensive_lock_rank": 114,
+        "pressing_heat_rank": 178,
+        "booking_heat_rank": 195
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Delcroix",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_u21_burnley_u21_joe_bevan_2025/2026",
+      "name": "Joe Bevan",
+      "surname": "Bevan",
+      "club": "Burnley U21",
+      "club_slug": "burnley_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 375
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 54,
+        "shot_threat": 51,
+        "xg_threat": 58,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 48,
+        "ball_progression": 49,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 52,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 169,
+        "position_rank": 111,
+        "club_rank": 12,
+        "goal_threat_rank": 79,
+        "creative_spark_rank": 139,
+        "defensive_lock_rank": 114,
+        "pressing_heat_rank": 178,
+        "booking_heat_rank": 105
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Bevan",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_u21_burnley_u21_joseph_wilcock_2025/2026",
+      "name": "Joseph Wilcock",
+      "surname": "Wilcock",
+      "club": "Burnley U21",
+      "club_slug": "burnley_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 76
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 46,
+        "shot_threat": 47,
+        "xg_threat": 45,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 48,
+        "ball_progression": 49,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 46,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 169,
+        "position_rank": 23,
+        "club_rank": 12,
+        "goal_threat_rank": 179,
+        "creative_spark_rank": 139,
+        "defensive_lock_rank": 114,
+        "pressing_heat_rank": 178,
+        "booking_heat_rank": 195
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Wilcock",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_u21_burnley_u21_julien_vetro_2025/2026",
+      "name": "Julien Vetro",
+      "surname": "Vetro",
+      "club": "Burnley U21",
+      "club_slug": "burnley_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 48,
+        "shot_threat": 47,
+        "xg_threat": 45,
+        "creative_spark": 54,
+        "xa_threat": 53,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 48,
+        "ball_progression": 49,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 46,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 169,
+        "position_rank": 111,
+        "club_rank": 12,
+        "goal_threat_rank": 165,
+        "creative_spark_rank": 38,
+        "defensive_lock_rank": 114,
+        "pressing_heat_rank": 178,
+        "booking_heat_rank": 195
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Vetro",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_u21_burnley_u21_luca_scanlon_2025/2026",
+      "name": "Luca Scanlon",
+      "surname": "Scanlon",
+      "club": "Burnley U21",
+      "club_slug": "burnley_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 46,
+        "shot_threat": 47,
+        "xg_threat": 45,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 48,
+        "ball_progression": 49,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 46,
+        "discipline_risk": 46,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 169,
+        "position_rank": 111,
+        "club_rank": 12,
+        "goal_threat_rank": 179,
+        "creative_spark_rank": 139,
+        "defensive_lock_rank": 114,
+        "pressing_heat_rank": 178,
+        "booking_heat_rank": 195
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Scanlon",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_u21_burnley_u21_roman_egan_riley_2025/2026",
+      "name": "Roman Egan-Riley",
+      "surname": "Egan-Riley",
+      "club": "Burnley U21",
+      "club_slug": "burnley_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 61
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 46,
+        "shot_threat": 47,
+        "xg_threat": 45,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 48,
+        "ball_progression": 49,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 46,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 169,
+        "position_rank": 111,
+        "club_rank": 12,
+        "goal_threat_rank": 179,
+        "creative_spark_rank": 139,
+        "defensive_lock_rank": 114,
+        "pressing_heat_rank": 178,
+        "booking_heat_rank": 195
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Egan-Riley",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_u21_burnley_u21_corey_king_2025/2026",
+      "name": "Corey King",
+      "surname": "King",
+      "club": "Burnley U21",
+      "club_slug": "burnley_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 29
+      },
+      "ratings": {
+        "og_player_power": 41,
+        "goal_threat": 46,
+        "shot_threat": 47,
+        "xg_threat": 45,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 48,
+        "ball_progression": 49,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 46,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 294,
+        "position_rank": 24,
+        "club_rank": 18,
+        "goal_threat_rank": 179,
+        "creative_spark_rank": 139,
+        "defensive_lock_rank": 114,
+        "pressing_heat_rank": 178,
+        "booking_heat_rank": 195
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "King",
+        "badge_score": 41,
+        "tier": "WEAK"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Brierley",
+      "Clark",
+      "Pimlott",
+      "Banel",
+      "Blackie"
+    ],
+    "goal_threat": [
+      "McMahon-Brown",
+      "Veevers",
+      "Banel",
+      "Benson",
+      "Bevan"
+    ],
+    "creative_spark": [
+      "Pimlott",
+      "Clark",
+      "Brierley",
+      "Blackie",
+      "Vetro"
+    ],
+    "discipline_risk": [
+      "Pimlott",
+      "Brierley",
+      "Veevers",
+      "Agyei",
+      "Bevan"
+    ]
+  }
+}

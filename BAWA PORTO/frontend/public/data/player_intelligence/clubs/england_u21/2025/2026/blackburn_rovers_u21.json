@@ -1,0 +1,777 @@
+{
+  "club": "Blackburn Rovers U21",
+  "club_slug": "blackburn_rovers_u21",
+  "competition": "England U21",
+  "competition_key": "england_u21",
+  "season": "2025/2026",
+  "players": [
+    {
+      "player_id": "england_u21_blackburn_rovers_u21_brandon_powell_2025/2026",
+      "name": "Brandon Powell",
+      "surname": "Powell",
+      "club": "Blackburn Rovers U21",
+      "club_slug": "blackburn_rovers_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Trusted sample",
+        "minutes_played": 900
+      },
+      "ratings": {
+        "og_player_power": 65,
+        "goal_threat": 69,
+        "shot_threat": 59,
+        "xg_threat": 67,
+        "creative_spark": 57,
+        "xa_threat": 56,
+        "midfield_engine": 62,
+        "defensive_lock": 60,
+        "pressing_heat": 59,
+        "ball_progression": 52,
+        "aerial_dominance": 62,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 61,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 8,
+        "position_rank": 3,
+        "club_rank": 1,
+        "goal_threat_rank": 5,
+        "creative_spark_rank": 18,
+        "defensive_lock_rank": 11,
+        "pressing_heat_rank": 3,
+        "booking_heat_rank": 52
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Powell",
+        "badge_score": 65,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_u21_blackburn_rovers_u21_aodhan_doherty_2025/2026",
+      "name": "Aodhan Doherty",
+      "surname": "Doherty",
+      "club": "Blackburn Rovers U21",
+      "club_slug": "blackburn_rovers_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 530
+      },
+      "ratings": {
+        "og_player_power": 57,
+        "goal_threat": 60,
+        "shot_threat": 56,
+        "xg_threat": 59,
+        "creative_spark": 50,
+        "xa_threat": 52,
+        "midfield_engine": 57,
+        "defensive_lock": 55,
+        "pressing_heat": 56,
+        "ball_progression": 51,
+        "aerial_dominance": 57,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 58,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 35,
+        "position_rank": 22,
+        "club_rank": 2,
+        "goal_threat_rank": 27,
+        "creative_spark_rank": 82,
+        "defensive_lock_rank": 28,
+        "pressing_heat_rank": 21,
+        "booking_heat_rank": 52
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Doherty",
+        "badge_score": 57,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_u21_blackburn_rovers_u21_harrison_wood_2025/2026",
+      "name": "Harrison Wood",
+      "surname": "Wood",
+      "club": "Blackburn Rovers U21",
+      "club_slug": "blackburn_rovers_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 198
+      },
+      "ratings": {
+        "og_player_power": 54,
+        "goal_threat": 54,
+        "shot_threat": 55,
+        "xg_threat": 55,
+        "creative_spark": 50,
+        "xa_threat": 52,
+        "midfield_engine": 55,
+        "defensive_lock": 54,
+        "pressing_heat": 55,
+        "ball_progression": 51,
+        "aerial_dominance": 55,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 58,
+        "booking_heat": 56
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 60,
+        "position_rank": 39,
+        "club_rank": 3,
+        "goal_threat_rank": 79,
+        "creative_spark_rank": 82,
+        "defensive_lock_rank": 44,
+        "pressing_heat_rank": 27,
+        "booking_heat_rank": 17
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Wood",
+        "badge_score": 54,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_u21_blackburn_rovers_u21_hayden_carter_2025/2026",
+      "name": "Hayden Carter",
+      "surname": "Carter",
+      "club": "Blackburn Rovers U21",
+      "club_slug": "blackburn_rovers_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 216
+      },
+      "ratings": {
+        "og_player_power": 54,
+        "goal_threat": 50,
+        "shot_threat": 53,
+        "xg_threat": 51,
+        "creative_spark": 50,
+        "xa_threat": 51,
+        "midfield_engine": 55,
+        "defensive_lock": 56,
+        "pressing_heat": 52,
+        "ball_progression": 51,
+        "aerial_dominance": 55,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 60,
+        "position_rank": 11,
+        "club_rank": 3,
+        "goal_threat_rank": 117,
+        "creative_spark_rank": 82,
+        "defensive_lock_rank": 25,
+        "pressing_heat_rank": 64,
+        "booking_heat_rank": 105
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Carter",
+        "badge_score": 54,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_u21_blackburn_rovers_u21_jack_joseph_barrett_2025/2026",
+      "name": "Jack Joseph Barrett",
+      "surname": "Barrett",
+      "club": "Blackburn Rovers U21",
+      "club_slug": "blackburn_rovers_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 116
+      },
+      "ratings": {
+        "og_player_power": 54,
+        "goal_threat": 46,
+        "shot_threat": 47,
+        "xg_threat": 45,
+        "creative_spark": 50,
+        "xa_threat": 51,
+        "midfield_engine": 55,
+        "defensive_lock": 53,
+        "pressing_heat": 51,
+        "ball_progression": 51,
+        "aerial_dominance": 52,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 48,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 60,
+        "position_rank": 39,
+        "club_rank": 3,
+        "goal_threat_rank": 179,
+        "creative_spark_rank": 82,
+        "defensive_lock_rank": 50,
+        "pressing_heat_rank": 74,
+        "booking_heat_rank": 166
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Barrett",
+        "badge_score": 54,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_u21_blackburn_rovers_u21_adam_forshaw_2025/2026",
+      "name": "Adam Forshaw",
+      "surname": "Forshaw",
+      "club": "Blackburn Rovers U21",
+      "club_slug": "blackburn_rovers_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 87
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 46,
+        "shot_threat": 47,
+        "xg_threat": 45,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 48,
+        "ball_progression": 49,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 46,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 169,
+        "position_rank": 111,
+        "club_rank": 6,
+        "goal_threat_rank": 179,
+        "creative_spark_rank": 139,
+        "defensive_lock_rank": 114,
+        "pressing_heat_rank": 178,
+        "booking_heat_rank": 195
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Forshaw",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_u21_blackburn_rovers_u21_finlay_wilkinson_2025/2026",
+      "name": "Finlay Wilkinson",
+      "surname": "Wilkinson",
+      "club": "Blackburn Rovers U21",
+      "club_slug": "blackburn_rovers_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 4
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 46,
+        "shot_threat": 47,
+        "xg_threat": 45,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 48,
+        "ball_progression": 49,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 46,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 169,
+        "position_rank": 111,
+        "club_rank": 6,
+        "goal_threat_rank": 179,
+        "creative_spark_rank": 139,
+        "defensive_lock_rank": 114,
+        "pressing_heat_rank": 178,
+        "booking_heat_rank": 195
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Wilkinson",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_u21_blackburn_rovers_u21_jake_garrett_2025/2026",
+      "name": "Jake Garrett",
+      "surname": "Garrett",
+      "club": "Blackburn Rovers U21",
+      "club_slug": "blackburn_rovers_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 316
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 56,
+        "shot_threat": 54,
+        "xg_threat": 56,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 50,
+        "ball_progression": 49,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Weak",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 169,
+        "position_rank": 23,
+        "club_rank": 6,
+        "goal_threat_rank": 67,
+        "creative_spark_rank": 139,
+        "defensive_lock_rank": 114,
+        "pressing_heat_rank": 90,
+        "booking_heat_rank": 105
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Garrett",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_u21_blackburn_rovers_u21_solomon_honor_2025/2026",
+      "name": "Solomon Honor",
+      "surname": "Honor",
+      "club": "Blackburn Rovers U21",
+      "club_slug": "blackburn_rovers_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 90
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 46,
+        "shot_threat": 47,
+        "xg_threat": 45,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 48,
+        "ball_progression": 49,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 53,
+        "discipline_risk": 46,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 169,
+        "position_rank": 15,
+        "club_rank": 6,
+        "goal_threat_rank": 179,
+        "creative_spark_rank": 139,
+        "defensive_lock_rank": 114,
+        "pressing_heat_rank": 178,
+        "booking_heat_rank": 195
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Honor",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Powell",
+      "Doherty",
+      "Wood",
+      "Carter",
+      "Barrett"
+    ],
+    "goal_threat": [
+      "Powell",
+      "Doherty",
+      "Garrett",
+      "Wood",
+      "Carter"
+    ],
+    "creative_spark": [
+      "Powell",
+      "Doherty",
+      "Wood",
+      "Carter",
+      "Barrett"
+    ],
+    "discipline_risk": [
+      "Powell",
+      "Doherty",
+      "Wood",
+      "Garrett",
+      "Carter"
+    ]
+  }
+}

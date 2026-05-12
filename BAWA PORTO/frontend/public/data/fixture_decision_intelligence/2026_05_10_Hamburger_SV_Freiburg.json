@@ -1,0 +1,254 @@
+{
+  "fixture_key": "2026_05_10_Hamburger_SV_Freiburg",
+  "fixture": "Hamburger SV vs Freiburg",
+  "primary_signal": "Freiburg Win",
+  "signal_state": "AVOID",
+  "agreement_score": 44,
+  "confidence_band": "LOW",
+  "supporting_layers": [
+    "AWAY_POWER_ADVANTAGE"
+  ],
+  "caution_layers": [
+    "HOME_RESISTANCE_HOLDS",
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "profile_tags": {
+    "home": [
+      "Mixed Team Profile"
+    ],
+    "away": [
+      "Mixed Team Profile"
+    ]
+  },
+  "profile_narrative": "Hamburger SV bring a mixed team profile into a matchup with Freiburg's mixed team profile. The structural lean comes from Freiburg's travelling profile against the home-side resistance.",
+  "team_faceoff_summary": [
+    {
+      "metric": "og_power_rating",
+      "label": "OG Power Rating",
+      "home_value": 37,
+      "away_value": 49,
+      "delta": 12,
+      "leader": "Freiburg"
+    },
+    {
+      "metric": "away_threat_rating",
+      "label": "Away Threat",
+      "home_value": 24,
+      "away_value": 38,
+      "delta": 14,
+      "leader": "Freiburg"
+    },
+    {
+      "metric": "home_fortress_rating",
+      "label": "Home Fortress",
+      "home_value": 40,
+      "away_value": 58,
+      "delta": 18,
+      "leader": "Freiburg"
+    },
+    {
+      "metric": "defensive_lock_rating",
+      "label": "Defensive Lock",
+      "home_value": 45,
+      "away_value": 55,
+      "delta": 10,
+      "leader": "Freiburg"
+    },
+    {
+      "metric": "first_strike_rating",
+      "label": "First Strike",
+      "home_value": 24,
+      "away_value": 44,
+      "delta": 20,
+      "leader": "Freiburg"
+    },
+    {
+      "metric": "control_rating",
+      "label": "Control Rating",
+      "home_value": 54,
+      "away_value": 56,
+      "delta": 2,
+      "leader": "Freiburg"
+    }
+  ],
+  "unit_battle_summary": [],
+  "key_player_drivers": [],
+  "key_mismatches": [],
+  "h2h_context": {
+    "available": false,
+    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
+    "sample_size": 0
+  },
+  "market_suitability": {
+    "ftr": {
+      "rating": 49,
+      "label": "Weak",
+      "read": "Stronger when one side owns a clear team-power edge."
+    },
+    "btts": {
+      "rating": 46,
+      "label": "Weak",
+      "read": "Driven by two-way access and reduced suppression."
+    },
+    "ou25": {
+      "rating": 38,
+      "label": "Red Flag",
+      "read": "Driven by combined goal environment and tempo."
+    },
+    "team_goals": {
+      "rating": 44,
+      "label": "Weak",
+      "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
+    },
+    "correct_score": {
+      "rating": 100,
+      "label": "Elite",
+      "read": "Better when the shape is structured and the likely scoring zone is narrow."
+    },
+    "corners": {
+      "rating": 27,
+      "label": "Red Flag",
+      "read": "Driven by territory and wide-channel pressure."
+    },
+    "cards": {
+      "rating": 56,
+      "label": "Mixed",
+      "read": "Driven by discipline heat, fouling, and volatility."
+    }
+  },
+  "market_intelligence": {
+    "ftr": {
+      "alignment_score": 46,
+      "state": "AVOID",
+      "model_lean": "AWAY",
+      "structural_support": [
+        "AWAY_POWER_ADVANTAGE"
+      ],
+      "cautions": [
+        "HOME_RESISTANCE_HOLDS",
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "FTR is too contradicted by home resistance holds to present as a clean public read.",
+      "rating": 49,
+      "band": "Weak"
+    },
+    "btts": {
+      "alignment_score": 42,
+      "state": "AVOID",
+      "model_lean": "NO",
+      "structural_support": [
+        "AWAY_POWER_ADVANTAGE"
+      ],
+      "cautions": [
+        "HOME_RESISTANCE_HOLDS",
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "BTTS is too contradicted by home resistance holds to present as a clean public read.",
+      "rating": 46,
+      "band": "Weak"
+    },
+    "ou25": {
+      "alignment_score": 36,
+      "state": "AVOID",
+      "model_lean": "UNDER25",
+      "structural_support": [
+        "AWAY_POWER_ADVANTAGE"
+      ],
+      "cautions": [
+        "HOME_RESISTANCE_HOLDS",
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Over 2.5 is too contradicted by home resistance holds to present as a clean public read.",
+      "rating": 38,
+      "band": "Red Flag"
+    },
+    "team_goals": {
+      "alignment_score": 45,
+      "state": "FRAGILE",
+      "model_lean": "Freiburg 1.5+",
+      "structural_support": [
+        "AWAY_POWER_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Team Goals has some structural support from away power advantage, but the overall layer fit remains fragile.",
+      "rating": 44,
+      "band": "Weak"
+    },
+    "correct_score": {
+      "alignment_score": 83,
+      "state": "SUPPORTED",
+      "model_lean": "OPEN",
+      "structural_support": [
+        "AWAY_POWER_ADVANTAGE"
+      ],
+      "cautions": [
+        "HOME_RESISTANCE_HOLDS",
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Correct Score is well supported by away power advantage, with caution still coming from home resistance holds.",
+      "rating": 100,
+      "band": "Elite"
+    },
+    "corners": {
+      "alignment_score": 28,
+      "state": "AVOID",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "AWAY_POWER_ADVANTAGE"
+      ],
+      "cautions": [
+        "HOME_RESISTANCE_HOLDS",
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Corners is too contradicted by home resistance holds to present as a clean public read.",
+      "rating": 27,
+      "band": "Red Flag"
+    },
+    "cards": {
+      "alignment_score": 50,
+      "state": "FRAGILE",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "AWAY_POWER_ADVANTAGE"
+      ],
+      "cautions": [
+        "HOME_RESISTANCE_HOLDS",
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Cards has some structural support from away power advantage, but the overall layer fit remains fragile.",
+      "rating": 56,
+      "band": "Mixed"
+    }
+  },
+  "watchlist": {
+    "active": false,
+    "summary": "No watchlist layer is active for this fixture.",
+    "trigger_signals": [],
+    "public_state": "No watchlist flag",
+    "mode": ""
+  },
+  "public_safe_summary": "Freiburg Win is too contradicted across the current structural layers for Hamburger SV vs Freiburg, so the clean read is caution rather than action.",
+  "internal_reason_tokens": [
+    "AWAY_POWER_ADVANTAGE",
+    "HOME_RESISTANCE_HOLDS",
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "summary": {
+    "support_count": 1,
+    "caution_count": 3,
+    "lineup_available": false,
+    "h2h_available": false
+  },
+  "preview": {
+    "headline": "Hamburger SV vs Freiburg: Freiburg Win avoid",
+    "short_summary": "Freiburg Win is too contradicted across the current structural layers for Hamburger SV vs Freiburg, so the clean read is caution rather than action. Primary support comes from away power advantage, while the main caution remains home resistance holds.",
+    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Cards. Weakest read: Corners.",
+    "caution_line": "Main caution: Home Resistance Holds.",
+    "telegram_summary": "Hamburger SV vs Freiburg — Freiburg Win (Avoid, 44% agreement). Support: Away Power Advantage. Caution: Home Resistance Holds.",
+    "premium_summary": "Freiburg Win is carrying a 44% agreement read across the published decision layers. Support is currently led by away power advantage, while caution is still coming from home resistance holds, lineup data missing."
+  }
+}

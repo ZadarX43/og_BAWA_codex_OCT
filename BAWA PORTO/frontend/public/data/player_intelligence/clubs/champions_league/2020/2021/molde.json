@@ -1,0 +1,1843 @@
+{
+  "club": "Molde",
+  "club_slug": "molde",
+  "competition": "Champions League",
+  "competition_key": "champions_league",
+  "season": "2020/2021",
+  "players": [
+    {
+      "player_id": "champions_league_molde_leke_james_2020/2021",
+      "name": "Leke James",
+      "surname": "James",
+      "club": "Molde",
+      "club_slug": "molde",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2020/2021",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 368
+      },
+      "ratings": {
+        "og_player_power": 60,
+        "goal_threat": 61,
+        "shot_threat": 60,
+        "xg_threat": 62,
+        "creative_spark": 50,
+        "xa_threat": 51,
+        "midfield_engine": 51,
+        "defensive_lock": 51,
+        "pressing_heat": 52,
+        "ball_progression": 53,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 56,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 60,
+        "position_rank": 34,
+        "club_rank": 1,
+        "goal_threat_rank": 129,
+        "creative_spark_rank": 566,
+        "defensive_lock_rank": 464,
+        "pressing_heat_rank": 351,
+        "booking_heat_rank": 232
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "James",
+        "badge_score": 60,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "champions_league_molde_magnus_wolff_eikrem_2020/2021",
+      "name": "Magnus Wolff Eikrem",
+      "surname": "Eikrem",
+      "club": "Molde",
+      "club_slug": "molde",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2020/2021",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 415
+      },
+      "ratings": {
+        "og_player_power": 55,
+        "goal_threat": 62,
+        "shot_threat": 61,
+        "xg_threat": 62,
+        "creative_spark": 58,
+        "xa_threat": 57,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 49,
+        "ball_progression": 54,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 46,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 179,
+        "position_rank": 53,
+        "club_rank": 2,
+        "goal_threat_rank": 89,
+        "creative_spark_rank": 58,
+        "defensive_lock_rank": 579,
+        "pressing_heat_rank": 1064,
+        "booking_heat_rank": 1583
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Eikrem",
+        "badge_score": 55,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "champions_league_molde_marcus_pedersen_2020/2021",
+      "name": "Marcus Pedersen",
+      "surname": "Pedersen",
+      "club": "Molde",
+      "club_slug": "molde",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2020/2021",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 196
+      },
+      "ratings": {
+        "og_player_power": 54,
+        "goal_threat": 59,
+        "shot_threat": 54,
+        "xg_threat": 59,
+        "creative_spark": 53,
+        "xa_threat": 54,
+        "midfield_engine": 54,
+        "defensive_lock": 54,
+        "pressing_heat": 52,
+        "ball_progression": 51,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 55,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Weak",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 234,
+        "position_rank": 66,
+        "club_rank": 3,
+        "goal_threat_rank": 200,
+        "creative_spark_rank": 282,
+        "defensive_lock_rank": 170,
+        "pressing_heat_rank": 351,
+        "booking_heat_rank": 232
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Pedersen",
+        "badge_score": 54,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_molde_martin_ellingsen_2020/2021",
+      "name": "Martin Ellingsen",
+      "surname": "Ellingsen",
+      "club": "Molde",
+      "club_slug": "molde",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2020/2021",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 450
+      },
+      "ratings": {
+        "og_player_power": 52,
+        "goal_threat": 61,
+        "shot_threat": 60,
+        "xg_threat": 62,
+        "creative_spark": 51,
+        "xa_threat": 50,
+        "midfield_engine": 53,
+        "defensive_lock": 55,
+        "pressing_heat": 49,
+        "ball_progression": 48,
+        "aerial_dominance": 57,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 53,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 298,
+        "position_rank": 96,
+        "club_rank": 4,
+        "goal_threat_rank": 129,
+        "creative_spark_rank": 468,
+        "defensive_lock_rank": 104,
+        "pressing_heat_rank": 1064,
+        "booking_heat_rank": 425
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Ellingsen",
+        "badge_score": 52,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_molde_stian_gregersen_2020/2021",
+      "name": "Stian Gregersen",
+      "surname": "Gregersen",
+      "club": "Molde",
+      "club_slug": "molde",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2020/2021",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 270
+      },
+      "ratings": {
+        "og_player_power": 52,
+        "goal_threat": 46,
+        "shot_threat": 46,
+        "xg_threat": 46,
+        "creative_spark": 51,
+        "xa_threat": 53,
+        "midfield_engine": 54,
+        "defensive_lock": 55,
+        "pressing_heat": 53,
+        "ball_progression": 50,
+        "aerial_dominance": 55,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 56,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 298,
+        "position_rank": 88,
+        "club_rank": 4,
+        "goal_threat_rank": 1016,
+        "creative_spark_rank": 468,
+        "defensive_lock_rank": 104,
+        "pressing_heat_rank": 214,
+        "booking_heat_rank": 232
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Gregersen",
+        "badge_score": 52,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_molde_fredrik_aursnes_2020/2021",
+      "name": "Fredrik Aursnes",
+      "surname": "Aursnes",
+      "club": "Molde",
+      "club_slug": "molde",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2020/2021",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 450
+      },
+      "ratings": {
+        "og_player_power": 51,
+        "goal_threat": 52,
+        "shot_threat": 51,
+        "xg_threat": 51,
+        "creative_spark": 58,
+        "xa_threat": 57,
+        "midfield_engine": 55,
+        "defensive_lock": 53,
+        "pressing_heat": 52,
+        "ball_progression": 53,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 58,
+        "booking_heat": 54
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 341,
+        "position_rank": 111,
+        "club_rank": 6,
+        "goal_threat_rank": 430,
+        "creative_spark_rank": 58,
+        "defensive_lock_rank": 239,
+        "pressing_heat_rank": 351,
+        "booking_heat_rank": 123
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Aursnes",
+        "badge_score": 51,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_molde_alexandro_craninx_2020/2021",
+      "name": "Alexandro Craninx",
+      "surname": "Craninx",
+      "club": "Molde",
+      "club_slug": "molde",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2020/2021",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 377,
+        "position_rank": 30,
+        "club_rank": 7,
+        "goal_threat_rank": 640,
+        "creative_spark_rank": 566,
+        "defensive_lock_rank": 579,
+        "pressing_heat_rank": 611,
+        "booking_heat_rank": 425
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Craninx",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_molde_eirik_andersen_2020/2021",
+      "name": "Eirik Andersen",
+      "surname": "Andersen",
+      "club": "Molde",
+      "club_slug": "molde",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2020/2021",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 377,
+        "position_rank": 126,
+        "club_rank": 7,
+        "goal_threat_rank": 640,
+        "creative_spark_rank": 566,
+        "defensive_lock_rank": 579,
+        "pressing_heat_rank": 611,
+        "booking_heat_rank": 425
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Andersen",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_molde_eirik_hestad_2020/2021",
+      "name": "Eirik Hestad",
+      "surname": "Hestad",
+      "club": "Molde",
+      "club_slug": "molde",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2020/2021",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 444
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 62,
+        "shot_threat": 60,
+        "xg_threat": 62,
+        "creative_spark": 55,
+        "xa_threat": 56,
+        "midfield_engine": 54,
+        "defensive_lock": 51,
+        "pressing_heat": 52,
+        "ball_progression": 55,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 58,
+        "booking_heat": 54
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 377,
+        "position_rank": 126,
+        "club_rank": 7,
+        "goal_threat_rank": 89,
+        "creative_spark_rank": 160,
+        "defensive_lock_rank": 464,
+        "pressing_heat_rank": 351,
+        "booking_heat_rank": 123
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Hestad",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_molde_john_kitolano_2020/2021",
+      "name": "John Kitolano",
+      "surname": "Kitolano",
+      "club": "Molde",
+      "club_slug": "molde",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2020/2021",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 377,
+        "position_rank": 116,
+        "club_rank": 7,
+        "goal_threat_rank": 640,
+        "creative_spark_rank": 566,
+        "defensive_lock_rank": 579,
+        "pressing_heat_rank": 611,
+        "booking_heat_rank": 425
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Kitolano",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_molde_kristoffer_haugen_2020/2021",
+      "name": "Kristoffer Haugen",
+      "surname": "Haugen",
+      "club": "Molde",
+      "club_slug": "molde",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2020/2021",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 450
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 46,
+        "shot_threat": 45,
+        "xg_threat": 45,
+        "creative_spark": 55,
+        "xa_threat": 57,
+        "midfield_engine": 55,
+        "defensive_lock": 55,
+        "pressing_heat": 53,
+        "ball_progression": 53,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 377,
+        "position_rank": 116,
+        "club_rank": 7,
+        "goal_threat_rank": 1016,
+        "creative_spark_rank": 160,
+        "defensive_lock_rank": 104,
+        "pressing_heat_rank": 214,
+        "booking_heat_rank": 425
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Haugen",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_molde_martin_bj_rnbak_2020/2021",
+      "name": "Martin Bj\u00f8rnbak",
+      "surname": "Bj\u00f8rnbak",
+      "club": "Molde",
+      "club_slug": "molde",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2020/2021",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 377,
+        "position_rank": 116,
+        "club_rank": 7,
+        "goal_threat_rank": 640,
+        "creative_spark_rank": 566,
+        "defensive_lock_rank": 579,
+        "pressing_heat_rank": 611,
+        "booking_heat_rank": 425
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Bj\u00f8rnbak",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_molde_mattias_mostr_m_2020/2021",
+      "name": "Mattias Mostr\u00f8m",
+      "surname": "Mostr\u00f8m",
+      "club": "Molde",
+      "club_slug": "molde",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2020/2021",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 50,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 377,
+        "position_rank": 108,
+        "club_rank": 7,
+        "goal_threat_rank": 640,
+        "creative_spark_rank": 566,
+        "defensive_lock_rank": 579,
+        "pressing_heat_rank": 611,
+        "booking_heat_rank": 425
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Mostr\u00f8m",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_molde_ohi_omoijuanfo_2020/2021",
+      "name": "Ohi Omoijuanfo",
+      "surname": "Omoijuanfo",
+      "club": "Molde",
+      "club_slug": "molde",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2020/2021",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 151
+      },
+      "ratings": {
+        "og_player_power": 49,
+        "goal_threat": 60,
+        "shot_threat": 55,
+        "xg_threat": 59,
+        "creative_spark": 49,
+        "xa_threat": 49,
+        "midfield_engine": 52,
+        "defensive_lock": 50,
+        "pressing_heat": 47,
+        "ball_progression": 50,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 45,
+        "booking_heat": 46
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 770,
+        "position_rank": 156,
+        "club_rank": 14,
+        "goal_threat_rank": 169,
+        "creative_spark_rank": 1020,
+        "defensive_lock_rank": 579,
+        "pressing_heat_rank": 1711,
+        "booking_heat_rank": 1687
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Omoijuanfo",
+        "badge_score": 49,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_molde_andreas_linde_2020/2021",
+      "name": "Andreas Linde",
+      "surname": "Linde",
+      "club": "Molde",
+      "club_slug": "molde",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2020/2021",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 450
+      },
+      "ratings": {
+        "og_player_power": 47,
+        "goal_threat": 46,
+        "shot_threat": 45,
+        "xg_threat": 45,
+        "creative_spark": 48,
+        "xa_threat": 49,
+        "midfield_engine": 49,
+        "defensive_lock": 49,
+        "pressing_heat": 46,
+        "ball_progression": 48,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 58,
+        "discipline_risk": 44,
+        "booking_heat": 46
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Mixed",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Mixed shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 841,
+        "position_rank": 156,
+        "club_rank": 15,
+        "goal_threat_rank": 1016,
+        "creative_spark_rank": 1163,
+        "defensive_lock_rank": 1050,
+        "pressing_heat_rank": 1795,
+        "booking_heat_rank": 1687
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Linde",
+        "badge_score": 47,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_molde_henry_wingo_2020/2021",
+      "name": "Henry Wingo",
+      "surname": "Wingo",
+      "club": "Molde",
+      "club_slug": "molde",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2020/2021",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 254
+      },
+      "ratings": {
+        "og_player_power": 46,
+        "goal_threat": 52,
+        "shot_threat": 53,
+        "xg_threat": 54,
+        "creative_spark": 51,
+        "xa_threat": 50,
+        "midfield_engine": 52,
+        "defensive_lock": 52,
+        "pressing_heat": 49,
+        "ball_progression": 52,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 46,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 881,
+        "position_rank": 268,
+        "club_rank": 16,
+        "goal_threat_rank": 430,
+        "creative_spark_rank": 468,
+        "defensive_lock_rank": 345,
+        "pressing_heat_rank": 1064,
+        "booking_heat_rank": 1583
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Wingo",
+        "badge_score": 46,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_molde_erling_knudtzon_2020/2021",
+      "name": "Erling Knudtzon",
+      "surname": "Knudtzon",
+      "club": "Molde",
+      "club_slug": "molde",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2020/2021",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 257
+      },
+      "ratings": {
+        "og_player_power": 45,
+        "goal_threat": 55,
+        "shot_threat": 50,
+        "xg_threat": 58,
+        "creative_spark": 51,
+        "xa_threat": 52,
+        "midfield_engine": 52,
+        "defensive_lock": 53,
+        "pressing_heat": 55,
+        "ball_progression": 53,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 58,
+        "booking_heat": 54
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Weak",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 921,
+        "position_rank": 191,
+        "club_rank": 17,
+        "goal_threat_rank": 254,
+        "creative_spark_rank": 468,
+        "defensive_lock_rank": 239,
+        "pressing_heat_rank": 43,
+        "booking_heat_rank": 123
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Knudtzon",
+        "badge_score": 45,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_molde_etzaz_hussain_2020/2021",
+      "name": "Etzaz Hussain",
+      "surname": "Hussain",
+      "club": "Molde",
+      "club_slug": "molde",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2020/2021",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 473
+      },
+      "ratings": {
+        "og_player_power": 45,
+        "goal_threat": 55,
+        "shot_threat": 49,
+        "xg_threat": 60,
+        "creative_spark": 52,
+        "xa_threat": 55,
+        "midfield_engine": 54,
+        "defensive_lock": 53,
+        "pressing_heat": 54,
+        "ball_progression": 53,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 60,
+        "booking_heat": 55
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Weak",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 921,
+        "position_rank": 289,
+        "club_rank": 17,
+        "goal_threat_rank": 254,
+        "creative_spark_rank": 367,
+        "defensive_lock_rank": 239,
+        "pressing_heat_rank": 96,
+        "booking_heat_rank": 70
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Hussain",
+        "badge_score": 45,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_molde_mathis_gazoa_kippersund_bolly_2020/2021",
+      "name": "Mathis Gazoa Kippersund Bolly",
+      "surname": "Bolly",
+      "club": "Molde",
+      "club_slug": "molde",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2020/2021",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": -8
+      },
+      "ratings": {
+        "og_player_power": 45,
+        "goal_threat": 54,
+        "shot_threat": 55,
+        "xg_threat": 57,
+        "creative_spark": 51,
+        "xa_threat": 52,
+        "midfield_engine": 53,
+        "defensive_lock": 49,
+        "pressing_heat": 47,
+        "ball_progression": 50,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 52,
+        "discipline_risk": 45,
+        "booking_heat": 46
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 921,
+        "position_rank": 191,
+        "club_rank": 17,
+        "goal_threat_rank": 307,
+        "creative_spark_rank": 468,
+        "defensive_lock_rank": 1050,
+        "pressing_heat_rank": 1711,
+        "booking_heat_rank": 1687
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Bolly",
+        "badge_score": 45,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_molde_ola_brynhildsen_2020/2021",
+      "name": "Ola Brynhildsen",
+      "surname": "Brynhildsen",
+      "club": "Molde",
+      "club_slug": "molde",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2020/2021",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 165
+      },
+      "ratings": {
+        "og_player_power": 44,
+        "goal_threat": 52,
+        "shot_threat": 53,
+        "xg_threat": 54,
+        "creative_spark": 52,
+        "xa_threat": 54,
+        "midfield_engine": 53,
+        "defensive_lock": 52,
+        "pressing_heat": 53,
+        "ball_progression": 53,
+        "aerial_dominance": 52,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 964,
+        "position_rank": 306,
+        "club_rank": 20,
+        "goal_threat_rank": 430,
+        "creative_spark_rank": 367,
+        "defensive_lock_rank": 345,
+        "pressing_heat_rank": 214,
+        "booking_heat_rank": 425
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Brynhildsen",
+        "badge_score": 44,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "champions_league_molde_tobias_christensen_2020/2021",
+      "name": "Tobias Christensen",
+      "surname": "Christensen",
+      "club": "Molde",
+      "club_slug": "molde",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2020/2021",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": -15
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 46,
+        "shot_threat": 46,
+        "xg_threat": 46,
+        "creative_spark": 47,
+        "xa_threat": 47,
+        "midfield_engine": 46,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 47,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 52,
+        "discipline_risk": 48,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1263,
+        "position_rank": 280,
+        "club_rank": 21,
+        "goal_threat_rank": 1016,
+        "creative_spark_rank": 1238,
+        "defensive_lock_rank": 1159,
+        "pressing_heat_rank": 1117,
+        "booking_heat_rank": 987
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Christensen",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "champions_league_molde_sheriff_sinyan_2020/2021",
+      "name": "Sheriff Sinyan",
+      "surname": "Sinyan",
+      "club": "Molde",
+      "club_slug": "molde",
+      "competition": "Champions League",
+      "competition_key": "champions_league",
+      "season": "2020/2021",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 180
+      },
+      "ratings": {
+        "og_player_power": 35,
+        "goal_threat": 46,
+        "shot_threat": 46,
+        "xg_threat": 46,
+        "creative_spark": 47,
+        "xa_threat": 47,
+        "midfield_engine": 46,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 47,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1555,
+        "position_rank": 433,
+        "club_rank": 22,
+        "goal_threat_rank": 1016,
+        "creative_spark_rank": 1238,
+        "defensive_lock_rank": 1159,
+        "pressing_heat_rank": 1117,
+        "booking_heat_rank": 987
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Sinyan",
+        "badge_score": 35,
+        "tier": "RED_FLAG"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "James",
+      "Eikrem",
+      "Pedersen",
+      "Ellingsen",
+      "Gregersen"
+    ],
+    "goal_threat": [
+      "Eikrem",
+      "Hestad",
+      "James",
+      "Ellingsen",
+      "Omoijuanfo"
+    ],
+    "creative_spark": [
+      "Eikrem",
+      "Aursnes",
+      "Hestad",
+      "Haugen",
+      "Pedersen"
+    ],
+    "discipline_risk": [
+      "Hussain",
+      "Aursnes",
+      "Hestad",
+      "Knudtzon",
+      "James"
+    ]
+  }
+}

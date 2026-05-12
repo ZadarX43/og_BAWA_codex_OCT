@@ -1,0 +1,1597 @@
+{
+  "club": "Walsall",
+  "club_slug": "walsall",
+  "competition": "England EFL League 2",
+  "competition_key": "england_efl_league_2",
+  "season": "2025/2026",
+  "players": [
+    {
+      "player_id": "england_efl_league_2_walsall_aaron_presley_2025/2026",
+      "name": "Aaron Presley",
+      "surname": "Presley",
+      "club": "Walsall",
+      "club_slug": "walsall",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2297
+      },
+      "ratings": {
+        "og_player_power": 76,
+        "goal_threat": 81,
+        "shot_threat": 76,
+        "xg_threat": 81,
+        "creative_spark": 53,
+        "xa_threat": 54,
+        "midfield_engine": 32,
+        "defensive_lock": 44,
+        "pressing_heat": 42,
+        "ball_progression": 48,
+        "aerial_dominance": 63,
+        "goalkeeper_shield": 46,
+        "discipline_risk": 41,
+        "booking_heat": 33
+      },
+      "rating_bands": {
+        "og_player_power": "Positive",
+        "goal_threat": "Strong",
+        "shot_threat": "Positive",
+        "xg_threat": "Strong",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Red Flag",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_player_power": "Positive headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Strong scoring profile with xG and shot support.",
+        "shot_threat": "Positive shooting volume and on-target pressure.",
+        "xg_threat": "Strong chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Red Flag central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Red Flag booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 19,
+        "position_rank": 19,
+        "club_rank": 1,
+        "goal_threat_rank": 52,
+        "creative_spark_rank": 206,
+        "defensive_lock_rank": 410,
+        "pressing_heat_rank": 487,
+        "booking_heat_rank": 474
+      },
+      "tags": [
+        "Forward Profile"
+      ],
+      "ui": {
+        "pitch_label": "Presley",
+        "badge_score": 76,
+        "tier": "POSITIVE"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_walsall_aden_flint_2025/2026",
+      "name": "Aden Flint",
+      "surname": "Flint",
+      "club": "Walsall",
+      "club_slug": "walsall",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 3763
+      },
+      "ratings": {
+        "og_player_power": 68,
+        "goal_threat": 38,
+        "shot_threat": 34,
+        "xg_threat": 34,
+        "creative_spark": 40,
+        "xa_threat": 38,
+        "midfield_engine": 47,
+        "defensive_lock": 71,
+        "pressing_heat": 45,
+        "ball_progression": 37,
+        "aerial_dominance": 68,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 56,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Red Flag",
+        "shot_threat": "Red Flag",
+        "xg_threat": "Red Flag",
+        "creative_spark": "Weak",
+        "xa_threat": "Red Flag",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Positive",
+        "pressing_heat": "Weak",
+        "ball_progression": "Red Flag",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Red Flag scoring profile with xG and shot support.",
+        "shot_threat": "Red Flag shooting volume and on-target pressure.",
+        "xg_threat": "Red Flag chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Red Flag assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Positive defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Red Flag carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 63,
+        "position_rank": 16,
+        "club_rank": 2,
+        "goal_threat_rank": 436,
+        "creative_spark_rank": 465,
+        "defensive_lock_rank": 28,
+        "pressing_heat_rank": 437,
+        "booking_heat_rank": 278
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Flint",
+        "badge_score": 68,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_walsall_charlie_lakin_2025/2026",
+      "name": "Charlie Lakin",
+      "surname": "Lakin",
+      "club": "Walsall",
+      "club_slug": "walsall",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2773
+      },
+      "ratings": {
+        "og_player_power": 60,
+        "goal_threat": 53,
+        "shot_threat": 57,
+        "xg_threat": 53,
+        "creative_spark": 63,
+        "xa_threat": 61,
+        "midfield_engine": 53,
+        "defensive_lock": 42,
+        "pressing_heat": 58,
+        "ball_progression": 57,
+        "aerial_dominance": 37,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 49,
+        "booking_heat": 38
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Weak",
+        "shot_threat": "Mixed",
+        "xg_threat": "Weak",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Red Flag",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Red Flag aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Red Flag booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 156,
+        "position_rank": 45,
+        "club_rank": 3,
+        "goal_threat_rank": 220,
+        "creative_spark_rank": 90,
+        "defensive_lock_rank": 446,
+        "pressing_heat_rank": 62,
+        "booking_heat_rank": 440
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Lakin",
+        "badge_score": 60,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_walsall_evan_weir_2025/2026",
+      "name": "Evan Weir",
+      "surname": "Weir",
+      "club": "Walsall",
+      "club_slug": "walsall",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2627
+      },
+      "ratings": {
+        "og_player_power": 60,
+        "goal_threat": 58,
+        "shot_threat": 48,
+        "xg_threat": 55,
+        "creative_spark": 70,
+        "xa_threat": 68,
+        "midfield_engine": 51,
+        "defensive_lock": 62,
+        "pressing_heat": 46,
+        "ball_progression": 54,
+        "aerial_dominance": 56,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 33,
+        "booking_heat": 27
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Weak",
+        "xg_threat": "Mixed",
+        "creative_spark": "Positive",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Red Flag",
+        "booking_heat": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Positive creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Red Flag foul and discipline exposure profile.",
+        "booking_heat": "Red Flag booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 156,
+        "position_rank": 46,
+        "club_rank": 3,
+        "goal_threat_rank": 183,
+        "creative_spark_rank": 34,
+        "defensive_lock_rank": 81,
+        "pressing_heat_rank": 414,
+        "booking_heat_rank": 504
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Weir",
+        "badge_score": 60,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_walsall_priestley_farquharson_2025/2026",
+      "name": "Priestley Farquharson",
+      "surname": "Farquharson",
+      "club": "Walsall",
+      "club_slug": "walsall",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 1803
+      },
+      "ratings": {
+        "og_player_power": 59,
+        "goal_threat": 72,
+        "shot_threat": 61,
+        "xg_threat": 72,
+        "creative_spark": 46,
+        "xa_threat": 45,
+        "midfield_engine": 52,
+        "defensive_lock": 76,
+        "pressing_heat": 56,
+        "ball_progression": 47,
+        "aerial_dominance": 67,
+        "goalkeeper_shield": 47,
+        "discipline_risk": 58,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Positive",
+        "shot_threat": "Mixed",
+        "xg_threat": "Positive",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Positive",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Positive scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Positive chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Positive defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 172,
+        "position_rank": 52,
+        "club_rank": 5,
+        "goal_threat_rank": 84,
+        "creative_spark_rank": 338,
+        "defensive_lock_rank": 4,
+        "pressing_heat_rank": 90,
+        "booking_heat_rank": 202
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Farquharson",
+        "badge_score": 59,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_walsall_jamie_jellis_2025/2026",
+      "name": "Jamie Jellis",
+      "surname": "Jellis",
+      "club": "Walsall",
+      "club_slug": "walsall",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2032
+      },
+      "ratings": {
+        "og_player_power": 58,
+        "goal_threat": 52,
+        "shot_threat": 59,
+        "xg_threat": 56,
+        "creative_spark": 61,
+        "xa_threat": 62,
+        "midfield_engine": 55,
+        "defensive_lock": 45,
+        "pressing_heat": 57,
+        "ball_progression": 57,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 53,
+        "booking_heat": 46
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Weak",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 187,
+        "position_rank": 61,
+        "club_rank": 6,
+        "goal_threat_rank": 232,
+        "creative_spark_rank": 100,
+        "defensive_lock_rank": 376,
+        "pressing_heat_rank": 73,
+        "booking_heat_rank": 335
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Jellis",
+        "badge_score": 58,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_walsall_jamille_matt_2025/2026",
+      "name": "Jamille Matt",
+      "surname": "Matt",
+      "club": "Walsall",
+      "club_slug": "walsall",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Trusted sample",
+        "minutes_played": 959
+      },
+      "ratings": {
+        "og_player_power": 56,
+        "goal_threat": 67,
+        "shot_threat": 65,
+        "xg_threat": 67,
+        "creative_spark": 54,
+        "xa_threat": 54,
+        "midfield_engine": 40,
+        "defensive_lock": 50,
+        "pressing_heat": 51,
+        "ball_progression": 48,
+        "aerial_dominance": 58,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 54,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 210,
+        "position_rank": 61,
+        "club_rank": 7,
+        "goal_threat_rank": 115,
+        "creative_spark_rank": 186,
+        "defensive_lock_rank": 221,
+        "pressing_heat_rank": 227,
+        "booking_heat_rank": 215
+      },
+      "tags": [
+        "Forward Profile"
+      ],
+      "ui": {
+        "pitch_label": "Matt",
+        "badge_score": 56,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_walsall_mason_hancock_2025/2026",
+      "name": "Mason Hancock",
+      "surname": "Hancock",
+      "club": "Walsall",
+      "club_slug": "walsall",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Trusted sample",
+        "minutes_played": 1382
+      },
+      "ratings": {
+        "og_player_power": 55,
+        "goal_threat": 64,
+        "shot_threat": 59,
+        "xg_threat": 65,
+        "creative_spark": 63,
+        "xa_threat": 63,
+        "midfield_engine": 57,
+        "defensive_lock": 55,
+        "pressing_heat": 55,
+        "ball_progression": 60,
+        "aerial_dominance": 55,
+        "goalkeeper_shield": 45,
+        "discipline_risk": 58,
+        "booking_heat": 57
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 228,
+        "position_rank": 66,
+        "club_rank": 8,
+        "goal_threat_rank": 127,
+        "creative_spark_rank": 90,
+        "defensive_lock_rank": 151,
+        "pressing_heat_rank": 109,
+        "booking_heat_rank": 142
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Hancock",
+        "badge_score": 55,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_walsall_albert_danquah_adomah_2025/2026",
+      "name": "Albert Danquah Adomah",
+      "surname": "Adomah",
+      "club": "Walsall",
+      "club_slug": "walsall",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Trusted sample",
+        "minutes_played": 1254
+      },
+      "ratings": {
+        "og_player_power": 54,
+        "goal_threat": 84,
+        "shot_threat": 80,
+        "xg_threat": 85,
+        "creative_spark": 70,
+        "xa_threat": 67,
+        "midfield_engine": 50,
+        "defensive_lock": 41,
+        "pressing_heat": 54,
+        "ball_progression": 67,
+        "aerial_dominance": 45,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 41,
+        "booking_heat": 37
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Strong",
+        "shot_threat": "Strong",
+        "xg_threat": "Strong",
+        "creative_spark": "Positive",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Strong scoring profile with xG and shot support.",
+        "shot_threat": "Strong shooting volume and on-target pressure.",
+        "xg_threat": "Strong chance-quality profile.",
+        "creative_spark": "Positive creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Red Flag booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 241,
+        "position_rank": 89,
+        "club_rank": 9,
+        "goal_threat_rank": 37,
+        "creative_spark_rank": 34,
+        "defensive_lock_rank": 460,
+        "pressing_heat_rank": 129,
+        "booking_heat_rank": 447
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Adomah",
+        "badge_score": 54,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_walsall_connor_ellis_barrett_2025/2026",
+      "name": "Connor Ellis Barrett",
+      "surname": "Barrett",
+      "club": "Walsall",
+      "club_slug": "walsall",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2580
+      },
+      "ratings": {
+        "og_player_power": 54,
+        "goal_threat": 52,
+        "shot_threat": 39,
+        "xg_threat": 46,
+        "creative_spark": 57,
+        "xa_threat": 52,
+        "midfield_engine": 49,
+        "defensive_lock": 51,
+        "pressing_heat": 59,
+        "ball_progression": 57,
+        "aerial_dominance": 51,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 67,
+        "booking_heat": 61
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Red Flag",
+        "xg_threat": "Weak",
+        "creative_spark": "Mixed",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Red Flag shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 241,
+        "position_rank": 70,
+        "club_rank": 9,
+        "goal_threat_rank": 232,
+        "creative_spark_rank": 148,
+        "defensive_lock_rank": 203,
+        "pressing_heat_rank": 45,
+        "booking_heat_rank": 89
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Barrett",
+        "badge_score": 54,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_walsall_alexander_antony_pattison_2025/2026",
+      "name": "Alexander Antony Pattison",
+      "surname": "Pattison",
+      "club": "Walsall",
+      "club_slug": "walsall",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Trusted sample",
+        "minutes_played": 942
+      },
+      "ratings": {
+        "og_player_power": 53,
+        "goal_threat": 63,
+        "shot_threat": 64,
+        "xg_threat": 63,
+        "creative_spark": 62,
+        "xa_threat": 61,
+        "midfield_engine": 53,
+        "defensive_lock": 55,
+        "pressing_heat": 57,
+        "ball_progression": 53,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 61,
+        "booking_heat": 61
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 262,
+        "position_rank": 98,
+        "club_rank": 11,
+        "goal_threat_rank": 131,
+        "creative_spark_rank": 94,
+        "defensive_lock_rank": 151,
+        "pressing_heat_rank": 73,
+        "booking_heat_rank": 89
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Pattison",
+        "badge_score": 53,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_walsall_brandon_comley_2025/2026",
+      "name": "Brandon Comley",
+      "surname": "Comley",
+      "club": "Walsall",
+      "club_slug": "walsall",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2307
+      },
+      "ratings": {
+        "og_player_power": 53,
+        "goal_threat": 23,
+        "shot_threat": 39,
+        "xg_threat": 25,
+        "creative_spark": 38,
+        "xa_threat": 38,
+        "midfield_engine": 60,
+        "defensive_lock": 58,
+        "pressing_heat": 61,
+        "ball_progression": 50,
+        "aerial_dominance": 45,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 81,
+        "booking_heat": 76
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Red Flag",
+        "shot_threat": "Red Flag",
+        "xg_threat": "Red Flag",
+        "creative_spark": "Red Flag",
+        "xa_threat": "Red Flag",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Strong",
+        "booking_heat": "Positive"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Red Flag scoring profile with xG and shot support.",
+        "shot_threat": "Red Flag shooting volume and on-target pressure.",
+        "xg_threat": "Red Flag chance-quality profile.",
+        "creative_spark": "Red Flag creation profile for final-third value.",
+        "xa_threat": "Red Flag assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Strong foul and discipline exposure profile.",
+        "booking_heat": "Positive booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 262,
+        "position_rank": 98,
+        "club_rank": 11,
+        "goal_threat_rank": 503,
+        "creative_spark_rank": 481,
+        "defensive_lock_rank": 119,
+        "pressing_heat_rank": 20,
+        "booking_heat_rank": 16
+      },
+      "tags": [
+        "Booking Risk"
+      ],
+      "ui": {
+        "pitch_label": "Comley",
+        "badge_score": 53,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_walsall_alfie_chang_2025/2026",
+      "name": "Alfie Chang",
+      "surname": "Chang",
+      "club": "Walsall",
+      "club_slug": "walsall",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 1530
+      },
+      "ratings": {
+        "og_player_power": 49,
+        "goal_threat": 52,
+        "shot_threat": 45,
+        "xg_threat": 49,
+        "creative_spark": 58,
+        "xa_threat": 54,
+        "midfield_engine": 52,
+        "defensive_lock": 36,
+        "pressing_heat": 50,
+        "ball_progression": 53,
+        "aerial_dominance": 40,
+        "goalkeeper_shield": 40,
+        "discipline_risk": 58,
+        "booking_heat": 54
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Mixed",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Red Flag",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Red Flag defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 325,
+        "position_rank": 129,
+        "club_rank": 13,
+        "goal_threat_rank": 232,
+        "creative_spark_rank": 134,
+        "defensive_lock_rank": 505,
+        "pressing_heat_rank": 264,
+        "booking_heat_rank": 177
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Chang",
+        "badge_score": 49,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_walsall_jonny_stuttle_2025/2026",
+      "name": "Jonny Stuttle",
+      "surname": "Stuttle",
+      "club": "Walsall",
+      "club_slug": "walsall",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 188
+      },
+      "ratings": {
+        "og_player_power": 46,
+        "goal_threat": 48,
+        "shot_threat": 53,
+        "xg_threat": 49,
+        "creative_spark": 49,
+        "xa_threat": 48,
+        "midfield_engine": 47,
+        "defensive_lock": 46,
+        "pressing_heat": 49,
+        "ball_progression": 49,
+        "aerial_dominance": 46,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 53,
+        "booking_heat": 55
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 382,
+        "position_rank": 91,
+        "club_rank": 14,
+        "goal_threat_rank": 283,
+        "creative_spark_rank": 267,
+        "defensive_lock_rank": 343,
+        "pressing_heat_rank": 310,
+        "booking_heat_rank": 168
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Stuttle",
+        "badge_score": 46,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_walsall_jake_hollman_2025/2026",
+      "name": "Jake Hollman",
+      "surname": "Hollman",
+      "club": "Walsall",
+      "club_slug": "walsall",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 40
+      },
+      "ratings": {
+        "og_player_power": 40,
+        "goal_threat": 41,
+        "shot_threat": 40,
+        "xg_threat": 40,
+        "creative_spark": 50,
+        "xa_threat": 53,
+        "midfield_engine": 49,
+        "defensive_lock": 48,
+        "pressing_heat": 52,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 48,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 454,
+        "position_rank": 188,
+        "club_rank": 15,
+        "goal_threat_rank": 374,
+        "creative_spark_rank": 252,
+        "defensive_lock_rank": 279,
+        "pressing_heat_rank": 191,
+        "booking_heat_rank": 230
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Hollman",
+        "badge_score": 40,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_walsall_harrison_burke_2025/2026",
+      "name": "Harrison Burke",
+      "surname": "Burke",
+      "club": "Walsall",
+      "club_slug": "walsall",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 1588
+      },
+      "ratings": {
+        "og_player_power": 39,
+        "goal_threat": 53,
+        "shot_threat": 37,
+        "xg_threat": 51,
+        "creative_spark": 32,
+        "xa_threat": 29,
+        "midfield_engine": 49,
+        "defensive_lock": 65,
+        "pressing_heat": 49,
+        "ball_progression": 38,
+        "aerial_dominance": 64,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 30,
+        "booking_heat": 26
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Red Flag",
+        "xg_threat": "Weak",
+        "creative_spark": "Red Flag",
+        "xa_threat": "Red Flag",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Red Flag",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Red Flag",
+        "booking_heat": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Red Flag shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Red Flag creation profile for final-third value.",
+        "xa_threat": "Red Flag assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Red Flag carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Red Flag foul and discipline exposure profile.",
+        "booking_heat": "Red Flag booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 476,
+        "position_rank": 195,
+        "club_rank": 16,
+        "goal_threat_rank": 220,
+        "creative_spark_rank": 515,
+        "defensive_lock_rank": 57,
+        "pressing_heat_rank": 310,
+        "booking_heat_rank": 511
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Burke",
+        "badge_score": 39,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_walsall_sam_hornby_2025/2026",
+      "name": "Sam Hornby",
+      "surname": "Hornby",
+      "club": "Walsall",
+      "club_slug": "walsall",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 315
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 41,
+        "shot_threat": 40,
+        "xg_threat": 40,
+        "creative_spark": 44,
+        "xa_threat": 44,
+        "midfield_engine": 46,
+        "defensive_lock": 50,
+        "pressing_heat": 45,
+        "ball_progression": 45,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 53,
+        "discipline_risk": 51,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 516,
+        "position_rank": 40,
+        "club_rank": 17,
+        "goal_threat_rank": 374,
+        "creative_spark_rank": 407,
+        "defensive_lock_rank": 221,
+        "pressing_heat_rank": 437,
+        "booking_heat_rank": 202
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Hornby",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_walsall_kemar_roofe_2025/2026",
+      "name": "Kemar Roofe",
+      "surname": "Roofe",
+      "club": "Walsall",
+      "club_slug": "walsall",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 16
+      },
+      "ratings": {
+        "og_player_power": 34,
+        "goal_threat": 41,
+        "shot_threat": 40,
+        "xg_threat": 40,
+        "creative_spark": 44,
+        "xa_threat": 44,
+        "midfield_engine": 44,
+        "defensive_lock": 45,
+        "pressing_heat": 48,
+        "ball_progression": 45,
+        "aerial_dominance": 44,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 45,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 529,
+        "position_rank": 224,
+        "club_rank": 18,
+        "goal_threat_rank": 374,
+        "creative_spark_rank": 407,
+        "defensive_lock_rank": 376,
+        "pressing_heat_rank": 358,
+        "booking_heat_rank": 287
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Roofe",
+        "badge_score": 34,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_walsall_vincent_harper_2025/2026",
+      "name": "Vincent Harper",
+      "surname": "Harper",
+      "club": "Walsall",
+      "club_slug": "walsall",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 1958
+      },
+      "ratings": {
+        "og_player_power": 29,
+        "goal_threat": 22,
+        "shot_threat": 23,
+        "xg_threat": 20,
+        "creative_spark": 50,
+        "xa_threat": 45,
+        "midfield_engine": 56,
+        "defensive_lock": 61,
+        "pressing_heat": 65,
+        "ball_progression": 56,
+        "aerial_dominance": 45,
+        "goalkeeper_shield": 52,
+        "discipline_risk": 64,
+        "booking_heat": 59
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Red Flag",
+        "shot_threat": "Red Flag",
+        "xg_threat": "Red Flag",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Red Flag scoring profile with xG and shot support.",
+        "shot_threat": "Red Flag shooting volume and on-target pressure.",
+        "xg_threat": "Red Flag chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 538,
+        "position_rank": 120,
+        "club_rank": 19,
+        "goal_threat_rank": 505,
+        "creative_spark_rank": 252,
+        "defensive_lock_rank": 92,
+        "pressing_heat_rank": 5,
+        "booking_heat_rank": 117
+      },
+      "tags": [
+        "Forward Profile"
+      ],
+      "ui": {
+        "pitch_label": "Harper",
+        "badge_score": 29,
+        "tier": "RED_FLAG"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Presley",
+      "Flint",
+      "Lakin",
+      "Weir",
+      "Farquharson"
+    ],
+    "goal_threat": [
+      "Adomah",
+      "Presley",
+      "Farquharson",
+      "Matt",
+      "Hancock"
+    ],
+    "creative_spark": [
+      "Weir",
+      "Adomah",
+      "Lakin",
+      "Hancock",
+      "Pattison"
+    ],
+    "discipline_risk": [
+      "Comley",
+      "Barrett",
+      "Harper",
+      "Pattison",
+      "Farquharson"
+    ]
+  }
+}

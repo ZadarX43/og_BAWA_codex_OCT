@@ -1,0 +1,1515 @@
+{
+  "club": "Bromley",
+  "club_slug": "bromley",
+  "competition": "England EFL League 2",
+  "competition_key": "england_efl_league_2",
+  "season": "2025/2026",
+  "players": [
+    {
+      "player_id": "england_efl_league_2_bromley_michael_cheek_2025/2026",
+      "name": "Michael Cheek",
+      "surname": "Cheek",
+      "club": "Bromley",
+      "club_slug": "bromley",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2903
+      },
+      "ratings": {
+        "og_player_power": 89,
+        "goal_threat": 94,
+        "shot_threat": 91,
+        "xg_threat": 95,
+        "creative_spark": 55,
+        "xa_threat": 56,
+        "midfield_engine": 30,
+        "defensive_lock": 38,
+        "pressing_heat": 42,
+        "ball_progression": 43,
+        "aerial_dominance": 61,
+        "goalkeeper_shield": 52,
+        "discipline_risk": 34,
+        "booking_heat": 27
+      },
+      "rating_bands": {
+        "og_player_power": "Strong",
+        "goal_threat": "Elite",
+        "shot_threat": "Elite",
+        "xg_threat": "Elite",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Red Flag",
+        "defensive_lock": "Red Flag",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Red Flag",
+        "booking_heat": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_player_power": "Strong headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Elite scoring profile with xG and shot support.",
+        "shot_threat": "Elite shooting volume and on-target pressure.",
+        "xg_threat": "Elite chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Red Flag central involvement and recycling profile.",
+        "defensive_lock": "Red Flag defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Red Flag foul and discipline exposure profile.",
+        "booking_heat": "Red Flag booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 2,
+        "position_rank": 2,
+        "club_rank": 1,
+        "goal_threat_rank": 5,
+        "creative_spark_rank": 167,
+        "defensive_lock_rank": 487,
+        "pressing_heat_rank": 487,
+        "booking_heat_rank": 504
+      },
+      "tags": [
+        "Elite Goal Threat"
+      ],
+      "ui": {
+        "pitch_label": "Cheek",
+        "badge_score": 89,
+        "tier": "STRONG"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_bromley_nicke_kabamba_2025/2026",
+      "name": "Nicke Kabamba",
+      "surname": "Kabamba",
+      "club": "Bromley",
+      "club_slug": "bromley",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2027
+      },
+      "ratings": {
+        "og_player_power": 84,
+        "goal_threat": 96,
+        "shot_threat": 95,
+        "xg_threat": 98,
+        "creative_spark": 45,
+        "xa_threat": 44,
+        "midfield_engine": 31,
+        "defensive_lock": 40,
+        "pressing_heat": 43,
+        "ball_progression": 40,
+        "aerial_dominance": 61,
+        "goalkeeper_shield": 53,
+        "discipline_risk": 48,
+        "booking_heat": 40
+      },
+      "rating_bands": {
+        "og_player_power": "Strong",
+        "goal_threat": "Elite",
+        "shot_threat": "Elite",
+        "xg_threat": "Elite",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Red Flag",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Strong headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Elite scoring profile with xG and shot support.",
+        "shot_threat": "Elite shooting volume and on-target pressure.",
+        "xg_threat": "Elite chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Red Flag central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 6,
+        "position_rank": 6,
+        "club_rank": 2,
+        "goal_threat_rank": 1,
+        "creative_spark_rank": 372,
+        "defensive_lock_rank": 472,
+        "pressing_heat_rank": 477,
+        "booking_heat_rank": 426
+      },
+      "tags": [
+        "Elite Goal Threat"
+      ],
+      "ui": {
+        "pitch_label": "Kabamba",
+        "badge_score": 84,
+        "tier": "STRONG"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_bromley_omar_kolawole_olufemi_sowunmi_2025/2026",
+      "name": "Omar Kolawole Olufemi Sowunmi",
+      "surname": "Sowunmi",
+      "club": "Bromley",
+      "club_slug": "bromley",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 3374
+      },
+      "ratings": {
+        "og_player_power": 71,
+        "goal_threat": 72,
+        "shot_threat": 72,
+        "xg_threat": 75,
+        "creative_spark": 36,
+        "xa_threat": 33,
+        "midfield_engine": 46,
+        "defensive_lock": 75,
+        "pressing_heat": 51,
+        "ball_progression": 36,
+        "aerial_dominance": 72,
+        "goalkeeper_shield": 53,
+        "discipline_risk": 55,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Positive",
+        "goal_threat": "Positive",
+        "shot_threat": "Positive",
+        "xg_threat": "Positive",
+        "creative_spark": "Red Flag",
+        "xa_threat": "Red Flag",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Positive",
+        "pressing_heat": "Weak",
+        "ball_progression": "Red Flag",
+        "aerial_dominance": "Positive",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Positive headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Positive scoring profile with xG and shot support.",
+        "shot_threat": "Positive shooting volume and on-target pressure.",
+        "xg_threat": "Positive chance-quality profile.",
+        "creative_spark": "Red Flag creation profile for final-third value.",
+        "xa_threat": "Red Flag assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Positive defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Red Flag carrying and forward progression profile.",
+        "aerial_dominance": "Positive aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 38,
+        "position_rank": 5,
+        "club_rank": 3,
+        "goal_threat_rank": 84,
+        "creative_spark_rank": 494,
+        "defensive_lock_rank": 7,
+        "pressing_heat_rank": 227,
+        "booking_heat_rank": 313
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Sowunmi",
+        "badge_score": 71,
+        "tier": "POSITIVE"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_bromley_corey_milton_whitely_2025/2026",
+      "name": "Corey Milton Whitely",
+      "surname": "Whitely",
+      "club": "Bromley",
+      "club_slug": "bromley",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2762
+      },
+      "ratings": {
+        "og_player_power": 65,
+        "goal_threat": 64,
+        "shot_threat": 67,
+        "xg_threat": 64,
+        "creative_spark": 56,
+        "xa_threat": 53,
+        "midfield_engine": 44,
+        "defensive_lock": 43,
+        "pressing_heat": 51,
+        "ball_progression": 50,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 42,
+        "booking_heat": 35
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Red Flag booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 94,
+        "position_rank": 42,
+        "club_rank": 4,
+        "goal_threat_rank": 127,
+        "creative_spark_rank": 159,
+        "defensive_lock_rank": 433,
+        "pressing_heat_rank": 227,
+        "booking_heat_rank": 463
+      },
+      "tags": [
+        "Forward Profile"
+      ],
+      "ui": {
+        "pitch_label": "Whitely",
+        "badge_score": 65,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_bromley_grant_ashley_smith_2025/2026",
+      "name": "Grant Ashley Smith",
+      "surname": "Smith",
+      "club": "Bromley",
+      "club_slug": "bromley",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 3780
+      },
+      "ratings": {
+        "og_player_power": 65,
+        "goal_threat": 13,
+        "shot_threat": 9,
+        "xg_threat": 10,
+        "creative_spark": 29,
+        "xa_threat": 26,
+        "midfield_engine": 38,
+        "defensive_lock": 46,
+        "pressing_heat": 32,
+        "ball_progression": 31,
+        "aerial_dominance": 32,
+        "goalkeeper_shield": 81,
+        "discipline_risk": 35,
+        "booking_heat": 27
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Red Flag",
+        "shot_threat": "Red Flag",
+        "xg_threat": "Red Flag",
+        "creative_spark": "Red Flag",
+        "xa_threat": "Red Flag",
+        "midfield_engine": "Red Flag",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Red Flag",
+        "ball_progression": "Red Flag",
+        "aerial_dominance": "Red Flag",
+        "goalkeeper_shield": "Strong",
+        "discipline_risk": "Red Flag",
+        "booking_heat": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Red Flag scoring profile with xG and shot support.",
+        "shot_threat": "Red Flag shooting volume and on-target pressure.",
+        "xg_threat": "Red Flag chance-quality profile.",
+        "creative_spark": "Red Flag creation profile for final-third value.",
+        "xa_threat": "Red Flag assist expectation profile.",
+        "midfield_engine": "Red Flag central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Red Flag pressure and regain activity profile.",
+        "ball_progression": "Red Flag carrying and forward progression profile.",
+        "aerial_dominance": "Red Flag aerial and set-piece profile.",
+        "goalkeeper_shield": "Strong shot-stopping and resistance profile.",
+        "discipline_risk": "Red Flag foul and discipline exposure profile.",
+        "booking_heat": "Red Flag booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 94,
+        "position_rank": 7,
+        "club_rank": 4,
+        "goal_threat_rank": 524,
+        "creative_spark_rank": 522,
+        "defensive_lock_rank": 343,
+        "pressing_heat_rank": 519,
+        "booking_heat_rank": 504
+      },
+      "tags": [
+        "Goalkeeper Profile"
+      ],
+      "ui": {
+        "pitch_label": "Smith",
+        "badge_score": 65,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_bromley_ashley_charles_2025/2026",
+      "name": "Ashley Charles",
+      "surname": "Charles",
+      "club": "Bromley",
+      "club_slug": "bromley",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 3646
+      },
+      "ratings": {
+        "og_player_power": 64,
+        "goal_threat": 43,
+        "shot_threat": 34,
+        "xg_threat": 39,
+        "creative_spark": 54,
+        "xa_threat": 53,
+        "midfield_engine": 59,
+        "defensive_lock": 60,
+        "pressing_heat": 64,
+        "ball_progression": 47,
+        "aerial_dominance": 55,
+        "goalkeeper_shield": 53,
+        "discipline_risk": 75,
+        "booking_heat": 68
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Weak",
+        "shot_threat": "Red Flag",
+        "xg_threat": "Red Flag",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Positive",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Red Flag shooting volume and on-target pressure.",
+        "xg_threat": "Red Flag chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Positive foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 107,
+        "position_rank": 23,
+        "club_rank": 6,
+        "goal_threat_rank": 341,
+        "creative_spark_rank": 186,
+        "defensive_lock_rank": 99,
+        "pressing_heat_rank": 10,
+        "booking_heat_rank": 44
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Charles",
+        "badge_score": 64,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_bromley_mitchell_pinnock_2025/2026",
+      "name": "Mitchell Pinnock",
+      "surname": "Pinnock",
+      "club": "Bromley",
+      "club_slug": "bromley",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 3979
+      },
+      "ratings": {
+        "og_player_power": 64,
+        "goal_threat": 57,
+        "shot_threat": 63,
+        "xg_threat": 56,
+        "creative_spark": 78,
+        "xa_threat": 76,
+        "midfield_engine": 39,
+        "defensive_lock": 38,
+        "pressing_heat": 44,
+        "ball_progression": 60,
+        "aerial_dominance": 37,
+        "goalkeeper_shield": 53,
+        "discipline_risk": 49,
+        "booking_heat": 40
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Positive",
+        "xa_threat": "Positive",
+        "midfield_engine": "Red Flag",
+        "defensive_lock": "Red Flag",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Red Flag",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Positive creation profile for final-third value.",
+        "xa_threat": "Positive assist expectation profile.",
+        "midfield_engine": "Red Flag central involvement and recycling profile.",
+        "defensive_lock": "Red Flag defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Red Flag aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 107,
+        "position_rank": 23,
+        "club_rank": 6,
+        "goal_threat_rank": 190,
+        "creative_spark_rank": 4,
+        "defensive_lock_rank": 487,
+        "pressing_heat_rank": 463,
+        "booking_heat_rank": 426
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Pinnock",
+        "badge_score": 64,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_bromley_idris_odutayo_2025/2026",
+      "name": "Idris Odutayo",
+      "surname": "Odutayo",
+      "club": "Bromley",
+      "club_slug": "bromley",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 3561
+      },
+      "ratings": {
+        "og_player_power": 63,
+        "goal_threat": 44,
+        "shot_threat": 39,
+        "xg_threat": 37,
+        "creative_spark": 57,
+        "xa_threat": 49,
+        "midfield_engine": 50,
+        "defensive_lock": 64,
+        "pressing_heat": 52,
+        "ball_progression": 45,
+        "aerial_dominance": 56,
+        "goalkeeper_shield": 52,
+        "discipline_risk": 53,
+        "booking_heat": 45
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Weak",
+        "shot_threat": "Red Flag",
+        "xg_threat": "Red Flag",
+        "creative_spark": "Mixed",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Red Flag shooting volume and on-target pressure.",
+        "xg_threat": "Red Flag chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 115,
+        "position_rank": 32,
+        "club_rank": 8,
+        "goal_threat_rank": 332,
+        "creative_spark_rank": 148,
+        "defensive_lock_rank": 68,
+        "pressing_heat_rank": 191,
+        "booking_heat_rank": 351
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Odutayo",
+        "badge_score": 63,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_bromley_markus_ifill_2025/2026",
+      "name": "Markus Ifill",
+      "surname": "Ifill",
+      "club": "Bromley",
+      "club_slug": "bromley",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 3042
+      },
+      "ratings": {
+        "og_player_power": 59,
+        "goal_threat": 51,
+        "shot_threat": 43,
+        "xg_threat": 49,
+        "creative_spark": 52,
+        "xa_threat": 47,
+        "midfield_engine": 49,
+        "defensive_lock": 48,
+        "pressing_heat": 57,
+        "ball_progression": 51,
+        "aerial_dominance": 52,
+        "goalkeeper_shield": 52,
+        "discipline_risk": 63,
+        "booking_heat": 56
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 172,
+        "position_rank": 52,
+        "club_rank": 9,
+        "goal_threat_rank": 248,
+        "creative_spark_rank": 218,
+        "defensive_lock_rank": 279,
+        "pressing_heat_rank": 73,
+        "booking_heat_rank": 159
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Ifill",
+        "badge_score": 59,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_bromley_zechariah_medley_2025/2026",
+      "name": "Zechariah Medley",
+      "surname": "Medley",
+      "club": "Bromley",
+      "club_slug": "bromley",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2019
+      },
+      "ratings": {
+        "og_player_power": 58,
+        "goal_threat": 45,
+        "shot_threat": 49,
+        "xg_threat": 45,
+        "creative_spark": 41,
+        "xa_threat": 37,
+        "midfield_engine": 52,
+        "defensive_lock": 70,
+        "pressing_heat": 57,
+        "ball_progression": 54,
+        "aerial_dominance": 66,
+        "goalkeeper_shield": 44,
+        "discipline_risk": 56,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Red Flag",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Positive",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Red Flag assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Positive defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 187,
+        "position_rank": 55,
+        "club_rank": 10,
+        "goal_threat_rank": 322,
+        "creative_spark_rank": 455,
+        "defensive_lock_rank": 34,
+        "pressing_heat_rank": 73,
+        "booking_heat_rank": 287
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Medley",
+        "badge_score": 58,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_bromley_william_hondermarck_2025/2026",
+      "name": "William Hondermarck",
+      "surname": "Hondermarck",
+      "club": "Bromley",
+      "club_slug": "bromley",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2468
+      },
+      "ratings": {
+        "og_player_power": 55,
+        "goal_threat": 68,
+        "shot_threat": 59,
+        "xg_threat": 67,
+        "creative_spark": 61,
+        "xa_threat": 59,
+        "midfield_engine": 50,
+        "defensive_lock": 45,
+        "pressing_heat": 64,
+        "ball_progression": 55,
+        "aerial_dominance": 46,
+        "goalkeeper_shield": 53,
+        "discipline_risk": 83,
+        "booking_heat": 78
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Strong",
+        "booking_heat": "Positive"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Strong foul and discipline exposure profile.",
+        "booking_heat": "Positive booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 228,
+        "position_rank": 83,
+        "club_rank": 11,
+        "goal_threat_rank": 107,
+        "creative_spark_rank": 100,
+        "defensive_lock_rank": 376,
+        "pressing_heat_rank": 10,
+        "booking_heat_rank": 8
+      },
+      "tags": [
+        "Booking Risk"
+      ],
+      "ui": {
+        "pitch_label": "Hondermarck",
+        "badge_score": 55,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_bromley_kyle_cameron_2025/2026",
+      "name": "Kyle Cameron",
+      "surname": "Cameron",
+      "club": "Bromley",
+      "club_slug": "bromley",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Trusted sample",
+        "minutes_played": 1452
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 66,
+        "shot_threat": 69,
+        "xg_threat": 68,
+        "creative_spark": 45,
+        "xa_threat": 40,
+        "midfield_engine": 45,
+        "defensive_lock": 66,
+        "pressing_heat": 51,
+        "ball_progression": 40,
+        "aerial_dominance": 63,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 55,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 297,
+        "position_rank": 88,
+        "club_rank": 12,
+        "goal_threat_rank": 120,
+        "creative_spark_rank": 372,
+        "defensive_lock_rank": 53,
+        "pressing_heat_rank": 227,
+        "booking_heat_rank": 202
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Cameron",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_bromley_marcus_dinanga_nyamabu_2025/2026",
+      "name": "Marcus Dinanga Nyamabu",
+      "surname": "Nyamabu",
+      "club": "Bromley",
+      "club_slug": "bromley",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 581
+      },
+      "ratings": {
+        "og_player_power": 49,
+        "goal_threat": 61,
+        "shot_threat": 65,
+        "xg_threat": 63,
+        "creative_spark": 51,
+        "xa_threat": 51,
+        "midfield_engine": 46,
+        "defensive_lock": 41,
+        "pressing_heat": 47,
+        "ball_progression": 54,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 41,
+        "booking_heat": 46
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 325,
+        "position_rank": 79,
+        "club_rank": 13,
+        "goal_threat_rank": 149,
+        "creative_spark_rank": 235,
+        "defensive_lock_rank": 460,
+        "pressing_heat_rank": 387,
+        "booking_heat_rank": 335
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Nyamabu",
+        "badge_score": 49,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_bromley_ben_thompson_2025/2026",
+      "name": "Ben Thompson",
+      "surname": "Thompson",
+      "club": "Bromley",
+      "club_slug": "bromley",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Trusted sample",
+        "minutes_played": 1223
+      },
+      "ratings": {
+        "og_player_power": 45,
+        "goal_threat": 87,
+        "shot_threat": 81,
+        "xg_threat": 88,
+        "creative_spark": 60,
+        "xa_threat": 58,
+        "midfield_engine": 41,
+        "defensive_lock": 42,
+        "pressing_heat": 48,
+        "ball_progression": 52,
+        "aerial_dominance": 52,
+        "goalkeeper_shield": 52,
+        "discipline_risk": 39,
+        "booking_heat": 35
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Strong",
+        "shot_threat": "Strong",
+        "xg_threat": "Strong",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Red Flag",
+        "booking_heat": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Strong scoring profile with xG and shot support.",
+        "shot_threat": "Strong shooting volume and on-target pressure.",
+        "xg_threat": "Strong chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Red Flag foul and discipline exposure profile.",
+        "booking_heat": "Red Flag booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 395,
+        "position_rank": 163,
+        "club_rank": 14,
+        "goal_threat_rank": 26,
+        "creative_spark_rank": 118,
+        "defensive_lock_rank": 446,
+        "pressing_heat_rank": 358,
+        "booking_heat_rank": 463
+      },
+      "tags": [
+        "Elite Goal Threat"
+      ],
+      "ui": {
+        "pitch_label": "Thompson",
+        "badge_score": 45,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_bromley_byron_clark_webster_2025/2026",
+      "name": "Byron Clark Webster",
+      "surname": "Webster",
+      "club": "Bromley",
+      "club_slug": "bromley",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Medium sample",
+        "minutes_played": 683
+      },
+      "ratings": {
+        "og_player_power": 40,
+        "goal_threat": 36,
+        "shot_threat": 35,
+        "xg_threat": 35,
+        "creative_spark": 40,
+        "xa_threat": 40,
+        "midfield_engine": 46,
+        "defensive_lock": 50,
+        "pressing_heat": 49,
+        "ball_progression": 42,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 61,
+        "booking_heat": 61
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Red Flag",
+        "shot_threat": "Red Flag",
+        "xg_threat": "Red Flag",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Red Flag scoring profile with xG and shot support.",
+        "shot_threat": "Red Flag shooting volume and on-target pressure.",
+        "xg_threat": "Red Flag chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 454,
+        "position_rank": 124,
+        "club_rank": 15,
+        "goal_threat_rank": 451,
+        "creative_spark_rank": 465,
+        "defensive_lock_rank": 221,
+        "pressing_heat_rank": 310,
+        "booking_heat_rank": 89
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Webster",
+        "badge_score": 40,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_bromley_carl_jenkinson_2025/2026",
+      "name": "Carl Jenkinson",
+      "surname": "Jenkinson",
+      "club": "Bromley",
+      "club_slug": "bromley",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 203
+      },
+      "ratings": {
+        "og_player_power": 40,
+        "goal_threat": 47,
+        "shot_threat": 53,
+        "xg_threat": 48,
+        "creative_spark": 50,
+        "xa_threat": 49,
+        "midfield_engine": 49,
+        "defensive_lock": 55,
+        "pressing_heat": 50,
+        "ball_progression": 49,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 52,
+        "discipline_risk": 52,
+        "booking_heat": 54
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 454,
+        "position_rank": 124,
+        "club_rank": 15,
+        "goal_threat_rank": 305,
+        "creative_spark_rank": 252,
+        "defensive_lock_rank": 151,
+        "pressing_heat_rank": 264,
+        "booking_heat_rank": 177
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Jenkinson",
+        "badge_score": 40,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_bromley_sam_long_2025/2026",
+      "name": "Sam Long",
+      "surname": "Long",
+      "club": "Bromley",
+      "club_slug": "bromley",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 270
+      },
+      "ratings": {
+        "og_player_power": 36,
+        "goal_threat": 41,
+        "shot_threat": 40,
+        "xg_threat": 40,
+        "creative_spark": 44,
+        "xa_threat": 44,
+        "midfield_engine": 46,
+        "defensive_lock": 45,
+        "pressing_heat": 45,
+        "ball_progression": 45,
+        "aerial_dominance": 46,
+        "goalkeeper_shield": 55,
+        "discipline_risk": 41,
+        "booking_heat": 44
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Mixed",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Mixed shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 516,
+        "position_rank": 40,
+        "club_rank": 17,
+        "goal_threat_rank": 374,
+        "creative_spark_rank": 407,
+        "defensive_lock_rank": 376,
+        "pressing_heat_rank": 437,
+        "booking_heat_rank": 373
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Long",
+        "badge_score": 36,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_efl_league_2_bromley_alex_stepien_iwumene_2025/2026",
+      "name": "Alex Stepien-Iwumene",
+      "surname": "Stepien-Iwumene",
+      "club": "Bromley",
+      "club_slug": "bromley",
+      "competition": "England EFL League 2",
+      "competition_key": "england_efl_league_2",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 5
+      },
+      "ratings": {
+        "og_player_power": 34,
+        "goal_threat": 41,
+        "shot_threat": 40,
+        "xg_threat": 40,
+        "creative_spark": 44,
+        "xa_threat": 44,
+        "midfield_engine": 45,
+        "defensive_lock": 46,
+        "pressing_heat": 48,
+        "ball_progression": 45,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 45,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 529,
+        "position_rank": 224,
+        "club_rank": 18,
+        "goal_threat_rank": 374,
+        "creative_spark_rank": 407,
+        "defensive_lock_rank": 343,
+        "pressing_heat_rank": 358,
+        "booking_heat_rank": 287
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Stepien-Iwumene",
+        "badge_score": 34,
+        "tier": "RED_FLAG"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Cheek",
+      "Kabamba",
+      "Sowunmi",
+      "Whitely",
+      "Smith"
+    ],
+    "goal_threat": [
+      "Kabamba",
+      "Cheek",
+      "Thompson",
+      "Sowunmi",
+      "Hondermarck"
+    ],
+    "creative_spark": [
+      "Pinnock",
+      "Hondermarck",
+      "Thompson",
+      "Odutayo",
+      "Whitely"
+    ],
+    "discipline_risk": [
+      "Hondermarck",
+      "Charles",
+      "Ifill",
+      "Webster",
+      "Medley"
+    ]
+  }
+}

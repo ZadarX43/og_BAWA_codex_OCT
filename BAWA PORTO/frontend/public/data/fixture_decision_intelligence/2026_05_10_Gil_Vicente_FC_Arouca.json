@@ -1,0 +1,220 @@
+{
+  "fixture_key": "2026_05_10_Gil_Vicente_FC_Arouca",
+  "fixture": "Gil Vicente vs FC Arouca",
+  "primary_signal": "Fixture read",
+  "signal_state": "FRAGILE",
+  "agreement_score": 44,
+  "confidence_band": "LOW",
+  "supporting_layers": [],
+  "caution_layers": [
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "profile_tags": {
+    "home": [
+      "Mixed Team Profile"
+    ],
+    "away": [
+      "Open Match Profile",
+      "Card Heat Risk"
+    ]
+  },
+  "profile_narrative": "Gil Vicente bring a mixed team profile into a matchup with FC Arouca's open match profile.",
+  "team_faceoff_summary": [
+    {
+      "metric": "og_power_rating",
+      "label": "OG Power Rating",
+      "home_value": 66,
+      "away_value": 42,
+      "delta": 24,
+      "leader": "Gil Vicente"
+    },
+    {
+      "metric": "attack_flow_rating",
+      "label": "Attack Flow",
+      "home_value": 73,
+      "away_value": 51,
+      "delta": 22,
+      "leader": "Gil Vicente"
+    },
+    {
+      "metric": "defensive_lock_rating",
+      "label": "Defensive Lock",
+      "home_value": 71,
+      "away_value": 23,
+      "delta": 48,
+      "leader": "Gil Vicente"
+    },
+    {
+      "metric": "goal_heat_rating",
+      "label": "Goal Heat",
+      "home_value": 40,
+      "away_value": 77,
+      "delta": 37,
+      "leader": "FC Arouca"
+    }
+  ],
+  "unit_battle_summary": [],
+  "key_player_drivers": [],
+  "key_mismatches": [],
+  "h2h_context": {
+    "available": false,
+    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
+    "sample_size": 0
+  },
+  "market_suitability": {
+    "ftr": {
+      "rating": 66,
+      "label": "Mixed",
+      "read": "Stronger when one side owns a clear team-power edge."
+    },
+    "btts": {
+      "rating": 58,
+      "label": "Mixed",
+      "read": "Driven by two-way access and reduced suppression."
+    },
+    "ou25": {
+      "rating": 58,
+      "label": "Mixed",
+      "read": "Driven by combined goal environment and tempo."
+    },
+    "team_goals": {
+      "rating": 77,
+      "label": "Strong",
+      "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
+    },
+    "correct_score": {
+      "rating": 100,
+      "label": "Elite",
+      "read": "Better when the shape is structured and the likely scoring zone is narrow."
+    },
+    "corners": {
+      "rating": 57,
+      "label": "Mixed",
+      "read": "Driven by territory and wide-channel pressure."
+    },
+    "cards": {
+      "rating": 59,
+      "label": "Mixed",
+      "read": "Driven by discipline heat, fouling, and volatility."
+    }
+  },
+  "market_intelligence": {
+    "ftr": {
+      "alignment_score": 52,
+      "state": "FRAGILE",
+      "model_lean": "HOME",
+      "structural_support": [],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "FTR has some structural support from structural support, but the overall layer fit remains fragile.",
+      "rating": 66,
+      "band": "Mixed"
+    },
+    "btts": {
+      "alignment_score": 46,
+      "state": "FRAGILE",
+      "model_lean": "YES",
+      "structural_support": [],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "BTTS has some structural support from structural support, but the overall layer fit remains fragile.",
+      "rating": 58,
+      "band": "Mixed"
+    },
+    "ou25": {
+      "alignment_score": 46,
+      "state": "FRAGILE",
+      "model_lean": "OVER25",
+      "structural_support": [],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Over 2.5 has some structural support from structural support, but the overall layer fit remains fragile.",
+      "rating": 58,
+      "band": "Mixed"
+    },
+    "team_goals": {
+      "alignment_score": 64,
+      "state": "MIXED",
+      "model_lean": "FC Arouca 1.5+",
+      "structural_support": [],
+      "cautions": [
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Team Goals has partial support from structural support, but lineup data missing keeps it from reading clean.",
+      "rating": 77,
+      "band": "Strong"
+    },
+    "correct_score": {
+      "alignment_score": 77,
+      "state": "MIXED",
+      "model_lean": "STRUCTURED",
+      "structural_support": [],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Correct Score has partial support from structural support, but lineup data missing keeps it from reading clean.",
+      "rating": 100,
+      "band": "Elite"
+    },
+    "corners": {
+      "alignment_score": 45,
+      "state": "FRAGILE",
+      "model_lean": "ELEVATED",
+      "structural_support": [],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Corners has some structural support from structural support, but the overall layer fit remains fragile.",
+      "rating": 57,
+      "band": "Mixed"
+    },
+    "cards": {
+      "alignment_score": 46,
+      "state": "FRAGILE",
+      "model_lean": "ELEVATED",
+      "structural_support": [],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Cards has some structural support from structural support, but the overall layer fit remains fragile.",
+      "rating": 59,
+      "band": "Mixed"
+    }
+  },
+  "watchlist": {
+    "active": false,
+    "summary": "No watchlist layer is active for this fixture.",
+    "trigger_signals": [],
+    "public_state": "No watchlist flag",
+    "mode": ""
+  },
+  "public_safe_summary": "Fixture read has some live shape in Gil Vicente vs FC Arouca, but the supporting layers remain fragile and need discipline.",
+  "internal_reason_tokens": [
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "summary": {
+    "support_count": 0,
+    "caution_count": 2,
+    "lineup_available": false,
+    "h2h_available": false
+  },
+  "preview": {
+    "headline": "Gil Vicente vs FC Arouca: Fixture read fragile",
+    "short_summary": "Fixture read has some live shape in Gil Vicente vs FC Arouca, but the supporting layers remain fragile and need discipline. Primary support comes from structural caution, while the main caution remains lineup data missing.",
+    "market_summary": "Best aligned market: Correct Score (Mixed). Secondary support: Team Goals. Weakest read: Corners.",
+    "caution_line": "Main caution: Lineup Data Missing.",
+    "telegram_summary": "Gil Vicente vs FC Arouca — Fixture read (Fragile, 44% agreement). Support: structural caution. Caution: Lineup Data Missing.",
+    "premium_summary": "Fixture read is carrying a 44% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from lineup data missing, h2h unavailable."
+  }
+}

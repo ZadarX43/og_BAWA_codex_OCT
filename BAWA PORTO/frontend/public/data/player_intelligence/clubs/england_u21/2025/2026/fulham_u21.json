@@ -1,0 +1,859 @@
+{
+  "club": "Fulham U21",
+  "club_slug": "fulham_u21",
+  "competition": "England U21",
+  "competition_key": "england_u21",
+  "season": "2025/2026",
+  "players": [
+    {
+      "player_id": "england_u21_fulham_u21_thomas_olyott_2025/2026",
+      "name": "Thomas Olyott",
+      "surname": "Olyott",
+      "club": "Fulham U21",
+      "club_slug": "fulham_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Medium sample",
+        "minutes_played": 754
+      },
+      "ratings": {
+        "og_player_power": 71,
+        "goal_threat": 69,
+        "shot_threat": 71,
+        "xg_threat": 69,
+        "creative_spark": 64,
+        "xa_threat": 63,
+        "midfield_engine": 60,
+        "defensive_lock": 55,
+        "pressing_heat": 57,
+        "ball_progression": 54,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 48,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Positive",
+        "goal_threat": "Mixed",
+        "shot_threat": "Positive",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Positive headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Positive shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 1,
+        "position_rank": 1,
+        "club_rank": 1,
+        "goal_threat_rank": 5,
+        "creative_spark_rank": 2,
+        "defensive_lock_rank": 28,
+        "pressing_heat_rank": 17,
+        "booking_heat_rank": 93
+      },
+      "tags": [
+        "Forward Profile"
+      ],
+      "ui": {
+        "pitch_label": "Olyott",
+        "badge_score": 71,
+        "tier": "POSITIVE"
+      }
+    },
+    {
+      "player_id": "england_u21_fulham_u21_samuel_amissah_2025/2026",
+      "name": "Samuel Amissah",
+      "surname": "Amissah",
+      "club": "Fulham U21",
+      "club_slug": "fulham_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Trusted sample",
+        "minutes_played": 900
+      },
+      "ratings": {
+        "og_player_power": 67,
+        "goal_threat": 47,
+        "shot_threat": 52,
+        "xg_threat": 49,
+        "creative_spark": 50,
+        "xa_threat": 53,
+        "midfield_engine": 63,
+        "defensive_lock": 66,
+        "pressing_heat": 58,
+        "ball_progression": 52,
+        "aerial_dominance": 60,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 67,
+        "booking_heat": 59
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 5,
+        "position_rank": 2,
+        "club_rank": 2,
+        "goal_threat_rank": 171,
+        "creative_spark_rank": 82,
+        "defensive_lock_rank": 2,
+        "pressing_heat_rank": 7,
+        "booking_heat_rank": 8
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Amissah",
+        "badge_score": 67,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_u21_fulham_u21_farhaan_ali_wahid_2025/2026",
+      "name": "Farhaan Ali Wahid",
+      "surname": "Wahid",
+      "club": "Fulham U21",
+      "club_slug": "fulham_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Medium sample",
+        "minutes_played": 846
+      },
+      "ratings": {
+        "og_player_power": 62,
+        "goal_threat": 73,
+        "shot_threat": 72,
+        "xg_threat": 74,
+        "creative_spark": 57,
+        "xa_threat": 57,
+        "midfield_engine": 59,
+        "defensive_lock": 58,
+        "pressing_heat": 58,
+        "ball_progression": 52,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 50,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Positive",
+        "shot_threat": "Positive",
+        "xg_threat": "Positive",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Positive scoring profile with xG and shot support.",
+        "shot_threat": "Positive shooting volume and on-target pressure.",
+        "xg_threat": "Positive chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 15,
+        "position_rank": 5,
+        "club_rank": 3,
+        "goal_threat_rank": 3,
+        "creative_spark_rank": 18,
+        "defensive_lock_rank": 17,
+        "pressing_heat_rank": 7,
+        "booking_heat_rank": 52
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Wahid",
+        "badge_score": 62,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_u21_fulham_u21_chibuzo_nwoko_2025/2026",
+      "name": "Chibuzo Nwoko",
+      "surname": "Nwoko",
+      "club": "Fulham U21",
+      "club_slug": "fulham_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Medium sample",
+        "minutes_played": 625
+      },
+      "ratings": {
+        "og_player_power": 58,
+        "goal_threat": 52,
+        "shot_threat": 49,
+        "xg_threat": 55,
+        "creative_spark": 54,
+        "xa_threat": 57,
+        "midfield_engine": 59,
+        "defensive_lock": 54,
+        "pressing_heat": 56,
+        "ball_progression": 54,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 49,
+        "booking_heat": 51
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 33,
+        "position_rank": 20,
+        "club_rank": 4,
+        "goal_threat_rank": 102,
+        "creative_spark_rank": 38,
+        "defensive_lock_rank": 44,
+        "pressing_heat_rank": 21,
+        "booking_heat_rank": 93
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Nwoko",
+        "badge_score": 58,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_u21_fulham_u21_seth_ky_ridgeon_2025/2026",
+      "name": "Seth Ky Ridgeon",
+      "surname": "Ridgeon",
+      "club": "Fulham U21",
+      "club_slug": "fulham_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Medium sample",
+        "minutes_played": 644
+      },
+      "ratings": {
+        "og_player_power": 55,
+        "goal_threat": 64,
+        "shot_threat": 57,
+        "xg_threat": 63,
+        "creative_spark": 47,
+        "xa_threat": 47,
+        "midfield_engine": 56,
+        "defensive_lock": 51,
+        "pressing_heat": 54,
+        "ball_progression": 52,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 50,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 49,
+        "position_rank": 30,
+        "club_rank": 5,
+        "goal_threat_rank": 18,
+        "creative_spark_rank": 292,
+        "defensive_lock_rank": 67,
+        "pressing_heat_rank": 37,
+        "booking_heat_rank": 74
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Ridgeon",
+        "badge_score": 55,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_u21_fulham_u21_macauley_adams_zepa_2025/2026",
+      "name": "Macauley Adams Zepa",
+      "surname": "Zepa",
+      "club": "Fulham U21",
+      "club_slug": "fulham_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Medium sample",
+        "minutes_played": 603
+      },
+      "ratings": {
+        "og_player_power": 51,
+        "goal_threat": 50,
+        "shot_threat": 51,
+        "xg_threat": 49,
+        "creative_spark": 54,
+        "xa_threat": 53,
+        "midfield_engine": 54,
+        "defensive_lock": 51,
+        "pressing_heat": 50,
+        "ball_progression": 52,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 47,
+        "booking_heat": 49
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 92,
+        "position_rank": 60,
+        "club_rank": 6,
+        "goal_threat_rank": 117,
+        "creative_spark_rank": 38,
+        "defensive_lock_rank": 67,
+        "pressing_heat_rank": 90,
+        "booking_heat_rank": 166
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Zepa",
+        "badge_score": 51,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_u21_fulham_u21_marco_underwood_2025/2026",
+      "name": "Marco Underwood",
+      "surname": "Underwood",
+      "club": "Fulham U21",
+      "club_slug": "fulham_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 360
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 46,
+        "shot_threat": 47,
+        "xg_threat": 45,
+        "creative_spark": 50,
+        "xa_threat": 51,
+        "midfield_engine": 52,
+        "defensive_lock": 50,
+        "pressing_heat": 48,
+        "ball_progression": 51,
+        "aerial_dominance": 51,
+        "goalkeeper_shield": 54,
+        "discipline_risk": 53,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 96,
+        "position_rank": 64,
+        "club_rank": 7,
+        "goal_threat_rank": 179,
+        "creative_spark_rank": 82,
+        "defensive_lock_rank": 88,
+        "pressing_heat_rank": 178,
+        "booking_heat_rank": 105
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Underwood",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_u21_fulham_u21_oliver_mayer_2025/2026",
+      "name": "Oliver Mayer",
+      "surname": "Mayer",
+      "club": "Fulham U21",
+      "club_slug": "fulham_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 0
+      },
+      "ratings": {
+        "og_player_power": 50,
+        "goal_threat": 49,
+        "shot_threat": 50,
+        "xg_threat": 49,
+        "creative_spark": 50,
+        "xa_threat": 50,
+        "midfield_engine": 50,
+        "defensive_lock": 50,
+        "pressing_heat": 50,
+        "ball_progression": 50,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 48,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 96,
+        "position_rank": 64,
+        "club_rank": 7,
+        "goal_threat_rank": 141,
+        "creative_spark_rank": 82,
+        "defensive_lock_rank": 88,
+        "pressing_heat_rank": 90,
+        "booking_heat_rank": 105
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Mayer",
+        "badge_score": 50,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_u21_fulham_u21_dan_casey_2025/2026",
+      "name": "Dan Casey",
+      "surname": "Casey",
+      "club": "Fulham U21",
+      "club_slug": "fulham_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 172
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 51,
+        "shot_threat": 51,
+        "xg_threat": 56,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 50,
+        "ball_progression": 49,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 169,
+        "position_rank": 111,
+        "club_rank": 9,
+        "goal_threat_rank": 109,
+        "creative_spark_rank": 139,
+        "defensive_lock_rank": 114,
+        "pressing_heat_rank": 90,
+        "booking_heat_rank": 105
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Casey",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_u21_fulham_u21_jonah_kusi_asare_2025/2026",
+      "name": "Jonah Kusi-Asare",
+      "surname": "Kusi-Asare",
+      "club": "Fulham U21",
+      "club_slug": "fulham_u21",
+      "competition": "England U21",
+      "competition_key": "england_u21",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 61
+      },
+      "ratings": {
+        "og_player_power": 42,
+        "goal_threat": 56,
+        "shot_threat": 51,
+        "xg_threat": 60,
+        "creative_spark": 48,
+        "xa_threat": 48,
+        "midfield_engine": 48,
+        "defensive_lock": 49,
+        "pressing_heat": 50,
+        "ball_progression": 49,
+        "aerial_dominance": 50,
+        "goalkeeper_shield": 51,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Mixed",
+        "shot_threat": "Weak",
+        "xg_threat": "Mixed",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 169,
+        "position_rank": 111,
+        "club_rank": 9,
+        "goal_threat_rank": 67,
+        "creative_spark_rank": 139,
+        "defensive_lock_rank": 114,
+        "pressing_heat_rank": 90,
+        "booking_heat_rank": 105
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Kusi-Asare",
+        "badge_score": 42,
+        "tier": "WEAK"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Olyott",
+      "Amissah",
+      "Wahid",
+      "Nwoko",
+      "Ridgeon"
+    ],
+    "goal_threat": [
+      "Wahid",
+      "Olyott",
+      "Ridgeon",
+      "Kusi-Asare",
+      "Nwoko"
+    ],
+    "creative_spark": [
+      "Olyott",
+      "Wahid",
+      "Nwoko",
+      "Zepa",
+      "Amissah"
+    ],
+    "discipline_risk": [
+      "Amissah",
+      "Underwood",
+      "Wahid",
+      "Ridgeon",
+      "Nwoko"
+    ]
+  }
+}

@@ -1,0 +1,256 @@
+{
+  "fixture_key": "2026_05_09_Auckland_Adelaide_United",
+  "fixture": "Auckland vs Adelaide United",
+  "primary_signal": "Auckland Win",
+  "signal_state": "AVOID",
+  "agreement_score": 44,
+  "confidence_band": "LOW",
+  "supporting_layers": [
+    "TEAM_POWER_ADVANTAGE"
+  ],
+  "caution_layers": [
+    "AWAY_TRAVEL_THREAT",
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "profile_tags": {
+    "home": [
+      "Attack-Led Side",
+      "Strong First Goal",
+      "Travels Well"
+    ],
+    "away": [
+      "Open Match Profile",
+      "Two-Way Scoring Profile"
+    ]
+  },
+  "profile_narrative": "Auckland bring a attack-led side into a matchup with Adelaide United's open match profile. The structural lean comes from Auckland's home-side control against the away profile.",
+  "team_faceoff_summary": [
+    {
+      "metric": "og_power_rating",
+      "label": "OG Power Rating",
+      "home_value": 76,
+      "away_value": 64,
+      "delta": 12,
+      "leader": "Auckland"
+    },
+    {
+      "metric": "home_fortress_rating",
+      "label": "Home Fortress",
+      "home_value": 60,
+      "away_value": 71,
+      "delta": 11,
+      "leader": "Adelaide United"
+    },
+    {
+      "metric": "away_threat_rating",
+      "label": "Away Threat",
+      "home_value": 83,
+      "away_value": 56,
+      "delta": 27,
+      "leader": "Auckland"
+    },
+    {
+      "metric": "defensive_lock_rating",
+      "label": "Defensive Lock",
+      "home_value": 69,
+      "away_value": 37,
+      "delta": 32,
+      "leader": "Auckland"
+    },
+    {
+      "metric": "first_strike_rating",
+      "label": "First Strike",
+      "home_value": 93,
+      "away_value": 71,
+      "delta": 22,
+      "leader": "Auckland"
+    },
+    {
+      "metric": "control_rating",
+      "label": "Control Rating",
+      "home_value": 49,
+      "away_value": 21,
+      "delta": 28,
+      "leader": "Auckland"
+    }
+  ],
+  "unit_battle_summary": [],
+  "key_player_drivers": [],
+  "key_mismatches": [],
+  "h2h_context": {
+    "available": false,
+    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
+    "sample_size": 0
+  },
+  "market_suitability": {
+    "ftr": {
+      "rating": 76,
+      "label": "Positive",
+      "read": "Stronger when one side owns a clear team-power edge."
+    },
+    "btts": {
+      "rating": 73,
+      "label": "Positive",
+      "read": "Driven by two-way access and reduced suppression."
+    },
+    "ou25": {
+      "rating": 64,
+      "label": "Mixed",
+      "read": "Driven by combined goal environment and tempo."
+    },
+    "team_goals": {
+      "rating": 79,
+      "label": "Strong",
+      "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
+    },
+    "correct_score": {
+      "rating": 100,
+      "label": "Elite",
+      "read": "Better when the shape is structured and the likely scoring zone is narrow."
+    },
+    "corners": {
+      "rating": 62,
+      "label": "Mixed",
+      "read": "Driven by territory and wide-channel pressure."
+    },
+    "cards": {
+      "rating": 44,
+      "label": "Weak",
+      "read": "Driven by discipline heat, fouling, and volatility."
+    }
+  },
+  "market_intelligence": {
+    "ftr": {
+      "alignment_score": 57,
+      "state": "AVOID",
+      "model_lean": "HOME",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE"
+      ],
+      "cautions": [
+        "AWAY_TRAVEL_THREAT"
+      ],
+      "public_summary": "FTR is too contradicted by away travel threat to present as a clean public read.",
+      "rating": 76,
+      "band": "Positive"
+    },
+    "btts": {
+      "alignment_score": 63,
+      "state": "MIXED",
+      "model_lean": "YES",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE"
+      ],
+      "cautions": [
+        "AWAY_TRAVEL_THREAT",
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "BTTS has partial support from team power advantage, but away travel threat keeps it from reading clean.",
+      "rating": 73,
+      "band": "Positive"
+    },
+    "ou25": {
+      "alignment_score": 56,
+      "state": "FRAGILE",
+      "model_lean": "OVER25",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE"
+      ],
+      "cautions": [
+        "AWAY_TRAVEL_THREAT",
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Over 2.5 has some structural support from team power advantage, but the overall layer fit remains fragile.",
+      "rating": 64,
+      "band": "Mixed"
+    },
+    "team_goals": {
+      "alignment_score": 71,
+      "state": "MIXED",
+      "model_lean": "Adelaide United 1.5+",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Team Goals has partial support from team power advantage, but lineup data missing keeps it from reading clean.",
+      "rating": 79,
+      "band": "Strong"
+    },
+    "correct_score": {
+      "alignment_score": 83,
+      "state": "SUPPORTED",
+      "model_lean": "OPEN",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE"
+      ],
+      "cautions": [
+        "AWAY_TRAVEL_THREAT",
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Correct Score is well supported by team power advantage, with caution still coming from away travel threat.",
+      "rating": 100,
+      "band": "Elite"
+    },
+    "corners": {
+      "alignment_score": 54,
+      "state": "FRAGILE",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE"
+      ],
+      "cautions": [
+        "AWAY_TRAVEL_THREAT",
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Corners has some structural support from team power advantage, but the overall layer fit remains fragile.",
+      "rating": 62,
+      "band": "Mixed"
+    },
+    "cards": {
+      "alignment_score": 41,
+      "state": "AVOID",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE"
+      ],
+      "cautions": [
+        "AWAY_TRAVEL_THREAT",
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Cards is too contradicted by away travel threat to present as a clean public read.",
+      "rating": 44,
+      "band": "Weak"
+    }
+  },
+  "watchlist": {
+    "active": false,
+    "summary": "No watchlist layer is active for this fixture.",
+    "trigger_signals": [],
+    "public_state": "No watchlist flag",
+    "mode": ""
+  },
+  "public_safe_summary": "Auckland Win is too contradicted across the current structural layers for Auckland vs Adelaide United, so the clean read is caution rather than action.",
+  "internal_reason_tokens": [
+    "TEAM_POWER_ADVANTAGE",
+    "AWAY_TRAVEL_THREAT",
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "summary": {
+    "support_count": 1,
+    "caution_count": 3,
+    "lineup_available": false,
+    "h2h_available": false
+  },
+  "preview": {
+    "headline": "Auckland vs Adelaide United: Auckland Win avoid",
+    "short_summary": "Auckland Win is too contradicted across the current structural layers for Auckland vs Adelaide United, so the clean read is caution rather than action. Primary support comes from team power advantage, while the main caution remains away travel threat.",
+    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: Cards.",
+    "caution_line": "Main caution: Away Travel Threat.",
+    "telegram_summary": "Auckland vs Adelaide United — Auckland Win (Avoid, 44% agreement). Support: Team Power Advantage. Caution: Away Travel Threat.",
+    "premium_summary": "Auckland Win is carrying a 44% agreement read across the published decision layers. Support is currently led by team power advantage, while caution is still coming from away travel threat, lineup data missing."
+  }
+}

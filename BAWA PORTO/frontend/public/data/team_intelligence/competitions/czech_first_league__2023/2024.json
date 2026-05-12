@@ -1,0 +1,1589 @@
+{
+  "competition_key": "czech_first_league",
+  "season": "2023/2024",
+  "teams": [
+    {
+      "team": "Viktoria Plze\u0148",
+      "team_slug": "viktoria_plze",
+      "competition": "Czech First League",
+      "competition_key": "czech_first_league",
+      "season": "2023/2024",
+      "country": "Czech Republic",
+      "matches_played": 35,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 35
+      },
+      "ratings": {
+        "og_power_rating": 83,
+        "attack_flow_rating": 87,
+        "defensive_lock_rating": 68,
+        "goal_heat_rating": 76,
+        "btts_pressure_rating": 59,
+        "over25_heat_rating": 80,
+        "control_rating": 44,
+        "first_strike_rating": 88,
+        "corner_pressure_rating": 67,
+        "card_heat_rating": 52,
+        "chaos_rating": 64,
+        "home_fortress_rating": 81,
+        "away_threat_rating": 82
+      },
+      "rating_bands": {
+        "og_power_rating": "Strong",
+        "attack_flow_rating": "Strong",
+        "defensive_lock_rating": "Mixed",
+        "goal_heat_rating": "Positive",
+        "btts_pressure_rating": "Mixed",
+        "over25_heat_rating": "Strong",
+        "control_rating": "Weak",
+        "first_strike_rating": "Strong",
+        "corner_pressure_rating": "Mixed",
+        "card_heat_rating": "Weak",
+        "chaos_rating": "Mixed",
+        "home_fortress_rating": "Strong",
+        "away_threat_rating": "Strong"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Strong team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Strong attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Mixed defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Positive goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Mixed two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Strong 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Weak match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Strong early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Mixed territory and corner-generation profile.",
+        "card_heat_rating": "Weak discipline and card volatility profile.",
+        "chaos_rating": "Mixed volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Strong home-ground control profile.",
+        "away_threat_rating": "Strong travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Strong Table Profile",
+        "Attack-Led Side",
+        "Strong First Goal",
+        "Travels Well",
+        "Open Match Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 83%",
+        "profile": "Strong team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "First Strike",
+          "Attack Flow",
+          "Og Power"
+        ],
+        "main_caution": "Chaos Rating sits at 64%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Positive",
+        "btts_lean": "Mixed",
+        "over25_lean": "Positive",
+        "under_control": "Weak",
+        "team_goals_15": "Strong",
+        "corners": "Mixed",
+        "cards": "Weak"
+      },
+      "home_profile": {
+        "power": 81,
+        "attack": 87,
+        "defence": 68,
+        "goal_heat": 76
+      },
+      "away_profile": {
+        "power": 82,
+        "attack": 84,
+        "defence": 52,
+        "goal_heat": 78
+      },
+      "timing_profile": {
+        "early_threat": 88,
+        "half_time_control": 45,
+        "late_surge": 78,
+        "late_fragility": 58
+      }
+    },
+    {
+      "team": "Sparta Praha",
+      "team_slug": "sparta_praha",
+      "competition": "Czech First League",
+      "competition_key": "czech_first_league",
+      "season": "2023/2024",
+      "country": "Czech Republic",
+      "matches_played": 35,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 35
+      },
+      "ratings": {
+        "og_power_rating": 93,
+        "attack_flow_rating": 96,
+        "defensive_lock_rating": 84,
+        "goal_heat_rating": 69,
+        "btts_pressure_rating": 55,
+        "over25_heat_rating": 74,
+        "control_rating": 49,
+        "first_strike_rating": 98,
+        "corner_pressure_rating": 83,
+        "card_heat_rating": 37,
+        "chaos_rating": 52,
+        "home_fortress_rating": 89,
+        "away_threat_rating": 95
+      },
+      "rating_bands": {
+        "og_power_rating": "Elite",
+        "attack_flow_rating": "Elite",
+        "defensive_lock_rating": "Strong",
+        "goal_heat_rating": "Mixed",
+        "btts_pressure_rating": "Mixed",
+        "over25_heat_rating": "Positive",
+        "control_rating": "Weak",
+        "first_strike_rating": "Elite",
+        "corner_pressure_rating": "Strong",
+        "card_heat_rating": "Red Flag",
+        "chaos_rating": "Weak",
+        "home_fortress_rating": "Strong",
+        "away_threat_rating": "Elite"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Elite team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Elite attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Strong defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Mixed goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Mixed two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Positive 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Weak match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Elite early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Strong territory and corner-generation profile.",
+        "card_heat_rating": "Red Flag discipline and card volatility profile.",
+        "chaos_rating": "Weak volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Strong home-ground control profile.",
+        "away_threat_rating": "Elite travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Elite Control Side",
+        "Attack-Led Side",
+        "Strong First Goal",
+        "Home Dominant",
+        "Travels Well"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 93%",
+        "profile": "Elite team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "First Strike",
+          "Attack Flow",
+          "Away Threat"
+        ],
+        "main_caution": "Chaos Rating sits at 52%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Strong",
+        "btts_lean": "Mixed",
+        "over25_lean": "Positive",
+        "under_control": "Weak",
+        "team_goals_15": "Strong",
+        "corners": "Positive",
+        "cards": "Mixed"
+      },
+      "home_profile": {
+        "power": 89,
+        "attack": 96,
+        "defence": 84,
+        "goal_heat": 69
+      },
+      "away_profile": {
+        "power": 95,
+        "attack": 96,
+        "defence": 66,
+        "goal_heat": 72
+      },
+      "timing_profile": {
+        "early_threat": 97,
+        "half_time_control": 53,
+        "late_surge": 72,
+        "late_fragility": 44
+      }
+    },
+    {
+      "team": "Slavia Praha",
+      "team_slug": "slavia_praha",
+      "competition": "Czech First League",
+      "competition_key": "czech_first_league",
+      "season": "2023/2024",
+      "country": "Czech Republic",
+      "matches_played": 35,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 35
+      },
+      "ratings": {
+        "og_power_rating": 87,
+        "attack_flow_rating": 92,
+        "defensive_lock_rating": 94,
+        "goal_heat_rating": 51,
+        "btts_pressure_rating": 40,
+        "over25_heat_rating": 54,
+        "control_rating": 77,
+        "first_strike_rating": 90,
+        "corner_pressure_rating": 77,
+        "card_heat_rating": 29,
+        "chaos_rating": 37,
+        "home_fortress_rating": 98,
+        "away_threat_rating": 94
+      },
+      "rating_bands": {
+        "og_power_rating": "Strong",
+        "attack_flow_rating": "Elite",
+        "defensive_lock_rating": "Elite",
+        "goal_heat_rating": "Weak",
+        "btts_pressure_rating": "Weak",
+        "over25_heat_rating": "Weak",
+        "control_rating": "Positive",
+        "first_strike_rating": "Elite",
+        "corner_pressure_rating": "Positive",
+        "card_heat_rating": "Red Flag",
+        "chaos_rating": "Red Flag",
+        "home_fortress_rating": "Elite",
+        "away_threat_rating": "Elite"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Strong team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Elite attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Elite defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Weak goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Weak two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Weak 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Positive match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Elite early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Positive territory and corner-generation profile.",
+        "card_heat_rating": "Red Flag discipline and card volatility profile.",
+        "chaos_rating": "Red Flag volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Elite home-ground control profile.",
+        "away_threat_rating": "Elite travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Strong Table Profile",
+        "Defensive Wall",
+        "Attack-Led Side",
+        "Strong First Goal",
+        "Home Dominant"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 87%",
+        "profile": "Strong team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Home Fortress",
+          "Defensive Lock",
+          "Away Threat"
+        ],
+        "main_caution": "Chaos Rating sits at 37%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Strong",
+        "btts_lean": "Weak",
+        "over25_lean": "Weak",
+        "under_control": "Positive",
+        "team_goals_15": "Strong",
+        "corners": "Positive",
+        "cards": "Positive"
+      },
+      "home_profile": {
+        "power": 98,
+        "attack": 92,
+        "defence": 94,
+        "goal_heat": 51
+      },
+      "away_profile": {
+        "power": 94,
+        "attack": 93,
+        "defence": 78,
+        "goal_heat": 52
+      },
+      "timing_profile": {
+        "early_threat": 91,
+        "half_time_control": 63,
+        "late_surge": 52,
+        "late_fragility": 33
+      }
+    },
+    {
+      "team": "Karvin\u00e1",
+      "team_slug": "karvin",
+      "competition": "Czech First League",
+      "competition_key": "czech_first_league",
+      "season": "2023/2024",
+      "country": "Czech Republic",
+      "matches_played": 35,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 35
+      },
+      "ratings": {
+        "og_power_rating": 29,
+        "attack_flow_rating": 40,
+        "defensive_lock_rating": 29,
+        "goal_heat_rating": 60,
+        "btts_pressure_rating": 52,
+        "over25_heat_rating": 61,
+        "control_rating": 38,
+        "first_strike_rating": 31,
+        "corner_pressure_rating": 38,
+        "card_heat_rating": 63,
+        "chaos_rating": 59,
+        "home_fortress_rating": 25,
+        "away_threat_rating": 26
+      },
+      "rating_bands": {
+        "og_power_rating": "Red Flag",
+        "attack_flow_rating": "Weak",
+        "defensive_lock_rating": "Red Flag",
+        "goal_heat_rating": "Mixed",
+        "btts_pressure_rating": "Weak",
+        "over25_heat_rating": "Mixed",
+        "control_rating": "Red Flag",
+        "first_strike_rating": "Red Flag",
+        "corner_pressure_rating": "Red Flag",
+        "card_heat_rating": "Mixed",
+        "chaos_rating": "Mixed",
+        "home_fortress_rating": "Red Flag",
+        "away_threat_rating": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Weak attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Red Flag defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Mixed goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Weak two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Mixed 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Red Flag match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Red Flag early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Red Flag territory and corner-generation profile.",
+        "card_heat_rating": "Mixed discipline and card volatility profile.",
+        "chaos_rating": "Mixed volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Red Flag home-ground control profile.",
+        "away_threat_rating": "Red Flag travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Mixed Team Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 29%",
+        "profile": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Card Heat",
+          "Over25 Heat",
+          "Goal Heat"
+        ],
+        "main_caution": "Card Heat sits at 63%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Red Flag",
+        "btts_lean": "Weak",
+        "over25_lean": "Mixed",
+        "under_control": "Red Flag",
+        "team_goals_15": "Weak",
+        "corners": "Red Flag",
+        "cards": "Red Flag"
+      },
+      "home_profile": {
+        "power": 25,
+        "attack": 40,
+        "defence": 29,
+        "goal_heat": 60
+      },
+      "away_profile": {
+        "power": 26,
+        "attack": 33,
+        "defence": 35,
+        "goal_heat": 60
+      },
+      "timing_profile": {
+        "early_threat": 36,
+        "half_time_control": 30,
+        "late_surge": 60,
+        "late_fragility": 61
+      }
+    },
+    {
+      "team": "Slov\u00e1cko",
+      "team_slug": "slov_cko",
+      "competition": "Czech First League",
+      "competition_key": "czech_first_league",
+      "season": "2023/2024",
+      "country": "Czech Republic",
+      "matches_played": 35,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 35
+      },
+      "ratings": {
+        "og_power_rating": 52,
+        "attack_flow_rating": 48,
+        "defensive_lock_rating": 48,
+        "goal_heat_rating": 45,
+        "btts_pressure_rating": 45,
+        "over25_heat_rating": 46,
+        "control_rating": 64,
+        "first_strike_rating": 46,
+        "corner_pressure_rating": 36,
+        "card_heat_rating": 42,
+        "chaos_rating": 39,
+        "home_fortress_rating": 47,
+        "away_threat_rating": 56
+      },
+      "rating_bands": {
+        "og_power_rating": "Weak",
+        "attack_flow_rating": "Weak",
+        "defensive_lock_rating": "Weak",
+        "goal_heat_rating": "Weak",
+        "btts_pressure_rating": "Weak",
+        "over25_heat_rating": "Weak",
+        "control_rating": "Mixed",
+        "first_strike_rating": "Weak",
+        "corner_pressure_rating": "Red Flag",
+        "card_heat_rating": "Weak",
+        "chaos_rating": "Red Flag",
+        "home_fortress_rating": "Weak",
+        "away_threat_rating": "Mixed"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Weak attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Weak defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Weak goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Weak two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Weak 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Mixed match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Weak early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Red Flag territory and corner-generation profile.",
+        "card_heat_rating": "Weak discipline and card volatility profile.",
+        "chaos_rating": "Red Flag volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Weak home-ground control profile.",
+        "away_threat_rating": "Mixed travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Mixed Team Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 52%",
+        "profile": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Control",
+          "Away Threat",
+          "Og Power"
+        ],
+        "main_caution": "Card Heat sits at 42%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Weak",
+        "btts_lean": "Weak",
+        "over25_lean": "Weak",
+        "under_control": "Mixed",
+        "team_goals_15": "Weak",
+        "corners": "Red Flag",
+        "cards": "Mixed"
+      },
+      "home_profile": {
+        "power": 47,
+        "attack": 48,
+        "defence": 48,
+        "goal_heat": 45
+      },
+      "away_profile": {
+        "power": 56,
+        "attack": 52,
+        "defence": 54,
+        "goal_heat": 46
+      },
+      "timing_profile": {
+        "early_threat": 47,
+        "half_time_control": 42,
+        "late_surge": 46,
+        "late_fragility": 40
+      }
+    },
+    {
+      "team": "Slovan Liberec",
+      "team_slug": "slovan_liberec",
+      "competition": "Czech First League",
+      "competition_key": "czech_first_league",
+      "season": "2023/2024",
+      "country": "Czech Republic",
+      "matches_played": 32,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 32
+      },
+      "ratings": {
+        "og_power_rating": 53,
+        "attack_flow_rating": 74,
+        "defensive_lock_rating": 47,
+        "goal_heat_rating": 55,
+        "btts_pressure_rating": 57,
+        "over25_heat_rating": 49,
+        "control_rating": 50,
+        "first_strike_rating": 65,
+        "corner_pressure_rating": 54,
+        "card_heat_rating": 53,
+        "chaos_rating": 59,
+        "home_fortress_rating": 72,
+        "away_threat_rating": 30
+      },
+      "rating_bands": {
+        "og_power_rating": "Weak",
+        "attack_flow_rating": "Positive",
+        "defensive_lock_rating": "Weak",
+        "goal_heat_rating": "Mixed",
+        "btts_pressure_rating": "Mixed",
+        "over25_heat_rating": "Weak",
+        "control_rating": "Weak",
+        "first_strike_rating": "Mixed",
+        "corner_pressure_rating": "Weak",
+        "card_heat_rating": "Weak",
+        "chaos_rating": "Mixed",
+        "home_fortress_rating": "Positive",
+        "away_threat_rating": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Positive attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Weak defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Mixed goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Mixed two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Weak 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Weak match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Mixed early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Weak territory and corner-generation profile.",
+        "card_heat_rating": "Weak discipline and card volatility profile.",
+        "chaos_rating": "Mixed volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Positive home-ground control profile.",
+        "away_threat_rating": "Red Flag travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Mixed Team Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 53%",
+        "profile": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Attack Flow",
+          "Home Fortress",
+          "First Strike"
+        ],
+        "main_caution": "Chaos Rating sits at 59%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Weak",
+        "btts_lean": "Mixed",
+        "over25_lean": "Weak",
+        "under_control": "Weak",
+        "team_goals_15": "Positive",
+        "corners": "Weak",
+        "cards": "Weak"
+      },
+      "home_profile": {
+        "power": 72,
+        "attack": 74,
+        "defence": 47,
+        "goal_heat": 55
+      },
+      "away_profile": {
+        "power": 30,
+        "attack": 52,
+        "defence": 44,
+        "goal_heat": 52
+      },
+      "timing_profile": {
+        "early_threat": 70,
+        "half_time_control": 39,
+        "late_surge": 52,
+        "late_fragility": 56
+      }
+    },
+    {
+      "team": "Jablonec",
+      "team_slug": "jablonec",
+      "competition": "Czech First League",
+      "competition_key": "czech_first_league",
+      "season": "2023/2024",
+      "country": "Czech Republic",
+      "matches_played": 35,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 35
+      },
+      "ratings": {
+        "og_power_rating": 53,
+        "attack_flow_rating": 48,
+        "defensive_lock_rating": 47,
+        "goal_heat_rating": 40,
+        "btts_pressure_rating": 60,
+        "over25_heat_rating": 34,
+        "control_rating": 54,
+        "first_strike_rating": 47,
+        "corner_pressure_rating": 34,
+        "card_heat_rating": 66,
+        "chaos_rating": 57,
+        "home_fortress_rating": 47,
+        "away_threat_rating": 44
+      },
+      "rating_bands": {
+        "og_power_rating": "Weak",
+        "attack_flow_rating": "Weak",
+        "defensive_lock_rating": "Weak",
+        "goal_heat_rating": "Weak",
+        "btts_pressure_rating": "Mixed",
+        "over25_heat_rating": "Red Flag",
+        "control_rating": "Weak",
+        "first_strike_rating": "Weak",
+        "corner_pressure_rating": "Red Flag",
+        "card_heat_rating": "Mixed",
+        "chaos_rating": "Mixed",
+        "home_fortress_rating": "Weak",
+        "away_threat_rating": "Weak"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Weak attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Weak defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Weak goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Mixed two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Red Flag 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Weak match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Weak early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Red Flag territory and corner-generation profile.",
+        "card_heat_rating": "Mixed discipline and card volatility profile.",
+        "chaos_rating": "Mixed volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Weak home-ground control profile.",
+        "away_threat_rating": "Weak travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Mixed Team Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 53%",
+        "profile": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Card Heat",
+          "Btts Pressure",
+          "Chaos"
+        ],
+        "main_caution": "Card Heat sits at 66%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Weak",
+        "btts_lean": "Mixed",
+        "over25_lean": "Red Flag",
+        "under_control": "Weak",
+        "team_goals_15": "Weak",
+        "corners": "Red Flag",
+        "cards": "Red Flag"
+      },
+      "home_profile": {
+        "power": 47,
+        "attack": 48,
+        "defence": 47,
+        "goal_heat": 40
+      },
+      "away_profile": {
+        "power": 44,
+        "attack": 46,
+        "defence": 45,
+        "goal_heat": 37
+      },
+      "timing_profile": {
+        "early_threat": 48,
+        "half_time_control": 37,
+        "late_surge": 37,
+        "late_fragility": 62
+      }
+    },
+    {
+      "team": "Sigma Olomouc",
+      "team_slug": "sigma_olomouc",
+      "competition": "Czech First League",
+      "competition_key": "czech_first_league",
+      "season": "2023/2024",
+      "country": "Czech Republic",
+      "matches_played": 32,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 32
+      },
+      "ratings": {
+        "og_power_rating": 42,
+        "attack_flow_rating": 49,
+        "defensive_lock_rating": 32,
+        "goal_heat_rating": 58,
+        "btts_pressure_rating": 69,
+        "over25_heat_rating": 53,
+        "control_rating": 32,
+        "first_strike_rating": 58,
+        "corner_pressure_rating": 54,
+        "card_heat_rating": 40,
+        "chaos_rating": 49,
+        "home_fortress_rating": 39,
+        "away_threat_rating": 41
+      },
+      "rating_bands": {
+        "og_power_rating": "Weak",
+        "attack_flow_rating": "Weak",
+        "defensive_lock_rating": "Red Flag",
+        "goal_heat_rating": "Mixed",
+        "btts_pressure_rating": "Mixed",
+        "over25_heat_rating": "Weak",
+        "control_rating": "Red Flag",
+        "first_strike_rating": "Mixed",
+        "corner_pressure_rating": "Weak",
+        "card_heat_rating": "Weak",
+        "chaos_rating": "Weak",
+        "home_fortress_rating": "Red Flag",
+        "away_threat_rating": "Weak"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Weak attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Red Flag defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Mixed goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Mixed two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Weak 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Red Flag match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Mixed early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Weak territory and corner-generation profile.",
+        "card_heat_rating": "Weak discipline and card volatility profile.",
+        "chaos_rating": "Weak volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Red Flag home-ground control profile.",
+        "away_threat_rating": "Weak travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Mixed Team Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 42%",
+        "profile": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Btts Pressure",
+          "Goal Heat",
+          "First Strike"
+        ],
+        "main_caution": "Chaos Rating sits at 49%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Weak",
+        "btts_lean": "Mixed",
+        "over25_lean": "Weak",
+        "under_control": "Red Flag",
+        "team_goals_15": "Weak",
+        "corners": "Weak",
+        "cards": "Mixed"
+      },
+      "home_profile": {
+        "power": 39,
+        "attack": 49,
+        "defence": 32,
+        "goal_heat": 58
+      },
+      "away_profile": {
+        "power": 41,
+        "attack": 45,
+        "defence": 42,
+        "goal_heat": 56
+      },
+      "timing_profile": {
+        "early_threat": 54,
+        "half_time_control": 28,
+        "late_surge": 56,
+        "late_fragility": 44
+      }
+    },
+    {
+      "team": "Ban\u00edk Ostrava",
+      "team_slug": "ban_k_ostrava",
+      "competition": "Czech First League",
+      "competition_key": "czech_first_league",
+      "season": "2023/2024",
+      "country": "Czech Republic",
+      "matches_played": 35,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 35
+      },
+      "ratings": {
+        "og_power_rating": 70,
+        "attack_flow_rating": 72,
+        "defensive_lock_rating": 58,
+        "goal_heat_rating": 66,
+        "btts_pressure_rating": 53,
+        "over25_heat_rating": 68,
+        "control_rating": 57,
+        "first_strike_rating": 53,
+        "corner_pressure_rating": 75,
+        "card_heat_rating": 59,
+        "chaos_rating": 58,
+        "home_fortress_rating": 55,
+        "away_threat_rating": 70
+      },
+      "rating_bands": {
+        "og_power_rating": "Positive",
+        "attack_flow_rating": "Positive",
+        "defensive_lock_rating": "Mixed",
+        "goal_heat_rating": "Mixed",
+        "btts_pressure_rating": "Weak",
+        "over25_heat_rating": "Mixed",
+        "control_rating": "Mixed",
+        "first_strike_rating": "Weak",
+        "corner_pressure_rating": "Positive",
+        "card_heat_rating": "Mixed",
+        "chaos_rating": "Mixed",
+        "home_fortress_rating": "Mixed",
+        "away_threat_rating": "Positive"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Positive team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Positive attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Mixed defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Mixed goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Weak two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Mixed 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Mixed match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Weak early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Positive territory and corner-generation profile.",
+        "card_heat_rating": "Mixed discipline and card volatility profile.",
+        "chaos_rating": "Mixed volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Mixed home-ground control profile.",
+        "away_threat_rating": "Positive travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Mixed Team Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 70%",
+        "profile": "Positive team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Corner Pressure",
+          "Attack Flow",
+          "Og Power"
+        ],
+        "main_caution": "Card Heat sits at 59%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Positive",
+        "btts_lean": "Weak",
+        "over25_lean": "Mixed",
+        "under_control": "Mixed",
+        "team_goals_15": "Positive",
+        "corners": "Positive",
+        "cards": "Weak"
+      },
+      "home_profile": {
+        "power": 55,
+        "attack": 72,
+        "defence": 58,
+        "goal_heat": 66
+      },
+      "away_profile": {
+        "power": 70,
+        "attack": 71,
+        "defence": 50,
+        "goal_heat": 67
+      },
+      "timing_profile": {
+        "early_threat": 62,
+        "half_time_control": 42,
+        "late_surge": 67,
+        "late_fragility": 58
+      }
+    },
+    {
+      "team": "Zl\u00edn",
+      "team_slug": "zl_n",
+      "competition": "Czech First League",
+      "competition_key": "czech_first_league",
+      "season": "2023/2024",
+      "country": "Czech Republic",
+      "matches_played": 35,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 35
+      },
+      "ratings": {
+        "og_power_rating": 15,
+        "attack_flow_rating": 23,
+        "defensive_lock_rating": 16,
+        "goal_heat_rating": 65,
+        "btts_pressure_rating": 58,
+        "over25_heat_rating": 64,
+        "control_rating": 27,
+        "first_strike_rating": 14,
+        "corner_pressure_rating": 17,
+        "card_heat_rating": 70,
+        "chaos_rating": 69,
+        "home_fortress_rating": 16,
+        "away_threat_rating": 15
+      },
+      "rating_bands": {
+        "og_power_rating": "Red Flag",
+        "attack_flow_rating": "Red Flag",
+        "defensive_lock_rating": "Red Flag",
+        "goal_heat_rating": "Mixed",
+        "btts_pressure_rating": "Mixed",
+        "over25_heat_rating": "Mixed",
+        "control_rating": "Red Flag",
+        "first_strike_rating": "Red Flag",
+        "corner_pressure_rating": "Red Flag",
+        "card_heat_rating": "Positive",
+        "chaos_rating": "Mixed",
+        "home_fortress_rating": "Red Flag",
+        "away_threat_rating": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Red Flag attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Red Flag defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Mixed goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Mixed two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Mixed 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Red Flag match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Red Flag early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Red Flag territory and corner-generation profile.",
+        "card_heat_rating": "Positive discipline and card volatility profile.",
+        "chaos_rating": "Mixed volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Red Flag home-ground control profile.",
+        "away_threat_rating": "Red Flag travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Mixed Team Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 15%",
+        "profile": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Card Heat",
+          "Chaos",
+          "Goal Heat"
+        ],
+        "main_caution": "Card Heat sits at 70%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Red Flag",
+        "btts_lean": "Mixed",
+        "over25_lean": "Mixed",
+        "under_control": "Red Flag",
+        "team_goals_15": "Red Flag",
+        "corners": "Red Flag",
+        "cards": "Red Flag"
+      },
+      "home_profile": {
+        "power": 16,
+        "attack": 23,
+        "defence": 16,
+        "goal_heat": 65
+      },
+      "away_profile": {
+        "power": 15,
+        "attack": 19,
+        "defence": 24,
+        "goal_heat": 64
+      },
+      "timing_profile": {
+        "early_threat": 18,
+        "half_time_control": 22,
+        "late_surge": 64,
+        "late_fragility": 70
+      }
+    },
+    {
+      "team": "Bohemians 1905",
+      "team_slug": "bohemians_1905",
+      "competition": "Czech First League",
+      "competition_key": "czech_first_league",
+      "season": "2023/2024",
+      "country": "Czech Republic",
+      "matches_played": 35,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 35
+      },
+      "ratings": {
+        "og_power_rating": 38,
+        "attack_flow_rating": 22,
+        "defensive_lock_rating": 54,
+        "goal_heat_rating": 27,
+        "btts_pressure_rating": 40,
+        "over25_heat_rating": 25,
+        "control_rating": 61,
+        "first_strike_rating": 17,
+        "corner_pressure_rating": 52,
+        "card_heat_rating": 61,
+        "chaos_rating": 42,
+        "home_fortress_rating": 32,
+        "away_threat_rating": 47
+      },
+      "rating_bands": {
+        "og_power_rating": "Red Flag",
+        "attack_flow_rating": "Red Flag",
+        "defensive_lock_rating": "Weak",
+        "goal_heat_rating": "Red Flag",
+        "btts_pressure_rating": "Weak",
+        "over25_heat_rating": "Red Flag",
+        "control_rating": "Mixed",
+        "first_strike_rating": "Red Flag",
+        "corner_pressure_rating": "Weak",
+        "card_heat_rating": "Mixed",
+        "chaos_rating": "Weak",
+        "home_fortress_rating": "Red Flag",
+        "away_threat_rating": "Weak"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Red Flag attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Weak defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Red Flag goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Weak two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Red Flag 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Mixed match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Red Flag early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Weak territory and corner-generation profile.",
+        "card_heat_rating": "Mixed discipline and card volatility profile.",
+        "chaos_rating": "Weak volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Red Flag home-ground control profile.",
+        "away_threat_rating": "Weak travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Mixed Team Profile"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 38%",
+        "profile": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Control",
+          "Card Heat",
+          "Defensive Lock"
+        ],
+        "main_caution": "Card Heat sits at 61%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Red Flag",
+        "btts_lean": "Weak",
+        "over25_lean": "Red Flag",
+        "under_control": "Mixed",
+        "team_goals_15": "Red Flag",
+        "corners": "Weak",
+        "cards": "Red Flag"
+      },
+      "home_profile": {
+        "power": 32,
+        "attack": 22,
+        "defence": 54,
+        "goal_heat": 27
+      },
+      "away_profile": {
+        "power": 47,
+        "attack": 34,
+        "defence": 56,
+        "goal_heat": 26
+      },
+      "timing_profile": {
+        "early_threat": 20,
+        "half_time_control": 40,
+        "late_surge": 26,
+        "late_fragility": 52
+      }
+    },
+    {
+      "team": "Mlad\u00e1 Boleslav",
+      "team_slug": "mlad_boleslav",
+      "competition": "Czech First League",
+      "competition_key": "czech_first_league",
+      "season": "2023/2024",
+      "country": "Czech Republic",
+      "matches_played": 36,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 36
+      },
+      "ratings": {
+        "og_power_rating": 44,
+        "attack_flow_rating": 60,
+        "defensive_lock_rating": 23,
+        "goal_heat_rating": 86,
+        "btts_pressure_rating": 68,
+        "over25_heat_rating": 83,
+        "control_rating": 22,
+        "first_strike_rating": 54,
+        "corner_pressure_rating": 69,
+        "card_heat_rating": 58,
+        "chaos_rating": 81,
+        "home_fortress_rating": 47,
+        "away_threat_rating": 50
+      },
+      "rating_bands": {
+        "og_power_rating": "Weak",
+        "attack_flow_rating": "Mixed",
+        "defensive_lock_rating": "Red Flag",
+        "goal_heat_rating": "Strong",
+        "btts_pressure_rating": "Mixed",
+        "over25_heat_rating": "Strong",
+        "control_rating": "Red Flag",
+        "first_strike_rating": "Weak",
+        "corner_pressure_rating": "Mixed",
+        "card_heat_rating": "Mixed",
+        "chaos_rating": "Strong",
+        "home_fortress_rating": "Weak",
+        "away_threat_rating": "Weak"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Mixed attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Red Flag defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Strong goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Mixed two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Strong 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Red Flag match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Weak early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Mixed territory and corner-generation profile.",
+        "card_heat_rating": "Mixed discipline and card volatility profile.",
+        "chaos_rating": "Strong volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Weak home-ground control profile.",
+        "away_threat_rating": "Weak travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Open Match Profile",
+        "High Chaos Side"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 44%",
+        "profile": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Goal Heat",
+          "Over25 Heat",
+          "Chaos"
+        ],
+        "main_caution": "Chaos Rating sits at 81%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Weak",
+        "btts_lean": "Mixed",
+        "over25_lean": "Positive",
+        "under_control": "Red Flag",
+        "team_goals_15": "Mixed",
+        "corners": "Mixed",
+        "cards": "Weak"
+      },
+      "home_profile": {
+        "power": 47,
+        "attack": 60,
+        "defence": 23,
+        "goal_heat": 86
+      },
+      "away_profile": {
+        "power": 50,
+        "attack": 55,
+        "defence": 21,
+        "goal_heat": 84
+      },
+      "timing_profile": {
+        "early_threat": 57,
+        "half_time_control": 28,
+        "late_surge": 84,
+        "late_fragility": 70
+      }
+    },
+    {
+      "team": "Teplice",
+      "team_slug": "teplice",
+      "competition": "Czech First League",
+      "competition_key": "czech_first_league",
+      "season": "2023/2024",
+      "country": "Czech Republic",
+      "matches_played": 34,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 34
+      },
+      "ratings": {
+        "og_power_rating": 39,
+        "attack_flow_rating": 25,
+        "defensive_lock_rating": 62,
+        "goal_heat_rating": 16,
+        "btts_pressure_rating": 27,
+        "over25_heat_rating": 16,
+        "control_rating": 72,
+        "first_strike_rating": 29,
+        "corner_pressure_rating": 26,
+        "card_heat_rating": 59,
+        "chaos_rating": 34,
+        "home_fortress_rating": 50,
+        "away_threat_rating": 44
+      },
+      "rating_bands": {
+        "og_power_rating": "Red Flag",
+        "attack_flow_rating": "Red Flag",
+        "defensive_lock_rating": "Mixed",
+        "goal_heat_rating": "Red Flag",
+        "btts_pressure_rating": "Red Flag",
+        "over25_heat_rating": "Red Flag",
+        "control_rating": "Positive",
+        "first_strike_rating": "Red Flag",
+        "corner_pressure_rating": "Red Flag",
+        "card_heat_rating": "Mixed",
+        "chaos_rating": "Red Flag",
+        "home_fortress_rating": "Weak",
+        "away_threat_rating": "Weak"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Red Flag attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Mixed defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Red Flag goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Red Flag two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Red Flag 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Positive match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Red Flag early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Red Flag territory and corner-generation profile.",
+        "card_heat_rating": "Mixed discipline and card volatility profile.",
+        "chaos_rating": "Red Flag volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Weak home-ground control profile.",
+        "away_threat_rating": "Weak travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Low Chaos"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 39%",
+        "profile": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Control",
+          "Defensive Lock",
+          "Card Heat"
+        ],
+        "main_caution": "Card Heat sits at 59%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Red Flag",
+        "btts_lean": "Red Flag",
+        "over25_lean": "Red Flag",
+        "under_control": "Positive",
+        "team_goals_15": "Red Flag",
+        "corners": "Red Flag",
+        "cards": "Weak"
+      },
+      "home_profile": {
+        "power": 50,
+        "attack": 25,
+        "defence": 62,
+        "goal_heat": 16
+      },
+      "away_profile": {
+        "power": 44,
+        "attack": 34,
+        "defence": 64,
+        "goal_heat": 16
+      },
+      "timing_profile": {
+        "early_threat": 27,
+        "half_time_control": 49,
+        "late_surge": 16,
+        "late_fragility": 46
+      }
+    },
+    {
+      "team": "Hradec Kr\u00e1lov\u00e9",
+      "team_slug": "hradec_kr_lov",
+      "competition": "Czech First League",
+      "competition_key": "czech_first_league",
+      "season": "2023/2024",
+      "country": "Czech Republic",
+      "matches_played": 35,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 35
+      },
+      "ratings": {
+        "og_power_rating": 60,
+        "attack_flow_rating": 55,
+        "defensive_lock_rating": 68,
+        "goal_heat_rating": 23,
+        "btts_pressure_rating": 39,
+        "over25_heat_rating": 21,
+        "control_rating": 72,
+        "first_strike_rating": 68,
+        "corner_pressure_rating": 57,
+        "card_heat_rating": 58,
+        "chaos_rating": 31,
+        "home_fortress_rating": 66,
+        "away_threat_rating": 49
+      },
+      "rating_bands": {
+        "og_power_rating": "Mixed",
+        "attack_flow_rating": "Mixed",
+        "defensive_lock_rating": "Mixed",
+        "goal_heat_rating": "Red Flag",
+        "btts_pressure_rating": "Red Flag",
+        "over25_heat_rating": "Red Flag",
+        "control_rating": "Positive",
+        "first_strike_rating": "Mixed",
+        "corner_pressure_rating": "Mixed",
+        "card_heat_rating": "Mixed",
+        "chaos_rating": "Red Flag",
+        "home_fortress_rating": "Mixed",
+        "away_threat_rating": "Weak"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Mixed team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Mixed attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Mixed defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Red Flag goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Red Flag two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Red Flag 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Positive match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Mixed early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Mixed territory and corner-generation profile.",
+        "card_heat_rating": "Mixed discipline and card volatility profile.",
+        "chaos_rating": "Red Flag volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Mixed home-ground control profile.",
+        "away_threat_rating": "Weak travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Low Chaos"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 60%",
+        "profile": "Mixed team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Control",
+          "Defensive Lock",
+          "First Strike"
+        ],
+        "main_caution": "Card Heat sits at 58%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Mixed",
+        "btts_lean": "Red Flag",
+        "over25_lean": "Red Flag",
+        "under_control": "Positive",
+        "team_goals_15": "Mixed",
+        "corners": "Mixed",
+        "cards": "Weak"
+      },
+      "home_profile": {
+        "power": 66,
+        "attack": 55,
+        "defence": 68,
+        "goal_heat": 23
+      },
+      "away_profile": {
+        "power": 49,
+        "attack": 52,
+        "defence": 68,
+        "goal_heat": 22
+      },
+      "timing_profile": {
+        "early_threat": 62,
+        "half_time_control": 52,
+        "late_surge": 22,
+        "late_fragility": 44
+      }
+    },
+    {
+      "team": "\u010cesk\u00e9 Bud\u011bjovice",
+      "team_slug": "esk_bud_jovice",
+      "competition": "Czech First League",
+      "competition_key": "czech_first_league",
+      "season": "2023/2024",
+      "country": "Czech Republic",
+      "matches_played": 35,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 35
+      },
+      "ratings": {
+        "og_power_rating": 21,
+        "attack_flow_rating": 36,
+        "defensive_lock_rating": 6,
+        "goal_heat_rating": 88,
+        "btts_pressure_rating": 73,
+        "over25_heat_rating": 91,
+        "control_rating": 15,
+        "first_strike_rating": 25,
+        "corner_pressure_rating": 74,
+        "card_heat_rating": 52,
+        "chaos_rating": 77,
+        "home_fortress_rating": 34,
+        "away_threat_rating": 18
+      },
+      "rating_bands": {
+        "og_power_rating": "Red Flag",
+        "attack_flow_rating": "Red Flag",
+        "defensive_lock_rating": "Red Flag",
+        "goal_heat_rating": "Strong",
+        "btts_pressure_rating": "Positive",
+        "over25_heat_rating": "Elite",
+        "control_rating": "Red Flag",
+        "first_strike_rating": "Red Flag",
+        "corner_pressure_rating": "Positive",
+        "card_heat_rating": "Weak",
+        "chaos_rating": "Positive",
+        "home_fortress_rating": "Red Flag",
+        "away_threat_rating": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Red Flag attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Red Flag defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Strong goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Positive two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Elite 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Red Flag match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Red Flag early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Positive territory and corner-generation profile.",
+        "card_heat_rating": "Weak discipline and card volatility profile.",
+        "chaos_rating": "Positive volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Red Flag home-ground control profile.",
+        "away_threat_rating": "Red Flag travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Open Match Profile",
+        "Two-Way Scoring Profile",
+        "High Chaos Side"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 21%",
+        "profile": "Red Flag team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Over25 Heat",
+          "Goal Heat",
+          "Chaos"
+        ],
+        "main_caution": "Chaos Rating sits at 77%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Red Flag",
+        "btts_lean": "Positive",
+        "over25_lean": "Strong",
+        "under_control": "Red Flag",
+        "team_goals_15": "Red Flag",
+        "corners": "Positive",
+        "cards": "Weak"
+      },
+      "home_profile": {
+        "power": 34,
+        "attack": 36,
+        "defence": 6,
+        "goal_heat": 88
+      },
+      "away_profile": {
+        "power": 18,
+        "attack": 27,
+        "defence": 14,
+        "goal_heat": 90
+      },
+      "timing_profile": {
+        "early_threat": 30,
+        "half_time_control": 10,
+        "late_surge": 90,
+        "late_fragility": 64
+      }
+    },
+    {
+      "team": "Pardubice",
+      "team_slug": "pardubice",
+      "competition": "Czech First League",
+      "competition_key": "czech_first_league",
+      "season": "2023/2024",
+      "country": "Czech Republic",
+      "matches_played": 35,
+      "sample_confidence": {
+        "label": "Strong sample",
+        "matches_played": 35
+      },
+      "ratings": {
+        "og_power_rating": 50,
+        "attack_flow_rating": 23,
+        "defensive_lock_rating": 52,
+        "goal_heat_rating": 25,
+        "btts_pressure_rating": 31,
+        "over25_heat_rating": 32,
+        "control_rating": 59,
+        "first_strike_rating": 51,
+        "corner_pressure_rating": 38,
+        "card_heat_rating": 52,
+        "chaos_rating": 31,
+        "home_fortress_rating": 21,
+        "away_threat_rating": 57
+      },
+      "rating_bands": {
+        "og_power_rating": "Weak",
+        "attack_flow_rating": "Red Flag",
+        "defensive_lock_rating": "Weak",
+        "goal_heat_rating": "Red Flag",
+        "btts_pressure_rating": "Red Flag",
+        "over25_heat_rating": "Red Flag",
+        "control_rating": "Mixed",
+        "first_strike_rating": "Weak",
+        "corner_pressure_rating": "Red Flag",
+        "card_heat_rating": "Weak",
+        "chaos_rating": "Red Flag",
+        "home_fortress_rating": "Red Flag",
+        "away_threat_rating": "Mixed"
+      },
+      "rating_explanations": {
+        "og_power_rating": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "attack_flow_rating": "Red Flag attacking pressure profile with shot production and first-goal threat support.",
+        "defensive_lock_rating": "Weak defensive resistance with concession control and clean-sheet support.",
+        "goal_heat_rating": "Red Flag goal-environment profile for open versus controlled match states.",
+        "btts_pressure_rating": "Red Flag two-way scoring pressure based on scoring access and defensive leakage.",
+        "over25_heat_rating": "Red Flag 3+ goal tendency profile driven by tempo, scoring rate, and goal timing.",
+        "control_rating": "Mixed match-control profile that suppresses chaos and supports lower-event game states.",
+        "first_strike_rating": "Weak early control profile with strong first-goal and halftime leverage.",
+        "corner_pressure_rating": "Red Flag territory and corner-generation profile.",
+        "card_heat_rating": "Weak discipline and card volatility profile.",
+        "chaos_rating": "Red Flag volatility profile showing how difficult this side is to trust cleanly.",
+        "home_fortress_rating": "Red Flag home-ground control profile.",
+        "away_threat_rating": "Mixed travelling threat profile away from home."
+      },
+      "profile_tags": [
+        "Low Chaos"
+      ],
+      "summary": {
+        "headline": "OG Power Rating: 50%",
+        "profile": "Weak team strength built from table output, xG shape, and repeatable match control.",
+        "primary_strengths": [
+          "Control",
+          "Away Threat",
+          "Defensive Lock"
+        ],
+        "main_caution": "Card Heat sits at 52%, so this side needs context rather than blind trust."
+      },
+      "market_tendencies": {
+        "ftr_lean": "Weak",
+        "btts_lean": "Red Flag",
+        "over25_lean": "Red Flag",
+        "under_control": "Mixed",
+        "team_goals_15": "Red Flag",
+        "corners": "Red Flag",
+        "cards": "Weak"
+      },
+      "home_profile": {
+        "power": 21,
+        "attack": 23,
+        "defence": 52,
+        "goal_heat": 25
+      },
+      "away_profile": {
+        "power": 57,
+        "attack": 40,
+        "defence": 60,
+        "goal_heat": 28
+      },
+      "timing_profile": {
+        "early_threat": 37,
+        "half_time_control": 46,
+        "late_surge": 28,
+        "late_fragility": 42
+      }
+    }
+  ]
+}

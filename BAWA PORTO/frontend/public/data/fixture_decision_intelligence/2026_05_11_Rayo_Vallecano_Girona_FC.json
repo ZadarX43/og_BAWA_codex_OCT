@@ -1,0 +1,261 @@
+{
+  "fixture_key": "2026_05_11_Rayo_Vallecano_Girona_FC",
+  "fixture": "Rayo Vallecano vs Girona FC",
+  "primary_signal": "Rayo Vallecano Win",
+  "signal_state": "FRAGILE",
+  "agreement_score": 56,
+  "confidence_band": "LOW",
+  "supporting_layers": [
+    "TEAM_POWER_ADVANTAGE",
+    "HOME_FORTRESS_ADVANTAGE"
+  ],
+  "caution_layers": [
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "profile_tags": {
+    "home": [
+      "Corner Pressure Side",
+      "Low Chaos"
+    ],
+    "away": [
+      "Mixed Team Profile"
+    ]
+  },
+  "profile_narrative": "Rayo Vallecano bring a corner pressure side into a matchup with Girona FC's mixed team profile. The structural lean comes from Rayo Vallecano's home-side control against the away profile.",
+  "team_faceoff_summary": [
+    {
+      "metric": "og_power_rating",
+      "label": "OG Power Rating",
+      "home_value": 53,
+      "away_value": 34,
+      "delta": 19,
+      "leader": "Rayo Vallecano"
+    },
+    {
+      "metric": "home_fortress_rating",
+      "label": "Home Fortress",
+      "home_value": 56,
+      "away_value": 25,
+      "delta": 31,
+      "leader": "Rayo Vallecano"
+    },
+    {
+      "metric": "away_threat_rating",
+      "label": "Away Threat",
+      "home_value": 48,
+      "away_value": 43,
+      "delta": 5,
+      "leader": "Rayo Vallecano"
+    },
+    {
+      "metric": "defensive_lock_rating",
+      "label": "Defensive Lock",
+      "home_value": 73,
+      "away_value": 36,
+      "delta": 37,
+      "leader": "Rayo Vallecano"
+    },
+    {
+      "metric": "first_strike_rating",
+      "label": "First Strike",
+      "home_value": 31,
+      "away_value": 53,
+      "delta": 22,
+      "leader": "Girona FC"
+    },
+    {
+      "metric": "control_rating",
+      "label": "Control Rating",
+      "home_value": 78,
+      "away_value": 40,
+      "delta": 38,
+      "leader": "Rayo Vallecano"
+    }
+  ],
+  "unit_battle_summary": [],
+  "key_player_drivers": [],
+  "key_mismatches": [],
+  "h2h_context": {
+    "available": false,
+    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
+    "sample_size": 0
+  },
+  "market_suitability": {
+    "ftr": {
+      "rating": 53,
+      "label": "Weak",
+      "read": "Stronger when one side owns a clear team-power edge."
+    },
+    "btts": {
+      "rating": 40,
+      "label": "Weak",
+      "read": "Driven by two-way access and reduced suppression."
+    },
+    "ou25": {
+      "rating": 34,
+      "label": "Red Flag",
+      "read": "Driven by combined goal environment and tempo."
+    },
+    "team_goals": {
+      "rating": 43,
+      "label": "Weak",
+      "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
+    },
+    "correct_score": {
+      "rating": 100,
+      "label": "Elite",
+      "read": "Better when the shape is structured and the likely scoring zone is narrow."
+    },
+    "corners": {
+      "rating": 61,
+      "label": "Mixed",
+      "read": "Driven by territory and wide-channel pressure."
+    },
+    "cards": {
+      "rating": 48,
+      "label": "Weak",
+      "read": "Driven by discipline heat, fouling, and volatility."
+    }
+  },
+  "market_intelligence": {
+    "ftr": {
+      "alignment_score": 55,
+      "state": "FRAGILE",
+      "model_lean": "HOME",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE",
+        "HOME_FORTRESS_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "FTR has some structural support from team power advantage, but the overall layer fit remains fragile.",
+      "rating": 53,
+      "band": "Weak"
+    },
+    "btts": {
+      "alignment_score": 44,
+      "state": "AVOID",
+      "model_lean": "NO",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE",
+        "HOME_FORTRESS_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "BTTS is too contradicted by lineup data missing to present as a clean public read.",
+      "rating": 40,
+      "band": "Weak"
+    },
+    "ou25": {
+      "alignment_score": 40,
+      "state": "AVOID",
+      "model_lean": "UNDER25",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE",
+        "HOME_FORTRESS_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Over 2.5 is too contradicted by lineup data missing to present as a clean public read.",
+      "rating": 34,
+      "band": "Red Flag"
+    },
+    "team_goals": {
+      "alignment_score": 50,
+      "state": "FRAGILE",
+      "model_lean": "Girona FC 1.5+",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE",
+        "HOME_FORTRESS_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Team Goals has some structural support from team power advantage, but the overall layer fit remains fragile.",
+      "rating": 43,
+      "band": "Weak"
+    },
+    "correct_score": {
+      "alignment_score": 83,
+      "state": "SUPPORTED",
+      "model_lean": "STRUCTURED",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Correct Score is well supported by team power advantage, with caution still coming from lineup data missing.",
+      "rating": 100,
+      "band": "Elite"
+    },
+    "corners": {
+      "alignment_score": 60,
+      "state": "FRAGILE",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE",
+        "HOME_FORTRESS_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Corners has some structural support from team power advantage, but the overall layer fit remains fragile.",
+      "rating": 61,
+      "band": "Mixed"
+    },
+    "cards": {
+      "alignment_score": 50,
+      "state": "FRAGILE",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "TEAM_POWER_ADVANTAGE",
+        "HOME_FORTRESS_ADVANTAGE"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Cards has some structural support from team power advantage, but the overall layer fit remains fragile.",
+      "rating": 48,
+      "band": "Weak"
+    }
+  },
+  "watchlist": {
+    "active": false,
+    "summary": "No watchlist layer is active for this fixture.",
+    "trigger_signals": [],
+    "public_state": "No watchlist flag",
+    "mode": ""
+  },
+  "public_safe_summary": "Rayo Vallecano Win has some live shape in Rayo Vallecano vs Girona FC, but the supporting layers remain fragile and need discipline.",
+  "internal_reason_tokens": [
+    "TEAM_POWER_ADVANTAGE",
+    "HOME_FORTRESS_ADVANTAGE",
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "summary": {
+    "support_count": 2,
+    "caution_count": 2,
+    "lineup_available": false,
+    "h2h_available": false
+  },
+  "preview": {
+    "headline": "Rayo Vallecano vs Girona FC: Rayo Vallecano Win fragile",
+    "short_summary": "Rayo Vallecano Win has some live shape in Rayo Vallecano vs Girona FC, but the supporting layers remain fragile and need discipline. Primary support comes from team power advantage, while the main caution remains lineup data missing.",
+    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Corners. Weakest read: Over 2.5.",
+    "caution_line": "Main caution: Lineup Data Missing.",
+    "telegram_summary": "Rayo Vallecano vs Girona FC — Rayo Vallecano Win (Fragile, 56% agreement). Support: Team Power Advantage. Caution: Lineup Data Missing.",
+    "premium_summary": "Rayo Vallecano Win is carrying a 56% agreement read across the published decision layers. Support is currently led by team power advantage, home fortress advantage, while caution is still coming from lineup data missing, h2h unavailable."
+  }
+}

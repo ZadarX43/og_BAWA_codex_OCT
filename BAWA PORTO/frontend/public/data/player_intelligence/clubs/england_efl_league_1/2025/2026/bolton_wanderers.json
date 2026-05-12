@@ -1,0 +1,1679 @@
+{
+  "club": "Bolton Wanderers",
+  "club_slug": "bolton_wanderers",
+  "competition": "England EFL League 1",
+  "competition_key": "england_efl_league_1",
+  "season": "2025/2026",
+  "players": [
+    {
+      "player_id": "england_efl_league_1_bolton_wanderers_samuel_george_dalby_2025/2026",
+      "name": "Samuel George Dalby",
+      "surname": "Dalby",
+      "club": "Bolton Wanderers",
+      "club_slug": "bolton_wanderers",
+      "competition": "England EFL League 1",
+      "competition_key": "england_efl_league_1",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2302
+      },
+      "ratings": {
+        "og_player_power": 85,
+        "goal_threat": 91,
+        "shot_threat": 85,
+        "xg_threat": 92,
+        "creative_spark": 63,
+        "xa_threat": 66,
+        "midfield_engine": 38,
+        "defensive_lock": 46,
+        "pressing_heat": 44,
+        "ball_progression": 48,
+        "aerial_dominance": 63,
+        "goalkeeper_shield": 46,
+        "discipline_risk": 40,
+        "booking_heat": 32
+      },
+      "rating_bands": {
+        "og_player_power": "Strong",
+        "goal_threat": "Elite",
+        "shot_threat": "Strong",
+        "xg_threat": "Elite",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Red Flag",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_player_power": "Strong headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Elite scoring profile with xG and shot support.",
+        "shot_threat": "Strong shooting volume and on-target pressure.",
+        "xg_threat": "Elite chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Red Flag central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Red Flag booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 7,
+        "position_rank": 7,
+        "club_rank": 1,
+        "goal_threat_rank": 13,
+        "creative_spark_rank": 96,
+        "defensive_lock_rank": 369,
+        "pressing_heat_rank": 496,
+        "booking_heat_rank": 518
+      },
+      "tags": [
+        "Elite Goal Threat"
+      ],
+      "ui": {
+        "pitch_label": "Dalby",
+        "badge_score": 85,
+        "tier": "STRONG"
+      }
+    },
+    {
+      "player_id": "england_efl_league_1_bolton_wanderers_johnny_kenny_2025/2026",
+      "name": "Johnny Kenny",
+      "surname": "Kenny",
+      "club": "Bolton Wanderers",
+      "club_slug": "bolton_wanderers",
+      "competition": "England EFL League 1",
+      "competition_key": "england_efl_league_1",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Trusted sample",
+        "minutes_played": 969
+      },
+      "ratings": {
+        "og_player_power": 74,
+        "goal_threat": 80,
+        "shot_threat": 79,
+        "xg_threat": 81,
+        "creative_spark": 63,
+        "xa_threat": 63,
+        "midfield_engine": 39,
+        "defensive_lock": 45,
+        "pressing_heat": 44,
+        "ball_progression": 54,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 45,
+        "discipline_risk": 49,
+        "booking_heat": 47
+      },
+      "rating_bands": {
+        "og_player_power": "Positive",
+        "goal_threat": "Strong",
+        "shot_threat": "Positive",
+        "xg_threat": "Strong",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Red Flag",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Positive headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Strong scoring profile with xG and shot support.",
+        "shot_threat": "Positive shooting volume and on-target pressure.",
+        "xg_threat": "Strong chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Red Flag central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 36,
+        "position_rank": 36,
+        "club_rank": 2,
+        "goal_threat_rank": 55,
+        "creative_spark_rank": 96,
+        "defensive_lock_rank": 395,
+        "pressing_heat_rank": 496,
+        "booking_heat_rank": 345
+      },
+      "tags": [
+        "Forward Profile"
+      ],
+      "ui": {
+        "pitch_label": "Kenny",
+        "badge_score": 74,
+        "tier": "POSITIVE"
+      }
+    },
+    {
+      "player_id": "england_efl_league_1_bolton_wanderers_george_johnston_2025/2026",
+      "name": "George Johnston",
+      "surname": "Johnston",
+      "club": "Bolton Wanderers",
+      "club_slug": "bolton_wanderers",
+      "competition": "England EFL League 1",
+      "competition_key": "england_efl_league_1",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 3835
+      },
+      "ratings": {
+        "og_player_power": 72,
+        "goal_threat": 37,
+        "shot_threat": 35,
+        "xg_threat": 35,
+        "creative_spark": 45,
+        "xa_threat": 48,
+        "midfield_engine": 65,
+        "defensive_lock": 72,
+        "pressing_heat": 49,
+        "ball_progression": 47,
+        "aerial_dominance": 68,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 61,
+        "booking_heat": 53
+      },
+      "rating_bands": {
+        "og_player_power": "Positive",
+        "goal_threat": "Red Flag",
+        "shot_threat": "Red Flag",
+        "xg_threat": "Red Flag",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Positive",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Positive headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Red Flag scoring profile with xG and shot support.",
+        "shot_threat": "Red Flag shooting volume and on-target pressure.",
+        "xg_threat": "Red Flag chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Positive defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 45,
+        "position_rank": 4,
+        "club_rank": 3,
+        "goal_threat_rank": 462,
+        "creative_spark_rank": 381,
+        "defensive_lock_rank": 22,
+        "pressing_heat_rank": 335,
+        "booking_heat_rank": 201
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Johnston",
+        "badge_score": 72,
+        "tier": "POSITIVE"
+      }
+    },
+    {
+      "player_id": "england_efl_league_1_bolton_wanderers_amario_cozier_duberry_2025/2026",
+      "name": "Amario Cozier-Duberry",
+      "surname": "Cozier-Duberry",
+      "club": "Bolton Wanderers",
+      "club_slug": "bolton_wanderers",
+      "competition": "England EFL League 1",
+      "competition_key": "england_efl_league_1",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2651
+      },
+      "ratings": {
+        "og_player_power": 70,
+        "goal_threat": 89,
+        "shot_threat": 88,
+        "xg_threat": 93,
+        "creative_spark": 77,
+        "xa_threat": 75,
+        "midfield_engine": 54,
+        "defensive_lock": 40,
+        "pressing_heat": 49,
+        "ball_progression": 72,
+        "aerial_dominance": 34,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 40,
+        "booking_heat": 32
+      },
+      "rating_bands": {
+        "og_player_power": "Positive",
+        "goal_threat": "Strong",
+        "shot_threat": "Strong",
+        "xg_threat": "Elite",
+        "creative_spark": "Positive",
+        "xa_threat": "Positive",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Positive",
+        "aerial_dominance": "Red Flag",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_player_power": "Positive headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Strong scoring profile with xG and shot support.",
+        "shot_threat": "Strong shooting volume and on-target pressure.",
+        "xg_threat": "Elite chance-quality profile.",
+        "creative_spark": "Positive creation profile for final-third value.",
+        "xa_threat": "Positive assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Positive carrying and forward progression profile.",
+        "aerial_dominance": "Red Flag aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Red Flag booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 58,
+        "position_rank": 8,
+        "club_rank": 4,
+        "goal_threat_rank": 23,
+        "creative_spark_rank": 3,
+        "defensive_lock_rank": 498,
+        "pressing_heat_rank": 335,
+        "booking_heat_rank": 518
+      },
+      "tags": [
+        "Elite Goal Threat"
+      ],
+      "ui": {
+        "pitch_label": "Cozier-Duberry",
+        "badge_score": 70,
+        "tier": "POSITIVE"
+      }
+    },
+    {
+      "player_id": "england_efl_league_1_bolton_wanderers_josh_sheehan_2025/2026",
+      "name": "Josh Sheehan",
+      "surname": "Sheehan",
+      "club": "Bolton Wanderers",
+      "club_slug": "bolton_wanderers",
+      "competition": "England EFL League 1",
+      "competition_key": "england_efl_league_1",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2721
+      },
+      "ratings": {
+        "og_player_power": 70,
+        "goal_threat": 66,
+        "shot_threat": 66,
+        "xg_threat": 67,
+        "creative_spark": 73,
+        "xa_threat": 74,
+        "midfield_engine": 67,
+        "defensive_lock": 56,
+        "pressing_heat": 55,
+        "ball_progression": 55,
+        "aerial_dominance": 43,
+        "goalkeeper_shield": 47,
+        "discipline_risk": 75,
+        "booking_heat": 69
+      },
+      "rating_bands": {
+        "og_player_power": "Positive",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Positive",
+        "xa_threat": "Positive",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Positive",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Positive headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Positive creation profile for final-third value.",
+        "xa_threat": "Positive assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Positive foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 58,
+        "position_rank": 8,
+        "club_rank": 4,
+        "goal_threat_rank": 126,
+        "creative_spark_rank": 21,
+        "defensive_lock_rank": 147,
+        "pressing_heat_rank": 108,
+        "booking_heat_rank": 48
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Sheehan",
+        "badge_score": 70,
+        "tier": "POSITIVE"
+      }
+    },
+    {
+      "player_id": "england_efl_league_1_bolton_wanderers_ethan_erhahon_2025/2026",
+      "name": "Ethan Erhahon",
+      "surname": "Erhahon",
+      "club": "Bolton Wanderers",
+      "club_slug": "bolton_wanderers",
+      "competition": "England EFL League 1",
+      "competition_key": "england_efl_league_1",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 1726
+      },
+      "ratings": {
+        "og_player_power": 63,
+        "goal_threat": 23,
+        "shot_threat": 15,
+        "xg_threat": 17,
+        "creative_spark": 66,
+        "xa_threat": 67,
+        "midfield_engine": 73,
+        "defensive_lock": 60,
+        "pressing_heat": 65,
+        "ball_progression": 63,
+        "aerial_dominance": 48,
+        "goalkeeper_shield": 43,
+        "discipline_risk": 66,
+        "booking_heat": 61
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Red Flag",
+        "shot_threat": "Red Flag",
+        "xg_threat": "Red Flag",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Positive",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Red Flag scoring profile with xG and shot support.",
+        "shot_threat": "Red Flag shooting volume and on-target pressure.",
+        "xg_threat": "Red Flag chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Positive central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 130,
+        "position_rank": 31,
+        "club_rank": 6,
+        "goal_threat_rank": 521,
+        "creative_spark_rank": 73,
+        "defensive_lock_rank": 112,
+        "pressing_heat_rank": 5,
+        "booking_heat_rank": 99
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Erhahon",
+        "badge_score": 63,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_efl_league_1_bolton_wanderers_jack_bonham_2025/2026",
+      "name": "Jack Bonham",
+      "surname": "Bonham",
+      "club": "Bolton Wanderers",
+      "club_slug": "bolton_wanderers",
+      "competition": "England EFL League 1",
+      "competition_key": "england_efl_league_1",
+      "season": "2025/2026",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 1890
+      },
+      "ratings": {
+        "og_player_power": 63,
+        "goal_threat": 13,
+        "shot_threat": 10,
+        "xg_threat": 11,
+        "creative_spark": 34,
+        "xa_threat": 34,
+        "midfield_engine": 46,
+        "defensive_lock": 51,
+        "pressing_heat": 32,
+        "ball_progression": 33,
+        "aerial_dominance": 38,
+        "goalkeeper_shield": 70,
+        "discipline_risk": 15,
+        "booking_heat": 29
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Red Flag",
+        "shot_threat": "Red Flag",
+        "xg_threat": "Red Flag",
+        "creative_spark": "Red Flag",
+        "xa_threat": "Red Flag",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Red Flag",
+        "ball_progression": "Red Flag",
+        "aerial_dominance": "Red Flag",
+        "goalkeeper_shield": "Positive",
+        "discipline_risk": "Red Flag",
+        "booking_heat": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Red Flag scoring profile with xG and shot support.",
+        "shot_threat": "Red Flag shooting volume and on-target pressure.",
+        "xg_threat": "Red Flag chance-quality profile.",
+        "creative_spark": "Red Flag creation profile for final-third value.",
+        "xa_threat": "Red Flag assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Red Flag pressure and regain activity profile.",
+        "ball_progression": "Red Flag carrying and forward progression profile.",
+        "aerial_dominance": "Red Flag aerial and set-piece profile.",
+        "goalkeeper_shield": "Positive shot-stopping and resistance profile.",
+        "discipline_risk": "Red Flag foul and discipline exposure profile.",
+        "booking_heat": "Red Flag booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 130,
+        "position_rank": 11,
+        "club_rank": 6,
+        "goal_threat_rank": 548,
+        "creative_spark_rank": 533,
+        "defensive_lock_rank": 216,
+        "pressing_heat_rank": 548,
+        "booking_heat_rank": 535
+      },
+      "tags": [
+        "Goalkeeper Profile"
+      ],
+      "ui": {
+        "pitch_label": "Bonham",
+        "badge_score": 63,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_efl_league_1_bolton_wanderers_eoin_toal_2025/2026",
+      "name": "Eoin Toal",
+      "surname": "Toal",
+      "club": "Bolton Wanderers",
+      "club_slug": "bolton_wanderers",
+      "competition": "England EFL League 1",
+      "competition_key": "england_efl_league_1",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 3228
+      },
+      "ratings": {
+        "og_player_power": 62,
+        "goal_threat": 54,
+        "shot_threat": 45,
+        "xg_threat": 52,
+        "creative_spark": 50,
+        "xa_threat": 51,
+        "midfield_engine": 63,
+        "defensive_lock": 66,
+        "pressing_heat": 44,
+        "ball_progression": 45,
+        "aerial_dominance": 69,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 31,
+        "booking_heat": 25
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Red Flag",
+        "booking_heat": "Red Flag"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Red Flag foul and discipline exposure profile.",
+        "booking_heat": "Red Flag booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 148,
+        "position_rank": 41,
+        "club_rank": 8,
+        "goal_threat_rank": 231,
+        "creative_spark_rank": 262,
+        "defensive_lock_rank": 68,
+        "pressing_heat_rank": 496,
+        "booking_heat_rank": 556
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Toal",
+        "badge_score": 62,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_efl_league_1_bolton_wanderers_marcus_forss_2025/2026",
+      "name": "Marcus Forss",
+      "surname": "Forss",
+      "club": "Bolton Wanderers",
+      "club_slug": "bolton_wanderers",
+      "competition": "England EFL League 1",
+      "competition_key": "england_efl_league_1",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Medium sample",
+        "minutes_played": 804
+      },
+      "ratings": {
+        "og_player_power": 62,
+        "goal_threat": 67,
+        "shot_threat": 69,
+        "xg_threat": 70,
+        "creative_spark": 49,
+        "xa_threat": 50,
+        "midfield_engine": 46,
+        "defensive_lock": 43,
+        "pressing_heat": 48,
+        "ball_progression": 56,
+        "aerial_dominance": 43,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 46,
+        "booking_heat": 44
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Positive",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Positive chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 148,
+        "position_rank": 59,
+        "club_rank": 8,
+        "goal_threat_rank": 119,
+        "creative_spark_rank": 278,
+        "defensive_lock_rank": 454,
+        "pressing_heat_rank": 379,
+        "booking_heat_rank": 419
+      },
+      "tags": [
+        "Forward Profile"
+      ],
+      "ui": {
+        "pitch_label": "Forss",
+        "badge_score": 62,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_efl_league_1_bolton_wanderers_chris_forino_joseph_2025/2026",
+      "name": "Chris Forino-Joseph",
+      "surname": "Forino-Joseph",
+      "club": "Bolton Wanderers",
+      "club_slug": "bolton_wanderers",
+      "competition": "England EFL League 1",
+      "competition_key": "england_efl_league_1",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2373
+      },
+      "ratings": {
+        "og_player_power": 61,
+        "goal_threat": 49,
+        "shot_threat": 51,
+        "xg_threat": 50,
+        "creative_spark": 39,
+        "xa_threat": 45,
+        "midfield_engine": 70,
+        "defensive_lock": 79,
+        "pressing_heat": 54,
+        "ball_progression": 47,
+        "aerial_dominance": 70,
+        "goalkeeper_shield": 43,
+        "discipline_risk": 67,
+        "booking_heat": 63
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Red Flag",
+        "xa_threat": "Weak",
+        "midfield_engine": "Positive",
+        "defensive_lock": "Positive",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Positive",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Red Flag creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Positive central involvement and recycling profile.",
+        "defensive_lock": "Positive defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Positive aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 166,
+        "position_rank": 51,
+        "club_rank": 10,
+        "goal_threat_rank": 277,
+        "creative_spark_rank": 494,
+        "defensive_lock_rank": 1,
+        "pressing_heat_rank": 144,
+        "booking_heat_rank": 79
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Forino-Joseph",
+        "badge_score": 61,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_efl_league_1_bolton_wanderers_ibrahim_cissoko_2025/2026",
+      "name": "Ibrahim Cissoko",
+      "surname": "Cissoko",
+      "club": "Bolton Wanderers",
+      "club_slug": "bolton_wanderers",
+      "competition": "England EFL League 1",
+      "competition_key": "england_efl_league_1",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Trusted sample",
+        "minutes_played": 962
+      },
+      "ratings": {
+        "og_player_power": 60,
+        "goal_threat": 73,
+        "shot_threat": 74,
+        "xg_threat": 76,
+        "creative_spark": 56,
+        "xa_threat": 59,
+        "midfield_engine": 47,
+        "defensive_lock": 38,
+        "pressing_heat": 48,
+        "ball_progression": 63,
+        "aerial_dominance": 44,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 62,
+        "booking_heat": 61
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Positive",
+        "shot_threat": "Positive",
+        "xg_threat": "Positive",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Red Flag",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Positive scoring profile with xG and shot support.",
+        "shot_threat": "Positive shooting volume and on-target pressure.",
+        "xg_threat": "Positive chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Red Flag defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 178,
+        "position_rank": 63,
+        "club_rank": 11,
+        "goal_threat_rank": 88,
+        "creative_spark_rank": 172,
+        "defensive_lock_rank": 521,
+        "pressing_heat_rank": 379,
+        "booking_heat_rank": 99
+      },
+      "tags": [
+        "Forward Profile"
+      ],
+      "ui": {
+        "pitch_label": "Cissoko",
+        "badge_score": 60,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_efl_league_1_bolton_wanderers_jordi_osei_tutu_2025/2026",
+      "name": "Jordi Osei-Tutu",
+      "surname": "Osei-Tutu",
+      "club": "Bolton Wanderers",
+      "club_slug": "bolton_wanderers",
+      "competition": "England EFL League 1",
+      "competition_key": "england_efl_league_1",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Strong sample",
+        "minutes_played": 2565
+      },
+      "ratings": {
+        "og_player_power": 60,
+        "goal_threat": 58,
+        "shot_threat": 59,
+        "xg_threat": 59,
+        "creative_spark": 59,
+        "xa_threat": 58,
+        "midfield_engine": 62,
+        "defensive_lock": 54,
+        "pressing_heat": 62,
+        "ball_progression": 66,
+        "aerial_dominance": 54,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 79,
+        "booking_heat": 71
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Positive",
+        "booking_heat": "Positive"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Positive foul and discipline exposure profile.",
+        "booking_heat": "Positive booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 178,
+        "position_rank": 55,
+        "club_rank": 11,
+        "goal_threat_rank": 195,
+        "creative_spark_rank": 130,
+        "defensive_lock_rank": 177,
+        "pressing_heat_rank": 20,
+        "booking_heat_rank": 35
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Osei-Tutu",
+        "badge_score": 60,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_efl_league_1_bolton_wanderers_john_mcatee_2025/2026",
+      "name": "John Mcatee",
+      "surname": "Mcatee",
+      "club": "Bolton Wanderers",
+      "club_slug": "bolton_wanderers",
+      "competition": "England EFL League 1",
+      "competition_key": "england_efl_league_1",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Medium sample",
+        "minutes_played": 788
+      },
+      "ratings": {
+        "og_player_power": 59,
+        "goal_threat": 69,
+        "shot_threat": 70,
+        "xg_threat": 71,
+        "creative_spark": 58,
+        "xa_threat": 59,
+        "midfield_engine": 48,
+        "defensive_lock": 50,
+        "pressing_heat": 52,
+        "ball_progression": 56,
+        "aerial_dominance": 47,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 60,
+        "booking_heat": 59
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Positive",
+        "xg_threat": "Positive",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Positive shooting volume and on-target pressure.",
+        "xg_threat": "Positive chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 200,
+        "position_rank": 66,
+        "club_rank": 13,
+        "goal_threat_rank": 109,
+        "creative_spark_rank": 144,
+        "defensive_lock_rank": 240,
+        "pressing_heat_rank": 212,
+        "booking_heat_rank": 116
+      },
+      "tags": [
+        "Forward Profile"
+      ],
+      "ui": {
+        "pitch_label": "Mcatee",
+        "badge_score": 59,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_efl_league_1_bolton_wanderers_kyle_dempsey_2025/2026",
+      "name": "Kyle Dempsey",
+      "surname": "Dempsey",
+      "club": "Bolton Wanderers",
+      "club_slug": "bolton_wanderers",
+      "competition": "England EFL League 1",
+      "competition_key": "england_efl_league_1",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Trusted sample",
+        "minutes_played": 1380
+      },
+      "ratings": {
+        "og_player_power": 59,
+        "goal_threat": 76,
+        "shot_threat": 75,
+        "xg_threat": 77,
+        "creative_spark": 71,
+        "xa_threat": 71,
+        "midfield_engine": 59,
+        "defensive_lock": 52,
+        "pressing_heat": 57,
+        "ball_progression": 62,
+        "aerial_dominance": 55,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 66,
+        "booking_heat": 63
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Positive",
+        "shot_threat": "Positive",
+        "xg_threat": "Positive",
+        "creative_spark": "Positive",
+        "xa_threat": "Positive",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Mixed",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Positive scoring profile with xG and shot support.",
+        "shot_threat": "Positive shooting volume and on-target pressure.",
+        "xg_threat": "Positive chance-quality profile.",
+        "creative_spark": "Positive creation profile for final-third value.",
+        "xa_threat": "Positive assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Mixed pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 200,
+        "position_rank": 57,
+        "club_rank": 13,
+        "goal_threat_rank": 70,
+        "creative_spark_rank": 32,
+        "defensive_lock_rank": 202,
+        "pressing_heat_rank": 84,
+        "booking_heat_rank": 79
+      },
+      "tags": [
+        "Central Midfielder Profile"
+      ],
+      "ui": {
+        "pitch_label": "Dempsey",
+        "badge_score": 59,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_efl_league_1_bolton_wanderers_corey_taylor_2025/2026",
+      "name": "Corey Taylor",
+      "surname": "Taylor",
+      "club": "Bolton Wanderers",
+      "club_slug": "bolton_wanderers",
+      "competition": "England EFL League 1",
+      "competition_key": "england_efl_league_1",
+      "season": "2025/2026",
+      "position": "Forward",
+      "position_group": "forward",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 350
+      },
+      "ratings": {
+        "og_player_power": 58,
+        "goal_threat": 61,
+        "shot_threat": 62,
+        "xg_threat": 62,
+        "creative_spark": 57,
+        "xa_threat": 57,
+        "midfield_engine": 48,
+        "defensive_lock": 46,
+        "pressing_heat": 47,
+        "ball_progression": 55,
+        "aerial_dominance": 46,
+        "goalkeeper_shield": 48,
+        "discipline_risk": 49,
+        "booking_heat": 50
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 221,
+        "position_rank": 72,
+        "club_rank": 15,
+        "goal_threat_rank": 167,
+        "creative_spark_rank": 156,
+        "defensive_lock_rank": 369,
+        "pressing_heat_rank": 412,
+        "booking_heat_rank": 250
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Taylor",
+        "badge_score": 58,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_efl_league_1_bolton_wanderers_r_ben_da_rocha_rodrigues_2025/2026",
+      "name": "R\u00faben da Rocha Rodrigues",
+      "surname": "Rodrigues",
+      "club": "Bolton Wanderers",
+      "club_slug": "bolton_wanderers",
+      "competition": "England EFL League 1",
+      "competition_key": "england_efl_league_1",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Low sample",
+        "minutes_played": 535
+      },
+      "ratings": {
+        "og_player_power": 56,
+        "goal_threat": 63,
+        "shot_threat": 58,
+        "xg_threat": 63,
+        "creative_spark": 60,
+        "xa_threat": 59,
+        "midfield_engine": 52,
+        "defensive_lock": 49,
+        "pressing_heat": 54,
+        "ball_progression": 56,
+        "aerial_dominance": 49,
+        "goalkeeper_shield": 47,
+        "discipline_risk": 53,
+        "booking_heat": 52
+      },
+      "rating_bands": {
+        "og_player_power": "Mixed",
+        "goal_threat": "Mixed",
+        "shot_threat": "Mixed",
+        "xg_threat": "Mixed",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Mixed headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Mixed scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Mixed chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 256,
+        "position_rank": 73,
+        "club_rank": 16,
+        "goal_threat_rank": 146,
+        "creative_spark_rank": 120,
+        "defensive_lock_rank": 286,
+        "pressing_heat_rank": 144,
+        "booking_heat_rank": 217
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Rodrigues",
+        "badge_score": 56,
+        "tier": "MIXED"
+      }
+    },
+    {
+      "player_id": "england_efl_league_1_bolton_wanderers_cyrus_christie_2025/2026",
+      "name": "Cyrus Christie",
+      "surname": "Christie",
+      "club": "Bolton Wanderers",
+      "club_slug": "bolton_wanderers",
+      "competition": "England EFL League 1",
+      "competition_key": "england_efl_league_1",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Trusted sample",
+        "minutes_played": 1170
+      },
+      "ratings": {
+        "og_player_power": 51,
+        "goal_threat": 50,
+        "shot_threat": 60,
+        "xg_threat": 54,
+        "creative_spark": 64,
+        "xa_threat": 64,
+        "midfield_engine": 61,
+        "defensive_lock": 63,
+        "pressing_heat": 54,
+        "ball_progression": 62,
+        "aerial_dominance": 59,
+        "goalkeeper_shield": 50,
+        "discipline_risk": 50,
+        "booking_heat": 46
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Mixed",
+        "xg_threat": "Weak",
+        "creative_spark": "Mixed",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Mixed",
+        "defensive_lock": "Mixed",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Mixed",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Mixed creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Mixed central involvement and recycling profile.",
+        "defensive_lock": "Mixed defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Mixed aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 331,
+        "position_rank": 120,
+        "club_rank": 17,
+        "goal_threat_rank": 267,
+        "creative_spark_rank": 87,
+        "defensive_lock_rank": 85,
+        "pressing_heat_rank": 144,
+        "booking_heat_rank": 362
+      },
+      "tags": [
+        "Centre Back Profile"
+      ],
+      "ui": {
+        "pitch_label": "Christie",
+        "badge_score": 51,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_efl_league_1_bolton_wanderers_tobias_ritchie_2025/2026",
+      "name": "Tobias Ritchie",
+      "surname": "Ritchie",
+      "club": "Bolton Wanderers",
+      "club_slug": "bolton_wanderers",
+      "competition": "England EFL League 1",
+      "competition_key": "england_efl_league_1",
+      "season": "2025/2026",
+      "position": "Midfielder",
+      "position_group": "central_midfielder",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 7
+      },
+      "ratings": {
+        "og_player_power": 40,
+        "goal_threat": 41,
+        "shot_threat": 40,
+        "xg_threat": 40,
+        "creative_spark": 52,
+        "xa_threat": 57,
+        "midfield_engine": 51,
+        "defensive_lock": 48,
+        "pressing_heat": 48,
+        "ball_progression": 56,
+        "aerial_dominance": 51,
+        "goalkeeper_shield": 49,
+        "discipline_risk": 46,
+        "booking_heat": 48
+      },
+      "rating_bands": {
+        "og_player_power": "Weak",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Mixed",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Mixed",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Weak headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Mixed assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Mixed carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 488,
+        "position_rank": 174,
+        "club_rank": 18,
+        "goal_threat_rank": 388,
+        "creative_spark_rank": 231,
+        "defensive_lock_rank": 310,
+        "pressing_heat_rank": 379,
+        "booking_heat_rank": 315
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Ritchie",
+        "badge_score": 40,
+        "tier": "WEAK"
+      }
+    },
+    {
+      "player_id": "england_efl_league_1_bolton_wanderers_richard_taylor_2025/2026",
+      "name": "Richard Taylor",
+      "surname": "Taylor",
+      "club": "Bolton Wanderers",
+      "club_slug": "bolton_wanderers",
+      "competition": "England EFL League 1",
+      "competition_key": "england_efl_league_1",
+      "season": "2025/2026",
+      "position": "Defender",
+      "position_group": "centre_back",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 114
+      },
+      "ratings": {
+        "og_player_power": 39,
+        "goal_threat": 50,
+        "shot_threat": 57,
+        "xg_threat": 52,
+        "creative_spark": 51,
+        "xa_threat": 51,
+        "midfield_engine": 54,
+        "defensive_lock": 48,
+        "pressing_heat": 53,
+        "ball_progression": 50,
+        "aerial_dominance": 53,
+        "goalkeeper_shield": 53,
+        "discipline_risk": 56,
+        "booking_heat": 57
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Mixed",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Weak",
+        "discipline_risk": "Mixed",
+        "booking_heat": "Mixed"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Mixed shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Weak shot-stopping and resistance profile.",
+        "discipline_risk": "Mixed foul and discipline exposure profile.",
+        "booking_heat": "Mixed booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 496,
+        "position_rank": 169,
+        "club_rank": 19,
+        "goal_threat_rank": 267,
+        "creative_spark_rank": 245,
+        "defensive_lock_rank": 310,
+        "pressing_heat_rank": 176,
+        "booking_heat_rank": 136
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Taylor",
+        "badge_score": 39,
+        "tier": "RED_FLAG"
+      }
+    },
+    {
+      "player_id": "england_efl_league_1_bolton_wanderers_tyler_miller_2025/2026",
+      "name": "Tyler Miller",
+      "surname": "Miller",
+      "club": "Bolton Wanderers",
+      "club_slug": "bolton_wanderers",
+      "competition": "England EFL League 1",
+      "competition_key": "england_efl_league_1",
+      "season": "2025/2026",
+      "position": "Goalkeeper",
+      "position_group": "goalkeeper",
+      "minutes_confidence": {
+        "label": "Very low sample",
+        "minutes_played": 270
+      },
+      "ratings": {
+        "og_player_power": 37,
+        "goal_threat": 41,
+        "shot_threat": 40,
+        "xg_threat": 40,
+        "creative_spark": 45,
+        "xa_threat": 45,
+        "midfield_engine": 47,
+        "defensive_lock": 46,
+        "pressing_heat": 45,
+        "ball_progression": 46,
+        "aerial_dominance": 45,
+        "goalkeeper_shield": 56,
+        "discipline_risk": 41,
+        "booking_heat": 45
+      },
+      "rating_bands": {
+        "og_player_power": "Red Flag",
+        "goal_threat": "Weak",
+        "shot_threat": "Weak",
+        "xg_threat": "Weak",
+        "creative_spark": "Weak",
+        "xa_threat": "Weak",
+        "midfield_engine": "Weak",
+        "defensive_lock": "Weak",
+        "pressing_heat": "Weak",
+        "ball_progression": "Weak",
+        "aerial_dominance": "Weak",
+        "goalkeeper_shield": "Mixed",
+        "discipline_risk": "Weak",
+        "booking_heat": "Weak"
+      },
+      "rating_explanations": {
+        "og_player_power": "Red Flag headline player impact once role, production, and minutes trust are combined.",
+        "goal_threat": "Weak scoring profile with xG and shot support.",
+        "shot_threat": "Weak shooting volume and on-target pressure.",
+        "xg_threat": "Weak chance-quality profile.",
+        "creative_spark": "Weak creation profile for final-third value.",
+        "xa_threat": "Weak assist expectation profile.",
+        "midfield_engine": "Weak central involvement and recycling profile.",
+        "defensive_lock": "Weak defensive action and duel profile.",
+        "pressing_heat": "Weak pressure and regain activity profile.",
+        "ball_progression": "Weak carrying and forward progression profile.",
+        "aerial_dominance": "Weak aerial and set-piece profile.",
+        "goalkeeper_shield": "Mixed shot-stopping and resistance profile.",
+        "discipline_risk": "Weak foul and discipline exposure profile.",
+        "booking_heat": "Weak booking-market risk profile."
+      },
+      "ranks": {
+        "league_overall_rank": 527,
+        "position_rank": 45,
+        "club_rank": 20,
+        "goal_threat_rank": 388,
+        "creative_spark_rank": 381,
+        "defensive_lock_rank": 369,
+        "pressing_heat_rank": 453,
+        "booking_heat_rank": 383
+      },
+      "tags": [
+        "Low Sample"
+      ],
+      "ui": {
+        "pitch_label": "Miller",
+        "badge_score": 37,
+        "tier": "RED_FLAG"
+      }
+    }
+  ],
+  "leaders": {
+    "power": [
+      "Dalby",
+      "Kenny",
+      "Johnston",
+      "Cozier-Duberry",
+      "Sheehan"
+    ],
+    "goal_threat": [
+      "Dalby",
+      "Cozier-Duberry",
+      "Kenny",
+      "Dempsey",
+      "Cissoko"
+    ],
+    "creative_spark": [
+      "Cozier-Duberry",
+      "Sheehan",
+      "Dempsey",
+      "Erhahon",
+      "Christie"
+    ],
+    "discipline_risk": [
+      "Osei-Tutu",
+      "Sheehan",
+      "Forino-Joseph",
+      "Erhahon",
+      "Dempsey"
+    ]
+  }
+}

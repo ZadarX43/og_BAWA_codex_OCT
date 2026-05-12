@@ -1,0 +1,270 @@
+{
+  "fixture_key": "2026_05_10_SJ_Earthquakes_Vancouver_Whitecaps",
+  "fixture": "SJ Earthquakes vs Vancouver Whitecaps",
+  "primary_signal": "BTTS Yes",
+  "signal_state": "AVOID",
+  "agreement_score": 32,
+  "confidence_band": "LOW",
+  "supporting_layers": [],
+  "caution_layers": [
+    "BTTS_PRESSURE_WEAK",
+    "GOAL_ENVIRONMENT_SOFT",
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "profile_tags": {
+    "home": [
+      "Mixed Team Profile"
+    ],
+    "away": [
+      "Mixed Team Profile"
+    ]
+  },
+  "profile_narrative": "SJ Earthquakes bring a mixed team profile into a matchup with Vancouver Whitecaps's mixed team profile. The cleaner read is two-way scoring access.",
+  "team_faceoff_summary": [
+    {
+      "metric": "goal_heat_rating",
+      "label": "Goal Heat",
+      "home_value": 43,
+      "away_value": 48,
+      "delta": 5,
+      "leader": "Vancouver Whitecaps"
+    },
+    {
+      "metric": "btts_pressure_rating",
+      "label": "BTTS Pressure",
+      "home_value": 48,
+      "away_value": 47,
+      "delta": 1,
+      "leader": "SJ Earthquakes"
+    },
+    {
+      "metric": "attack_flow_rating",
+      "label": "Attack Flow",
+      "home_value": 68,
+      "away_value": 74,
+      "delta": 6,
+      "leader": "Vancouver Whitecaps"
+    },
+    {
+      "metric": "defensive_lock_rating",
+      "label": "Defensive Lock",
+      "home_value": 71,
+      "away_value": 70,
+      "delta": 1,
+      "leader": "SJ Earthquakes"
+    },
+    {
+      "metric": "first_strike_rating",
+      "label": "First Strike",
+      "home_value": 66,
+      "away_value": 74,
+      "delta": 8,
+      "leader": "Vancouver Whitecaps"
+    },
+    {
+      "metric": "chaos_rating",
+      "label": "Chaos Rating",
+      "home_value": 43,
+      "away_value": 39,
+      "delta": 4,
+      "leader": "SJ Earthquakes"
+    }
+  ],
+  "unit_battle_summary": [],
+  "key_player_drivers": [
+    {
+      "team": "SJ Earthquakes",
+      "player": "Ousseni Bouda",
+      "role": "Forward",
+      "power": 71,
+      "driver_metric": "Goal Threat",
+      "driver_value": 73
+    },
+    {
+      "team": "SJ Earthquakes",
+      "player": "Niko Tsakiris",
+      "role": "Central Midfielder",
+      "power": 65,
+      "driver_metric": "Creative Spark",
+      "driver_value": 67
+    },
+    {
+      "team": "Vancouver Whitecaps",
+      "player": "Brian White",
+      "role": "Forward",
+      "power": 74,
+      "driver_metric": "Goal Threat",
+      "driver_value": 76
+    },
+    {
+      "team": "Vancouver Whitecaps",
+      "player": "Thomas Müller",
+      "role": "Forward",
+      "power": 67,
+      "driver_metric": "Goal Threat",
+      "driver_value": 67
+    }
+  ],
+  "key_mismatches": [],
+  "h2h_context": {
+    "available": false,
+    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
+    "sample_size": 0
+  },
+  "market_suitability": {
+    "ftr": {
+      "rating": 70,
+      "label": "Positive",
+      "read": "Stronger when one side owns a clear team-power edge."
+    },
+    "btts": {
+      "rating": 48,
+      "label": "Weak",
+      "read": "Driven by two-way access and reduced suppression."
+    },
+    "ou25": {
+      "rating": 46,
+      "label": "Weak",
+      "read": "Driven by combined goal environment and tempo."
+    },
+    "team_goals": {
+      "rating": 48,
+      "label": "Weak",
+      "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
+    },
+    "correct_score": {
+      "rating": 100,
+      "label": "Elite",
+      "read": "Better when the shape is structured and the likely scoring zone is narrow."
+    },
+    "corners": {
+      "rating": 68,
+      "label": "Mixed",
+      "read": "Driven by territory and wide-channel pressure."
+    },
+    "cards": {
+      "rating": 42,
+      "label": "Weak",
+      "read": "Driven by discipline heat, fouling, and volatility."
+    }
+  },
+  "market_intelligence": {
+    "ftr": {
+      "alignment_score": 54,
+      "state": "FRAGILE",
+      "model_lean": "DRAW",
+      "structural_support": [],
+      "cautions": [
+        "BTTS_PRESSURE_WEAK",
+        "GOAL_ENVIRONMENT_SOFT"
+      ],
+      "public_summary": "FTR has some structural support from structural support, but the overall layer fit remains fragile.",
+      "rating": 70,
+      "band": "Positive"
+    },
+    "btts": {
+      "alignment_score": 38,
+      "state": "AVOID",
+      "model_lean": "YES",
+      "structural_support": [],
+      "cautions": [
+        "BTTS_PRESSURE_WEAK",
+        "GOAL_ENVIRONMENT_SOFT"
+      ],
+      "public_summary": "BTTS is too contradicted by btts pressure weak to present as a clean public read.",
+      "rating": 48,
+      "band": "Weak"
+    },
+    "ou25": {
+      "alignment_score": 40,
+      "state": "AVOID",
+      "model_lean": "UNDER25",
+      "structural_support": [],
+      "cautions": [
+        "GOAL_ENVIRONMENT_SOFT"
+      ],
+      "public_summary": "Over 2.5 is too contradicted by goal environment soft to present as a clean public read.",
+      "rating": 46,
+      "band": "Weak"
+    },
+    "team_goals": {
+      "alignment_score": 38,
+      "state": "AVOID",
+      "model_lean": "Vancouver Whitecaps 1.5+",
+      "structural_support": [],
+      "cautions": [
+        "GOAL_ENVIRONMENT_SOFT",
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Team Goals is too contradicted by goal environment soft to present as a clean public read.",
+      "rating": 48,
+      "band": "Weak"
+    },
+    "correct_score": {
+      "alignment_score": 81,
+      "state": "SUPPORTED",
+      "model_lean": "STRUCTURED",
+      "structural_support": [],
+      "cautions": [
+        "GOAL_ENVIRONMENT_SOFT"
+      ],
+      "public_summary": "Correct Score is well supported by structural support, with caution still coming from goal environment soft.",
+      "rating": 100,
+      "band": "Elite"
+    },
+    "corners": {
+      "alignment_score": 57,
+      "state": "FRAGILE",
+      "model_lean": "ELEVATED",
+      "structural_support": [],
+      "cautions": [
+        "BTTS_PRESSURE_WEAK"
+      ],
+      "public_summary": "Corners has some structural support from structural support, but the overall layer fit remains fragile.",
+      "rating": 68,
+      "band": "Mixed"
+    },
+    "cards": {
+      "alignment_score": 34,
+      "state": "AVOID",
+      "model_lean": "ELEVATED",
+      "structural_support": [],
+      "cautions": [
+        "BTTS_PRESSURE_WEAK",
+        "GOAL_ENVIRONMENT_SOFT"
+      ],
+      "public_summary": "Cards is too contradicted by btts pressure weak to present as a clean public read.",
+      "rating": 42,
+      "band": "Weak"
+    }
+  },
+  "watchlist": {
+    "active": false,
+    "summary": "No watchlist layer is active for this fixture.",
+    "trigger_signals": [],
+    "public_state": "No watchlist flag",
+    "mode": ""
+  },
+  "public_safe_summary": "BTTS Yes is too contradicted across the current structural layers for SJ Earthquakes vs Vancouver Whitecaps, so the clean read is caution rather than action.",
+  "internal_reason_tokens": [
+    "BTTS_PRESSURE_WEAK",
+    "GOAL_ENVIRONMENT_SOFT",
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "summary": {
+    "support_count": 0,
+    "caution_count": 4,
+    "lineup_available": false,
+    "h2h_available": false
+  },
+  "preview": {
+    "headline": "SJ Earthquakes vs Vancouver Whitecaps: BTTS Yes avoid",
+    "short_summary": "BTTS Yes is too contradicted across the current structural layers for SJ Earthquakes vs Vancouver Whitecaps, so the clean read is caution rather than action. Primary support comes from structural caution, while the main caution remains btts pressure weak.",
+    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Corners. Weakest read: Cards.",
+    "caution_line": "Main caution: Btts Pressure Weak.",
+    "telegram_summary": "SJ Earthquakes vs Vancouver Whitecaps — BTTS Yes (Avoid, 32% agreement). Support: structural caution. Caution: Btts Pressure Weak.",
+    "premium_summary": "BTTS Yes is carrying a 32% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from btts pressure weak, goal environment soft."
+  }
+}

@@ -1,0 +1,237 @@
+{
+  "fixture_key": "2026_05_10_Angers_SCO_Strasbourg",
+  "fixture": "Angers SCO vs Strasbourg",
+  "primary_signal": "BTTS Yes",
+  "signal_state": "AVOID",
+  "agreement_score": 32,
+  "confidence_band": "LOW",
+  "supporting_layers": [],
+  "caution_layers": [
+    "BTTS_PRESSURE_WEAK",
+    "GOAL_ENVIRONMENT_SOFT",
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "profile_tags": {
+    "home": [
+      "Low Chaos"
+    ],
+    "away": [
+      "Mixed Team Profile"
+    ]
+  },
+  "profile_narrative": "Angers SCO bring a low chaos into a matchup with Strasbourg's mixed team profile. The cleaner read is two-way scoring access.",
+  "team_faceoff_summary": [
+    {
+      "metric": "goal_heat_rating",
+      "label": "Goal Heat",
+      "home_value": 15,
+      "away_value": 63,
+      "delta": 48,
+      "leader": "Strasbourg"
+    },
+    {
+      "metric": "btts_pressure_rating",
+      "label": "BTTS Pressure",
+      "home_value": 26,
+      "away_value": 61,
+      "delta": 35,
+      "leader": "Strasbourg"
+    },
+    {
+      "metric": "attack_flow_rating",
+      "label": "Attack Flow",
+      "home_value": 10,
+      "away_value": 58,
+      "delta": 48,
+      "leader": "Strasbourg"
+    },
+    {
+      "metric": "defensive_lock_rating",
+      "label": "Defensive Lock",
+      "home_value": 54,
+      "away_value": 59,
+      "delta": 5,
+      "leader": "Strasbourg"
+    },
+    {
+      "metric": "first_strike_rating",
+      "label": "First Strike",
+      "home_value": 16,
+      "away_value": 59,
+      "delta": 43,
+      "leader": "Strasbourg"
+    },
+    {
+      "metric": "chaos_rating",
+      "label": "Chaos Rating",
+      "home_value": 17,
+      "away_value": 51,
+      "delta": 34,
+      "leader": "Strasbourg"
+    }
+  ],
+  "unit_battle_summary": [],
+  "key_player_drivers": [],
+  "key_mismatches": [],
+  "h2h_context": {
+    "available": false,
+    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
+    "sample_size": 0
+  },
+  "market_suitability": {
+    "ftr": {
+      "rating": 66,
+      "label": "Mixed",
+      "read": "Stronger when one side owns a clear team-power edge."
+    },
+    "btts": {
+      "rating": 44,
+      "label": "Weak",
+      "read": "Driven by two-way access and reduced suppression."
+    },
+    "ou25": {
+      "rating": 39,
+      "label": "Red Flag",
+      "read": "Driven by combined goal environment and tempo."
+    },
+    "team_goals": {
+      "rating": 63,
+      "label": "Mixed",
+      "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
+    },
+    "correct_score": {
+      "rating": 100,
+      "label": "Elite",
+      "read": "Better when the shape is structured and the likely scoring zone is narrow."
+    },
+    "corners": {
+      "rating": 32,
+      "label": "Red Flag",
+      "read": "Driven by territory and wide-channel pressure."
+    },
+    "cards": {
+      "rating": 32,
+      "label": "Red Flag",
+      "read": "Driven by discipline heat, fouling, and volatility."
+    }
+  },
+  "market_intelligence": {
+    "ftr": {
+      "alignment_score": 52,
+      "state": "FRAGILE",
+      "model_lean": "AWAY",
+      "structural_support": [],
+      "cautions": [
+        "BTTS_PRESSURE_WEAK",
+        "GOAL_ENVIRONMENT_SOFT"
+      ],
+      "public_summary": "FTR has some structural support from structural support, but the overall layer fit remains fragile.",
+      "rating": 66,
+      "band": "Mixed"
+    },
+    "btts": {
+      "alignment_score": 37,
+      "state": "AVOID",
+      "model_lean": "YES",
+      "structural_support": [],
+      "cautions": [
+        "BTTS_PRESSURE_WEAK",
+        "GOAL_ENVIRONMENT_SOFT"
+      ],
+      "public_summary": "BTTS is too contradicted by btts pressure weak to present as a clean public read.",
+      "rating": 44,
+      "band": "Weak"
+    },
+    "ou25": {
+      "alignment_score": 35,
+      "state": "AVOID",
+      "model_lean": "UNDER25",
+      "structural_support": [],
+      "cautions": [
+        "GOAL_ENVIRONMENT_SOFT"
+      ],
+      "public_summary": "Over 2.5 is too contradicted by goal environment soft to present as a clean public read.",
+      "rating": 39,
+      "band": "Red Flag"
+    },
+    "team_goals": {
+      "alignment_score": 49,
+      "state": "FRAGILE",
+      "model_lean": "Strasbourg 1.5+",
+      "structural_support": [],
+      "cautions": [
+        "GOAL_ENVIRONMENT_SOFT",
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Team Goals has some structural support from structural support, but the overall layer fit remains fragile.",
+      "rating": 63,
+      "band": "Mixed"
+    },
+    "correct_score": {
+      "alignment_score": 81,
+      "state": "SUPPORTED",
+      "model_lean": "STRUCTURED",
+      "structural_support": [],
+      "cautions": [
+        "GOAL_ENVIRONMENT_SOFT"
+      ],
+      "public_summary": "Correct Score is well supported by structural support, with caution still coming from goal environment soft.",
+      "rating": 100,
+      "band": "Elite"
+    },
+    "corners": {
+      "alignment_score": 30,
+      "state": "AVOID",
+      "model_lean": "ELEVATED",
+      "structural_support": [],
+      "cautions": [
+        "BTTS_PRESSURE_WEAK"
+      ],
+      "public_summary": "Corners is too contradicted by btts pressure weak to present as a clean public read.",
+      "rating": 32,
+      "band": "Red Flag"
+    },
+    "cards": {
+      "alignment_score": 26,
+      "state": "AVOID",
+      "model_lean": "ELEVATED",
+      "structural_support": [],
+      "cautions": [
+        "BTTS_PRESSURE_WEAK",
+        "GOAL_ENVIRONMENT_SOFT"
+      ],
+      "public_summary": "Cards is too contradicted by btts pressure weak to present as a clean public read.",
+      "rating": 32,
+      "band": "Red Flag"
+    }
+  },
+  "watchlist": {
+    "active": false,
+    "summary": "No watchlist layer is active for this fixture.",
+    "trigger_signals": [],
+    "public_state": "No watchlist flag",
+    "mode": ""
+  },
+  "public_safe_summary": "BTTS Yes is too contradicted across the current structural layers for Angers SCO vs Strasbourg, so the clean read is caution rather than action.",
+  "internal_reason_tokens": [
+    "BTTS_PRESSURE_WEAK",
+    "GOAL_ENVIRONMENT_SOFT",
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "summary": {
+    "support_count": 0,
+    "caution_count": 4,
+    "lineup_available": false,
+    "h2h_available": false
+  },
+  "preview": {
+    "headline": "Angers SCO vs Strasbourg: BTTS Yes avoid",
+    "short_summary": "BTTS Yes is too contradicted across the current structural layers for Angers SCO vs Strasbourg, so the clean read is caution rather than action. Primary support comes from structural caution, while the main caution remains btts pressure weak.",
+    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: FTR. Weakest read: Cards.",
+    "caution_line": "Main caution: Btts Pressure Weak.",
+    "telegram_summary": "Angers SCO vs Strasbourg — BTTS Yes (Avoid, 32% agreement). Support: structural caution. Caution: Btts Pressure Weak.",
+    "premium_summary": "BTTS Yes is carrying a 32% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from btts pressure weak, goal environment soft."
+  }
+}

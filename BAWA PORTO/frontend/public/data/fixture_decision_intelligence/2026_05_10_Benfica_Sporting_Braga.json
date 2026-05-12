@@ -1,0 +1,224 @@
+{
+  "fixture_key": "2026_05_10_Benfica_Sporting_Braga",
+  "fixture": "Benfica vs Sporting Braga",
+  "primary_signal": "Fixture read",
+  "signal_state": "FRAGILE",
+  "agreement_score": 44,
+  "confidence_band": "LOW",
+  "supporting_layers": [],
+  "caution_layers": [
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "profile_tags": {
+    "home": [
+      "Strong Table Profile",
+      "Attack-Led Side",
+      "Strong First Goal",
+      "Home Dominant"
+    ],
+    "away": [
+      "Strong Table Profile",
+      "Strong First Goal",
+      "Travels Well"
+    ]
+  },
+  "profile_narrative": "Benfica bring a strong table profile into a matchup with Sporting Braga's strong table profile.",
+  "team_faceoff_summary": [
+    {
+      "metric": "og_power_rating",
+      "label": "OG Power Rating",
+      "home_value": 85,
+      "away_value": 82,
+      "delta": 3,
+      "leader": "Benfica"
+    },
+    {
+      "metric": "attack_flow_rating",
+      "label": "Attack Flow",
+      "home_value": 95,
+      "away_value": 78,
+      "delta": 17,
+      "leader": "Benfica"
+    },
+    {
+      "metric": "defensive_lock_rating",
+      "label": "Defensive Lock",
+      "home_value": 79,
+      "away_value": 69,
+      "delta": 10,
+      "leader": "Benfica"
+    },
+    {
+      "metric": "goal_heat_rating",
+      "label": "Goal Heat",
+      "home_value": 79,
+      "away_value": 69,
+      "delta": 10,
+      "leader": "Benfica"
+    }
+  ],
+  "unit_battle_summary": [],
+  "key_player_drivers": [],
+  "key_mismatches": [],
+  "h2h_context": {
+    "available": false,
+    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
+    "sample_size": 0
+  },
+  "market_suitability": {
+    "ftr": {
+      "rating": 85,
+      "label": "Strong",
+      "read": "Stronger when one side owns a clear team-power edge."
+    },
+    "btts": {
+      "rating": 62,
+      "label": "Mixed",
+      "read": "Driven by two-way access and reduced suppression."
+    },
+    "ou25": {
+      "rating": 74,
+      "label": "Positive",
+      "read": "Driven by combined goal environment and tempo."
+    },
+    "team_goals": {
+      "rating": 79,
+      "label": "Strong",
+      "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
+    },
+    "correct_score": {
+      "rating": 100,
+      "label": "Elite",
+      "read": "Better when the shape is structured and the likely scoring zone is narrow."
+    },
+    "corners": {
+      "rating": 68,
+      "label": "Mixed",
+      "read": "Driven by territory and wide-channel pressure."
+    },
+    "cards": {
+      "rating": 20,
+      "label": "Red Flag",
+      "read": "Driven by discipline heat, fouling, and volatility."
+    }
+  },
+  "market_intelligence": {
+    "ftr": {
+      "alignment_score": 66,
+      "state": "MIXED",
+      "model_lean": "DRAW",
+      "structural_support": [],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "FTR has partial support from structural support, but lineup data missing keeps it from reading clean.",
+      "rating": 85,
+      "band": "Strong"
+    },
+    "btts": {
+      "alignment_score": 48,
+      "state": "FRAGILE",
+      "model_lean": "YES",
+      "structural_support": [],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "BTTS has some structural support from structural support, but the overall layer fit remains fragile.",
+      "rating": 62,
+      "band": "Mixed"
+    },
+    "ou25": {
+      "alignment_score": 58,
+      "state": "FRAGILE",
+      "model_lean": "OVER25",
+      "structural_support": [],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Over 2.5 has some structural support from structural support, but the overall layer fit remains fragile.",
+      "rating": 74,
+      "band": "Positive"
+    },
+    "team_goals": {
+      "alignment_score": 65,
+      "state": "MIXED",
+      "model_lean": "Benfica 1.5+",
+      "structural_support": [],
+      "cautions": [
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Team Goals has partial support from structural support, but lineup data missing keeps it from reading clean.",
+      "rating": 79,
+      "band": "Strong"
+    },
+    "correct_score": {
+      "alignment_score": 77,
+      "state": "MIXED",
+      "model_lean": "OPEN",
+      "structural_support": [],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Correct Score has partial support from structural support, but lineup data missing keeps it from reading clean.",
+      "rating": 100,
+      "band": "Elite"
+    },
+    "corners": {
+      "alignment_score": 53,
+      "state": "FRAGILE",
+      "model_lean": "ELEVATED",
+      "structural_support": [],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Corners has some structural support from structural support, but the overall layer fit remains fragile.",
+      "rating": 68,
+      "band": "Mixed"
+    },
+    "cards": {
+      "alignment_score": 17,
+      "state": "AVOID",
+      "model_lean": "ELEVATED",
+      "structural_support": [],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Cards is too contradicted by lineup data missing to present as a clean public read.",
+      "rating": 20,
+      "band": "Red Flag"
+    }
+  },
+  "watchlist": {
+    "active": false,
+    "summary": "No watchlist layer is active for this fixture.",
+    "trigger_signals": [],
+    "public_state": "No watchlist flag",
+    "mode": ""
+  },
+  "public_safe_summary": "Fixture read has some live shape in Benfica vs Sporting Braga, but the supporting layers remain fragile and need discipline.",
+  "internal_reason_tokens": [
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "summary": {
+    "support_count": 0,
+    "caution_count": 2,
+    "lineup_available": false,
+    "h2h_available": false
+  },
+  "preview": {
+    "headline": "Benfica vs Sporting Braga: Fixture read fragile",
+    "short_summary": "Fixture read has some live shape in Benfica vs Sporting Braga, but the supporting layers remain fragile and need discipline. Primary support comes from structural caution, while the main caution remains lineup data missing.",
+    "market_summary": "Best aligned market: Correct Score (Mixed). Secondary support: FTR. Weakest read: Cards.",
+    "caution_line": "Main caution: Lineup Data Missing.",
+    "telegram_summary": "Benfica vs Sporting Braga — Fixture read (Fragile, 44% agreement). Support: structural caution. Caution: Lineup Data Missing.",
+    "premium_summary": "Fixture read is carrying a 44% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from lineup data missing, h2h unavailable."
+  }
+}

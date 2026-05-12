@@ -1,0 +1,252 @@
+{
+  "fixture_key": "2026_05_09_Al_Khaleej_Al_Ittifaq",
+  "fixture": "Al Khaleej vs Al Ittifaq",
+  "primary_signal": "BTTS Yes",
+  "signal_state": "AVOID",
+  "agreement_score": 44,
+  "confidence_band": "LOW",
+  "supporting_layers": [
+    "GOAL_ENVIRONMENT_SUPPORT"
+  ],
+  "caution_layers": [
+    "BTTS_PRESSURE_WEAK",
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "profile_tags": {
+    "home": [
+      "High Chaos Side"
+    ],
+    "away": [
+      "Mixed Team Profile"
+    ]
+  },
+  "profile_narrative": "Al Khaleej bring a high chaos side into a matchup with Al Ittifaq's mixed team profile. The cleaner read is two-way scoring access.",
+  "team_faceoff_summary": [
+    {
+      "metric": "goal_heat_rating",
+      "label": "Goal Heat",
+      "home_value": 74,
+      "away_value": 61,
+      "delta": 13,
+      "leader": "Al Khaleej"
+    },
+    {
+      "metric": "btts_pressure_rating",
+      "label": "BTTS Pressure",
+      "home_value": 61,
+      "away_value": 44,
+      "delta": 17,
+      "leader": "Al Khaleej"
+    },
+    {
+      "metric": "attack_flow_rating",
+      "label": "Attack Flow",
+      "home_value": 56,
+      "away_value": 44,
+      "delta": 12,
+      "leader": "Al Khaleej"
+    },
+    {
+      "metric": "defensive_lock_rating",
+      "label": "Defensive Lock",
+      "home_value": 34,
+      "away_value": 46,
+      "delta": 12,
+      "leader": "Al Ittifaq"
+    },
+    {
+      "metric": "first_strike_rating",
+      "label": "First Strike",
+      "home_value": 62,
+      "away_value": 49,
+      "delta": 13,
+      "leader": "Al Khaleej"
+    },
+    {
+      "metric": "chaos_rating",
+      "label": "Chaos Rating",
+      "home_value": 75,
+      "away_value": 59,
+      "delta": 16,
+      "leader": "Al Khaleej"
+    }
+  ],
+  "unit_battle_summary": [],
+  "key_player_drivers": [],
+  "key_mismatches": [],
+  "h2h_context": {
+    "available": false,
+    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
+    "sample_size": 0
+  },
+  "market_suitability": {
+    "ftr": {
+      "rating": 57,
+      "label": "Mixed",
+      "read": "Stronger when one side owns a clear team-power edge."
+    },
+    "btts": {
+      "rating": 52,
+      "label": "Weak",
+      "read": "Driven by two-way access and reduced suppression."
+    },
+    "ou25": {
+      "rating": 68,
+      "label": "Mixed",
+      "read": "Driven by combined goal environment and tempo."
+    },
+    "team_goals": {
+      "rating": 74,
+      "label": "Strong",
+      "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
+    },
+    "correct_score": {
+      "rating": 100,
+      "label": "Elite",
+      "read": "Better when the shape is structured and the likely scoring zone is narrow."
+    },
+    "corners": {
+      "rating": 42,
+      "label": "Weak",
+      "read": "Driven by territory and wide-channel pressure."
+    },
+    "cards": {
+      "rating": 68,
+      "label": "Mixed",
+      "read": "Driven by discipline heat, fouling, and volatility."
+    }
+  },
+  "market_intelligence": {
+    "ftr": {
+      "alignment_score": 51,
+      "state": "FRAGILE",
+      "model_lean": "AWAY",
+      "structural_support": [
+        "GOAL_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "BTTS_PRESSURE_WEAK",
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "FTR has some structural support from goal environment support, but the overall layer fit remains fragile.",
+      "rating": 57,
+      "band": "Mixed"
+    },
+    "btts": {
+      "alignment_score": 47,
+      "state": "AVOID",
+      "model_lean": "YES",
+      "structural_support": [
+        "GOAL_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "BTTS_PRESSURE_WEAK"
+      ],
+      "public_summary": "BTTS is too contradicted by btts pressure weak to present as a clean public read.",
+      "rating": 52,
+      "band": "Weak"
+    },
+    "ou25": {
+      "alignment_score": 59,
+      "state": "FRAGILE",
+      "model_lean": "OVER25",
+      "structural_support": [
+        "GOAL_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "BTTS_PRESSURE_WEAK",
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Over 2.5 has some structural support from goal environment support, but the overall layer fit remains fragile.",
+      "rating": 68,
+      "band": "Mixed"
+    },
+    "team_goals": {
+      "alignment_score": 68,
+      "state": "MIXED",
+      "model_lean": "Al Khaleej 1.5+",
+      "structural_support": [
+        "GOAL_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Team Goals has partial support from goal environment support, but lineup data missing keeps it from reading clean.",
+      "rating": 74,
+      "band": "Strong"
+    },
+    "correct_score": {
+      "alignment_score": 83,
+      "state": "SUPPORTED",
+      "model_lean": "OPEN",
+      "structural_support": [
+        "GOAL_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "BTTS_PRESSURE_WEAK",
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Correct Score is well supported by goal environment support, with caution still coming from btts pressure weak.",
+      "rating": 100,
+      "band": "Elite"
+    },
+    "corners": {
+      "alignment_score": 44,
+      "state": "AVOID",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "GOAL_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "BTTS_PRESSURE_WEAK"
+      ],
+      "public_summary": "Corners is too contradicted by btts pressure weak to present as a clean public read.",
+      "rating": 42,
+      "band": "Weak"
+    },
+    "cards": {
+      "alignment_score": 59,
+      "state": "FRAGILE",
+      "model_lean": "ELEVATED",
+      "structural_support": [
+        "GOAL_ENVIRONMENT_SUPPORT"
+      ],
+      "cautions": [
+        "BTTS_PRESSURE_WEAK",
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Cards has some structural support from goal environment support, but the overall layer fit remains fragile.",
+      "rating": 68,
+      "band": "Mixed"
+    }
+  },
+  "watchlist": {
+    "active": false,
+    "summary": "No watchlist layer is active for this fixture.",
+    "trigger_signals": [],
+    "public_state": "No watchlist flag",
+    "mode": ""
+  },
+  "public_safe_summary": "BTTS Yes is too contradicted across the current structural layers for Al Khaleej vs Al Ittifaq, so the clean read is caution rather than action.",
+  "internal_reason_tokens": [
+    "GOAL_ENVIRONMENT_SUPPORT",
+    "BTTS_PRESSURE_WEAK",
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "summary": {
+    "support_count": 1,
+    "caution_count": 3,
+    "lineup_available": false,
+    "h2h_available": false
+  },
+  "preview": {
+    "headline": "Al Khaleej vs Al Ittifaq: BTTS Yes avoid",
+    "short_summary": "BTTS Yes is too contradicted across the current structural layers for Al Khaleej vs Al Ittifaq, so the clean read is caution rather than action. Primary support comes from goal environment support, while the main caution remains btts pressure weak.",
+    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: Corners.",
+    "caution_line": "Main caution: Btts Pressure Weak.",
+    "telegram_summary": "Al Khaleej vs Al Ittifaq — BTTS Yes (Avoid, 44% agreement). Support: Goal Environment Support. Caution: Btts Pressure Weak.",
+    "premium_summary": "BTTS Yes is carrying a 44% agreement read across the published decision layers. Support is currently led by goal environment support, while caution is still coming from btts pressure weak, lineup data missing."
+  }
+}

@@ -1,0 +1,219 @@
+{
+  "fixture_key": "2026_05_10_Preu_en_M_nster_Darmstadt_98",
+  "fixture": "Preußen Münster vs Darmstadt 98",
+  "primary_signal": "Fixture read",
+  "signal_state": "FRAGILE",
+  "agreement_score": 44,
+  "confidence_band": "LOW",
+  "supporting_layers": [],
+  "caution_layers": [
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "profile_tags": {
+    "home": [
+      "Card Heat Risk"
+    ],
+    "away": [
+      "Mixed Team Profile"
+    ]
+  },
+  "profile_narrative": "Preußen Münster bring a card heat risk into a matchup with Darmstadt 98's mixed team profile.",
+  "team_faceoff_summary": [
+    {
+      "metric": "og_power_rating",
+      "label": "OG Power Rating",
+      "home_value": 20,
+      "away_value": 69,
+      "delta": 49,
+      "leader": "Darmstadt 98"
+    },
+    {
+      "metric": "attack_flow_rating",
+      "label": "Attack Flow",
+      "home_value": 12,
+      "away_value": 70,
+      "delta": 58,
+      "leader": "Darmstadt 98"
+    },
+    {
+      "metric": "defensive_lock_rating",
+      "label": "Defensive Lock",
+      "home_value": 17,
+      "away_value": 61,
+      "delta": 44,
+      "leader": "Darmstadt 98"
+    },
+    {
+      "metric": "goal_heat_rating",
+      "label": "Goal Heat",
+      "home_value": 54,
+      "away_value": 66,
+      "delta": 12,
+      "leader": "Darmstadt 98"
+    }
+  ],
+  "unit_battle_summary": [],
+  "key_player_drivers": [],
+  "key_mismatches": [],
+  "h2h_context": {
+    "available": false,
+    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
+    "sample_size": 0
+  },
+  "market_suitability": {
+    "ftr": {
+      "rating": 69,
+      "label": "Mixed",
+      "read": "Stronger when one side owns a clear team-power edge."
+    },
+    "btts": {
+      "rating": 60,
+      "label": "Mixed",
+      "read": "Driven by two-way access and reduced suppression."
+    },
+    "ou25": {
+      "rating": 60,
+      "label": "Mixed",
+      "read": "Driven by combined goal environment and tempo."
+    },
+    "team_goals": {
+      "rating": 66,
+      "label": "Mixed",
+      "read": "Useful when one attacking unit clearly dominates the defensive resistance opposite it."
+    },
+    "correct_score": {
+      "rating": 63,
+      "label": "Mixed",
+      "read": "Better when the shape is structured and the likely scoring zone is narrow."
+    },
+    "corners": {
+      "rating": 48,
+      "label": "Weak",
+      "read": "Driven by territory and wide-channel pressure."
+    },
+    "cards": {
+      "rating": 52,
+      "label": "Weak",
+      "read": "Driven by discipline heat, fouling, and volatility."
+    }
+  },
+  "market_intelligence": {
+    "ftr": {
+      "alignment_score": 54,
+      "state": "FRAGILE",
+      "model_lean": "AWAY",
+      "structural_support": [],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "FTR has some structural support from structural support, but the overall layer fit remains fragile.",
+      "rating": 69,
+      "band": "Mixed"
+    },
+    "btts": {
+      "alignment_score": 47,
+      "state": "FRAGILE",
+      "model_lean": "YES",
+      "structural_support": [],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "BTTS has some structural support from structural support, but the overall layer fit remains fragile.",
+      "rating": 60,
+      "band": "Mixed"
+    },
+    "ou25": {
+      "alignment_score": 47,
+      "state": "FRAGILE",
+      "model_lean": "OVER25",
+      "structural_support": [],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Over 2.5 has some structural support from structural support, but the overall layer fit remains fragile.",
+      "rating": 60,
+      "band": "Mixed"
+    },
+    "team_goals": {
+      "alignment_score": 56,
+      "state": "FRAGILE",
+      "model_lean": "Darmstadt 98 1.5+",
+      "structural_support": [],
+      "cautions": [
+        "LINEUP_DATA_MISSING"
+      ],
+      "public_summary": "Team Goals has some structural support from structural support, but the overall layer fit remains fragile.",
+      "rating": 66,
+      "band": "Mixed"
+    },
+    "correct_score": {
+      "alignment_score": 49,
+      "state": "FRAGILE",
+      "model_lean": "OPEN",
+      "structural_support": [],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Correct Score has some structural support from structural support, but the overall layer fit remains fragile.",
+      "rating": 63,
+      "band": "Mixed"
+    },
+    "corners": {
+      "alignment_score": 38,
+      "state": "AVOID",
+      "model_lean": "ELEVATED",
+      "structural_support": [],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Corners is too contradicted by lineup data missing to present as a clean public read.",
+      "rating": 48,
+      "band": "Weak"
+    },
+    "cards": {
+      "alignment_score": 41,
+      "state": "AVOID",
+      "model_lean": "ELEVATED",
+      "structural_support": [],
+      "cautions": [
+        "LINEUP_DATA_MISSING",
+        "H2H_UNAVAILABLE"
+      ],
+      "public_summary": "Cards is too contradicted by lineup data missing to present as a clean public read.",
+      "rating": 52,
+      "band": "Weak"
+    }
+  },
+  "watchlist": {
+    "active": false,
+    "summary": "No watchlist layer is active for this fixture.",
+    "trigger_signals": [],
+    "public_state": "No watchlist flag",
+    "mode": ""
+  },
+  "public_safe_summary": "Fixture read has some live shape in Preußen Münster vs Darmstadt 98, but the supporting layers remain fragile and need discipline.",
+  "internal_reason_tokens": [
+    "LINEUP_DATA_MISSING",
+    "H2H_UNAVAILABLE"
+  ],
+  "summary": {
+    "support_count": 0,
+    "caution_count": 2,
+    "lineup_available": false,
+    "h2h_available": false
+  },
+  "preview": {
+    "headline": "Preußen Münster vs Darmstadt 98: Fixture read fragile",
+    "short_summary": "Fixture read has some live shape in Preußen Münster vs Darmstadt 98, but the supporting layers remain fragile and need discipline. Primary support comes from structural caution, while the main caution remains lineup data missing.",
+    "market_summary": "Best aligned market: Team Goals (Fragile). Secondary support: FTR. Weakest read: Corners.",
+    "caution_line": "Main caution: Lineup Data Missing.",
+    "telegram_summary": "Preußen Münster vs Darmstadt 98 — Fixture read (Fragile, 44% agreement). Support: structural caution. Caution: Lineup Data Missing.",
+    "premium_summary": "Fixture read is carrying a 44% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from lineup data missing, h2h unavailable."
+  }
+}
