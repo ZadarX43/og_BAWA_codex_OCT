@@ -25,9 +25,9 @@
     "2026_05_10_FC_Barcelona_Real_Madrid": {
       src: "https://www.youtube.com/embed/aAdAJEU8_E0?si=F_TvglhZgOaL1oVi",
       title: "FC Barcelona vs Real Madrid highlights",
-      label: "Match highlights",
-      heading: "Barcelona 2-0 Real Madrid",
-      summary: "Goals from Marcus Rashford and Ferran Torres, shown alongside the full fixture read.",
+      label: "",
+      heading: "Match Highlights",
+      summary: "Goals from Marcus Rashford and Ferran Torres, shown alongside full fixture read below.",
     },
   };
 
@@ -2986,7 +2986,7 @@
     return `
       <section class="section fixture-hero-media-section">
         <div class="fixture-hero-media-copy">
-          <span>${escapeHtml(media.label || "Match media")}</span>
+          ${media.label ? `<span>${escapeHtml(media.label)}</span>` : ""}
           <strong>${escapeHtml(media.heading || "Fixture video")}</strong>
           ${media.summary ? `<p>${escapeHtml(media.summary)}</p>` : ""}
         </div>
