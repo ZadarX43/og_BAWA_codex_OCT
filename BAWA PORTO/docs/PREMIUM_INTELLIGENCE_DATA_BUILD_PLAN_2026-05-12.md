@@ -1,6 +1,6 @@
 # Premium Intelligence Data Build Plan
 
-Updated: 2026-05-12
+Updated: 2026-05-13
 
 ## Purpose
 
@@ -56,6 +56,16 @@ Important current truth:
 ## First Premium Curation Slice
 
 Implement these tables first:
+
+- `site_player_identity_map`
+- `site_player_match_stats`
+- `site_team_match_stats`
+- `site_lineup_slots`
+- `site_formation_slots`
+- `site_fixture_market_intelligence`
+- `site_player_event_shortlists`
+
+The first five tables establish the player/team/lineup foundation. The market and event-shortlist tables establish the first premium product contract for fixture markets and player-event cards without touching live deploy routing.
 
 ## Launch Data Limits
 
@@ -115,6 +125,19 @@ Measured after import:
 - `site_team_match_stats`: 26
 - `team_lineup_snapshots`: 282
 - `site_player_identity_map`: 15,190
+
+Measured after adding the first market/event premium exporter slice:
+
+- SQLite size: ~155MB
+- D1 SQL chunks: ~144MB across 36 chunks
+- active fixtures: 156
+- `site_fixture_market_intelligence`: 1,092 rows
+- `site_player_event_shortlists`: 2,618 rows
+- cached fixture stat route payloads: 156
+- cached team premium route payloads: 388
+- schema version: 4
+
+The player-event rows are intentionally marked as beta/manual-review shortlist intelligence. They are not priced probabilities, not deploy picks, and not permitted to override `deploy_rulebook.py`.
 
 Current coverage truth:
 
@@ -248,7 +271,108 @@ Core fields:
 - slot index
 - pitch x/y
 
+### `site_fixture_market_intelligence`
+
+Purpose:
+
+- give Fixture Markets and Fixture Prediction pages a stable premium market contract
+- expose the model-facing market posture without asking the frontend to recompute it
+- support the initial paid-market hierarchy:
+  - FTR
+  - OU25
+  - BTTS
+  - team goals 1.5+
+  - correct score
+  - corners
+  - cards
+
+Source:
+
+- `frontend/public/data/fixture_decision_intelligence/<fixture_key>.json`
+- canonical `market_intelligence` and `market_suitability` objects from the fixture decision reconciler
+
+Core fields:
+
+- `fixture_key`
+- `market_key`
+- `market_family`
+- `market_group`
+- `market_label`
+- `selection_label`
+- `rank_role`
+- `state`
+- `alignment_score`
+- `rating`
+- `band`
+- `model_lean`
+- `confidence_band`
+- `signal_state`
+- support/caution counts
+- public summary
+- payload JSON
+
+Product use:
+
+- £20 can show the top market posture
+- £49/£99 can show the richer market grid and reasoning cards
+- £500 can receive route payloads and audit/export metadata later
+
+### `site_player_event_shortlists`
+
+Purpose:
+
+- provide the first data contract for high-value player-event cards
+- shortlist players for event families that subscribers care about:
+  - shots on target 0.5 / 1.5
+  - shots 1.5 / 2.5
+  - tackles 0.5 / 1.5
+  - fouls 0.5 / 1.5
+  - player to be fouled 0.5
+  - bookings
+  - key passes
+  - goalkeeper saves 1.5
+
+Source:
+
+- current-season active-site `site_player_match_stats`
+- latest team lineup snapshots or confirmed fixture lineup slots
+- `site_player_identity_map` for rating/rank attachment
+
+Important boundary:
+
+- this table is beta/manual-review shortlist intelligence
+- it does not create odds, priced probabilities, slips, deploy rows, or automatic alerts
+- every row carries `beta_status`, `confidence_label`, `source_lineup_status`, and a reason string
+
+Core fields:
+
+- fixture identity
+- event key/family/label/threshold
+- player/team identity
+- home/away flag
+- position and position group
+- starter flag
+- shortlist rank and score
+- recent per-90 and average
+- sample size and minutes sample
+- OG rating power and ranks
+- source lineup status
+- beta/manual-review metadata
+- payload JSON
+
 ## Next Premium Curation Slice
+
+### `site_goal_combo_intelligence`
+
+Purpose:
+
+- expose goal-combo markets after the core market posture is stable:
+  - FTR + BTTS
+  - FTR + over 2.5
+  - FTR + team goals 1.5+
+  - over 2.5 + BTTS
+
+This should use the existing model output and reconciler context, but remain a website premium layer until the production spine explicitly supports it.
 
 ### `site_fixture_h2h_stats`
 

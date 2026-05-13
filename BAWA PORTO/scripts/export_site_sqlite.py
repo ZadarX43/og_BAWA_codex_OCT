@@ -22,8 +22,9 @@ from typing import Any, Iterable
 DEFAULT_DATA_ROOT = Path("frontend/public/data")
 DEFAULT_NORMALIZED_ROOT = Path("data_sources/api_football/normalized")
 DEFAULT_OUTPUT = Path("build/site_data/odds_genius.sqlite")
-SCHEMA_VERSION = 3
+SCHEMA_VERSION = 4
 DEFAULT_ROUTE_CACHE_LIMIT = 20
+DEFAULT_EVENT_SHORTLIST_LIMIT = 3
 
 
 def read_json(path: Path, default: Any = None) -> Any:
@@ -62,6 +63,18 @@ def normalize_text(value: Any) -> str:
 
 def slug_key(value: Any) -> str:
     return normalize_text(value).replace(" ", "_")
+
+
+def slug_aliases(value: Any) -> set[str]:
+    base = slug_key(value)
+    aliases = {base} if base else set()
+    for prefix in ("fc_", "cf_", "afc_", "sc_"):
+        if base.startswith(prefix):
+            aliases.add(base[len(prefix) :])
+    for suffix in ("_fc", "_cf", "_afc", "_sc"):
+        if base.endswith(suffix):
+            aliases.add(base[: -len(suffix)])
+    return {alias for alias in aliases if alias}
 
 
 COMPETITION_KEY_ALIASES = {
@@ -257,6 +270,8 @@ def execute_schema(conn: sqlite3.Connection) -> None:
         DROP TABLE IF EXISTS site_team_match_stats;
         DROP TABLE IF EXISTS site_lineup_slots;
         DROP TABLE IF EXISTS site_formation_slots;
+        DROP TABLE IF EXISTS site_fixture_market_intelligence;
+        DROP TABLE IF EXISTS site_player_event_shortlists;
         DROP TABLE IF EXISTS site_fixture_stats_payloads;
         DROP TABLE IF EXISTS site_team_premium_payloads;
 
@@ -447,6 +462,62 @@ def execute_schema(conn: sqlite3.Connection) -> None:
           PRIMARY KEY (formation, slot_code)
         );
 
+        CREATE TABLE site_fixture_market_intelligence (
+          row_id TEXT PRIMARY KEY,
+          fixture_key TEXT NOT NULL,
+          market_key TEXT NOT NULL,
+          market_family TEXT,
+          market_group TEXT,
+          market_label TEXT,
+          selection_label TEXT,
+          rank_role TEXT,
+          state TEXT,
+          alignment_score INTEGER,
+          rating INTEGER,
+          band TEXT,
+          model_lean TEXT,
+          confidence_band TEXT,
+          signal_state TEXT,
+          support_count INTEGER,
+          caution_count INTEGER,
+          source_status TEXT,
+          public_summary TEXT,
+          payload_json TEXT NOT NULL
+        );
+
+        CREATE TABLE site_player_event_shortlists (
+          row_id TEXT PRIMARY KEY,
+          fixture_key TEXT NOT NULL,
+          event_key TEXT NOT NULL,
+          event_family TEXT,
+          event_label TEXT,
+          threshold REAL,
+          player_key TEXT,
+          api_player_id INTEGER,
+          player_name TEXT,
+          team_name TEXT,
+          team_slug TEXT,
+          is_home INTEGER,
+          position TEXT,
+          position_group TEXT,
+          is_starting_xi INTEGER,
+          shortlist_rank INTEGER,
+          shortlist_score REAL,
+          recent_per90 REAL,
+          recent_average REAL,
+          sample_size INTEGER,
+          minutes_sample INTEGER,
+          rating_power INTEGER,
+          rank_overall INTEGER,
+          rank_position INTEGER,
+          rank_club INTEGER,
+          source_lineup_status TEXT,
+          beta_status TEXT,
+          confidence_label TEXT,
+          reason TEXT,
+          payload_json TEXT NOT NULL
+        );
+
         CREATE TABLE site_fixture_stats_payloads (
           fixture_key TEXT PRIMARY KEY,
           payload_json TEXT NOT NULL
@@ -473,6 +544,11 @@ def execute_schema(conn: sqlite3.Connection) -> None:
         CREATE INDEX idx_site_team_stats_team ON site_team_match_stats(team_slug);
         CREATE INDEX idx_site_lineup_slots_fixture ON site_lineup_slots(fixture_key);
         CREATE INDEX idx_site_lineup_slots_team ON site_lineup_slots(team_slug);
+        CREATE INDEX idx_site_fixture_market_fixture ON site_fixture_market_intelligence(fixture_key);
+        CREATE INDEX idx_site_fixture_market_market ON site_fixture_market_intelligence(market_key, rank_role);
+        CREATE INDEX idx_site_player_event_fixture ON site_player_event_shortlists(fixture_key);
+        CREATE INDEX idx_site_player_event_player ON site_player_event_shortlists(player_key);
+        CREATE INDEX idx_site_player_event_team ON site_player_event_shortlists(team_slug, event_key);
         CREATE INDEX idx_site_team_premium_comp_team ON site_team_premium_payloads(competition_key, team_slug);
         """
     )
@@ -921,19 +997,20 @@ def build_rating_lookup(data_root: Path) -> tuple[dict[tuple[str, str], dict[str
     lookup: dict[tuple[str, str], dict[str, Any]] = {}
     rows = ratings if isinstance(ratings, list) else []
     for player in rows:
-        club_slug = slug_key(player.get("club_slug") or player.get("club"))
+        club_slugs = slug_aliases(player.get("club_slug") or player.get("club"))
         for key in person_keys(player.get("name")).values():
-            if club_slug and key:
-                lookup[(club_slug, key)] = player
+            for club_slug in club_slugs:
+                if club_slug and key:
+                    lookup[(club_slug, key)] = player
     return lookup, rows
 
 
 def resolve_rating_player(team_name: str, player_name: str, rating_lookup: dict[tuple[str, str], dict[str, Any]]) -> dict[str, Any] | None:
-    club_slug = slug_key(team_name)
     keys = person_keys(player_name)
-    for key in (keys["full"], keys["initial_surname"], keys["surname"]):
-        if club_slug and key and (club_slug, key) in rating_lookup:
-            return rating_lookup[(club_slug, key)]
+    for club_slug in slug_aliases(team_name):
+        for key in (keys["full"], keys["initial_surname"], keys["surname"]):
+            if club_slug and key and (club_slug, key) in rating_lookup:
+                return rating_lookup[(club_slug, key)]
     return None
 
 
@@ -1366,6 +1443,477 @@ def insert_site_lineup_slots(
     return len(rows)
 
 
+MARKET_META = {
+    "ftr": ("FTR", "core_goal_market", "Full Time Result"),
+    "ou25": ("OU25", "core_goal_market", "Over / Under 2.5 Match Goals"),
+    "btts": ("BTTS", "core_goal_market", "Both Teams To Score"),
+    "team_goals": ("TEAM_GOALS", "team_goal_market", "Team Goals 1.5+"),
+    "correct_score": ("CORRECT_SCORE", "scoreline_market", "Correct Score"),
+    "corners": ("CORNERS", "team_event_market", "Corners"),
+    "cards": ("CARDS", "team_event_market", "Cards"),
+}
+
+
+def market_rank_role(market_key: str, state: Any, rating: Any, alignment_score: Any) -> str:
+    state_key = str(state or "").strip().upper()
+    score = safe_int(alignment_score) or safe_int(rating) or 0
+    if state_key in {"AVOID", "RED_FLAG"} or score < 50:
+        return "avoid"
+    if state_key in {"SUPPORTED", "DEPLOY"} or score >= 82:
+        return "best"
+    if score >= 68:
+        return "secondary"
+    if market_key in {"ftr", "ou25", "btts", "team_goals"}:
+        return "weak"
+    return "context"
+
+
+def insert_site_fixture_market_intelligence(conn: sqlite3.Connection) -> int:
+    rows = []
+    for fixture_key, signal_state, confidence_band, agreement_score, payload_json in conn.execute(
+        """
+        SELECT fixture_key, signal_state, confidence_band, agreement_score, payload_json
+        FROM fixture_decisions
+        ORDER BY fixture_key
+        """
+    ):
+        try:
+            payload = json.loads(payload_json)
+        except (TypeError, json.JSONDecodeError):
+            continue
+        intelligence = payload.get("market_intelligence") if isinstance(payload.get("market_intelligence"), dict) else {}
+        suitability = payload.get("market_suitability") if isinstance(payload.get("market_suitability"), dict) else {}
+        market_keys = sorted(set(intelligence) | set(suitability))
+        for market_key in market_keys:
+            market_read = intelligence.get(market_key) if isinstance(intelligence.get(market_key), dict) else {}
+            suitability_read = suitability.get(market_key) if isinstance(suitability.get(market_key), dict) else {}
+            market_family, market_group, market_label = MARKET_META.get(
+                market_key,
+                (market_key.upper(), "other_market", market_key.replace("_", " ").title()),
+            )
+            support_tokens = market_read.get("structural_support") if isinstance(market_read.get("structural_support"), list) else []
+            caution_tokens = market_read.get("cautions") if isinstance(market_read.get("cautions"), list) else []
+            alignment = safe_int(market_read.get("alignment_score"))
+            rating = safe_int(market_read.get("rating") or suitability_read.get("rating"))
+            state = market_read.get("state") or suitability_read.get("label")
+            row_payload = {
+                "fixture_key": fixture_key,
+                "market_key": market_key,
+                "market_family": market_family,
+                "market_group": market_group,
+                "market_label": market_label,
+                "selection_label": market_read.get("model_lean"),
+                "rank_role": market_rank_role(market_key, state, rating, alignment),
+                "state": state,
+                "alignment_score": alignment,
+                "rating": rating,
+                "band": market_read.get("band") or suitability_read.get("label"),
+                "model_lean": market_read.get("model_lean"),
+                "confidence_band": confidence_band,
+                "signal_state": signal_state,
+                "agreement_score": safe_int(agreement_score),
+                "structural_support": support_tokens,
+                "cautions": caution_tokens,
+                "suitability": suitability_read,
+                "public_summary": market_read.get("public_summary") or suitability_read.get("read"),
+                "source_status": "fixture_decision_reconciler",
+                "product_tier_hint": "core_public" if market_key in {"ftr", "ou25", "btts", "team_goals"} else "premium_market_context",
+            }
+            rows.append(
+                (
+                    f"{fixture_key}:{market_key}",
+                    fixture_key,
+                    market_key,
+                    market_family,
+                    market_group,
+                    market_label,
+                    market_read.get("model_lean"),
+                    row_payload["rank_role"],
+                    state,
+                    alignment,
+                    rating,
+                    row_payload["band"],
+                    market_read.get("model_lean"),
+                    confidence_band,
+                    signal_state,
+                    len(support_tokens),
+                    len(caution_tokens),
+                    "fixture_decision_reconciler",
+                    row_payload["public_summary"],
+                    json_text(row_payload),
+                )
+            )
+    conn.executemany(
+        """
+        INSERT OR REPLACE INTO site_fixture_market_intelligence(
+          row_id, fixture_key, market_key, market_family, market_group,
+          market_label, selection_label, rank_role, state, alignment_score,
+          rating, band, model_lean, confidence_band, signal_state,
+          support_count, caution_count, source_status, public_summary, payload_json
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        rows,
+    )
+    return len(rows)
+
+
+PLAYER_EVENT_CONFIG = [
+    {
+        "event_key": "shots_on_target_0_5",
+        "event_family": "shots_on_target",
+        "event_label": "Shots On Target 0.5+",
+        "stat_field": "shots_on_target",
+        "threshold": 0.5,
+        "benchmark_per90": 0.65,
+        "position_groups": {"forward", "midfielder"},
+    },
+    {
+        "event_key": "shots_on_target_1_5",
+        "event_family": "shots_on_target",
+        "event_label": "Shots On Target 1.5+",
+        "stat_field": "shots_on_target",
+        "threshold": 1.5,
+        "benchmark_per90": 1.20,
+        "position_groups": {"forward"},
+    },
+    {
+        "event_key": "shots_1_5",
+        "event_family": "shots",
+        "event_label": "Shots 1.5+",
+        "stat_field": "shots_total",
+        "threshold": 1.5,
+        "benchmark_per90": 1.80,
+        "position_groups": {"forward", "midfielder"},
+    },
+    {
+        "event_key": "shots_2_5",
+        "event_family": "shots",
+        "event_label": "Shots 2.5+",
+        "stat_field": "shots_total",
+        "threshold": 2.5,
+        "benchmark_per90": 2.60,
+        "position_groups": {"forward"},
+    },
+    {
+        "event_key": "tackles_0_5",
+        "event_family": "tackles",
+        "event_label": "Tackles 0.5+",
+        "stat_field": "tackles",
+        "threshold": 0.5,
+        "benchmark_per90": 1.40,
+        "position_groups": {"defender", "midfielder"},
+    },
+    {
+        "event_key": "tackles_1_5",
+        "event_family": "tackles",
+        "event_label": "Tackles 1.5+",
+        "stat_field": "tackles",
+        "threshold": 1.5,
+        "benchmark_per90": 2.20,
+        "position_groups": {"defender", "midfielder"},
+    },
+    {
+        "event_key": "fouls_committed_0_5",
+        "event_family": "fouls",
+        "event_label": "Fouls 0.5+",
+        "stat_field": "fouls_committed",
+        "threshold": 0.5,
+        "benchmark_per90": 1.20,
+        "position_groups": {"defender", "midfielder", "forward"},
+    },
+    {
+        "event_key": "fouls_committed_1_5",
+        "event_family": "fouls",
+        "event_label": "Fouls 1.5+",
+        "stat_field": "fouls_committed",
+        "threshold": 1.5,
+        "benchmark_per90": 2.00,
+        "position_groups": {"defender", "midfielder"},
+    },
+    {
+        "event_key": "player_fouled_0_5",
+        "event_family": "player_fouled",
+        "event_label": "Player To Be Fouled 0.5+",
+        "stat_field": "fouls_drawn",
+        "threshold": 0.5,
+        "benchmark_per90": 1.20,
+        "position_groups": {"forward", "midfielder"},
+    },
+    {
+        "event_key": "bookings",
+        "event_family": "bookings",
+        "event_label": "Player Booking",
+        "stat_field": "yellow_cards",
+        "threshold": 0.5,
+        "benchmark_per90": 0.30,
+        "position_groups": {"defender", "midfielder"},
+    },
+    {
+        "event_key": "key_passes_0_5",
+        "event_family": "key_passes",
+        "event_label": "Key Passes 0.5+",
+        "stat_field": "passes_key",
+        "threshold": 0.5,
+        "benchmark_per90": 1.25,
+        "position_groups": {"midfielder", "forward"},
+    },
+    {
+        "event_key": "goalkeeper_saves_1_5",
+        "event_family": "goalkeeper_saves",
+        "event_label": "Goalkeeper Saves 1.5+",
+        "stat_field": "saves",
+        "threshold": 1.5,
+        "benchmark_per90": 2.80,
+        "position_groups": {"goalkeeper"},
+    },
+]
+
+
+def player_event_profiles(conn: sqlite3.Connection) -> dict[str, dict[str, Any]]:
+    profiles: dict[str, dict[str, Any]] = {}
+    fields = {config["stat_field"] for config in PLAYER_EVENT_CONFIG}
+    for player_key, payload_json in conn.execute(
+        """
+        SELECT player_key, payload_json
+        FROM site_player_match_stats
+        WHERE player_key IS NOT NULL
+        """
+    ):
+        try:
+            payload = json.loads(payload_json)
+        except (TypeError, json.JSONDecodeError):
+            continue
+        profile = profiles.setdefault(
+            player_key,
+            {"sample_size": 0, "minutes": 0.0, "totals": {field: 0.0 for field in fields}},
+        )
+        minutes = safe_float(payload.get("minutes")) or 0.0
+        if minutes <= 0:
+            continue
+        profile["sample_size"] += 1
+        profile["minutes"] += minutes
+        for field in fields:
+            profile["totals"][field] = profile["totals"].get(field, 0.0) + (safe_float(payload.get(field)) or 0.0)
+    return profiles
+
+
+def team_lineup_candidates(
+    conn: sqlite3.Connection,
+    fixture_key: str,
+    competition_key: str,
+    team_name: str,
+    is_home: int,
+) -> list[dict[str, Any]]:
+    team_key = slug_key(team_name)
+    team_aliases = sorted(slug_aliases(team_name))
+    team_alias_placeholders = ", ".join("?" for _ in team_aliases) or "?"
+    snapshot_rows = conn.execute(
+        f"""
+        SELECT payload_json
+        FROM team_lineup_snapshots
+        WHERE competition_key = ? AND team_key IN ({team_alias_placeholders})
+        """,
+        (competition_key, *(team_aliases or [team_key])),
+    ).fetchall()
+    if not snapshot_rows:
+        snapshot_rows = conn.execute(
+            f"""
+            SELECT payload_json
+            FROM team_lineup_snapshots
+            WHERE team_key IN ({team_alias_placeholders})
+            ORDER BY competition_key
+            LIMIT 1
+            """,
+            tuple(team_aliases or [team_key]),
+        ).fetchall()
+    if snapshot_rows:
+        try:
+            snapshot = json.loads(snapshot_rows[0][0])
+        except (TypeError, json.JSONDecodeError):
+            snapshot = {}
+        candidates = []
+        for player in snapshot.get("starters") or []:
+            candidates.append(
+                {
+                    "fixture_key": fixture_key,
+                    "team_name": team_name,
+                    "team_slug": slug_key(team_name),
+                    "is_home": is_home,
+                    "player_key": player.get("player_key"),
+                    "api_player_id": safe_int(player.get("api_player_id")),
+                    "player_name": player.get("name") or player.get("player_name"),
+                    "position": player.get("position") or player.get("lineup_position"),
+                    "position_group": player.get("position_group") or position_group_from_broad(player.get("lineup_position")),
+                    "is_starting_xi": 1,
+                    "rating_power": safe_int(player.get("power") or player.get("rating_power")),
+                    "rank_overall": safe_int(player.get("rank_overall")),
+                    "rank_position": safe_int(player.get("rank_position")),
+                    "rank_club": safe_int(player.get("rank_club")),
+                    "source_lineup_status": snapshot.get("lineup_status") or "last_fixture_snapshot",
+                }
+            )
+        return candidates
+
+    rows = conn.execute(
+        f"""
+        SELECT player_key, api_player_id, player_name, broad_position, position_group,
+               is_starting_xi, rating_power, rank_overall, rank_position, rank_club
+        FROM site_lineup_slots
+        WHERE fixture_key = ? AND team_slug IN ({team_alias_placeholders}) AND is_starting_xi = 1
+        ORDER BY broad_position, slot_code, player_name
+        """,
+        (fixture_key, *(team_aliases or [team_key])),
+    ).fetchall()
+    return [
+        {
+            "fixture_key": fixture_key,
+            "team_name": team_name,
+            "team_slug": team_key,
+            "is_home": is_home,
+            "player_key": row[0],
+            "api_player_id": row[1],
+            "player_name": row[2],
+            "position": row[3],
+            "position_group": row[4],
+            "is_starting_xi": row[5],
+            "rating_power": row[6],
+            "rank_overall": row[7],
+            "rank_position": row[8],
+            "rank_club": row[9],
+            "source_lineup_status": "confirmed_or_fixture_lineup",
+        }
+        for row in rows
+    ]
+
+
+def player_event_score(candidate: dict[str, Any], profile: dict[str, Any], config: dict[str, Any]) -> tuple[float, float, float]:
+    minutes = float(profile.get("minutes") or 0.0)
+    sample_size = int(profile.get("sample_size") or 0)
+    total = float((profile.get("totals") or {}).get(config["stat_field"]) or 0.0)
+    per90 = (total / minutes * 90.0) if minutes > 0 else 0.0
+    average = (total / sample_size) if sample_size > 0 else 0.0
+    benchmark = float(config["benchmark_per90"] or 1.0)
+    base = min(1.0, per90 / benchmark) * 74.0 if benchmark > 0 else 0.0
+    rating_boost = min(12.0, max(0.0, ((safe_int(candidate.get("rating_power")) or 50) - 50) / 50 * 12.0))
+    starter_boost = 8.0 if safe_int(candidate.get("is_starting_xi")) else 0.0
+    sample_boost = min(6.0, sample_size * 1.5)
+    return round(min(99.0, base + rating_boost + starter_boost + sample_boost), 2), round(per90, 3), round(average, 3)
+
+
+def insert_site_player_event_shortlists(conn: sqlite3.Connection, limit: int = DEFAULT_EVENT_SHORTLIST_LIMIT) -> int:
+    profiles = player_event_profiles(conn)
+    fixture_rows = conn.execute(
+        """
+        SELECT f.fixture_key,
+               COALESCE(fl.competition_key, f.league_key) AS competition_key,
+               f.home_team,
+               f.away_team
+        FROM fixtures f
+        LEFT JOIN fixture_lineups fl ON fl.fixture_key = f.fixture_key
+        ORDER BY f.kickoff_time, f.fixture_key
+        """
+    ).fetchall()
+    rows = []
+    for fixture_key, competition_key, home_team, away_team in fixture_rows:
+        candidates = []
+        candidates.extend(team_lineup_candidates(conn, fixture_key, competition_key or "", home_team or "", 1))
+        candidates.extend(team_lineup_candidates(conn, fixture_key, competition_key or "", away_team or "", 0))
+        for config in PLAYER_EVENT_CONFIG:
+            scored: list[tuple[float, float, float, dict[str, Any], dict[str, Any]]] = []
+            allowed_groups = config.get("position_groups") or set()
+            for candidate in candidates:
+                player_key = candidate.get("player_key")
+                if not player_key or player_key not in profiles:
+                    continue
+                position_group = str(candidate.get("position_group") or "").lower()
+                if allowed_groups and position_group not in allowed_groups:
+                    continue
+                profile = profiles[player_key]
+                if int(profile.get("sample_size") or 0) <= 0:
+                    continue
+                score, per90, average = player_event_score(candidate, profile, config)
+                if score <= 12:
+                    continue
+                scored.append((score, per90, average, candidate, profile))
+            scored.sort(key=lambda item: (item[0], item[1], safe_int(item[3].get("rating_power")) or 0), reverse=True)
+            for rank, (score, per90, average, candidate, profile) in enumerate(scored[:limit], start=1):
+                sample_size = int(profile.get("sample_size") or 0)
+                minutes_sample = int(round(float(profile.get("minutes") or 0.0)))
+                reason = (
+                    f"{per90:g} {config['event_family'].replace('_', ' ')} per 90 "
+                    f"from {sample_size} current-season sample{'s' if sample_size != 1 else ''}; "
+                    f"lineup source is {candidate.get('source_lineup_status') or 'unknown'}."
+                )
+                payload = {
+                    **candidate,
+                    "event_key": config["event_key"],
+                    "event_family": config["event_family"],
+                    "event_label": config["event_label"],
+                    "threshold": config["threshold"],
+                    "shortlist_rank": rank,
+                    "shortlist_score": score,
+                    "recent_per90": per90,
+                    "recent_average": average,
+                    "sample_size": sample_size,
+                    "minutes_sample": minutes_sample,
+                    "beta_status": "beta_shortlist",
+                    "confidence_label": "manual_review",
+                    "source_status": "current_season_recent_stats_and_latest_lineup",
+                    "priced_probability": None,
+                    "deployable": False,
+                    "reason": reason,
+                    "product_tier_hint": "premium_player_events",
+                }
+                rows.append(
+                    (
+                        f"{fixture_key}:{config['event_key']}:{candidate.get('player_key')}:{rank}",
+                        fixture_key,
+                        config["event_key"],
+                        config["event_family"],
+                        config["event_label"],
+                        config["threshold"],
+                        candidate.get("player_key"),
+                        safe_int(candidate.get("api_player_id")),
+                        candidate.get("player_name"),
+                        candidate.get("team_name"),
+                        candidate.get("team_slug"),
+                        safe_int(candidate.get("is_home")),
+                        candidate.get("position"),
+                        candidate.get("position_group"),
+                        safe_int(candidate.get("is_starting_xi")),
+                        rank,
+                        score,
+                        per90,
+                        average,
+                        sample_size,
+                        minutes_sample,
+                        safe_int(candidate.get("rating_power")),
+                        safe_int(candidate.get("rank_overall")),
+                        safe_int(candidate.get("rank_position")),
+                        safe_int(candidate.get("rank_club")),
+                        candidate.get("source_lineup_status"),
+                        "beta_shortlist",
+                        "manual_review",
+                        reason,
+                        json_text(payload),
+                    )
+                )
+    conn.executemany(
+        """
+        INSERT OR REPLACE INTO site_player_event_shortlists(
+          row_id, fixture_key, event_key, event_family, event_label, threshold,
+          player_key, api_player_id, player_name, team_name, team_slug, is_home,
+          position, position_group, is_starting_xi, shortlist_rank,
+          shortlist_score, recent_per90, recent_average, sample_size,
+          minutes_sample, rating_power, rank_overall, rank_position, rank_club,
+          source_lineup_status, beta_status, confidence_label, reason, payload_json
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        rows,
+    )
+    return len(rows)
+
+
 def json_rows(conn: sqlite3.Connection, query: str, params: Iterable[Any] = ()) -> list[Any]:
     rows = conn.execute(query, tuple(params)).fetchall()
     payloads = []
@@ -1409,6 +1957,36 @@ def insert_site_fixture_stats_payloads(conn: sqlite3.Connection) -> int:
                 FROM site_lineup_slots
                 WHERE fixture_key = ?
                 ORDER BY is_home DESC, is_starting_xi DESC, broad_position, slot_code, player_name
+                """,
+                (fixture_key,),
+            ),
+            "market_intelligence": json_rows(
+                conn,
+                """
+                SELECT payload_json
+                FROM site_fixture_market_intelligence
+                WHERE fixture_key = ?
+                ORDER BY
+                  CASE rank_role
+                    WHEN 'best' THEN 1
+                    WHEN 'secondary' THEN 2
+                    WHEN 'weak' THEN 3
+                    WHEN 'avoid' THEN 4
+                    ELSE 5
+                  END,
+                  alignment_score DESC,
+                  rating DESC,
+                  market_key
+                """,
+                (fixture_key,),
+            ),
+            "player_event_shortlists": json_rows(
+                conn,
+                """
+                SELECT payload_json
+                FROM site_player_event_shortlists
+                WHERE fixture_key = ?
+                ORDER BY event_family, event_key, shortlist_rank, team_name, player_name
                 """,
                 (fixture_key,),
             ),
@@ -1465,6 +2043,17 @@ def insert_site_team_premium_payloads(conn: sqlite3.Connection, limit: int = DEF
                 """,
                 (team_slug, limit * 2),
             ),
+            "player_event_shortlists": json_rows(
+                conn,
+                """
+                SELECT payload_json
+                FROM site_player_event_shortlists
+                WHERE team_slug = ?
+                ORDER BY fixture_key DESC, event_family, shortlist_rank
+                LIMIT ?
+                """,
+                (team_slug, limit),
+            ),
         }
         rows.append((competition_key, team_slug, json_text(payload)))
     conn.executemany(
@@ -1510,6 +2099,8 @@ def export_database(
             "site_team_match_stats": insert_site_team_match_stats(conn, normalized_root, active_seasons),
             "site_formation_slots": insert_site_formation_slots(conn, normalized_root, active_seasons),
             "site_lineup_slots": insert_site_lineup_slots(conn, normalized_root, identities, active_seasons),
+            "site_fixture_market_intelligence": insert_site_fixture_market_intelligence(conn),
+            "site_player_event_shortlists": insert_site_player_event_shortlists(conn),
             "site_fixture_stats_payloads": insert_site_fixture_stats_payloads(conn),
             "site_team_premium_payloads": insert_site_team_premium_payloads(conn),
         }
