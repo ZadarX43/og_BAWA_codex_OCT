@@ -21,6 +21,15 @@
   const workerApiBase = String(runtimeConfig.WORKER_API_BASE || "").replace(/\/+$/, "");
   const siteDataApiBase = String(runtimeConfig.SITE_DATA_API_BASE || runtimeConfig.WORKER_API_BASE || "").replace(/\/+$/, "");
   const checkoutPlaceholderHref = "./account.html?intent=checkout";
+  const FIXTURE_HERO_MEDIA = {
+    "2026_05_10_FC_Barcelona_Real_Madrid": {
+      src: "https://www.youtube.com/embed/aAdAJEU8_E0?si=F_TvglhZgOaL1oVi",
+      title: "FC Barcelona vs Real Madrid highlights",
+      label: "Match highlights",
+      heading: "Barcelona 2-0 Real Madrid",
+      summary: "Goals from Marcus Rashford and Ferran Torres, shown alongside the full fixture read.",
+    },
+  };
 
   const state = {
     summary: null,
@@ -2966,6 +2975,33 @@
           <span class="fixture-status-badge fixture-status-badge-${escapeHtml(timing.tone)}">${escapeHtml(timing.label)}</span>
         </div>
       </div>
+    `;
+  };
+
+  const renderFixtureHeroMedia = (fixture) => {
+    const media = FIXTURE_HERO_MEDIA[String(fixture?.fixture_key || "")];
+    if (!media?.src) {
+      return "";
+    }
+    return `
+      <section class="section fixture-hero-media-section">
+        <div class="fixture-hero-media-copy">
+          <span>${escapeHtml(media.label || "Match media")}</span>
+          <strong>${escapeHtml(media.heading || "Fixture video")}</strong>
+          ${media.summary ? `<p>${escapeHtml(media.summary)}</p>` : ""}
+        </div>
+        <div class="fixture-hero-media-frame">
+          <iframe
+            src="${escapeHtml(media.src)}"
+            title="${escapeHtml(media.title || media.heading || "Fixture video")}"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            loading="lazy"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </section>
     `;
   };
 
@@ -8905,6 +8941,7 @@
           ${renderFixtureHeroScoreboard(fixture, clarity)}
         </article>
       </section>
+      ${renderFixtureHeroMedia(fixture)}
       ${renderFixturePredictionDeck(fixture, clarity, matchedEntry, publishClass)}
       ${renderFixtureCoverageTruthStrip(
         fixture,
