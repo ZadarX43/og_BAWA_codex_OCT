@@ -3035,6 +3035,59 @@
     `;
   };
 
+  const renderFixtureWeatherContext = (fixture) => {
+    const fixtureKey = String(fixture?.fixture_key || "");
+    const context = state.selectedFixtureExternalContent?.fixture_key === fixtureKey ? state.selectedFixtureExternalContent : null;
+    const weather = Array.isArray(context?.weather_signals) ? context.weather_signals[0] : null;
+    const spaceWeather = Array.isArray(context?.space_weather_signals) ? context.space_weather_signals[0] : null;
+    if (!weather && !spaceWeather) {
+      return "";
+    }
+    const weatherMetrics = weather
+      ? [
+          ["Temp", weather.temperature_c !== undefined ? `${Number(weather.temperature_c).toFixed(0)}°C` : ""],
+          ["Rain", weather.precip_mm !== undefined ? `${Number(weather.precip_mm).toFixed(1)}mm` : ""],
+          ["Wind", weather.wind_kmh !== undefined ? `${Number(weather.wind_kmh).toFixed(0)}km/h` : ""],
+          ["Severity", weather.severity_score !== undefined ? `${weather.severity_score}/7` : ""],
+        ].filter((item) => item[1])
+      : [];
+    const weatherNotes = Array.isArray(weather?.interpretation) ? weather.interpretation.slice(0, 3) : [];
+    const spaceNotes = Array.isArray(spaceWeather?.interpretation) ? spaceWeather.interpretation.slice(0, 2) : [];
+    return `
+      <section class="section fixture-context-weather-section">
+        <article class="fixture-weather-card">
+          <div class="fixture-weather-copy">
+            <span class="metric-label">${escapeHtml(weather?.provider || "Weather overlay")}</span>
+            <h2>${escapeHtml(weather?.heading || "Weather Forecast")}</h2>
+            <p>${escapeHtml(weather?.summary || "Weather context is monitored as a soft fixture layer.")}</p>
+          </div>
+          ${
+            weatherMetrics.length
+              ? `<div class="fixture-weather-metrics">${weatherMetrics
+                  .map(
+                    ([label, value]) => `
+                      <div class="fixture-weather-metric">
+                        <strong>${escapeHtml(value)}</strong>
+                        <span>${escapeHtml(label)}</span>
+                      </div>
+                    `
+                  )
+                  .join("")}</div>`
+              : ""
+          }
+          ${weatherNotes.length ? `<ul class="fixture-weather-notes">${weatherNotes.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}</ul>` : ""}
+        </article>
+        <article class="fixture-space-weather-card">
+          <span class="metric-label">${escapeHtml(spaceWeather?.provider || "Space weather")}</span>
+          <h3>${escapeHtml(spaceWeather?.heading || "Space Weather")}</h3>
+          <strong>${escapeHtml(spaceWeather?.alert_level || "Monitor")}</strong>
+          <p>${escapeHtml(spaceWeather?.summary || "No environmental volatility alert is applied.")}</p>
+          ${spaceNotes.length ? `<ul class="fixture-weather-notes fixture-weather-notes-compact">${spaceNotes.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}</ul>` : ""}
+        </article>
+      </section>
+    `;
+  };
+
   const renderFixturePredictionDeck = (fixture, clarity, matchedEntry, publishClass) => {
     const decision = state.selectedFixtureDecisionIntelligence || null;
     const verdictLabel = marketVerdictDisplay(fixture);
@@ -8971,6 +9024,7 @@
           ${renderFixtureHeroScoreboard(fixture, clarity)}
         </article>
       </section>
+      ${renderFixtureWeatherContext(fixture)}
       ${renderFixtureHeroMedia(fixture)}
       ${renderFixturePredictionDeck(fixture, clarity, matchedEntry, publishClass)}
       ${renderFixtureCoverageTruthStrip(

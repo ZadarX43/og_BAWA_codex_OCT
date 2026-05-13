@@ -2281,7 +2281,7 @@ def insert_site_fixture_external_content(conn: sqlite3.Connection, data_root: Pa
         fixture_key = str(payload.get("fixture_key") or path.stem).strip()
         if not fixture_key:
             continue
-        for collection_name in ("media", "news_signals", "weather_signals", "sentiment_signals"):
+        for collection_name in ("media", "news_signals", "weather_signals", "space_weather_signals", "sentiment_signals"):
             items = payload.get(collection_name)
             if not isinstance(items, list):
                 continue
@@ -2361,7 +2361,17 @@ def insert_site_fixture_context_payloads(conn: sqlite3.Connection) -> int:
                 """
                 SELECT payload_json
                 FROM site_fixture_external_content
-                WHERE fixture_key = ? AND content_type IN ('sentiment_signal', 'environmental_volatility')
+                WHERE fixture_key = ? AND content_type = 'sentiment_signal'
+                ORDER BY priority, row_id
+                """,
+                (fixture_key,),
+            ),
+            "space_weather_signals": json_rows(
+                conn,
+                """
+                SELECT payload_json
+                FROM site_fixture_external_content
+                WHERE fixture_key = ? AND content_type = 'environmental_volatility'
                 ORDER BY priority, row_id
                 """,
                 (fixture_key,),

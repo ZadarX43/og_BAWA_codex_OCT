@@ -42,6 +42,7 @@ Current implementation:
 - source registry: `frontend/public/data/external_content/source_registry.json`
 - fixture media index: `frontend/public/data/external_content/fixture_media/index.json`
 - fixture media payloads: `frontend/public/data/external_content/fixture_media/<fixture_key>.json`
+- context builder: `scripts/external_content/build_fixture_context_signals.py`
 
 ### RSS and article sources
 
@@ -144,6 +145,7 @@ Current fields:
 - `media`
 - `news_signals`
 - `weather_signals`
+- `space_weather_signals`
 - `sentiment_signals`
 
 Media item fields:
@@ -171,6 +173,8 @@ frontend/public/data/external_content/fixture_media/<fixture_key>.json
 
 If a YouTube embed exists, the hero media module renders from that payload.
 
+If weather or space-weather context exists, the fixture page renders a Weather Forecast card above the highlights module.
+
 If no payload exists, nothing is shown.
 
 There is currently a fallback for the Barcelona vs Real Madrid demo fixture so the hero remains stable while the external-content layer is rolled out.
@@ -183,6 +187,7 @@ The next database tables should be:
 - `site_fixture_external_content`
 - `site_fixture_news_signals`
 - `site_fixture_weather_context`
+- `site_fixture_space_weather_context`
 - `site_fixture_sentiment_signals`
 
 Suggested route:
@@ -228,6 +233,34 @@ Route payload should be page-shaped:
 - downloadable route payloads
 - operational source freshness and stale-data warnings
 
+## Current Build Slice Completed
+
+The first implementation slice now exists:
+
+```bash
+python3 scripts/external_content/build_fixture_context_signals.py --demo-barca
+python3 scripts/export_site_sqlite.py
+python3 scripts/export_site_d1_chunks.py
+```
+
+The builder supports:
+
+- RSS/Atom ingestion through `--rss-url`
+- headline/link/source-only matching into `news_signals`
+- demo weather context for `2026_05_10_FC_Barcelona_Real_Madrid`
+- demo space-weather monitoring for the same 24-hour fixture window
+
+The Barcelona demo fixture currently carries:
+
+- one YouTube highlight embed
+- one Weather Forecast card
+- one Space Weather monitor card
+
+SQLite/D1 export now includes those context items in:
+
+- `site_fixture_external_content`
+- `site_fixture_context_payloads`
+
 ## Next Build Slice
 
 1. Add a small RSS ingestion script that writes headline/link/source-only signal payloads.
@@ -250,4 +283,3 @@ Do not edit:
 - `bookie_allmarkets.py`
 - `slip_formatter.py`
 - protected production spine files
-

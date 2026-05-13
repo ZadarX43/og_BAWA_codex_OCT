@@ -289,7 +289,13 @@ const handleSiteFixtureContext = async (_request, env, fixtureKey) => {
   }
   const started = performance.now();
   const data = await getFixtureContext(db, fixtureKey);
-  if (!data.media.length && !data.news_signals.length && !data.weather_signals.length && !data.sentiment_signals.length) {
+  if (
+    !data.media.length &&
+    !data.news_signals.length &&
+    !data.weather_signals.length &&
+    !(data.space_weather_signals || []).length &&
+    !data.sentiment_signals.length
+  ) {
     return requestError("Fixture context was not found in the site data store.", { fixture_key: fixtureKey }, 404);
   }
   return json({ ok: true, fixture_key: fixtureKey, meta: { worker_elapsed_ms: elapsedMs(started) }, data }, 200, siteDataCacheHeaders);

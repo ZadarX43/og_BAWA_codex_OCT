@@ -18,6 +18,51 @@
     }
   ],
   "news_signals": [],
-  "weather_signals": [],
-  "sentiment_signals": []
+  "weather_signals": [
+    {
+      "content_id": "weather_barcelona_2026_05_10",
+      "type": "weather_context",
+      "source_id": "weather_overlay_research",
+      "provider": "Odds Genius weather overlay",
+      "heading": "Weather Forecast",
+      "summary": "Mild, mostly dry Barcelona conditions. Weather does not add a major drag to the fixture read.",
+      "venue": "Camp Nou, Barcelona",
+      "forecast_window": "2026-05-09T12:00:00Z/2026-05-10T12:00:00Z",
+      "condition": "fair",
+      "temperature_c": 17.0,
+      "precip_mm": 0.2,
+      "wind_kmh": 12.0,
+      "wind_gust_kmh": 24.0,
+      "cloud_cover_pct": 45,
+      "severity_score": 0,
+      "interpretation": [
+        "No meaningful weather suppression for pace or shot quality.",
+        "Low wind means crossing and long passing are not materially downgraded.",
+        "This remains a soft context layer and does not force the decision."
+      ],
+      "usage_mode": "weather_context",
+      "rights_note": "Demo website context derived from the internal weather-overlay field shape. Production provider terms must be checked before bulk use.",
+      "priority": 1
+    }
+  ],
+  "sentiment_signals": [],
+  "space_weather_signals": [
+    {
+      "content_id": "space_weather_2026_05_10",
+      "type": "environmental_volatility",
+      "source_id": "noaa_swpc",
+      "provider": "NOAA SWPC",
+      "heading": "Space Weather",
+      "summary": "No material environmental volatility flag is applied. This remains an experimental monitor only.",
+      "alert_level": "Monitor",
+      "forecast_window": "2026-05-10T00:00:00Z/2026-05-11T00:00:00Z",
+      "interpretation": [
+        "No football-market adjustment is made from this layer.",
+        "Tracked as experimental environmental context, not a prediction driver."
+      ],
+      "usage_mode": "environmental_volatility",
+      "rights_note": "Public environmental context. Do not present as deterministic football causation.",
+      "priority": 2
+    }
+  ]
 }

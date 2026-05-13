@@ -58,6 +58,13 @@
       "notes": "Useful for low-cost weather overlays. The free API is non-commercial, so production/commercial use needs an appropriate plan or confirmed permission."
     },
     {
+      "source_id": "weather_overlay_research",
+      "provider": "Odds Genius weather overlay",
+      "usage_mode": "weather_context",
+      "terms_url": "",
+      "notes": "Internal beta/research overlay shape for website context. This must remain soft context and must not hard-gate deploy outputs."
+    },
+    {
       "source_id": "noaa_swpc",
       "provider": "NOAA Space Weather Prediction Center",
       "usage_mode": "environmental_volatility",

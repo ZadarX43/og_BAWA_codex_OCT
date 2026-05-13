@@ -197,7 +197,8 @@ export const getFixtureContext = async (db, fixtureKey) => {
     media: items.filter((item) => item.type === "youtube_embed"),
     news_signals: items.filter((item) => item.type === "rss_headline_link" || item.type === "news_signal"),
     weather_signals: items.filter((item) => item.type === "weather_context" || item.type === "weather_signal"),
-    sentiment_signals: items.filter((item) => item.type === "sentiment_signal" || item.type === "environmental_volatility"),
+    space_weather_signals: items.filter((item) => item.type === "environmental_volatility"),
+    sentiment_signals: items.filter((item) => item.type === "sentiment_signal"),
   };
 };
 
