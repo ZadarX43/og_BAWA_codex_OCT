@@ -3039,7 +3039,7 @@
     const key = String(badge || "unknown").toLowerCase();
     const iconClass = `og-weather-icon og-weather-icon-${escapeHtml(key)}`;
     const sun = `<circle class="og-weather-sun" cx="34" cy="28" r="11"></circle><path class="og-weather-ray" d="M34 8v7M34 41v7M14 28h7M47 28h7M20 14l5 5M48 14l-5 5M20 42l5-5M48 42l-5-5"></path>`;
-    const sunCloudSun = `<circle class="og-weather-sun" cx="43" cy="29" r="10"></circle><path class="og-weather-ray" d="M43 11v6M43 41v6M25 29h6M55 29h6M30 16l4 4M56 16l-4 4M30 42l4-4M56 42l-4-4"></path>`;
+    const sunCloudSun = `<circle class="og-weather-sun" cx="52" cy="29" r="9"></circle><path class="og-weather-ray" d="M52 13v5M52 40v5M36 29h5M63 29h5M40 17l4 4M64 17l-4 4M40 41l4-4M64 41l-4-4"></path>`;
     const cloud = `<path class="og-weather-cloud" d="M23 43h25c6 0 10-4 10-9s-4-9-9-9c-2-8-9-13-17-11-7 1-12 7-13 14-6 1-10 5-10 10 0 3 3 5 7 5h7z"></path>`;
     const rain = `<path class="og-weather-rain" d="M23 51l-4 8M36 51l-4 8M49 51l-4 8"></path>`;
     const snow = `<path class="og-weather-snow" d="M25 54h10M30 49v10M45 54h10M50 49v10"></path>`;
