@@ -188,6 +188,7 @@ def demo_weather_signal() -> dict[str, Any]:
         "wind_gust_kmh": 24.0,
         "cloud_cover_pct": 45,
         "severity_score": 0,
+        "drag_label": "Low",
         "interpretation": [
             "No meaningful weather suppression for pace or shot quality.",
             "Low wind means crossing and long passing are not materially downgraded.",

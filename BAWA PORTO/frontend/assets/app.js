@@ -3072,6 +3072,32 @@
     `;
   };
 
+  const weatherDragLabel = (weather) => {
+    if (weather?.drag_label) return weather.drag_label;
+    if (weather?.weather_drag_label) return weather.weather_drag_label;
+    const severity = Number(weather?.severity_score || 0);
+    if (!Number.isFinite(severity) || severity <= 1) return "Low";
+    if (severity <= 3) return "Raised";
+    if (severity <= 5) return "High";
+    return "Severe";
+  };
+
+  const renderSpaceWeatherBadge = (spaceWeather) => {
+    const label = spaceWeather?.alert_level || "Monitor";
+    return `
+      <div class="og-space-weather-badge" title="${escapeHtml(label)}">
+        <svg class="og-space-weather-icon" viewBox="0 0 72 72" aria-hidden="true" focusable="false">
+          <circle class="og-space-weather-core" cx="36" cy="36" r="7"></circle>
+          <ellipse class="og-space-weather-orbit" cx="36" cy="36" rx="24" ry="10" transform="rotate(-24 36 36)"></ellipse>
+          <ellipse class="og-space-weather-orbit" cx="36" cy="36" rx="24" ry="10" transform="rotate(24 36 36)"></ellipse>
+          <path class="og-space-weather-pulse" d="M20 52c4 4 9 6 16 6s12-2 16-6"></path>
+          <circle class="og-space-weather-dot" cx="55" cy="28" r="3"></circle>
+        </svg>
+        <span>${escapeHtml(label)}</span>
+      </div>
+    `;
+  };
+
   const renderFixtureWeatherContext = (fixture) => {
     const fixtureKey = String(fixture?.fixture_key || "");
     const context = state.selectedFixtureExternalContent?.fixture_key === fixtureKey ? state.selectedFixtureExternalContent : null;
@@ -3084,8 +3110,8 @@
       ? [
           ["Temp", weather.temperature_c !== undefined ? `${Number(weather.temperature_c).toFixed(0)}°C` : ""],
           ["Rain", weather.precip_mm !== undefined ? `${Number(weather.precip_mm).toFixed(1)}mm` : ""],
-          ["Wind", weather.wind_kmh !== undefined ? `${Number(weather.wind_kmh).toFixed(0)}km/h` : ""],
-          ["Severity", weather.severity_score !== undefined ? `${weather.severity_score}/7` : ""],
+          ["Wind", weather.wind_kmh !== undefined ? `${Number(weather.wind_kmh).toFixed(0)} km/h` : ""],
+          ["Weather Drag", weatherDragLabel(weather)],
         ].filter((item) => item[1])
       : [];
     const weatherNotes = Array.isArray(weather?.interpretation) ? weather.interpretation.slice(0, 3) : [];
@@ -3117,9 +3143,13 @@
           ${weatherNotes.length ? `<ul class="fixture-weather-notes">${weatherNotes.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}</ul>` : ""}
         </article>
         <article class="fixture-space-weather-card">
-          <span class="metric-label">${escapeHtml(spaceWeather?.provider || "Space weather")}</span>
-          <h3>${escapeHtml(spaceWeather?.heading || "Space Weather")}</h3>
-          <strong>${escapeHtml(spaceWeather?.alert_level || "Monitor")}</strong>
+          <div class="fixture-space-weather-head">
+            <div>
+              <span class="metric-label">${escapeHtml(spaceWeather?.provider || "Space weather")}</span>
+              <h3>${escapeHtml(spaceWeather?.heading || "Space Weather")}</h3>
+            </div>
+            ${renderSpaceWeatherBadge(spaceWeather)}
+          </div>
           <p>${escapeHtml(spaceWeather?.summary || "No environmental volatility alert is applied.")}</p>
           ${spaceNotes.length ? `<ul class="fixture-weather-notes fixture-weather-notes-compact">${spaceNotes.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}</ul>` : ""}
         </article>
