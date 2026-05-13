@@ -1079,6 +1079,45 @@ body::after {
   font-size: 0.86rem;
 }
 
+.news-signal-grid {
+  align-items: stretch;
+}
+
+.news-signal-card {
+  flex: 1 1 min(320px, 100%);
+  display: grid;
+  gap: 14px;
+  align-content: start;
+  min-height: 240px;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(48, 199, 255, 0.08), transparent 30%),
+    linear-gradient(180deg, rgba(17, 38, 33, 0.94), rgba(8, 18, 18, 0.98));
+}
+
+.news-signal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.news-signal-card h3 {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(1.05rem, 1.2vw, 1.35rem);
+  line-height: 1.05;
+}
+
+.news-signal-card p {
+  margin: 0;
+}
+
+.news-source-link {
+  justify-self: start;
+  min-height: 40px;
+  padding-inline: 14px;
+}
+
 .fixture-prediction-section {
   display: grid;
   grid-template-columns: minmax(0, 1.08fr) minmax(300px, 0.92fr);

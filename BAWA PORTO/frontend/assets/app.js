@@ -46,6 +46,8 @@
     selectedTeamIntelligence: null,
     selectedTeamSquadIntelligence: null,
     selectedTeamLineupSnapshot: null,
+    selectedTeamExternalContent: null,
+    selectedTeamExternalContentKey: "",
     selectedFixtureLineupIntelligence: null,
     selectedFixtureDecisionIntelligence: null,
     selectedFixtureDecisionSupport: null,
@@ -591,6 +593,8 @@
       .trim()
       .replace(/\s+/g, " ");
 
+  const externalContentTeamSlug = (value) => normalizePreferenceText(value).replace(/\s+/g, "_");
+
   const parsePreferenceList = (value) => {
     if (Array.isArray(value)) {
       return value.map((entry) => String(entry || "").trim()).filter(Boolean);
@@ -880,6 +884,21 @@
     );
     state.selectedFixtureExternalContent = payload?.fixture_key ? payload : null;
     return state.selectedFixtureExternalContent;
+  };
+
+  const loadSelectedTeamExternalContent = async () => {
+    if (page !== "teams" || !selectedTeam) {
+      return null;
+    }
+    const slug = externalContentTeamSlug(selectedTeam);
+    if (state.selectedTeamExternalContentKey === slug) {
+      return state.selectedTeamExternalContent;
+    }
+    state.selectedTeamExternalContentKey = slug;
+    state.selectedTeamExternalContent = null;
+    const payload = await fetchOptionalJson(`${DATA_ROOT}/external_content/team_news/${encodeURIComponent(slug)}.json`);
+    state.selectedTeamExternalContent = payload?.team_slug ? payload : null;
+    return state.selectedTeamExternalContent;
   };
 
   const loadFixtureIntelligenceRows = async () => {
@@ -1183,6 +1202,8 @@
     state.selectedTeamIntelligence = null;
     state.selectedTeamSquadIntelligence = null;
     state.selectedTeamLineupSnapshot = null;
+    state.selectedTeamExternalContent = null;
+    state.selectedTeamExternalContentKey = "";
     if (page !== "teams" || !selectedTeam) {
       return;
     }
@@ -1191,6 +1212,7 @@
     state.selectedTeamIntelligence = teamDetail.team || null;
     state.selectedTeamSquadIntelligence = teamDetail.squad || null;
     state.selectedTeamLineupSnapshot = teamDetail.lineupSnapshot || null;
+    await loadSelectedTeamExternalContent();
   };
 
   const loadSelectedFixtureLineupIntelligence = async () => {
@@ -3156,6 +3178,84 @@
           <p>${escapeHtml(spaceWeather?.summary || "No environmental volatility alert is applied.")}</p>
           ${spaceNotes.length ? `<ul class="fixture-weather-notes fixture-weather-notes-compact">${spaceNotes.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}</ul>` : ""}
         </article>
+      </section>
+    `;
+  };
+
+  const sourceHostname = (value) => {
+    try {
+      return new URL(String(value || "")).hostname.replace(/^www\./, "");
+    } catch {
+      return "";
+    }
+  };
+
+  const renderNewsSignalCards = (signals, emptyCopy = "No source-linked news signals are published for this page yet.") => {
+    const rows = Array.isArray(signals) ? signals.filter((item) => item?.title || item?.source_url).slice(0, 8) : [];
+    if (!rows.length) {
+      return `<div class="notice">${escapeHtml(emptyCopy)}</div>`;
+    }
+    return `
+      <div class="card-grid news-signal-grid">
+        ${rows
+          .map((item) => {
+            const url = item.source_url || item.url || "";
+            const host = sourceHostname(url);
+            const tags = Array.isArray(item.tags) ? item.tags.slice(0, 3) : [];
+            return `
+              <article class="panel news-signal-card">
+                <div class="news-signal-head">
+                  <span class="metric-label">${escapeHtml(item.provider || host || "Source")}</span>
+                  <span class="stat-chip">${escapeHtml(String(item.usage_mode || item.type || "source").replace(/_/g, " "))}</span>
+                </div>
+                <h3>${escapeHtml(item.title || "Source-linked football update")}</h3>
+                <p class="muted">${escapeHtml(item.summary || "Headline and source link are stored as context. Full article remains with the publisher.")}</p>
+                ${
+                  tags.length
+                    ? `<div class="pill-row">${tags.map((tag) => `<span class="chip chip-reference">${escapeHtml(String(tag).replace(/_/g, " "))}</span>`).join("")}</div>`
+                    : ""
+                }
+                ${
+                  url
+                    ? `<a class="ghost-button news-source-link" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Open source${host ? ` · ${escapeHtml(host)}` : ""}</a>`
+                    : ""
+                }
+              </article>
+            `;
+          })
+          .join("")}
+      </div>
+    `;
+  };
+
+  const renderFixtureNewsSection = (fixture) => {
+    const fixtureKey = String(fixture?.fixture_key || "");
+    const context = state.selectedFixtureExternalContent?.fixture_key === fixtureKey ? state.selectedFixtureExternalContent : null;
+    const signals = Array.isArray(context?.news_signals) ? context.news_signals : [];
+    return `
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>News Signals</h2>
+            <p class="section-copy">Source-linked club and publisher context for this fixture. Odds Genius stores headlines, links, and interpretation only; full articles stay with the original publisher.</p>
+          </div>
+        </div>
+        ${renderNewsSignalCards(signals, "No source-linked news signals are published for this fixture yet.")}
+      </section>
+    `;
+  };
+
+  const renderTeamNewsSection = (teamName) => {
+    const signals = Array.isArray(state.selectedTeamExternalContent?.news_signals) ? state.selectedTeamExternalContent.news_signals : [];
+    return `
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>${escapeHtml(teamName)} News Signals</h2>
+            <p class="section-copy">Official club sources and publisher links for team context. This is an intelligence feed, not a republished news site.</p>
+          </div>
+        </div>
+        ${renderNewsSignalCards(signals, "No source-linked news signals are published for this team yet.")}
       </section>
     `;
   };
@@ -6017,6 +6117,7 @@
       ["Fixtures", teamPageHref(team.name, "fixtures"), selectedTeamTab === "fixtures"],
       ["Results", teamPageHref(team.name, "results"), selectedTeamTab === "results"],
       ["Form", teamPageHref(team.name, "form"), selectedTeamTab === "form"],
+      ["News", teamPageHref(team.name, "news"), selectedTeamTab === "news"],
       ["Intelligence", teamPageHref(team.name, "intelligence"), selectedTeamTab === "intelligence"],
     ];
     const intelligenceHeroCopy =
@@ -6317,6 +6418,7 @@
       fixtures: fixturesContent,
       results: resultsContent,
       form: formContent,
+      news: renderTeamNewsSection(team.name),
       intelligence: intelligenceContent,
     };
     return `
@@ -8756,6 +8858,7 @@
       ["h2h", "H2H"],
       ["markets", "Markets"],
       ["form", "Form"],
+      ["news", "News"],
       ["context", "Context"],
     ];
     const requestedFixtureTab =
@@ -9000,6 +9103,9 @@
             </article>
           </section>
         `;
+      }
+      if (activeFixtureTab === "news") {
+        return renderFixtureNewsSection(fixture);
       }
       if (activeFixtureTab === "context") {
         return `

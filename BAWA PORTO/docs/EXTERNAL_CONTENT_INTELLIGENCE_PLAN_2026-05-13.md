@@ -181,14 +181,13 @@ There is currently a fallback for the Barcelona vs Real Madrid demo fixture so t
 
 ## Database / Worker Direction
 
-The next database tables should be:
+The database tables now used for the first slice are:
 
 - `site_external_sources`
 - `site_fixture_external_content`
-- `site_fixture_news_signals`
-- `site_fixture_weather_context`
-- `site_fixture_space_weather_context`
-- `site_fixture_sentiment_signals`
+- `site_fixture_context_payloads`
+
+News, weather, space-weather, media, and sentiment items are stored as typed rows in `site_fixture_external_content` and cached into one page-shaped context payload per fixture. Separate typed tables can still be added later if query pressure justifies them.
 
 Suggested route:
 
@@ -255,11 +254,63 @@ The Barcelona demo fixture currently carries:
 - one YouTube highlight embed
 - one Weather Forecast card
 - one Space Weather monitor card
+- four source-linked news signals:
+  - FC Barcelona official first-team news source page
+  - Real Madrid official first-team news source page
+  - Sky Sports football news watch source page
+  - BBC Sport football RSS monitor source
 
 SQLite/D1 export now includes those context items in:
 
 - `site_fixture_external_content`
 - `site_fixture_context_payloads`
+
+## News Feed Implementation Update
+
+Added:
+
+- `frontend/public/data/external_content/news_sources.json`
+- `frontend/public/data/external_content/team_news/<team_slug>.json`
+- `frontend/public/data/external_content/team_news/index.json`
+- Fixture `News` tab rendering from `news_signals`
+- Team `News` tab rendering from `team_news/<team_slug>.json`
+
+Current demo payloads:
+
+- `2026_05_10_FC_Barcelona_Real_Madrid`: 4 news signals
+- `fc_barcelona`: 3 news signals
+- `real_madrid`: 3 news signals
+
+Official club websites are currently treated as source-page links, not scraped feeds. BBC Sport is configured as an RSS-capable source, but broad RSS matching must stay conservative because generic terms such as `real`, `club`, `city`, and `united` create false positives. The matcher now excludes those generic team tokens.
+
+Run the controlled demo seed without network RSS:
+
+```bash
+python3 scripts/external_content/build_fixture_context_signals.py \
+  --source-config /private/tmp/nonexistent-news-sources.json \
+  --demo-barca \
+  --demo-barca-news
+```
+
+Run configured RSS ingestion when network access and source policy are approved:
+
+```bash
+python3 scripts/external_content/build_fixture_context_signals.py --demo-barca --demo-barca-news
+```
+
+Then export:
+
+```bash
+python3 scripts/export_site_sqlite.py
+python3 scripts/export_site_d1_chunks.py
+```
+
+Current measured D1/static impact after adding the demo news signals:
+
+- `site_fixture_external_content`: 7 rows
+- `site_fixture_context_payloads`: 1 cached fixture context payload
+- D1 chunk total: ~144.9MB
+- SQLite: ~156.4MB
 
 ## Next Build Slice
 

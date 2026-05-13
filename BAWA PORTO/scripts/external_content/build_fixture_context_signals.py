@@ -21,7 +21,21 @@ from typing import Any
 
 
 DEFAULT_DATA_ROOT = Path("frontend/public/data")
+DEFAULT_SOURCE_CONFIG = Path("frontend/public/data/external_content/news_sources.json")
 DEMO_FIXTURE_KEY = "2026_05_10_FC_Barcelona_Real_Madrid"
+GENERIC_TEAM_TOKENS = {
+    "real",
+    "club",
+    "city",
+    "town",
+    "united",
+    "athletic",
+    "sporting",
+    "football",
+    "fc",
+    "cf",
+    "sc",
+}
 
 
 def read_json(path: Path, default: Any) -> Any:
@@ -117,7 +131,7 @@ def fixture_terms(fixture: dict[str, Any]) -> set[str]:
         text_key(fixture.get("league")),
     }
     for team in (fixture.get("home_team"), fixture.get("away_team")):
-        parts = [part for part in text_key(team).split() if len(part) >= 4]
+        parts = [part for part in text_key(team).split() if len(part) >= 4 and part not in GENERIC_TEAM_TOKENS]
         terms.update(parts)
     return {term for term in terms if term}
 
@@ -167,6 +181,126 @@ def build_news_interpretation(item: dict[str, Any], score: int) -> str:
     if score >= 2:
         return "Source-linked team context. Review for lineup, injury, or manager-comment impact before using the fixture read."
     return "Source-linked football context. Treat as orientation unless it is confirmed by lineup or squad intelligence."
+
+
+def team_slug(value: Any) -> str:
+    return re.sub(r"[^a-z0-9]+", "_", normalize_text(value).lower()).strip("_")
+
+
+def demo_barca_news_signals() -> list[dict[str, Any]]:
+    return [
+        {
+            "content_id": "official_fc_barcelona_newsroom_barca_real_demo",
+            "type": "news_signal",
+            "source_id": "fc_barcelona_official_news",
+            "provider": "FC Barcelona",
+            "title": "FC Barcelona official first-team news",
+            "summary": "Official club newsroom source for squad, training, injury, and match reaction context. Odds Genius stores the source link and interprets impact separately.",
+            "source_url": "https://www.fcbarcelona.com/en/football/first-team/news",
+            "published_at": "",
+            "usage_mode": "source_page_link",
+            "rights_note": "Source-page link only. Do not republish article bodies or club media.",
+            "priority": 1,
+            "relevance_score": 4,
+            "teams": ["FC Barcelona"],
+            "team_slugs": ["fc_barcelona"],
+            "tags": ["official_club_source", "team_news", "squad_context"],
+        },
+        {
+            "content_id": "official_real_madrid_newsroom_barca_real_demo",
+            "type": "news_signal",
+            "source_id": "real_madrid_official_news",
+            "provider": "Real Madrid",
+            "title": "Real Madrid official first-team news",
+            "summary": "Official club newsroom source for squad, training, injury, and match reaction context. Use as source-backed orientation before the fixture read.",
+            "source_url": "https://www.realmadrid.com/en-US/news/football/first-team",
+            "published_at": "",
+            "usage_mode": "source_page_link",
+            "rights_note": "Source-page link only. Do not republish article bodies or club media.",
+            "priority": 1,
+            "relevance_score": 4,
+            "teams": ["Real Madrid"],
+            "team_slugs": ["real_madrid"],
+            "tags": ["official_club_source", "team_news", "squad_context"],
+        },
+        {
+            "content_id": "sky_sports_spanish_football_barca_real_demo",
+            "type": "news_signal",
+            "source_id": "sky_sports_football",
+            "provider": "Sky Sports",
+            "title": "Sky Sports football news watch",
+            "summary": "Broad publisher context for match reaction, transfer noise, injury updates, and manager comments. Treat as orientation until confirmed by team sheets or club sources.",
+            "source_url": "https://www.skysports.com/football/news",
+            "published_at": "",
+            "usage_mode": "source_page_link",
+            "rights_note": "Headline/link/source signal only unless a publisher feed or licence allows more.",
+            "priority": 3,
+            "relevance_score": 2,
+            "teams": ["FC Barcelona", "Real Madrid"],
+            "team_slugs": ["fc_barcelona", "real_madrid"],
+            "tags": ["publisher_source", "football_news", "external_context"],
+        },
+        {
+            "content_id": "bbc_football_rss_barca_real_demo",
+            "type": "rss_headline_link",
+            "source_id": "bbc_sport_football_rss",
+            "provider": "BBC Sport",
+            "title": "BBC Sport football RSS monitor",
+            "summary": "RSS-capable football source for headline/link monitoring. Matching headlines can be routed into fixture and team news feeds without storing full article bodies.",
+            "source_url": "https://feeds.bbci.co.uk/sport/football/rss.xml",
+            "published_at": "",
+            "usage_mode": "rss_headline_link",
+            "rights_note": "Headline/link/source signal only. Full article remains with the publisher.",
+            "priority": 4,
+            "relevance_score": 2,
+            "teams": ["FC Barcelona", "Real Madrid"],
+            "team_slugs": ["fc_barcelona", "real_madrid"],
+            "tags": ["rss_capable", "football_news", "external_context"],
+        },
+    ]
+
+
+def team_news_updates_from_signals(signals: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
+    updates: dict[str, list[dict[str, Any]]] = {}
+    for signal in signals:
+        slugs = signal.get("team_slugs")
+        if not isinstance(slugs, list):
+            slugs = [team_slug(team) for team in signal.get("teams", [])] if isinstance(signal.get("teams"), list) else []
+        for slug in slugs:
+            if slug:
+                updates.setdefault(str(slug), []).append(signal)
+    return updates
+
+
+def merge_team_news_payload(data_root: Path, slug: str, items: list[dict[str, Any]]) -> None:
+    path = data_root / "external_content" / "team_news" / f"{slug}.json"
+    payload = read_json(path, {"team_slug": slug, "news_signals": []})
+    payload["team_slug"] = slug
+    payload["updated_at"] = dt.datetime.now(dt.timezone.utc).date().isoformat()
+    existing = payload.get("news_signals")
+    if not isinstance(existing, list):
+        existing = []
+    by_id = {str(item.get("content_id") or index): item for index, item in enumerate(existing)}
+    for item in items:
+        by_id[str(item.get("content_id") or len(by_id))] = item
+    payload["news_signals"] = sorted(by_id.values(), key=lambda item: int(item.get("priority") or 99))
+    write_json(path, payload)
+
+
+def refresh_team_news_index(data_root: Path) -> None:
+    root = data_root / "external_content" / "team_news"
+    items = []
+    for path in sorted(root.glob("*.json")):
+        if path.name == "index.json":
+            continue
+        payload = read_json(path, {})
+        items.append(
+            {
+                "team_slug": payload.get("team_slug") or path.stem,
+                "news_signal_count": len(payload.get("news_signals") or []),
+            }
+        )
+    write_json(root / "index.json", {"updated_at": dt.datetime.now(dt.timezone.utc).date().isoformat(), "items": items})
 
 
 def demo_weather_signal() -> dict[str, Any]:
@@ -269,10 +403,12 @@ def refresh_fixture_media_index(data_root: Path) -> None:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data-root", type=Path, default=DEFAULT_DATA_ROOT)
+    parser.add_argument("--source-config", type=Path, default=DEFAULT_SOURCE_CONFIG)
     parser.add_argument("--rss-url", action="append", default=[], help="RSS/Atom URL to ingest as headline/link signals.")
     parser.add_argument("--rss-provider", action="append", default=[], help="Provider label for each --rss-url.")
     parser.add_argument("--rss-source-id", action="append", default=[], help="Source id for each --rss-url.")
     parser.add_argument("--demo-barca", action="store_true", help="Seed Barcelona vs Real Madrid with weather and space-weather demo context.")
+    parser.add_argument("--demo-barca-news", action="store_true", help="Seed Barcelona vs Real Madrid with source-linked demo news signals.")
     return parser.parse_args()
 
 
@@ -280,6 +416,25 @@ def main() -> int:
     args = parse_args()
     fixtures = load_fixtures(args.data_root)
     fixture_updates: dict[str, dict[str, list[dict[str, Any]]]] = {}
+    team_updates: dict[str, list[dict[str, Any]]] = {}
+
+    configured_sources = read_json(args.source_config, {}).get("sources", []) if args.source_config.exists() else []
+    for source in configured_sources:
+        if source.get("source_type") != "rss" or not source.get("url"):
+            continue
+        try:
+            items = parse_rss_items(
+                fetch_text(source["url"]),
+                source.get("provider") or "Publisher RSS",
+                source.get("source_id") or "publisher_rss",
+            )
+        except Exception as exc:
+            print(json.dumps({"source_id": source.get("source_id"), "status": "rss_fetch_failed", "error": str(exc)}))
+            continue
+        for fixture_key, signals in match_rss_to_fixtures(fixtures, items).items():
+            fixture_updates.setdefault(fixture_key, {}).setdefault("news_signals", []).extend(signals)
+            for slug, team_items in team_news_updates_from_signals(signals).items():
+                team_updates.setdefault(slug, []).extend(team_items)
 
     for index, url in enumerate(args.rss_url):
         provider = args.rss_provider[index] if index < len(args.rss_provider) else "Publisher RSS"
@@ -287,16 +442,37 @@ def main() -> int:
         items = parse_rss_items(fetch_text(url), provider, source_id)
         for fixture_key, signals in match_rss_to_fixtures(fixtures, items).items():
             fixture_updates.setdefault(fixture_key, {}).setdefault("news_signals", []).extend(signals)
+            for slug, team_items in team_news_updates_from_signals(signals).items():
+                team_updates.setdefault(slug, []).extend(team_items)
 
     if args.demo_barca:
         fixture_updates.setdefault(DEMO_FIXTURE_KEY, {}).setdefault("weather_signals", []).append(demo_weather_signal())
         fixture_updates.setdefault(DEMO_FIXTURE_KEY, {}).setdefault("space_weather_signals", []).append(demo_space_weather_signal())
 
+    if args.demo_barca_news:
+        demo_news = demo_barca_news_signals()
+        fixture_updates.setdefault(DEMO_FIXTURE_KEY, {}).setdefault("news_signals", []).extend(demo_news)
+        for slug, team_items in team_news_updates_from_signals(demo_news).items():
+            team_updates.setdefault(slug, []).extend(team_items)
+
     for fixture_key, updates in fixture_updates.items():
         merge_fixture_payload(args.data_root, fixture_key, updates)
+    for slug, updates in team_updates.items():
+        merge_team_news_payload(args.data_root, slug, updates)
     refresh_fixture_media_index(args.data_root)
+    refresh_team_news_index(args.data_root)
 
-    print(json.dumps({"fixtures_updated": len(fixture_updates), "fixture_keys": sorted(fixture_updates)}, indent=2))
+    print(
+        json.dumps(
+            {
+                "fixtures_updated": len(fixture_updates),
+                "fixture_keys": sorted(fixture_updates),
+                "teams_updated": len(team_updates),
+                "team_slugs": sorted(team_updates),
+            },
+            indent=2,
+        )
+    )
     return 0
 
 

@@ -1,0 +1,48 @@
+{
+  "updated_at": "2026-05-13",
+  "purpose": "Publish-safe news source configuration for headline/link/source-only football intelligence signals.",
+  "rules": [
+    "Use RSS/Atom feeds where available.",
+    "Use official club pages as source links unless a reliable feed or licence is confirmed.",
+    "Do not republish full article bodies, images, or paywalled content.",
+    "Odds Genius interpretation should describe possible intelligence impact without claiming unverified team news."
+  ],
+  "sources": [
+    {
+      "source_id": "fc_barcelona_official_news",
+      "provider": "FC Barcelona",
+      "source_type": "official_source_page",
+      "url": "https://www.fcbarcelona.com/en/football/first-team/news",
+      "team_slugs": ["fc_barcelona"],
+      "usage_mode": "source_page_link",
+      "notes": "Official club newsroom. Treat as source page until an official RSS/API endpoint is confirmed."
+    },
+    {
+      "source_id": "real_madrid_official_news",
+      "provider": "Real Madrid",
+      "source_type": "official_source_page",
+      "url": "https://www.realmadrid.com/en-US/news/football/first-team",
+      "team_slugs": ["real_madrid"],
+      "usage_mode": "source_page_link",
+      "notes": "Official club newsroom. Treat as source page until an official RSS/API endpoint is confirmed."
+    },
+    {
+      "source_id": "bbc_sport_football_rss",
+      "provider": "BBC Sport",
+      "source_type": "rss",
+      "url": "https://feeds.bbci.co.uk/sport/football/rss.xml",
+      "team_slugs": [],
+      "usage_mode": "rss_headline_link",
+      "notes": "General football RSS feed. Match headlines/descriptions to teams and fixtures."
+    },
+    {
+      "source_id": "sky_sports_football",
+      "provider": "Sky Sports",
+      "source_type": "source_page",
+      "url": "https://www.skysports.com/football/news",
+      "team_slugs": [],
+      "usage_mode": "source_page_link",
+      "notes": "Broad football news page. Add a direct RSS/API adapter only if a stable permitted feed is confirmed."
+    }
+  ]
+}

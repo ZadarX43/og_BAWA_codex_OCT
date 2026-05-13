@@ -1,0 +1,85 @@
+{
+  "team_slug": "fc_barcelona",
+  "news_signals": [
+    {
+      "content_id": "official_fc_barcelona_newsroom_barca_real_demo",
+      "type": "news_signal",
+      "source_id": "fc_barcelona_official_news",
+      "provider": "FC Barcelona",
+      "title": "FC Barcelona official first-team news",
+      "summary": "Official club newsroom source for squad, training, injury, and match reaction context. Odds Genius stores the source link and interprets impact separately.",
+      "source_url": "https://www.fcbarcelona.com/en/football/first-team/news",
+      "published_at": "",
+      "usage_mode": "source_page_link",
+      "rights_note": "Source-page link only. Do not republish article bodies or club media.",
+      "priority": 1,
+      "relevance_score": 4,
+      "teams": [
+        "FC Barcelona"
+      ],
+      "team_slugs": [
+        "fc_barcelona"
+      ],
+      "tags": [
+        "official_club_source",
+        "team_news",
+        "squad_context"
+      ]
+    },
+    {
+      "content_id": "sky_sports_spanish_football_barca_real_demo",
+      "type": "news_signal",
+      "source_id": "sky_sports_football",
+      "provider": "Sky Sports",
+      "title": "Sky Sports football news watch",
+      "summary": "Broad publisher context for match reaction, transfer noise, injury updates, and manager comments. Treat as orientation until confirmed by team sheets or club sources.",
+      "source_url": "https://www.skysports.com/football/news",
+      "published_at": "",
+      "usage_mode": "source_page_link",
+      "rights_note": "Headline/link/source signal only unless a publisher feed or licence allows more.",
+      "priority": 3,
+      "relevance_score": 2,
+      "teams": [
+        "FC Barcelona",
+        "Real Madrid"
+      ],
+      "team_slugs": [
+        "fc_barcelona",
+        "real_madrid"
+      ],
+      "tags": [
+        "publisher_source",
+        "football_news",
+        "external_context"
+      ]
+    },
+    {
+      "content_id": "bbc_football_rss_barca_real_demo",
+      "type": "rss_headline_link",
+      "source_id": "bbc_sport_football_rss",
+      "provider": "BBC Sport",
+      "title": "BBC Sport football RSS monitor",
+      "summary": "RSS-capable football source for headline/link monitoring. Matching headlines can be routed into fixture and team news feeds without storing full article bodies.",
+      "source_url": "https://feeds.bbci.co.uk/sport/football/rss.xml",
+      "published_at": "",
+      "usage_mode": "rss_headline_link",
+      "rights_note": "Headline/link/source signal only. Full article remains with the publisher.",
+      "priority": 4,
+      "relevance_score": 2,
+      "teams": [
+        "FC Barcelona",
+        "Real Madrid"
+      ],
+      "team_slugs": [
+        "fc_barcelona",
+        "real_madrid"
+      ],
+      "tags": [
+        "rss_capable",
+        "football_news",
+        "external_context"
+      ]
+    }
+  ],
+  "updated_at": "2026-05-13"
+}
