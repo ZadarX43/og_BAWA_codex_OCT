@@ -180,6 +180,8 @@ def demo_weather_signal() -> dict[str, Any]:
         "venue": "Camp Nou, Barcelona",
         "forecast_window": "2026-05-09T12:00:00Z/2026-05-10T12:00:00Z",
         "condition": "fair",
+        "badge": "sun-cloud",
+        "label": "Mild / Mostly Dry",
         "temperature_c": 17.0,
         "precip_mm": 0.2,
         "wind_kmh": 12.0,
