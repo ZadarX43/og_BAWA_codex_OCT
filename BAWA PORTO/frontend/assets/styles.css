@@ -1003,6 +1003,14 @@ summary:focus-visible {
   margin-bottom: 20px;
 }
 
+.app-view[data-view="fixture"] > .section {
+  margin-bottom: clamp(40px, 5vw, 76px);
+}
+
+.app-view[data-view="fixture"] > .section.section-tight {
+  margin-bottom: 28px;
+}
+
 .app-view > .hero,
 .app-view > .section {
   opacity: 0;

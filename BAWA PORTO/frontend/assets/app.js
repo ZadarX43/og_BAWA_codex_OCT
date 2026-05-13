@@ -1340,14 +1340,12 @@
 
   const intelligenceCard = (entry, telegramEnabled) => {
     const row = entry.row;
-    const reasons = entry.reasons.join(" • ");
     const publishClass = String(row.publish_class || row.fixture_class || "MONITOR").toUpperCase();
     const headline =
       row.signal_summary?.headline ||
       row.signal_summary?.summary_text ||
       "This fixture is being monitored through the intelligence layer.";
-    const notes = Array.isArray(row.context_summary?.notes) ? row.context_summary.notes.slice(0, 3) : [];
-    const notificationPriority = row.follow_relevance?.notification_priority || "normal";
+    const notes = Array.isArray(row.context_summary?.notes) ? row.context_summary.notes.slice(0, 2) : [];
     return `
       <article class="panel intelligence-card intelligence-card-${publishClass.toLowerCase()}">
         <div class="intelligence-card-head">
@@ -1369,8 +1367,6 @@
         </div>
         <div class="intelligence-meta">
           <span class="chip">${escapeHtml(marketFamilyLabel(row.signal_summary?.market_family))}</span>
-          <span class="chip">${escapeHtml(reasons)}</span>
-          <span class="chip">${telegramEnabled ? `Telegram ${escapeHtml(notificationPriority)}` : "Website preview"}</span>
         </div>
         <p class="intelligence-headline">${escapeHtml(headline)}</p>
         ${
@@ -2520,11 +2516,9 @@
       >
         <div class="widget-reference-head fixture-table-reference-head">
           <div>
-            <span class="metric-label">Reference layer</span>
             <h4>League table</h4>
             <p class="muted">Reference context for this fixture. Use this as orientation, not as the decision layer.</p>
           </div>
-          <span class="chip chip-reference">Table orientation</span>
         </div>
         <div class="widget-reference-frame">
           <div class="notice reference-loading">Loading league table…</div>
@@ -2977,10 +2971,7 @@
 
   const renderFixturePredictionDeck = (fixture, clarity, matchedEntry, publishClass) => {
     const decision = state.selectedFixtureDecisionIntelligence || null;
-    const marketLine = primaryMarketLine(fixture);
-    const confidenceTier = String(fixture.signal_summary?.confidence_tier || fixture.deploy_summary?.confidence_tier || "").toUpperCase();
     const verdictLabel = marketVerdictDisplay(fixture);
-    const decisionMarkets = decisionMarketSuitabilityItems(decision);
     return `
       <section class="section fixture-prediction-section">
         <article class="panel fixture-prediction-card">
@@ -2993,39 +2984,6 @@
                 fixture.signal_summary?.summary_text ||
                 clarity.action_copy
             )}</p>
-          </div>
-          <div class="fixture-prediction-card-grid">
-            <div>
-              <span class="metric-label">Signal</span>
-              <strong>${escapeHtml(decision ? safeTitleLabel(decision.signal_state, "Pending") : clarity.action_label)}</strong>
-            </div>
-            <div>
-              <span class="metric-label">Agreement</span>
-              <strong>${escapeHtml(decision ? `${decision.agreement_score ?? "—"}%` : confidenceBandDisplay(confidenceTier))}</strong>
-            </div>
-            <div>
-              <span class="metric-label">Best market</span>
-              <strong>${escapeHtml(decisionMarkets[0] ? `${decisionMarkets[0].label} ${decisionMarkets[0].rating}%` : bookmakerLineDisplay(marketLine.odds))}</strong>
-            </div>
-            <div>
-              <span class="metric-label">Main caution</span>
-              <strong>${escapeHtml(decision ? decisionTopCaution(decision) : valueEdgeDisplay(fixture))}</strong>
-            </div>
-          </div>
-          <div class="pill-row">
-            <span class="fixture-state-pill fixture-state-pill-${escapeHtml(clarity.action_label.toLowerCase().includes("deploy") ? "deploy" : publishClass.toLowerCase())}">${escapeHtml(publishClass)}</span>
-            <span class="chip chip-reference">${escapeHtml(decision ? safeTitleLabel(decision.confidence_band, "Pending") : confidenceBandDisplay(confidenceTier))}</span>
-            ${
-              decision?.supporting_layers
-                ? decision.supporting_layers
-                    .slice(0, 2)
-                    .map((tag) => `<span class="chip chip-reference">${escapeHtml(reasonTokenLabel(String(tag)))}</span>`)
-                    .join("")
-                : (fixture.signal_summary?.context_tags || [])
-                    .slice(0, 2)
-                    .map((tag) => `<span class="chip chip-reference">${escapeHtml(String(tag).replace(/_/g, " "))}</span>`)
-                    .join("")
-            }
           </div>
           <div class="cta-row">
             <a class="button" href="./dashboard.html">Back to dashboard</a>
@@ -5063,13 +5021,10 @@
 
   const renderFixtureOverviewPrimer = (fixture, clarity) => {
     const decision = state.selectedFixtureDecisionIntelligence || null;
-    const lineup = state.selectedFixtureLineupIntelligence || null;
     const preview = decision?.preview || null;
     const posture = decisionMarketPosture(decision);
     const watchlist = decision?.watchlist || null;
     const supportRows = decisionReasonRows(decision, 4);
-    const primaryMismatch = Array.isArray(decision?.key_mismatches) ? decision.key_mismatches[0] : null;
-    const lineupMismatch = Array.isArray(lineup?.key_mismatches) ? lineup.key_mismatches[0] : null;
 
     if (!decision) {
       return `
@@ -5137,54 +5092,36 @@
               },
             ])}
             <p class="section-copy"><strong>Main caution:</strong> ${escapeHtml(preview?.caution_line || decisionTopCaution(decision))}</p>
+            <a class="ghost-button" href="./fixture.html?fixture=${encodeURIComponent(fixture.fixture_key || "")}&tab=markets#fixture-tab-markets">See full market posture</a>
           </article>
         </div>
       </section>
+      ${
+        watchlist
+          ? `
       <section class="section">
-        <div class="split">
-          <article class="panel">
-            <h3>Key structural edge</h3>
-            ${
-              primaryMismatch
-                ? `
-                  <div class="feature-list compact-list">
-                    <li><strong>${escapeHtml(primaryMismatch.summary || primaryMismatch.zone || "Mismatch edge")}</strong><br /><span class="muted">${escapeHtml(`${primaryMismatch.advantage || "Advantage"} • ${primaryMismatch.mismatch_score ?? "—"} points`)}</span></li>
-                  </div>
-                `
-                : `<div class="notice">No published fixture mismatch summary is available yet.</div>`
-            }
-            ${
-              lineupMismatch
-                ? `<p class="section-copy"><strong>Lineup layer:</strong> ${escapeHtml(lineupMismatch.summary || lineupMismatch.zone || "A lineup mismatch has been published.")}</p>`
-                : ""
-            }
-          </article>
           <article class="panel">
             <h3>Watchlist posture</h3>
-            ${
-              watchlist
-                ? `
-                  ${renderEntitySurfaceTiles([
-                    {
-                      label: "Watch state",
-                      value: safeTitleLabel(watchlist.state || decision.signal_state, "Pending"),
-                      meta: watchlist.label || "Live confirmation layer",
-                      tone: decisionStateTone(watchlist.state || decision.signal_state),
-                    },
-                    {
-                      label: "Readiness",
-                      value: `${watchlist.readiness_score ?? decision.agreement_score ?? "—"}%`,
-                      meta: "Pre-match watch posture",
-                      tone: scoreTone(watchlist.readiness_score ?? decision.agreement_score),
-                    },
-                  ])}
-                  <p class="section-copy">${escapeHtml(watchlist.public_summary || "Pre-match is not clean enough for full deployment, but the shape is interesting enough to monitor live.")}</p>
-                `
-                : `<p class="section-copy">No separate watchlist layer is published for this fixture, so the page is relying on the main decision state and caution framing.</p>`
-            }
+            ${renderEntitySurfaceTiles([
+              {
+                label: "Watch state",
+                value: safeTitleLabel(watchlist.state || decision.signal_state, "Pending"),
+                meta: watchlist.label || "Live confirmation layer",
+                tone: decisionStateTone(watchlist.state || decision.signal_state),
+              },
+              {
+                label: "Readiness",
+                value: `${watchlist.readiness_score ?? decision.agreement_score ?? "—"}%`,
+                meta: "Pre-match watch posture",
+                tone: scoreTone(watchlist.readiness_score ?? decision.agreement_score),
+              },
+            ])}
+            <p class="section-copy">${escapeHtml(watchlist.public_summary || "Pre-match is not clean enough for full deployment, but the shape is interesting enough to monitor live.")}</p>
           </article>
-        </div>
       </section>
+      `
+          : ""
+      }
     `;
   };
 
@@ -8658,80 +8595,12 @@
         return `
           ${renderFixtureOverviewPrimer(fixture, clarity)}
           ${renderFixtureTeamFaceOff(fixture, state.selectedFixtureDecisionIntelligence || null)}
-          ${renderFixtureUnitBattle(state.selectedFixtureDecisionIntelligence || null)}
           ${renderDecisionKeyPlayerDrivers(state.selectedFixtureDecisionIntelligence || null)}
-          ${renderDecisionMarketSuitability(state.selectedFixtureDecisionIntelligence || null)}
-          <section class="section">
-            ${fixtureSummaryNotice}
-            <div class="fixture-detail-grid">
-              <article class="panel">
-                <h3>Published overview</h3>
-                <p class="muted">${escapeHtml(state.selectedFixtureDecisionIntelligence?.preview?.premium_summary || headline)}</p>
-                <div class="card-grid">
-                  <article class="panel">
-                    <h4>Telegram / comms preview</h4>
-                    <p class="muted">${escapeHtml(state.selectedFixtureDecisionIntelligence?.preview?.telegram_summary || fixture.signal_summary?.summary_text || headline)}</p>
-                  </article>
-              <article class="panel">
-                <h4>State snapshot</h4>
-                <ul class="feature-list compact-list">
-                  <li>Action state: ${escapeHtml(clarity.action_label)}</li>
-                  <li>Confidence band: ${escapeHtml(confidenceBandDisplay(confidenceTier))}</li>
-                  <li>Feed bucket: ${escapeHtml(clarity.feed_bucket)}</li>
-                  <li>Coverage: ${escapeHtml(String(fixture.coverage_status || "covered"))}</li>
-                  <li>Alert priority: ${
-                        notificationPreferences?.telegram_enabled
-                          ? escapeHtml(fixture.follow_relevance?.notification_priority || "website only")
-                          : "Preview"
-                      }</li>
-                    </ul>
-                  </article>
-                </div>
-              </article>
-              <article class="panel">
-                <h3>Published market snapshot</h3>
-                <div class="prediction-meta-grid dashboard-odds-grid">
-                  <div class="signal-cell">
-                    <span class="signal-label">1X2</span>
-                    <span class="signal-value">${escapeHtml(
-                      odds.home_win_odds && odds.draw_odds && odds.away_win_odds
-                        ? `${formatOdds(odds.home_win_odds)} / ${formatOdds(odds.draw_odds)} / ${formatOdds(odds.away_win_odds)}`
-                        : "N/A"
-                    )}</span>
-                  </div>
-                  <div class="signal-cell">
-                    <span class="signal-label">OU25</span>
-                    <span class="signal-value">${escapeHtml(
-                      odds.over25_odds && odds.under25_odds ? `${formatOdds(odds.over25_odds)} / ${formatOdds(odds.under25_odds)}` : "N/A"
-                    )}</span>
-                  </div>
-                  <div class="signal-cell">
-                    <span class="signal-label">BTTS</span>
-                    <span class="signal-value">${escapeHtml(
-                      odds.btts_yes_odds && odds.btts_no_odds ? `${formatOdds(odds.btts_yes_odds)} / ${formatOdds(odds.btts_no_odds)}` : "N/A"
-                    )}</span>
-                  </div>
-                </div>
-                <div class="pill-row">
-                  ${(fixture.signal_summary?.context_tags || []).length
-                    ? fixture.signal_summary.context_tags.map((tag) => `<span class="chip">${escapeHtml(String(tag).replace(/_/g, " "))}</span>`).join("")
-                    : `<span class="muted">No published context tags</span>`}
-                </div>
-              </article>
-            </div>
-          </section>
-          ${renderDecisionKeyMismatches(state.selectedFixtureDecisionIntelligence || null)}
         `;
       }
       if (activeFixtureTab === "lineups") {
         return `
           ${renderFixtureLineupIntelligence(state.selectedFixtureLineupIntelligence, fixture)}
-          <section class="section">
-            ${fixtureSummaryNotice}
-            <article class="panel">
-              ${fixtureLineupsWidgetMarkup(fixture)}
-            </article>
-          </section>
         `;
       }
       if (activeFixtureTab === "markets") {
@@ -8937,11 +8806,6 @@
                   </article>
                 </div>
               </div>
-            </article>
-            <article class="panel">
-              <h3>League rhythm around this fixture</h3>
-              <p class="muted">Nearby same-league fixtures remain visible underneath the direct team-form layer so the broader slate still has context.</p>
-              ${relatedFixturesMarkup}
             </article>
           </section>
         `;
