@@ -1,0 +1,75 @@
+{
+  "updated_at": "2026-05-13",
+  "purpose": "Publish-safe registry for external content that Odds Genius may reference, embed, or contextualise.",
+  "principles": [
+    "External sources provide raw context; Odds Genius provides the interpretation layer.",
+    "Do not republish full articles, videos, or provider-owned datasets unless the source licence explicitly permits it.",
+    "Store source URL, provider, usage mode, attribution, and freshness on every content item."
+  ],
+  "usage_modes": {
+    "youtube_embed": {
+      "display": "Embedded YouTube video",
+      "allowed_use": "Embed public videos via the YouTube iframe/player flow.",
+      "rules": [
+        "Do not download or rehost video files.",
+        "Prefer official league, broadcaster, club, or competition channels.",
+        "Keep the YouTube player controls and attribution intact."
+      ]
+    },
+    "rss_headline_link": {
+      "display": "Headline and outbound source link",
+      "allowed_use": "Use headline, source, timestamp, and outbound link as a signal input.",
+      "rules": [
+        "Do not copy full article bodies into public pages.",
+        "Use short Odds Genius interpretation text written from the intelligence layer.",
+        "Link clearly to the original publisher."
+      ]
+    },
+    "weather_context": {
+      "display": "Weather context overlay",
+      "allowed_use": "Use public or licensed weather data to create football-specific context.",
+      "rules": [
+        "Keep attribution where the provider requires it.",
+        "Present weather as a contextual modifier, not a guaranteed outcome driver."
+      ]
+    },
+    "environmental_volatility": {
+      "display": "Experimental environmental context",
+      "allowed_use": "Use public space-weather/environmental data only as a labelled experimental volatility overlay.",
+      "rules": [
+        "Do not imply direct causation.",
+        "Keep this behind a clear experimental label until validated."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "source_id": "youtube_public_embed",
+      "provider": "YouTube",
+      "usage_mode": "youtube_embed",
+      "terms_url": "https://www.youtube.com/t/terms",
+      "notes": "Use embed URLs only. Official football channels are preferred."
+    },
+    {
+      "source_id": "open_meteo",
+      "provider": "Open-Meteo",
+      "usage_mode": "weather_context",
+      "terms_url": "https://open-meteo.com/en/terms",
+      "notes": "Useful for low-cost weather overlays. The free API is non-commercial, so production/commercial use needs an appropriate plan or confirmed permission."
+    },
+    {
+      "source_id": "noaa_swpc",
+      "provider": "NOAA Space Weather Prediction Center",
+      "usage_mode": "environmental_volatility",
+      "terms_url": "https://www.weather.gov/disclaimer",
+      "notes": "Experimental context only; never present as deterministic prediction logic."
+    },
+    {
+      "source_id": "publisher_rss",
+      "provider": "Publisher RSS feeds",
+      "usage_mode": "rss_headline_link",
+      "terms_url": "",
+      "notes": "Provider terms differ. Use as headline/link signal input unless a richer licence is confirmed."
+    }
+  ]
+}

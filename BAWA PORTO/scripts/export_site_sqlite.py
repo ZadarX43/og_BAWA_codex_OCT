@@ -22,7 +22,7 @@ from typing import Any, Iterable
 DEFAULT_DATA_ROOT = Path("frontend/public/data")
 DEFAULT_NORMALIZED_ROOT = Path("data_sources/api_football/normalized")
 DEFAULT_OUTPUT = Path("build/site_data/odds_genius.sqlite")
-SCHEMA_VERSION = 4
+SCHEMA_VERSION = 5
 DEFAULT_ROUTE_CACHE_LIMIT = 20
 DEFAULT_EVENT_SHORTLIST_LIMIT = 3
 
@@ -312,6 +312,9 @@ def execute_schema(conn: sqlite3.Connection) -> None:
         DROP TABLE IF EXISTS site_formation_slots;
         DROP TABLE IF EXISTS site_fixture_market_intelligence;
         DROP TABLE IF EXISTS site_player_event_shortlists;
+        DROP TABLE IF EXISTS site_external_sources;
+        DROP TABLE IF EXISTS site_fixture_external_content;
+        DROP TABLE IF EXISTS site_fixture_context_payloads;
         DROP TABLE IF EXISTS site_fixture_stats_payloads;
         DROP TABLE IF EXISTS site_team_premium_payloads;
 
@@ -578,6 +581,29 @@ def execute_schema(conn: sqlite3.Connection) -> None:
           payload_json TEXT NOT NULL
         );
 
+        CREATE TABLE site_external_sources (
+          source_id TEXT PRIMARY KEY,
+          provider TEXT,
+          usage_mode TEXT,
+          terms_url TEXT,
+          payload_json TEXT NOT NULL
+        );
+
+        CREATE TABLE site_fixture_external_content (
+          row_id TEXT PRIMARY KEY,
+          fixture_key TEXT NOT NULL,
+          content_type TEXT,
+          source_id TEXT,
+          provider TEXT,
+          priority INTEGER,
+          payload_json TEXT NOT NULL
+        );
+
+        CREATE TABLE site_fixture_context_payloads (
+          fixture_key TEXT PRIMARY KEY,
+          payload_json TEXT NOT NULL
+        );
+
         CREATE TABLE site_fixture_stats_payloads (
           fixture_key TEXT PRIMARY KEY,
           payload_json TEXT NOT NULL
@@ -611,6 +637,8 @@ def execute_schema(conn: sqlite3.Connection) -> None:
         CREATE INDEX idx_site_player_event_fixture ON site_player_event_shortlists(fixture_key);
         CREATE INDEX idx_site_player_event_player ON site_player_event_shortlists(player_key);
         CREATE INDEX idx_site_player_event_team ON site_player_event_shortlists(team_slug, event_key);
+        CREATE INDEX idx_site_fixture_external_fixture ON site_fixture_external_content(fixture_key);
+        CREATE INDEX idx_site_fixture_external_source ON site_fixture_external_content(source_id, content_type);
         CREATE INDEX idx_site_team_premium_comp_team ON site_team_premium_payloads(competition_key, team_slug);
         """
     )
@@ -2214,6 +2242,139 @@ def insert_site_team_premium_payloads(conn: sqlite3.Connection, limit: int = DEF
     return len(rows)
 
 
+def insert_site_external_sources(conn: sqlite3.Connection, data_root: Path) -> int:
+    registry = read_json(data_root / "external_content" / "source_registry.json", {})
+    rows = []
+    for source in registry.get("sources", []) if isinstance(registry, dict) else []:
+        source_id = str(source.get("source_id") or "").strip()
+        if not source_id:
+            continue
+        rows.append(
+            (
+                source_id,
+                source.get("provider") or "",
+                source.get("usage_mode") or "",
+                source.get("terms_url") or "",
+                json_text(source),
+            )
+        )
+    conn.executemany(
+        """
+        INSERT OR REPLACE INTO site_external_sources(
+          source_id, provider, usage_mode, terms_url, payload_json
+        ) VALUES (?, ?, ?, ?, ?)
+        """,
+        rows,
+    )
+    return len(rows)
+
+
+def insert_site_fixture_external_content(conn: sqlite3.Connection, data_root: Path) -> int:
+    root = data_root / "external_content" / "fixture_media"
+    rows = []
+    if not root.exists():
+        return 0
+    for path in sorted(root.glob("*.json")):
+        if path.name == "index.json":
+            continue
+        payload = read_json(path, {})
+        fixture_key = str(payload.get("fixture_key") or path.stem).strip()
+        if not fixture_key:
+            continue
+        for collection_name in ("media", "news_signals", "weather_signals", "sentiment_signals"):
+            items = payload.get(collection_name)
+            if not isinstance(items, list):
+                continue
+            for index, item in enumerate(items, start=1):
+                if not isinstance(item, dict):
+                    continue
+                content_id = str(item.get("content_id") or f"{collection_name}_{index}").strip()
+                row_id = f"{fixture_key}:{collection_name}:{content_id}"
+                rows.append(
+                    (
+                        row_id,
+                        fixture_key,
+                        item.get("type") or collection_name,
+                        item.get("source_id") or "",
+                        item.get("provider") or "",
+                        safe_int(item.get("priority")) or index,
+                        json_text(item),
+                    )
+                )
+    conn.executemany(
+        """
+        INSERT OR REPLACE INTO site_fixture_external_content(
+          row_id, fixture_key, content_type, source_id, provider, priority, payload_json
+        ) VALUES (?, ?, ?, ?, ?, ?, ?)
+        """,
+        rows,
+    )
+    return len(rows)
+
+
+def insert_site_fixture_context_payloads(conn: sqlite3.Connection) -> int:
+    fixture_keys = [
+        row[0]
+        for row in conn.execute(
+            """
+            SELECT DISTINCT fixture_key
+            FROM site_fixture_external_content
+            ORDER BY fixture_key
+            """
+        ).fetchall()
+    ]
+    rows = []
+    for fixture_key in fixture_keys:
+        payload = {
+            "media": json_rows(
+                conn,
+                """
+                SELECT payload_json
+                FROM site_fixture_external_content
+                WHERE fixture_key = ? AND content_type = 'youtube_embed'
+                ORDER BY priority, row_id
+                """,
+                (fixture_key,),
+            ),
+            "news_signals": json_rows(
+                conn,
+                """
+                SELECT payload_json
+                FROM site_fixture_external_content
+                WHERE fixture_key = ? AND content_type IN ('rss_headline_link', 'news_signal')
+                ORDER BY priority, row_id
+                """,
+                (fixture_key,),
+            ),
+            "weather_signals": json_rows(
+                conn,
+                """
+                SELECT payload_json
+                FROM site_fixture_external_content
+                WHERE fixture_key = ? AND content_type IN ('weather_context', 'weather_signal')
+                ORDER BY priority, row_id
+                """,
+                (fixture_key,),
+            ),
+            "sentiment_signals": json_rows(
+                conn,
+                """
+                SELECT payload_json
+                FROM site_fixture_external_content
+                WHERE fixture_key = ? AND content_type IN ('sentiment_signal', 'environmental_volatility')
+                ORDER BY priority, row_id
+                """,
+                (fixture_key,),
+            ),
+        }
+        rows.append((fixture_key, json_text(payload)))
+    conn.executemany(
+        "INSERT OR REPLACE INTO site_fixture_context_payloads(fixture_key, payload_json) VALUES (?, ?)",
+        rows,
+    )
+    return len(rows)
+
+
 def export_database(
     data_root: Path,
     output_path: Path,
@@ -2262,6 +2423,9 @@ def export_database(
             "site_lineup_slots": insert_site_lineup_slots(conn, normalized_root, identities, active_seasons, site_fixture_aliases),
             "site_fixture_market_intelligence": insert_site_fixture_market_intelligence(conn),
             "site_player_event_shortlists": insert_site_player_event_shortlists(conn),
+            "site_external_sources": insert_site_external_sources(conn, data_root),
+            "site_fixture_external_content": insert_site_fixture_external_content(conn, data_root),
+            "site_fixture_context_payloads": insert_site_fixture_context_payloads(conn),
             "site_fixture_stats_payloads": insert_site_fixture_stats_payloads(conn),
             "site_team_premium_payloads": insert_site_team_premium_payloads(conn),
         }

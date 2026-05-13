@@ -21,7 +21,7 @@
   const workerApiBase = String(runtimeConfig.WORKER_API_BASE || "").replace(/\/+$/, "");
   const siteDataApiBase = String(runtimeConfig.SITE_DATA_API_BASE || runtimeConfig.WORKER_API_BASE || "").replace(/\/+$/, "");
   const checkoutPlaceholderHref = "./account.html?intent=checkout";
-  const FIXTURE_HERO_MEDIA = {
+  const FIXTURE_HERO_MEDIA_FALLBACK = {
     "2026_05_10_FC_Barcelona_Real_Madrid": {
       src: "https://www.youtube.com/embed/aAdAJEU8_E0?si=F_TvglhZgOaL1oVi",
       title: "FC Barcelona vs Real Madrid highlights",
@@ -49,6 +49,8 @@
     selectedFixtureLineupIntelligence: null,
     selectedFixtureDecisionIntelligence: null,
     selectedFixtureDecisionSupport: null,
+    selectedFixtureExternalContent: null,
+    selectedFixtureExternalContentKey: "",
     selectedFixtureSiteData: null,
     selectedFixtureSiteDataKey: "",
     runtime: {
@@ -857,6 +859,27 @@
     const payload = await fetchSiteDataJson(`/api/site/fixtures/${encodeURIComponent(selectedFixtureKey)}`);
     state.selectedFixtureSiteData = payload?.data || null;
     return state.selectedFixtureSiteData;
+  };
+
+  const loadSelectedFixtureExternalContent = async () => {
+    if (page !== "fixture" || !selectedFixtureKey) {
+      return null;
+    }
+    if (state.selectedFixtureExternalContentKey === selectedFixtureKey) {
+      return state.selectedFixtureExternalContent;
+    }
+    state.selectedFixtureExternalContentKey = selectedFixtureKey;
+    state.selectedFixtureExternalContent = null;
+    const sitePayload = await fetchSiteDataJson(`/api/site/fixtures/${encodeURIComponent(selectedFixtureKey)}/context`);
+    if (sitePayload?.data) {
+      state.selectedFixtureExternalContent = { fixture_key: selectedFixtureKey, ...sitePayload.data };
+      return state.selectedFixtureExternalContent;
+    }
+    const payload = await fetchOptionalJson(
+      `${DATA_ROOT}/external_content/fixture_media/${encodeURIComponent(selectedFixtureKey)}.json`
+    );
+    state.selectedFixtureExternalContent = payload?.fixture_key ? payload : null;
+    return state.selectedFixtureExternalContent;
   };
 
   const loadFixtureIntelligenceRows = async () => {
@@ -2979,8 +3002,15 @@
   };
 
   const renderFixtureHeroMedia = (fixture) => {
-    const media = FIXTURE_HERO_MEDIA[String(fixture?.fixture_key || "")];
-    if (!media?.src) {
+    const fixtureKey = String(fixture?.fixture_key || "");
+    const externalMedia = state.selectedFixtureExternalContent?.fixture_key === fixtureKey
+      ? state.selectedFixtureExternalContent?.media
+      : null;
+    const media =
+      (Array.isArray(externalMedia) ? externalMedia.find((item) => item?.type === "youtube_embed" && item?.embed_url) : null) ||
+      FIXTURE_HERO_MEDIA_FALLBACK[fixtureKey];
+    const embedSrc = media?.embed_url || media?.src;
+    if (!embedSrc) {
       return "";
     }
     return `
@@ -2992,7 +3022,7 @@
         </div>
         <div class="fixture-hero-media-frame">
           <iframe
-            src="${escapeHtml(media.src)}"
+            src="${escapeHtml(embedSrc)}"
             title="${escapeHtml(media.title || media.heading || "Fixture video")}"
             frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -11342,6 +11372,7 @@
       state.fixtureLineupIndex = Array.isArray(fixtureLineupIndex) ? fixtureLineupIndex : [];
       state.fixtureH2HIndex = Array.isArray(fixtureH2HIndex) ? fixtureH2HIndex : [];
       await loadSelectedTeamIntelligence();
+      await loadSelectedFixtureExternalContent();
       await loadSelectedFixtureLineupIntelligence();
       await loadSelectedFixtureDecisionIntelligence();
       await loadProtectedPremiumPredictions();

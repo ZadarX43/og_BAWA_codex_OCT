@@ -173,6 +173,34 @@ export const getFixtureStats = async (db, fixtureKey) => {
   };
 };
 
+export const getFixtureContext = async (db, fixtureKey) => {
+  const cached = await first(db.prepare("SELECT payload_json FROM site_fixture_context_payloads WHERE fixture_key = ?").bind(fixtureKey));
+  const cachedPayload = parsePayload(cached);
+  if (cachedPayload) {
+    return cachedPayload;
+  }
+
+  const rows = await all(
+    db
+      .prepare(
+        `
+        SELECT payload_json
+        FROM site_fixture_external_content
+        WHERE fixture_key = ?
+        ORDER BY priority, row_id
+        `
+      )
+      .bind(fixtureKey)
+  );
+  const items = rows.map((row) => parsePayload(row)).filter(Boolean);
+  return {
+    media: items.filter((item) => item.type === "youtube_embed"),
+    news_signals: items.filter((item) => item.type === "rss_headline_link" || item.type === "news_signal"),
+    weather_signals: items.filter((item) => item.type === "weather_context" || item.type === "weather_signal"),
+    sentiment_signals: items.filter((item) => item.type === "sentiment_signal" || item.type === "environmental_volatility"),
+  };
+};
+
 export const getTeamPremiumData = async (db, competitionKey, teamSlug, { limit = 20 } = {}) => {
   const safeLimit = Math.max(1, Math.min(Number(limit) || 20, 80));
   if (safeLimit === 20) {

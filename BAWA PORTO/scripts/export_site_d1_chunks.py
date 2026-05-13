@@ -31,6 +31,9 @@ TABLES = (
     "site_formation_slots",
     "site_fixture_market_intelligence",
     "site_player_event_shortlists",
+    "site_external_sources",
+    "site_fixture_external_content",
+    "site_fixture_context_payloads",
     "site_fixture_stats_payloads",
     "site_team_premium_payloads",
 )

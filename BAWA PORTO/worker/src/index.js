@@ -39,7 +39,7 @@ import {
   updateNotificationPreferences,
 } from "./account_store.js";
 import { issuePremiumToken, verifyPremiumAccess } from "./auth.js";
-import { getCurrentFixtures, getFixtureDetail, getFixtureStats, getTeamDetail, getTeamPremiumData } from "./site_data_store.js";
+import { getCurrentFixtures, getFixtureContext, getFixtureDetail, getFixtureStats, getTeamDetail, getTeamPremiumData } from "./site_data_store.js";
 
 const STRIPE_WEBHOOK_TOLERANCE_SECONDS = 300;
 const PREMIUM_CACHE_TTL_SECONDS = 300;
@@ -278,6 +278,19 @@ const handleSiteFixtureStats = async (_request, env, fixtureKey) => {
   const data = await getFixtureStats(db, fixtureKey);
   if (!data.team_stats.length && !data.player_stats.length && !data.lineup_slots.length) {
     return requestError("Premium fixture stats were not found in the site data store.", { fixture_key: fixtureKey }, 404);
+  }
+  return json({ ok: true, fixture_key: fixtureKey, meta: { worker_elapsed_ms: elapsedMs(started) }, data }, 200, siteDataCacheHeaders);
+};
+
+const handleSiteFixtureContext = async (_request, env, fixtureKey) => {
+  const db = getSiteDataDb(env);
+  if (!db) {
+    return siteDataDbRequired();
+  }
+  const started = performance.now();
+  const data = await getFixtureContext(db, fixtureKey);
+  if (!data.media.length && !data.news_signals.length && !data.weather_signals.length && !data.sentiment_signals.length) {
+    return requestError("Fixture context was not found in the site data store.", { fixture_key: fixtureKey }, 404);
   }
   return json({ ok: true, fixture_key: fixtureKey, meta: { worker_elapsed_ms: elapsedMs(started) }, data }, 200, siteDataCacheHeaders);
 };
@@ -4600,6 +4613,7 @@ async function handleRequest(request, env) {
         "POST /api/account/telegram/fixture-alert",
         "GET /api/site/fixtures/current",
         "GET /api/site/fixtures/:fixture_key",
+        "GET /api/site/fixtures/:fixture_key/context",
         "GET /api/site/fixtures/:fixture_key/stats",
         "GET /api/site/teams/:competition_key/:team_slug",
         "GET /api/site/teams/:competition_key/:team_slug/premium",
@@ -4915,6 +4929,18 @@ async function handleRequest(request, env) {
     }
     response = await handleCachedSiteData(request, () =>
       handleSiteFixtureStats(request, env, decodeURIComponent(siteFixtureStatsMatch[1] || ""))
+    );
+    return withCors(response, request, env);
+  }
+
+  const siteFixtureContextMatch = pathname.match(/^\/api\/site\/fixtures\/([^/]+)\/context$/);
+  if (siteFixtureContextMatch) {
+    if (request.method !== "GET") {
+      response = methodNotAllowed("GET");
+      return withCors(response, request, env);
+    }
+    response = await handleCachedSiteData(request, () =>
+      handleSiteFixtureContext(request, env, decodeURIComponent(siteFixtureContextMatch[1] || ""))
     );
     return withCors(response, request, env);
   }
