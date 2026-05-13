@@ -250,6 +250,45 @@ def active_competition_seasons(data_root: Path) -> dict[str, str]:
     return seasons
 
 
+def active_site_fixture_aliases(data_root: Path) -> dict[tuple[str, str, str], str]:
+    payload = read_json(data_root / "fixture_intelligence_public.json", {})
+    fixtures = payload.get("fixtures") if isinstance(payload, dict) else []
+    aliases: dict[tuple[str, str, str], str] = {}
+    for fixture in fixtures or []:
+        fixture_key = str(fixture.get("fixture_key") or "").strip()
+        if not fixture_key:
+            continue
+        date_key = str(fixture.get("kickoff_time") or "")[:10]
+        if not date_key:
+            match = re.match(r"^(\d{4})_(\d{2})_(\d{2})_", fixture_key)
+            if match:
+                date_key = "-".join(match.groups())
+        if not date_key:
+            continue
+        home_aliases = slug_aliases(fixture.get("home_team"))
+        away_aliases = slug_aliases(fixture.get("away_team"))
+        for home_alias in home_aliases:
+            for away_alias in away_aliases:
+                aliases[(date_key, home_alias, away_alias)] = fixture_key
+    return aliases
+
+
+def resolve_active_site_fixture_key(
+    context: dict[str, Any],
+    site_fixture_aliases: dict[tuple[str, str, str], str] | None,
+) -> str:
+    provider_key = str(context.get("fixture_key") or "").strip()
+    if not site_fixture_aliases:
+        return provider_key
+    date_key = str(context.get("match_date") or "")[:10]
+    for home_alias in slug_aliases(context.get("home_team_name")):
+        for away_alias in slug_aliases(context.get("away_team_name")):
+            mapped = site_fixture_aliases.get((date_key, home_alias, away_alias))
+            if mapped:
+                return mapped
+    return provider_key
+
+
 def execute_schema(conn: sqlite3.Connection) -> None:
     conn.executescript(
         """
@@ -268,6 +307,7 @@ def execute_schema(conn: sqlite3.Connection) -> None:
         DROP TABLE IF EXISTS site_player_identity_map;
         DROP TABLE IF EXISTS site_player_match_stats;
         DROP TABLE IF EXISTS site_team_match_stats;
+        DROP TABLE IF EXISTS site_match_events;
         DROP TABLE IF EXISTS site_lineup_slots;
         DROP TABLE IF EXISTS site_formation_slots;
         DROP TABLE IF EXISTS site_fixture_market_intelligence;
@@ -425,6 +465,26 @@ def execute_schema(conn: sqlite3.Connection) -> None:
           payload_json TEXT NOT NULL
         );
 
+        CREATE TABLE site_match_events (
+          row_id TEXT PRIMARY KEY,
+          fixture_key TEXT NOT NULL,
+          fixture_id INTEGER,
+          event_id INTEGER,
+          minute INTEGER,
+          extra_minute INTEGER,
+          team_id INTEGER,
+          team_name TEXT,
+          is_home INTEGER,
+          api_player_id INTEGER,
+          player_key TEXT,
+          player_name TEXT,
+          event_type TEXT,
+          event_detail TEXT,
+          score_home_after INTEGER,
+          score_away_after INTEGER,
+          payload_json TEXT NOT NULL
+        );
+
         CREATE TABLE site_lineup_slots (
           row_id TEXT PRIMARY KEY,
           fixture_key TEXT NOT NULL,
@@ -542,6 +602,8 @@ def execute_schema(conn: sqlite3.Connection) -> None:
         CREATE INDEX idx_site_player_stats_player ON site_player_match_stats(player_key);
         CREATE INDEX idx_site_team_stats_fixture ON site_team_match_stats(fixture_key);
         CREATE INDEX idx_site_team_stats_team ON site_team_match_stats(team_slug);
+        CREATE INDEX idx_site_match_events_fixture ON site_match_events(fixture_key);
+        CREATE INDEX idx_site_match_events_player ON site_match_events(player_key);
         CREATE INDEX idx_site_lineup_slots_fixture ON site_lineup_slots(fixture_key);
         CREATE INDEX idx_site_lineup_slots_team ON site_lineup_slots(team_slug);
         CREATE INDEX idx_site_fixture_market_fixture ON site_fixture_market_intelligence(fixture_key);
@@ -818,8 +880,9 @@ def insert_team_lineup_snapshots_from_normalized(
     normalized_root: Path,
     identities: dict[str, dict[str, Any]],
     active_seasons: dict[str, str] | None = None,
+    site_fixture_aliases: dict[tuple[str, str, str], str] | None = None,
 ) -> int:
-    fixtures, team_names = fixture_context(normalized_root, active_seasons)
+    fixtures, team_names = fixture_context(normalized_root, active_seasons, site_fixture_aliases)
     by_api = identity_by_api_id(identities)
     by_team_fixture: dict[tuple[str, str], list[dict[str, Any]]] = {}
     context_by_group: dict[tuple[str, str], dict[str, Any]] = {}
@@ -938,6 +1001,7 @@ def insert_team_lineup_snapshots_from_normalized(
 def fixture_context(
     normalized_root: Path,
     active_seasons: dict[str, str] | None = None,
+    site_fixture_aliases: dict[tuple[str, str, str], str] | None = None,
 ) -> tuple[dict[str, dict[str, Any]], dict[tuple[str, str], str]]:
     fixtures = read_normalized_family_rows(normalized_root, "fixtures_master", latest_per_competition=False)
     by_fixture_id: dict[str, dict[str, Any]] = {}
@@ -953,6 +1017,7 @@ def fixture_context(
         context = {
             "fixture_id": fixture_id,
             "fixture_key": row.get("fixture_key") or "",
+            "provider_fixture_key": row.get("fixture_key") or "",
             "league": row.get("league") or "",
             "_source_file": row.get("_source_file") or "",
             "league_id": row.get("league_id") or "",
@@ -963,6 +1028,7 @@ def fixture_context(
             "home_team_name": row.get("home_team_name") or "",
             "away_team_name": row.get("away_team_name") or "",
         }
+        context["fixture_key"] = resolve_active_site_fixture_key(context, site_fixture_aliases)
         by_fixture_id[fixture_id] = context
         if home_id:
             team_names[(fixture_id, home_id)] = context["home_team_name"]
@@ -1027,8 +1093,9 @@ def build_player_identity_rows(
     data_root: Path,
     normalized_root: Path,
     active_seasons: dict[str, str] | None = None,
+    site_fixture_aliases: dict[tuple[str, str, str], str] | None = None,
 ) -> dict[str, dict[str, Any]]:
-    fixtures, team_names = fixture_context(normalized_root, active_seasons)
+    fixtures, team_names = fixture_context(normalized_root, active_seasons, site_fixture_aliases)
     rating_lookup, rating_rows = build_rating_lookup(data_root)
     identities: dict[str, dict[str, Any]] = {}
 
@@ -1103,8 +1170,9 @@ def insert_site_player_identity_map(
     data_root: Path,
     normalized_root: Path,
     active_seasons: dict[str, str] | None = None,
+    site_fixture_aliases: dict[tuple[str, str, str], str] | None = None,
 ) -> tuple[int, dict[str, dict[str, Any]]]:
-    identities = build_player_identity_rows(data_root, normalized_root, active_seasons)
+    identities = build_player_identity_rows(data_root, normalized_root, active_seasons, site_fixture_aliases)
     rows = []
     for identity in identities.values():
         rows.append(
@@ -1170,8 +1238,9 @@ def insert_site_player_match_stats(
     normalized_root: Path,
     identities: dict[str, dict[str, Any]],
     active_seasons: dict[str, str] | None = None,
+    site_fixture_aliases: dict[tuple[str, str, str], str] | None = None,
 ) -> int:
-    fixtures, team_names = fixture_context(normalized_root, active_seasons)
+    fixtures, team_names = fixture_context(normalized_root, active_seasons, site_fixture_aliases)
     by_api = identity_by_api_id(identities)
     rows = []
     for idx, row in enumerate(read_normalized_family_rows(normalized_root, "match_player_stats")):
@@ -1241,8 +1310,9 @@ def insert_site_team_match_stats(
     conn: sqlite3.Connection,
     normalized_root: Path,
     active_seasons: dict[str, str] | None = None,
+    site_fixture_aliases: dict[tuple[str, str, str], str] | None = None,
 ) -> int:
-    fixtures, _team_names = fixture_context(normalized_root, active_seasons)
+    fixtures, _team_names = fixture_context(normalized_root, active_seasons, site_fixture_aliases)
     rows = []
     for idx, row in enumerate(read_normalized_family_rows(normalized_root, "match_team_stats")):
         fixture_id = str(row.get("fixture_id") or "").strip()
@@ -1280,6 +1350,71 @@ def insert_site_team_match_stats(
           row_id, fixture_key, fixture_id, team_id, team_name, team_slug, is_home,
           possession_pct, shots_total, shots_on_goal, corners_for, fouls_for,
           yellow_cards, red_cards, passes_total, passes_accurate, payload_json
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        rows,
+    )
+    return len(rows)
+
+
+def insert_site_match_events(
+    conn: sqlite3.Connection,
+    normalized_root: Path,
+    identities: dict[str, dict[str, Any]],
+    active_seasons: dict[str, str] | None = None,
+    site_fixture_aliases: dict[tuple[str, str, str], str] | None = None,
+) -> int:
+    fixtures, _team_names = fixture_context(normalized_root, active_seasons, site_fixture_aliases)
+    by_api = identity_by_api_id(identities)
+    rows = []
+    for idx, row in enumerate(read_normalized_family_rows(normalized_root, "match_events")):
+        fixture_id = str(row.get("fixture_id") or "").strip()
+        context = fixtures.get(fixture_id)
+        if not context or not context.get("fixture_key"):
+            continue
+        if not normalized_row_in_scope(row, context, active_seasons):
+            continue
+        api_id = safe_int(row.get("player_id"))
+        identity = by_api.get(api_id or -1)
+        is_home = safe_int(row.get("is_home"))
+        team_name = context.get("home_team_name") if is_home == 1 else context.get("away_team_name") if is_home == 0 else ""
+        player_key = (identity or {}).get("player_key") or player_key_for(api_id, None, row.get("player_id"))
+        payload = {
+            **row,
+            "fixture_key": context.get("fixture_key"),
+            "provider_fixture_key": context.get("provider_fixture_key"),
+            "team_name": team_name,
+            "player_key": player_key,
+            "player_name": (identity or {}).get("name"),
+            "identity": compact_identity(identity),
+        }
+        rows.append(
+            (
+                f"{context['fixture_key']}:{row.get('event_id') or idx}",
+                context.get("fixture_key"),
+                safe_int(fixture_id),
+                safe_int(row.get("event_id")),
+                safe_int(row.get("minute")),
+                safe_int(row.get("extra_minute")),
+                safe_int(row.get("team_id")),
+                team_name,
+                is_home,
+                api_id,
+                player_key,
+                (identity or {}).get("name"),
+                row.get("event_type"),
+                row.get("event_detail"),
+                safe_int(row.get("score_home_after")),
+                safe_int(row.get("score_away_after")),
+                json_text(payload),
+            )
+        )
+    conn.executemany(
+        """
+        INSERT OR REPLACE INTO site_match_events(
+          row_id, fixture_key, fixture_id, event_id, minute, extra_minute,
+          team_id, team_name, is_home, api_player_id, player_key, player_name,
+          event_type, event_detail, score_home_after, score_away_after, payload_json
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
         rows,
@@ -1330,8 +1465,9 @@ def insert_site_formation_slots(
     conn: sqlite3.Connection,
     normalized_root: Path,
     active_seasons: dict[str, str] | None = None,
+    site_fixture_aliases: dict[tuple[str, str, str], str] | None = None,
 ) -> int:
-    fixtures, _team_names = fixture_context(normalized_root, active_seasons)
+    fixtures, _team_names = fixture_context(normalized_root, active_seasons, site_fixture_aliases)
     formations = {
         str(row.get("formation") or "").strip()
         for row in read_normalized_family_rows(normalized_root, "lineups")
@@ -1368,8 +1504,9 @@ def insert_site_lineup_slots(
     normalized_root: Path,
     identities: dict[str, dict[str, Any]],
     active_seasons: dict[str, str] | None = None,
+    site_fixture_aliases: dict[tuple[str, str, str], str] | None = None,
 ) -> int:
-    fixtures, team_names = fixture_context(normalized_root, active_seasons)
+    fixtures, team_names = fixture_context(normalized_root, active_seasons, site_fixture_aliases)
     by_api = identity_by_api_id(identities)
     lineup_rows = read_normalized_family_rows(normalized_root, "lineups")
     starters_seen: dict[tuple[str, str, str], int] = {}
@@ -1950,6 +2087,16 @@ def insert_site_fixture_stats_payloads(conn: sqlite3.Connection) -> int:
                 """,
                 (fixture_key,),
             ),
+            "match_events": json_rows(
+                conn,
+                """
+                SELECT payload_json
+                FROM site_match_events
+                WHERE fixture_key = ?
+                ORDER BY minute, extra_minute, event_id
+                """,
+                (fixture_key,),
+            ),
             "lineup_slots": json_rows(
                 conn,
                 """
@@ -2078,14 +2225,27 @@ def export_database(
     if output_path.exists():
         output_path.unlink()
     active_seasons = None if include_history else active_competition_seasons(data_root)
+    site_fixture_aliases = active_site_fixture_aliases(data_root)
 
     conn = sqlite3.connect(output_path)
     try:
         execute_schema(conn)
-        identity_count, identities = insert_site_player_identity_map(conn, data_root, normalized_root, active_seasons)
+        identity_count, identities = insert_site_player_identity_map(
+            conn,
+            data_root,
+            normalized_root,
+            active_seasons,
+            site_fixture_aliases,
+        )
         team_lineup_snapshot_count = insert_team_lineup_snapshots(conn, data_root)
         if team_lineup_snapshot_count == 0:
-            team_lineup_snapshot_count = insert_team_lineup_snapshots_from_normalized(conn, normalized_root, identities, active_seasons)
+            team_lineup_snapshot_count = insert_team_lineup_snapshots_from_normalized(
+                conn,
+                normalized_root,
+                identities,
+                active_seasons,
+                site_fixture_aliases,
+            )
         insert_counts = {
             "fixtures": insert_fixtures(conn, data_root),
             "fixture_decisions": insert_fixture_decisions(conn, data_root),
@@ -2095,10 +2255,11 @@ def export_database(
             "club_squads": insert_club_squads(conn, data_root, active_seasons),
             "team_lineup_snapshots": team_lineup_snapshot_count,
             "site_player_identity_map": identity_count,
-            "site_player_match_stats": insert_site_player_match_stats(conn, normalized_root, identities, active_seasons),
-            "site_team_match_stats": insert_site_team_match_stats(conn, normalized_root, active_seasons),
-            "site_formation_slots": insert_site_formation_slots(conn, normalized_root, active_seasons),
-            "site_lineup_slots": insert_site_lineup_slots(conn, normalized_root, identities, active_seasons),
+            "site_player_match_stats": insert_site_player_match_stats(conn, normalized_root, identities, active_seasons, site_fixture_aliases),
+            "site_team_match_stats": insert_site_team_match_stats(conn, normalized_root, active_seasons, site_fixture_aliases),
+            "site_match_events": insert_site_match_events(conn, normalized_root, identities, active_seasons, site_fixture_aliases),
+            "site_formation_slots": insert_site_formation_slots(conn, normalized_root, active_seasons, site_fixture_aliases),
+            "site_lineup_slots": insert_site_lineup_slots(conn, normalized_root, identities, active_seasons, site_fixture_aliases),
             "site_fixture_market_intelligence": insert_site_fixture_market_intelligence(conn),
             "site_player_event_shortlists": insert_site_player_event_shortlists(conn),
             "site_fixture_stats_payloads": insert_site_fixture_stats_payloads(conn),

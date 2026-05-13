@@ -18,7 +18,7 @@ NORMALIZED_DIR = ROOT / "data_sources" / "api_football" / "normalized"
 MANIFEST_PATH = NORMALIZED_DIR / "current_site_normalized_import_manifest.json"
 REPORT_PATH = ROOT / "reports" / "latest" / "CURRENT_SITE_NORMALIZED_IMPORT_REPORT.md"
 
-FAMILIES = ("fixtures_master", "lineups", "match_player_stats", "match_team_stats")
+FAMILIES = ("fixtures_master", "lineups", "match_player_stats", "match_team_stats", "match_events")
 DEFAULT_LEAGUES = {
     "Australia_A_League": {"league_id": 188, "season": 2025},
     "Austria_Bundesliga": {"league_id": 218, "season": 2025},
@@ -127,12 +127,26 @@ NORMALIZED_SCHEMAS = {
         "lineup_known_pre_kickoff_flag",
         "lineup_published_ts_utc",
     ],
+    "match_events": [
+        "fixture_id",
+        "event_id",
+        "minute",
+        "extra_minute",
+        "team_id",
+        "player_id",
+        "event_type",
+        "event_detail",
+        "is_home",
+        "score_home_after",
+        "score_away_after",
+    ],
 }
 DEDUP_KEYS = {
     "fixtures_master": ("fixture_id",),
     "lineups": ("fixture_id", "team_id", "player_id", "is_starting_xi"),
     "match_player_stats": ("fixture_id", "team_id", "player_id"),
     "match_team_stats": ("fixture_id", "team_id"),
+    "match_events": ("fixture_id", "event_id"),
 }
 
 

@@ -139,6 +139,42 @@ Measured after adding the first market/event premium exporter slice:
 
 The player-event rows are intentionally marked as beta/manual-review shortlist intelligence. They are not priced probabilities, not deploy picks, and not permitted to override `deploy_rulebook.py`.
 
+Barcelona vs Real Madrid full-demo fixture added:
+
+- public fixture key: `2026_05_10_FC_Barcelona_Real_Madrid`
+- API-Football fixture id: `1391161`
+- provider fixture key: `2026-05-10_barcelona_real_madrid`
+- direct lineup slots: 44
+- direct player match stats: 44
+- direct team match stats: 2
+- direct match events: 16
+- fixture market rows: 7
+- player-event shortlist rows: 35
+
+Refresh command:
+
+```bash
+python3 -m scripts.api_football.fetch_single_fixture_demo_bundle \
+  --fixture-id 1391161 \
+  --league-tag Spain_La_Liga \
+  --season 2025 \
+  --outdir reports/latest/demo_fixture_full_provider_bundle
+
+python3 scripts/api_football/import_current_site_normalized.py \
+  --write \
+  --league-tags Spain_La_Liga \
+  --families fixtures_master,lineups,match_player_stats,match_team_stats,match_events
+
+python3 scripts/export_site_sqlite.py --output build/site_data/odds_genius.sqlite
+python3 scripts/export_site_d1_chunks.py --db build/site_data/odds_genius.sqlite --output-dir build/site_data/d1_chunks
+```
+
+Why the exporter needed a key resolver:
+
+- the provider key normalizes to `2026-05-10_barcelona_real_madrid`
+- the public site key is `2026_05_10_FC_Barcelona_Real_Madrid`
+- the SQLite exporter now maps provider fixture rows back to the active public fixture key by date and team aliases, so direct provider stats land under the route the frontend already uses
+
 Current coverage truth:
 
 - report-scoped current lineups/player stats exist for 14 of 22 active competitions
@@ -227,6 +263,28 @@ Core fields:
 - passes
 - scoreline
 - payload JSON for future-safe expansion
+
+### `site_match_events`
+
+Purpose:
+
+- support scorers, card timelines, substitutions, post-match event strips, and future commentary cards
+- keep match events available under the same fixture stats route payload as lineups and player/team stats
+
+Source:
+
+- `data_sources/api_football/normalized/match_events*.csv`
+
+Core fields:
+
+- fixture identity
+- provider event id
+- minute and extra minute
+- team identity and home/away side
+- player id, resolved player key, and resolved player name where available
+- event type and detail
+- score state after each event
+- payload JSON
 
 ### `site_lineup_slots`
 

@@ -26,6 +26,7 @@ TABLES = (
     "site_player_identity_map",
     "site_player_match_stats",
     "site_team_match_stats",
+    "site_match_events",
     "site_lineup_slots",
     "site_formation_slots",
     "site_fixture_market_intelligence",
