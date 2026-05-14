@@ -38,6 +38,7 @@
     securePremiumPredictions: [],
     fixtureIntelligence: [],
     weeklyResults: null,
+    liveResultsFeed: null,
     teamIntelligenceIndex: [],
     clubSquadIntelligenceIndex: [],
     fixtureDecisionIndex: [],
@@ -6728,8 +6729,194 @@
     `;
   };
 
+  const resultOutcomeLabel = (status) => {
+    const normalized = String(status || "").toLowerCase();
+    if (normalized === "won") return "Won";
+    if (normalized === "lost") return "Lost";
+    if (normalized === "cashed") return "Cashed";
+    if (normalized === "void") return "Void";
+    return "Pending";
+  };
+
+  const resultOutcomeTone = (status) => {
+    const normalized = String(status || "").toLowerCase();
+    if (normalized === "won") return "won";
+    if (normalized === "lost") return "lost";
+    if (normalized === "cashed") return "cashed";
+    if (normalized === "void") return "void";
+    return "pending";
+  };
+
+  const feedPercent = (value) => (value == null || Number.isNaN(Number(value)) ? "Pending" : compactPercent(Number(value)));
+
+  const resultSummaryCopy = (summary) => {
+    if (!summary) return "No settled rows";
+    const wins = Number(summary.wins || 0);
+    const settled = Number(summary.settled || 0);
+    return `${wins}/${settled} · ${feedPercent(summary.hit_rate)}`;
+  };
+
+  const renderResultFeedItems = (items = [], limit = 12) => {
+    const visible = items.slice(0, limit);
+    if (!visible.length) return `<div class="notice">No graded rows published for this window yet.</div>`;
+    return `
+      <div class="public-result-list">
+        ${visible
+          .map((item) => {
+            const tone = resultOutcomeTone(item.result_status);
+            const isObserve = String(item.publish_class || "").toUpperCase() === "OBSERVE" || String(item.tier || "").toUpperCase() === "OBSERVE";
+            const signal = item.site_signal_alignment
+              ? `${item.site_signal_alignment}${item.site_signal_state ? ` · ${item.site_signal_state}` : ""}`
+              : item.decision_state || "";
+            return `
+              <article class="public-result-row public-result-row-${escapeHtml(tone)} ${isObserve ? "public-result-row-observe" : ""}">
+                <div class="public-result-main">
+                  <span class="result-status-pill result-status-pill-${escapeHtml(tone)}">${escapeHtml(resultOutcomeLabel(item.result_status))}</span>
+                  <div>
+                    <strong>${escapeHtml(item.home_team)} vs ${escapeHtml(item.away_team)}</strong>
+                    <p class="muted">${escapeHtml(item.league || "League")} · ${escapeHtml(item.score || "Score pending")}</p>
+                  </div>
+                </div>
+                <div class="public-result-pick">
+                  <span class="metric-label">${escapeHtml(`${item.market || "Market"} · ${item.tier || "Tier"}`)}</span>
+                  <strong>${escapeHtml(item.pick || "Pick")}</strong>
+                  <span class="muted">Actual ${escapeHtml(item.actual || "pending")}</span>
+                </div>
+                <div class="public-result-signal">
+                  <span class="metric-label">${isObserve ? "Watchlist" : "Model + intelligence"}</span>
+                  <span>${escapeHtml(signal || (isObserve ? "Observe only" : "Deploy row"))}</span>
+                </div>
+              </article>
+            `;
+          })
+          .join("")}
+      </div>
+    `;
+  };
+
+  const liveResultsView = (feed, weekly) => {
+    const windows = Array.isArray(feed.windows) ? feed.windows : [];
+    const summary = feed.summary || {};
+    const primaryWindow = windows[0] || {};
+    const secondaryWindow = windows[1] || {};
+    const windowPanels = windows
+      .map((window) => {
+        const deploy = window.summary?.deploy || {};
+        const observe = window.summary?.observe || {};
+        return `
+          <article class="panel result-window-panel">
+            <span class="muted">${escapeHtml(window.period_start || "")} → ${escapeHtml(window.period_end || "")}</span>
+            <h3>${escapeHtml(window.title || "Results window")}</h3>
+            <p>${escapeHtml(window.subtitle || "")}</p>
+            <div class="result-window-metrics">
+              <span><strong>${escapeHtml(resultSummaryCopy(deploy))}</strong><small>Deploy</small></span>
+              <span><strong>${escapeHtml(resultSummaryCopy(observe))}</strong><small>Observe</small></span>
+            </div>
+          </article>
+        `;
+      })
+      .join("");
+
+    const marketCards = (primaryWindow.by_market || [])
+      .map(
+        (item) => `
+          <article class="panel market-proof-card market-proof-card--${resultsStatusTone(item.hit_rate)}">
+            <span class="muted">${escapeHtml(item.market)}</span>
+            <strong>${escapeHtml(feedPercent(item.hit_rate))}</strong>
+            <span>${escapeHtml(`${item.wins}/${item.settled} settled`)}</span>
+          </article>
+        `
+      )
+      .join("");
+
+    return `
+      <section class="section split">
+        <article class="hero-main">
+          <p class="hero-kicker">Live Proof Feed</p>
+          <h1>Wins, losses, and watchlist evidence.</h1>
+          <p>
+            Public-safe results from scored deploy outputs and settled provider results. Deploy rows are the paid/actionable proof layer; OBSERVE rows stay separate as research evidence.
+          </p>
+          <div class="pill-row">
+            <span class="stat-chip">Deploy ${escapeHtml(`${summary.deploy_wins || 0}/${summary.deploy_settled || 0} · ${feedPercent(summary.deploy_hit_rate)}`)}</span>
+            <span class="stat-chip">Generated ${escapeHtml(String(feed.generated_at || "").slice(0, 10))}</span>
+          </div>
+        </article>
+        <aside class="hero-side">
+          <div class="metric">
+            <span class="metric-label">Combined deploy hit rate</span>
+            <span class="metric-value">${escapeHtml(feedPercent(summary.deploy_hit_rate))}</span>
+            <span class="muted">${escapeHtml(`${summary.deploy_wins || 0}/${summary.deploy_settled || 0} settled deploy rows`)}</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Watchlist hit rate</span>
+            <span class="metric-value">${escapeHtml(feedPercent(summary.observe_hit_rate))}</span>
+            <span class="muted">${escapeHtml(`${summary.observe_wins || 0}/${summary.observe_settled || 0} settled observe rows`)}</span>
+          </div>
+        </aside>
+      </section>
+
+      <section class="section">
+        <div class="results-highlight results-highlight--four">
+          ${statPanel("MLS live deploy", resultSummaryCopy(primaryWindow.summary?.deploy), "2026-05-14 provider final")}
+          ${statPanel("MLS OU25 standard", "8/8", "Live night deploy subset")}
+          ${statPanel("Weekend deploy", resultSummaryCopy(secondaryWindow.summary?.deploy), "2026-05-09 → 2026-05-11")}
+          ${statPanel("Weekend EV+", resultSummaryCopy(secondaryWindow.summary?.ev_positive), "Settled positive-EV rows")}
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="result-window-grid">${windowPanels}</div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>Latest live audit</h2>
+            <p class="section-copy">MLS live board, including the one BTTS miss where intelligence flagged conflict pre-result.</p>
+          </div>
+        </div>
+        ${renderResultFeedItems(primaryWindow.featured_results || primaryWindow.items || [], 16)}
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>Live night by market</h2>
+            <p class="section-copy">Deployable rows only. Observe rows are deliberately excluded from this market split.</p>
+          </div>
+        </div>
+        <div class="stats-grid">${marketCards}</div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>Weekend proof sample</h2>
+            <p class="section-copy">Settled public rows from the most recent broad weekend scoring audit.</p>
+          </div>
+        </div>
+        ${renderResultFeedItems(secondaryWindow.featured_results || secondaryWindow.items || [], 12)}
+      </section>
+
+      ${
+        weekly
+          ? `<section class="section">
+              <div class="notice">
+                Historical archive remains available underneath this feed: ${escapeHtml(weekly.wins || 0)} wins, ${escapeHtml(weekly.losses || 0)} losses from the previous published weekly proof window.
+              </div>
+            </section>`
+          : ""
+      }
+    `;
+  };
+
   const resultsView = () => {
     const weekly = state.weeklyResults;
+    const liveFeed = state.liveResultsFeed;
+    if (liveFeed?.windows?.length) {
+      return liveResultsView(liveFeed, weekly);
+    }
     if (!weekly) {
       return `
         <section class="section split">
@@ -11592,11 +11779,13 @@
         fetchOptionalJson(`${DATA_ROOT}/fixture_h2h_support/index.json`),
       ]);
       const weeklyResults = await fetchOptionalJson(`${DATA_ROOT}/weekly_results.json`);
+      const liveResultsFeed = await fetchOptionalJson(`${DATA_ROOT}/live_results_feed.json`);
       const fixtureIntelligenceRows = await loadFixtureIntelligenceRows();
       state.summary = summary;
       state.publicPredictions = publicPredictions;
       state.premiumPredictions = Array.isArray(premiumPredictions) ? premiumPredictions : [];
       state.weeklyResults = weeklyResults;
+      state.liveResultsFeed = liveResultsFeed;
       state.fixtureIntelligence = fixtureIntelligenceRows;
       state.teamIntelligenceIndex = Array.isArray(teamIntelligenceIndex) ? teamIntelligenceIndex : [];
       state.clubSquadIntelligenceIndex = Array.isArray(clubSquadIntelligenceIndex) ? clubSquadIntelligenceIndex : [];

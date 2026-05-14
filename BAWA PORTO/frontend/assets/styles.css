@@ -5298,6 +5298,160 @@ tbody tr:hover {
     linear-gradient(180deg, rgba(24, 38, 32, 0.96), rgba(13, 24, 19, 0.98));
 }
 
+.result-window-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.result-window-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+.result-window-panel::after {
+  content: "";
+  position: absolute;
+  inset: auto -20% -48% 35%;
+  height: 190px;
+  background: radial-gradient(circle, rgba(80, 212, 174, 0.14), transparent 68%);
+  pointer-events: none;
+}
+
+.result-window-panel h3 {
+  margin: 8px 0 10px;
+  font-size: clamp(1.5rem, 2.2vw, 2.2rem);
+  letter-spacing: 0;
+}
+
+.result-window-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.result-window-metrics span {
+  display: grid;
+  gap: 4px;
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(122, 148, 132, 0.14);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.result-window-metrics strong {
+  font-size: 1.28rem;
+}
+
+.result-window-metrics small {
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.public-result-list {
+  display: grid;
+  gap: 12px;
+}
+
+.public-result-row {
+  display: grid;
+  grid-template-columns: minmax(280px, 1.4fr) minmax(150px, 0.6fr) minmax(180px, 0.8fr);
+  gap: 16px;
+  align-items: center;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(122, 148, 132, 0.16);
+  background: linear-gradient(135deg, rgba(22, 39, 31, 0.9), rgba(12, 19, 17, 0.96));
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
+}
+
+.public-result-row-won {
+  border-color: rgba(80, 222, 163, 0.42);
+  box-shadow: 0 0 0 1px rgba(80, 222, 163, 0.12), 0 18px 52px rgba(40, 184, 130, 0.1);
+}
+
+.public-result-row-lost {
+  border-color: rgba(246, 139, 109, 0.46);
+  box-shadow: 0 0 0 1px rgba(246, 139, 109, 0.12), 0 18px 52px rgba(246, 139, 109, 0.08);
+}
+
+.public-result-row-cashed {
+  border-color: rgba(105, 202, 255, 0.48);
+  box-shadow: 0 0 0 1px rgba(105, 202, 255, 0.12), 0 18px 52px rgba(105, 202, 255, 0.08);
+}
+
+.public-result-row-observe {
+  background: linear-gradient(135deg, rgba(22, 35, 35, 0.84), rgba(12, 18, 18, 0.94));
+}
+
+.public-result-main {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.public-result-main strong,
+.public-result-pick strong {
+  display: block;
+  font-size: 1.08rem;
+}
+
+.public-result-main p,
+.public-result-signal span,
+.public-result-pick span {
+  margin: 0;
+}
+
+.public-result-pick,
+.public-result-signal {
+  display: grid;
+  gap: 4px;
+}
+
+.result-status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 76px;
+  min-width: 76px;
+  min-height: 38px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.result-status-pill-won {
+  color: #dfffee;
+  border-color: rgba(80, 222, 163, 0.52);
+  background: rgba(80, 222, 163, 0.14);
+}
+
+.result-status-pill-lost {
+  color: #ffd5c9;
+  border-color: rgba(246, 139, 109, 0.52);
+  background: rgba(246, 139, 109, 0.14);
+}
+
+.result-status-pill-cashed {
+  color: #def4ff;
+  border-color: rgba(105, 202, 255, 0.52);
+  background: rgba(105, 202, 255, 0.13);
+}
+
+.result-status-pill-pending,
+.result-status-pill-void {
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.04);
+}
+
 .tier-panel {
   position: relative;
   overflow: hidden;
@@ -5382,6 +5536,7 @@ code {
   .split-tight,
   .pricing-grid,
   .results-highlight,
+  .result-window-grid,
   .pricing-band {
     grid-template-columns: 1fr;
   }
@@ -5406,6 +5561,11 @@ code {
 
   .fixture-stream-body-grid {
     grid-template-columns: 1fr;
+  }
+
+  .public-result-row {
+    grid-template-columns: 1fr;
+    align-items: flex-start;
   }
 
   .compute-panel-head,
@@ -5573,6 +5733,8 @@ code {
   .standings-table-head,
   .standings-row,
   .results-highlight--four,
+  .result-window-grid,
+  .result-window-metrics,
   .pricing-band {
     grid-template-columns: 1fr;
   }

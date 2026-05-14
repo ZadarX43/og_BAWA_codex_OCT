@@ -73,3 +73,4 @@ reports/
 # Keep schema and manifest files tracked, but ignore regenerated data payloads by default.
 frontend/public/data/*.json
 !frontend/public/data/api_football_logo_asset_manifest.json
+!frontend/public/data/live_results_feed.json
