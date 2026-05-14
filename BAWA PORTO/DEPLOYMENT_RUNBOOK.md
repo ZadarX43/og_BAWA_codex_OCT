@@ -68,6 +68,17 @@ Results output:
 
 - `frontend/public/data/weekly_results.json`
 
+Optional public live proof feed publish after an audit pack exists:
+
+```bash
+python3 scripts/build_public_results_feed.py
+```
+
+Live proof feed output:
+
+- `frontend/public/data/live_results_feed.json`
+- `docs/PUBLIC_RESULTS_FEED_BUILD_NOTES_2026-05-14.md`
+
 ## Step 2 — Validate Export
 
 Run:
@@ -75,10 +86,12 @@ Run:
 ```bash
 python3 validate_public_export.py
 python3 validate_weekly_results.py
+python3 validate_live_results_feed.py
 ```
 
 `validate_public_export.py` must pass before deployment.
 If `weekly_results.json` exists, `validate_weekly_results.py` should also pass before deployment.
+If `live_results_feed.json` exists, `validate_live_results_feed.py` should pass before deployment.
 
 ## Step 3 — Frontend Static Smoke
 
@@ -134,7 +147,7 @@ git push origin dev
 
 ## Step 7 — Cloudflare Preview
 
-Cloudflare Pages should be connected to the GitHub repo with:
+Cloudflare Pages is expected to be connected to the GitHub repo with:
 
 - production branch: `main`
 - preview branch: `dev`
@@ -158,6 +171,14 @@ git push origin main
 ```
 
 Cloudflare Pages then publishes production from `main`.
+
+If the local worktree is dirty and `dev` is known to be exactly the preview revision approved for production, an equivalent non-checkout promotion is:
+
+```bash
+git push origin dev:main
+```
+
+Use this only when `origin/main` is the immediate production predecessor of `dev` or after confirming the exact branch relationship. This avoids dragging unrelated local working-tree changes across branches.
 
 ## Step 9 — Prepare Worker Deployment
 

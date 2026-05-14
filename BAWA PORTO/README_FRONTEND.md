@@ -47,6 +47,7 @@ The frontend reads:
 - `frontend/public/data/fixture_h2h_support/index.json` (optional H2H support index)
 - `frontend/public/data/fixture_decision_intelligence/<fixture_key>.json` (optional reconciled fixture decision layer)
 - `frontend/public/data/fixture_decision_intelligence/index.json` (optional decision companion index)
+- `frontend/public/data/live_results_feed.json` (public recent proof feed for deploy/observe results)
 
 Fixture decision payloads may now also include:
 - `market_intelligence`
@@ -58,7 +59,7 @@ Current behavior:
 - `predictions.html` uses the public board
 - `premium.html` uses internal demo mode for static preview or the Worker premium route when configured and token-authenticated
 - `index.html` uses both boards plus publish summary metadata
-- `results.html` currently reads `weekly_results.json` for proof rollups; the backend now also publishes `results_archive.json` for the next settled archive UI layer
+- `results.html` reads `live_results_feed.json` first for recent public proof, then falls back to `weekly_results.json`; `results_archive.json` remains the settled archive layer
 - `teams.html` can enrich team desks from publish-safe team and squad intelligence when those files are present, while keeping the current fixture-linked desk as fallback
 - `fixture.html?tab=lineups` can render publish-safe formation, unit, mismatch, and player matchup intelligence when lineup JSON is published
 - `fixture.html` hero and decision surfaces can consume `fixture_decision_intelligence` when published, rather than rebuilding judgement phrases in-browser
@@ -190,6 +191,12 @@ Likely later deployment shape:
 4. Push to GitHub
 5. Cloudflare Pages serves `frontend/` as the project root or publish directory
 6. Configure `WORKER_API_BASE` so the frontend can hand off secure premium flows to the Worker
+
+Current branch convention:
+
+- `dev` is the Cloudflare Pages preview branch.
+- `main` is the Cloudflare Pages production branch.
+- Public website changes should land on `dev`, be previewed, then be promoted to `main`.
 
 ## Important Boundary
 

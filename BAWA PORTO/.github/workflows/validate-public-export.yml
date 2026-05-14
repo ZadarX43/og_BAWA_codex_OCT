@@ -26,5 +26,8 @@ jobs:
       - name: Validate weekly results
         run: python3 validate_weekly_results.py
 
+      - name: Validate live results feed
+        run: python3 validate_live_results_feed.py
+
       - name: Run frontend static smoke
         run: python3 scripts/smoke_frontend_static.py

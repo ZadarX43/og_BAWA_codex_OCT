@@ -37,6 +37,7 @@ REQUIRED_FILES = [
     DATA / "league_remediation_plan.json",
     DATA / "weekly_results.json",
     DATA / "results_archive.json",
+    DATA / "live_results_feed.json",
 ]
 
 FORBIDDEN_TERMS = [
