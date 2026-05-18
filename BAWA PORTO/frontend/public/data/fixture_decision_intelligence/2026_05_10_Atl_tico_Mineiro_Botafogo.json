@@ -1,10 +1,49 @@
 {
   "fixture_key": "2026_05_10_Atl_tico_Mineiro_Botafogo",
   "fixture": "Atlético Mineiro vs Botafogo",
-  "primary_signal": "Atlético Mineiro Win",
+  "primary_signal": "No published pick",
+  "context_signal": "Atlético Mineiro Win",
   "signal_state": "AVOID",
   "agreement_score": 42,
   "confidence_band": "LOW",
+  "route_state": "OBSERVE",
+  "route_market": "FTR",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "AVOID",
+  "audit_agreement_score": 42,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "FTR",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "AVOID",
+    "agreement_score": 42,
+    "confidence_band": "LOW",
+    "supporting_layers": [
+      "ATTACK_VS_DEFENCE_MISMATCH"
+    ],
+    "caution_layers": [
+      "TEAM_POWER_NOT_DECISIVE",
+      "AWAY_TRAVEL_THREAT",
+      "H2H_UNAVAILABLE"
+    ],
+    "context_signal": "Atlético Mineiro Win",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [
     "ATTACK_VS_DEFENCE_MISMATCH"
   ],
@@ -172,8 +211,13 @@
   ],
   "h2h_context": {
     "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "summary": "No publish-safe H2H regime snapshot is available yet for this fixture, so H2H remains supporting-only.",
+    "sample_size": 0,
+    "goal_environment": 0,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 0
   },
   "market_suitability": {
     "ftr": {
@@ -216,7 +260,30 @@
     "ftr": {
       "alignment_score": 45,
       "state": "AVOID",
+      "audit_state": "AVOID",
       "model_lean": "HOME",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "HOME",
+        "bookie_pick": "HOME",
+        "pick_probability": 0.5502183406113539,
+        "probabilities": {
+          "HOME": 0.5180214192788745,
+          "DRAW": 0.21268312087693936,
+          "AWAY": 0.2692954598441862
+        },
+        "xgb_pick": "HOME",
+        "xgb_pick_probability": 0.5680927038192749,
+        "xgb_probabilities": {
+          "HOME": 0.5680927038192749,
+          "DRAW": 0.07438094168901443,
+          "AWAY": 0.35752636194229126
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "HOME",
       "structural_support": [
         "ATTACK_VS_DEFENCE_MISMATCH"
       ],
@@ -231,7 +298,28 @@
     "btts": {
       "alignment_score": 50,
       "state": "FRAGILE",
-      "model_lean": "YES",
+      "audit_state": "FRAGILE",
+      "model_lean": "NO",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "NO",
+        "bookie_pick": "NO",
+        "pick_probability": 0.5276757894464159,
+        "probabilities": {
+          "YES": 0.4723242105535841,
+          "NO": 0.5276757894464159
+        },
+        "xgb_pick": "YES",
+        "xgb_pick_probability": 0.4022441506385803,
+        "xgb_probabilities": {
+          "YES": 0.4022441506385803,
+          "NO": 0.5977558493614197
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "YES",
       "structural_support": [
         "ATTACK_VS_DEFENCE_MISMATCH"
       ],
@@ -246,7 +334,28 @@
     "ou25": {
       "alignment_score": 59,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "OVER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "OVER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.5409282711428918,
+        "probabilities": {
+          "OVER25": 0.5409282711428918,
+          "UNDER25": 0.45907172885710823
+        },
+        "xgb_pick": "OVER25",
+        "xgb_pick_probability": 0.7977762818336487,
+        "xgb_probabilities": {
+          "OVER25": 0.7977762818336487,
+          "UNDER25": 0.20222371816635132
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "OVER25",
       "structural_support": [
         "ATTACK_VS_DEFENCE_MISMATCH"
       ],
@@ -261,7 +370,10 @@
     "team_goals": {
       "alignment_score": 69,
       "state": "MIXED",
-      "model_lean": "Botafogo 1.5+",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Botafogo 1.5+",
       "structural_support": [
         "ATTACK_VS_DEFENCE_MISMATCH"
       ],
@@ -276,7 +388,10 @@
     "correct_score": {
       "alignment_score": 87,
       "state": "SUPPORTED",
-      "model_lean": "OPEN",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "OPEN",
       "structural_support": [
         "ATTACK_VS_DEFENCE_MISMATCH"
       ],
@@ -290,7 +405,10 @@
     "corners": {
       "alignment_score": 42,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "ATTACK_VS_DEFENCE_MISMATCH"
       ],
@@ -305,7 +423,10 @@
     "cards": {
       "alignment_score": 48,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "ATTACK_VS_DEFENCE_MISMATCH"
       ],
@@ -325,7 +446,7 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "Atlético Mineiro Win is too contradicted across the current structural layers for Atlético Mineiro vs Botafogo, so the clean read is caution rather than action.",
+  "public_safe_summary": "No published pick is active for Atlético Mineiro vs Botafogo; the context layer is too contradicted to present as an action.",
   "internal_reason_tokens": [
     "ATTACK_VS_DEFENCE_MISMATCH",
     "TEAM_POWER_NOT_DECISIVE",
@@ -338,12 +459,9 @@
     "lineup_available": true,
     "h2h_available": false
   },
-  "preview": {
-    "headline": "Atlético Mineiro vs Botafogo: Atlético Mineiro Win avoid",
-    "short_summary": "Atlético Mineiro Win is too contradicted across the current structural layers for Atlético Mineiro vs Botafogo, so the clean read is caution rather than action. Primary support comes from attack vs defence mismatch, while the main caution remains team power not decisive.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: Corners.",
-    "caution_line": "Main caution: Team Power Not Decisive.",
-    "telegram_summary": "Atlético Mineiro vs Botafogo — Atlético Mineiro Win (Avoid, 42% agreement). Support: Attack Vs Defence Mismatch. Caution: Team Power Not Decisive.",
-    "premium_summary": "Atlético Mineiro Win is carrying a 42% agreement read across the published decision layers. Support is currently led by attack vs defence mismatch, while caution is still coming from team power not decisive, away travel threat."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-10T19:00:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

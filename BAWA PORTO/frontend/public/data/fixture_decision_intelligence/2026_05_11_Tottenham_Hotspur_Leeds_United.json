@@ -1,16 +1,53 @@
 {
   "fixture_key": "2026_05_11_Tottenham_Hotspur_Leeds_United",
   "fixture": "Tottenham Hotspur vs Leeds United",
-  "primary_signal": "BTTS Yes",
-  "signal_state": "FRAGILE",
-  "agreement_score": 56,
+  "primary_signal": "No published pick",
+  "context_signal": "BTTS Yes",
+  "signal_state": "WATCHLIST",
+  "agreement_score": 60,
   "confidence_band": "LOW",
+  "route_state": "OBSERVE",
+  "route_market": "BTTS",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "WATCHLIST",
+  "audit_agreement_score": 60,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "BTTS",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "WATCHLIST",
+    "agreement_score": 60,
+    "confidence_band": "LOW",
+    "supporting_layers": [
+      "BTTS_PRESSURE_SUPPORT",
+      "GOAL_ENVIRONMENT_SUPPORT"
+    ],
+    "caution_layers": [
+      "H2H_UNAVAILABLE"
+    ],
+    "context_signal": "BTTS Yes",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [
     "BTTS_PRESSURE_SUPPORT",
     "GOAL_ENVIRONMENT_SUPPORT"
   ],
   "caution_layers": [
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -73,46 +110,37 @@
       "leader": "Tottenham Hotspur"
     }
   ],
-  "unit_battle_summary": [],
-  "key_player_drivers": [
+  "unit_battle_summary": [
     {
-      "team": "Tottenham Hotspur",
-      "player": "Guglielmo Vicario",
-      "role": "Goalkeeper",
-      "power": 63,
-      "driver_metric": "Defensive Lock",
-      "driver_value": 54
+      "label": "Attack vs Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "Tottenham Hotspur",
-      "player": "Cristian Romero",
-      "role": "Centre Back",
-      "power": 62,
-      "driver_metric": "Goal Threat",
-      "driver_value": 63
+      "label": "Midfield Control",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "Leeds United",
-      "player": "Jaka Bijol",
-      "role": "Centre Back",
-      "power": 62,
-      "driver_metric": "Defensive Lock",
-      "driver_value": 55
-    },
-    {
-      "team": "Leeds United",
-      "player": "Ethan Ampadu",
-      "role": "Central Midfielder",
-      "power": 59,
-      "driver_metric": "Midfield Engine",
-      "driver_value": 56
+      "label": "Away Attack vs Home Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     }
   ],
+  "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "summary": "No publish-safe H2H regime snapshot is available yet for this fixture, so H2H remains supporting-only.",
+    "sample_size": 0,
+    "goal_environment": 0,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 0
   },
   "market_suitability": {
     "ftr": {
@@ -153,46 +181,108 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 40,
+      "alignment_score": 44,
       "state": "AVOID",
-      "model_lean": "DRAW",
+      "audit_state": "AVOID",
+      "model_lean": "HOME",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "HOME",
+        "bookie_pick": "HOME",
+        "pick_probability": 0.5360285388783698,
+        "probabilities": {
+          "HOME": 0.5657508248844483,
+          "DRAW": 0.1900907630455803,
+          "AWAY": 0.24415841206997144
+        },
+        "xgb_pick": "HOME",
+        "xgb_pick_probability": 0.9283067584037781,
+        "xgb_probabilities": {
+          "HOME": 0.9283067584037781,
+          "DRAW": 0.03578471392393112,
+          "AWAY": 0.03590849041938782
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "DRAW",
       "structural_support": [
         "BTTS_PRESSURE_SUPPORT",
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "FTR is too contradicted by lineup data missing to present as a clean public read.",
+      "public_summary": "FTR is too contradicted by h2h unavailable to present as a clean public read.",
       "rating": 34,
       "band": "Red Flag"
     },
     "btts": {
-      "alignment_score": 58,
-      "state": "FRAGILE",
-      "model_lean": "YES",
+      "alignment_score": 61,
+      "state": "WATCHLIST",
+      "audit_state": "WATCHLIST",
+      "model_lean": "NO",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "NO",
+        "bookie_pick": "NO",
+        "pick_probability": 0.6181713810367078,
+        "probabilities": {
+          "YES": 0.38182861896329223,
+          "NO": 0.6181713810367078
+        },
+        "xgb_pick": "NO",
+        "xgb_pick_probability": 0.9278696030378342,
+        "xgb_probabilities": {
+          "NO": 0.9278696030378342,
+          "YES": 0.07213039696216583
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "YES",
       "structural_support": [
         "BTTS_PRESSURE_SUPPORT",
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "BTTS has some structural support from btts pressure support, but the overall layer fit remains fragile.",
+      "public_summary": "BTTS is interesting enough to monitor, but current support is better treated as watch-first because of h2h unavailable.",
       "rating": 62,
       "band": "Mixed"
     },
     "ou25": {
-      "alignment_score": 54,
+      "alignment_score": 58,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "OVER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "OVER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.5016869750559168,
+        "probabilities": {
+          "OVER25": 0.5016869750559168,
+          "UNDER25": 0.49831302494408325
+        },
+        "xgb_pick": "UNDER25",
+        "xgb_pick_probability": 0.1499055176973343,
+        "xgb_probabilities": {
+          "UNDER25": 0.1499055176973343,
+          "OVER25": 0.8500944823026657
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "OVER25",
       "structural_support": [
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "Over 2.5 has some structural support from goal environment support, but the overall layer fit remains fragile.",
@@ -202,90 +292,99 @@
     "team_goals": {
       "alignment_score": 58,
       "state": "FRAGILE",
-      "model_lean": "Leeds United 1.5+",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Leeds United 1.5+",
       "structural_support": [
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "H2H_UNAVAILABLE"
       ],
       "public_summary": "Team Goals has some structural support from goal environment support, but the overall layer fit remains fragile.",
       "rating": 62,
       "band": "Mixed"
     },
     "correct_score": {
-      "alignment_score": 83,
+      "alignment_score": 87,
       "state": "SUPPORTED",
-      "model_lean": "OPEN",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "OPEN",
       "structural_support": [
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Correct Score is well supported by goal environment support, with caution still coming from lineup data missing.",
+      "public_summary": "Correct Score is well supported by goal environment support, with caution still coming from h2h unavailable.",
       "rating": 100,
       "band": "Elite"
     },
     "corners": {
-      "alignment_score": 39,
+      "alignment_score": 43,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "BTTS_PRESSURE_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Corners is too contradicted by lineup data missing to present as a clean public read.",
+      "public_summary": "Corners is too contradicted by h2h unavailable to present as a clean public read.",
       "rating": 41,
       "band": "Weak"
     },
     "cards": {
-      "alignment_score": 63,
+      "alignment_score": 67,
       "state": "MIXED",
-      "model_lean": "ELEVATED",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "BTTS_PRESSURE_SUPPORT",
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Cards has partial support from btts pressure support, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Cards has partial support from btts pressure support, but h2h unavailable keeps it from reading clean.",
       "rating": 65,
       "band": "Mixed"
     }
   },
   "watchlist": {
-    "active": false,
-    "summary": "No watchlist layer is active for this fixture.",
-    "trigger_signals": [],
-    "public_state": "No watchlist flag",
-    "mode": ""
+    "active": true,
+    "summary": "BTTS Yes is better treated as a watch-first structure because h2h unavailable.",
+    "trigger_signals": [
+      "Confirm both forward lines are intact before kickoff.",
+      "Watch for early two-way shot volume inside the opening 15 minutes.",
+      "Escalate only if suppression signs stay absent."
+    ],
+    "public_state": "Watchlist: wait for live confirmation",
+    "mode": "BTTS:YES"
   },
-  "public_safe_summary": "BTTS Yes has some live shape in Tottenham Hotspur vs Leeds United, but the supporting layers remain fragile and need discipline.",
+  "public_safe_summary": "No published pick is active for Tottenham Hotspur vs Leeds United; the context layer is watch-first around BTTS Yes.",
   "internal_reason_tokens": [
     "BTTS_PRESSURE_SUPPORT",
     "GOAL_ENVIRONMENT_SUPPORT",
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
     "support_count": 2,
-    "caution_count": 2,
-    "lineup_available": false,
+    "caution_count": 1,
+    "lineup_available": true,
     "h2h_available": false
   },
-  "preview": {
-    "headline": "Tottenham Hotspur vs Leeds United: BTTS Yes fragile",
-    "short_summary": "BTTS Yes has some live shape in Tottenham Hotspur vs Leeds United, but the supporting layers remain fragile and need discipline. Primary support comes from btts pressure support, while the main caution remains lineup data missing.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Cards. Weakest read: Corners.",
-    "caution_line": "Main caution: Lineup Data Missing.",
-    "telegram_summary": "Tottenham Hotspur vs Leeds United — BTTS Yes (Fragile, 56% agreement). Support: Btts Pressure Support. Caution: Lineup Data Missing.",
-    "premium_summary": "BTTS Yes is carrying a 56% agreement read across the published decision layers. Support is currently led by btts pressure support, goal environment support, while caution is still coming from lineup data missing, h2h unavailable."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-11T19:00:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

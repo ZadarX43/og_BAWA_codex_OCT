@@ -1,10 +1,48 @@
 {
   "fixture_key": "2026_05_10_Mirassol_Chapecoense",
   "fixture": "Mirassol vs Chapecoense",
-  "primary_signal": "Over 2.5",
+  "primary_signal": "No published pick",
+  "context_signal": "Over 2.5",
   "signal_state": "WATCHLIST",
   "agreement_score": 60,
   "confidence_band": "LOW",
+  "route_state": "OBSERVE",
+  "route_market": "OU25",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "WATCHLIST",
+  "audit_agreement_score": 60,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "OU25",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "WATCHLIST",
+    "agreement_score": 60,
+    "confidence_band": "LOW",
+    "supporting_layers": [
+      "OVER25_HEAT_SUPPORT",
+      "CHAOS_ENVIRONMENT_SUPPORT"
+    ],
+    "caution_layers": [
+      "H2H_UNAVAILABLE"
+    ],
+    "context_signal": "Over 2.5",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [
     "OVER25_HEAT_SUPPORT",
     "CHAOS_ENVIRONMENT_SUPPORT"
@@ -169,8 +207,13 @@
   ],
   "h2h_context": {
     "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "summary": "No publish-safe H2H regime snapshot is available yet for this fixture, so H2H remains supporting-only.",
+    "sample_size": 0,
+    "goal_environment": 0,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 0
   },
   "market_suitability": {
     "ftr": {
@@ -213,7 +256,30 @@
     "ftr": {
       "alignment_score": 44,
       "state": "AVOID",
+      "audit_state": "AVOID",
       "model_lean": "HOME",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "HOME",
+        "bookie_pick": "HOME",
+        "pick_probability": 0.4344262295081967,
+        "probabilities": {
+          "HOME": 0.4363175304488325,
+          "DRAW": 0.28396976708879534,
+          "AWAY": 0.2797127024623723
+        },
+        "xgb_pick": "HOME",
+        "xgb_pick_probability": 0.6768027544021606,
+        "xgb_probabilities": {
+          "HOME": 0.6768027544021606,
+          "DRAW": 0.09790540486574173,
+          "AWAY": 0.22529184818267822
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "HOME",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT"
@@ -228,7 +294,10 @@
     "btts": {
       "alignment_score": 60,
       "state": "FRAGILE",
-      "model_lean": "YES",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "YES",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT"
@@ -243,7 +312,28 @@
     "ou25": {
       "alignment_score": 62,
       "state": "WATCHLIST",
+      "audit_state": "WATCHLIST",
       "model_lean": "OVER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "OVER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.5008247472676219,
+        "probabilities": {
+          "OVER25": 0.5008247472676219,
+          "UNDER25": 0.49917525273237806
+        },
+        "xgb_pick": "UNDER25",
+        "xgb_pick_probability": 0.3913363218307495,
+        "xgb_probabilities": {
+          "UNDER25": 0.3913363218307495,
+          "OVER25": 0.6086636781692505
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "OVER25",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT"
@@ -258,7 +348,10 @@
     "team_goals": {
       "alignment_score": 69,
       "state": "MIXED",
-      "model_lean": "Mirassol 1.5+",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Mirassol 1.5+",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT"
@@ -273,7 +366,10 @@
     "correct_score": {
       "alignment_score": 81,
       "state": "SUPPORTED",
-      "model_lean": "OPEN",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "OPEN",
       "structural_support": [
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
@@ -287,7 +383,10 @@
     "corners": {
       "alignment_score": 57,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT"
@@ -302,7 +401,10 @@
     "cards": {
       "alignment_score": 57,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
@@ -325,7 +427,7 @@
     "public_state": "Watchlist: wait for live confirmation",
     "mode": "OU25:OVER25"
   },
-  "public_safe_summary": "Over 2.5 has useful structure for Mirassol vs Chapecoense, but the current layer fit is better treated as watch-first than pre-match deploy.",
+  "public_safe_summary": "No published pick is active for Mirassol vs Chapecoense; the context layer is watch-first around Over 2.5.",
   "internal_reason_tokens": [
     "OVER25_HEAT_SUPPORT",
     "CHAOS_ENVIRONMENT_SUPPORT",
@@ -337,12 +439,9 @@
     "lineup_available": true,
     "h2h_available": false
   },
-  "preview": {
-    "headline": "Mirassol vs Chapecoense: Over 2.5 watchlist",
-    "short_summary": "Over 2.5 has useful structure for Mirassol vs Chapecoense, but the current layer fit is better treated as watch-first than pre-match deploy. Primary support comes from over25 heat support, while the main caution remains h2h unavailable.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: FTR.",
-    "caution_line": "Main caution: H2H Unavailable.",
-    "telegram_summary": "Mirassol vs Chapecoense — Over 2.5 (Watchlist, 60% agreement). Support: Over25 Heat Support. Caution: H2H Unavailable.",
-    "premium_summary": "Over 2.5 is carrying a 60% agreement read across the published decision layers. Support is currently led by over25 heat support, chaos environment support, while caution is still coming from h2h unavailable."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-10T21:30:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

@@ -1,16 +1,55 @@
 {
   "fixture_key": "2026_05_10_KAA_Gent_RSC_Anderlecht",
   "fixture": "KAA Gent vs RSC Anderlecht",
-  "primary_signal": "KAA Gent Win",
+  "primary_signal": "No published pick",
+  "context_signal": "KAA Gent Win",
   "signal_state": "AVOID",
-  "agreement_score": 44,
+  "agreement_score": 42,
   "confidence_band": "LOW",
+  "route_state": "OBSERVE",
+  "route_market": "FTR",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "AVOID",
+  "audit_agreement_score": 42,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "FTR",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "AVOID",
+    "agreement_score": 42,
+    "confidence_band": "LOW",
+    "supporting_layers": [
+      "HOME_FORTRESS_ADVANTAGE"
+    ],
+    "caution_layers": [
+      "TEAM_POWER_NOT_DECISIVE",
+      "LINEUP_UNIT_EDGE_SOFT",
+      "H2H_UNAVAILABLE"
+    ],
+    "context_signal": "KAA Gent Win",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [
     "HOME_FORTRESS_ADVANTAGE"
   ],
   "caution_layers": [
     "TEAM_POWER_NOT_DECISIVE",
-    "LINEUP_DATA_MISSING",
+    "LINEUP_UNIT_EDGE_SOFT",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -74,46 +113,37 @@
       "leader": "RSC Anderlecht"
     }
   ],
-  "unit_battle_summary": [],
-  "key_player_drivers": [
+  "unit_battle_summary": [
     {
-      "team": "KAA Gent",
-      "player": "Wilfried Kanga",
-      "role": "Forward",
-      "power": 85,
-      "driver_metric": "Goal Threat",
-      "driver_value": 89
+      "label": "Attack vs Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "KAA Gent",
-      "player": "Davy Roef",
-      "role": "Goalkeeper",
-      "power": 70,
-      "driver_metric": "Defensive Lock",
-      "driver_value": 51
+      "label": "Midfield Control",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "RSC Anderlecht",
-      "player": "Adriano Bertaccini",
-      "role": "Forward",
-      "power": 79,
-      "driver_metric": "Goal Threat",
-      "driver_value": 90
-    },
-    {
-      "team": "RSC Anderlecht",
-      "player": "Nilson Angulo",
-      "role": "Forward",
-      "power": 79,
-      "driver_metric": "Goal Threat",
-      "driver_value": 82
+      "label": "Away Attack vs Home Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     }
   ],
+  "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "summary": "No publish-safe H2H regime snapshot is available yet for this fixture, so H2H remains supporting-only.",
+    "sample_size": 0,
+    "goal_environment": 0,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 0
   },
   "market_suitability": {
     "ftr": {
@@ -154,9 +184,32 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 48,
+      "alignment_score": 47,
       "state": "AVOID",
+      "audit_state": "AVOID",
       "model_lean": "HOME",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "HOME",
+        "bookie_pick": "HOME",
+        "pick_probability": 0.7349397590361446,
+        "probabilities": {
+          "HOME": 0.41647211827137587,
+          "DRAW": 0.2973242869159291,
+          "AWAY": 0.28620359481269514
+        },
+        "xgb_pick": "HOME",
+        "xgb_pick_probability": 0.5955058336257935,
+        "xgb_probabilities": {
+          "HOME": 0.5955058336257935,
+          "DRAW": 0.23212847113609314,
+          "AWAY": 0.1723656952381134
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "HOME",
       "structural_support": [
         "HOME_FORTRESS_ADVANTAGE"
       ],
@@ -170,13 +223,16 @@
     "btts": {
       "alignment_score": 47,
       "state": "FRAGILE",
-      "model_lean": "YES",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "YES",
       "structural_support": [
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
       "public_summary": "BTTS has some structural support from home fortress advantage, but the overall layer fit remains fragile.",
       "rating": 52,
@@ -185,13 +241,34 @@
     "ou25": {
       "alignment_score": 62,
       "state": "MIXED",
-      "model_lean": "OVER25",
+      "audit_state": "MIXED",
+      "model_lean": "UNDER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "UNDER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.45908278652522627,
+        "probabilities": {
+          "OVER25": 0.45908278652522627,
+          "UNDER25": 0.5409172134747737
+        },
+        "xgb_pick": "UNDER25",
+        "xgb_pick_probability": 0.23630917072296143,
+        "xgb_probabilities": {
+          "UNDER25": 0.23630917072296143,
+          "OVER25": 0.7636908292770386
+        },
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "OVER25",
       "structural_support": [
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
       "public_summary": "Over 2.5 has partial support from home fortress advantage, but team power not decisive keeps it from reading clean.",
       "rating": 72,
@@ -200,21 +277,27 @@
     "team_goals": {
       "alignment_score": 68,
       "state": "MIXED",
-      "model_lean": "RSC Anderlecht 1.5+",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "RSC Anderlecht 1.5+",
       "structural_support": [
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
-      "public_summary": "Team Goals has partial support from home fortress advantage, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Team Goals has partial support from home fortress advantage, but lineup unit edge soft keeps it from reading clean.",
       "rating": 75,
       "band": "Strong"
     },
     "correct_score": {
       "alignment_score": 87,
       "state": "SUPPORTED",
-      "model_lean": "OPEN",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "OPEN",
       "structural_support": [
         "HOME_FORTRESS_ADVANTAGE"
       ],
@@ -228,13 +311,16 @@
     "corners": {
       "alignment_score": 60,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
       "public_summary": "Corners has some structural support from home fortress advantage, but the overall layer fit remains fragile.",
       "rating": 70,
@@ -243,13 +329,16 @@
     "cards": {
       "alignment_score": 56,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
       "public_summary": "Cards has some structural support from home fortress advantage, but the overall layer fit remains fragile.",
       "rating": 64,
@@ -263,25 +352,22 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "KAA Gent Win is too contradicted across the current structural layers for KAA Gent vs RSC Anderlecht, so the clean read is caution rather than action.",
+  "public_safe_summary": "No published pick is active for KAA Gent vs RSC Anderlecht; the context layer is too contradicted to present as an action.",
   "internal_reason_tokens": [
     "HOME_FORTRESS_ADVANTAGE",
     "TEAM_POWER_NOT_DECISIVE",
-    "LINEUP_DATA_MISSING",
+    "LINEUP_UNIT_EDGE_SOFT",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
     "support_count": 1,
     "caution_count": 3,
-    "lineup_available": false,
+    "lineup_available": true,
     "h2h_available": false
   },
-  "preview": {
-    "headline": "KAA Gent vs RSC Anderlecht: KAA Gent Win avoid",
-    "short_summary": "KAA Gent Win is too contradicted across the current structural layers for KAA Gent vs RSC Anderlecht, so the clean read is caution rather than action. Primary support comes from home fortress advantage, while the main caution remains team power not decisive.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: BTTS.",
-    "caution_line": "Main caution: Team Power Not Decisive.",
-    "telegram_summary": "KAA Gent vs RSC Anderlecht — KAA Gent Win (Avoid, 44% agreement). Support: Home Fortress Advantage. Caution: Team Power Not Decisive.",
-    "premium_summary": "KAA Gent Win is carrying a 44% agreement read across the published decision layers. Support is currently led by home fortress advantage, while caution is still coming from team power not decisive, lineup data missing."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-10T11:30:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

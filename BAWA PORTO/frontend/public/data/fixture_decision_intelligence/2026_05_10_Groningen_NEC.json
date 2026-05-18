@@ -2,14 +2,50 @@
   "fixture_key": "2026_05_10_Groningen_NEC",
   "fixture": "Groningen vs NEC",
   "primary_signal": "Over 2.5",
+  "context_signal": "Over 2.5",
   "signal_state": "AVOID",
-  "agreement_score": 32,
+  "agreement_score": 36,
   "confidence_band": "STANDARD",
+  "route_state": "DEPLOY",
+  "route_market": "OU25",
+  "route_pick": "OVER25",
+  "route_active": true,
+  "route_label": "Over 2.5",
+  "route_confidence_tier": "STANDARD",
+  "route_bookie_od": 1.4,
+  "route_value_edge_label": "positive",
+  "audit_state": "AVOID",
+  "audit_agreement_score": 36,
+  "audit_confidence_band": "STANDARD",
+  "conflict_level": "CAUTION",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "DEPLOY",
+    "route_market": "OU25",
+    "route_pick": "OVER25",
+    "route_active": true,
+    "confidence_tier": "STANDARD",
+    "bookie_od": 1.4,
+    "value_edge_label": "positive",
+    "premium_tier": "STANDARD"
+  },
+  "context_audit": {
+    "state": "AVOID",
+    "agreement_score": 36,
+    "confidence_band": "STANDARD",
+    "supporting_layers": [],
+    "caution_layers": [
+      "OVER25_HEAT_SOFT",
+      "CHAOS_ENVIRONMENT_SOFT",
+      "H2H_UNAVAILABLE"
+    ],
+    "context_signal": "Over 2.5",
+    "conflict_level": "CAUTION"
+  },
   "supporting_layers": [],
   "caution_layers": [
     "OVER25_HEAT_SOFT",
     "CHAOS_ENVIRONMENT_SOFT",
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -74,13 +110,37 @@
       "leader": "NEC"
     }
   ],
-  "unit_battle_summary": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    }
+  ],
   "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "summary": "No publish-safe H2H regime snapshot is available yet for this fixture, so H2H remains supporting-only.",
+    "sample_size": 0,
+    "goal_environment": 0,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 0
   },
   "market_suitability": {
     "ftr": {
@@ -123,7 +183,30 @@
     "ftr": {
       "alignment_score": 60,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "AWAY",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "AWAY",
+        "bookie_pick": "AWAY",
+        "pick_probability": 0.4222222222222222,
+        "probabilities": {
+          "HOME": 0.3185467964684106,
+          "DRAW": 0.32322814647204756,
+          "AWAY": 0.35822505705954183
+        },
+        "xgb_pick": "HOME",
+        "xgb_pick_probability": 0.8624534010887146,
+        "xgb_probabilities": {
+          "HOME": 0.8624534010887146,
+          "DRAW": 0.04594104364514351,
+          "AWAY": 0.09160556644201279
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "AWAY",
       "structural_support": [],
       "cautions": [
         "OVER25_HEAT_SOFT",
@@ -136,7 +219,28 @@
     "btts": {
       "alignment_score": 43,
       "state": "AVOID",
+      "audit_state": "AVOID",
       "model_lean": "YES",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "YES",
+        "bookie_pick": "YES",
+        "pick_probability": 0.7839296270160576,
+        "probabilities": {
+          "YES": 0.7839296270160576,
+          "NO": 0.21607037298394238
+        },
+        "xgb_pick": "YES",
+        "xgb_pick_probability": 0.9855453372001648,
+        "xgb_probabilities": {
+          "YES": 0.9855453372001648,
+          "NO": 0.014454662799835205
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "YES",
       "structural_support": [],
       "cautions": [
         "OVER25_HEAT_SOFT",
@@ -147,9 +251,30 @@
       "band": "Mixed"
     },
     "ou25": {
-      "alignment_score": 41,
+      "alignment_score": 43,
       "state": "AVOID",
+      "audit_state": "AVOID",
       "model_lean": "OVER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "OVER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.72160107206259,
+        "probabilities": {
+          "OVER25": 0.72160107206259,
+          "UNDER25": 0.27839892793740995
+        },
+        "xgb_pick": "OVER25",
+        "xgb_pick_probability": 0.8507448434829712,
+        "xgb_probabilities": {
+          "OVER25": 0.8507448434829712,
+          "UNDER25": 0.1492551565170288
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "OVER25",
       "structural_support": [],
       "cautions": [
         "OVER25_HEAT_SOFT",
@@ -160,21 +285,28 @@
       "band": "Weak"
     },
     "team_goals": {
-      "alignment_score": 70,
+      "alignment_score": 66,
       "state": "MIXED",
-      "model_lean": "NEC 1.5+",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "NEC 1.5+",
       "structural_support": [],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "OVER25_HEAT_SOFT",
+        "CHAOS_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Team Goals has partial support from structural support, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Team Goals has partial support from structural support, but over 2.5 heat soft keeps it from reading clean.",
       "rating": 85,
       "band": "Strong"
     },
     "correct_score": {
       "alignment_score": 81,
       "state": "SUPPORTED",
-      "model_lean": "STRUCTURED",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "STRUCTURED",
       "structural_support": [],
       "cautions": [
         "CHAOS_ENVIRONMENT_SOFT"
@@ -186,7 +318,10 @@
     "corners": {
       "alignment_score": 54,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [],
       "cautions": [
         "OVER25_HEAT_SOFT",
@@ -199,7 +334,10 @@
     "cards": {
       "alignment_score": 44,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [],
       "cautions": [
         "CHAOS_ENVIRONMENT_SOFT"
@@ -216,25 +354,21 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "Over 2.5 is too contradicted across the current structural layers for Groningen vs NEC, so the clean read is caution rather than action.",
+  "public_safe_summary": "Published route remains Over 2.5 for Groningen vs NEC, while the context audit flags avoid because of over 2.5 heat soft.",
   "internal_reason_tokens": [
     "OVER25_HEAT_SOFT",
     "CHAOS_ENVIRONMENT_SOFT",
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
     "support_count": 0,
-    "caution_count": 4,
-    "lineup_available": false,
+    "caution_count": 3,
+    "lineup_available": true,
     "h2h_available": false
   },
-  "preview": {
-    "headline": "Groningen vs NEC: Over 2.5 avoid",
-    "short_summary": "Over 2.5 is too contradicted across the current structural layers for Groningen vs NEC, so the clean read is caution rather than action. Primary support comes from structural caution, while the main caution remains over25 heat soft.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: Over 2.5.",
-    "caution_line": "Main caution: Over25 Heat Soft.",
-    "telegram_summary": "Groningen vs NEC — Over 2.5 (Avoid, 32% agreement). Support: structural caution. Caution: Over25 Heat Soft.",
-    "premium_summary": "Over 2.5 is carrying a 32% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from over25 heat soft, chaos environment soft."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-10T14:45:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

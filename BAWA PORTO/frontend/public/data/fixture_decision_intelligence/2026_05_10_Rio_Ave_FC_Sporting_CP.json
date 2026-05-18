@@ -1,14 +1,45 @@
 {
   "fixture_key": "2026_05_10_Rio_Ave_FC_Sporting_CP",
   "fixture": "Rio Ave FC vs Sporting CP",
-  "primary_signal": "Fixture read",
+  "primary_signal": "No published pick",
+  "context_signal": "Fixture context",
   "signal_state": "FRAGILE",
-  "agreement_score": 48,
+  "agreement_score": 50,
   "confidence_band": "LOW",
+  "route_state": "CONTEXT",
+  "route_market": "",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "FRAGILE",
+  "audit_agreement_score": 50,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "CONTEXT",
+    "route_market": "",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "FRAGILE",
+    "agreement_score": 50,
+    "confidence_band": "LOW",
+    "supporting_layers": [],
+    "caution_layers": [],
+    "context_signal": "Fixture context",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [],
-  "caution_layers": [
-    "H2H_UNAVAILABLE"
-  ],
+  "caution_layers": [],
   "profile_tags": {
     "home": [
       "Mixed Team Profile"
@@ -75,24 +106,7 @@
       "delta": 50
     }
   ],
-  "key_player_drivers": [
-    {
-      "team": "Sporting CP",
-      "player": "Luis Suárez",
-      "role": "Forward",
-      "power": 77,
-      "driver_metric": "Goal Threat",
-      "driver_value": 77
-    },
-    {
-      "team": "Sporting CP",
-      "player": "Francisco Trincão",
-      "role": "Central Midfielder",
-      "power": 68,
-      "driver_metric": "Goal Threat",
-      "driver_value": 75
-    }
-  ],
+  "key_player_drivers": [],
   "key_mismatches": [
     {
       "zone": "Sporting CP attack vs Rio Ave defence",
@@ -136,9 +150,14 @@
     }
   ],
   "h2h_context": {
-    "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "available": true,
+    "summary": "Using the latest available same-team-pair historical regime (1 prior meeting) as supporting context for this current fixture.",
+    "sample_size": 1,
+    "goal_environment": 4,
+    "btts_regime": 100,
+    "over25_rate": 100,
+    "draw_rate": 0,
+    "booking_heat": 4
   },
   "market_suitability": {
     "ftr": {
@@ -179,86 +198,93 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 73,
+      "alignment_score": 77,
       "state": "MIXED",
-      "model_lean": "AWAY",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "AWAY",
       "structural_support": [],
-      "cautions": [
-        "H2H_UNAVAILABLE"
-      ],
-      "public_summary": "FTR has partial support from structural support, but h2h unavailable keeps it from reading clean.",
+      "cautions": [],
+      "public_summary": "FTR has partial support from structural support, but no major caution published keeps it from reading clean.",
       "rating": 89,
       "band": "Strong"
     },
     "btts": {
-      "alignment_score": 51,
+      "alignment_score": 55,
       "state": "FRAGILE",
-      "model_lean": "YES",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "YES",
       "structural_support": [],
-      "cautions": [
-        "H2H_UNAVAILABLE"
-      ],
+      "cautions": [],
       "public_summary": "BTTS has some structural support from structural support, but the overall layer fit remains fragile.",
       "rating": 60,
       "band": "Mixed"
     },
     "ou25": {
-      "alignment_score": 62,
+      "alignment_score": 66,
       "state": "MIXED",
-      "model_lean": "OVER25",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "OVER25",
       "structural_support": [],
-      "cautions": [
-        "H2H_UNAVAILABLE"
-      ],
-      "public_summary": "Over 2.5 has partial support from structural support, but h2h unavailable keeps it from reading clean.",
+      "cautions": [],
+      "public_summary": "Over 2.5 has partial support from structural support, but no major caution published keeps it from reading clean.",
       "rating": 74,
       "band": "Positive"
     },
     "team_goals": {
-      "alignment_score": 77,
-      "state": "MIXED",
-      "model_lean": "Sporting CP 1.5+",
+      "alignment_score": 81,
+      "state": "SUPPORTED",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Sporting CP 1.5+",
       "structural_support": [],
-      "cautions": [
-        "H2H_UNAVAILABLE"
-      ],
-      "public_summary": "Team Goals has partial support from structural support, but h2h unavailable keeps it from reading clean.",
+      "cautions": [],
+      "public_summary": "Team Goals is well supported by structural support, with caution still coming from no major caution published.",
       "rating": 95,
       "band": "Strong"
     },
     "correct_score": {
-      "alignment_score": 61,
-      "state": "FRAGILE",
-      "model_lean": "OPEN",
+      "alignment_score": 65,
+      "state": "MIXED",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "OPEN",
       "structural_support": [],
-      "cautions": [
-        "H2H_UNAVAILABLE"
-      ],
-      "public_summary": "Correct Score has some structural support from structural support, but the overall layer fit remains fragile.",
+      "cautions": [],
+      "public_summary": "Correct Score has partial support from structural support, but no major caution published keeps it from reading clean.",
       "rating": 73,
       "band": "Positive"
     },
     "corners": {
-      "alignment_score": 63,
+      "alignment_score": 67,
       "state": "MIXED",
-      "model_lean": "ELEVATED",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [],
-      "cautions": [
-        "H2H_UNAVAILABLE"
-      ],
-      "public_summary": "Corners has partial support from structural support, but h2h unavailable keeps it from reading clean.",
+      "cautions": [],
+      "public_summary": "Corners has partial support from structural support, but no major caution published keeps it from reading clean.",
       "rating": 76,
       "band": "Positive"
     },
     "cards": {
-      "alignment_score": 40,
+      "alignment_score": 44,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [],
-      "cautions": [
-        "H2H_UNAVAILABLE"
-      ],
-      "public_summary": "Cards is too contradicted by h2h unavailable to present as a clean public read.",
+      "cautions": [],
+      "public_summary": "Cards is too contradicted by no major caution published to present as a clean public read.",
       "rating": 46,
       "band": "Weak"
     }
@@ -270,22 +296,17 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "Fixture read has some live shape in Rio Ave FC vs Sporting CP, but the supporting layers remain fragile and need discipline.",
-  "internal_reason_tokens": [
-    "H2H_UNAVAILABLE"
-  ],
+  "public_safe_summary": "No published pick is active for Rio Ave FC vs Sporting CP; the fixture read is context only.",
+  "internal_reason_tokens": [],
   "summary": {
     "support_count": 0,
-    "caution_count": 1,
+    "caution_count": 0,
     "lineup_available": true,
-    "h2h_available": false
+    "h2h_available": true
   },
-  "preview": {
-    "headline": "Rio Ave FC vs Sporting CP: Fixture read fragile",
-    "short_summary": "Fixture read has some live shape in Rio Ave FC vs Sporting CP, but the supporting layers remain fragile and need discipline. Primary support comes from structural caution, while the main caution remains h2h unavailable.",
-    "market_summary": "Best aligned market: Team Goals (Mixed). Secondary support: FTR. Weakest read: Cards.",
-    "caution_line": "Main caution: H2H Unavailable.",
-    "telegram_summary": "Rio Ave FC vs Sporting CP — Fixture read (Fragile, 48% agreement). Support: structural caution. Caution: H2H Unavailable.",
-    "premium_summary": "Fixture read is carrying a 48% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from h2h unavailable."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-11T19:15:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

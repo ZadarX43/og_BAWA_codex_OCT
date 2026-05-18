@@ -1,15 +1,53 @@
 {
   "fixture_key": "2026_05_10_RCD_Mallorca_Villarreal",
   "fixture": "RCD Mallorca vs Villarreal",
-  "primary_signal": "RCD Mallorca Win",
+  "primary_signal": "No published pick",
+  "context_signal": "RCD Mallorca Win",
   "signal_state": "AVOID",
-  "agreement_score": 32,
+  "agreement_score": 30,
   "confidence_band": "LOW",
+  "route_state": "OBSERVE",
+  "route_market": "FTR",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "AVOID",
+  "audit_agreement_score": 30,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "FTR",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "AVOID",
+    "agreement_score": 30,
+    "confidence_band": "LOW",
+    "supporting_layers": [],
+    "caution_layers": [
+      "TEAM_POWER_NOT_DECISIVE",
+      "AWAY_TRAVEL_THREAT",
+      "LINEUP_UNIT_EDGE_SOFT",
+      "H2H_UNAVAILABLE"
+    ],
+    "context_signal": "RCD Mallorca Win",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [],
   "caution_layers": [
     "TEAM_POWER_NOT_DECISIVE",
     "AWAY_TRAVEL_THREAT",
-    "LINEUP_DATA_MISSING",
+    "LINEUP_UNIT_EDGE_SOFT",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -71,30 +109,37 @@
       "leader": "Villarreal"
     }
   ],
-  "unit_battle_summary": [],
-  "key_player_drivers": [
+  "unit_battle_summary": [
     {
-      "team": "Villarreal",
-      "player": "Nicolas Pépé",
-      "role": "Forward",
-      "power": 62,
-      "driver_metric": "Goal Threat",
-      "driver_value": 59
+      "label": "Attack vs Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "Villarreal",
-      "player": "Álvaro Santiago Mouriño González",
-      "role": "Centre Back",
-      "power": 55,
-      "driver_metric": "Midfield Engine",
-      "driver_value": 56
+      "label": "Midfield Control",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     }
   ],
+  "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "summary": "No publish-safe H2H regime snapshot is available yet for this fixture, so H2H remains supporting-only.",
+    "sample_size": 0,
+    "goal_environment": 0,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 0
   },
   "market_suitability": {
     "ftr": {
@@ -135,9 +180,32 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 49,
+      "alignment_score": 48,
       "state": "AVOID",
-      "model_lean": "HOME",
+      "audit_state": "AVOID",
+      "model_lean": "DRAW",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "DRAW",
+        "bookie_pick": "HOME",
+        "pick_probability": 0.0,
+        "probabilities": {
+          "HOME": 0.2372790382921077,
+          "DRAW": 0.41818550200620286,
+          "AWAY": 0.34453545970168953
+        },
+        "xgb_pick": "DRAW",
+        "xgb_pick_probability": 0.3747955560684204,
+        "xgb_probabilities": {
+          "HOME": 0.3285926580429077,
+          "DRAW": 0.3747955560684204,
+          "AWAY": 0.29661181569099426
+        },
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "HOME",
       "structural_support": [],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
@@ -150,7 +218,28 @@
     "btts": {
       "alignment_score": 51,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "YES",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "YES",
+        "bookie_pick": "YES",
+        "pick_probability": 0.5753532617279016,
+        "probabilities": {
+          "YES": 0.5753532617279016,
+          "NO": 0.4246467382720984
+        },
+        "xgb_pick": "YES",
+        "xgb_pick_probability": 0.9084999561309814,
+        "xgb_probabilities": {
+          "YES": 0.9084999561309814,
+          "NO": 0.09150004386901855
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "YES",
       "structural_support": [],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
@@ -163,7 +252,28 @@
     "ou25": {
       "alignment_score": 52,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "OVER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "OVER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.5461658170603001,
+        "probabilities": {
+          "OVER25": 0.5461658170603001,
+          "UNDER25": 0.4538341829396999
+        },
+        "xgb_pick": "OVER25",
+        "xgb_pick_probability": 0.6923792362213135,
+        "xgb_probabilities": {
+          "OVER25": 0.6923792362213135,
+          "UNDER25": 0.3076207637786865
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "OVER25",
       "structural_support": [],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
@@ -176,10 +286,13 @@
     "team_goals": {
       "alignment_score": 57,
       "state": "FRAGILE",
-      "model_lean": "Villarreal 1.5+",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Villarreal 1.5+",
       "structural_support": [],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
       "public_summary": "Team Goals has some structural support from structural support, but the overall layer fit remains fragile.",
       "rating": 68,
@@ -188,7 +301,10 @@
     "correct_score": {
       "alignment_score": 56,
       "state": "FRAGILE",
-      "model_lean": "OPEN",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "OPEN",
       "structural_support": [],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE"
@@ -200,7 +316,10 @@
     "corners": {
       "alignment_score": 32,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
@@ -213,7 +332,10 @@
     "cards": {
       "alignment_score": 41,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
@@ -231,25 +353,22 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "RCD Mallorca Win is too contradicted across the current structural layers for RCD Mallorca vs Villarreal, so the clean read is caution rather than action.",
+  "public_safe_summary": "No published pick is active for RCD Mallorca vs Villarreal; the context layer is too contradicted to present as an action.",
   "internal_reason_tokens": [
     "TEAM_POWER_NOT_DECISIVE",
     "AWAY_TRAVEL_THREAT",
-    "LINEUP_DATA_MISSING",
+    "LINEUP_UNIT_EDGE_SOFT",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
     "support_count": 0,
     "caution_count": 4,
-    "lineup_available": false,
+    "lineup_available": true,
     "h2h_available": false
   },
-  "preview": {
-    "headline": "RCD Mallorca vs Villarreal: RCD Mallorca Win avoid",
-    "short_summary": "RCD Mallorca Win is too contradicted across the current structural layers for RCD Mallorca vs Villarreal, so the clean read is caution rather than action. Primary support comes from structural caution, while the main caution remains team power not decisive.",
-    "market_summary": "Best aligned market: Team Goals (Fragile). Secondary support: Correct Score. Weakest read: Corners.",
-    "caution_line": "Main caution: Team Power Not Decisive.",
-    "telegram_summary": "RCD Mallorca vs Villarreal — RCD Mallorca Win (Avoid, 32% agreement). Support: structural caution. Caution: Team Power Not Decisive.",
-    "premium_summary": "RCD Mallorca Win is carrying a 32% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from team power not decisive, away travel threat."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-10T12:00:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

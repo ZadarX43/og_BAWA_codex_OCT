@@ -1,16 +1,53 @@
 {
   "fixture_key": "2026_05_10_West_Ham_United_Arsenal",
   "fixture": "West Ham United vs Arsenal",
-  "primary_signal": "BTTS Yes",
+  "primary_signal": "No published pick",
+  "context_signal": "BTTS Yes",
   "signal_state": "AVOID",
-  "agreement_score": 26,
+  "agreement_score": 30,
   "confidence_band": "LOW",
+  "route_state": "OBSERVE",
+  "route_market": "BTTS",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "AVOID",
+  "audit_agreement_score": 30,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "BTTS",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "AVOID",
+    "agreement_score": 30,
+    "confidence_band": "LOW",
+    "supporting_layers": [],
+    "caution_layers": [
+      "BTTS_PRESSURE_WEAK",
+      "GOAL_ENVIRONMENT_SOFT",
+      "DEFENSIVE_SUPPRESSION_RISK",
+      "H2H_UNAVAILABLE"
+    ],
+    "context_signal": "BTTS Yes",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [],
   "caution_layers": [
     "BTTS_PRESSURE_WEAK",
     "GOAL_ENVIRONMENT_SOFT",
     "DEFENSIVE_SUPPRESSION_RISK",
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -75,46 +112,37 @@
       "leader": "West Ham United"
     }
   ],
-  "unit_battle_summary": [],
-  "key_player_drivers": [
+  "unit_battle_summary": [
     {
-      "team": "West Ham United",
-      "player": "Crysencio Summerville",
-      "role": "Forward",
-      "power": 59,
-      "driver_metric": "Goal Threat",
-      "driver_value": 61
+      "label": "Attack vs Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "West Ham United",
-      "player": "Jarrod Bowen",
-      "role": "Forward",
-      "power": 59,
-      "driver_metric": "Goal Threat",
-      "driver_value": 60
+      "label": "Midfield Control",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "Arsenal",
-      "player": "Viktor Gyökeres",
-      "role": "Forward",
-      "power": 73,
-      "driver_metric": "Goal Threat",
-      "driver_value": 75
-    },
-    {
-      "team": "Arsenal",
-      "player": "David Raya",
-      "role": "Goalkeeper",
-      "power": 69,
-      "driver_metric": "Midfield Engine",
-      "driver_value": 50
+      "label": "Away Attack vs Home Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     }
   ],
+  "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "summary": "No publish-safe H2H regime snapshot is available yet for this fixture, so H2H remains supporting-only.",
+    "sample_size": 0,
+    "goal_environment": 0,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 0
   },
   "market_suitability": {
     "ftr": {
@@ -157,7 +185,30 @@
     "ftr": {
       "alignment_score": 69,
       "state": "MIXED",
+      "audit_state": "MIXED",
       "model_lean": "AWAY",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "AWAY",
+        "bookie_pick": "AWAY",
+        "pick_probability": 0.5357539364456133,
+        "probabilities": {
+          "HOME": 0.22570659111544147,
+          "DRAW": 0.23589111349124123,
+          "AWAY": 0.5384022953933173
+        },
+        "xgb_pick": "HOME",
+        "xgb_pick_probability": 0.8904112577438354,
+        "xgb_probabilities": {
+          "HOME": 0.8904112577438354,
+          "DRAW": 0.006622491870075464,
+          "AWAY": 0.10296623408794403
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "AWAY",
       "structural_support": [],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
@@ -168,9 +219,30 @@
       "band": "Strong"
     },
     "btts": {
-      "alignment_score": 34,
+      "alignment_score": 37,
       "state": "AVOID",
-      "model_lean": "YES",
+      "audit_state": "AVOID",
+      "model_lean": "NO",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "NO",
+        "bookie_pick": "NO",
+        "pick_probability": 0.6223860188738826,
+        "probabilities": {
+          "YES": 0.37761398112611744,
+          "NO": 0.6223860188738826
+        },
+        "xgb_pick": "NO",
+        "xgb_pick_probability": 0.6789155900478363,
+        "xgb_probabilities": {
+          "NO": 0.6789155900478363,
+          "YES": 0.3210844099521637
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "YES",
       "structural_support": [],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
@@ -184,7 +256,28 @@
     "ou25": {
       "alignment_score": 40,
       "state": "AVOID",
-      "model_lean": "UNDER25",
+      "audit_state": "AVOID",
+      "model_lean": "OVER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "OVER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.5017561557338127,
+        "probabilities": {
+          "OVER25": 0.5017561557338127,
+          "UNDER25": 0.4982438442661873
+        },
+        "xgb_pick": "UNDER25",
+        "xgb_pick_probability": 0.08702702075242996,
+        "xgb_probabilities": {
+          "UNDER25": 0.08702702075242996,
+          "OVER25": 0.91297297924757
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "UNDER25",
       "structural_support": [],
       "cautions": [
         "GOAL_ENVIRONMENT_SOFT",
@@ -195,13 +288,15 @@
       "band": "Weak"
     },
     "team_goals": {
-      "alignment_score": 49,
+      "alignment_score": 53,
       "state": "FRAGILE",
-      "model_lean": "West Ham United 1.5+",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "West Ham United 1.5+",
       "structural_support": [],
       "cautions": [
-        "GOAL_ENVIRONMENT_SOFT",
-        "LINEUP_DATA_MISSING"
+        "GOAL_ENVIRONMENT_SOFT"
       ],
       "public_summary": "Team Goals has some structural support from structural support, but the overall layer fit remains fragile.",
       "rating": 63,
@@ -210,7 +305,10 @@
     "correct_score": {
       "alignment_score": 50,
       "state": "FRAGILE",
-      "model_lean": "STRUCTURED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "STRUCTURED",
       "structural_support": [],
       "cautions": [
         "GOAL_ENVIRONMENT_SOFT",
@@ -223,7 +321,10 @@
     "corners": {
       "alignment_score": 49,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [],
       "cautions": [
         "BTTS_PRESSURE_WEAK"
@@ -235,7 +336,10 @@
     "cards": {
       "alignment_score": 30,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
@@ -253,26 +357,22 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "BTTS Yes is too contradicted across the current structural layers for West Ham United vs Arsenal, so the clean read is caution rather than action.",
+  "public_safe_summary": "No published pick is active for West Ham United vs Arsenal; the context layer is too contradicted to present as an action.",
   "internal_reason_tokens": [
     "BTTS_PRESSURE_WEAK",
     "GOAL_ENVIRONMENT_SOFT",
     "DEFENSIVE_SUPPRESSION_RISK",
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
     "support_count": 0,
-    "caution_count": 5,
-    "lineup_available": false,
+    "caution_count": 4,
+    "lineup_available": true,
     "h2h_available": false
   },
-  "preview": {
-    "headline": "West Ham United vs Arsenal: BTTS Yes avoid",
-    "short_summary": "BTTS Yes is too contradicted across the current structural layers for West Ham United vs Arsenal, so the clean read is caution rather than action. Primary support comes from structural caution, while the main caution remains btts pressure weak.",
-    "market_summary": "Best aligned market: FTR (Mixed). Secondary support: Correct Score. Weakest read: Cards.",
-    "caution_line": "Main caution: Btts Pressure Weak.",
-    "telegram_summary": "West Ham United vs Arsenal — BTTS Yes (Avoid, 26% agreement). Support: structural caution. Caution: Btts Pressure Weak.",
-    "premium_summary": "BTTS Yes is carrying a 26% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from btts pressure weak, goal environment soft."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-10T15:30:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

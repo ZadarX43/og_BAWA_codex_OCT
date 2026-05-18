@@ -2,14 +2,50 @@
   "fixture_key": "2026_05_09_Atlanta_United_FC_LA_Galaxy",
   "fixture": "Atlanta United FC vs LA Galaxy",
   "primary_signal": "BTTS Yes",
+  "context_signal": "BTTS Yes",
   "signal_state": "AVOID",
-  "agreement_score": 32,
+  "agreement_score": 36,
   "confidence_band": "ELITE",
+  "route_state": "DEPLOY",
+  "route_market": "BTTS",
+  "route_pick": "YES",
+  "route_active": true,
+  "route_label": "BTTS Yes",
+  "route_confidence_tier": "ELITE",
+  "route_bookie_od": 1.53,
+  "route_value_edge_label": "positive",
+  "audit_state": "AVOID",
+  "audit_agreement_score": 36,
+  "audit_confidence_band": "ELITE",
+  "conflict_level": "CAUTION",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "DEPLOY",
+    "route_market": "BTTS",
+    "route_pick": "YES",
+    "route_active": true,
+    "confidence_tier": "ELITE",
+    "bookie_od": 1.53,
+    "value_edge_label": "positive",
+    "premium_tier": "ELITE"
+  },
+  "context_audit": {
+    "state": "AVOID",
+    "agreement_score": 36,
+    "confidence_band": "ELITE",
+    "supporting_layers": [],
+    "caution_layers": [
+      "BTTS_PRESSURE_WEAK",
+      "GOAL_ENVIRONMENT_SOFT",
+      "H2H_UNAVAILABLE"
+    ],
+    "context_signal": "BTTS Yes",
+    "conflict_level": "CAUTION"
+  },
   "supporting_layers": [],
   "caution_layers": [
     "BTTS_PRESSURE_WEAK",
     "GOAL_ENVIRONMENT_SOFT",
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -71,7 +107,26 @@
       "leader": "LA Galaxy"
     }
   ],
-  "unit_battle_summary": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 36,
+      "away_value": 50,
+      "delta": -14
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 56,
+      "away_value": 50,
+      "delta": 6
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 50,
+      "away_value": 47,
+      "delta": 3
+    }
+  ],
   "key_player_drivers": [
     {
       "team": "Atlanta United FC",
@@ -106,11 +161,57 @@
       "driver_value": 70
     }
   ],
-  "key_mismatches": [],
+  "key_mismatches": [
+    {
+      "zone": "Atlanta United FC attack vs Los Angeles Galaxy defence",
+      "advantage": "Los Angeles Galaxy",
+      "mismatch_score": 14,
+      "left_label": "Atlanta United FC attack",
+      "left_value": 36,
+      "right_label": "Los Angeles Galaxy defence",
+      "right_value": 50,
+      "summary": "Los Angeles Galaxy defensive resistance is suppressing the home attack"
+    },
+    {
+      "zone": "Atlanta United FC wide threat vs Los Angeles Galaxy resistance",
+      "advantage": "Atlanta United FC",
+      "mismatch_score": 6,
+      "left_label": "Atlanta United FC wide threat",
+      "left_value": 56,
+      "right_label": "Los Angeles Galaxy resistance",
+      "right_value": 50,
+      "summary": "Atlanta United FC wide channel has a live attacking edge"
+    },
+    {
+      "zone": "Midfield control battle",
+      "advantage": "Atlanta United FC",
+      "mismatch_score": 6,
+      "left_label": "Atlanta United FC midfield",
+      "left_value": 56,
+      "right_label": "Los Angeles Galaxy midfield",
+      "right_value": 50,
+      "summary": "Atlanta United FC should control more of the central game-state"
+    },
+    {
+      "zone": "Los Angeles Galaxy attack vs Atlanta United FC defence",
+      "advantage": "Los Angeles Galaxy",
+      "mismatch_score": 3,
+      "left_label": "Los Angeles Galaxy attack",
+      "left_value": 50,
+      "right_label": "Atlanta United FC defence",
+      "right_value": 47,
+      "summary": "Major Los Angeles Galaxy attacking advantage"
+    }
+  ],
   "h2h_context": {
     "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "summary": "No publish-safe H2H regime snapshot is available yet for this fixture, so H2H remains supporting-only.",
+    "sample_size": 0,
+    "goal_environment": 0,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 0
   },
   "market_suitability": {
     "ftr": {
@@ -153,7 +254,30 @@
     "ftr": {
       "alignment_score": 40,
       "state": "AVOID",
+      "audit_state": "AVOID",
       "model_lean": "AWAY",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "AWAY",
+        "bookie_pick": "HOME",
+        "pick_probability": 0.2125,
+        "probabilities": {
+          "HOME": 0.30727917200986826,
+          "DRAW": 0.30946573303340597,
+          "AWAY": 0.3832550949567257
+        },
+        "xgb_pick": "HOME",
+        "xgb_pick_probability": 0.7619839310646057,
+        "xgb_probabilities": {
+          "HOME": 0.7619839310646057,
+          "DRAW": 0.12460018694400787,
+          "AWAY": 0.11341585218906403
+        },
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "AWAY",
       "structural_support": [],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
@@ -164,9 +288,30 @@
       "band": "Weak"
     },
     "btts": {
-      "alignment_score": 41,
+      "alignment_score": 43,
       "state": "AVOID",
+      "audit_state": "AVOID",
       "model_lean": "YES",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "YES",
+        "bookie_pick": "YES",
+        "pick_probability": 0.7507243756083869,
+        "probabilities": {
+          "YES": 0.7507243756083869,
+          "NO": 0.2492756243916131
+        },
+        "xgb_pick": "YES",
+        "xgb_pick_probability": 0.9161147475242615,
+        "xgb_probabilities": {
+          "YES": 0.9161147475242615,
+          "NO": 0.08388525247573853
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "YES",
       "structural_support": [],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
@@ -179,7 +324,28 @@
     "ou25": {
       "alignment_score": 41,
       "state": "AVOID",
-      "model_lean": "UNDER25",
+      "audit_state": "AVOID",
+      "model_lean": "OVER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "OVER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.7449211930614357,
+        "probabilities": {
+          "OVER25": 0.7449211930614357,
+          "UNDER25": 0.25507880693856433
+        },
+        "xgb_pick": "OVER25",
+        "xgb_pick_probability": 0.987476646900177,
+        "xgb_probabilities": {
+          "OVER25": 0.987476646900177,
+          "UNDER25": 0.012523353099822998
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "UNDER25",
       "structural_support": [],
       "cautions": [
         "GOAL_ENVIRONMENT_SOFT"
@@ -189,22 +355,27 @@
       "band": "Weak"
     },
     "team_goals": {
-      "alignment_score": 42,
-      "state": "AVOID",
-      "model_lean": "LA Galaxy 1.5+",
+      "alignment_score": 46,
+      "state": "FRAGILE",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "LA Galaxy 1.5+",
       "structural_support": [],
       "cautions": [
-        "GOAL_ENVIRONMENT_SOFT",
-        "LINEUP_DATA_MISSING"
+        "GOAL_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Team Goals is too contradicted by goal environment soft to present as a clean public read.",
+      "public_summary": "Team Goals has some structural support from structural support, but the overall layer fit remains fragile.",
       "rating": 54,
       "band": "Weak"
     },
     "correct_score": {
       "alignment_score": 81,
       "state": "SUPPORTED",
-      "model_lean": "STRUCTURED",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "STRUCTURED",
       "structural_support": [],
       "cautions": [
         "GOAL_ENVIRONMENT_SOFT"
@@ -216,7 +387,10 @@
     "corners": {
       "alignment_score": 45,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [],
       "cautions": [
         "BTTS_PRESSURE_WEAK"
@@ -228,7 +402,10 @@
     "cards": {
       "alignment_score": 45,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
@@ -246,25 +423,21 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "BTTS Yes is too contradicted across the current structural layers for Atlanta United FC vs LA Galaxy, so the clean read is caution rather than action.",
+  "public_safe_summary": "Published route remains BTTS Yes for Atlanta United FC vs LA Galaxy, while the context audit flags avoid because of btts pressure weak.",
   "internal_reason_tokens": [
     "BTTS_PRESSURE_WEAK",
     "GOAL_ENVIRONMENT_SOFT",
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
     "support_count": 0,
-    "caution_count": 4,
-    "lineup_available": false,
+    "caution_count": 3,
+    "lineup_available": true,
     "h2h_available": false
   },
-  "preview": {
-    "headline": "Atlanta United FC vs LA Galaxy: BTTS Yes avoid",
-    "short_summary": "BTTS Yes is too contradicted across the current structural layers for Atlanta United FC vs LA Galaxy, so the clean read is caution rather than action. Primary support comes from structural caution, while the main caution remains btts pressure weak.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Corners. Weakest read: FTR.",
-    "caution_line": "Main caution: Btts Pressure Weak.",
-    "telegram_summary": "Atlanta United FC vs LA Galaxy — BTTS Yes (Avoid, 32% agreement). Support: structural caution. Caution: Btts Pressure Weak.",
-    "premium_summary": "BTTS Yes is carrying a 32% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from btts pressure weak, goal environment soft."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-09T23:30:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

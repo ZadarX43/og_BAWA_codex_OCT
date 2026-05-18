@@ -1,18 +1,53 @@
 {
   "fixture_key": "2026_05_09_Liverpool_Chelsea",
   "fixture": "Liverpool vs Chelsea",
-  "primary_signal": "Over 2.5",
+  "primary_signal": "No published pick",
+  "context_signal": "Over 2.5",
   "signal_state": "WATCHLIST",
-  "agreement_score": 62,
+  "agreement_score": 66,
   "confidence_band": "MEDIUM",
+  "route_state": "OBSERVE",
+  "route_market": "OU25",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "WATCHLIST",
+  "audit_agreement_score": 66,
+  "audit_confidence_band": "MEDIUM",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "OU25",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "WATCHLIST",
+    "agreement_score": 66,
+    "confidence_band": "MEDIUM",
+    "supporting_layers": [
+      "OVER25_HEAT_SUPPORT",
+      "CHAOS_ENVIRONMENT_SUPPORT",
+      "H2H_OVER_SUPPORT"
+    ],
+    "caution_layers": [],
+    "context_signal": "Over 2.5",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [
     "OVER25_HEAT_SUPPORT",
     "CHAOS_ENVIRONMENT_SUPPORT",
     "H2H_OVER_SUPPORT"
   ],
-  "caution_layers": [
-    "LINEUP_DATA_MISSING"
-  ],
+  "caution_layers": [],
   "profile_tags": {
     "home": [
       "Open Match Profile"
@@ -72,41 +107,27 @@
       "leader": "Chelsea"
     }
   ],
-  "unit_battle_summary": [],
-  "key_player_drivers": [
+  "unit_battle_summary": [
     {
-      "team": "Liverpool",
-      "player": "Hugo Ekitike",
-      "role": "Forward",
-      "power": 73,
-      "driver_metric": "Goal Threat",
-      "driver_value": 74
+      "label": "Attack vs Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "Liverpool",
-      "player": "Dominik Szoboszlai",
-      "role": "Central Midfielder",
-      "power": 70,
-      "driver_metric": "Goal Threat",
-      "driver_value": 79
+      "label": "Midfield Control",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "Chelsea",
-      "player": "Moisés Caicedo",
-      "role": "Central Midfielder",
-      "power": 65,
-      "driver_metric": "Goal Threat",
-      "driver_value": 67
-    },
-    {
-      "team": "Chelsea",
-      "player": "Enzo Fernández",
-      "role": "Central Midfielder",
-      "power": 63,
-      "driver_metric": "Goal Threat",
-      "driver_value": 68
+      "label": "Away Attack vs Home Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     }
   ],
+  "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
     "available": true,
@@ -157,104 +178,167 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 70,
+      "alignment_score": 74,
       "state": "MIXED",
+      "audit_state": "MIXED",
       "model_lean": "HOME",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "HOME",
+        "bookie_pick": "HOME",
+        "pick_probability": 0.5364050989628679,
+        "probabilities": {
+          "HOME": 0.6032571823762404,
+          "DRAW": 0.2088898177709271,
+          "AWAY": 0.18785299985283263
+        },
+        "xgb_pick": "HOME",
+        "xgb_pick_probability": 0.5398898124694824,
+        "xgb_probabilities": {
+          "HOME": 0.5398898124694824,
+          "DRAW": 0.1803719401359558,
+          "AWAY": 0.2797382175922394
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "HOME",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
-      "cautions": [
-        "LINEUP_DATA_MISSING"
-      ],
-      "public_summary": "FTR has partial support from over 2.5 heat support, but lineup data missing keeps it from reading clean.",
+      "cautions": [],
+      "public_summary": "FTR has partial support from over 2.5 heat support, but no major caution published keeps it from reading clean.",
       "rating": 70,
       "band": "Positive"
     },
     "btts": {
-      "alignment_score": 66,
+      "alignment_score": 70,
       "state": "MIXED",
-      "model_lean": "YES",
+      "audit_state": "MIXED",
+      "model_lean": "NO",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "NO",
+        "bookie_pick": "NO",
+        "pick_probability": 0.6181713810367078,
+        "probabilities": {
+          "YES": 0.38182861896329223,
+          "NO": 0.6181713810367078
+        },
+        "xgb_pick": "YES",
+        "xgb_pick_probability": 0.2735379934310913,
+        "xgb_probabilities": {
+          "YES": 0.2735379934310913,
+          "NO": 0.7264620065689087
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "YES",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
-      "cautions": [
-        "LINEUP_DATA_MISSING"
-      ],
-      "public_summary": "BTTS has partial support from over 2.5 heat support, but lineup data missing keeps it from reading clean.",
+      "cautions": [],
+      "public_summary": "BTTS has partial support from over 2.5 heat support, but no major caution published keeps it from reading clean.",
       "rating": 64,
       "band": "Mixed"
     },
     "ou25": {
-      "alignment_score": 67,
+      "alignment_score": 70,
       "state": "WATCHLIST",
+      "audit_state": "WATCHLIST",
       "model_lean": "OVER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "OVER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.6364341203425634,
+        "probabilities": {
+          "OVER25": 0.6364341203425634,
+          "UNDER25": 0.3635658796574366
+        },
+        "xgb_pick": "UNDER25",
+        "xgb_pick_probability": 0.46266043186187744,
+        "xgb_probabilities": {
+          "UNDER25": 0.46266043186187744,
+          "OVER25": 0.5373395681381226
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "OVER25",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
-      "cautions": [
-        "LINEUP_DATA_MISSING"
-      ],
-      "public_summary": "Over 2.5 is interesting enough to monitor, but current support is better treated as watch-first because of lineup data missing.",
+      "cautions": [],
+      "public_summary": "Over 2.5 is interesting enough to monitor, but current support is better treated as watch-first because of no major caution published.",
       "rating": 75,
       "band": "Positive"
     },
     "team_goals": {
-      "alignment_score": 80,
+      "alignment_score": 84,
       "state": "SUPPORTED",
-      "model_lean": "Liverpool 1.5+",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Liverpool 1.5+",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
-      "cautions": [
-        "LINEUP_DATA_MISSING"
-      ],
-      "public_summary": "Team Goals is well supported by over 2.5 heat support, with caution still coming from lineup data missing.",
+      "cautions": [],
+      "public_summary": "Team Goals is well supported by over 2.5 heat support, with caution still coming from no major caution published.",
       "rating": 82,
       "band": "Strong"
     },
     "correct_score": {
-      "alignment_score": 87,
+      "alignment_score": 91,
       "state": "SUPPORTED",
-      "model_lean": "OPEN",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "OPEN",
       "structural_support": [
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
-      "cautions": [
-        "LINEUP_DATA_MISSING"
-      ],
-      "public_summary": "Correct Score is well supported by chaos environment support, with caution still coming from lineup data missing.",
+      "cautions": [],
+      "public_summary": "Correct Score is well supported by chaos environment support, with caution still coming from no major caution published.",
       "rating": 100,
       "band": "Elite"
     },
     "corners": {
-      "alignment_score": 82,
+      "alignment_score": 86,
       "state": "SUPPORTED",
-      "model_lean": "ELEVATED",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
-      "cautions": [
-        "LINEUP_DATA_MISSING"
-      ],
-      "public_summary": "Corners is well supported by over 2.5 heat support, with caution still coming from lineup data missing.",
+      "cautions": [],
+      "public_summary": "Corners is well supported by over 2.5 heat support, with caution still coming from no major caution published.",
       "rating": 85,
       "band": "Strong"
     },
     "cards": {
-      "alignment_score": 51,
+      "alignment_score": 55,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
-      "cautions": [
-        "LINEUP_DATA_MISSING"
-      ],
+      "cautions": [],
       "public_summary": "Cards has some structural support from chaos environment support, but the overall layer fit remains fragile.",
       "rating": 52,
       "band": "Weak"
@@ -262,7 +346,7 @@
   },
   "watchlist": {
     "active": true,
-    "summary": "Over 2.5 is better treated as a watch-first structure because lineup data missing.",
+    "summary": "No watchlist layer is active for this fixture.",
     "trigger_signals": [
       "Watch for early tempo and repeat penalty-box entries.",
       "Escalate only if control signals fail to settle the game.",
@@ -271,25 +355,21 @@
     "public_state": "Watchlist: wait for live confirmation",
     "mode": "OU25:OVER25"
   },
-  "public_safe_summary": "Over 2.5 has useful structure for Liverpool vs Chelsea, but the current layer fit is better treated as watch-first than pre-match deploy.",
+  "public_safe_summary": "No published pick is active for Liverpool vs Chelsea; the context layer is watch-first around Over 2.5.",
   "internal_reason_tokens": [
     "OVER25_HEAT_SUPPORT",
     "CHAOS_ENVIRONMENT_SUPPORT",
-    "H2H_OVER_SUPPORT",
-    "LINEUP_DATA_MISSING"
+    "H2H_OVER_SUPPORT"
   ],
   "summary": {
     "support_count": 3,
-    "caution_count": 1,
-    "lineup_available": false,
+    "caution_count": 0,
+    "lineup_available": true,
     "h2h_available": true
   },
-  "preview": {
-    "headline": "Liverpool vs Chelsea: Over 2.5 watchlist",
-    "short_summary": "Over 2.5 has useful structure for Liverpool vs Chelsea, but the current layer fit is better treated as watch-first than pre-match deploy. Primary support comes from over25 heat support, while the main caution remains lineup data missing.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Corners. Weakest read: Cards.",
-    "caution_line": "Main caution: Lineup Data Missing.",
-    "telegram_summary": "Liverpool vs Chelsea — Over 2.5 (Watchlist, 62% agreement). Support: Over25 Heat Support. Caution: Lineup Data Missing.",
-    "premium_summary": "Over 2.5 is carrying a 62% agreement read across the published decision layers. Support is currently led by over25 heat support, chaos environment support, while caution is still coming from lineup data missing."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-09T11:30:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

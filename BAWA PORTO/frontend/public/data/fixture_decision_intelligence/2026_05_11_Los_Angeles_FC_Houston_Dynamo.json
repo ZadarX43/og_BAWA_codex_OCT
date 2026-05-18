@@ -1,10 +1,48 @@
 {
   "fixture_key": "2026_05_11_Los_Angeles_FC_Houston_Dynamo",
   "fixture": "Los Angeles FC vs Houston Dynamo",
-  "primary_signal": "Los Angeles FC Win",
+  "primary_signal": "No published pick",
+  "context_signal": "Los Angeles FC Win",
   "signal_state": "FRAGILE",
   "agreement_score": 56,
   "confidence_band": "LOW",
+  "route_state": "OBSERVE",
+  "route_market": "FTR",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "FRAGILE",
+  "audit_agreement_score": 56,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "FTR",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "FRAGILE",
+    "agreement_score": 56,
+    "confidence_band": "LOW",
+    "supporting_layers": [
+      "TEAM_POWER_ADVANTAGE",
+      "HOME_FORTRESS_ADVANTAGE"
+    ],
+    "caution_layers": [
+      "LINEUP_UNIT_EDGE_SOFT"
+    ],
+    "context_signal": "Los Angeles FC Win",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [
     "TEAM_POWER_ADVANTAGE",
     "HOME_FORTRESS_ADVANTAGE"
@@ -218,7 +256,30 @@
     "ftr": {
       "alignment_score": 58,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "HOME",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "HOME",
+        "bookie_pick": "HOME",
+        "pick_probability": 0.37745098039215685,
+        "probabilities": {
+          "HOME": 0.47340327713922054,
+          "DRAW": 0.2744186786219128,
+          "AWAY": 0.25217804423886653
+        },
+        "xgb_pick": "HOME",
+        "xgb_pick_probability": 0.46561065316200256,
+        "xgb_probabilities": {
+          "HOME": 0.46561065316200256,
+          "DRAW": 0.1314583122730255,
+          "AWAY": 0.4029310643672943
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "HOME",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
@@ -233,7 +294,28 @@
     "btts": {
       "alignment_score": 48,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "NO",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "NO",
+        "bookie_pick": "NO",
+        "pick_probability": 0.5561167328876313,
+        "probabilities": {
+          "YES": 0.4438832671123687,
+          "NO": 0.5561167328876313
+        },
+        "xgb_pick": "YES",
+        "xgb_pick_probability": 0.4559541344642639,
+        "xgb_probabilities": {
+          "YES": 0.4559541344642639,
+          "NO": 0.5440458655357361
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "NO",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
@@ -248,7 +330,28 @@
     "ou25": {
       "alignment_score": 46,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "UNDER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "UNDER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.3159713783604229,
+        "probabilities": {
+          "OVER25": 0.3159713783604229,
+          "UNDER25": 0.6840286216395771
+        },
+        "xgb_pick": "UNDER25",
+        "xgb_pick_probability": 0.4348927438259125,
+        "xgb_probabilities": {
+          "UNDER25": 0.4348927438259125,
+          "OVER25": 0.5651072561740875
+        },
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "UNDER25",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
@@ -263,7 +366,10 @@
     "team_goals": {
       "alignment_score": 56,
       "state": "FRAGILE",
-      "model_lean": "Los Angeles FC 1.5+",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Los Angeles FC 1.5+",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
@@ -278,7 +384,10 @@
     "correct_score": {
       "alignment_score": 82,
       "state": "SUPPORTED",
-      "model_lean": "STRUCTURED",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "STRUCTURED",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE"
       ],
@@ -292,7 +401,10 @@
     "corners": {
       "alignment_score": 56,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
@@ -307,7 +419,10 @@
     "cards": {
       "alignment_score": 52,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
@@ -327,7 +442,7 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "Los Angeles FC Win has some live shape in Los Angeles FC vs Houston Dynamo, but the supporting layers remain fragile and need discipline.",
+  "public_safe_summary": "No published pick is active for Los Angeles FC vs Houston Dynamo; the fixture read is context only.",
   "internal_reason_tokens": [
     "TEAM_POWER_ADVANTAGE",
     "HOME_FORTRESS_ADVANTAGE",
@@ -339,12 +454,9 @@
     "lineup_available": true,
     "h2h_available": true
   },
-  "preview": {
-    "headline": "Los Angeles FC vs Houston Dynamo: Los Angeles FC Win fragile",
-    "short_summary": "Los Angeles FC Win has some live shape in Los Angeles FC vs Houston Dynamo, but the supporting layers remain fragile and need discipline. Primary support comes from team power advantage, while the main caution remains lineup unit edge soft.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: FTR. Weakest read: Over 2.5.",
-    "caution_line": "Main caution: Lineup Unit Edge Soft.",
-    "telegram_summary": "Los Angeles FC vs Houston Dynamo — Los Angeles FC Win (Fragile, 56% agreement). Support: Team Power Advantage. Caution: Lineup Unit Edge Soft.",
-    "premium_summary": "Los Angeles FC Win is carrying a 56% agreement read across the published decision layers. Support is currently led by team power advantage, home fortress advantage, while caution is still coming from lineup unit edge soft."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-11T01:00:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

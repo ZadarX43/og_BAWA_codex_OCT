@@ -2,17 +2,53 @@
   "fixture_key": "2026_05_10_FC_Barcelona_Real_Madrid",
   "fixture": "FC Barcelona vs Real Madrid",
   "primary_signal": "BTTS Yes",
-  "signal_state": "AVOID",
-  "agreement_score": 38,
+  "context_signal": "BTTS Yes",
+  "signal_state": "FRAGILE",
+  "agreement_score": 44,
   "confidence_band": "STANDARD",
+  "route_state": "DEPLOY",
+  "route_market": "BTTS",
+  "route_pick": "YES",
+  "route_active": true,
+  "route_label": "BTTS Yes",
+  "route_confidence_tier": "STANDARD",
+  "route_bookie_od": 1.27,
+  "route_value_edge_label": "negative",
+  "audit_state": "FRAGILE",
+  "audit_agreement_score": 44,
+  "audit_confidence_band": "STANDARD",
+  "conflict_level": "CAUTION",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "DEPLOY",
+    "route_market": "BTTS",
+    "route_pick": "YES",
+    "route_active": true,
+    "confidence_tier": "STANDARD",
+    "bookie_od": 1.27,
+    "value_edge_label": "negative",
+    "premium_tier": "STANDARD"
+  },
+  "context_audit": {
+    "state": "FRAGILE",
+    "agreement_score": 44,
+    "confidence_band": "STANDARD",
+    "supporting_layers": [
+      "GOAL_ENVIRONMENT_SUPPORT"
+    ],
+    "caution_layers": [
+      "BTTS_PRESSURE_WEAK",
+      "DEFENSIVE_SUPPRESSION_RISK"
+    ],
+    "context_signal": "BTTS Yes",
+    "conflict_level": "CAUTION"
+  },
   "supporting_layers": [
     "GOAL_ENVIRONMENT_SUPPORT"
   ],
   "caution_layers": [
     "BTTS_PRESSURE_WEAK",
-    "DEFENSIVE_SUPPRESSION_RISK",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "DEFENSIVE_SUPPRESSION_RISK"
   ],
   "profile_tags": {
     "home": [
@@ -79,46 +115,37 @@
       "leader": "FC Barcelona"
     }
   ],
-  "unit_battle_summary": [],
-  "key_player_drivers": [
+  "unit_battle_summary": [
     {
-      "team": "FC Barcelona",
-      "player": "Lamine Yamal",
-      "role": "Forward",
-      "power": 76,
-      "driver_metric": "Goal Threat",
-      "driver_value": 76
+      "label": "Attack vs Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "FC Barcelona",
-      "player": "Raphinha",
-      "role": "Forward",
-      "power": 67,
-      "driver_metric": "Goal Threat",
-      "driver_value": 66
+      "label": "Midfield Control",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "Real Madrid",
-      "player": "Vinicius Junior",
-      "role": "Forward",
-      "power": 83,
-      "driver_metric": "Goal Threat",
-      "driver_value": 84
-    },
-    {
-      "team": "Real Madrid",
-      "player": "Kylian Mbappé",
-      "role": "Forward",
-      "power": 78,
-      "driver_metric": "Goal Threat",
-      "driver_value": 79
+      "label": "Away Attack vs Home Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     }
   ],
+  "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
-    "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "available": true,
+    "summary": "Using the latest available same-team-pair historical regime (1 prior meeting) as supporting context for this current fixture.",
+    "sample_size": 1,
+    "goal_environment": 4,
+    "btts_regime": 0,
+    "over25_rate": 100,
+    "draw_rate": 0,
+    "booking_heat": 7
   },
   "market_suitability": {
     "ftr": {
@@ -161,7 +188,30 @@
     "ftr": {
       "alignment_score": 74,
       "state": "MIXED",
+      "audit_state": "MIXED",
       "model_lean": "DRAW",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "DRAW",
+        "bookie_pick": "HOME",
+        "pick_probability": 0.025,
+        "probabilities": {
+          "HOME": 0.280018833278122,
+          "DRAW": 0.4429179658071713,
+          "AWAY": 0.27706320091470676
+        },
+        "xgb_pick": "DRAW",
+        "xgb_pick_probability": 0.5550370216369629,
+        "xgb_probabilities": {
+          "HOME": 0.3471437990665436,
+          "DRAW": 0.5550370216369629,
+          "AWAY": 0.09781918674707413
+        },
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "DRAW",
       "structural_support": [
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
@@ -174,9 +224,30 @@
       "band": "Strong"
     },
     "btts": {
-      "alignment_score": 44,
-      "state": "AVOID",
+      "alignment_score": 48,
+      "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "YES",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "YES",
+        "bookie_pick": "YES",
+        "pick_probability": 0.601298837245193,
+        "probabilities": {
+          "YES": 0.601298837245193,
+          "NO": 0.39870116275480705
+        },
+        "xgb_pick": "YES",
+        "xgb_pick_probability": 0.9794274568557739,
+        "xgb_probabilities": {
+          "YES": 0.9794274568557739,
+          "NO": 0.020572543144226074
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "YES",
       "structural_support": [
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
@@ -184,14 +255,35 @@
         "BTTS_PRESSURE_WEAK",
         "DEFENSIVE_SUPPRESSION_RISK"
       ],
-      "public_summary": "BTTS is too contradicted by btts pressure weak to present as a clean public read.",
+      "public_summary": "BTTS has some structural support from goal environment support, but the overall layer fit remains fragile.",
       "rating": 53,
       "band": "Weak"
     },
     "ou25": {
       "alignment_score": 70,
       "state": "MIXED",
+      "audit_state": "MIXED",
       "model_lean": "OVER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "OVER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.7116656329494702,
+        "probabilities": {
+          "OVER25": 0.7116656329494702,
+          "UNDER25": 0.28833436705052984
+        },
+        "xgb_pick": "OVER25",
+        "xgb_pick_probability": 0.9723353385925293,
+        "xgb_probabilities": {
+          "OVER25": 0.9723353385925293,
+          "UNDER25": 0.027664661407470703
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "OVER25",
       "structural_support": [
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
@@ -203,23 +295,30 @@
       "band": "Positive"
     },
     "team_goals": {
-      "alignment_score": 75,
+      "alignment_score": 71,
       "state": "MIXED",
-      "model_lean": "FC Barcelona 1.5+",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "FC Barcelona 1.5+",
       "structural_support": [
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "BTTS_PRESSURE_WEAK",
+        "DEFENSIVE_SUPPRESSION_RISK"
       ],
-      "public_summary": "Team Goals has partial support from goal environment support, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Team Goals has partial support from goal environment support, but btts pressure weak keeps it from reading clean.",
       "rating": 84,
       "band": "Strong"
     },
     "correct_score": {
       "alignment_score": 87,
       "state": "SUPPORTED",
-      "model_lean": "OPEN",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "OPEN",
       "structural_support": [
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
@@ -233,7 +332,10 @@
     "corners": {
       "alignment_score": 82,
       "state": "SUPPORTED",
-      "model_lean": "ELEVATED",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
@@ -247,7 +349,10 @@
     "cards": {
       "alignment_score": 28,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
@@ -267,26 +372,21 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "BTTS Yes is too contradicted across the current structural layers for FC Barcelona vs Real Madrid, so the clean read is caution rather than action.",
+  "public_safe_summary": "Published route remains BTTS Yes for FC Barcelona vs Real Madrid, while the context audit flags fragile because of btts pressure weak.",
   "internal_reason_tokens": [
     "GOAL_ENVIRONMENT_SUPPORT",
     "BTTS_PRESSURE_WEAK",
-    "DEFENSIVE_SUPPRESSION_RISK",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "DEFENSIVE_SUPPRESSION_RISK"
   ],
   "summary": {
     "support_count": 1,
-    "caution_count": 4,
-    "lineup_available": false,
-    "h2h_available": false
+    "caution_count": 2,
+    "lineup_available": true,
+    "h2h_available": true
   },
-  "preview": {
-    "headline": "FC Barcelona vs Real Madrid: BTTS Yes avoid",
-    "short_summary": "BTTS Yes is too contradicted across the current structural layers for FC Barcelona vs Real Madrid, so the clean read is caution rather than action. Primary support comes from goal environment support, while the main caution remains btts pressure weak.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Corners. Weakest read: Cards.",
-    "caution_line": "Main caution: Btts Pressure Weak.",
-    "telegram_summary": "FC Barcelona vs Real Madrid — BTTS Yes (Avoid, 38% agreement). Support: Goal Environment Support. Caution: Btts Pressure Weak.",
-    "premium_summary": "BTTS Yes is carrying a 38% agreement read across the published decision layers. Support is currently led by goal environment support, while caution is still coming from btts pressure weak, defensive suppression risk."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-10T19:00:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

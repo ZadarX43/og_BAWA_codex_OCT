@@ -1,16 +1,53 @@
 {
   "fixture_key": "2026_05_09_Al_Khaleej_Al_Ittifaq",
   "fixture": "Al Khaleej vs Al Ittifaq",
-  "primary_signal": "BTTS Yes",
-  "signal_state": "AVOID",
-  "agreement_score": 44,
+  "primary_signal": "No published pick",
+  "context_signal": "BTTS Yes",
+  "signal_state": "FRAGILE",
+  "agreement_score": 48,
   "confidence_band": "LOW",
+  "route_state": "OBSERVE",
+  "route_market": "BTTS",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "FRAGILE",
+  "audit_agreement_score": 48,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "BTTS",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "FRAGILE",
+    "agreement_score": 48,
+    "confidence_band": "LOW",
+    "supporting_layers": [
+      "GOAL_ENVIRONMENT_SUPPORT"
+    ],
+    "caution_layers": [
+      "BTTS_PRESSURE_WEAK",
+      "H2H_UNAVAILABLE"
+    ],
+    "context_signal": "BTTS Yes",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [
     "GOAL_ENVIRONMENT_SUPPORT"
   ],
   "caution_layers": [
     "BTTS_PRESSURE_WEAK",
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -72,13 +109,37 @@
       "leader": "Al Khaleej"
     }
   ],
-  "unit_battle_summary": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    }
+  ],
   "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "summary": "No publish-safe H2H regime snapshot is available yet for this fixture, so H2H remains supporting-only.",
+    "sample_size": 0,
+    "goal_environment": 0,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 0
   },
   "market_suitability": {
     "ftr": {
@@ -121,71 +182,140 @@
     "ftr": {
       "alignment_score": 51,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "AWAY",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "AWAY",
+        "bookie_pick": "HOME",
+        "pick_probability": 0.31181121132456224,
+        "probabilities": {
+          "HOME": 0.31181121132456224,
+          "DRAW": 0.32510882614380715,
+          "AWAY": 0.3630799625316307
+        },
+        "xgb_pick": "HOME",
+        "xgb_pick_probability": 0.3562440276145935,
+        "xgb_probabilities": {
+          "HOME": 0.3562440276145935,
+          "DRAW": 0.33296263217926025,
+          "AWAY": 0.31079334020614624
+        },
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "AWAY",
       "structural_support": [
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
-        "LINEUP_DATA_MISSING"
+        "H2H_UNAVAILABLE"
       ],
       "public_summary": "FTR has some structural support from goal environment support, but the overall layer fit remains fragile.",
       "rating": 57,
       "band": "Mixed"
     },
     "btts": {
-      "alignment_score": 47,
-      "state": "AVOID",
-      "model_lean": "YES",
+      "alignment_score": 50,
+      "state": "FRAGILE",
+      "audit_state": "FRAGILE",
+      "model_lean": "NO",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "NO",
+        "bookie_pick": "NO",
+        "pick_probability": 0.5108825135932844,
+        "probabilities": {
+          "YES": 0.4891174864067156,
+          "NO": 0.5108825135932844
+        },
+        "xgb_pick": "",
+        "xgb_pick_probability": null,
+        "xgb_probabilities": {},
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "YES",
       "structural_support": [
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
         "BTTS_PRESSURE_WEAK"
       ],
-      "public_summary": "BTTS is too contradicted by btts pressure weak to present as a clean public read.",
+      "public_summary": "BTTS has some structural support from goal environment support, but the overall layer fit remains fragile.",
       "rating": 52,
       "band": "Weak"
     },
     "ou25": {
       "alignment_score": 59,
       "state": "FRAGILE",
-      "model_lean": "OVER25",
+      "audit_state": "FRAGILE",
+      "model_lean": "UNDER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "UNDER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.4871370078809869,
+        "probabilities": {
+          "OVER25": 0.4871370078809869,
+          "UNDER25": 0.5128629921190131
+        },
+        "xgb_pick": "OVER25",
+        "xgb_pick_probability": 0.5824493765830994,
+        "xgb_probabilities": {
+          "OVER25": 0.5824493765830994,
+          "UNDER25": 0.41755062341690063
+        },
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "OVER25",
       "structural_support": [
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
-        "LINEUP_DATA_MISSING"
+        "H2H_UNAVAILABLE"
       ],
       "public_summary": "Over 2.5 has some structural support from goal environment support, but the overall layer fit remains fragile.",
       "rating": 68,
       "band": "Mixed"
     },
     "team_goals": {
-      "alignment_score": 68,
+      "alignment_score": 64,
       "state": "MIXED",
-      "model_lean": "Al Khaleej 1.5+",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Al Khaleej 1.5+",
       "structural_support": [
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "BTTS_PRESSURE_WEAK",
+        "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Team Goals has partial support from goal environment support, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Team Goals has partial support from goal environment support, but btts pressure weak keeps it from reading clean.",
       "rating": 74,
       "band": "Strong"
     },
     "correct_score": {
       "alignment_score": 83,
       "state": "SUPPORTED",
-      "model_lean": "OPEN",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "OPEN",
       "structural_support": [
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
-        "LINEUP_DATA_MISSING"
+        "H2H_UNAVAILABLE"
       ],
       "public_summary": "Correct Score is well supported by goal environment support, with caution still coming from btts pressure weak.",
       "rating": 100,
@@ -194,7 +324,10 @@
     "corners": {
       "alignment_score": 44,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
@@ -208,13 +341,16 @@
     "cards": {
       "alignment_score": 59,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
-        "LINEUP_DATA_MISSING"
+        "H2H_UNAVAILABLE"
       ],
       "public_summary": "Cards has some structural support from goal environment support, but the overall layer fit remains fragile.",
       "rating": 68,
@@ -228,25 +364,21 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "BTTS Yes is too contradicted across the current structural layers for Al Khaleej vs Al Ittifaq, so the clean read is caution rather than action.",
+  "public_safe_summary": "No published pick is active for Al Khaleej vs Al Ittifaq; the fixture read is context only.",
   "internal_reason_tokens": [
     "GOAL_ENVIRONMENT_SUPPORT",
     "BTTS_PRESSURE_WEAK",
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
     "support_count": 1,
-    "caution_count": 3,
-    "lineup_available": false,
+    "caution_count": 2,
+    "lineup_available": true,
     "h2h_available": false
   },
-  "preview": {
-    "headline": "Al Khaleej vs Al Ittifaq: BTTS Yes avoid",
-    "short_summary": "BTTS Yes is too contradicted across the current structural layers for Al Khaleej vs Al Ittifaq, so the clean read is caution rather than action. Primary support comes from goal environment support, while the main caution remains btts pressure weak.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: Corners.",
-    "caution_line": "Main caution: Btts Pressure Weak.",
-    "telegram_summary": "Al Khaleej vs Al Ittifaq — BTTS Yes (Avoid, 44% agreement). Support: Goal Environment Support. Caution: Btts Pressure Weak.",
-    "premium_summary": "BTTS Yes is carrying a 44% agreement read across the published decision layers. Support is currently led by goal environment support, while caution is still coming from btts pressure weak, lineup data missing."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-09T15:55:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

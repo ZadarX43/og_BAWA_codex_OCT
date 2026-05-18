@@ -1,10 +1,46 @@
 {
   "fixture_key": "2026_05_10_Colorado_Rapids_St_Louis_City",
   "fixture": "Colorado Rapids vs St. Louis City",
-  "primary_signal": "BTTS Yes",
+  "primary_signal": "No published pick",
+  "context_signal": "BTTS Yes",
   "signal_state": "FRAGILE",
   "agreement_score": 38,
   "confidence_band": "LOW",
+  "route_state": "OBSERVE",
+  "route_market": "BTTS",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "FRAGILE",
+  "audit_agreement_score": 38,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "BTTS",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "FRAGILE",
+    "agreement_score": 38,
+    "confidence_band": "LOW",
+    "supporting_layers": [],
+    "caution_layers": [
+      "BTTS_PRESSURE_WEAK",
+      "GOAL_ENVIRONMENT_SOFT"
+    ],
+    "context_signal": "BTTS Yes",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [],
   "caution_layers": [
     "BTTS_PRESSURE_WEAK",
@@ -216,7 +252,30 @@
     "ftr": {
       "alignment_score": 40,
       "state": "AVOID",
+      "audit_state": "AVOID",
       "model_lean": "HOME",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "HOME",
+        "bookie_pick": "HOME",
+        "pick_probability": 0.37745098039215685,
+        "probabilities": {
+          "HOME": 0.4852458330418473,
+          "DRAW": 0.26832756322895823,
+          "AWAY": 0.24642660372919437
+        },
+        "xgb_pick": "AWAY",
+        "xgb_pick_probability": 0.8657464981079102,
+        "xgb_probabilities": {
+          "HOME": 0.11287397891283035,
+          "DRAW": 0.021379508078098297,
+          "AWAY": 0.8657464981079102
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "HOME",
       "structural_support": [],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
@@ -229,7 +288,28 @@
     "btts": {
       "alignment_score": 44,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "YES",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "YES",
+        "bookie_pick": "YES",
+        "pick_probability": 0.7780801266350518,
+        "probabilities": {
+          "YES": 0.7780801266350518,
+          "NO": 0.22191987336494823
+        },
+        "xgb_pick": "YES",
+        "xgb_pick_probability": 0.941769003868103,
+        "xgb_probabilities": {
+          "YES": 0.941769003868103,
+          "NO": 0.05823099613189697
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "YES",
       "structural_support": [],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
@@ -242,7 +322,28 @@
     "ou25": {
       "alignment_score": 45,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "UNDER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "UNDER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.46928363251253025,
+        "probabilities": {
+          "OVER25": 0.46928363251253025,
+          "UNDER25": 0.5307163674874698
+        },
+        "xgb_pick": "OVER25",
+        "xgb_pick_probability": 0.7698839902877808,
+        "xgb_probabilities": {
+          "OVER25": 0.7698839902877808,
+          "UNDER25": 0.23011600971221924
+        },
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "UNDER25",
       "structural_support": [],
       "cautions": [
         "GOAL_ENVIRONMENT_SOFT"
@@ -254,7 +355,10 @@
     "team_goals": {
       "alignment_score": 54,
       "state": "FRAGILE",
-      "model_lean": "Colorado Rapids 1.5+",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Colorado Rapids 1.5+",
       "structural_support": [],
       "cautions": [
         "GOAL_ENVIRONMENT_SOFT"
@@ -266,7 +370,10 @@
     "correct_score": {
       "alignment_score": 81,
       "state": "SUPPORTED",
-      "model_lean": "STRUCTURED",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "STRUCTURED",
       "structural_support": [],
       "cautions": [
         "GOAL_ENVIRONMENT_SOFT"
@@ -278,7 +385,10 @@
     "corners": {
       "alignment_score": 49,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [],
       "cautions": [
         "BTTS_PRESSURE_WEAK"
@@ -290,7 +400,10 @@
     "cards": {
       "alignment_score": 44,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
@@ -308,7 +421,7 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "BTTS Yes has some live shape in Colorado Rapids vs St. Louis City, but the supporting layers remain fragile and need discipline.",
+  "public_safe_summary": "No published pick is active for Colorado Rapids vs St. Louis City; the fixture read is context only.",
   "internal_reason_tokens": [
     "BTTS_PRESSURE_WEAK",
     "GOAL_ENVIRONMENT_SOFT"
@@ -319,12 +432,9 @@
     "lineup_available": true,
     "h2h_available": true
   },
-  "preview": {
-    "headline": "Colorado Rapids vs St. Louis City: BTTS Yes fragile",
-    "short_summary": "BTTS Yes has some live shape in Colorado Rapids vs St. Louis City, but the supporting layers remain fragile and need discipline. Primary support comes from structural caution, while the main caution remains btts pressure weak.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: FTR.",
-    "caution_line": "Main caution: Btts Pressure Weak.",
-    "telegram_summary": "Colorado Rapids vs St. Louis City — BTTS Yes (Fragile, 38% agreement). Support: structural caution. Caution: Btts Pressure Weak.",
-    "premium_summary": "BTTS Yes is carrying a 38% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from btts pressure weak, goal environment soft."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-10T01:30:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

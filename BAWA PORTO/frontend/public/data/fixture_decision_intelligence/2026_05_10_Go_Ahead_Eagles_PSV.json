@@ -2,15 +2,52 @@
   "fixture_key": "2026_05_10_Go_Ahead_Eagles_PSV",
   "fixture": "Go Ahead Eagles vs PSV",
   "primary_signal": "Over 2.5",
+  "context_signal": "Over 2.5",
   "signal_state": "FRAGILE",
-  "agreement_score": 56,
+  "agreement_score": 60,
   "confidence_band": "STANDARD",
+  "route_state": "DEPLOY",
+  "route_market": "OU25",
+  "route_pick": "OVER25",
+  "route_active": true,
+  "route_label": "Over 2.5",
+  "route_confidence_tier": "STANDARD",
+  "route_bookie_od": 1.3,
+  "route_value_edge_label": "positive",
+  "audit_state": "FRAGILE",
+  "audit_agreement_score": 60,
+  "audit_confidence_band": "STANDARD",
+  "conflict_level": "CAUTION",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "DEPLOY",
+    "route_market": "OU25",
+    "route_pick": "OVER25",
+    "route_active": true,
+    "confidence_tier": "STANDARD",
+    "bookie_od": 1.3,
+    "value_edge_label": "positive",
+    "premium_tier": "STANDARD"
+  },
+  "context_audit": {
+    "state": "FRAGILE",
+    "agreement_score": 60,
+    "confidence_band": "STANDARD",
+    "supporting_layers": [
+      "OVER25_HEAT_SUPPORT",
+      "CHAOS_ENVIRONMENT_SUPPORT"
+    ],
+    "caution_layers": [
+      "H2H_UNAVAILABLE"
+    ],
+    "context_signal": "Over 2.5",
+    "conflict_level": "CAUTION"
+  },
   "supporting_layers": [
     "OVER25_HEAT_SUPPORT",
     "CHAOS_ENVIRONMENT_SUPPORT"
   ],
   "caution_layers": [
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -75,30 +112,37 @@
       "leader": "PSV"
     }
   ],
-  "unit_battle_summary": [],
-  "key_player_drivers": [
+  "unit_battle_summary": [
     {
-      "team": "PSV",
-      "player": "Joey Veerman",
-      "role": "Central Midfielder",
-      "power": 64,
-      "driver_metric": "Creative Spark",
-      "driver_value": 61
+      "label": "Attack vs Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "PSV",
-      "player": "Ivan Perišić",
-      "role": "Forward",
-      "power": 60,
-      "driver_metric": "Goal Threat",
-      "driver_value": 62
+      "label": "Midfield Control",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     }
   ],
+  "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "summary": "No publish-safe H2H regime snapshot is available yet for this fixture, so H2H remains supporting-only.",
+    "sample_size": 0,
+    "goal_environment": 0,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 0
   },
   "market_suitability": {
     "ftr": {
@@ -139,31 +183,73 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 82,
+      "alignment_score": 86,
       "state": "SUPPORTED",
+      "audit_state": "SUPPORTED",
       "model_lean": "AWAY",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "AWAY",
+        "bookie_pick": "AWAY",
+        "pick_probability": 0.25,
+        "probabilities": {
+          "HOME": 0.3242410555923095,
+          "DRAW": 0.3289981159093569,
+          "AWAY": 0.3467608284983337
+        },
+        "xgb_pick": "HOME",
+        "xgb_pick_probability": 0.9761068820953369,
+        "xgb_probabilities": {
+          "HOME": 0.9761068820953369,
+          "DRAW": 0.00694450456649065,
+          "AWAY": 0.01694856956601143
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "AWAY",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "FTR is well supported by over 2.5 heat support, with caution still coming from lineup data missing.",
+      "public_summary": "FTR is well supported by over 2.5 heat support, with caution still coming from h2h unavailable.",
       "rating": 91,
       "band": "Elite"
     },
     "btts": {
-      "alignment_score": 56,
+      "alignment_score": 60,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "YES",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "YES",
+        "bookie_pick": "YES",
+        "pick_probability": 0.7830724391703704,
+        "probabilities": {
+          "YES": 0.7830724391703704,
+          "NO": 0.2169275608296296
+        },
+        "xgb_pick": "YES",
+        "xgb_pick_probability": 0.8817858695983887,
+        "xgb_probabilities": {
+          "YES": 0.8817858695983887,
+          "NO": 0.11821413040161133
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "YES",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "BTTS has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
@@ -171,15 +257,35 @@
       "band": "Mixed"
     },
     "ou25": {
-      "alignment_score": 64,
+      "alignment_score": 66,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "OVER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "OVER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.7911128791950589,
+        "probabilities": {
+          "OVER25": 0.7911128791950589,
+          "UNDER25": 0.2088871208049411
+        },
+        "xgb_pick": "OVER25",
+        "xgb_pick_probability": 0.9129060506820679,
+        "xgb_probabilities": {
+          "OVER25": 0.9129060506820679,
+          "UNDER25": 0.08709394931793213
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "OVER25",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "Over 2.5 has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
@@ -189,61 +295,70 @@
     "team_goals": {
       "alignment_score": 86,
       "state": "SUPPORTED",
-      "model_lean": "PSV 1.5+",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "PSV 1.5+",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Team Goals is well supported by over 2.5 heat support, with caution still coming from lineup data missing.",
+      "public_summary": "Team Goals is well supported by over 2.5 heat support, with caution still coming from h2h unavailable.",
       "rating": 90,
       "band": "Strong"
     },
     "correct_score": {
-      "alignment_score": 76,
-      "state": "MIXED",
-      "model_lean": "OPEN",
+      "alignment_score": 80,
+      "state": "SUPPORTED",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "OPEN",
       "structural_support": [
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Correct Score has partial support from chaos environment support, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Correct Score is well supported by chaos environment support, with caution still coming from h2h unavailable.",
       "rating": 90,
       "band": "Elite"
     },
     "corners": {
-      "alignment_score": 75,
+      "alignment_score": 79,
       "state": "MIXED",
-      "model_lean": "ELEVATED",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Corners has partial support from over 2.5 heat support, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Corners has partial support from over 2.5 heat support, but h2h unavailable keeps it from reading clean.",
       "rating": 81,
       "band": "Strong"
     },
     "cards": {
-      "alignment_score": 40,
+      "alignment_score": 44,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Cards is too contradicted by lineup data missing to present as a clean public read.",
+      "public_summary": "Cards is too contradicted by h2h unavailable to present as a clean public read.",
       "rating": 42,
       "band": "Weak"
     }
@@ -255,25 +370,21 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "Over 2.5 has some live shape in Go Ahead Eagles vs PSV, but the supporting layers remain fragile and need discipline.",
+  "public_safe_summary": "Published route remains Over 2.5 for Go Ahead Eagles vs PSV, while the context audit flags fragile because of h2h unavailable.",
   "internal_reason_tokens": [
     "OVER25_HEAT_SUPPORT",
     "CHAOS_ENVIRONMENT_SUPPORT",
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
     "support_count": 2,
-    "caution_count": 2,
-    "lineup_available": false,
+    "caution_count": 1,
+    "lineup_available": true,
     "h2h_available": false
   },
-  "preview": {
-    "headline": "Go Ahead Eagles vs PSV: Over 2.5 fragile",
-    "short_summary": "Over 2.5 has some live shape in Go Ahead Eagles vs PSV, but the supporting layers remain fragile and need discipline. Primary support comes from over25 heat support, while the main caution remains lineup data missing.",
-    "market_summary": "Best aligned market: Team Goals (Supported). Secondary support: FTR. Weakest read: Cards.",
-    "caution_line": "Main caution: Lineup Data Missing.",
-    "telegram_summary": "Go Ahead Eagles vs PSV — Over 2.5 (Fragile, 56% agreement). Support: Over25 Heat Support. Caution: Lineup Data Missing.",
-    "premium_summary": "Over 2.5 is carrying a 56% agreement read across the published decision layers. Support is currently led by over25 heat support, chaos environment support, while caution is still coming from lineup data missing, h2h unavailable."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-10T14:45:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

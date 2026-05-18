@@ -1,16 +1,55 @@
 {
   "fixture_key": "2026_05_10_Toulouse_Olympique_Lyonnais",
   "fixture": "Toulouse vs Olympique Lyonnais",
-  "primary_signal": "Olympique Lyonnais Win",
+  "primary_signal": "No published pick",
+  "context_signal": "Olympique Lyonnais Win",
   "signal_state": "FRAGILE",
-  "agreement_score": 56,
+  "agreement_score": 54,
   "confidence_band": "LOW",
+  "route_state": "OBSERVE",
+  "route_market": "FTR",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "FRAGILE",
+  "audit_agreement_score": 54,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "FTR",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "FRAGILE",
+    "agreement_score": 54,
+    "confidence_band": "LOW",
+    "supporting_layers": [
+      "AWAY_POWER_ADVANTAGE",
+      "AWAY_THREAT_ADVANTAGE"
+    ],
+    "caution_layers": [
+      "LINEUP_UNIT_EDGE_SOFT",
+      "H2H_UNAVAILABLE"
+    ],
+    "context_signal": "Olympique Lyonnais Win",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [
     "AWAY_POWER_ADVANTAGE",
     "AWAY_THREAT_ADVANTAGE"
   ],
   "caution_layers": [
-    "LINEUP_DATA_MISSING",
+    "LINEUP_UNIT_EDGE_SOFT",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -73,30 +112,37 @@
       "leader": "Olympique Lyonnais"
     }
   ],
-  "unit_battle_summary": [],
-  "key_player_drivers": [
+  "unit_battle_summary": [
     {
-      "team": "Olympique Lyonnais",
-      "player": "Amine Gouiri",
-      "role": "Forward",
-      "power": 50,
-      "driver_metric": "Creative Spark",
-      "driver_value": 50
+      "label": "Attack vs Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "Olympique Lyonnais",
-      "player": "Anthony Lopes",
-      "role": "Goalkeeper",
-      "power": 50,
-      "driver_metric": "Defensive Lock",
-      "driver_value": 50
+      "label": "Midfield Control",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     }
   ],
+  "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "summary": "No publish-safe H2H regime snapshot is available yet for this fixture, so H2H remains supporting-only.",
+    "sample_size": 0,
+    "goal_environment": 0,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 0
   },
   "market_suitability": {
     "ftr": {
@@ -137,15 +183,38 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 66,
+      "alignment_score": 65,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "AWAY",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "AWAY",
+        "bookie_pick": "AWAY",
+        "pick_probability": 1.0,
+        "probabilities": {
+          "HOME": 0.29759839835117224,
+          "DRAW": 0.28235120591893625,
+          "AWAY": 0.4200503957298915
+        },
+        "xgb_pick": "HOME",
+        "xgb_pick_probability": 0.5148512125015259,
+        "xgb_probabilities": {
+          "HOME": 0.5148512125015259,
+          "DRAW": 0.29656049609184265,
+          "AWAY": 0.18858829140663147
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "AWAY",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "FTR has some structural support from away power advantage, but the overall layer fit remains fragile.",
@@ -155,13 +224,34 @@
     "btts": {
       "alignment_score": 48,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "NO",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "NO",
+        "bookie_pick": "NO",
+        "pick_probability": 0.5337454854775097,
+        "probabilities": {
+          "YES": 0.46625451452249034,
+          "NO": 0.5337454854775097
+        },
+        "xgb_pick": "NO",
+        "xgb_pick_probability": 0.686235785484314,
+        "xgb_probabilities": {
+          "NO": 0.686235785484314,
+          "YES": 0.31376421451568604
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "NO",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "BTTS has some structural support from away power advantage, but the overall layer fit remains fragile.",
@@ -171,13 +261,34 @@
     "ou25": {
       "alignment_score": 49,
       "state": "FRAGILE",
-      "model_lean": "UNDER25",
+      "audit_state": "FRAGILE",
+      "model_lean": "OVER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "OVER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.5438660996020817,
+        "probabilities": {
+          "OVER25": 0.5438660996020817,
+          "UNDER25": 0.45613390039791835
+        },
+        "xgb_pick": "OVER25",
+        "xgb_pick_probability": 0.822864830493927,
+        "xgb_probabilities": {
+          "OVER25": 0.822864830493927,
+          "UNDER25": 0.177135169506073
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "UNDER25",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "Over 2.5 has some structural support from away power advantage, but the overall layer fit remains fragile.",
@@ -187,13 +298,16 @@
     "team_goals": {
       "alignment_score": 56,
       "state": "FRAGILE",
-      "model_lean": "Toulouse 1.5+",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Toulouse 1.5+",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
       "public_summary": "Team Goals has some structural support from away power advantage, but the overall layer fit remains fragile.",
       "rating": 50,
@@ -202,28 +316,34 @@
     "correct_score": {
       "alignment_score": 65,
       "state": "MIXED",
-      "model_lean": "STRUCTURED",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "STRUCTURED",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Correct Score has partial support from away power advantage, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Correct Score has partial support from away power advantage, but lineup unit edge soft keeps it from reading clean.",
       "rating": 76,
       "band": "Positive"
     },
     "corners": {
       "alignment_score": 60,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "Corners has some structural support from away power advantage, but the overall layer fit remains fragile.",
@@ -233,16 +353,19 @@
     "cards": {
       "alignment_score": 64,
       "state": "MIXED",
-      "model_lean": "ELEVATED",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Cards has partial support from away power advantage, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Cards has partial support from away power advantage, but lineup unit edge soft keeps it from reading clean.",
       "rating": 66,
       "band": "Mixed"
     }
@@ -254,25 +377,22 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "Olympique Lyonnais Win has some live shape in Toulouse vs Olympique Lyonnais, but the supporting layers remain fragile and need discipline.",
+  "public_safe_summary": "No published pick is active for Toulouse vs Olympique Lyonnais; the fixture read is context only.",
   "internal_reason_tokens": [
     "AWAY_POWER_ADVANTAGE",
     "AWAY_THREAT_ADVANTAGE",
-    "LINEUP_DATA_MISSING",
+    "LINEUP_UNIT_EDGE_SOFT",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
     "support_count": 2,
     "caution_count": 2,
-    "lineup_available": false,
+    "lineup_available": true,
     "h2h_available": false
   },
-  "preview": {
-    "headline": "Toulouse vs Olympique Lyonnais: Olympique Lyonnais Win fragile",
-    "short_summary": "Olympique Lyonnais Win has some live shape in Toulouse vs Olympique Lyonnais, but the supporting layers remain fragile and need discipline. Primary support comes from away power advantage, while the main caution remains lineup data missing.",
-    "market_summary": "Best aligned market: FTR (Fragile). Secondary support: Correct Score. Weakest read: BTTS.",
-    "caution_line": "Main caution: Lineup Data Missing.",
-    "telegram_summary": "Toulouse vs Olympique Lyonnais — Olympique Lyonnais Win (Fragile, 56% agreement). Support: Away Power Advantage. Caution: Lineup Data Missing.",
-    "premium_summary": "Olympique Lyonnais Win is carrying a 56% agreement read across the published decision layers. Support is currently led by away power advantage, away threat advantage, while caution is still coming from lineup data missing, h2h unavailable."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-10T00:00:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

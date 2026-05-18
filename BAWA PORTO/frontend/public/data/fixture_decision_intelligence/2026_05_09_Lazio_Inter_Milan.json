@@ -1,16 +1,55 @@
 {
   "fixture_key": "2026_05_09_Lazio_Inter_Milan",
   "fixture": "Lazio vs Inter Milan",
-  "primary_signal": "Inter Milan Win",
+  "primary_signal": "No published pick",
+  "context_signal": "Inter Milan Win",
   "signal_state": "FRAGILE",
-  "agreement_score": 56,
+  "agreement_score": 54,
   "confidence_band": "LOW",
+  "route_state": "OBSERVE",
+  "route_market": "FTR",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "FRAGILE",
+  "audit_agreement_score": 54,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "FTR",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "FRAGILE",
+    "agreement_score": 54,
+    "confidence_band": "LOW",
+    "supporting_layers": [
+      "AWAY_POWER_ADVANTAGE",
+      "AWAY_THREAT_ADVANTAGE"
+    ],
+    "caution_layers": [
+      "LINEUP_UNIT_EDGE_SOFT",
+      "H2H_UNAVAILABLE"
+    ],
+    "context_signal": "Inter Milan Win",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [
     "AWAY_POWER_ADVANTAGE",
     "AWAY_THREAT_ADVANTAGE"
   ],
   "caution_layers": [
-    "LINEUP_DATA_MISSING",
+    "LINEUP_UNIT_EDGE_SOFT",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -75,46 +114,37 @@
       "leader": "Lazio"
     }
   ],
-  "unit_battle_summary": [],
-  "key_player_drivers": [
+  "unit_battle_summary": [
     {
-      "team": "Lazio",
-      "player": "Luis Alberto",
-      "role": "Central Midfielder",
-      "power": 61,
-      "driver_metric": "Creative Spark",
-      "driver_value": 61
+      "label": "Attack vs Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "Lazio",
-      "player": "Ciro Immobile",
-      "role": "Forward",
-      "power": 59,
-      "driver_metric": "Goal Threat",
-      "driver_value": 64
+      "label": "Midfield Control",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "Inter Milan",
-      "player": "Marcus Thuram",
-      "role": "Forward",
-      "power": 66,
-      "driver_metric": "Goal Threat",
-      "driver_value": 66
-    },
-    {
-      "team": "Inter Milan",
-      "player": "Yann Sommer",
-      "role": "Goalkeeper",
-      "power": 62,
-      "driver_metric": "Defensive Lock",
-      "driver_value": 53
+      "label": "Away Attack vs Home Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     }
   ],
+  "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "summary": "No publish-safe H2H regime snapshot is available yet for this fixture, so H2H remains supporting-only.",
+    "sample_size": 0,
+    "goal_environment": 0,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 0
   },
   "market_suitability": {
     "ftr": {
@@ -155,15 +185,38 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 69,
+      "alignment_score": 68,
       "state": "FRAGILE",
-      "model_lean": "AWAY",
+      "audit_state": "FRAGILE",
+      "model_lean": "DRAW",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "DRAW",
+        "bookie_pick": "AWAY",
+        "pick_probability": 0.22972972972972974,
+        "probabilities": {
+          "HOME": 0.28041677339587423,
+          "DRAW": 0.3906950314316994,
+          "AWAY": 0.3288881951724264
+        },
+        "xgb_pick": "AWAY",
+        "xgb_pick_probability": 0.6264329552650452,
+        "xgb_probabilities": {
+          "HOME": 0.2709173858165741,
+          "DRAW": 0.10264971852302551,
+          "AWAY": 0.6264329552650452
+        },
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "AWAY",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "FTR has some structural support from away power advantage, but the overall layer fit remains fragile.",
@@ -173,13 +226,34 @@
     "btts": {
       "alignment_score": 46,
       "state": "FRAGILE",
-      "model_lean": "NO",
+      "audit_state": "FRAGILE",
+      "model_lean": "YES",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "YES",
+        "bookie_pick": "YES",
+        "pick_probability": 0.5143315619545851,
+        "probabilities": {
+          "YES": 0.5143315619545851,
+          "NO": 0.48566843804541493
+        },
+        "xgb_pick": "YES",
+        "xgb_pick_probability": 0.7363152503967285,
+        "xgb_probabilities": {
+          "YES": 0.7363152503967285,
+          "NO": 0.2636847496032715
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "NO",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "BTTS has some structural support from away power advantage, but the overall layer fit remains fragile.",
@@ -189,13 +263,34 @@
     "ou25": {
       "alignment_score": 57,
       "state": "FRAGILE",
-      "model_lean": "OVER25",
+      "audit_state": "FRAGILE",
+      "model_lean": "UNDER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "UNDER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.47773927740559663,
+        "probabilities": {
+          "OVER25": 0.47773927740559663,
+          "UNDER25": 0.5222607225944034
+        },
+        "xgb_pick": "OVER25",
+        "xgb_pick_probability": 0.5478271245956421,
+        "xgb_probabilities": {
+          "OVER25": 0.5478271245956421,
+          "UNDER25": 0.4521728754043579
+        },
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "OVER25",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "Over 2.5 has some structural support from away power advantage, but the overall layer fit remains fragile.",
@@ -205,43 +300,52 @@
     "team_goals": {
       "alignment_score": 82,
       "state": "SUPPORTED",
-      "model_lean": "Inter Milan 1.5+",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Inter Milan 1.5+",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
-      "public_summary": "Team Goals is well supported by away power advantage, with caution still coming from lineup data missing.",
+      "public_summary": "Team Goals is well supported by away power advantage, with caution still coming from lineup unit edge soft.",
       "rating": 85,
       "band": "Strong"
     },
     "correct_score": {
       "alignment_score": 83,
       "state": "SUPPORTED",
-      "model_lean": "STRUCTURED",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "STRUCTURED",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Correct Score is well supported by away power advantage, with caution still coming from lineup data missing.",
+      "public_summary": "Correct Score is well supported by away power advantage, with caution still coming from lineup unit edge soft.",
       "rating": 100,
       "band": "Elite"
     },
     "corners": {
       "alignment_score": 60,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "Corners has some structural support from away power advantage, but the overall layer fit remains fragile.",
@@ -251,13 +355,16 @@
     "cards": {
       "alignment_score": 46,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "Cards has some structural support from away power advantage, but the overall layer fit remains fragile.",
@@ -272,25 +379,22 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "Inter Milan Win has some live shape in Lazio vs Inter Milan, but the supporting layers remain fragile and need discipline.",
+  "public_safe_summary": "No published pick is active for Lazio vs Inter Milan; the fixture read is context only.",
   "internal_reason_tokens": [
     "AWAY_POWER_ADVANTAGE",
     "AWAY_THREAT_ADVANTAGE",
-    "LINEUP_DATA_MISSING",
+    "LINEUP_UNIT_EDGE_SOFT",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
     "support_count": 2,
     "caution_count": 2,
-    "lineup_available": false,
+    "lineup_available": true,
     "h2h_available": false
   },
-  "preview": {
-    "headline": "Lazio vs Inter Milan: Inter Milan Win fragile",
-    "short_summary": "Inter Milan Win has some live shape in Lazio vs Inter Milan, but the supporting layers remain fragile and need discipline. Primary support comes from away power advantage, while the main caution remains lineup data missing.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: BTTS.",
-    "caution_line": "Main caution: Lineup Data Missing.",
-    "telegram_summary": "Lazio vs Inter Milan — Inter Milan Win (Fragile, 56% agreement). Support: Away Power Advantage. Caution: Lineup Data Missing.",
-    "premium_summary": "Inter Milan Win is carrying a 56% agreement read across the published decision layers. Support is currently led by away power advantage, away threat advantage, while caution is still coming from lineup data missing, h2h unavailable."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-09T16:00:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

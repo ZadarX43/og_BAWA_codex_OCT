@@ -1,16 +1,53 @@
 {
   "fixture_key": "2026_05_09_Motherwell_Hearts",
   "fixture": "Motherwell vs Hearts",
-  "primary_signal": "Over 2.5",
+  "primary_signal": "No published pick",
+  "context_signal": "Over 2.5",
   "signal_state": "AVOID",
-  "agreement_score": 26,
+  "agreement_score": 30,
   "confidence_band": "LOW",
+  "route_state": "OBSERVE",
+  "route_market": "OU25",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "AVOID",
+  "audit_agreement_score": 30,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "OU25",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "AVOID",
+    "agreement_score": 30,
+    "confidence_band": "LOW",
+    "supporting_layers": [],
+    "caution_layers": [
+      "OVER25_HEAT_SOFT",
+      "CHAOS_ENVIRONMENT_SOFT",
+      "CONTROL_SUPPRESSION_RISK",
+      "H2H_UNAVAILABLE"
+    ],
+    "context_signal": "Over 2.5",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [],
   "caution_layers": [
     "OVER25_HEAT_SOFT",
     "CHAOS_ENVIRONMENT_SOFT",
     "CONTROL_SUPPRESSION_RISK",
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -75,13 +112,37 @@
       "leader": "Hearts"
     }
   ],
-  "unit_battle_summary": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    }
+  ],
   "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "summary": "No publish-safe H2H regime snapshot is available yet for this fixture, so H2H remains supporting-only.",
+    "sample_size": 0,
+    "goal_environment": 0,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 0
   },
   "market_suitability": {
     "ftr": {
@@ -124,7 +185,30 @@
     "ftr": {
       "alignment_score": 66,
       "state": "MIXED",
-      "model_lean": "AWAY",
+      "audit_state": "MIXED",
+      "model_lean": "HOME",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "HOME",
+        "bookie_pick": "HOME",
+        "pick_probability": 0.7872340425531915,
+        "probabilities": {
+          "HOME": 0.3802439625462026,
+          "DRAW": 0.3125313947976186,
+          "AWAY": 0.3072246426561788
+        },
+        "xgb_pick": "HOME",
+        "xgb_pick_probability": 0.624864935874939,
+        "xgb_probabilities": {
+          "HOME": 0.624864935874939,
+          "DRAW": 0.039380814880132675,
+          "AWAY": 0.3357542157173157
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "AWAY",
       "structural_support": [],
       "cautions": [
         "CONTROL_SUPPRESSION_RISK"
@@ -136,7 +220,28 @@
     "btts": {
       "alignment_score": 38,
       "state": "AVOID",
+      "audit_state": "AVOID",
       "model_lean": "NO",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "NO",
+        "bookie_pick": "NO",
+        "pick_probability": 0.5160692842800313,
+        "probabilities": {
+          "YES": 0.4839307157199687,
+          "NO": 0.5160692842800313
+        },
+        "xgb_pick": "NO",
+        "xgb_pick_probability": 0.8754436075687408,
+        "xgb_probabilities": {
+          "NO": 0.8754436075687408,
+          "YES": 0.12455639243125916
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "NO",
       "structural_support": [],
       "cautions": [
         "CONTROL_SUPPRESSION_RISK"
@@ -146,9 +251,30 @@
       "band": "Weak"
     },
     "ou25": {
-      "alignment_score": 28,
+      "alignment_score": 31,
       "state": "AVOID",
-      "model_lean": "OVER25",
+      "audit_state": "AVOID",
+      "model_lean": "UNDER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "UNDER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.4728379799086111,
+        "probabilities": {
+          "OVER25": 0.4728379799086111,
+          "UNDER25": 0.5271620200913889
+        },
+        "xgb_pick": "UNDER25",
+        "xgb_pick_probability": 0.38458359241485596,
+        "xgb_probabilities": {
+          "UNDER25": 0.38458359241485596,
+          "OVER25": 0.615416407585144
+        },
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "OVER25",
       "structural_support": [],
       "cautions": [
         "OVER25_HEAT_SOFT",
@@ -160,21 +286,28 @@
       "band": "Red Flag"
     },
     "team_goals": {
-      "alignment_score": 32,
+      "alignment_score": 28,
       "state": "AVOID",
-      "model_lean": "Hearts 1.5+",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Hearts 1.5+",
       "structural_support": [],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "OVER25_HEAT_SOFT",
+        "CHAOS_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Team Goals is too contradicted by lineup data missing to present as a clean public read.",
+      "public_summary": "Team Goals is too contradicted by over 2.5 heat soft to present as a clean public read.",
       "rating": 34,
       "band": "Red Flag"
     },
     "correct_score": {
       "alignment_score": 74,
       "state": "MIXED",
-      "model_lean": "STRUCTURED",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "STRUCTURED",
       "structural_support": [],
       "cautions": [
         "CHAOS_ENVIRONMENT_SOFT",
@@ -187,7 +320,10 @@
     "corners": {
       "alignment_score": 40,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [],
       "cautions": [
         "OVER25_HEAT_SOFT",
@@ -200,7 +336,10 @@
     "cards": {
       "alignment_score": 25,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [],
       "cautions": [
         "CHAOS_ENVIRONMENT_SOFT"
@@ -217,26 +356,22 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "Over 2.5 is too contradicted across the current structural layers for Motherwell vs Hearts, so the clean read is caution rather than action.",
+  "public_safe_summary": "No published pick is active for Motherwell vs Hearts; the context layer is too contradicted to present as an action.",
   "internal_reason_tokens": [
     "OVER25_HEAT_SOFT",
     "CHAOS_ENVIRONMENT_SOFT",
     "CONTROL_SUPPRESSION_RISK",
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
     "support_count": 0,
-    "caution_count": 5,
-    "lineup_available": false,
+    "caution_count": 4,
+    "lineup_available": true,
     "h2h_available": false
   },
-  "preview": {
-    "headline": "Motherwell vs Hearts: Over 2.5 avoid",
-    "short_summary": "Over 2.5 is too contradicted across the current structural layers for Motherwell vs Hearts, so the clean read is caution rather than action. Primary support comes from structural caution, while the main caution remains over25 heat soft.",
-    "market_summary": "Best aligned market: Correct Score (Mixed). Secondary support: FTR. Weakest read: Cards.",
-    "caution_line": "Main caution: Over25 Heat Soft.",
-    "telegram_summary": "Motherwell vs Hearts — Over 2.5 (Avoid, 26% agreement). Support: structural caution. Caution: Over25 Heat Soft.",
-    "premium_summary": "Over 2.5 is carrying a 26% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from over25 heat soft, chaos environment soft."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-09T19:00:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

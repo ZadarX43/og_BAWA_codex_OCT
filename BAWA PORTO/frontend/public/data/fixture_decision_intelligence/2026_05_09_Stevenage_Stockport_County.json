@@ -1,18 +1,56 @@
 {
   "fixture_key": "2026_05_09_Stevenage_Stockport_County",
   "fixture": "Stevenage vs Stockport County",
-  "primary_signal": "BTTS Yes",
+  "primary_signal": "No published pick",
+  "context_signal": "BTTS Yes",
   "signal_state": "AVOID",
-  "agreement_score": 32,
+  "agreement_score": 36,
   "confidence_band": "LOW",
+  "route_state": "OBSERVE",
+  "route_market": "BTTS",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "AVOID",
+  "audit_agreement_score": 36,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "BTTS",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "AVOID",
+    "agreement_score": 36,
+    "confidence_band": "LOW",
+    "supporting_layers": [
+      "H2H_BTTS_SUPPORT"
+    ],
+    "caution_layers": [
+      "BTTS_PRESSURE_WEAK",
+      "GOAL_ENVIRONMENT_SOFT",
+      "DEFENSIVE_SUPPRESSION_RISK"
+    ],
+    "context_signal": "BTTS Yes",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [
     "H2H_BTTS_SUPPORT"
   ],
   "caution_layers": [
     "BTTS_PRESSURE_WEAK",
     "GOAL_ENVIRONMENT_SOFT",
-    "DEFENSIVE_SUPPRESSION_RISK",
-    "LINEUP_DATA_MISSING"
+    "DEFENSIVE_SUPPRESSION_RISK"
   ],
   "profile_tags": {
     "home": [
@@ -74,41 +112,27 @@
       "leader": "Stockport County"
     }
   ],
-  "unit_battle_summary": [],
-  "key_player_drivers": [
+  "unit_battle_summary": [
     {
-      "team": "Stevenage",
-      "player": "Jamie Reid",
-      "role": "Forward",
-      "power": 82,
-      "driver_metric": "Goal Threat",
-      "driver_value": 90
+      "label": "Attack vs Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "Stevenage",
-      "player": "Charlie Goode",
-      "role": "Centre Back",
-      "power": 74,
-      "driver_metric": "Defensive Lock",
-      "driver_value": 78
+      "label": "Midfield Control",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "Stockport County",
-      "player": "Kyle Wootton",
-      "role": "Forward",
-      "power": 88,
-      "driver_metric": "Goal Threat",
-      "driver_value": 91
-    },
-    {
-      "team": "Stockport County",
-      "player": "Jack Diamond",
-      "role": "Forward",
-      "power": 79,
-      "driver_metric": "Goal Threat",
-      "driver_value": 80
+      "label": "Away Attack vs Home Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     }
   ],
+  "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
     "available": true,
@@ -161,7 +185,26 @@
     "ftr": {
       "alignment_score": 67,
       "state": "MIXED",
+      "audit_state": "MIXED",
       "model_lean": "AWAY",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "AWAY",
+        "bookie_pick": "HOME",
+        "pick_probability": 0.3300388467564844,
+        "probabilities": {
+          "HOME": 0.3300388467564844,
+          "DRAW": 0.25468783347604207,
+          "AWAY": 0.41527331976747345
+        },
+        "xgb_pick": "",
+        "xgb_pick_probability": null,
+        "xgb_probabilities": {},
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "AWAY",
       "structural_support": [
         "H2H_BTTS_SUPPORT"
       ],
@@ -174,9 +217,27 @@
       "band": "Positive"
     },
     "btts": {
-      "alignment_score": 37,
+      "alignment_score": 40,
       "state": "AVOID",
-      "model_lean": "YES",
+      "audit_state": "AVOID",
+      "model_lean": "NO",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "NO",
+        "bookie_pick": "NO",
+        "pick_probability": 0.8608408326482351,
+        "probabilities": {
+          "YES": 0.13915916735176492,
+          "NO": 0.8608408326482351
+        },
+        "xgb_pick": "",
+        "xgb_pick_probability": null,
+        "xgb_probabilities": {},
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "YES",
       "structural_support": [
         "H2H_BTTS_SUPPORT"
       ],
@@ -192,7 +253,28 @@
     "ou25": {
       "alignment_score": 40,
       "state": "AVOID",
+      "audit_state": "AVOID",
       "model_lean": "UNDER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "UNDER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.4379570885174573,
+        "probabilities": {
+          "OVER25": 0.4379570885174573,
+          "UNDER25": 0.5620429114825427
+        },
+        "xgb_pick": "UNDER25",
+        "xgb_pick_probability": 0.04246752709150314,
+        "xgb_probabilities": {
+          "UNDER25": 0.04246752709150314,
+          "OVER25": 0.9575324729084969
+        },
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "UNDER25",
       "structural_support": [
         "H2H_BTTS_SUPPORT"
       ],
@@ -205,15 +287,17 @@
       "band": "Weak"
     },
     "team_goals": {
-      "alignment_score": 62,
+      "alignment_score": 66,
       "state": "MIXED",
-      "model_lean": "Stockport County 1.5+",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Stockport County 1.5+",
       "structural_support": [
         "H2H_BTTS_SUPPORT"
       ],
       "cautions": [
-        "GOAL_ENVIRONMENT_SOFT",
-        "LINEUP_DATA_MISSING"
+        "GOAL_ENVIRONMENT_SOFT"
       ],
       "public_summary": "Team Goals has partial support from h2h btts support, but goal environment soft keeps it from reading clean.",
       "rating": 72,
@@ -222,7 +306,10 @@
     "correct_score": {
       "alignment_score": 83,
       "state": "SUPPORTED",
-      "model_lean": "STRUCTURED",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "STRUCTURED",
       "structural_support": [
         "H2H_BTTS_SUPPORT"
       ],
@@ -237,7 +324,10 @@
     "corners": {
       "alignment_score": 40,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "H2H_BTTS_SUPPORT"
       ],
@@ -251,7 +341,10 @@
     "cards": {
       "alignment_score": 44,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "H2H_BTTS_SUPPORT"
       ],
@@ -271,26 +364,22 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "BTTS Yes is too contradicted across the current structural layers for Stevenage vs Stockport County, so the clean read is caution rather than action.",
+  "public_safe_summary": "No published pick is active for Stevenage vs Stockport County; the context layer is too contradicted to present as an action.",
   "internal_reason_tokens": [
     "H2H_BTTS_SUPPORT",
     "BTTS_PRESSURE_WEAK",
     "GOAL_ENVIRONMENT_SOFT",
-    "DEFENSIVE_SUPPRESSION_RISK",
-    "LINEUP_DATA_MISSING"
+    "DEFENSIVE_SUPPRESSION_RISK"
   ],
   "summary": {
     "support_count": 1,
-    "caution_count": 4,
-    "lineup_available": false,
+    "caution_count": 3,
+    "lineup_available": true,
     "h2h_available": true
   },
-  "preview": {
-    "headline": "Stevenage vs Stockport County: BTTS Yes avoid",
-    "short_summary": "BTTS Yes is too contradicted across the current structural layers for Stevenage vs Stockport County, so the clean read is caution rather than action. Primary support comes from h2h btts support, while the main caution remains btts pressure weak.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: FTR. Weakest read: BTTS.",
-    "caution_line": "Main caution: Btts Pressure Weak.",
-    "telegram_summary": "Stevenage vs Stockport County — BTTS Yes (Avoid, 32% agreement). Support: H2H Btts Support. Caution: Btts Pressure Weak.",
-    "premium_summary": "BTTS Yes is carrying a 32% agreement read across the published decision layers. Support is currently led by h2h btts support, while caution is still coming from btts pressure weak, goal environment soft."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-09T00:00:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

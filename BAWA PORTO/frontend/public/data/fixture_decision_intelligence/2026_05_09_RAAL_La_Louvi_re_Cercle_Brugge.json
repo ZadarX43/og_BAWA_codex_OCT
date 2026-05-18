@@ -1,10 +1,49 @@
 {
   "fixture_key": "2026_05_09_RAAL_La_Louvi_re_Cercle_Brugge",
   "fixture": "RAAL La Louvière vs Cercle Brugge",
-  "primary_signal": "Cercle Brugge Win",
+  "primary_signal": "No published pick",
+  "context_signal": "Cercle Brugge Win",
   "signal_state": "FRAGILE",
   "agreement_score": 54,
   "confidence_band": "LOW",
+  "route_state": "OBSERVE",
+  "route_market": "FTR",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "FRAGILE",
+  "audit_agreement_score": 54,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "FTR",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "FRAGILE",
+    "agreement_score": 54,
+    "confidence_band": "LOW",
+    "supporting_layers": [
+      "AWAY_THREAT_ADVANTAGE",
+      "AWAY_ATTACK_MISMATCH"
+    ],
+    "caution_layers": [
+      "AWAY_POWER_NOT_DECISIVE",
+      "H2H_UNAVAILABLE"
+    ],
+    "context_signal": "Cercle Brugge Win",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [
     "AWAY_THREAT_ADVANTAGE",
     "AWAY_ATTACK_MISMATCH"
@@ -93,40 +132,7 @@
       "delta": 17
     }
   ],
-  "key_player_drivers": [
-    {
-      "team": "RAAL La Louvière",
-      "player": "Marcos Hernán Peano",
-      "role": "Goalkeeper",
-      "power": 67,
-      "driver_metric": "Defensive Lock",
-      "driver_value": 48
-    },
-    {
-      "team": "RAAL La Louvière",
-      "player": "Yllan Okou",
-      "role": "Centre Back",
-      "power": 67,
-      "driver_metric": "Defensive Lock",
-      "driver_value": 77
-    },
-    {
-      "team": "Cercle Brugge",
-      "player": "Steve Ngoura",
-      "role": "Forward",
-      "power": 77,
-      "driver_metric": "Goal Threat",
-      "driver_value": 85
-    },
-    {
-      "team": "Cercle Brugge",
-      "player": "Oumar Diakité",
-      "role": "Forward",
-      "power": 73,
-      "driver_metric": "Goal Threat",
-      "driver_value": 85
-    }
-  ],
+  "key_player_drivers": [],
   "key_mismatches": [
     {
       "zone": "Midfield control battle",
@@ -171,8 +177,13 @@
   ],
   "h2h_context": {
     "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "summary": "No publish-safe H2H regime snapshot is available yet for this fixture, so H2H remains supporting-only.",
+    "sample_size": 0,
+    "goal_environment": 0,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 0
   },
   "market_suitability": {
     "ftr": {
@@ -215,7 +226,30 @@
     "ftr": {
       "alignment_score": 45,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "AWAY",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "AWAY",
+        "bookie_pick": "AWAY",
+        "pick_probability": 0.6666666666666666,
+        "probabilities": {
+          "HOME": 0.33456556595298115,
+          "DRAW": 0.2652684389927434,
+          "AWAY": 0.40016599505427547
+        },
+        "xgb_pick": "HOME",
+        "xgb_pick_probability": 0.5404191613197327,
+        "xgb_probabilities": {
+          "HOME": 0.5404191613197327,
+          "DRAW": 0.24667520821094513,
+          "AWAY": 0.2129056602716446
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "AWAY",
       "structural_support": [
         "AWAY_THREAT_ADVANTAGE",
         "AWAY_ATTACK_MISMATCH"
@@ -230,7 +264,10 @@
     "btts": {
       "alignment_score": 48,
       "state": "FRAGILE",
-      "model_lean": "YES",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "YES",
       "structural_support": [
         "AWAY_ATTACK_MISMATCH"
       ],
@@ -245,7 +282,28 @@
     "ou25": {
       "alignment_score": 56,
       "state": "FRAGILE",
-      "model_lean": "OVER25",
+      "audit_state": "FRAGILE",
+      "model_lean": "UNDER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "UNDER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.2839299456293152,
+        "probabilities": {
+          "OVER25": 0.2839299456293152,
+          "UNDER25": 0.7160700543706848
+        },
+        "xgb_pick": "UNDER25",
+        "xgb_pick_probability": 0.10476717352867126,
+        "xgb_probabilities": {
+          "UNDER25": 0.10476717352867126,
+          "OVER25": 0.8952328264713287
+        },
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "OVER25",
       "structural_support": [
         "AWAY_THREAT_ADVANTAGE",
         "AWAY_ATTACK_MISMATCH"
@@ -261,7 +319,10 @@
     "team_goals": {
       "alignment_score": 68,
       "state": "MIXED",
-      "model_lean": "Cercle Brugge 1.5+",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Cercle Brugge 1.5+",
       "structural_support": [
         "AWAY_ATTACK_MISMATCH"
       ],
@@ -276,7 +337,10 @@
     "correct_score": {
       "alignment_score": 93,
       "state": "SUPPORTED",
-      "model_lean": "STRUCTURED",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "STRUCTURED",
       "structural_support": [
         "AWAY_THREAT_ADVANTAGE",
         "AWAY_ATTACK_MISMATCH"
@@ -291,7 +355,10 @@
     "corners": {
       "alignment_score": 52,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "AWAY_THREAT_ADVANTAGE",
         "AWAY_ATTACK_MISMATCH"
@@ -307,7 +374,10 @@
     "cards": {
       "alignment_score": 54,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "AWAY_THREAT_ADVANTAGE",
         "AWAY_ATTACK_MISMATCH"
@@ -328,7 +398,7 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "Cercle Brugge Win has some live shape in RAAL La Louvière vs Cercle Brugge, but the supporting layers remain fragile and need discipline.",
+  "public_safe_summary": "No published pick is active for RAAL La Louvière vs Cercle Brugge; the fixture read is context only.",
   "internal_reason_tokens": [
     "AWAY_THREAT_ADVANTAGE",
     "AWAY_ATTACK_MISMATCH",
@@ -341,12 +411,9 @@
     "lineup_available": true,
     "h2h_available": false
   },
-  "preview": {
-    "headline": "RAAL La Louvière vs Cercle Brugge: Cercle Brugge Win fragile",
-    "short_summary": "Cercle Brugge Win has some live shape in RAAL La Louvière vs Cercle Brugge, but the supporting layers remain fragile and need discipline. Primary support comes from away threat advantage, while the main caution remains away power not decisive.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: FTR.",
-    "caution_line": "Main caution: Away Power Not Decisive.",
-    "telegram_summary": "RAAL La Louvière vs Cercle Brugge — Cercle Brugge Win (Fragile, 54% agreement). Support: Away Threat Advantage. Caution: Away Power Not Decisive.",
-    "premium_summary": "Cercle Brugge Win is carrying a 54% agreement read across the published decision layers. Support is currently led by away threat advantage, away attack mismatch, while caution is still coming from away power not decisive, h2h unavailable."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-09T14:00:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

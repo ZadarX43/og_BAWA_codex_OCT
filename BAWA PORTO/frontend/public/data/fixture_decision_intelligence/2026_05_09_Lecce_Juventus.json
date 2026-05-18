@@ -1,16 +1,54 @@
 {
   "fixture_key": "2026_05_09_Lecce_Juventus",
   "fixture": "Lecce vs Juventus",
-  "primary_signal": "Juventus Win",
-  "signal_state": "WATCHLIST",
-  "agreement_score": 58,
+  "primary_signal": "No published pick",
+  "context_signal": "Juventus Win",
+  "signal_state": "FRAGILE",
+  "agreement_score": 56,
   "confidence_band": "LOW",
+  "route_state": "OBSERVE",
+  "route_market": "FTR",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "FRAGILE",
+  "audit_agreement_score": 56,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "FTR",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "FRAGILE",
+    "agreement_score": 56,
+    "confidence_band": "LOW",
+    "supporting_layers": [
+      "AWAY_POWER_ADVANTAGE",
+      "AWAY_THREAT_ADVANTAGE"
+    ],
+    "caution_layers": [
+      "LINEUP_UNIT_EDGE_SOFT"
+    ],
+    "context_signal": "Juventus Win",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [
     "AWAY_POWER_ADVANTAGE",
     "AWAY_THREAT_ADVANTAGE"
   ],
   "caution_layers": [
-    "LINEUP_DATA_MISSING"
+    "LINEUP_UNIT_EDGE_SOFT"
   ],
   "profile_tags": {
     "home": [
@@ -74,25 +112,27 @@
       "leader": "Lecce"
     }
   ],
-  "unit_battle_summary": [],
-  "key_player_drivers": [
+  "unit_battle_summary": [
     {
-      "team": "Juventus",
-      "player": "Kenan Yildiz",
-      "role": "Forward",
-      "power": 70,
-      "driver_metric": "Goal Threat",
-      "driver_value": 69
+      "label": "Attack vs Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "Juventus",
-      "player": "Weston McKennie",
-      "role": "Central Midfielder",
-      "power": 66,
-      "driver_metric": "Goal Threat",
-      "driver_value": 72
+      "label": "Midfield Control",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     }
   ],
+  "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
     "available": true,
@@ -143,30 +183,74 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 66,
-      "state": "WATCHLIST",
-      "model_lean": "AWAY",
+      "alignment_score": 65,
+      "state": "FRAGILE",
+      "audit_state": "FRAGILE",
+      "model_lean": "DRAW",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "DRAW",
+        "bookie_pick": "AWAY",
+        "pick_probability": 0.23529411764705882,
+        "probabilities": {
+          "HOME": 0.2321658782781782,
+          "DRAW": 0.3972098565778605,
+          "AWAY": 0.3706242651439612
+        },
+        "xgb_pick": "AWAY",
+        "xgb_pick_probability": 0.539470911026001,
+        "xgb_probabilities": {
+          "HOME": 0.1889064610004425,
+          "DRAW": 0.27162256836891174,
+          "AWAY": 0.539470911026001
+        },
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "AWAY",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
-      "public_summary": "FTR is interesting enough to monitor, but current support is better treated as watch-first because of lineup data missing.",
+      "public_summary": "FTR has some structural support from away power advantage, but the overall layer fit remains fragile.",
       "rating": 79,
       "band": "Positive"
     },
     "btts": {
       "alignment_score": 50,
       "state": "FRAGILE",
-      "model_lean": "NO",
+      "audit_state": "FRAGILE",
+      "model_lean": "YES",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "YES",
+        "bookie_pick": "YES",
+        "pick_probability": 0.501820580804127,
+        "probabilities": {
+          "YES": 0.501820580804127,
+          "NO": 0.49817941919587305
+        },
+        "xgb_pick": "YES",
+        "xgb_pick_probability": 0.9312617182731628,
+        "xgb_probabilities": {
+          "YES": 0.9312617182731628,
+          "NO": 0.06873828172683716
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "NO",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
       "public_summary": "BTTS has some structural support from away power advantage, but the overall layer fit remains fragile.",
       "rating": 43,
@@ -175,13 +259,34 @@
     "ou25": {
       "alignment_score": 49,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "UNDER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "UNDER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.4442161866294321,
+        "probabilities": {
+          "OVER25": 0.4442161866294321,
+          "UNDER25": 0.5557838133705679
+        },
+        "xgb_pick": "UNDER25",
+        "xgb_pick_probability": 0.17570002377033234,
+        "xgb_probabilities": {
+          "UNDER25": 0.17570002377033234,
+          "OVER25": 0.8242999762296677
+        },
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "UNDER25",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
       "public_summary": "Over 2.5 has some structural support from away power advantage, but the overall layer fit remains fragile.",
       "rating": 41,
@@ -190,57 +295,69 @@
     "team_goals": {
       "alignment_score": 65,
       "state": "MIXED",
-      "model_lean": "Juventus 1.5+",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Juventus 1.5+",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
-      "public_summary": "Team Goals has partial support from away power advantage, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Team Goals has partial support from away power advantage, but lineup unit edge soft keeps it from reading clean.",
       "rating": 63,
       "band": "Mixed"
     },
     "correct_score": {
       "alignment_score": 82,
       "state": "SUPPORTED",
-      "model_lean": "STRUCTURED",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "STRUCTURED",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
-      "public_summary": "Correct Score is well supported by away power advantage, with caution still coming from lineup data missing.",
+      "public_summary": "Correct Score is well supported by away power advantage, with caution still coming from lineup unit edge soft.",
       "rating": 93,
       "band": "Elite"
     },
     "corners": {
       "alignment_score": 64,
       "state": "MIXED",
-      "model_lean": "ELEVATED",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
-      "public_summary": "Corners has partial support from away power advantage, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Corners has partial support from away power advantage, but lineup unit edge soft keeps it from reading clean.",
       "rating": 62,
       "band": "Mixed"
     },
     "cards": {
       "alignment_score": 46,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
       "public_summary": "Cards has some structural support from away power advantage, but the overall layer fit remains fragile.",
       "rating": 37,
@@ -248,34 +365,27 @@
     }
   },
   "watchlist": {
-    "active": true,
-    "summary": "Juventus Win is better treated as a watch-first structure because lineup data missing.",
-    "trigger_signals": [
-      "Wait for the actual XI to confirm the structural edge.",
-      "Watch whether midfield control matches the pre-match read.",
-      "Treat short prices or late uncertainty as a reason to hold discipline."
-    ],
-    "public_state": "Watchlist: wait for live confirmation",
-    "mode": "FTR:AWAY"
+    "active": false,
+    "summary": "No watchlist layer is active for this fixture.",
+    "trigger_signals": [],
+    "public_state": "No watchlist flag",
+    "mode": ""
   },
-  "public_safe_summary": "Juventus Win has useful structure for Lecce vs Juventus, but the current layer fit is better treated as watch-first than pre-match deploy.",
+  "public_safe_summary": "No published pick is active for Lecce vs Juventus; the fixture read is context only.",
   "internal_reason_tokens": [
     "AWAY_POWER_ADVANTAGE",
     "AWAY_THREAT_ADVANTAGE",
-    "LINEUP_DATA_MISSING"
+    "LINEUP_UNIT_EDGE_SOFT"
   ],
   "summary": {
     "support_count": 2,
     "caution_count": 1,
-    "lineup_available": false,
+    "lineup_available": true,
     "h2h_available": true
   },
-  "preview": {
-    "headline": "Lecce vs Juventus: Juventus Win watchlist",
-    "short_summary": "Juventus Win has useful structure for Lecce vs Juventus, but the current layer fit is better treated as watch-first than pre-match deploy. Primary support comes from away power advantage, while the main caution remains lineup data missing.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: FTR. Weakest read: Cards.",
-    "caution_line": "Main caution: Lineup Data Missing.",
-    "telegram_summary": "Lecce vs Juventus — Juventus Win (Watchlist, 58% agreement). Support: Away Power Advantage. Caution: Lineup Data Missing.",
-    "premium_summary": "Juventus Win is carrying a 58% agreement read across the published decision layers. Support is currently led by away power advantage, away threat advantage, while caution is still coming from lineup data missing."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-09T18:45:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

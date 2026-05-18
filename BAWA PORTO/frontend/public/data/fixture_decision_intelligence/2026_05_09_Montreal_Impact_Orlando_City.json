@@ -2,15 +2,52 @@
   "fixture_key": "2026_05_09_Montreal_Impact_Orlando_City",
   "fixture": "Montreal Impact vs Orlando City",
   "primary_signal": "Over 2.5",
+  "context_signal": "Over 2.5",
   "signal_state": "FRAGILE",
-  "agreement_score": 56,
+  "agreement_score": 60,
   "confidence_band": "STANDARD",
+  "route_state": "DEPLOY",
+  "route_market": "OU25",
+  "route_pick": "OVER25",
+  "route_active": true,
+  "route_label": "Over 2.5",
+  "route_confidence_tier": "STANDARD",
+  "route_bookie_od": 1.54,
+  "route_value_edge_label": "positive",
+  "audit_state": "FRAGILE",
+  "audit_agreement_score": 60,
+  "audit_confidence_band": "STANDARD",
+  "conflict_level": "CAUTION",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "DEPLOY",
+    "route_market": "OU25",
+    "route_pick": "OVER25",
+    "route_active": true,
+    "confidence_tier": "STANDARD",
+    "bookie_od": 1.54,
+    "value_edge_label": "positive",
+    "premium_tier": "STANDARD"
+  },
+  "context_audit": {
+    "state": "FRAGILE",
+    "agreement_score": 60,
+    "confidence_band": "STANDARD",
+    "supporting_layers": [
+      "OVER25_HEAT_SUPPORT",
+      "CHAOS_ENVIRONMENT_SUPPORT"
+    ],
+    "caution_layers": [
+      "H2H_UNAVAILABLE"
+    ],
+    "context_signal": "Over 2.5",
+    "conflict_level": "CAUTION"
+  },
   "supporting_layers": [
     "OVER25_HEAT_SUPPORT",
     "CHAOS_ENVIRONMENT_SUPPORT"
   ],
   "caution_layers": [
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -72,7 +109,26 @@
       "leader": "Montreal Impact"
     }
   ],
-  "unit_battle_summary": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    }
+  ],
   "key_player_drivers": [
     {
       "team": "Montreal Impact",
@@ -110,8 +166,13 @@
   "key_mismatches": [],
   "h2h_context": {
     "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "summary": "No publish-safe H2H regime snapshot is available yet for this fixture, so H2H remains supporting-only.",
+    "sample_size": 0,
+    "goal_environment": 0,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 0
   },
   "market_suitability": {
     "ftr": {
@@ -152,15 +213,37 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 45,
+      "alignment_score": 49,
       "state": "FRAGILE",
-      "model_lean": "DRAW",
+      "audit_state": "FRAGILE",
+      "model_lean": "HOME",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "HOME",
+        "bookie_pick": "HOME",
+        "pick_probability": 0.37745098039215685,
+        "probabilities": {
+          "HOME": 0.4388948471190579,
+          "DRAW": 0.29515932680582924,
+          "AWAY": 0.26594582607511275
+        },
+        "xgb_pick": "HOME",
+        "xgb_pick_probability": 0.5523179173469543,
+        "xgb_probabilities": {
+          "HOME": 0.5523179173469543,
+          "DRAW": 0.138827845454216,
+          "AWAY": 0.30885425209999084
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "DRAW",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "FTR has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
@@ -168,15 +251,35 @@
       "band": "Weak"
     },
     "btts": {
-      "alignment_score": 52,
+      "alignment_score": 56,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "NO",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "NO",
+        "bookie_pick": "NO",
+        "pick_probability": 0.5092716627116098,
+        "probabilities": {
+          "YES": 0.49072833728839016,
+          "NO": 0.5092716627116098
+        },
+        "xgb_pick": "YES",
+        "xgb_pick_probability": 0.3131362795829773,
+        "xgb_probabilities": {
+          "YES": 0.3131362795829773,
+          "NO": 0.6868637204170227
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "NO",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "BTTS has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
@@ -184,15 +287,35 @@
       "band": "Weak"
     },
     "ou25": {
-      "alignment_score": 59,
+      "alignment_score": 61,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "OVER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "OVER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.8140615308249265,
+        "probabilities": {
+          "OVER25": 0.8140615308249265,
+          "UNDER25": 0.1859384691750735
+        },
+        "xgb_pick": "OVER25",
+        "xgb_pick_probability": 0.9196380376815796,
+        "xgb_probabilities": {
+          "OVER25": 0.9196380376815796,
+          "UNDER25": 0.08036196231842041
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "OVER25",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "Over 2.5 has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
@@ -202,58 +325,67 @@
     "team_goals": {
       "alignment_score": 71,
       "state": "MIXED",
-      "model_lean": "Orlando City 1.5+",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Orlando City 1.5+",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Team Goals has partial support from over 2.5 heat support, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Team Goals has partial support from over 2.5 heat support, but h2h unavailable keeps it from reading clean.",
       "rating": 71,
       "band": "Strong"
     },
     "correct_score": {
-      "alignment_score": 83,
+      "alignment_score": 87,
       "state": "SUPPORTED",
-      "model_lean": "OPEN",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "OPEN",
       "structural_support": [
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Correct Score is well supported by chaos environment support, with caution still coming from lineup data missing.",
+      "public_summary": "Correct Score is well supported by chaos environment support, with caution still coming from h2h unavailable.",
       "rating": 100,
       "band": "Elite"
     },
     "corners": {
-      "alignment_score": 44,
-      "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "alignment_score": 48,
+      "state": "FRAGILE",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Corners is too contradicted by lineup data missing to present as a clean public read.",
+      "public_summary": "Corners has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
       "rating": 40,
       "band": "Weak"
     },
     "cards": {
-      "alignment_score": 56,
+      "alignment_score": 60,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "Cards has some structural support from chaos environment support, but the overall layer fit remains fragile.",
@@ -268,25 +400,21 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "Over 2.5 has some live shape in Montreal Impact vs Orlando City, but the supporting layers remain fragile and need discipline.",
+  "public_safe_summary": "Published route remains Over 2.5 for Montreal Impact vs Orlando City, while the context audit flags fragile because of h2h unavailable.",
   "internal_reason_tokens": [
     "OVER25_HEAT_SUPPORT",
     "CHAOS_ENVIRONMENT_SUPPORT",
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
     "support_count": 2,
-    "caution_count": 2,
-    "lineup_available": false,
+    "caution_count": 1,
+    "lineup_available": true,
     "h2h_available": false
   },
-  "preview": {
-    "headline": "Montreal Impact vs Orlando City: Over 2.5 fragile",
-    "short_summary": "Over 2.5 has some live shape in Montreal Impact vs Orlando City, but the supporting layers remain fragile and need discipline. Primary support comes from over25 heat support, while the main caution remains lineup data missing.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: Corners.",
-    "caution_line": "Main caution: Lineup Data Missing.",
-    "telegram_summary": "Montreal Impact vs Orlando City — Over 2.5 (Fragile, 56% agreement). Support: Over25 Heat Support. Caution: Lineup Data Missing.",
-    "premium_summary": "Over 2.5 is carrying a 56% agreement read across the published decision layers. Support is currently led by over25 heat support, chaos environment support, while caution is still coming from lineup data missing, h2h unavailable."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-09T20:30:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

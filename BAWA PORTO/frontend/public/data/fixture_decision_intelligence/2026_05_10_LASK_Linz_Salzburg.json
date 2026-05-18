@@ -1,16 +1,53 @@
 {
   "fixture_key": "2026_05_10_LASK_Linz_Salzburg",
   "fixture": "LASK Linz vs Salzburg",
-  "primary_signal": "BTTS Yes",
-  "signal_state": "FRAGILE",
-  "agreement_score": 56,
+  "primary_signal": "No published pick",
+  "context_signal": "BTTS Yes",
+  "signal_state": "WATCHLIST",
+  "agreement_score": 60,
   "confidence_band": "LOW",
+  "route_state": "OBSERVE",
+  "route_market": "BTTS",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "WATCHLIST",
+  "audit_agreement_score": 60,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "BTTS",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "WATCHLIST",
+    "agreement_score": 60,
+    "confidence_band": "LOW",
+    "supporting_layers": [
+      "BTTS_PRESSURE_SUPPORT",
+      "GOAL_ENVIRONMENT_SUPPORT"
+    ],
+    "caution_layers": [
+      "H2H_UNAVAILABLE"
+    ],
+    "context_signal": "BTTS Yes",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [
     "BTTS_PRESSURE_SUPPORT",
     "GOAL_ENVIRONMENT_SUPPORT"
   ],
   "caution_layers": [
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -76,46 +113,37 @@
       "leader": "Salzburg"
     }
   ],
-  "unit_battle_summary": [],
-  "key_player_drivers": [
+  "unit_battle_summary": [
     {
-      "team": "LASK Linz",
-      "player": "Samuel Adeniran",
-      "role": "Forward",
-      "power": 84,
-      "driver_metric": "Goal Threat",
-      "driver_value": 92
+      "label": "Attack vs Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "LASK Linz",
-      "player": "Sasa Kalajdzic",
-      "role": "Forward",
-      "power": 73,
-      "driver_metric": "Goal Threat",
-      "driver_value": 84
+      "label": "Midfield Control",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "Salzburg",
-      "player": "Petar Ratkov",
-      "role": "Forward",
-      "power": 79,
-      "driver_metric": "Goal Threat",
-      "driver_value": 85
-    },
-    {
-      "team": "Salzburg",
-      "player": "Yorbe Vertessen",
-      "role": "Forward",
-      "power": 77,
-      "driver_metric": "Goal Threat",
-      "driver_value": 89
+      "label": "Away Attack vs Home Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     }
   ],
+  "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "summary": "No publish-safe H2H regime snapshot is available yet for this fixture, so H2H remains supporting-only.",
+    "sample_size": 0,
+    "goal_environment": 0,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 0
   },
   "market_suitability": {
     "ftr": {
@@ -156,139 +184,207 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 73,
+      "alignment_score": 77,
       "state": "MIXED",
+      "audit_state": "MIXED",
       "model_lean": "AWAY",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "AWAY",
+        "bookie_pick": "AWAY",
+        "pick_probability": 0.33990716486380557,
+        "probabilities": {
+          "HOME": 0.33615161647392733,
+          "DRAW": 0.32394121866226705,
+          "AWAY": 0.33990716486380557
+        },
+        "xgb_pick": "AWAY",
+        "xgb_pick_probability": 0.5417124032974243,
+        "xgb_probabilities": {
+          "HOME": 0.4078318178653717,
+          "DRAW": 0.05045577883720398,
+          "AWAY": 0.5417124032974243
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "AWAY",
       "structural_support": [
         "BTTS_PRESSURE_SUPPORT",
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "FTR has partial support from btts pressure support, but lineup data missing keeps it from reading clean.",
+      "public_summary": "FTR has partial support from btts pressure support, but h2h unavailable keeps it from reading clean.",
       "rating": 79,
       "band": "Positive"
     },
     "btts": {
-      "alignment_score": 62,
-      "state": "FRAGILE",
-      "model_lean": "YES",
+      "alignment_score": 65,
+      "state": "WATCHLIST",
+      "audit_state": "WATCHLIST",
+      "model_lean": "NO",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "NO",
+        "bookie_pick": "NO",
+        "pick_probability": 0.5308250245758352,
+        "probabilities": {
+          "YES": 0.46917497542416475,
+          "NO": 0.5308250245758352
+        },
+        "xgb_pick": "",
+        "xgb_pick_probability": null,
+        "xgb_probabilities": {},
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "YES",
       "structural_support": [
         "BTTS_PRESSURE_SUPPORT",
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "BTTS has some structural support from btts pressure support, but the overall layer fit remains fragile.",
+      "public_summary": "BTTS is interesting enough to monitor, but current support is better treated as watch-first because of h2h unavailable.",
       "rating": 72,
       "band": "Positive"
     },
     "ou25": {
-      "alignment_score": 71,
+      "alignment_score": 75,
       "state": "MIXED",
+      "audit_state": "MIXED",
       "model_lean": "OVER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "OVER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.6716954611597388,
+        "probabilities": {
+          "OVER25": 0.6716954611597388,
+          "UNDER25": 0.32830453884026123
+        },
+        "xgb_pick": "UNDER25",
+        "xgb_pick_probability": 0.4038490951061249,
+        "xgb_probabilities": {
+          "UNDER25": 0.4038490951061249,
+          "OVER25": 0.5961509048938751
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "OVER25",
       "structural_support": [
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Over 2.5 has partial support from goal environment support, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Over 2.5 has partial support from goal environment support, but h2h unavailable keeps it from reading clean.",
       "rating": 84,
       "band": "Strong"
     },
     "team_goals": {
       "alignment_score": 76,
       "state": "MIXED",
-      "model_lean": "LASK Linz 1.5+",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "LASK Linz 1.5+",
       "structural_support": [
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Team Goals has partial support from goal environment support, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Team Goals has partial support from goal environment support, but h2h unavailable keeps it from reading clean.",
       "rating": 85,
       "band": "Strong"
     },
     "correct_score": {
-      "alignment_score": 79,
-      "state": "MIXED",
-      "model_lean": "OPEN",
+      "alignment_score": 83,
+      "state": "SUPPORTED",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "OPEN",
       "structural_support": [
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Correct Score has partial support from goal environment support, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Correct Score is well supported by goal environment support, with caution still coming from h2h unavailable.",
       "rating": 95,
       "band": "Elite"
     },
     "corners": {
-      "alignment_score": 68,
+      "alignment_score": 72,
       "state": "MIXED",
-      "model_lean": "ELEVATED",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "BTTS_PRESSURE_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Corners has partial support from btts pressure support, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Corners has partial support from btts pressure support, but h2h unavailable keeps it from reading clean.",
       "rating": 80,
       "band": "Strong"
     },
     "cards": {
-      "alignment_score": 40,
+      "alignment_score": 44,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "BTTS_PRESSURE_SUPPORT",
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Cards is too contradicted by lineup data missing to present as a clean public read.",
+      "public_summary": "Cards is too contradicted by h2h unavailable to present as a clean public read.",
       "rating": 34,
       "band": "Red Flag"
     }
   },
   "watchlist": {
-    "active": false,
-    "summary": "No watchlist layer is active for this fixture.",
-    "trigger_signals": [],
-    "public_state": "No watchlist flag",
-    "mode": ""
+    "active": true,
+    "summary": "BTTS Yes is better treated as a watch-first structure because h2h unavailable.",
+    "trigger_signals": [
+      "Confirm both forward lines are intact before kickoff.",
+      "Watch for early two-way shot volume inside the opening 15 minutes.",
+      "Escalate only if suppression signs stay absent."
+    ],
+    "public_state": "Watchlist: wait for live confirmation",
+    "mode": "BTTS:YES"
   },
-  "public_safe_summary": "BTTS Yes has some live shape in LASK Linz vs Salzburg, but the supporting layers remain fragile and need discipline.",
+  "public_safe_summary": "No published pick is active for LASK Linz vs Salzburg; the context layer is watch-first around BTTS Yes.",
   "internal_reason_tokens": [
     "BTTS_PRESSURE_SUPPORT",
     "GOAL_ENVIRONMENT_SUPPORT",
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
     "support_count": 2,
-    "caution_count": 2,
-    "lineup_available": false,
+    "caution_count": 1,
+    "lineup_available": true,
     "h2h_available": false
   },
-  "preview": {
-    "headline": "LASK Linz vs Salzburg: BTTS Yes fragile",
-    "short_summary": "BTTS Yes has some live shape in LASK Linz vs Salzburg, but the supporting layers remain fragile and need discipline. Primary support comes from btts pressure support, while the main caution remains lineup data missing.",
-    "market_summary": "Best aligned market: Correct Score (Mixed). Secondary support: Team Goals. Weakest read: Cards.",
-    "caution_line": "Main caution: Lineup Data Missing.",
-    "telegram_summary": "LASK Linz vs Salzburg — BTTS Yes (Fragile, 56% agreement). Support: Btts Pressure Support. Caution: Lineup Data Missing.",
-    "premium_summary": "BTTS Yes is carrying a 56% agreement read across the published decision layers. Support is currently led by btts pressure support, goal environment support, while caution is still coming from lineup data missing, h2h unavailable."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-10T15:00:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

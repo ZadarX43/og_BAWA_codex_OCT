@@ -1,16 +1,55 @@
 {
   "fixture_key": "2026_05_10_Cremonese_Pisa",
   "fixture": "Cremonese vs Pisa",
-  "primary_signal": "Cremonese Win",
+  "primary_signal": "No published pick",
+  "context_signal": "Cremonese Win",
   "signal_state": "AVOID",
-  "agreement_score": 44,
+  "agreement_score": 42,
   "confidence_band": "LOW",
+  "route_state": "OBSERVE",
+  "route_market": "FTR",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "AVOID",
+  "audit_agreement_score": 42,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "FTR",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "AVOID",
+    "agreement_score": 42,
+    "confidence_band": "LOW",
+    "supporting_layers": [
+      "TEAM_POWER_ADVANTAGE"
+    ],
+    "caution_layers": [
+      "AWAY_TRAVEL_THREAT",
+      "LINEUP_UNIT_EDGE_SOFT",
+      "H2H_UNAVAILABLE"
+    ],
+    "context_signal": "Cremonese Win",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [
     "TEAM_POWER_ADVANTAGE"
   ],
   "caution_layers": [
     "AWAY_TRAVEL_THREAT",
-    "LINEUP_DATA_MISSING",
+    "LINEUP_UNIT_EDGE_SOFT",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -72,13 +111,37 @@
       "leader": "Cremonese"
     }
   ],
-  "unit_battle_summary": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    }
+  ],
   "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "summary": "No publish-safe H2H regime snapshot is available yet for this fixture, so H2H remains supporting-only.",
+    "sample_size": 0,
+    "goal_environment": 0,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 0
   },
   "market_suitability": {
     "ftr": {
@@ -119,9 +182,32 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 38,
+      "alignment_score": 36,
       "state": "AVOID",
-      "model_lean": "HOME",
+      "audit_state": "AVOID",
+      "model_lean": "DRAW",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "DRAW",
+        "bookie_pick": "HOME",
+        "pick_probability": 0.05405405405405406,
+        "probabilities": {
+          "HOME": 0.2761767916090365,
+          "DRAW": 0.5481604721283867,
+          "AWAY": 0.1756627362625768
+        },
+        "xgb_pick": "DRAW",
+        "xgb_pick_probability": 0.6854715943336487,
+        "xgb_probabilities": {
+          "HOME": 0.07599465548992157,
+          "DRAW": 0.6854715943336487,
+          "AWAY": 0.23853375017642975
+        },
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "HOME",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE"
       ],
@@ -135,13 +221,34 @@
     "btts": {
       "alignment_score": 43,
       "state": "AVOID",
-      "model_lean": "NO",
+      "audit_state": "AVOID",
+      "model_lean": "YES",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "YES",
+        "bookie_pick": "YES",
+        "pick_probability": 0.5219763814232331,
+        "probabilities": {
+          "YES": 0.5219763814232331,
+          "NO": 0.4780236185767669
+        },
+        "xgb_pick": "YES",
+        "xgb_pick_probability": 0.969779372215271,
+        "xgb_probabilities": {
+          "YES": 0.969779372215271,
+          "NO": 0.030220627784729004
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "NO",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE"
       ],
       "cautions": [
         "AWAY_TRAVEL_THREAT",
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
       "public_summary": "BTTS is too contradicted by away travel threat to present as a clean public read.",
       "rating": 47,
@@ -150,13 +257,34 @@
     "ou25": {
       "alignment_score": 52,
       "state": "FRAGILE",
-      "model_lean": "OVER25",
+      "audit_state": "FRAGILE",
+      "model_lean": "UNDER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "UNDER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.3776739327840405,
+        "probabilities": {
+          "OVER25": 0.3776739327840405,
+          "UNDER25": 0.6223260672159595
+        },
+        "xgb_pick": "UNDER25",
+        "xgb_pick_probability": 0.33782443404197693,
+        "xgb_probabilities": {
+          "UNDER25": 0.33782443404197693,
+          "OVER25": 0.6621755659580231
+        },
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "OVER25",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE"
       ],
       "cautions": [
         "AWAY_TRAVEL_THREAT",
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
       "public_summary": "Over 2.5 has some structural support from team power advantage, but the overall layer fit remains fragile.",
       "rating": 58,
@@ -165,27 +293,33 @@
     "team_goals": {
       "alignment_score": 63,
       "state": "MIXED",
-      "model_lean": "Pisa 1.5+",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Pisa 1.5+",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
-      "public_summary": "Team Goals has partial support from team power advantage, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Team Goals has partial support from team power advantage, but lineup unit edge soft keeps it from reading clean.",
       "rating": 68,
       "band": "Mixed"
     },
     "correct_score": {
       "alignment_score": 83,
       "state": "SUPPORTED",
-      "model_lean": "OPEN",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "OPEN",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE"
       ],
       "cautions": [
         "AWAY_TRAVEL_THREAT",
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
       "public_summary": "Correct Score is well supported by team power advantage, with caution still coming from away travel threat.",
       "rating": 100,
@@ -194,13 +328,16 @@
     "corners": {
       "alignment_score": 35,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE"
       ],
       "cautions": [
         "AWAY_TRAVEL_THREAT",
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
       "public_summary": "Corners is too contradicted by away travel threat to present as a clean public read.",
       "rating": 36,
@@ -209,13 +346,16 @@
     "cards": {
       "alignment_score": 58,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE"
       ],
       "cautions": [
         "AWAY_TRAVEL_THREAT",
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
       "public_summary": "Cards has some structural support from team power advantage, but the overall layer fit remains fragile.",
       "rating": 67,
@@ -229,25 +369,22 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "Cremonese Win is too contradicted across the current structural layers for Cremonese vs Pisa, so the clean read is caution rather than action.",
+  "public_safe_summary": "No published pick is active for Cremonese vs Pisa; the context layer is too contradicted to present as an action.",
   "internal_reason_tokens": [
     "TEAM_POWER_ADVANTAGE",
     "AWAY_TRAVEL_THREAT",
-    "LINEUP_DATA_MISSING",
+    "LINEUP_UNIT_EDGE_SOFT",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
     "support_count": 1,
     "caution_count": 3,
-    "lineup_available": false,
+    "lineup_available": true,
     "h2h_available": false
   },
-  "preview": {
-    "headline": "Cremonese vs Pisa: Cremonese Win avoid",
-    "short_summary": "Cremonese Win is too contradicted across the current structural layers for Cremonese vs Pisa, so the clean read is caution rather than action. Primary support comes from team power advantage, while the main caution remains away travel threat.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: Corners.",
-    "caution_line": "Main caution: Away Travel Threat.",
-    "telegram_summary": "Cremonese vs Pisa — Cremonese Win (Avoid, 44% agreement). Support: Team Power Advantage. Caution: Away Travel Threat.",
-    "premium_summary": "Cremonese Win is carrying a 44% agreement read across the published decision layers. Support is currently led by team power advantage, while caution is still coming from away travel threat, lineup data missing."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-10T13:00:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

@@ -1,16 +1,55 @@
 {
   "fixture_key": "2026_05_09_Winterthur_Lausanne_Sport",
   "fixture": "Winterthur vs Lausanne Sport",
-  "primary_signal": "Lausanne Sport Win",
+  "primary_signal": "No published pick",
+  "context_signal": "Lausanne Sport Win",
   "signal_state": "FRAGILE",
-  "agreement_score": 56,
+  "agreement_score": 54,
   "confidence_band": "LOW",
+  "route_state": "OBSERVE",
+  "route_market": "FTR",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "FRAGILE",
+  "audit_agreement_score": 54,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "FTR",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "FRAGILE",
+    "agreement_score": 54,
+    "confidence_band": "LOW",
+    "supporting_layers": [
+      "AWAY_POWER_ADVANTAGE",
+      "AWAY_THREAT_ADVANTAGE"
+    ],
+    "caution_layers": [
+      "LINEUP_UNIT_EDGE_SOFT",
+      "H2H_UNAVAILABLE"
+    ],
+    "context_signal": "Lausanne Sport Win",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [
     "AWAY_POWER_ADVANTAGE",
     "AWAY_THREAT_ADVANTAGE"
   ],
   "caution_layers": [
-    "LINEUP_DATA_MISSING",
+    "LINEUP_UNIT_EDGE_SOFT",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -74,13 +113,37 @@
       "leader": "Lausanne Sport"
     }
   ],
-  "unit_battle_summary": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    }
+  ],
   "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "summary": "No publish-safe H2H regime snapshot is available yet for this fixture, so H2H remains supporting-only.",
+    "sample_size": 0,
+    "goal_environment": 0,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 0
   },
   "market_suitability": {
     "ftr": {
@@ -121,15 +184,38 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 50,
+      "alignment_score": 48,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "AWAY",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "AWAY",
+        "bookie_pick": "AWAY",
+        "pick_probability": 0.3374253038694477,
+        "probabilities": {
+          "HOME": 0.3317927263483205,
+          "DRAW": 0.33078196978223184,
+          "AWAY": 0.3374253038694477
+        },
+        "xgb_pick": "AWAY",
+        "xgb_pick_probability": 0.8804624080657959,
+        "xgb_probabilities": {
+          "HOME": 0.04178605601191521,
+          "DRAW": 0.07775156199932098,
+          "AWAY": 0.8804624080657959
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "AWAY",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "FTR has some structural support from away power advantage, but the overall layer fit remains fragile.",
@@ -139,13 +225,31 @@
     "btts": {
       "alignment_score": 52,
       "state": "FRAGILE",
-      "model_lean": "NO",
+      "audit_state": "FRAGILE",
+      "model_lean": "YES",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "YES",
+        "bookie_pick": "YES",
+        "pick_probability": 0.5415408645489591,
+        "probabilities": {
+          "YES": 0.5415408645489591,
+          "NO": 0.4584591354510409
+        },
+        "xgb_pick": "",
+        "xgb_pick_probability": null,
+        "xgb_probabilities": {},
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "NO",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "BTTS has some structural support from away power advantage, but the overall layer fit remains fragile.",
@@ -155,59 +259,89 @@
     "ou25": {
       "alignment_score": 64,
       "state": "MIXED",
+      "audit_state": "MIXED",
       "model_lean": "OVER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "OVER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.5686834467240351,
+        "probabilities": {
+          "OVER25": 0.5686834467240351,
+          "UNDER25": 0.43131655327596485
+        },
+        "xgb_pick": "UNDER25",
+        "xgb_pick_probability": 0.4887242615222931,
+        "xgb_probabilities": {
+          "UNDER25": 0.4887242615222931,
+          "OVER25": 0.5112757384777069
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "OVER25",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Over 2.5 has partial support from away power advantage, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Over 2.5 has partial support from away power advantage, but lineup unit edge soft keeps it from reading clean.",
       "rating": 66,
       "band": "Mixed"
     },
     "team_goals": {
       "alignment_score": 77,
       "state": "MIXED",
-      "model_lean": "Winterthur 1.5+",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Winterthur 1.5+",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
-      "public_summary": "Team Goals has partial support from away power advantage, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Team Goals has partial support from away power advantage, but lineup unit edge soft keeps it from reading clean.",
       "rating": 79,
       "band": "Strong"
     },
     "correct_score": {
       "alignment_score": 83,
       "state": "SUPPORTED",
-      "model_lean": "OPEN",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "OPEN",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Correct Score is well supported by away power advantage, with caution still coming from lineup data missing.",
+      "public_summary": "Correct Score is well supported by away power advantage, with caution still coming from lineup unit edge soft.",
       "rating": 100,
       "band": "Elite"
     },
     "corners": {
       "alignment_score": 48,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "Corners has some structural support from away power advantage, but the overall layer fit remains fragile.",
@@ -217,16 +351,19 @@
     "cards": {
       "alignment_score": 64,
       "state": "MIXED",
-      "model_lean": "ELEVATED",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Cards has partial support from away power advantage, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Cards has partial support from away power advantage, but lineup unit edge soft keeps it from reading clean.",
       "rating": 66,
       "band": "Mixed"
     }
@@ -238,25 +375,22 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "Lausanne Sport Win has some live shape in Winterthur vs Lausanne Sport, but the supporting layers remain fragile and need discipline.",
+  "public_safe_summary": "No published pick is active for Winterthur vs Lausanne Sport; the fixture read is context only.",
   "internal_reason_tokens": [
     "AWAY_POWER_ADVANTAGE",
     "AWAY_THREAT_ADVANTAGE",
-    "LINEUP_DATA_MISSING",
+    "LINEUP_UNIT_EDGE_SOFT",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
     "support_count": 2,
     "caution_count": 2,
-    "lineup_available": false,
+    "lineup_available": true,
     "h2h_available": false
   },
-  "preview": {
-    "headline": "Winterthur vs Lausanne Sport: Lausanne Sport Win fragile",
-    "short_summary": "Lausanne Sport Win has some live shape in Winterthur vs Lausanne Sport, but the supporting layers remain fragile and need discipline. Primary support comes from away power advantage, while the main caution remains lineup data missing.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: Corners.",
-    "caution_line": "Main caution: Lineup Data Missing.",
-    "telegram_summary": "Winterthur vs Lausanne Sport — Lausanne Sport Win (Fragile, 56% agreement). Support: Away Power Advantage. Caution: Lineup Data Missing.",
-    "premium_summary": "Lausanne Sport Win is carrying a 56% agreement read across the published decision layers. Support is currently led by away power advantage, away threat advantage, while caution is still coming from lineup data missing, h2h unavailable."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-09T16:00:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

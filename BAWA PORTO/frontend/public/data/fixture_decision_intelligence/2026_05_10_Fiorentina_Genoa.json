@@ -1,15 +1,52 @@
 {
   "fixture_key": "2026_05_10_Fiorentina_Genoa",
   "fixture": "Fiorentina vs Genoa",
-  "primary_signal": "Fiorentina Win",
+  "primary_signal": "No published pick",
+  "context_signal": "Fiorentina Win",
   "signal_state": "AVOID",
-  "agreement_score": 34,
+  "agreement_score": 32,
   "confidence_band": "LOW",
+  "route_state": "OBSERVE",
+  "route_market": "FTR",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "AVOID",
+  "audit_agreement_score": 32,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "FTR",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "AVOID",
+    "agreement_score": 32,
+    "confidence_band": "LOW",
+    "supporting_layers": [],
+    "caution_layers": [
+      "TEAM_POWER_NOT_DECISIVE",
+      "AWAY_TRAVEL_THREAT",
+      "LINEUP_UNIT_EDGE_SOFT"
+    ],
+    "context_signal": "Fiorentina Win",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [],
   "caution_layers": [
     "TEAM_POWER_NOT_DECISIVE",
     "AWAY_TRAVEL_THREAT",
-    "LINEUP_DATA_MISSING"
+    "LINEUP_UNIT_EDGE_SOFT"
   ],
   "profile_tags": {
     "home": [
@@ -71,7 +108,26 @@
       "leader": "Fiorentina"
     }
   ],
-  "unit_battle_summary": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    }
+  ],
   "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
@@ -123,9 +179,32 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 38,
+      "alignment_score": 36,
       "state": "AVOID",
-      "model_lean": "HOME",
+      "audit_state": "AVOID",
+      "model_lean": "DRAW",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "DRAW",
+        "bookie_pick": "HOME",
+        "pick_probability": 0.18181818181818182,
+        "probabilities": {
+          "HOME": 0.3140727490450242,
+          "DRAW": 0.4749914960659177,
+          "AWAY": 0.21093575488905814
+        },
+        "xgb_pick": "HOME",
+        "xgb_pick_probability": 0.6752437353134155,
+        "xgb_probabilities": {
+          "HOME": 0.6752437353134155,
+          "DRAW": 0.27293092012405396,
+          "AWAY": 0.05182535573840141
+        },
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "HOME",
       "structural_support": [],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
@@ -138,7 +217,28 @@
     "btts": {
       "alignment_score": 54,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "YES",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "YES",
+        "bookie_pick": "YES",
+        "pick_probability": 0.5136806570497873,
+        "probabilities": {
+          "YES": 0.5136806570497873,
+          "NO": 0.48631934295021273
+        },
+        "xgb_pick": "YES",
+        "xgb_pick_probability": 0.9114730358123779,
+        "xgb_probabilities": {
+          "YES": 0.9114730358123779,
+          "NO": 0.08852696418762207
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "YES",
       "structural_support": [],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
@@ -151,7 +251,28 @@
     "ou25": {
       "alignment_score": 54,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "OVER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "OVER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.5463763905906815,
+        "probabilities": {
+          "OVER25": 0.5463763905906815,
+          "UNDER25": 0.45362360940931845
+        },
+        "xgb_pick": "UNDER25",
+        "xgb_pick_probability": 0.46167880296707153,
+        "xgb_probabilities": {
+          "UNDER25": 0.46167880296707153,
+          "OVER25": 0.5383211970329285
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "OVER25",
       "structural_support": [],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
@@ -164,10 +285,13 @@
     "team_goals": {
       "alignment_score": 60,
       "state": "FRAGILE",
-      "model_lean": "Fiorentina 1.5+",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Fiorentina 1.5+",
       "structural_support": [],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
       "public_summary": "Team Goals has some structural support from structural support, but the overall layer fit remains fragile.",
       "rating": 72,
@@ -176,7 +300,10 @@
     "correct_score": {
       "alignment_score": 79,
       "state": "MIXED",
-      "model_lean": "OPEN",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "OPEN",
       "structural_support": [],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE"
@@ -188,7 +315,10 @@
     "corners": {
       "alignment_score": 40,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
@@ -201,7 +331,10 @@
     "cards": {
       "alignment_score": 46,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
@@ -219,24 +352,21 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "Fiorentina Win is too contradicted across the current structural layers for Fiorentina vs Genoa, so the clean read is caution rather than action.",
+  "public_safe_summary": "No published pick is active for Fiorentina vs Genoa; the context layer is too contradicted to present as an action.",
   "internal_reason_tokens": [
     "TEAM_POWER_NOT_DECISIVE",
     "AWAY_TRAVEL_THREAT",
-    "LINEUP_DATA_MISSING"
+    "LINEUP_UNIT_EDGE_SOFT"
   ],
   "summary": {
     "support_count": 0,
     "caution_count": 3,
-    "lineup_available": false,
+    "lineup_available": true,
     "h2h_available": true
   },
-  "preview": {
-    "headline": "Fiorentina vs Genoa: Fiorentina Win avoid",
-    "short_summary": "Fiorentina Win is too contradicted across the current structural layers for Fiorentina vs Genoa, so the clean read is caution rather than action. Primary support comes from structural caution, while the main caution remains team power not decisive.",
-    "market_summary": "Best aligned market: Correct Score (Mixed). Secondary support: Team Goals. Weakest read: FTR.",
-    "caution_line": "Main caution: Team Power Not Decisive.",
-    "telegram_summary": "Fiorentina vs Genoa — Fiorentina Win (Avoid, 34% agreement). Support: structural caution. Caution: Team Power Not Decisive.",
-    "premium_summary": "Fiorentina Win is carrying a 34% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from team power not decisive, away travel threat."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-10T13:00:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

@@ -1,16 +1,55 @@
 {
   "fixture_key": "2026_05_09_Elche_CF_Deportivo_Alav_s",
   "fixture": "Elche CF vs Deportivo Alavés",
-  "primary_signal": "Elche CF Win",
+  "primary_signal": "No published pick",
+  "context_signal": "Elche CF Win",
   "signal_state": "FRAGILE",
-  "agreement_score": 56,
+  "agreement_score": 54,
   "confidence_band": "LOW",
+  "route_state": "OBSERVE",
+  "route_market": "FTR",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "FRAGILE",
+  "audit_agreement_score": 54,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "FTR",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "FRAGILE",
+    "agreement_score": 54,
+    "confidence_band": "LOW",
+    "supporting_layers": [
+      "TEAM_POWER_ADVANTAGE",
+      "HOME_FORTRESS_ADVANTAGE"
+    ],
+    "caution_layers": [
+      "LINEUP_UNIT_EDGE_SOFT",
+      "H2H_UNAVAILABLE"
+    ],
+    "context_signal": "Elche CF Win",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [
     "TEAM_POWER_ADVANTAGE",
     "HOME_FORTRESS_ADVANTAGE"
   ],
   "caution_layers": [
-    "LINEUP_DATA_MISSING",
+    "LINEUP_UNIT_EDGE_SOFT",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -74,13 +113,37 @@
       "leader": "Deportivo Alavés"
     }
   ],
-  "unit_battle_summary": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    }
+  ],
   "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "summary": "No publish-safe H2H regime snapshot is available yet for this fixture, so H2H remains supporting-only.",
+    "sample_size": 0,
+    "goal_environment": 0,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 0
   },
   "market_suitability": {
     "ftr": {
@@ -121,15 +184,38 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 48,
+      "alignment_score": 47,
       "state": "FRAGILE",
-      "model_lean": "HOME",
+      "audit_state": "FRAGILE",
+      "model_lean": "DRAW",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "DRAW",
+        "bookie_pick": "HOME",
+        "pick_probability": 0.6964285714285714,
+        "probabilities": {
+          "HOME": 0.37693837942961006,
+          "DRAW": 0.42374386323522506,
+          "AWAY": 0.19931775733516482
+        },
+        "xgb_pick": "HOME",
+        "xgb_pick_probability": 0.49348583817481995,
+        "xgb_probabilities": {
+          "HOME": 0.49348583817481995,
+          "DRAW": 0.24593119323253632,
+          "AWAY": 0.26058292388916016
+        },
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "HOME",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "FTR has some structural support from team power advantage, but the overall layer fit remains fragile.",
@@ -139,75 +225,126 @@
     "btts": {
       "alignment_score": 66,
       "state": "MIXED",
+      "audit_state": "MIXED",
       "model_lean": "YES",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "YES",
+        "bookie_pick": "YES",
+        "pick_probability": 0.5918679526581555,
+        "probabilities": {
+          "YES": 0.5918679526581555,
+          "NO": 0.4081320473418445
+        },
+        "xgb_pick": "NO",
+        "xgb_pick_probability": 0.31174683570861816,
+        "xgb_probabilities": {
+          "NO": 0.31174683570861816,
+          "YES": 0.6882531642913818
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "YES",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "BTTS has partial support from team power advantage, but lineup data missing keeps it from reading clean.",
+      "public_summary": "BTTS has partial support from team power advantage, but lineup unit edge soft keeps it from reading clean.",
       "rating": 70,
       "band": "Positive"
     },
     "ou25": {
       "alignment_score": 70,
       "state": "MIXED",
+      "audit_state": "MIXED",
       "model_lean": "OVER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "OVER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.5039217540859307,
+        "probabilities": {
+          "OVER25": 0.5039217540859307,
+          "UNDER25": 0.49607824591406935
+        },
+        "xgb_pick": "OVER25",
+        "xgb_pick_probability": 0.8807654976844788,
+        "xgb_probabilities": {
+          "OVER25": 0.8807654976844788,
+          "UNDER25": 0.11923450231552124
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "OVER25",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Over 2.5 has partial support from team power advantage, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Over 2.5 has partial support from team power advantage, but lineup unit edge soft keeps it from reading clean.",
       "rating": 74,
       "band": "Positive"
     },
     "team_goals": {
       "alignment_score": 80,
       "state": "SUPPORTED",
-      "model_lean": "Elche CF 1.5+",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Elche CF 1.5+",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
-      "public_summary": "Team Goals is well supported by team power advantage, with caution still coming from lineup data missing.",
+      "public_summary": "Team Goals is well supported by team power advantage, with caution still coming from lineup unit edge soft.",
       "rating": 83,
       "band": "Strong"
     },
     "correct_score": {
       "alignment_score": 83,
       "state": "SUPPORTED",
-      "model_lean": "OPEN",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "OPEN",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Correct Score is well supported by team power advantage, with caution still coming from lineup data missing.",
+      "public_summary": "Correct Score is well supported by team power advantage, with caution still coming from lineup unit edge soft.",
       "rating": 100,
       "band": "Elite"
     },
     "corners": {
       "alignment_score": 48,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "Corners has some structural support from team power advantage, but the overall layer fit remains fragile.",
@@ -217,16 +354,19 @@
     "cards": {
       "alignment_score": 66,
       "state": "MIXED",
-      "model_lean": "ELEVATED",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Cards has partial support from team power advantage, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Cards has partial support from team power advantage, but lineup unit edge soft keeps it from reading clean.",
       "rating": 70,
       "band": "Positive"
     }
@@ -238,25 +378,22 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "Elche CF Win has some live shape in Elche CF vs Deportivo Alavés, but the supporting layers remain fragile and need discipline.",
+  "public_safe_summary": "No published pick is active for Elche CF vs Deportivo Alavés; the fixture read is context only.",
   "internal_reason_tokens": [
     "TEAM_POWER_ADVANTAGE",
     "HOME_FORTRESS_ADVANTAGE",
-    "LINEUP_DATA_MISSING",
+    "LINEUP_UNIT_EDGE_SOFT",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
     "support_count": 2,
     "caution_count": 2,
-    "lineup_available": false,
+    "lineup_available": true,
     "h2h_available": false
   },
-  "preview": {
-    "headline": "Elche CF vs Deportivo Alavés: Elche CF Win fragile",
-    "short_summary": "Elche CF Win has some live shape in Elche CF vs Deportivo Alavés, but the supporting layers remain fragile and need discipline. Primary support comes from team power advantage, while the main caution remains lineup data missing.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: Corners.",
-    "caution_line": "Main caution: Lineup Data Missing.",
-    "telegram_summary": "Elche CF vs Deportivo Alavés — Elche CF Win (Fragile, 56% agreement). Support: Team Power Advantage. Caution: Lineup Data Missing.",
-    "premium_summary": "Elche CF Win is carrying a 56% agreement read across the published decision layers. Support is currently led by team power advantage, home fortress advantage, while caution is still coming from lineup data missing, h2h unavailable."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-09T12:00:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

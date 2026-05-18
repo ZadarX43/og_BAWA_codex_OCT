@@ -1,15 +1,53 @@
 {
   "fixture_key": "2026_05_09_Sydney_FC_Newcastle_Jets_FC",
   "fixture": "Sydney FC vs Newcastle Jets FC",
-  "primary_signal": "Sydney FC Win",
+  "primary_signal": "No published pick",
+  "context_signal": "Sydney FC Win",
   "signal_state": "AVOID",
-  "agreement_score": 32,
+  "agreement_score": 30,
   "confidence_band": "LOW",
+  "route_state": "OBSERVE",
+  "route_market": "FTR",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "AVOID",
+  "audit_agreement_score": 30,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "FTR",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "AVOID",
+    "agreement_score": 30,
+    "confidence_band": "LOW",
+    "supporting_layers": [],
+    "caution_layers": [
+      "TEAM_POWER_NOT_DECISIVE",
+      "AWAY_TRAVEL_THREAT",
+      "LINEUP_UNIT_EDGE_SOFT",
+      "H2H_UNAVAILABLE"
+    ],
+    "context_signal": "Sydney FC Win",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [],
   "caution_layers": [
     "TEAM_POWER_NOT_DECISIVE",
     "AWAY_TRAVEL_THREAT",
-    "LINEUP_DATA_MISSING",
+    "LINEUP_UNIT_EDGE_SOFT",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -75,46 +113,37 @@
       "leader": "Sydney FC"
     }
   ],
-  "unit_battle_summary": [],
-  "key_player_drivers": [
+  "unit_battle_summary": [
     {
-      "team": "Sydney FC",
-      "player": "Harrison Devenish-Meares",
-      "role": "Goalkeeper",
-      "power": 75,
-      "driver_metric": "Defensive Lock",
-      "driver_value": 53
+      "label": "Attack vs Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "Sydney FC",
-      "player": "Víctor Campuzano Bonilla",
-      "role": "Forward",
-      "power": 72,
-      "driver_metric": "Goal Threat",
-      "driver_value": 83
+      "label": "Midfield Control",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "Newcastle Jets FC",
-      "player": "James Nicholas Delianov",
-      "role": "Goalkeeper",
-      "power": 70,
-      "driver_metric": "Defensive Lock",
-      "driver_value": 52
-    },
-    {
-      "team": "Newcastle Jets FC",
-      "player": "Alexander Badolato",
-      "role": "Forward",
-      "power": 68,
-      "driver_metric": "Goal Threat",
-      "driver_value": 72
+      "label": "Away Attack vs Home Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     }
   ],
+  "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "summary": "No publish-safe H2H regime snapshot is available yet for this fixture, so H2H remains supporting-only.",
+    "sample_size": 0,
+    "goal_environment": 0,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 0
   },
   "market_suitability": {
     "ftr": {
@@ -155,9 +184,32 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 49,
+      "alignment_score": 48,
       "state": "AVOID",
-      "model_lean": "HOME",
+      "audit_state": "AVOID",
+      "model_lean": "AWAY",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "AWAY",
+        "bookie_pick": "HOME",
+        "pick_probability": 0.340924016018929,
+        "probabilities": {
+          "HOME": 0.340924016018929,
+          "DRAW": 0.3165734900966343,
+          "AWAY": 0.3425024938844366
+        },
+        "xgb_pick": "DRAW",
+        "xgb_pick_probability": 0.671707034111023,
+        "xgb_probabilities": {
+          "HOME": 0.2797676920890808,
+          "DRAW": 0.671707034111023,
+          "AWAY": 0.04852524772286415
+        },
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "HOME",
       "structural_support": [],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
@@ -170,7 +222,25 @@
     "btts": {
       "alignment_score": 41,
       "state": "AVOID",
-      "model_lean": "YES",
+      "audit_state": "AVOID",
+      "model_lean": "NO",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "NO",
+        "bookie_pick": "NO",
+        "pick_probability": 0.5017880540273733,
+        "probabilities": {
+          "YES": 0.49821194597262675,
+          "NO": 0.5017880540273733
+        },
+        "xgb_pick": "",
+        "xgb_pick_probability": null,
+        "xgb_probabilities": {},
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "YES",
       "structural_support": [],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
@@ -183,7 +253,28 @@
     "ou25": {
       "alignment_score": 47,
       "state": "FRAGILE",
-      "model_lean": "OVER25",
+      "audit_state": "FRAGILE",
+      "model_lean": "UNDER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "UNDER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.4827607660131956,
+        "probabilities": {
+          "OVER25": 0.4827607660131956,
+          "UNDER25": 0.5172392339868044
+        },
+        "xgb_pick": "UNDER25",
+        "xgb_pick_probability": 0.39550507068634033,
+        "xgb_probabilities": {
+          "UNDER25": 0.39550507068634033,
+          "OVER25": 0.6044949293136597
+        },
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "OVER25",
       "structural_support": [],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
@@ -196,19 +287,25 @@
     "team_goals": {
       "alignment_score": 78,
       "state": "MIXED",
-      "model_lean": "Newcastle Jets FC 1.5+",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Newcastle Jets FC 1.5+",
       "structural_support": [],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
-      "public_summary": "Team Goals has partial support from structural support, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Team Goals has partial support from structural support, but lineup unit edge soft keeps it from reading clean.",
       "rating": 96,
       "band": "Strong"
     },
     "correct_score": {
       "alignment_score": 81,
       "state": "SUPPORTED",
-      "model_lean": "STRUCTURED",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "STRUCTURED",
       "structural_support": [],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE"
@@ -220,7 +317,10 @@
     "corners": {
       "alignment_score": 44,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
@@ -233,7 +333,10 @@
     "cards": {
       "alignment_score": 36,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
@@ -251,25 +354,22 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "Sydney FC Win is too contradicted across the current structural layers for Sydney FC vs Newcastle Jets FC, so the clean read is caution rather than action.",
+  "public_safe_summary": "No published pick is active for Sydney FC vs Newcastle Jets FC; the context layer is too contradicted to present as an action.",
   "internal_reason_tokens": [
     "TEAM_POWER_NOT_DECISIVE",
     "AWAY_TRAVEL_THREAT",
-    "LINEUP_DATA_MISSING",
+    "LINEUP_UNIT_EDGE_SOFT",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
     "support_count": 0,
     "caution_count": 4,
-    "lineup_available": false,
+    "lineup_available": true,
     "h2h_available": false
   },
-  "preview": {
-    "headline": "Sydney FC vs Newcastle Jets FC: Sydney FC Win avoid",
-    "short_summary": "Sydney FC Win is too contradicted across the current structural layers for Sydney FC vs Newcastle Jets FC, so the clean read is caution rather than action. Primary support comes from structural caution, while the main caution remains team power not decisive.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: Cards.",
-    "caution_line": "Main caution: Team Power Not Decisive.",
-    "telegram_summary": "Sydney FC vs Newcastle Jets FC — Sydney FC Win (Avoid, 32% agreement). Support: structural caution. Caution: Team Power Not Decisive.",
-    "premium_summary": "Sydney FC Win is carrying a 32% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from team power not decisive, away travel threat."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-09T00:00:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

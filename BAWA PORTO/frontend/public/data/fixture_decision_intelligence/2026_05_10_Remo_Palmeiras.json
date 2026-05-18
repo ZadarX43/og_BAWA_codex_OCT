@@ -2,9 +2,48 @@
   "fixture_key": "2026_05_10_Remo_Palmeiras",
   "fixture": "Remo vs Palmeiras",
   "primary_signal": "Palmeiras Win",
+  "context_signal": "Palmeiras Win",
   "signal_state": "MIXED",
   "agreement_score": 66,
   "confidence_band": "ELITE",
+  "route_state": "DEPLOY",
+  "route_market": "FTR",
+  "route_pick": "AWAY",
+  "route_active": true,
+  "route_label": "Palmeiras Win",
+  "route_confidence_tier": "ELITE",
+  "route_bookie_od": 1.81,
+  "route_value_edge_label": "negative",
+  "audit_state": "MIXED",
+  "audit_agreement_score": 66,
+  "audit_confidence_band": "ELITE",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "DEPLOY",
+    "route_market": "FTR",
+    "route_pick": "AWAY",
+    "route_active": true,
+    "confidence_tier": "ELITE",
+    "bookie_od": 1.81,
+    "value_edge_label": "negative",
+    "premium_tier": "ELITE"
+  },
+  "context_audit": {
+    "state": "MIXED",
+    "agreement_score": 66,
+    "confidence_band": "ELITE",
+    "supporting_layers": [
+      "AWAY_POWER_ADVANTAGE",
+      "AWAY_THREAT_ADVANTAGE",
+      "AWAY_ATTACK_MISMATCH"
+    ],
+    "caution_layers": [
+      "H2H_UNAVAILABLE"
+    ],
+    "context_signal": "Palmeiras Win",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [
     "AWAY_POWER_ADVANTAGE",
     "AWAY_THREAT_ADVANTAGE",
@@ -170,8 +209,13 @@
   ],
   "h2h_context": {
     "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "summary": "No publish-safe H2H regime snapshot is available yet for this fixture, so H2H remains supporting-only.",
+    "sample_size": 0,
+    "goal_environment": 0,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 0
   },
   "market_suitability": {
     "ftr": {
@@ -214,7 +258,30 @@
     "ftr": {
       "alignment_score": 70,
       "state": "MIXED",
+      "audit_state": "MIXED",
       "model_lean": "AWAY",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "AWAY",
+        "bookie_pick": "AWAY",
+        "pick_probability": 0.4344262295081967,
+        "probabilities": {
+          "HOME": 0.29577171039774874,
+          "DRAW": 0.28126641842512523,
+          "AWAY": 0.4229618711771259
+        },
+        "xgb_pick": "HOME",
+        "xgb_pick_probability": 0.9248087406158447,
+        "xgb_probabilities": {
+          "HOME": 0.9248087406158447,
+          "DRAW": 0.029288817197084427,
+          "AWAY": 0.04590242728590965
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "AWAY",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE",
@@ -230,7 +297,28 @@
     "btts": {
       "alignment_score": 52,
       "state": "FRAGILE",
-      "model_lean": "YES",
+      "audit_state": "FRAGILE",
+      "model_lean": "NO",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "NO",
+        "bookie_pick": "NO",
+        "pick_probability": 0.5920451684407224,
+        "probabilities": {
+          "YES": 0.4079548315592776,
+          "NO": 0.5920451684407224
+        },
+        "xgb_pick": "NO",
+        "xgb_pick_probability": 0.5462898910045624,
+        "xgb_probabilities": {
+          "NO": 0.5462898910045624,
+          "YES": 0.4537101089954376
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "YES",
       "structural_support": [
         "AWAY_ATTACK_MISMATCH"
       ],
@@ -244,7 +332,28 @@
     "ou25": {
       "alignment_score": 57,
       "state": "FRAGILE",
-      "model_lean": "UNDER25",
+      "audit_state": "FRAGILE",
+      "model_lean": "OVER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "OVER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.5045702401750496,
+        "probabilities": {
+          "OVER25": 0.5045702401750496,
+          "UNDER25": 0.4954297598249504
+        },
+        "xgb_pick": "OVER25",
+        "xgb_pick_probability": 0.5892045497894287,
+        "xgb_probabilities": {
+          "OVER25": 0.5892045497894287,
+          "UNDER25": 0.4107954502105713
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "UNDER25",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
@@ -259,7 +368,10 @@
     "team_goals": {
       "alignment_score": 62,
       "state": "MIXED",
-      "model_lean": "Palmeiras 1.5+",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Palmeiras 1.5+",
       "structural_support": [
         "AWAY_ATTACK_MISMATCH"
       ],
@@ -273,7 +385,10 @@
     "correct_score": {
       "alignment_score": 52,
       "state": "FRAGILE",
-      "model_lean": "OPEN",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "OPEN",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE"
       ],
@@ -287,7 +402,10 @@
     "corners": {
       "alignment_score": 62,
       "state": "MIXED",
-      "model_lean": "ELEVATED",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
@@ -302,7 +420,10 @@
     "cards": {
       "alignment_score": 51,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
@@ -335,12 +456,9 @@
     "lineup_available": true,
     "h2h_available": false
   },
-  "preview": {
-    "headline": "Remo vs Palmeiras: Palmeiras Win mixed",
-    "short_summary": "Palmeiras Win has live support in Remo vs Palmeiras, but the supporting layers are not clean enough to read as fully aligned. Primary support comes from away power advantage, while the main caution remains h2h unavailable.",
-    "market_summary": "Best aligned market: FTR (Mixed). Secondary support: Team Goals. Weakest read: Cards.",
-    "caution_line": "Main caution: H2H Unavailable.",
-    "telegram_summary": "Remo vs Palmeiras — Palmeiras Win (Mixed, 66% agreement). Support: Away Power Advantage. Caution: H2H Unavailable.",
-    "premium_summary": "Palmeiras Win is carrying a 66% agreement read across the published decision layers. Support is currently led by away power advantage, away threat advantage, while caution is still coming from h2h unavailable."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-10T19:00:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

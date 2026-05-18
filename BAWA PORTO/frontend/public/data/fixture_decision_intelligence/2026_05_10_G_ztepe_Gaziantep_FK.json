@@ -1,13 +1,47 @@
 {
   "fixture_key": "2026_05_10_G_ztepe_Gaziantep_FK",
   "fixture": "Göztepe vs Gaziantep FK",
-  "primary_signal": "Fixture read",
+  "primary_signal": "No published pick",
+  "context_signal": "Fixture context",
   "signal_state": "FRAGILE",
-  "agreement_score": 44,
+  "agreement_score": 48,
   "confidence_band": "LOW",
+  "route_state": "CONTEXT",
+  "route_market": "",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "FRAGILE",
+  "audit_agreement_score": 48,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "CONTEXT",
+    "route_market": "",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "FRAGILE",
+    "agreement_score": 48,
+    "confidence_band": "LOW",
+    "supporting_layers": [],
+    "caution_layers": [
+      "H2H_UNAVAILABLE"
+    ],
+    "context_signal": "Fixture context",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [],
   "caution_layers": [
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -57,13 +91,37 @@
       "leader": "Gaziantep FK"
     }
   ],
-  "unit_battle_summary": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    }
+  ],
   "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "summary": "No publish-safe H2H regime snapshot is available yet for this fixture, so H2H remains supporting-only.",
+    "sample_size": 0,
+    "goal_environment": 0,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 0
   },
   "market_suitability": {
     "ftr": {
@@ -104,12 +162,14 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 55,
+      "alignment_score": 59,
       "state": "FRAGILE",
-      "model_lean": "HOME",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "HOME",
       "structural_support": [],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "FTR has some structural support from structural support, but the overall layer fit remains fragile.",
@@ -117,76 +177,89 @@
       "band": "Positive"
     },
     "btts": {
-      "alignment_score": 41,
-      "state": "AVOID",
-      "model_lean": "YES",
+      "alignment_score": 45,
+      "state": "FRAGILE",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "YES",
       "structural_support": [],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "BTTS is too contradicted by lineup data missing to present as a clean public read.",
+      "public_summary": "BTTS has some structural support from structural support, but the overall layer fit remains fragile.",
       "rating": 52,
       "band": "Weak"
     },
     "ou25": {
-      "alignment_score": 42,
-      "state": "AVOID",
-      "model_lean": "UNDER25",
+      "alignment_score": 46,
+      "state": "FRAGILE",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "UNDER25",
       "structural_support": [],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Over 2.5 is too contradicted by lineup data missing to present as a clean public read.",
+      "public_summary": "Over 2.5 has some structural support from structural support, but the overall layer fit remains fragile.",
       "rating": 54,
       "band": "Weak"
     },
     "team_goals": {
       "alignment_score": 69,
       "state": "MIXED",
-      "model_lean": "Gaziantep FK 1.5+",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Gaziantep FK 1.5+",
       "structural_support": [],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Team Goals has partial support from structural support, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Team Goals has partial support from structural support, but h2h unavailable keeps it from reading clean.",
       "rating": 84,
       "band": "Strong"
     },
     "correct_score": {
-      "alignment_score": 77,
-      "state": "MIXED",
-      "model_lean": "STRUCTURED",
+      "alignment_score": 81,
+      "state": "SUPPORTED",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "STRUCTURED",
       "structural_support": [],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Correct Score has partial support from structural support, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Correct Score is well supported by structural support, with caution still coming from h2h unavailable.",
       "rating": 100,
       "band": "Elite"
     },
     "corners": {
-      "alignment_score": 44,
-      "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "alignment_score": 48,
+      "state": "FRAGILE",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Corners is too contradicted by lineup data missing to present as a clean public read.",
+      "public_summary": "Corners has some structural support from structural support, but the overall layer fit remains fragile.",
       "rating": 56,
       "band": "Mixed"
     },
     "cards": {
-      "alignment_score": 50,
+      "alignment_score": 54,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [],
       "cautions": [
-        "LINEUP_DATA_MISSING",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "Cards has some structural support from structural support, but the overall layer fit remains fragile.",
@@ -201,23 +274,19 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "Fixture read has some live shape in Göztepe vs Gaziantep FK, but the supporting layers remain fragile and need discipline.",
+  "public_safe_summary": "No published pick is active for Göztepe vs Gaziantep FK; the fixture read is context only.",
   "internal_reason_tokens": [
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
     "support_count": 0,
-    "caution_count": 2,
-    "lineup_available": false,
+    "caution_count": 1,
+    "lineup_available": true,
     "h2h_available": false
   },
-  "preview": {
-    "headline": "Göztepe vs Gaziantep FK: Fixture read fragile",
-    "short_summary": "Fixture read has some live shape in Göztepe vs Gaziantep FK, but the supporting layers remain fragile and need discipline. Primary support comes from structural caution, while the main caution remains lineup data missing.",
-    "market_summary": "Best aligned market: Correct Score (Mixed). Secondary support: Team Goals. Weakest read: BTTS.",
-    "caution_line": "Main caution: Lineup Data Missing.",
-    "telegram_summary": "Göztepe vs Gaziantep FK — Fixture read (Fragile, 44% agreement). Support: structural caution. Caution: Lineup Data Missing.",
-    "premium_summary": "Fixture read is carrying a 44% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from lineup data missing, h2h unavailable."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-09T17:00:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

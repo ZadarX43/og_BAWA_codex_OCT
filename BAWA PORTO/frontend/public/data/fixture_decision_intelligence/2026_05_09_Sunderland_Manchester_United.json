@@ -1,15 +1,51 @@
 {
   "fixture_key": "2026_05_09_Sunderland_Manchester_United",
   "fixture": "Sunderland vs Manchester United",
-  "primary_signal": "BTTS Yes",
+  "primary_signal": "No published pick",
+  "context_signal": "BTTS Yes",
   "signal_state": "AVOID",
-  "agreement_score": 32,
+  "agreement_score": 36,
   "confidence_band": "LOW",
+  "route_state": "OBSERVE",
+  "route_market": "BTTS",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "AVOID",
+  "audit_agreement_score": 36,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "BTTS",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "AVOID",
+    "agreement_score": 36,
+    "confidence_band": "LOW",
+    "supporting_layers": [],
+    "caution_layers": [
+      "BTTS_PRESSURE_WEAK",
+      "GOAL_ENVIRONMENT_SOFT",
+      "H2H_UNAVAILABLE"
+    ],
+    "context_signal": "BTTS Yes",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [],
   "caution_layers": [
     "BTTS_PRESSURE_WEAK",
     "GOAL_ENVIRONMENT_SOFT",
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -74,46 +110,37 @@
       "leader": "Manchester United"
     }
   ],
-  "unit_battle_summary": [],
-  "key_player_drivers": [
+  "unit_battle_summary": [
     {
-      "team": "Sunderland",
-      "player": "Romaine Lee Mundle",
-      "role": "Forward",
-      "power": 57,
-      "driver_metric": "Goal Threat",
-      "driver_value": 55
+      "label": "Attack vs Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "Sunderland",
-      "player": "Enzo Le Fée",
-      "role": "Central Midfielder",
-      "power": 55,
-      "driver_metric": "Goal Threat",
-      "driver_value": 59
+      "label": "Midfield Control",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "Manchester United",
-      "player": "Benjamin Šeško",
-      "role": "Forward",
-      "power": 60,
-      "driver_metric": "Goal Threat",
-      "driver_value": 62
-    },
-    {
-      "team": "Manchester United",
-      "player": "Bruno Fernandes",
-      "role": "Central Midfielder",
-      "power": 56,
-      "driver_metric": "Creative Spark",
-      "driver_value": 57
+      "label": "Away Attack vs Home Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     }
   ],
+  "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "summary": "No publish-safe H2H regime snapshot is available yet for this fixture, so H2H remains supporting-only.",
+    "sample_size": 0,
+    "goal_environment": 0,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 0
   },
   "market_suitability": {
     "ftr": {
@@ -156,7 +183,30 @@
     "ftr": {
       "alignment_score": 54,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "AWAY",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "AWAY",
+        "bookie_pick": "AWAY",
+        "pick_probability": 0.5341920174334395,
+        "probabilities": {
+          "HOME": 0.3739683984157395,
+          "DRAW": 0.24314522451957016,
+          "AWAY": 0.38288637706469036
+        },
+        "xgb_pick": "HOME",
+        "xgb_pick_probability": 0.6081020832061768,
+        "xgb_probabilities": {
+          "HOME": 0.6081020832061768,
+          "DRAW": 0.07114540785551071,
+          "AWAY": 0.32075247168540955
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "AWAY",
       "structural_support": [],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
@@ -167,9 +217,30 @@
       "band": "Positive"
     },
     "btts": {
-      "alignment_score": 41,
+      "alignment_score": 44,
       "state": "AVOID",
-      "model_lean": "YES",
+      "audit_state": "AVOID",
+      "model_lean": "NO",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "NO",
+        "bookie_pick": "NO",
+        "pick_probability": 0.5943157564598851,
+        "probabilities": {
+          "YES": 0.4056842435401149,
+          "NO": 0.5943157564598851
+        },
+        "xgb_pick": "NO",
+        "xgb_pick_probability": 0.5057971477508545,
+        "xgb_probabilities": {
+          "NO": 0.5057971477508545,
+          "YES": 0.4942028522491455
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "YES",
       "structural_support": [],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
@@ -182,7 +253,28 @@
     "ou25": {
       "alignment_score": 46,
       "state": "FRAGILE",
-      "model_lean": "UNDER25",
+      "audit_state": "FRAGILE",
+      "model_lean": "OVER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "OVER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.6043561531335779,
+        "probabilities": {
+          "OVER25": 0.6043561531335779,
+          "UNDER25": 0.39564384686642207
+        },
+        "xgb_pick": "UNDER25",
+        "xgb_pick_probability": 0.13952885568141937,
+        "xgb_probabilities": {
+          "UNDER25": 0.13952885568141937,
+          "OVER25": 0.8604711443185806
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "UNDER25",
       "structural_support": [],
       "cautions": [
         "GOAL_ENVIRONMENT_SOFT"
@@ -192,13 +284,15 @@
       "band": "Weak"
     },
     "team_goals": {
-      "alignment_score": 69,
+      "alignment_score": 73,
       "state": "MIXED",
-      "model_lean": "Manchester United 1.5+",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Manchester United 1.5+",
       "structural_support": [],
       "cautions": [
-        "GOAL_ENVIRONMENT_SOFT",
-        "LINEUP_DATA_MISSING"
+        "GOAL_ENVIRONMENT_SOFT"
       ],
       "public_summary": "Team Goals has partial support from structural support, but goal environment soft keeps it from reading clean.",
       "rating": 89,
@@ -207,7 +301,10 @@
     "correct_score": {
       "alignment_score": 81,
       "state": "SUPPORTED",
-      "model_lean": "STRUCTURED",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "STRUCTURED",
       "structural_support": [],
       "cautions": [
         "GOAL_ENVIRONMENT_SOFT"
@@ -219,7 +316,10 @@
     "corners": {
       "alignment_score": 30,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [],
       "cautions": [
         "BTTS_PRESSURE_WEAK"
@@ -231,7 +331,10 @@
     "cards": {
       "alignment_score": 38,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
@@ -249,25 +352,21 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "BTTS Yes is too contradicted across the current structural layers for Sunderland vs Manchester United, so the clean read is caution rather than action.",
+  "public_safe_summary": "No published pick is active for Sunderland vs Manchester United; the context layer is too contradicted to present as an action.",
   "internal_reason_tokens": [
     "BTTS_PRESSURE_WEAK",
     "GOAL_ENVIRONMENT_SOFT",
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
     "support_count": 0,
-    "caution_count": 4,
-    "lineup_available": false,
+    "caution_count": 3,
+    "lineup_available": true,
     "h2h_available": false
   },
-  "preview": {
-    "headline": "Sunderland vs Manchester United: BTTS Yes avoid",
-    "short_summary": "BTTS Yes is too contradicted across the current structural layers for Sunderland vs Manchester United, so the clean read is caution rather than action. Primary support comes from structural caution, while the main caution remains btts pressure weak.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: Corners.",
-    "caution_line": "Main caution: Btts Pressure Weak.",
-    "telegram_summary": "Sunderland vs Manchester United — BTTS Yes (Avoid, 32% agreement). Support: structural caution. Caution: Btts Pressure Weak.",
-    "premium_summary": "BTTS Yes is carrying a 32% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from btts pressure weak, goal environment soft."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-09T14:00:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

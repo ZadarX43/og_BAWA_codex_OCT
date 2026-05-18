@@ -2,17 +2,52 @@
   "fixture_key": "2026_05_09_Toronto_Inter_Miami",
   "fixture": "Toronto vs Inter Miami",
   "primary_signal": "Over 2.5",
-  "signal_state": "FRAGILE",
-  "agreement_score": 56,
+  "context_signal": "Over 2.5",
+  "signal_state": "MIXED",
+  "agreement_score": 66,
   "confidence_band": "STANDARD",
+  "route_state": "DEPLOY",
+  "route_market": "OU25",
+  "route_pick": "OVER25",
+  "route_active": true,
+  "route_label": "Over 2.5",
+  "route_confidence_tier": "STANDARD",
+  "route_bookie_od": 1.44,
+  "route_value_edge_label": "positive",
+  "audit_state": "MIXED",
+  "audit_agreement_score": 66,
+  "audit_confidence_band": "STANDARD",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "DEPLOY",
+    "route_market": "OU25",
+    "route_pick": "OVER25",
+    "route_active": true,
+    "confidence_tier": "STANDARD",
+    "bookie_od": 1.44,
+    "value_edge_label": "positive",
+    "premium_tier": "STANDARD"
+  },
+  "context_audit": {
+    "state": "MIXED",
+    "agreement_score": 66,
+    "confidence_band": "STANDARD",
+    "supporting_layers": [
+      "OVER25_HEAT_SUPPORT",
+      "CHAOS_ENVIRONMENT_SUPPORT",
+      "H2H_OVER_SUPPORT"
+    ],
+    "caution_layers": [],
+    "context_signal": "Over 2.5",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [
     "OVER25_HEAT_SUPPORT",
-    "CHAOS_ENVIRONMENT_SUPPORT"
+    "CHAOS_ENVIRONMENT_SUPPORT",
+    "H2H_OVER_SUPPORT"
   ],
-  "caution_layers": [
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
-  ],
+  "caution_layers": [],
   "profile_tags": {
     "home": [
       "Mixed Team Profile"
@@ -72,7 +107,26 @@
       "leader": "Inter Miami"
     }
   ],
-  "unit_battle_summary": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 46,
+      "away_value": 46,
+      "delta": 0
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 44,
+      "away_value": 47,
+      "delta": -3
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 69,
+      "away_value": 41,
+      "delta": 28
+    }
+  ],
   "key_player_drivers": [
     {
       "team": "Toronto",
@@ -107,11 +161,57 @@
       "driver_value": 69
     }
   ],
-  "key_mismatches": [],
+  "key_mismatches": [
+    {
+      "zone": "Inter Miami attack vs Toronto FC defence",
+      "advantage": "Inter Miami",
+      "mismatch_score": 28,
+      "left_label": "Inter Miami attack",
+      "left_value": 69,
+      "right_label": "Toronto FC defence",
+      "right_value": 41,
+      "summary": "Major Inter Miami attacking advantage"
+    },
+    {
+      "zone": "Inter Miami wide threat vs Toronto FC resistance",
+      "advantage": "Inter Miami",
+      "mismatch_score": 21,
+      "left_label": "Inter Miami wide threat",
+      "left_value": 62,
+      "right_label": "Toronto FC resistance",
+      "right_value": 41,
+      "summary": "Inter Miami wide channel has a live attacking edge"
+    },
+    {
+      "zone": "Toronto FC wide threat vs Inter Miami resistance",
+      "advantage": "Toronto FC",
+      "mismatch_score": 16,
+      "left_label": "Toronto FC wide threat",
+      "left_value": 62,
+      "right_label": "Inter Miami resistance",
+      "right_value": 46,
+      "summary": "Toronto FC wide channel has a live attacking edge"
+    },
+    {
+      "zone": "Midfield control battle",
+      "advantage": "Inter Miami",
+      "mismatch_score": 3,
+      "left_label": "Toronto FC midfield",
+      "left_value": 44,
+      "right_label": "Inter Miami midfield",
+      "right_value": 47,
+      "summary": "Inter Miami should control more of the central game-state"
+    }
+  ],
   "h2h_context": {
-    "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "available": true,
+    "summary": "Using the latest available same-team-pair historical regime (1 prior meeting) as supporting context for this current fixture.",
+    "sample_size": 1,
+    "goal_environment": 4,
+    "btts_regime": 100,
+    "over25_rate": 100,
+    "draw_rate": 0,
+    "booking_heat": 3
   },
   "market_suitability": {
     "ftr": {
@@ -152,110 +252,167 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 56,
-      "state": "FRAGILE",
+      "alignment_score": 64,
+      "state": "MIXED",
+      "audit_state": "MIXED",
       "model_lean": "AWAY",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "AWAY",
+        "bookie_pick": "AWAY",
+        "pick_probability": 0.37745098039215685,
+        "probabilities": {
+          "HOME": 0.3115300768577061,
+          "DRAW": 0.2853605757746745,
+          "AWAY": 0.4031093473676194
+        },
+        "xgb_pick": "HOME",
+        "xgb_pick_probability": 0.8635678291320801,
+        "xgb_probabilities": {
+          "HOME": 0.8635678291320801,
+          "DRAW": 0.04465321823954582,
+          "AWAY": 0.09177893400192261
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "AWAY",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
-      "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
-      ],
-      "public_summary": "FTR has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
+      "cautions": [],
+      "public_summary": "FTR has partial support from over 2.5 heat support, but no major caution published keeps it from reading clean.",
       "rating": 56,
       "band": "Mixed"
     },
     "btts": {
-      "alignment_score": 60,
-      "state": "FRAGILE",
+      "alignment_score": 68,
+      "state": "MIXED",
+      "audit_state": "MIXED",
       "model_lean": "YES",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "YES",
+        "bookie_pick": "YES",
+        "pick_probability": 0.7846205225467895,
+        "probabilities": {
+          "YES": 0.7846205225467895,
+          "NO": 0.2153794774532105
+        },
+        "xgb_pick": "YES",
+        "xgb_pick_probability": 0.9097504615783691,
+        "xgb_probabilities": {
+          "YES": 0.9097504615783691,
+          "NO": 0.09024953842163086
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "YES",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
-      "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
-      ],
-      "public_summary": "BTTS has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
+      "cautions": [],
+      "public_summary": "BTTS has partial support from over 2.5 heat support, but no major caution published keeps it from reading clean.",
       "rating": 62,
       "band": "Mixed"
     },
     "ou25": {
-      "alignment_score": 59,
-      "state": "FRAGILE",
+      "alignment_score": 65,
+      "state": "MIXED",
+      "audit_state": "MIXED",
       "model_lean": "OVER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "OVER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.802206042747788,
+        "probabilities": {
+          "OVER25": 0.802206042747788,
+          "UNDER25": 0.19779395725221205
+        },
+        "xgb_pick": "OVER25",
+        "xgb_pick_probability": 0.9860862493515015,
+        "xgb_probabilities": {
+          "OVER25": 0.9860862493515015,
+          "UNDER25": 0.013913750648498535
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "OVER25",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
-      "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
-      ],
-      "public_summary": "Over 2.5 has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
+      "cautions": [],
+      "public_summary": "Over 2.5 has partial support from over 2.5 heat support, but no major caution published keeps it from reading clean.",
       "rating": 64,
       "band": "Mixed"
     },
     "team_goals": {
-      "alignment_score": 71,
+      "alignment_score": 75,
       "state": "MIXED",
-      "model_lean": "Inter Miami 1.5+",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Inter Miami 1.5+",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
-      "cautions": [
-        "LINEUP_DATA_MISSING"
-      ],
-      "public_summary": "Team Goals has partial support from over 2.5 heat support, but lineup data missing keeps it from reading clean.",
+      "cautions": [],
+      "public_summary": "Team Goals has partial support from over 2.5 heat support, but no major caution published keeps it from reading clean.",
       "rating": 71,
       "band": "Strong"
     },
     "correct_score": {
-      "alignment_score": 83,
+      "alignment_score": 91,
       "state": "SUPPORTED",
-      "model_lean": "OPEN",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "OPEN",
       "structural_support": [
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
-      "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
-      ],
-      "public_summary": "Correct Score is well supported by chaos environment support, with caution still coming from lineup data missing.",
+      "cautions": [],
+      "public_summary": "Correct Score is well supported by chaos environment support, with caution still coming from no major caution published.",
       "rating": 100,
       "band": "Elite"
     },
     "corners": {
-      "alignment_score": 60,
-      "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "alignment_score": 68,
+      "state": "MIXED",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
-      "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
-      ],
-      "public_summary": "Corners has some structural support from over 2.5 heat support, but the overall layer fit remains fragile.",
+      "cautions": [],
+      "public_summary": "Corners has partial support from over 2.5 heat support, but no major caution published keeps it from reading clean.",
       "rating": 62,
       "band": "Mixed"
     },
     "cards": {
-      "alignment_score": 53,
+      "alignment_score": 61,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
-      "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
-      ],
+      "cautions": [],
       "public_summary": "Cards has some structural support from chaos environment support, but the overall layer fit remains fragile.",
       "rating": 60,
       "band": "Mixed"
@@ -268,25 +425,21 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "Over 2.5 has some live shape in Toronto vs Inter Miami, but the supporting layers remain fragile and need discipline.",
+  "public_safe_summary": "Over 2.5 has live support in Toronto vs Inter Miami, but the supporting layers are not clean enough to read as fully aligned.",
   "internal_reason_tokens": [
     "OVER25_HEAT_SUPPORT",
     "CHAOS_ENVIRONMENT_SUPPORT",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "H2H_OVER_SUPPORT"
   ],
   "summary": {
-    "support_count": 2,
-    "caution_count": 2,
-    "lineup_available": false,
-    "h2h_available": false
+    "support_count": 3,
+    "caution_count": 0,
+    "lineup_available": true,
+    "h2h_available": true
   },
-  "preview": {
-    "headline": "Toronto vs Inter Miami: Over 2.5 fragile",
-    "short_summary": "Over 2.5 has some live shape in Toronto vs Inter Miami, but the supporting layers remain fragile and need discipline. Primary support comes from over25 heat support, while the main caution remains lineup data missing.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: Cards.",
-    "caution_line": "Main caution: Lineup Data Missing.",
-    "telegram_summary": "Toronto vs Inter Miami — Over 2.5 (Fragile, 56% agreement). Support: Over25 Heat Support. Caution: Lineup Data Missing.",
-    "premium_summary": "Over 2.5 is carrying a 56% agreement read across the published decision layers. Support is currently led by over25 heat support, chaos environment support, while caution is still coming from lineup data missing, h2h unavailable."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-09T17:00:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

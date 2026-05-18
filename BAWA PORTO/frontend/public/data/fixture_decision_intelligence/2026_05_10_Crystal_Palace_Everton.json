@@ -1,10 +1,48 @@
 {
   "fixture_key": "2026_05_10_Crystal_Palace_Everton",
   "fixture": "Crystal Palace vs Everton",
-  "primary_signal": "BTTS Yes",
+  "primary_signal": "No published pick",
+  "context_signal": "BTTS Yes",
   "signal_state": "FRAGILE",
   "agreement_score": 42,
   "confidence_band": "LOW",
+  "route_state": "OBSERVE",
+  "route_market": "BTTS",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "FRAGILE",
+  "audit_agreement_score": 42,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "BTTS",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "FRAGILE",
+    "agreement_score": 42,
+    "confidence_band": "LOW",
+    "supporting_layers": [
+      "H2H_BTTS_SUPPORT"
+    ],
+    "caution_layers": [
+      "BTTS_PRESSURE_WEAK",
+      "GOAL_ENVIRONMENT_SOFT"
+    ],
+    "context_signal": "BTTS Yes",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [
     "H2H_BTTS_SUPPORT"
   ],
@@ -218,7 +256,30 @@
     "ftr": {
       "alignment_score": 50,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "AWAY",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "AWAY",
+        "bookie_pick": "HOME",
+        "pick_probability": 0.533764889510901,
+        "probabilities": {
+          "HOME": 0.3403701936077686,
+          "DRAW": 0.22901234893177824,
+          "AWAY": 0.43061745746045316
+        },
+        "xgb_pick": "HOME",
+        "xgb_pick_probability": 0.8918933272361755,
+        "xgb_probabilities": {
+          "HOME": 0.8918933272361755,
+          "DRAW": 0.060330864042043686,
+          "AWAY": 0.04777584969997406
+        },
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "AWAY",
       "structural_support": [
         "H2H_BTTS_SUPPORT"
       ],
@@ -233,7 +294,28 @@
     "btts": {
       "alignment_score": 38,
       "state": "FRAGILE",
-      "model_lean": "YES",
+      "audit_state": "FRAGILE",
+      "model_lean": "NO",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "NO",
+        "bookie_pick": "NO",
+        "pick_probability": 0.6233812128638472,
+        "probabilities": {
+          "YES": 0.3766187871361528,
+          "NO": 0.6233812128638472
+        },
+        "xgb_pick": "NO",
+        "xgb_pick_probability": 0.8104142546653748,
+        "xgb_probabilities": {
+          "NO": 0.8104142546653748,
+          "YES": 0.18958574533462524
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "YES",
       "structural_support": [
         "H2H_BTTS_SUPPORT"
       ],
@@ -248,7 +330,28 @@
     "ou25": {
       "alignment_score": 28,
       "state": "AVOID",
-      "model_lean": "UNDER25",
+      "audit_state": "AVOID",
+      "model_lean": "OVER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "OVER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.5335744013041384,
+        "probabilities": {
+          "OVER25": 0.5335744013041384,
+          "UNDER25": 0.46642559869586164
+        },
+        "xgb_pick": "UNDER25",
+        "xgb_pick_probability": 0.05620912089943886,
+        "xgb_probabilities": {
+          "UNDER25": 0.05620912089943886,
+          "OVER25": 0.9437908791005611
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "UNDER25",
       "structural_support": [
         "H2H_BTTS_SUPPORT"
       ],
@@ -262,7 +365,10 @@
     "team_goals": {
       "alignment_score": 54,
       "state": "FRAGILE",
-      "model_lean": "Everton 1.5+",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Everton 1.5+",
       "structural_support": [
         "H2H_BTTS_SUPPORT"
       ],
@@ -276,7 +382,10 @@
     "correct_score": {
       "alignment_score": 87,
       "state": "SUPPORTED",
-      "model_lean": "STRUCTURED",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "STRUCTURED",
       "structural_support": [
         "H2H_BTTS_SUPPORT"
       ],
@@ -290,7 +399,10 @@
     "corners": {
       "alignment_score": 30,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "H2H_BTTS_SUPPORT"
       ],
@@ -304,7 +416,10 @@
     "cards": {
       "alignment_score": 50,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "H2H_BTTS_SUPPORT"
       ],
@@ -324,7 +439,7 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "BTTS Yes has some live shape in Crystal Palace vs Everton, but the supporting layers remain fragile and need discipline.",
+  "public_safe_summary": "No published pick is active for Crystal Palace vs Everton; the fixture read is context only.",
   "internal_reason_tokens": [
     "H2H_BTTS_SUPPORT",
     "BTTS_PRESSURE_WEAK",
@@ -336,12 +451,9 @@
     "lineup_available": true,
     "h2h_available": true
   },
-  "preview": {
-    "headline": "Crystal Palace vs Everton: BTTS Yes fragile",
-    "short_summary": "BTTS Yes has some live shape in Crystal Palace vs Everton, but the supporting layers remain fragile and need discipline. Primary support comes from h2h btts support, while the main caution remains btts pressure weak.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: Over 2.5.",
-    "caution_line": "Main caution: Btts Pressure Weak.",
-    "telegram_summary": "Crystal Palace vs Everton — BTTS Yes (Fragile, 42% agreement). Support: H2H Btts Support. Caution: Btts Pressure Weak.",
-    "premium_summary": "BTTS Yes is carrying a 42% agreement read across the published decision layers. Support is currently led by h2h btts support, while caution is still coming from btts pressure weak, goal environment soft."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-10T13:00:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

@@ -2,16 +2,53 @@
   "fixture_key": "2026_05_09_New_England_Revolution_Philadelphia_Union",
   "fixture": "New England Revolution vs Philadelphia Union",
   "primary_signal": "Over 2.5",
-  "signal_state": "AVOID",
-  "agreement_score": 38,
+  "context_signal": "Over 2.5",
+  "signal_state": "FRAGILE",
+  "agreement_score": 42,
   "confidence_band": "ELITE",
+  "route_state": "DEPLOY",
+  "route_market": "OU25",
+  "route_pick": "OVER25",
+  "route_active": true,
+  "route_label": "Over 2.5",
+  "route_confidence_tier": "ELITE",
+  "route_bookie_od": 1.95,
+  "route_value_edge_label": "positive",
+  "audit_state": "FRAGILE",
+  "audit_agreement_score": 42,
+  "audit_confidence_band": "ELITE",
+  "conflict_level": "CAUTION",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "DEPLOY",
+    "route_market": "OU25",
+    "route_pick": "OVER25",
+    "route_active": true,
+    "confidence_tier": "ELITE",
+    "bookie_od": 1.95,
+    "value_edge_label": "positive",
+    "premium_tier": "ELITE"
+  },
+  "context_audit": {
+    "state": "FRAGILE",
+    "agreement_score": 42,
+    "confidence_band": "ELITE",
+    "supporting_layers": [
+      "H2H_OVER_SUPPORT"
+    ],
+    "caution_layers": [
+      "OVER25_HEAT_SOFT",
+      "CHAOS_ENVIRONMENT_SOFT"
+    ],
+    "context_signal": "Over 2.5",
+    "conflict_level": "CAUTION"
+  },
   "supporting_layers": [
     "H2H_OVER_SUPPORT"
   ],
   "caution_layers": [
     "OVER25_HEAT_SOFT",
-    "CHAOS_ENVIRONMENT_SOFT",
-    "LINEUP_DATA_MISSING"
+    "CHAOS_ENVIRONMENT_SOFT"
   ],
   "profile_tags": {
     "home": [
@@ -72,7 +109,26 @@
       "leader": "New England Revolution"
     }
   ],
-  "unit_battle_summary": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 43,
+      "away_value": 56,
+      "delta": -13
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 49,
+      "away_value": 58,
+      "delta": -9
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 35,
+      "away_value": 54,
+      "delta": -19
+    }
+  ],
   "key_player_drivers": [
     {
       "team": "New England Revolution",
@@ -107,7 +163,48 @@
       "driver_value": 62
     }
   ],
-  "key_mismatches": [],
+  "key_mismatches": [
+    {
+      "zone": "New England Revolution wide threat vs Philadelphia Union resistance",
+      "advantage": "Philadelphia Union",
+      "mismatch_score": 26,
+      "left_label": "New England Revolution wide threat",
+      "left_value": 30,
+      "right_label": "Philadelphia Union resistance",
+      "right_value": 56,
+      "summary": "Philadelphia Union can neutralize the wide-channel pressure"
+    },
+    {
+      "zone": "Philadelphia Union attack vs New England Revolution defence",
+      "advantage": "New England Revolution",
+      "mismatch_score": 19,
+      "left_label": "Philadelphia Union attack",
+      "left_value": 35,
+      "right_label": "New England Revolution defence",
+      "right_value": 54,
+      "summary": "New England Revolution defensive resistance is suppressing the away attack"
+    },
+    {
+      "zone": "New England Revolution attack vs Philadelphia Union defence",
+      "advantage": "Philadelphia Union",
+      "mismatch_score": 13,
+      "left_label": "New England Revolution attack",
+      "left_value": 43,
+      "right_label": "Philadelphia Union defence",
+      "right_value": 56,
+      "summary": "Philadelphia Union defensive resistance is suppressing the home attack"
+    },
+    {
+      "zone": "Midfield control battle",
+      "advantage": "Philadelphia Union",
+      "mismatch_score": 9,
+      "left_label": "New England Revolution midfield",
+      "left_value": 49,
+      "right_label": "Philadelphia Union midfield",
+      "right_value": 58,
+      "summary": "Philadelphia Union should control more of the central game-state"
+    }
+  ],
   "h2h_context": {
     "available": true,
     "summary": "Using the latest available same-team-pair historical regime (1 prior meeting) as supporting context for this current fixture.",
@@ -159,7 +256,30 @@
     "ftr": {
       "alignment_score": 50,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "HOME",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "HOME",
+        "bookie_pick": "AWAY",
+        "pick_probability": 0.1111111111111111,
+        "probabilities": {
+          "HOME": 0.48071507770209015,
+          "DRAW": 0.2666114976509319,
+          "AWAY": 0.25267342464697795
+        },
+        "xgb_pick": "AWAY",
+        "xgb_pick_probability": 0.49638107419013977,
+        "xgb_probabilities": {
+          "HOME": 0.4176308512687683,
+          "DRAW": 0.0859881117939949,
+          "AWAY": 0.49638107419013977
+        },
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "HOME",
       "structural_support": [
         "H2H_OVER_SUPPORT"
       ],
@@ -174,7 +294,28 @@
     "btts": {
       "alignment_score": 42,
       "state": "AVOID",
-      "model_lean": "NO",
+      "audit_state": "AVOID",
+      "model_lean": "YES",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "YES",
+        "bookie_pick": "YES",
+        "pick_probability": 0.633620356338115,
+        "probabilities": {
+          "YES": 0.633620356338115,
+          "NO": 0.366379643661885
+        },
+        "xgb_pick": "YES",
+        "xgb_pick_probability": 0.7865936160087585,
+        "xgb_probabilities": {
+          "YES": 0.7865936160087585,
+          "NO": 0.21340638399124146
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "NO",
       "structural_support": [
         "H2H_OVER_SUPPORT"
       ],
@@ -187,9 +328,30 @@
       "band": "Weak"
     },
     "ou25": {
-      "alignment_score": 39,
-      "state": "AVOID",
+      "alignment_score": 41,
+      "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "OVER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "OVER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.6743794533988383,
+        "probabilities": {
+          "OVER25": 0.6743794533988383,
+          "UNDER25": 0.3256205466011617
+        },
+        "xgb_pick": "OVER25",
+        "xgb_pick_probability": 0.9202110171318054,
+        "xgb_probabilities": {
+          "OVER25": 0.9202110171318054,
+          "UNDER25": 0.07978898286819458
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "OVER25",
       "structural_support": [
         "H2H_OVER_SUPPORT"
       ],
@@ -197,28 +359,35 @@
         "OVER25_HEAT_SOFT",
         "CHAOS_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Over 2.5 is too contradicted by over 2.5 heat soft to present as a clean public read.",
+      "public_summary": "Over 2.5 has some structural support from h2h over support, but the overall layer fit remains fragile.",
       "rating": 40,
       "band": "Weak"
     },
     "team_goals": {
-      "alignment_score": 48,
-      "state": "FRAGILE",
-      "model_lean": "New England Revolution 1.5+",
+      "alignment_score": 44,
+      "state": "AVOID",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "New England Revolution 1.5+",
       "structural_support": [
         "H2H_OVER_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "OVER25_HEAT_SOFT",
+        "CHAOS_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Team Goals has some structural support from h2h over support, but the overall layer fit remains fragile.",
+      "public_summary": "Team Goals is too contradicted by over 2.5 heat soft to present as a clean public read.",
       "rating": 48,
       "band": "Weak"
     },
     "correct_score": {
       "alignment_score": 87,
       "state": "SUPPORTED",
-      "model_lean": "STRUCTURED",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "STRUCTURED",
       "structural_support": [
         "H2H_OVER_SUPPORT"
       ],
@@ -232,7 +401,10 @@
     "corners": {
       "alignment_score": 39,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "H2H_OVER_SUPPORT"
       ],
@@ -247,7 +419,10 @@
     "cards": {
       "alignment_score": 51,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "H2H_OVER_SUPPORT"
       ],
@@ -266,25 +441,21 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "Over 2.5 is too contradicted across the current structural layers for New England Revolution vs Philadelphia Union, so the clean read is caution rather than action.",
+  "public_safe_summary": "Published route remains Over 2.5 for New England Revolution vs Philadelphia Union, while the context audit flags fragile because of over 2.5 heat soft.",
   "internal_reason_tokens": [
     "H2H_OVER_SUPPORT",
     "OVER25_HEAT_SOFT",
-    "CHAOS_ENVIRONMENT_SOFT",
-    "LINEUP_DATA_MISSING"
+    "CHAOS_ENVIRONMENT_SOFT"
   ],
   "summary": {
     "support_count": 1,
-    "caution_count": 3,
-    "lineup_available": false,
+    "caution_count": 2,
+    "lineup_available": true,
     "h2h_available": true
   },
-  "preview": {
-    "headline": "New England Revolution vs Philadelphia Union: Over 2.5 avoid",
-    "short_summary": "Over 2.5 is too contradicted across the current structural layers for New England Revolution vs Philadelphia Union, so the clean read is caution rather than action. Primary support comes from h2h over support, while the main caution remains over25 heat soft.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Cards. Weakest read: Corners.",
-    "caution_line": "Main caution: Over25 Heat Soft.",
-    "telegram_summary": "New England Revolution vs Philadelphia Union — Over 2.5 (Avoid, 38% agreement). Support: H2H Over Support. Caution: Over25 Heat Soft.",
-    "premium_summary": "Over 2.5 is carrying a 38% agreement read across the published decision layers. Support is currently led by h2h over support, while caution is still coming from over25 heat soft, chaos environment soft."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-09T23:30:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

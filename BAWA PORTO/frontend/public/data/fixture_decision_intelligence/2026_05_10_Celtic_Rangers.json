@@ -1,15 +1,52 @@
 {
   "fixture_key": "2026_05_10_Celtic_Rangers",
   "fixture": "Celtic vs Rangers",
-  "primary_signal": "Celtic Win",
+  "primary_signal": "No published pick",
+  "context_signal": "Celtic Win",
   "signal_state": "AVOID",
-  "agreement_score": 34,
+  "agreement_score": 32,
   "confidence_band": "LOW",
+  "route_state": "OBSERVE",
+  "route_market": "FTR",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "AVOID",
+  "audit_agreement_score": 32,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "FTR",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "AVOID",
+    "agreement_score": 32,
+    "confidence_band": "LOW",
+    "supporting_layers": [],
+    "caution_layers": [
+      "TEAM_POWER_NOT_DECISIVE",
+      "AWAY_TRAVEL_THREAT",
+      "LINEUP_UNIT_EDGE_SOFT"
+    ],
+    "context_signal": "Celtic Win",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [],
   "caution_layers": [
     "TEAM_POWER_NOT_DECISIVE",
     "AWAY_TRAVEL_THREAT",
-    "LINEUP_DATA_MISSING"
+    "LINEUP_UNIT_EDGE_SOFT"
   ],
   "profile_tags": {
     "home": [
@@ -76,41 +113,27 @@
       "leader": "Celtic"
     }
   ],
-  "unit_battle_summary": [],
-  "key_player_drivers": [
+  "unit_battle_summary": [
     {
-      "team": "Celtic",
-      "player": "Cameron Carter-Vickers",
-      "role": "Centre Back",
-      "power": 56,
-      "driver_metric": "Defensive Lock",
-      "driver_value": 57
+      "label": "Attack vs Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "Celtic",
-      "player": "Callum McGregor",
-      "role": "Central Midfielder",
-      "power": 55,
-      "driver_metric": "Midfield Engine",
-      "driver_value": 56
+      "label": "Midfield Control",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "Rangers",
-      "player": "Djeidi Gassama",
-      "role": "Forward",
-      "power": 57,
-      "driver_metric": "Goal Threat",
-      "driver_value": 61
-    },
-    {
-      "team": "Rangers",
-      "player": "Jack Butland",
-      "role": "Goalkeeper",
-      "power": 57,
-      "driver_metric": "Defensive Lock",
-      "driver_value": 52
+      "label": "Away Attack vs Home Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     }
   ],
+  "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
     "available": true,
@@ -161,9 +184,32 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 52,
+      "alignment_score": 51,
       "state": "AVOID",
+      "audit_state": "AVOID",
       "model_lean": "HOME",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "HOME",
+        "bookie_pick": "HOME",
+        "pick_probability": 0.7872340425531915,
+        "probabilities": {
+          "HOME": 0.4374839867300862,
+          "DRAW": 0.27923010287615824,
+          "AWAY": 0.2832859103937557
+        },
+        "xgb_pick": "HOME",
+        "xgb_pick_probability": 0.8799653053283691,
+        "xgb_probabilities": {
+          "HOME": 0.8799653053283691,
+          "DRAW": 0.03193376585841179,
+          "AWAY": 0.08810098469257355
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "HOME",
       "structural_support": [],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
@@ -176,7 +222,10 @@
     "btts": {
       "alignment_score": 48,
       "state": "FRAGILE",
-      "model_lean": "YES",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "YES",
       "structural_support": [],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
@@ -189,7 +238,28 @@
     "ou25": {
       "alignment_score": 59,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "OVER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "OVER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.5354084840912463,
+        "probabilities": {
+          "OVER25": 0.5354084840912463,
+          "UNDER25": 0.4645915159087537
+        },
+        "xgb_pick": "OVER25",
+        "xgb_pick_probability": 0.7063428163528442,
+        "xgb_probabilities": {
+          "OVER25": 0.7063428163528442,
+          "UNDER25": 0.29365718364715576
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "OVER25",
       "structural_support": [],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
@@ -202,19 +272,25 @@
     "team_goals": {
       "alignment_score": 65,
       "state": "MIXED",
-      "model_lean": "Rangers 1.5+",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Rangers 1.5+",
       "structural_support": [],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
-      "public_summary": "Team Goals has partial support from structural support, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Team Goals has partial support from structural support, but lineup unit edge soft keeps it from reading clean.",
       "rating": 79,
       "band": "Strong"
     },
     "correct_score": {
       "alignment_score": 81,
       "state": "SUPPORTED",
-      "model_lean": "OPEN",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "OPEN",
       "structural_support": [],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE"
@@ -226,7 +302,10 @@
     "corners": {
       "alignment_score": 66,
       "state": "MIXED",
-      "model_lean": "ELEVATED",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
@@ -239,7 +318,10 @@
     "cards": {
       "alignment_score": 34,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
@@ -257,24 +339,21 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "Celtic Win is too contradicted across the current structural layers for Celtic vs Rangers, so the clean read is caution rather than action.",
+  "public_safe_summary": "No published pick is active for Celtic vs Rangers; the context layer is too contradicted to present as an action.",
   "internal_reason_tokens": [
     "TEAM_POWER_NOT_DECISIVE",
     "AWAY_TRAVEL_THREAT",
-    "LINEUP_DATA_MISSING"
+    "LINEUP_UNIT_EDGE_SOFT"
   ],
   "summary": {
     "support_count": 0,
     "caution_count": 3,
-    "lineup_available": false,
+    "lineup_available": true,
     "h2h_available": true
   },
-  "preview": {
-    "headline": "Celtic vs Rangers: Celtic Win avoid",
-    "short_summary": "Celtic Win is too contradicted across the current structural layers for Celtic vs Rangers, so the clean read is caution rather than action. Primary support comes from structural caution, while the main caution remains team power not decisive.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Corners. Weakest read: Cards.",
-    "caution_line": "Main caution: Team Power Not Decisive.",
-    "telegram_summary": "Celtic vs Rangers — Celtic Win (Avoid, 34% agreement). Support: structural caution. Caution: Team Power Not Decisive.",
-    "premium_summary": "Celtic Win is carrying a 34% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from team power not decisive, away travel threat."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-10T11:00:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

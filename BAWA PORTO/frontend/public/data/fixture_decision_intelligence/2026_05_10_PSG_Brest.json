@@ -2,15 +2,54 @@
   "fixture_key": "2026_05_10_PSG_Brest",
   "fixture": "PSG vs Brest",
   "primary_signal": "PSG Win",
+  "context_signal": "PSG Win",
   "signal_state": "FRAGILE",
-  "agreement_score": 56,
+  "agreement_score": 54,
   "confidence_band": "STANDARD",
+  "route_state": "DEPLOY",
+  "route_market": "FTR",
+  "route_pick": "HOME",
+  "route_active": true,
+  "route_label": "PSG Win",
+  "route_confidence_tier": "STANDARD",
+  "route_bookie_od": 1.18,
+  "route_value_edge_label": "positive",
+  "audit_state": "FRAGILE",
+  "audit_agreement_score": 54,
+  "audit_confidence_band": "STANDARD",
+  "conflict_level": "CAUTION",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "DEPLOY",
+    "route_market": "FTR",
+    "route_pick": "HOME",
+    "route_active": true,
+    "confidence_tier": "STANDARD",
+    "bookie_od": 1.18,
+    "value_edge_label": "positive",
+    "premium_tier": "STANDARD"
+  },
+  "context_audit": {
+    "state": "FRAGILE",
+    "agreement_score": 54,
+    "confidence_band": "STANDARD",
+    "supporting_layers": [
+      "TEAM_POWER_ADVANTAGE",
+      "HOME_FORTRESS_ADVANTAGE"
+    ],
+    "caution_layers": [
+      "LINEUP_UNIT_EDGE_SOFT",
+      "H2H_UNAVAILABLE"
+    ],
+    "context_signal": "PSG Win",
+    "conflict_level": "CAUTION"
+  },
   "supporting_layers": [
     "TEAM_POWER_ADVANTAGE",
     "HOME_FORTRESS_ADVANTAGE"
   ],
   "caution_layers": [
-    "LINEUP_DATA_MISSING",
+    "LINEUP_UNIT_EDGE_SOFT",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -75,30 +114,37 @@
       "leader": "PSG"
     }
   ],
-  "unit_battle_summary": [],
-  "key_player_drivers": [
+  "unit_battle_summary": [
     {
-      "team": "PSG",
-      "player": "Khvicha Kvaratskhelia",
-      "role": "Forward",
-      "power": 82,
-      "driver_metric": "Goal Threat",
-      "driver_value": 82
+      "label": "Attack vs Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "PSG",
-      "player": "Vitinha",
-      "role": "Central Midfielder",
-      "power": 74,
-      "driver_metric": "Goal Threat",
-      "driver_value": 87
+      "label": "Midfield Control",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     }
   ],
+  "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "summary": "No publish-safe H2H regime snapshot is available yet for this fixture, so H2H remains supporting-only.",
+    "sample_size": 0,
+    "goal_environment": 0,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 0
   },
   "market_suitability": {
     "ftr": {
@@ -139,15 +185,38 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 70,
+      "alignment_score": 69,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "HOME",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "HOME",
+        "bookie_pick": "HOME",
+        "pick_probability": 1.0,
+        "probabilities": {
+          "HOME": 0.6285203715103744,
+          "DRAW": 0.24373273886355473,
+          "AWAY": 0.12774688962607086
+        },
+        "xgb_pick": "HOME",
+        "xgb_pick_probability": 0.7600347399711609,
+        "xgb_probabilities": {
+          "HOME": 0.7600347399711609,
+          "DRAW": 0.21701835095882416,
+          "AWAY": 0.02294689044356346
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "HOME",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "FTR has some structural support from team power advantage, but the overall layer fit remains fragile.",
@@ -157,13 +226,34 @@
     "btts": {
       "alignment_score": 47,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "NO",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "NO",
+        "bookie_pick": "NO",
+        "pick_probability": 0.6120087225274333,
+        "probabilities": {
+          "YES": 0.3879912774725667,
+          "NO": 0.6120087225274333
+        },
+        "xgb_pick": "NO",
+        "xgb_pick_probability": 0.7427387535572052,
+        "xgb_probabilities": {
+          "NO": 0.7427387535572052,
+          "YES": 0.2572612464427948
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "NO",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "BTTS has some structural support from team power advantage, but the overall layer fit remains fragile.",
@@ -173,13 +263,34 @@
     "ou25": {
       "alignment_score": 57,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "OVER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "OVER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.6131948888048744,
+        "probabilities": {
+          "OVER25": 0.6131948888048744,
+          "UNDER25": 0.3868051111951256
+        },
+        "xgb_pick": "OVER25",
+        "xgb_pick_probability": 0.9418912529945374,
+        "xgb_probabilities": {
+          "OVER25": 0.9418912529945374,
+          "UNDER25": 0.058108747005462646
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "OVER25",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "Over 2.5 has some structural support from team power advantage, but the overall layer fit remains fragile.",
@@ -189,27 +300,33 @@
     "team_goals": {
       "alignment_score": 68,
       "state": "MIXED",
-      "model_lean": "PSG 1.5+",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "PSG 1.5+",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
-      "public_summary": "Team Goals has partial support from team power advantage, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Team Goals has partial support from team power advantage, but lineup unit edge soft keeps it from reading clean.",
       "rating": 66,
       "band": "Mixed"
     },
     "correct_score": {
       "alignment_score": 56,
       "state": "FRAGILE",
-      "model_lean": "STRUCTURED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "STRUCTURED",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "Correct Score has some structural support from team power advantage, but the overall layer fit remains fragile.",
@@ -219,13 +336,16 @@
     "corners": {
       "alignment_score": 56,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
       "public_summary": "Corners has some structural support from team power advantage, but the overall layer fit remains fragile.",
@@ -235,16 +355,19 @@
     "cards": {
       "alignment_score": 40,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
+        "LINEUP_UNIT_EDGE_SOFT",
         "H2H_UNAVAILABLE"
       ],
-      "public_summary": "Cards is too contradicted by lineup data missing to present as a clean public read.",
+      "public_summary": "Cards is too contradicted by lineup unit edge soft to present as a clean public read.",
       "rating": 34,
       "band": "Red Flag"
     }
@@ -256,25 +379,22 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "PSG Win has some live shape in PSG vs Brest, but the supporting layers remain fragile and need discipline.",
+  "public_safe_summary": "Published route remains PSG Win for PSG vs Brest, while the context audit flags fragile because of lineup unit edge soft.",
   "internal_reason_tokens": [
     "TEAM_POWER_ADVANTAGE",
     "HOME_FORTRESS_ADVANTAGE",
-    "LINEUP_DATA_MISSING",
+    "LINEUP_UNIT_EDGE_SOFT",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
     "support_count": 2,
     "caution_count": 2,
-    "lineup_available": false,
+    "lineup_available": true,
     "h2h_available": false
   },
-  "preview": {
-    "headline": "PSG vs Brest: PSG Win fragile",
-    "short_summary": "PSG Win has some live shape in PSG vs Brest, but the supporting layers remain fragile and need discipline. Primary support comes from team power advantage, while the main caution remains lineup data missing.",
-    "market_summary": "Best aligned market: FTR (Fragile). Secondary support: Team Goals. Weakest read: Cards.",
-    "caution_line": "Main caution: Lineup Data Missing.",
-    "telegram_summary": "PSG vs Brest — PSG Win (Fragile, 56% agreement). Support: Team Power Advantage. Caution: Lineup Data Missing.",
-    "premium_summary": "PSG Win is carrying a 56% agreement read across the published decision layers. Support is currently led by team power advantage, home fortress advantage, while caution is still coming from lineup data missing, h2h unavailable."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-10T19:00:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

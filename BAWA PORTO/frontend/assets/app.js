@@ -2521,8 +2521,8 @@
 
   const normalizeLeanKey = (value) => String(value || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 
-  const leanForMarket = (fixture, key, intel = null) => {
-    const rawLean = normalizeLeanKey(intel?.modelLean);
+  const modelLeanForMarket = (fixture, key, intel = null) => {
+    const rawLean = normalizeLeanKey(intel?.modelOutput?.pick || intel?.modelLean);
     if (rawLean) {
       if (key === "team_goals") {
         return rawLean;
@@ -2535,11 +2535,31 @@
       if (rawLean.includes("AWAY")) return "AWAY";
       if (rawLean.includes("HOME")) return "HOME";
     }
-    const signal = fixtureSignalProfile(fixture);
-    if (String(signal.family || "").toLowerCase() === String(key || "").replace("ou25", "OU25").toLowerCase()) {
-      return signal.pick;
-    }
     return "";
+  };
+
+  const teamContextLeanForMarket = (fixture, key, intel = null) => {
+    const rawLean = normalizeLeanKey(intel?.teamContextLean);
+    if (!rawLean) {
+      return "";
+    }
+    if (key === "team_goals") return rawLean;
+    if (rawLean.includes("OVER25")) return "OVER25";
+    if (rawLean.includes("UNDER25")) return "UNDER25";
+    if (rawLean.includes("YES")) return "YES";
+    if (rawLean.includes("NO")) return "NO";
+    if (rawLean.includes("DRAW")) return "DRAW";
+    if (rawLean.includes("AWAY")) return "AWAY";
+    if (rawLean.includes("HOME")) return "HOME";
+    return rawLean;
+  };
+
+  const modelOutputProbability = (intel = null, key = "", pick = "") => {
+    const output = intel?.modelOutput || null;
+    const normalizedPick = normalizeMarketPick(key, pick);
+    const probabilities = output?.probabilities || {};
+    const value = probabilities[normalizedPick];
+    return Number.isFinite(Number(value)) ? compactPercent(Number(value)) : "";
   };
 
   const modelSignalText = (fixture, key, pick, intel = null, state = {}) => {
@@ -2547,12 +2567,15 @@
       const probability = publishedModelProbability(fixture, key, pick);
       return probability ? `Model ${probability}` : "Published pick";
     }
+    if (state.modelSelected) {
+      const probability = modelOutputProbability(intel, key, pick);
+      return probability ? `Model ${probability}` : "Model output";
+    }
     if (state.context && Number.isFinite(Number(intel?.rating))) {
-      const label = String(intel?.band || intel?.state || "").toUpperCase() === "AVOID" ? "Caution" : "Context";
-      return `${label} ${Math.round(Number(intel.rating))}%`;
+      return `Team context ${Math.round(Number(intel.rating))}%`;
     }
     if (state.context) {
-      return "Context lean";
+      return "Team context";
     }
     return hasUsableOdds(state.odds) ? "Book price" : "No selection";
   };
@@ -2564,7 +2587,8 @@
   const marketOutcomeRows = (fixture, key, intel = null) => {
     const odds = fixture?.odds_summary || {};
     const selectedPick = selectedMarketPick(fixture, key);
-    const contextLean = normalizeMarketPick(key, leanForMarket(fixture, key, intel), fixture);
+    const modelLean = normalizeMarketPick(key, modelLeanForMarket(fixture, key, intel), fixture);
+    const contextLean = normalizeMarketPick(key, teamContextLeanForMarket(fixture, key, intel), fixture);
     if (key === "ftr") {
       return [
         { label: "Home", pick: "HOME", odds: odds.home_win_odds },
@@ -2572,12 +2596,14 @@
         { label: "Away", pick: "AWAY", odds: odds.away_win_odds },
       ].map((row) => {
         const active = selectedPick === row.pick;
-        const context = !selectedPick && contextLean === row.pick;
+        const modelSelected = !active && modelLean === row.pick;
+        const context = !active && !modelSelected && contextLean === row.pick;
         return {
           ...row,
           active,
+          modelSelected,
           context,
-          model: modelSignalText(fixture, key, row.pick, intel, { selected: active, context, odds: row.odds }),
+          model: modelSignalText(fixture, key, row.pick, intel, { selected: active, modelSelected, context, odds: row.odds }),
           implied: outcomeImpliedText(row.odds),
         };
       });
@@ -2588,12 +2614,14 @@
         { label: "Under 2.5", pick: "UNDER25", odds: odds.under25_odds },
       ].map((row) => {
         const active = selectedPick === row.pick;
-        const context = !selectedPick && contextLean === row.pick;
+        const modelSelected = !active && modelLean === row.pick;
+        const context = !active && !modelSelected && contextLean === row.pick;
         return {
           ...row,
           active,
+          modelSelected,
           context,
-          model: modelSignalText(fixture, key, row.pick, intel, { selected: active, context, odds: row.odds }),
+          model: modelSignalText(fixture, key, row.pick, intel, { selected: active, modelSelected, context, odds: row.odds }),
           implied: outcomeImpliedText(row.odds),
         };
       });
@@ -2604,12 +2632,14 @@
         { label: "No", pick: "NO", odds: odds.btts_no_odds },
       ].map((row) => {
         const active = selectedPick === row.pick;
-        const context = !selectedPick && contextLean === row.pick;
+        const modelSelected = !active && modelLean === row.pick;
+        const context = !active && !modelSelected && contextLean === row.pick;
         return {
           ...row,
           active,
+          modelSelected,
           context,
-          model: modelSignalText(fixture, key, row.pick, intel, { selected: active, context, odds: row.odds }),
+          model: modelSignalText(fixture, key, row.pick, intel, { selected: active, modelSelected, context, odds: row.odds }),
           implied: outcomeImpliedText(row.odds),
         };
       });
@@ -2619,13 +2649,15 @@
       { label: `${teamCardName(fixture.away_team) || "Away"} 1.5+`, pick: "AWAY15" },
     ].map((row) => {
       const active = selectedPick === row.pick;
-      const context = !selectedPick && contextLean === row.pick;
+      const modelSelected = !active && modelLean === row.pick;
+      const context = !active && !modelSelected && contextLean === row.pick;
       return {
         ...row,
         active,
+        modelSelected,
         context,
         odds: null,
-        model: context && Number.isFinite(Number(intel?.rating)) ? `Context ${Math.round(Number(intel.rating))}%` : context ? "Context lean" : "Support watch",
+        model: context && Number.isFinite(Number(intel?.rating)) ? `Team context ${Math.round(Number(intel.rating))}%` : context ? "Team context" : "Support watch",
         implied: "No odds feed",
       };
     });
@@ -2636,10 +2668,13 @@
     if (active) {
       return `Published ${marketPickDisplay(fixture, key, active.pick)} · ${active.model}`;
     }
+    const model = marketOutcomeRows(fixture, key, intel).find((row) => row.modelSelected);
+    if (model) {
+      return `Model ${model.label} · ${model.model}`;
+    }
     const context = marketOutcomeRows(fixture, key, intel).find((row) => row.context);
     if (context) {
-      const label = String(intel?.band || intel?.state || "").toUpperCase() === "AVOID" ? "Caution lean" : "Context lean";
-      return `${label} ${context.label} · ${context.model}`;
+      return `Team context ${context.label} · ${context.model}`;
     }
     if (Number.isFinite(Number(intel?.rating))) {
       return `${safeTitleLabel(intel?.band, "Context")} · ${Math.round(Number(intel.rating))}% support`;
@@ -2657,7 +2692,7 @@
       ${rows
         .map(
           (row) => `
-            <div class="fixture-market-outcome-row ${row.active ? "is-active" : row.context ? "is-context" : ""}">
+            <div class="fixture-market-outcome-row ${row.active ? "is-active" : row.modelSelected || row.context ? "is-context" : ""}">
               <div>
                 <span>${escapeHtml(row.label)}</span>
                 <small>${escapeHtml(row.model)}</small>
@@ -2678,7 +2713,7 @@
       <article class="fixture-tier-card fixture-tier-card-open">
         <span class="metric-label">Standard view</span>
         <strong>Top market cards</strong>
-        <p>FTR, OU25, BTTS, TG1.5 posture with public-safe odds and model signal state.</p>
+        <p>FTR, OU25, BTTS, TG1.5 posture with public-safe odds and model output state.</p>
       </article>
       <article class="fixture-tier-card">
         <span class="metric-label">Founder / Premium</span>
@@ -2704,19 +2739,19 @@
       {
         key: "ftr",
         title: "Full Time Result",
-        copy: "Home / Draw / Away odds with the model lean surfaced clearly.",
+        copy: "Home / Draw / Away odds with the actual model output surfaced clearly.",
         active: deployFamily === "FTR",
       },
       {
         key: "ou25",
         title: "Over 2.5 Match Goals",
-        copy: "Totals posture with Over/Under pricing and signal state.",
+        copy: "Totals posture with Over/Under pricing and model output state.",
         active: deployFamily === "OU25",
       },
       {
         key: "btts",
         title: "BTTS",
-        copy: "Both-teams-to-score pricing with Yes/No model posture.",
+        copy: "Both-teams-to-score pricing with Yes/No model output.",
         active: deployFamily === "BTTS",
       },
       {
@@ -2731,7 +2766,7 @@
         <div class="section-head">
           <div>
             <h2>Standard market cards</h2>
-            <p class="section-copy">The top fixture view is intentionally simple: odds, model signal, and confidence posture for the launch markets. Deeper context sits behind the tiered tabs below.</p>
+            <p class="section-copy">The top fixture view is intentionally simple: odds, model output, and confidence posture for the launch markets. Deeper context sits behind the tiered tabs below.</p>
           </div>
           <span class="pill">Standard view</span>
         </div>
@@ -2742,6 +2777,7 @@
               const stateLabel = safeTitleLabel(intel?.band || intel?.state || fixture?.signal_summary?.signal_state, "Pending");
               const outcomeRows = marketOutcomeRows(fixture, def.key, intel);
               const hasPublishedSelection = outcomeRows.some((row) => row.active);
+              const hasModelOutput = outcomeRows.some((row) => row.modelSelected);
               const hasContextLean = outcomeRows.some((row) => row.context);
               const intelligenceState = String(intel?.band || intel?.state || "").toUpperCase();
               const tone = hasPublishedSelection
@@ -2751,10 +2787,12 @@
                 : decisionStateTone(intel?.band || intel?.state || "");
               const stateCopy = hasPublishedSelection
                 ? "Published pick"
-                : hasContextLean
+                : hasModelOutput
+                  ? "Model output"
+                  : hasContextLean
                   ? intelligenceState === "AVOID"
-                    ? "Context caution"
-                    : "Context lean"
+                    ? "Team context caution"
+                    : "Team context"
                   : def.key === "team_goals"
                     ? "Support only"
                     : "No pick";
@@ -3189,6 +3227,47 @@
     return "reference";
   };
 
+  const routeAuditProfile = (fixture, decision = null) => {
+    const publishedSelection = fixturePublishedSelection(fixture);
+    const routeActive = typeof decision?.route_active === "boolean" ? decision.route_active : Boolean(publishedSelection);
+    const routeMarket = String(decision?.route_market || fixture?.signal_summary?.market_family || fixture?.deploy_summary?.market || "").toUpperCase();
+    const routePick = String(decision?.route_pick || publishedSelection?.pick || fixture?.signal_summary?.deploy_pick || fixture?.deploy_summary?.pick || "").toUpperCase();
+    const routeState = String(decision?.route_state || fixture?.publish_class || fixture?.signal_summary?.signal_state || "").toUpperCase();
+    const auditState = String(decision?.audit_state || decision?.signal_state || "").toUpperCase();
+    const conflictLevel = String(decision?.conflict_level || "").toUpperCase();
+    const agreement = decision?.audit_agreement_score ?? decision?.agreement_score;
+    const routeLabel = routeActive
+      ? decision?.route_label || decision?.primary_signal || publishedSelection?.label || marketVerdictDisplay(fixture)
+      : "No published pick";
+    const contextLabel = decision?.context_signal || (!routeActive ? decision?.primary_signal : "") || "Fixture context";
+    const conflictCopy =
+      conflictLevel === "HARD_CONFLICT"
+        ? "Hard conflict: route pick and context lean disagree."
+        : conflictLevel === "CAUTION"
+          ? "Caution: route remains live, but context audit is fragile."
+          : routeActive
+            ? "No route/audit conflict flagged."
+            : "Context only: no published route is active.";
+    return {
+      routeActive,
+      routeState,
+      routeMarket,
+      routePick,
+      routeLabel,
+      contextLabel,
+      auditState,
+      conflictLevel: conflictLevel || "NONE",
+      agreement,
+      confidence: decision?.route_confidence_tier || decision?.confidence_band || publishedSelection?.confidence || "",
+      routeOdds: decision?.route_bookie_od || fixture?.deploy_summary?.bookie_od,
+      conflictCopy,
+      conflictLabel: conflictLevel === "HARD_CONFLICT" ? "Hard conflict" : conflictLevel === "CAUTION" ? "Caution conflict" : "No conflict",
+      routeTone: routeActive ? "deploy" : "reference",
+      auditTone: decisionStateTone(auditState),
+      conflictTone: conflictLevel === "HARD_CONFLICT" ? "reference" : conflictLevel === "CAUTION" ? "observe" : "deploy",
+    };
+  };
+
   const decisionReasonRows = (decision, limit = 4) => {
     const supportRows = (decision?.supporting_layers || []).slice(0, 2).map((token) => ({
       tone: "support",
@@ -3217,6 +3296,8 @@
           read: value?.public_summary || "No published read yet.",
           band: value?.state || "Pending",
           modelLean: value?.model_lean || "",
+          modelOutput: value?.model_output || null,
+          teamContextLean: value?.team_context_lean || "",
           support: Array.isArray(value?.structural_support) ? value.structural_support : [],
           cautions: Array.isArray(value?.cautions) ? value.cautions : [],
         }))
@@ -3242,6 +3323,8 @@
         read: entry.data?.read || "No published read yet.",
         band: entry.data?.label || "Pending",
         modelLean: entry.data?.model_lean || "",
+        modelOutput: entry.data?.model_output || null,
+        teamContextLean: entry.data?.team_context_lean || "",
         support: Array.isArray(entry.data?.structural_support) ? entry.data.structural_support : [],
         cautions: Array.isArray(entry.data?.cautions) ? entry.data.cautions : [],
       }))
@@ -3771,14 +3854,12 @@
   const renderFixturePredictionDeck = (fixture, clarity, matchedEntry, publishClass) => {
     const decision = state.selectedFixtureDecisionIntelligence || null;
     const verdictLabel = marketVerdictDisplay(fixture);
-    const publishedSelection = fixturePublishedSelection(fixture);
-    const decisionState = String(decision?.signal_state || "").toUpperCase();
-    const hasDecisionConflict = Boolean(publishedSelection && ["AVOID", "FRAGILE"].includes(decisionState));
-    const deckLabel = publishedSelection ? "Published prediction" : "Fixture context";
-    const deckTitle = publishedSelection ? publishedSelection.label : "No published pick";
-    const deckCopy = publishedSelection
-      ? hasDecisionConflict
-        ? `${fixture.signal_summary?.summary_text || clarity.action_copy} Context audit flags ${safeTitleLabel(decisionState, "caution")} at ${decision?.agreement_score ?? "—"}% agreement, so treat the deeper cards as caution context rather than a second selection.`
+    const routeAudit = routeAuditProfile(fixture, decision);
+    const deckLabel = routeAudit.routeActive ? "Published prediction" : "Fixture context";
+    const deckTitle = routeAudit.routeLabel || verdictLabel;
+    const deckCopy = routeAudit.routeActive
+      ? routeAudit.conflictLevel === "CAUTION" || routeAudit.conflictLevel === "HARD_CONFLICT"
+        ? `${fixture.signal_summary?.summary_text || clarity.action_copy} Context audit flags ${safeTitleLabel(routeAudit.auditState, "caution")} at ${routeAudit.agreement ?? "—"}% agreement, so the deeper cards are caution context rather than a second selection.`
         : fixture.signal_summary?.summary_text || decision?.preview?.short_summary || decision?.public_safe_summary || clarity.action_copy
       : `This fixture is ${safeTitleLabel(publishClass || fixture.publish_class || "observe", "context")} only. Market cards show context posture, pricing, and cautions, but no Odds Genius pick is published for this fixture.`;
     return `
@@ -5375,18 +5456,19 @@
       FRAGILE: "reference",
       AVOID: "reference",
     };
-    const tone = stateToneMap[String(decision.signal_state || "").toUpperCase()] || "reference";
+    const routeAudit = routeAuditProfile(fixture, decision);
+    const tone = stateToneMap[routeAudit.auditState] || "reference";
     return `
       <section class="section">
         <article class="panel fixture-ratings-verdict">
-          <span class="metric-label">Decision companion</span>
-          <h3>${escapeHtml(decision.primary_signal || marketVerdictDisplay(fixture))}</h3>
+          <span class="metric-label">Route / audit companion</span>
+          <h3>${escapeHtml(routeAudit.routeLabel || decision.primary_signal || marketVerdictDisplay(fixture))}</h3>
           <p class="section-copy">${escapeHtml(decision.public_safe_summary || "No reconciled public summary has been published yet.")}</p>
           ${renderEntitySurfaceTiles([
-            { label: "Signal state", value: safeTitleLabel(decision.signal_state, "Pending"), meta: "Reconciled decision state", tone },
-            { label: "Agreement", value: `${decision.agreement_score ?? "—"}%`, meta: "Cross-layer agreement", tone: scoreTone(decision.agreement_score) },
-            { label: "Confidence", value: safeTitleLabel(decision.confidence_band, "Pending"), meta: "Reconciled confidence band", tone },
-            { label: "Primary read", value: decision.primary_signal || marketVerdictDisplay(fixture), meta: "Public-safe market view", tone },
+            { label: "Published route", value: routeAudit.routeActive ? `${routeAudit.routeMarket} ${routeAudit.routePick}` : "No pick", meta: safeTitleLabel(routeAudit.routeState || "context", "Context only"), tone: routeAudit.routeTone },
+            { label: "Context audit", value: safeTitleLabel(routeAudit.auditState, "Pending"), meta: `${routeAudit.agreement ?? "—"}% agreement`, tone },
+            { label: "Conflict level", value: routeAudit.conflictLabel, meta: routeAudit.conflictCopy, tone: routeAudit.conflictTone },
+            { label: "Primary read", value: routeAudit.routeActive ? routeAudit.routeLabel : routeAudit.contextLabel, meta: routeAudit.routeActive ? "Published route view" : "Context-only view", tone: routeAudit.routeTone },
           ])}
         </article>
       </section>
@@ -5432,15 +5514,22 @@
         </article>
       `;
     }
-    const tone = decisionStateTone(decision.signal_state);
+    const routeAudit = routeAuditProfile(fixture, decision);
     const agreementRows = decisionReasonRows(decision, 4);
     const marketHighlights = decisionMarketSuitabilityItems(decision).slice(0, 3);
     return `
       <article class="panel compact-panel compact-panel-primary">
+        <span class="metric-label">${escapeHtml(routeAudit.routeActive ? "Published route" : "Context only")}</span>
+        <div class="metric-stack">
+          <strong class="metric-value">${escapeHtml(routeAudit.routeLabel || verdictLabel)}</strong>
+          <p class="muted">${escapeHtml(`${safeTitleLabel(routeAudit.routeState || "context", "Context")} • ${safeTitleLabel(routeAudit.confidence, "Pending")} confidence${routeAudit.routeOdds ? ` • ${bookmakerLineDisplay(routeAudit.routeOdds)}` : ""}`)}</p>
+        </div>
+      </article>
+      <article class="panel compact-panel">
         <span class="metric-label">Context audit</span>
         <div class="metric-stack">
-          <strong class="metric-value">${escapeHtml(decision.primary_signal || verdictLabel)}</strong>
-          <p class="muted">${escapeHtml(`${safeTitleLabel(decision.signal_state, "Pending")} • ${safeTitleLabel(decision.confidence_band, "Pending")} confidence • ${decision.agreement_score ?? "—"}% agreement`)}</p>
+          <strong class="metric-value">${escapeHtml(safeTitleLabel(routeAudit.auditState, "Pending"))}</strong>
+          <p class="muted">${escapeHtml(`${routeAudit.agreement ?? "—"}% agreement • ${routeAudit.conflictLabel}`)}</p>
         </div>
       </article>
       <article class="panel compact-panel">
@@ -5498,6 +5587,7 @@
     }
     const deployMode = String(fixture.publish_class || "").toUpperCase() === "DEPLOY";
     const modeCopy = deployMode ? "deploy signal" : "observed lean";
+    const routeAudit = routeAuditProfile(fixture, decision);
     const toneIcon = (tone) => (tone === "support" ? "✓" : tone === "contradict" ? "✗" : "~");
     const supportRows = (decision.supporting_layers || []).slice(0, 3).map((token) => ({ tone: "support", text: reasonTokenLabel(token) }));
     const cautionRows = (decision.caution_layers || []).slice(0, 3).map((token) => ({ tone: "contradict", text: reasonTokenLabel(token) }));
@@ -5505,9 +5595,14 @@
     return `
       <section class="section">
         <article class="panel fixture-ratings-verdict">
-          <span class="metric-label">Ratings verdict</span>
-          <h3>${escapeHtml(`${safeTitleLabel(decision.signal_state || "mixed")} with ${modeCopy}`)}</h3>
-          <p class="section-copy">The published decision layer is cross-checking the live fixture read. Agreement tightens trust; contradiction is a discipline signal rather than a reason to force the bet.</p>
+          <span class="metric-label">Context audit</span>
+          <h3>${escapeHtml(`${safeTitleLabel(routeAudit.auditState || "mixed")} with ${modeCopy}`)}</h3>
+          <p class="section-copy">${escapeHtml(routeAudit.routeActive ? "The published route remains the pick layer. This audit explains supporting and caution context without changing the deployed route." : "No pick is published here. This audit explains why the fixture is context-only or watch-first.")}</p>
+          ${renderEntitySurfaceTiles([
+            { label: "Published route", value: routeAudit.routeActive ? routeAudit.routeLabel : "No pick", meta: routeAudit.routeActive ? `${routeAudit.routeMarket} ${routeAudit.routePick}` : safeTitleLabel(routeAudit.routeState || "context", "Context"), tone: routeAudit.routeTone },
+            { label: "Audit agreement", value: `${routeAudit.agreement ?? "—"}%`, meta: safeTitleLabel(routeAudit.auditState, "Pending"), tone: scoreTone(routeAudit.agreement) },
+            { label: "Conflict", value: routeAudit.conflictLabel, meta: routeAudit.conflictCopy, tone: routeAudit.conflictTone },
+          ])}
           <ul class="feature-list compact-list fixture-ratings-verdict-list">
             ${rows
               .map(
@@ -5996,6 +6091,7 @@
     const posture = decisionMarketPosture(decision);
     const watchlist = decision?.watchlist || null;
     const supportRows = decisionReasonRows(decision, 4);
+    const routeAudit = routeAuditProfile(fixture, decision);
 
     if (!decision) {
       return `
@@ -6016,8 +6112,13 @@
         <div class="split">
           <article class="panel">
             <span class="metric-label">Fixture primer</span>
-            <h3>${escapeHtml(preview?.headline || decision.primary_signal || "Published fixture read")}</h3>
+            <h3>${escapeHtml(routeAudit.routeActive ? routeAudit.routeLabel : "No published pick")}</h3>
             <p class="section-copy">${escapeHtml(preview?.short_summary || decision.public_safe_summary || "No published public-safe summary is available yet.")}</p>
+            ${renderEntitySurfaceTiles([
+              { label: "Route", value: routeAudit.routeActive ? safeTitleLabel(routeAudit.routeState, "Deploy") : "No pick", meta: routeAudit.routeActive ? `${routeAudit.routeMarket} ${routeAudit.routePick}` : safeTitleLabel(routeAudit.routeState || "context", "Context only"), tone: routeAudit.routeTone },
+              { label: "Audit", value: safeTitleLabel(routeAudit.auditState, "Pending"), meta: `${routeAudit.agreement ?? "—"}% agreement`, tone: routeAudit.auditTone },
+              { label: "Conflict", value: routeAudit.conflictLabel, meta: routeAudit.conflictCopy, tone: routeAudit.conflictTone },
+            ])}
             <ul class="feature-list compact-list fixture-ratings-verdict-list">
               ${supportRows.length
                 ? supportRows
@@ -6076,15 +6177,15 @@
             ${renderEntitySurfaceTiles([
               {
                 label: "Watch state",
-                value: safeTitleLabel(watchlist.state || decision.signal_state, "Pending"),
+                value: safeTitleLabel(watchlist.state || routeAudit.auditState, "Pending"),
                 meta: watchlist.label || "Live confirmation layer",
-                tone: decisionStateTone(watchlist.state || decision.signal_state),
+                tone: decisionStateTone(watchlist.state || routeAudit.auditState),
               },
               {
                 label: "Readiness",
-                value: `${watchlist.readiness_score ?? decision.agreement_score ?? "—"}%`,
+                value: `${watchlist.readiness_score ?? routeAudit.agreement ?? "—"}%`,
                 meta: "Pre-match watch posture",
-                tone: scoreTone(watchlist.readiness_score ?? decision.agreement_score),
+                tone: scoreTone(watchlist.readiness_score ?? routeAudit.agreement),
               },
             ])}
             <p class="section-copy">${escapeHtml(watchlist.public_summary || "Pre-match is not clean enough for full deployment, but the shape is interesting enough to monitor live.")}</p>

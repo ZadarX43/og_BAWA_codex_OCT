@@ -4,10 +4,14 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import json
+import re
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
+
+from publish_snapshot_metadata import metadata_from_fixture, utc_now_iso
 
 
 DATA_ROOT_DEFAULT = Path("frontend/public/data")
@@ -116,6 +120,14 @@ def clamp_0_100(value: object, fallback: int = 0) -> int:
     return max(0, min(100, int(round(numeric))))
 
 
+def numeric_or_none(value: object) -> float | None:
+    try:
+        numeric = float(value)
+    except (TypeError, ValueError):
+        return None
+    return numeric if numeric == numeric else None
+
+
 def avg(values: list[object]) -> int | None:
     usable = []
     for value in values:
@@ -187,6 +199,25 @@ def market_key_for_family(family: str) -> str | None:
     return None
 
 
+def normalize_pick(value: object) -> str:
+    pick = str(value or "").strip().upper().replace(" ", "_")
+    aliases = {
+        "OVER": "OVER25",
+        "OVER_25": "OVER25",
+        "OVER2.5": "OVER25",
+        "OVER_2.5": "OVER25",
+        "UNDER": "UNDER25",
+        "UNDER_25": "UNDER25",
+        "UNDER2.5": "UNDER25",
+        "UNDER_2.5": "UNDER25",
+        "BTTS_YES": "YES",
+        "BTTS_NO": "NO",
+        "HOME_WIN": "HOME",
+        "AWAY_WIN": "AWAY",
+    }
+    return aliases.get(pick, pick)
+
+
 def state_from_alignment(alignment_score: int) -> str:
     if alignment_score >= 80:
         return "SUPPORTED"
@@ -197,10 +228,29 @@ def state_from_alignment(alignment_score: int) -> str:
     return "AVOID"
 
 
+def route_profile(fixture: dict[str, Any]) -> dict[str, Any]:
+    signal_summary = fixture.get("signal_summary") or {}
+    deploy_summary = fixture.get("deploy_summary") or {}
+    route_state = str(fixture.get("publish_class") or signal_summary.get("signal_state") or "").upper()
+    route_market = str(signal_summary.get("market_family") or deploy_summary.get("market") or "").upper()
+    route_pick = normalize_pick(signal_summary.get("deploy_pick") or deploy_summary.get("pick"))
+    route_active = route_state == "DEPLOY" and bool(route_market and route_pick)
+    return {
+        "route_state": route_state or "UNKNOWN",
+        "route_market": route_market,
+        "route_pick": route_pick,
+        "route_active": route_active,
+        "confidence_tier": deploy_summary.get("confidence_tier") or signal_summary.get("confidence_tier"),
+        "bookie_od": deploy_summary.get("bookie_od"),
+        "value_edge_label": deploy_summary.get("value_edge_label"),
+        "premium_tier": signal_summary.get("premium_tier"),
+    }
+
+
 def signal_profile(fixture: dict[str, Any]) -> tuple[str, str]:
     signal_summary = fixture.get("signal_summary") or {}
     family = str(signal_summary.get("market_family") or "").upper()
-    pick = str(signal_summary.get("deploy_pick") or fixture.get("deploy_summary", {}).get("pick") or "").upper()
+    pick = normalize_pick(signal_summary.get("deploy_pick") or fixture.get("deploy_summary", {}).get("pick"))
     copy = f"{signal_summary.get('headline', '')} {signal_summary.get('summary_text', '')}".lower()
     if not pick:
         if family == "BTTS":
@@ -217,8 +267,9 @@ def signal_profile(fixture: dict[str, Any]) -> tuple[str, str]:
     return family, pick
 
 
-def primary_signal_label(fixture: dict[str, Any]) -> str:
-    family, pick = signal_profile(fixture)
+def signal_label_for_pick(fixture: dict[str, Any], family: str, pick: str, fallback: str = "Fixture read") -> str:
+    family = str(family or "").upper()
+    pick = normalize_pick(pick)
     if family == "BTTS":
         return "BTTS No" if pick == "NO" else "BTTS Yes"
     if family == "OU25":
@@ -229,7 +280,19 @@ def primary_signal_label(fixture: dict[str, Any]) -> str:
         if pick == "DRAW":
             return "Draw"
         return f"{fixture.get('home_team', 'Home')} Win"
-    return str((fixture.get("signal_summary") or {}).get("signal_label") or "Fixture read")
+    return str((fixture.get("signal_summary") or {}).get("signal_label") or fallback)
+
+
+def context_signal_label(fixture: dict[str, Any]) -> str:
+    family, pick = signal_profile(fixture)
+    return signal_label_for_pick(fixture, family, pick, fallback="Fixture context")
+
+
+def primary_signal_label(fixture: dict[str, Any]) -> str:
+    route = route_profile(fixture)
+    if not route["route_active"]:
+        return "No published pick"
+    return signal_label_for_pick(fixture, route["route_market"], route["route_pick"], fallback="Published pick")
 
 
 def relevant_rating_keys(fixture: dict[str, Any]) -> list[str]:
@@ -256,11 +319,110 @@ class DecisionPublisher:
         self.data_root = data_root
         self.fixture_feed = load_json(data_root / "fixture_intelligence_public.json")
         self.fixtures = list(self.fixture_feed.get("fixtures") or [])
+        self.fixture_keys = {str(fixture.get("fixture_key") or "") for fixture in self.fixtures}
+        self.fixture_dates = {key[:10].replace("_", "-") for key in self.fixture_keys if len(key) >= 10}
+        self.capture_generated_at = utc_now_iso()
         self.team_index = list(load_json(data_root / "team_intelligence" / "team_ratings_index.json"))
         self.club_index = list(load_json(data_root / "player_intelligence" / "club_squad_ratings.json"))
         self.lineup_index = {row["fixture_key"]: row for row in load_json(data_root / "fixture_lineup_intelligence" / "index.json")}
         h2h_index_path = data_root / "fixture_h2h_support" / "index.json"
         self.h2h_index = {row["fixture_key"]: row for row in load_json(h2h_index_path)} if h2h_index_path.exists() else {}
+        self.model_output_index = self.load_allmarkets_model_outputs()
+
+    def load_allmarkets_model_outputs(self) -> dict[str, dict[str, dict[str, Any]]]:
+        output_root = Path("predictions_output")
+        if not output_root.exists():
+            return {}
+        paths = [
+            path
+            for path in output_root.glob("**/BOOKIE_IMP20_ALLMARKETS_*.csv")
+            if "__" not in path.name
+            and self.allmarkets_window_overlaps_fixture_dates(path)
+        ]
+        paths.sort(key=lambda path: (path.stat().st_mtime, str(path)))
+        index: dict[str, dict[str, dict[str, Any]]] = {}
+        for path in paths:
+            with path.open(newline="") as handle:
+                for row in csv.DictReader(handle):
+                    fixture_key = str(row.get("fixture_key") or "").strip()
+                    if not fixture_key or fixture_key not in self.fixture_keys:
+                        continue
+                    market_key = market_key_for_family(str(row.get("market") or "").upper())
+                    if market_key not in {"ftr", "btts", "ou25"}:
+                        continue
+                    output = self.model_output_from_allmarkets_row(row, market_key, path)
+                    if output:
+                        index.setdefault(fixture_key, {})[market_key] = output
+        return index
+
+    def allmarkets_window_overlaps_fixture_dates(self, path: Path) -> bool:
+        dates = re.findall(r"\d{4}-\d{2}-\d{2}", path.name)
+        if len(dates) < 2:
+            return True
+        start, end = dates[0], dates[1]
+        return any(start <= fixture_date <= end for fixture_date in self.fixture_dates)
+
+    def model_output_from_allmarkets_row(self, row: dict[str, str], market_key: str, path: Path) -> dict[str, Any] | None:
+        pick = normalize_pick(row.get("model_top_pick"))
+        probabilities: dict[str, float] = {}
+        xgb_probabilities: dict[str, float] = {}
+        xgb_pick = normalize_pick(row.get("model_top_pick_xgb"))
+        if market_key == "ftr":
+            probabilities = {
+                "HOME": numeric_or_none(row.get("confidence_home")),
+                "DRAW": numeric_or_none(row.get("confidence_draw")),
+                "AWAY": numeric_or_none(row.get("confidence_away")),
+            }
+            xgb_probabilities = {
+                "HOME": numeric_or_none(row.get("confidence_home_xgb")),
+                "DRAW": numeric_or_none(row.get("confidence_draw_xgb")),
+                "AWAY": numeric_or_none(row.get("confidence_away_xgb")),
+            }
+            xgb_pick = normalize_pick(row.get("ftr_pick_xgb") or xgb_pick)
+        elif market_key == "btts":
+            yes_prob = numeric_or_none(row.get("prob_btts_v2") or row.get("prob_btts"))
+            if yes_prob is not None:
+                probabilities = {"YES": yes_prob, "NO": max(0.0, min(1.0, 1.0 - yes_prob))}
+            xgb_yes = numeric_or_none(row.get("model_p_for_bookie_xgb_btts"))
+            xgb_pick = normalize_pick(row.get("btts_pick_xgb") or xgb_pick)
+            if xgb_yes is not None and xgb_pick:
+                xgb_probabilities = {
+                    xgb_pick: xgb_yes,
+                    "NO" if xgb_pick == "YES" else "YES": max(0.0, min(1.0, 1.0 - xgb_yes)),
+                }
+        elif market_key == "ou25":
+            over_prob = numeric_or_none(row.get("prob_over25_v2") or row.get("prob_over25"))
+            if over_prob is not None:
+                probabilities = {"OVER25": over_prob, "UNDER25": max(0.0, min(1.0, 1.0 - over_prob))}
+            xgb_over = numeric_or_none(row.get("model_p_for_bookie_xgb_ou25"))
+            xgb_pick = normalize_pick(row.get("ou25_pick_xgb") or xgb_pick)
+            if xgb_over is not None and xgb_pick:
+                xgb_probabilities = {
+                    xgb_pick: xgb_over,
+                    "UNDER25" if xgb_pick == "OVER25" else "OVER25": max(0.0, min(1.0, 1.0 - xgb_over)),
+                }
+        probabilities = {key: value for key, value in probabilities.items() if value is not None}
+        xgb_probabilities = {key: value for key, value in xgb_probabilities.items() if value is not None}
+        if not pick and probabilities:
+            pick = max(probabilities.items(), key=lambda item: item[1])[0]
+        if not pick:
+            return None
+        pick_probability = numeric_or_none(row.get("model_p_for_bookie_cal") or row.get("model_p_for_bookie") or row.get("model_p_for_bookie_raw"))
+        if pick_probability is None:
+            pick_probability = probabilities.get(pick)
+        return {
+            "source": "ALLMARKETS",
+            "source_file": str(path),
+            "market": MARKET_LABELS.get(market_key, market_key.upper()),
+            "pick": pick,
+            "bookie_pick": normalize_pick(row.get("bookie_pick")),
+            "pick_probability": pick_probability,
+            "probabilities": probabilities,
+            "xgb_pick": xgb_pick,
+            "xgb_pick_probability": xgb_probabilities.get(xgb_pick) if xgb_pick else None,
+            "xgb_probabilities": xgb_probabilities,
+            "agreement_with_bookie": str(row.get("agree_model_vs_bookie") or "").strip() in {"1", "1.0", "true", "TRUE"},
+        }
 
     def find_best_team_entry(self, team_name: str, competition: str, season: object) -> dict[str, Any] | None:
         target_team = normalize(team_name)
@@ -627,7 +789,7 @@ class DecisionPublisher:
             "cards": {"rating": combined_card, "label": score_band(combined_card), "read": "Driven by discipline heat, fouling, and volatility."},
         }
 
-    def market_model_lean(
+    def team_context_lean(
         self,
         market_key: str,
         fixture: dict[str, Any],
@@ -666,6 +828,9 @@ class DecisionPublisher:
             return "ELEVATED" if avg([home_ratings.get("card_heat_rating"), away_ratings.get("card_heat_rating")]) or 0 >= 55 else "MIXED"
         return "LEAN"
 
+    def market_model_output(self, fixture: dict[str, Any], market_key: str) -> dict[str, Any] | None:
+        return (self.model_output_index.get(str(fixture.get("fixture_key") or "")) or {}).get(market_key)
+
     def select_market_reason_tokens(self, market_key: str, tokens: list[str]) -> list[str]:
         hints = MARKET_REASON_HINTS.get(market_key, ())
         matched = [token for token in tokens if any(hint in token for hint in hints)]
@@ -685,6 +850,26 @@ class DecisionPublisher:
         if state == "AVOID":
             return f"{market_label} is too contradicted by {caution_text.lower()} to present as a clean public read."
         return f"{market_label} has some structural support from {support_text.lower()}, but the overall layer fit remains fragile."
+
+    def route_conflict_level(
+        self,
+        route: dict[str, Any],
+        audit_state: str,
+        market_intelligence: dict[str, dict[str, Any]],
+    ) -> str:
+        if not route.get("route_active"):
+            return "NONE"
+        route_market_key = market_key_for_family(str(route.get("route_market") or ""))
+        route_pick = normalize_pick(route.get("route_pick"))
+        route_market = market_intelligence.get(route_market_key or "", {})
+        model_lean = normalize_pick(route_market.get("model_lean"))
+        if route_market_key and model_lean and route_pick and model_lean != route_pick:
+            return "HARD_CONFLICT"
+        if str(audit_state or "").upper() in {"AVOID", "FRAGILE"}:
+            return "CAUTION"
+        if str(route_market.get("state") or "").upper() in {"AVOID", "FRAGILE"}:
+            return "CAUTION"
+        return "NONE"
 
     def build_market_intelligence(
         self,
@@ -714,7 +899,10 @@ class DecisionPublisher:
             result[market_key] = {
                 "alignment_score": alignment_score,
                 "state": state,
-                "model_lean": self.market_model_lean(market_key, fixture, home_team, away_team, lineup),
+                "audit_state": state,
+                "model_lean": (self.market_model_output(fixture, market_key) or {}).get("pick") or "",
+                "model_output": self.market_model_output(fixture, market_key),
+                "team_context_lean": self.team_context_lean(market_key, fixture, home_team, away_team, lineup),
                 "structural_support": support,
                 "cautions": caution,
                 "public_summary": self.market_public_summary(MARKET_LABELS.get(market_key, safe_title(market_key)), state, support, caution),
@@ -745,7 +933,7 @@ class DecisionPublisher:
                 "Treat short prices or late uncertainty as a reason to hold discipline.",
             ]
         summary = (
-            f"{primary_signal_label(fixture)} is better treated as a watch-first structure because {public_reason_label(caution_layers[0]).lower()}."
+            f"{context_signal_label(fixture)} is better treated as a watch-first structure because {public_reason_label(caution_layers[0]).lower()}."
             if active and caution_layers
             else "No watchlist layer is active for this fixture."
         )
@@ -757,7 +945,7 @@ class DecisionPublisher:
             "mode": f"{family}:{pick}" if active else "",
         }
 
-    def derive_signal_state(self, fixture: dict[str, Any], agreement_score: int, caution_layers: list[str]) -> str:
+    def derive_audit_state(self, fixture: dict[str, Any], agreement_score: int, caution_layers: list[str]) -> str:
         publish_class = str(fixture.get("publish_class") or "").upper()
         if agreement_score >= 80 and publish_class == "DEPLOY":
             return "SUPPORTED"
@@ -771,10 +959,28 @@ class DecisionPublisher:
             return "AVOID"
         return "FRAGILE"
 
+    def derive_signal_state(self, fixture: dict[str, Any], agreement_score: int, caution_layers: list[str]) -> str:
+        return self.derive_audit_state(fixture, agreement_score, caution_layers)
+
     def public_summary(self, fixture: dict[str, Any], state: str, support: list[str], caution: list[str]) -> str:
         home = fixture.get("home_team", "Home")
         away = fixture.get("away_team", "Away")
-        signal = primary_signal_label(fixture)
+        route = route_profile(fixture)
+        published_signal = primary_signal_label(fixture)
+        context_signal = context_signal_label(fixture)
+        if route["route_active"] and state in {"AVOID", "FRAGILE"}:
+            caution_text = public_reason_label(caution[0]).lower() if caution else "published caution context"
+            return (
+                f"Published route remains {published_signal} for {home} vs {away}, "
+                f"while the context audit flags {state.lower()} because of {caution_text}."
+            )
+        if not route["route_active"]:
+            if state == "WATCHLIST":
+                return f"No published pick is active for {home} vs {away}; the context layer is watch-first around {context_signal}."
+            if state == "AVOID":
+                return f"No published pick is active for {home} vs {away}; the context layer is too contradicted to present as an action."
+            return f"No published pick is active for {home} vs {away}; the fixture read is context only."
+        signal = published_signal
         if state == "SUPPORTED":
             return f"{signal} is structurally supported for {home} vs {away}, with multiple independent layers aligning behind the live read."
         if state == "WATCHLIST":
@@ -804,13 +1010,14 @@ class DecisionPublisher:
         h2h = self.load_h2h_payload(fixture["fixture_key"])
 
         supporting_layers, caution_layers, agreement_score = self.build_support_and_caution(fixture, home_team, away_team, lineup, h2h)
-        signal_state = self.derive_signal_state(fixture, agreement_score, caution_layers)
+        route = route_profile(fixture)
+        audit_state = self.derive_audit_state(fixture, agreement_score, caution_layers)
         lineup_home_profiles = (lineup or {}).get("home_lineup_profiles") or []
         lineup_away_profiles = (lineup or {}).get("away_lineup_profiles") or []
         market_suitability = self.build_market_suitability(fixture, home_team, away_team, lineup)
         market_intelligence = self.build_market_intelligence(
             fixture,
-            signal_state,
+            audit_state,
             agreement_score,
             supporting_layers,
             caution_layers,
@@ -819,15 +1026,41 @@ class DecisionPublisher:
             away_team,
             lineup,
         )
-        watchlist = self.build_watchlist(fixture, signal_state, caution_layers)
+        conflict_level = self.route_conflict_level(route, audit_state, market_intelligence)
+        watchlist = self.build_watchlist(fixture, audit_state, caution_layers)
+        confidence = confidence_band(agreement_score, (fixture.get("signal_summary") or {}).get("confidence_tier"))
 
-        return {
+        payload = {
             "fixture_key": fixture["fixture_key"],
             "fixture": f"{home_team_name} vs {away_team_name}",
             "primary_signal": primary_signal_label(fixture),
-            "signal_state": signal_state,
+            "context_signal": context_signal_label(fixture),
+            "signal_state": audit_state,
             "agreement_score": agreement_score,
-            "confidence_band": confidence_band(agreement_score, (fixture.get("signal_summary") or {}).get("confidence_tier")),
+            "confidence_band": confidence,
+            "route_state": route["route_state"],
+            "route_market": route["route_market"],
+            "route_pick": route["route_pick"],
+            "route_active": route["route_active"],
+            "route_label": primary_signal_label(fixture),
+            "route_confidence_tier": route.get("confidence_tier"),
+            "route_bookie_od": route.get("bookie_od"),
+            "route_value_edge_label": route.get("value_edge_label"),
+            "audit_state": audit_state,
+            "audit_agreement_score": agreement_score,
+            "audit_confidence_band": confidence,
+            "conflict_level": conflict_level,
+            "decision_contract_version": "route_audit_v1",
+            "published_route": route,
+            "context_audit": {
+                "state": audit_state,
+                "agreement_score": agreement_score,
+                "confidence_band": confidence,
+                "supporting_layers": supporting_layers,
+                "caution_layers": caution_layers,
+                "context_signal": context_signal_label(fixture),
+                "conflict_level": conflict_level,
+            },
             "supporting_layers": supporting_layers,
             "caution_layers": caution_layers,
             "profile_tags": {
@@ -846,7 +1079,7 @@ class DecisionPublisher:
             "market_suitability": market_suitability,
             "market_intelligence": market_intelligence,
             "watchlist": watchlist,
-            "public_safe_summary": self.public_summary(fixture, signal_state, supporting_layers, caution_layers),
+            "public_safe_summary": self.public_summary(fixture, audit_state, supporting_layers, caution_layers),
             "internal_reason_tokens": supporting_layers + caution_layers,
             "summary": {
                 "support_count": len(supporting_layers),
@@ -855,6 +1088,8 @@ class DecisionPublisher:
                 "h2h_available": bool(h2h and int(h2h.get("sample_size") or 0) > 0),
             },
         }
+        payload.update(metadata_from_fixture(fixture, capture_generated_at=self.capture_generated_at))
+        return payload
 
     def publish(self, output_root: Path | None = None) -> int:
         target_root = output_root or self.data_root
@@ -869,9 +1104,21 @@ class DecisionPublisher:
                     "fixture_key": payload["fixture_key"],
                     "fixture": payload["fixture"],
                     "primary_signal": payload["primary_signal"],
+                    "context_signal": payload["context_signal"],
+                    "route_state": payload["route_state"],
+                    "route_market": payload["route_market"],
+                    "route_pick": payload["route_pick"],
+                    "route_active": payload["route_active"],
+                    "audit_state": payload["audit_state"],
+                    "conflict_level": payload["conflict_level"],
                     "signal_state": payload["signal_state"],
                     "agreement_score": payload["agreement_score"],
                     "confidence_band": payload["confidence_band"],
+                    "capture_generated_at": payload.get("capture_generated_at"),
+                    "source_data_cutoff_at": payload.get("source_data_cutoff_at"),
+                    "fixture_kickoff_at": payload.get("fixture_kickoff_at"),
+                    "pre_kickoff_eligible": payload.get("pre_kickoff_eligible"),
+                    "snapshot_phase": payload.get("snapshot_phase"),
                 }
             )
         (target_dir / "index.json").write_text(json.dumps(index_rows, indent=2, ensure_ascii=False))

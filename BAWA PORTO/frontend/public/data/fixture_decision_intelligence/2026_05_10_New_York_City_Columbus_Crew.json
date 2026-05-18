@@ -2,16 +2,55 @@
   "fixture_key": "2026_05_10_New_York_City_Columbus_Crew",
   "fixture": "New York City vs Columbus Crew",
   "primary_signal": "Over 2.5",
-  "signal_state": "AVOID",
-  "agreement_score": 42,
+  "context_signal": "Over 2.5",
+  "signal_state": "FRAGILE",
+  "agreement_score": 48,
   "confidence_band": "ELITE",
+  "route_state": "DEPLOY",
+  "route_market": "OU25",
+  "route_pick": "OVER25",
+  "route_active": true,
+  "route_label": "Over 2.5",
+  "route_confidence_tier": "ELITE",
+  "route_bookie_od": 1.7,
+  "route_value_edge_label": "neutral",
+  "audit_state": "FRAGILE",
+  "audit_agreement_score": 48,
+  "audit_confidence_band": "ELITE",
+  "conflict_level": "CAUTION",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "DEPLOY",
+    "route_market": "OU25",
+    "route_pick": "OVER25",
+    "route_active": true,
+    "confidence_tier": "ELITE",
+    "bookie_od": 1.7,
+    "value_edge_label": "neutral",
+    "premium_tier": "ELITE"
+  },
+  "context_audit": {
+    "state": "FRAGILE",
+    "agreement_score": 48,
+    "confidence_band": "ELITE",
+    "supporting_layers": [
+      "LINEUP_GOAL_PRESSURE_SUPPORT",
+      "H2H_OVER_SUPPORT"
+    ],
+    "caution_layers": [
+      "OVER25_HEAT_SOFT",
+      "CHAOS_ENVIRONMENT_SOFT"
+    ],
+    "context_signal": "Over 2.5",
+    "conflict_level": "CAUTION"
+  },
   "supporting_layers": [
-    "LINEUP_GOAL_PRESSURE_SUPPORT"
+    "LINEUP_GOAL_PRESSURE_SUPPORT",
+    "H2H_OVER_SUPPORT"
   ],
   "caution_layers": [
     "OVER25_HEAT_SOFT",
-    "CHAOS_ENVIRONMENT_SOFT",
-    "H2H_UNAVAILABLE"
+    "CHAOS_ENVIRONMENT_SOFT"
   ],
   "profile_tags": {
     "home": [
@@ -169,9 +208,14 @@
     }
   ],
   "h2h_context": {
-    "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "available": true,
+    "summary": "Using the latest available same-team-pair historical regime (1 prior meeting) as supporting context for this current fixture.",
+    "sample_size": 1,
+    "goal_environment": 5,
+    "btts_regime": 100,
+    "over25_rate": 100,
+    "draw_rate": 0,
+    "booking_heat": 7
   },
   "market_suitability": {
     "ftr": {
@@ -212,11 +256,35 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 48,
+      "alignment_score": 54,
       "state": "FRAGILE",
-      "model_lean": "DRAW",
+      "audit_state": "FRAGILE",
+      "model_lean": "HOME",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "HOME",
+        "bookie_pick": "HOME",
+        "pick_probability": 0.37745098039215685,
+        "probabilities": {
+          "HOME": 0.4288425011842734,
+          "DRAW": 0.25062790084649555,
+          "AWAY": 0.32052959796923103
+        },
+        "xgb_pick": "AWAY",
+        "xgb_pick_probability": 0.5707020163536072,
+        "xgb_probabilities": {
+          "HOME": 0.3962130546569824,
+          "DRAW": 0.03308488428592682,
+          "AWAY": 0.5707020163536072
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "DRAW",
       "structural_support": [
-        "LINEUP_GOAL_PRESSURE_SUPPORT"
+        "LINEUP_GOAL_PRESSURE_SUPPORT",
+        "H2H_OVER_SUPPORT"
       ],
       "cautions": [
         "OVER25_HEAT_SOFT",
@@ -229,7 +297,28 @@
     "btts": {
       "alignment_score": 48,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "YES",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "YES",
+        "bookie_pick": "YES",
+        "pick_probability": 0.7403740469419363,
+        "probabilities": {
+          "YES": 0.7403740469419363,
+          "NO": 0.2596259530580637
+        },
+        "xgb_pick": "YES",
+        "xgb_pick_probability": 0.5887247920036316,
+        "xgb_probabilities": {
+          "YES": 0.5887247920036316,
+          "NO": 0.4112752079963684
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "YES",
       "structural_support": [
         "LINEUP_GOAL_PRESSURE_SUPPORT"
       ],
@@ -242,9 +331,30 @@
       "band": "Weak"
     },
     "ou25": {
-      "alignment_score": 45,
-      "state": "AVOID",
+      "alignment_score": 49,
+      "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "OVER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "OVER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.638351753310713,
+        "probabilities": {
+          "OVER25": 0.638351753310713,
+          "UNDER25": 0.36164824668928697
+        },
+        "xgb_pick": "OVER25",
+        "xgb_pick_probability": 0.9427914023399353,
+        "xgb_probabilities": {
+          "OVER25": 0.9427914023399353,
+          "UNDER25": 0.0572085976600647
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "OVER25",
       "structural_support": [
         "LINEUP_GOAL_PRESSURE_SUPPORT"
       ],
@@ -252,14 +362,17 @@
         "OVER25_HEAT_SOFT",
         "CHAOS_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Over 2.5 is too contradicted by over 2.5 heat soft to present as a clean public read.",
+      "public_summary": "Over 2.5 has some structural support from lineup goal pressure support, but the overall layer fit remains fragile.",
       "rating": 50,
       "band": "Weak"
     },
     "team_goals": {
       "alignment_score": 52,
       "state": "FRAGILE",
-      "model_lean": "New York City 1.5+",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "New York City 1.5+",
       "structural_support": [
         "LINEUP_GOAL_PRESSURE_SUPPORT"
       ],
@@ -274,7 +387,10 @@
     "correct_score": {
       "alignment_score": 87,
       "state": "SUPPORTED",
-      "model_lean": "OPEN",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "OPEN",
       "structural_support": [
         "LINEUP_GOAL_PRESSURE_SUPPORT"
       ],
@@ -288,7 +404,10 @@
     "corners": {
       "alignment_score": 45,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "LINEUP_GOAL_PRESSURE_SUPPORT"
       ],
@@ -301,11 +420,15 @@
       "band": "Weak"
     },
     "cards": {
-      "alignment_score": 46,
+      "alignment_score": 52,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
-        "LINEUP_GOAL_PRESSURE_SUPPORT"
+        "LINEUP_GOAL_PRESSURE_SUPPORT",
+        "H2H_OVER_SUPPORT"
       ],
       "cautions": [
         "CHAOS_ENVIRONMENT_SOFT"
@@ -322,25 +445,22 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "Over 2.5 is too contradicted across the current structural layers for New York City vs Columbus Crew, so the clean read is caution rather than action.",
+  "public_safe_summary": "Published route remains Over 2.5 for New York City vs Columbus Crew, while the context audit flags fragile because of over 2.5 heat soft.",
   "internal_reason_tokens": [
     "LINEUP_GOAL_PRESSURE_SUPPORT",
+    "H2H_OVER_SUPPORT",
     "OVER25_HEAT_SOFT",
-    "CHAOS_ENVIRONMENT_SOFT",
-    "H2H_UNAVAILABLE"
+    "CHAOS_ENVIRONMENT_SOFT"
   ],
   "summary": {
-    "support_count": 1,
-    "caution_count": 3,
+    "support_count": 2,
+    "caution_count": 2,
     "lineup_available": true,
-    "h2h_available": false
+    "h2h_available": true
   },
-  "preview": {
-    "headline": "New York City vs Columbus Crew: Over 2.5 avoid",
-    "short_summary": "Over 2.5 is too contradicted across the current structural layers for New York City vs Columbus Crew, so the clean read is caution rather than action. Primary support comes from lineup goal pressure support, while the main caution remains over25 heat soft.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: Corners.",
-    "caution_line": "Main caution: Over25 Heat Soft.",
-    "telegram_summary": "New York City vs Columbus Crew — Over 2.5 (Avoid, 42% agreement). Support: Lineup Goal Pressure Support. Caution: Over25 Heat Soft.",
-    "premium_summary": "Over 2.5 is carrying a 42% agreement read across the published decision layers. Support is currently led by lineup goal pressure support, while caution is still coming from over25 heat soft, chaos environment soft."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-10T20:30:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

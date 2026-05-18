@@ -1,10 +1,45 @@
 {
   "fixture_key": "2026_05_10_Benfica_Sporting_Braga",
   "fixture": "Benfica vs Sporting Braga",
-  "primary_signal": "Fixture read",
+  "primary_signal": "No published pick",
+  "context_signal": "Fixture context",
   "signal_state": "FRAGILE",
   "agreement_score": 48,
   "confidence_band": "LOW",
+  "route_state": "CONTEXT",
+  "route_market": "",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "FRAGILE",
+  "audit_agreement_score": 48,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "CONTEXT",
+    "route_market": "",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "FRAGILE",
+    "agreement_score": 48,
+    "confidence_band": "LOW",
+    "supporting_layers": [],
+    "caution_layers": [
+      "H2H_UNAVAILABLE"
+    ],
+    "context_signal": "Fixture context",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [],
   "caution_layers": [
     "H2H_UNAVAILABLE"
@@ -77,40 +112,7 @@
       "delta": -27
     }
   ],
-  "key_player_drivers": [
-    {
-      "team": "Benfica",
-      "player": "Evangelos Pavlidis",
-      "role": "Forward",
-      "power": 73,
-      "driver_metric": "Goal Threat",
-      "driver_value": 74
-    },
-    {
-      "team": "Benfica",
-      "player": "Nicolas Otamendi",
-      "role": "Centre Back",
-      "power": 72,
-      "driver_metric": "Defensive Lock",
-      "driver_value": 69
-    },
-    {
-      "team": "Sporting Braga",
-      "player": "Bruma",
-      "role": "Forward",
-      "power": 69,
-      "driver_metric": "Goal Threat",
-      "driver_value": 70
-    },
-    {
-      "team": "Sporting Braga",
-      "player": "Ricardo Horta",
-      "role": "Forward",
-      "power": 67,
-      "driver_metric": "Creative Spark",
-      "driver_value": 64
-    }
-  ],
+  "key_player_drivers": [],
   "key_mismatches": [
     {
       "zone": "Benfica attack vs SC Braga defence",
@@ -155,8 +157,13 @@
   ],
   "h2h_context": {
     "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "summary": "No publish-safe H2H regime snapshot is available yet for this fixture, so H2H remains supporting-only.",
+    "sample_size": 0,
+    "goal_environment": 0,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 0
   },
   "market_suitability": {
     "ftr": {
@@ -199,7 +206,10 @@
     "ftr": {
       "alignment_score": 70,
       "state": "MIXED",
-      "model_lean": "DRAW",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "DRAW",
       "structural_support": [],
       "cautions": [
         "H2H_UNAVAILABLE"
@@ -211,7 +221,10 @@
     "btts": {
       "alignment_score": 52,
       "state": "FRAGILE",
-      "model_lean": "YES",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "YES",
       "structural_support": [],
       "cautions": [
         "H2H_UNAVAILABLE"
@@ -223,7 +236,10 @@
     "ou25": {
       "alignment_score": 62,
       "state": "MIXED",
-      "model_lean": "OVER25",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "OVER25",
       "structural_support": [],
       "cautions": [
         "H2H_UNAVAILABLE"
@@ -235,7 +251,10 @@
     "team_goals": {
       "alignment_score": 76,
       "state": "MIXED",
-      "model_lean": "Benfica 1.5+",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Benfica 1.5+",
       "structural_support": [],
       "cautions": [
         "H2H_UNAVAILABLE"
@@ -247,7 +266,10 @@
     "correct_score": {
       "alignment_score": 81,
       "state": "SUPPORTED",
-      "model_lean": "OPEN",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "OPEN",
       "structural_support": [],
       "cautions": [
         "H2H_UNAVAILABLE"
@@ -259,7 +281,10 @@
     "corners": {
       "alignment_score": 57,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [],
       "cautions": [
         "H2H_UNAVAILABLE"
@@ -271,7 +296,10 @@
     "cards": {
       "alignment_score": 21,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [],
       "cautions": [
         "H2H_UNAVAILABLE"
@@ -288,7 +316,7 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "Fixture read has some live shape in Benfica vs Sporting Braga, but the supporting layers remain fragile and need discipline.",
+  "public_safe_summary": "No published pick is active for Benfica vs Sporting Braga; the fixture read is context only.",
   "internal_reason_tokens": [
     "H2H_UNAVAILABLE"
   ],
@@ -298,12 +326,9 @@
     "lineup_available": true,
     "h2h_available": false
   },
-  "preview": {
-    "headline": "Benfica vs Sporting Braga: Fixture read fragile",
-    "short_summary": "Fixture read has some live shape in Benfica vs Sporting Braga, but the supporting layers remain fragile and need discipline. Primary support comes from structural caution, while the main caution remains h2h unavailable.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: Cards.",
-    "caution_line": "Main caution: H2H Unavailable.",
-    "telegram_summary": "Benfica vs Sporting Braga — Fixture read (Fragile, 48% agreement). Support: structural caution. Caution: H2H Unavailable.",
-    "premium_summary": "Fixture read is carrying a 48% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from h2h unavailable."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-11T19:15:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

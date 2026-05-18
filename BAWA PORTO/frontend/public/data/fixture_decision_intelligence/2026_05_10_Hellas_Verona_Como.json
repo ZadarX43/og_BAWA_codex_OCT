@@ -1,16 +1,54 @@
 {
   "fixture_key": "2026_05_10_Hellas_Verona_Como",
   "fixture": "Hellas Verona vs Como",
-  "primary_signal": "Como Win",
-  "signal_state": "WATCHLIST",
-  "agreement_score": 58,
+  "primary_signal": "No published pick",
+  "context_signal": "Como Win",
+  "signal_state": "FRAGILE",
+  "agreement_score": 56,
   "confidence_band": "LOW",
+  "route_state": "OBSERVE",
+  "route_market": "FTR",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "FRAGILE",
+  "audit_agreement_score": 56,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "FTR",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "FRAGILE",
+    "agreement_score": 56,
+    "confidence_band": "LOW",
+    "supporting_layers": [
+      "AWAY_POWER_ADVANTAGE",
+      "AWAY_THREAT_ADVANTAGE"
+    ],
+    "caution_layers": [
+      "LINEUP_UNIT_EDGE_SOFT"
+    ],
+    "context_signal": "Como Win",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [
     "AWAY_POWER_ADVANTAGE",
     "AWAY_THREAT_ADVANTAGE"
   ],
   "caution_layers": [
-    "LINEUP_DATA_MISSING"
+    "LINEUP_UNIT_EDGE_SOFT"
   ],
   "profile_tags": {
     "home": [
@@ -75,7 +113,26 @@
       "leader": "Como"
     }
   ],
-  "unit_battle_summary": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    }
+  ],
   "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
@@ -127,30 +184,74 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 68,
-      "state": "WATCHLIST",
-      "model_lean": "AWAY",
+      "alignment_score": 67,
+      "state": "FRAGILE",
+      "audit_state": "FRAGILE",
+      "model_lean": "DRAW",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "DRAW",
+        "bookie_pick": "AWAY",
+        "pick_probability": 0.23529411764705882,
+        "probabilities": {
+          "HOME": 0.24049396886339955,
+          "DRAW": 0.3984727719688808,
+          "AWAY": 0.36103325916771956
+        },
+        "xgb_pick": "AWAY",
+        "xgb_pick_probability": 0.5560341477394104,
+        "xgb_probabilities": {
+          "HOME": 0.21211278438568115,
+          "DRAW": 0.23185311257839203,
+          "AWAY": 0.5560341477394104
+        },
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "AWAY",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
-      "public_summary": "FTR is interesting enough to monitor, but current support is better treated as watch-first because of lineup data missing.",
+      "public_summary": "FTR has some structural support from away power advantage, but the overall layer fit remains fragile.",
       "rating": 83,
       "band": "Strong"
     },
     "btts": {
       "alignment_score": 54,
       "state": "FRAGILE",
-      "model_lean": "NO",
+      "audit_state": "FRAGILE",
+      "model_lean": "YES",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "YES",
+        "bookie_pick": "YES",
+        "pick_probability": 0.5213261868410516,
+        "probabilities": {
+          "YES": 0.5213261868410516,
+          "NO": 0.4786738131589484
+        },
+        "xgb_pick": "YES",
+        "xgb_pick_probability": 0.9294043779373169,
+        "xgb_probabilities": {
+          "YES": 0.9294043779373169,
+          "NO": 0.0705956220626831
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "NO",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
       "public_summary": "BTTS has some structural support from away power advantage, but the overall layer fit remains fragile.",
       "rating": 48,
@@ -159,13 +260,34 @@
     "ou25": {
       "alignment_score": 57,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "UNDER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "UNDER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.4428067313440629,
+        "probabilities": {
+          "OVER25": 0.4428067313440629,
+          "UNDER25": 0.5571932686559371
+        },
+        "xgb_pick": "OVER25",
+        "xgb_pick_probability": 0.9163129925727844,
+        "xgb_probabilities": {
+          "OVER25": 0.9163129925727844,
+          "UNDER25": 0.08368700742721558
+        },
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "UNDER25",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
       "public_summary": "Over 2.5 has some structural support from away power advantage, but the overall layer fit remains fragile.",
       "rating": 52,
@@ -174,13 +296,16 @@
     "team_goals": {
       "alignment_score": 60,
       "state": "FRAGILE",
-      "model_lean": "Hellas Verona 1.5+",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Hellas Verona 1.5+",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
       "public_summary": "Team Goals has some structural support from away power advantage, but the overall layer fit remains fragile.",
       "rating": 56,
@@ -189,12 +314,15 @@
     "correct_score": {
       "alignment_score": 47,
       "state": "FRAGILE",
-      "model_lean": "STRUCTURED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "STRUCTURED",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
       "public_summary": "Correct Score has some structural support from away power advantage, but the overall layer fit remains fragile.",
       "rating": 47,
@@ -203,13 +331,16 @@
     "corners": {
       "alignment_score": 51,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
       "public_summary": "Corners has some structural support from away power advantage, but the overall layer fit remains fragile.",
       "rating": 44,
@@ -218,48 +349,44 @@
     "cards": {
       "alignment_score": 74,
       "state": "MIXED",
-      "model_lean": "ELEVATED",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "AWAY_POWER_ADVANTAGE",
         "AWAY_THREAT_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
-      "public_summary": "Cards has partial support from away power advantage, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Cards has partial support from away power advantage, but lineup unit edge soft keeps it from reading clean.",
       "rating": 75,
       "band": "Positive"
     }
   },
   "watchlist": {
-    "active": true,
-    "summary": "Como Win is better treated as a watch-first structure because lineup data missing.",
-    "trigger_signals": [
-      "Wait for the actual XI to confirm the structural edge.",
-      "Watch whether midfield control matches the pre-match read.",
-      "Treat short prices or late uncertainty as a reason to hold discipline."
-    ],
-    "public_state": "Watchlist: wait for live confirmation",
-    "mode": "FTR:AWAY"
+    "active": false,
+    "summary": "No watchlist layer is active for this fixture.",
+    "trigger_signals": [],
+    "public_state": "No watchlist flag",
+    "mode": ""
   },
-  "public_safe_summary": "Como Win has useful structure for Hellas Verona vs Como, but the current layer fit is better treated as watch-first than pre-match deploy.",
+  "public_safe_summary": "No published pick is active for Hellas Verona vs Como; the fixture read is context only.",
   "internal_reason_tokens": [
     "AWAY_POWER_ADVANTAGE",
     "AWAY_THREAT_ADVANTAGE",
-    "LINEUP_DATA_MISSING"
+    "LINEUP_UNIT_EDGE_SOFT"
   ],
   "summary": {
     "support_count": 2,
     "caution_count": 1,
-    "lineup_available": false,
+    "lineup_available": true,
     "h2h_available": true
   },
-  "preview": {
-    "headline": "Hellas Verona vs Como: Como Win watchlist",
-    "short_summary": "Como Win has useful structure for Hellas Verona vs Como, but the current layer fit is better treated as watch-first than pre-match deploy. Primary support comes from away power advantage, while the main caution remains lineup data missing.",
-    "market_summary": "Best aligned market: Cards (Mixed). Secondary support: FTR. Weakest read: Correct Score.",
-    "caution_line": "Main caution: Lineup Data Missing.",
-    "telegram_summary": "Hellas Verona vs Como — Como Win (Watchlist, 58% agreement). Support: Away Power Advantage. Caution: Lineup Data Missing.",
-    "premium_summary": "Como Win is carrying a 58% agreement read across the published decision layers. Support is currently led by away power advantage, away threat advantage, while caution is still coming from lineup data missing."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-10T10:30:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

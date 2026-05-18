@@ -1,15 +1,53 @@
 {
   "fixture_key": "2026_05_10_Sion_Thun",
   "fixture": "Sion vs Thun",
-  "primary_signal": "Sion Win",
+  "primary_signal": "No published pick",
+  "context_signal": "Sion Win",
   "signal_state": "AVOID",
-  "agreement_score": 32,
+  "agreement_score": 30,
   "confidence_band": "LOW",
+  "route_state": "OBSERVE",
+  "route_market": "FTR",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "AVOID",
+  "audit_agreement_score": 30,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "FTR",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "AVOID",
+    "agreement_score": 30,
+    "confidence_band": "LOW",
+    "supporting_layers": [],
+    "caution_layers": [
+      "TEAM_POWER_NOT_DECISIVE",
+      "AWAY_TRAVEL_THREAT",
+      "LINEUP_UNIT_EDGE_SOFT",
+      "H2H_UNAVAILABLE"
+    ],
+    "context_signal": "Sion Win",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [],
   "caution_layers": [
     "TEAM_POWER_NOT_DECISIVE",
     "AWAY_TRAVEL_THREAT",
-    "LINEUP_DATA_MISSING",
+    "LINEUP_UNIT_EDGE_SOFT",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -75,13 +113,37 @@
       "leader": "Sion"
     }
   ],
-  "unit_battle_summary": [],
+  "unit_battle_summary": [
+    {
+      "label": "Attack vs Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    },
+    {
+      "label": "Midfield Control",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    }
+  ],
   "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "summary": "No publish-safe H2H regime snapshot is available yet for this fixture, so H2H remains supporting-only.",
+    "sample_size": 0,
+    "goal_environment": 0,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 0
   },
   "market_suitability": {
     "ftr": {
@@ -122,9 +184,32 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 53,
+      "alignment_score": 52,
       "state": "AVOID",
+      "audit_state": "AVOID",
       "model_lean": "HOME",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "HOME",
+        "bookie_pick": "HOME",
+        "pick_probability": 0.34258494515633015,
+        "probabilities": {
+          "HOME": 0.34258494515633015,
+          "DRAW": 0.31576643032005675,
+          "AWAY": 0.34164862452361316
+        },
+        "xgb_pick": "AWAY",
+        "xgb_pick_probability": 0.7809597849845886,
+        "xgb_probabilities": {
+          "HOME": 0.17637532949447632,
+          "DRAW": 0.04266490042209625,
+          "AWAY": 0.7809597849845886
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "HOME",
       "structural_support": [],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
@@ -137,7 +222,25 @@
     "btts": {
       "alignment_score": 36,
       "state": "AVOID",
-      "model_lean": "NO",
+      "audit_state": "AVOID",
+      "model_lean": "YES",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "YES",
+        "bookie_pick": "YES",
+        "pick_probability": 0.5408792556036441,
+        "probabilities": {
+          "YES": 0.5408792556036441,
+          "NO": 0.45912074439635586
+        },
+        "xgb_pick": "",
+        "xgb_pick_probability": null,
+        "xgb_probabilities": {},
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "NO",
       "structural_support": [],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
@@ -150,7 +253,28 @@
     "ou25": {
       "alignment_score": 36,
       "state": "AVOID",
-      "model_lean": "UNDER25",
+      "audit_state": "AVOID",
+      "model_lean": "OVER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "OVER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.5064350634255491,
+        "probabilities": {
+          "OVER25": 0.5064350634255491,
+          "UNDER25": 0.4935649365744509
+        },
+        "xgb_pick": "OVER25",
+        "xgb_pick_probability": 0.6455040574073792,
+        "xgb_probabilities": {
+          "OVER25": 0.6455040574073792,
+          "UNDER25": 0.35449594259262085
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "UNDER25",
       "structural_support": [],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
@@ -163,19 +287,25 @@
     "team_goals": {
       "alignment_score": 62,
       "state": "MIXED",
-      "model_lean": "Thun 1.5+",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Thun 1.5+",
       "structural_support": [],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
-      "public_summary": "Team Goals has partial support from structural support, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Team Goals has partial support from structural support, but lineup unit edge soft keeps it from reading clean.",
       "rating": 74,
       "band": "Strong"
     },
     "correct_score": {
       "alignment_score": 81,
       "state": "SUPPORTED",
-      "model_lean": "STRUCTURED",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "STRUCTURED",
       "structural_support": [],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE"
@@ -187,7 +317,10 @@
     "corners": {
       "alignment_score": 52,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
@@ -200,7 +333,10 @@
     "cards": {
       "alignment_score": 34,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [],
       "cautions": [
         "TEAM_POWER_NOT_DECISIVE",
@@ -218,25 +354,22 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "Sion Win is too contradicted across the current structural layers for Sion vs Thun, so the clean read is caution rather than action.",
+  "public_safe_summary": "No published pick is active for Sion vs Thun; the context layer is too contradicted to present as an action.",
   "internal_reason_tokens": [
     "TEAM_POWER_NOT_DECISIVE",
     "AWAY_TRAVEL_THREAT",
-    "LINEUP_DATA_MISSING",
+    "LINEUP_UNIT_EDGE_SOFT",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
     "support_count": 0,
     "caution_count": 4,
-    "lineup_available": false,
+    "lineup_available": true,
     "h2h_available": false
   },
-  "preview": {
-    "headline": "Sion vs Thun: Sion Win avoid",
-    "short_summary": "Sion Win is too contradicted across the current structural layers for Sion vs Thun, so the clean read is caution rather than action. Primary support comes from structural caution, while the main caution remains team power not decisive.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: Cards.",
-    "caution_line": "Main caution: Team Power Not Decisive.",
-    "telegram_summary": "Sion vs Thun — Sion Win (Avoid, 32% agreement). Support: structural caution. Caution: Team Power Not Decisive.",
-    "premium_summary": "Sion Win is carrying a 32% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from team power not decisive, away travel threat."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-10T14:30:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

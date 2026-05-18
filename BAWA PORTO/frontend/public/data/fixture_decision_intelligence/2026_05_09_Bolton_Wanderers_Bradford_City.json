@@ -1,16 +1,53 @@
 {
   "fixture_key": "2026_05_09_Bolton_Wanderers_Bradford_City",
   "fixture": "Bolton Wanderers vs Bradford City",
-  "primary_signal": "BTTS Yes",
-  "signal_state": "AVOID",
-  "agreement_score": 44,
+  "primary_signal": "No published pick",
+  "context_signal": "BTTS Yes",
+  "signal_state": "FRAGILE",
+  "agreement_score": 48,
   "confidence_band": "LOW",
+  "route_state": "OBSERVE",
+  "route_market": "BTTS",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "FRAGILE",
+  "audit_agreement_score": 48,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "BTTS",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "FRAGILE",
+    "agreement_score": 48,
+    "confidence_band": "LOW",
+    "supporting_layers": [
+      "BTTS_PRESSURE_SUPPORT"
+    ],
+    "caution_layers": [
+      "GOAL_ENVIRONMENT_SOFT",
+      "H2H_UNAVAILABLE"
+    ],
+    "context_signal": "BTTS Yes",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [
     "BTTS_PRESSURE_SUPPORT"
   ],
   "caution_layers": [
     "GOAL_ENVIRONMENT_SOFT",
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -72,46 +109,37 @@
       "leader": "Bolton Wanderers"
     }
   ],
-  "unit_battle_summary": [],
-  "key_player_drivers": [
+  "unit_battle_summary": [
     {
-      "team": "Bolton Wanderers",
-      "player": "Samuel George Dalby",
-      "role": "Forward",
-      "power": 85,
-      "driver_metric": "Goal Threat",
-      "driver_value": 91
+      "label": "Attack vs Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "Bolton Wanderers",
-      "player": "Johnny Kenny",
-      "role": "Forward",
-      "power": 74,
-      "driver_metric": "Goal Threat",
-      "driver_value": 80
+      "label": "Midfield Control",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "Bradford City",
-      "player": "Stephen Humphrys",
-      "role": "Forward",
-      "power": 79,
-      "driver_metric": "Goal Threat",
-      "driver_value": 89
-    },
-    {
-      "team": "Bradford City",
-      "player": "Max Power",
-      "role": "Central Midfielder",
-      "power": 69,
-      "driver_metric": "Creative Spark",
-      "driver_value": 71
+      "label": "Away Attack vs Home Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     }
   ],
+  "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "summary": "No publish-safe H2H regime snapshot is available yet for this fixture, so H2H remains supporting-only.",
+    "sample_size": 0,
+    "goal_environment": 0,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 0
   },
   "market_suitability": {
     "ftr": {
@@ -154,36 +182,94 @@
     "ftr": {
       "alignment_score": 59,
       "state": "FRAGILE",
-      "model_lean": "DRAW",
+      "audit_state": "FRAGILE",
+      "model_lean": "AWAY",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "AWAY",
+        "bookie_pick": "HOME",
+        "pick_probability": 0.3331346475464086,
+        "probabilities": {
+          "HOME": 0.3331346475464086,
+          "DRAW": 0.24414862146520253,
+          "AWAY": 0.4227167309883889
+        },
+        "xgb_pick": "",
+        "xgb_pick_probability": null,
+        "xgb_probabilities": {},
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "DRAW",
       "structural_support": [
         "BTTS_PRESSURE_SUPPORT"
       ],
       "cautions": [
         "GOAL_ENVIRONMENT_SOFT",
-        "LINEUP_DATA_MISSING"
+        "H2H_UNAVAILABLE"
       ],
       "public_summary": "FTR has some structural support from btts pressure support, but the overall layer fit remains fragile.",
       "rating": 68,
       "band": "Mixed"
     },
     "btts": {
-      "alignment_score": 50,
-      "state": "AVOID",
-      "model_lean": "YES",
+      "alignment_score": 52,
+      "state": "FRAGILE",
+      "audit_state": "FRAGILE",
+      "model_lean": "NO",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "NO",
+        "bookie_pick": "NO",
+        "pick_probability": 0.8053832663298351,
+        "probabilities": {
+          "YES": 0.19461673367016485,
+          "NO": 0.8053832663298351
+        },
+        "xgb_pick": "",
+        "xgb_pick_probability": null,
+        "xgb_probabilities": {},
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "YES",
       "structural_support": [
         "BTTS_PRESSURE_SUPPORT"
       ],
       "cautions": [
         "GOAL_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "BTTS is too contradicted by goal environment soft to present as a clean public read.",
+      "public_summary": "BTTS has some structural support from btts pressure support, but the overall layer fit remains fragile.",
       "rating": 59,
       "band": "Mixed"
     },
     "ou25": {
       "alignment_score": 51,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "UNDER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "UNDER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.32217908607259893,
+        "probabilities": {
+          "OVER25": 0.32217908607259893,
+          "UNDER25": 0.6778209139274011
+        },
+        "xgb_pick": "UNDER25",
+        "xgb_pick_probability": 0.027611196041107178,
+        "xgb_probabilities": {
+          "UNDER25": 0.027611196041107178,
+          "OVER25": 0.9723888039588928
+        },
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "UNDER25",
       "structural_support": [
         "BTTS_PRESSURE_SUPPORT"
       ],
@@ -195,15 +281,17 @@
       "band": "Weak"
     },
     "team_goals": {
-      "alignment_score": 55,
+      "alignment_score": 59,
       "state": "FRAGILE",
-      "model_lean": "Bolton Wanderers 1.5+",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Bolton Wanderers 1.5+",
       "structural_support": [
         "BTTS_PRESSURE_SUPPORT"
       ],
       "cautions": [
-        "GOAL_ENVIRONMENT_SOFT",
-        "LINEUP_DATA_MISSING"
+        "GOAL_ENVIRONMENT_SOFT"
       ],
       "public_summary": "Team Goals has some structural support from btts pressure support, but the overall layer fit remains fragile.",
       "rating": 63,
@@ -212,7 +300,10 @@
     "correct_score": {
       "alignment_score": 87,
       "state": "SUPPORTED",
-      "model_lean": "STRUCTURED",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "STRUCTURED",
       "structural_support": [
         "BTTS_PRESSURE_SUPPORT"
       ],
@@ -226,13 +317,16 @@
     "corners": {
       "alignment_score": 65,
       "state": "MIXED",
-      "model_lean": "ELEVATED",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "BTTS_PRESSURE_SUPPORT"
       ],
       "cautions": [
         "GOAL_ENVIRONMENT_SOFT",
-        "LINEUP_DATA_MISSING"
+        "H2H_UNAVAILABLE"
       ],
       "public_summary": "Corners has partial support from btts pressure support, but goal environment soft keeps it from reading clean.",
       "rating": 76,
@@ -241,13 +335,16 @@
     "cards": {
       "alignment_score": 35,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "BTTS_PRESSURE_SUPPORT"
       ],
       "cautions": [
         "GOAL_ENVIRONMENT_SOFT",
-        "LINEUP_DATA_MISSING"
+        "H2H_UNAVAILABLE"
       ],
       "public_summary": "Cards is too contradicted by goal environment soft to present as a clean public read.",
       "rating": 36,
@@ -261,25 +358,21 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "BTTS Yes is too contradicted across the current structural layers for Bolton Wanderers vs Bradford City, so the clean read is caution rather than action.",
+  "public_safe_summary": "No published pick is active for Bolton Wanderers vs Bradford City; the fixture read is context only.",
   "internal_reason_tokens": [
     "BTTS_PRESSURE_SUPPORT",
     "GOAL_ENVIRONMENT_SOFT",
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
     "support_count": 1,
-    "caution_count": 3,
-    "lineup_available": false,
+    "caution_count": 2,
+    "lineup_available": true,
     "h2h_available": false
   },
-  "preview": {
-    "headline": "Bolton Wanderers vs Bradford City: BTTS Yes avoid",
-    "short_summary": "BTTS Yes is too contradicted across the current structural layers for Bolton Wanderers vs Bradford City, so the clean read is caution rather than action. Primary support comes from btts pressure support, while the main caution remains goal environment soft.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Corners. Weakest read: Cards.",
-    "caution_line": "Main caution: Goal Environment Soft.",
-    "telegram_summary": "Bolton Wanderers vs Bradford City — BTTS Yes (Avoid, 44% agreement). Support: Btts Pressure Support. Caution: Goal Environment Soft.",
-    "premium_summary": "BTTS Yes is carrying a 44% agreement read across the published decision layers. Support is currently led by btts pressure support, while caution is still coming from goal environment soft, lineup data missing."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-09T00:00:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

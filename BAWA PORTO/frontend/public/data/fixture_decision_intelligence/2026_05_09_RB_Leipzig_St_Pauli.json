@@ -1,17 +1,54 @@
 {
   "fixture_key": "2026_05_09_RB_Leipzig_St_Pauli",
   "fixture": "RB Leipzig vs St. Pauli",
-  "primary_signal": "RB Leipzig Win",
+  "primary_signal": "No published pick",
+  "context_signal": "RB Leipzig Win",
   "signal_state": "FRAGILE",
   "agreement_score": 56,
   "confidence_band": "LOW",
+  "route_state": "OBSERVE",
+  "route_market": "FTR",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "FRAGILE",
+  "audit_agreement_score": 56,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "FTR",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "FRAGILE",
+    "agreement_score": 56,
+    "confidence_band": "LOW",
+    "supporting_layers": [
+      "TEAM_POWER_ADVANTAGE",
+      "HOME_FORTRESS_ADVANTAGE"
+    ],
+    "caution_layers": [
+      "LINEUP_UNIT_EDGE_SOFT"
+    ],
+    "context_signal": "RB Leipzig Win",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [
     "TEAM_POWER_ADVANTAGE",
     "HOME_FORTRESS_ADVANTAGE"
   ],
   "caution_layers": [
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "LINEUP_UNIT_EDGE_SOFT"
   ],
   "profile_tags": {
     "home": [
@@ -74,30 +111,37 @@
       "leader": "St. Pauli"
     }
   ],
-  "unit_battle_summary": [],
-  "key_player_drivers": [
+  "unit_battle_summary": [
     {
-      "team": "RB Leipzig",
-      "player": "David Raum",
-      "role": "Centre Back",
-      "power": 63,
-      "driver_metric": "Goal Threat",
-      "driver_value": 62
+      "label": "Attack vs Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "RB Leipzig",
-      "player": "Xavi Simons",
-      "role": "Central Midfielder",
-      "power": 63,
-      "driver_metric": "Goal Threat",
-      "driver_value": 65
+      "label": "Midfield Control",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     }
   ],
+  "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
-    "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "available": true,
+    "summary": "Using the latest available same-team-pair historical regime (1 prior meeting) as supporting context for this current fixture.",
+    "sample_size": 1,
+    "goal_environment": 0,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 100,
+    "booking_heat": 3
   },
   "market_suitability": {
     "ftr": {
@@ -140,110 +184,178 @@
     "ftr": {
       "alignment_score": 65,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "HOME",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "HOME",
+        "bookie_pick": "HOME",
+        "pick_probability": 0.96,
+        "probabilities": {
+          "HOME": 0.4557051447427578,
+          "DRAW": 0.2773479017122116,
+          "AWAY": 0.26694695354503056
+        },
+        "xgb_pick": "HOME",
+        "xgb_pick_probability": 0.9406455159187317,
+        "xgb_probabilities": {
+          "HOME": 0.9406455159187317,
+          "DRAW": 0.005329726729542017,
+          "AWAY": 0.05402471125125885
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "HOME",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
       "public_summary": "FTR has some structural support from team power advantage, but the overall layer fit remains fragile.",
       "rating": 79,
       "band": "Positive"
     },
     "btts": {
-      "alignment_score": 42,
-      "state": "AVOID",
-      "model_lean": "NO",
+      "alignment_score": 46,
+      "state": "FRAGILE",
+      "audit_state": "FRAGILE",
+      "model_lean": "YES",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "YES",
+        "bookie_pick": "YES",
+        "pick_probability": 0.5344438045440713,
+        "probabilities": {
+          "YES": 0.5344438045440713,
+          "NO": 0.46555619545592875
+        },
+        "xgb_pick": "",
+        "xgb_pick_probability": null,
+        "xgb_probabilities": {},
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "NO",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
-      "public_summary": "BTTS is too contradicted by lineup data missing to present as a clean public read.",
+      "public_summary": "BTTS has some structural support from team power advantage, but the overall layer fit remains fragile.",
       "rating": 38,
       "band": "Red Flag"
     },
     "ou25": {
-      "alignment_score": 42,
-      "state": "AVOID",
+      "alignment_score": 46,
+      "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "UNDER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "UNDER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.4563331196014535,
+        "probabilities": {
+          "OVER25": 0.4563331196014535,
+          "UNDER25": 0.5436668803985465
+        },
+        "xgb_pick": "OVER25",
+        "xgb_pick_probability": 0.987133800983429,
+        "xgb_probabilities": {
+          "OVER25": 0.987133800983429,
+          "UNDER25": 0.012866199016571045
+        },
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "UNDER25",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
-      "public_summary": "Over 2.5 is too contradicted by lineup data missing to present as a clean public read.",
+      "public_summary": "Over 2.5 has some structural support from team power advantage, but the overall layer fit remains fragile.",
       "rating": 38,
       "band": "Red Flag"
     },
     "team_goals": {
       "alignment_score": 64,
       "state": "MIXED",
-      "model_lean": "RB Leipzig 1.5+",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "RB Leipzig 1.5+",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
-      "public_summary": "Team Goals has partial support from team power advantage, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Team Goals has partial support from team power advantage, but lineup unit edge soft keeps it from reading clean.",
       "rating": 61,
       "band": "Mixed"
     },
     "correct_score": {
-      "alignment_score": 77,
-      "state": "MIXED",
-      "model_lean": "STRUCTURED",
+      "alignment_score": 81,
+      "state": "SUPPORTED",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "STRUCTURED",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
-      "public_summary": "Correct Score has partial support from team power advantage, but lineup data missing keeps it from reading clean.",
+      "public_summary": "Correct Score is well supported by team power advantage, with caution still coming from lineup unit edge soft.",
       "rating": 92,
       "band": "Elite"
     },
     "corners": {
-      "alignment_score": 60,
-      "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "alignment_score": 64,
+      "state": "MIXED",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
-      "public_summary": "Corners has some structural support from team power advantage, but the overall layer fit remains fragile.",
+      "public_summary": "Corners has partial support from team power advantage, but lineup unit edge soft keeps it from reading clean.",
       "rating": 62,
       "band": "Mixed"
     },
     "cards": {
-      "alignment_score": 42,
-      "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "alignment_score": 46,
+      "state": "FRAGILE",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING",
-        "H2H_UNAVAILABLE"
+        "LINEUP_UNIT_EDGE_SOFT"
       ],
-      "public_summary": "Cards is too contradicted by lineup data missing to present as a clean public read.",
+      "public_summary": "Cards has some structural support from team power advantage, but the overall layer fit remains fragile.",
       "rating": 38,
       "band": "Red Flag"
     }
@@ -255,25 +367,21 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "RB Leipzig Win has some live shape in RB Leipzig vs St. Pauli, but the supporting layers remain fragile and need discipline.",
+  "public_safe_summary": "No published pick is active for RB Leipzig vs St. Pauli; the fixture read is context only.",
   "internal_reason_tokens": [
     "TEAM_POWER_ADVANTAGE",
     "HOME_FORTRESS_ADVANTAGE",
-    "LINEUP_DATA_MISSING",
-    "H2H_UNAVAILABLE"
+    "LINEUP_UNIT_EDGE_SOFT"
   ],
   "summary": {
     "support_count": 2,
-    "caution_count": 2,
-    "lineup_available": false,
-    "h2h_available": false
+    "caution_count": 1,
+    "lineup_available": true,
+    "h2h_available": true
   },
-  "preview": {
-    "headline": "RB Leipzig vs St. Pauli: RB Leipzig Win fragile",
-    "short_summary": "RB Leipzig Win has some live shape in RB Leipzig vs St. Pauli, but the supporting layers remain fragile and need discipline. Primary support comes from team power advantage, while the main caution remains lineup data missing.",
-    "market_summary": "Best aligned market: Correct Score (Mixed). Secondary support: FTR. Weakest read: BTTS.",
-    "caution_line": "Main caution: Lineup Data Missing.",
-    "telegram_summary": "RB Leipzig vs St. Pauli — RB Leipzig Win (Fragile, 56% agreement). Support: Team Power Advantage. Caution: Lineup Data Missing.",
-    "premium_summary": "RB Leipzig Win is carrying a 56% agreement read across the published decision layers. Support is currently led by team power advantage, home fortress advantage, while caution is still coming from lineup data missing, h2h unavailable."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-09T13:30:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

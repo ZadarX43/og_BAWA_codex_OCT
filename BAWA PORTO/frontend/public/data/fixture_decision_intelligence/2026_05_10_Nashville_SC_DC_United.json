@@ -1,10 +1,43 @@
 {
   "fixture_key": "2026_05_10_Nashville_SC_DC_United",
   "fixture": "Nashville SC vs DC United",
-  "primary_signal": "Fixture read",
+  "primary_signal": "No published pick",
+  "context_signal": "Fixture context",
   "signal_state": "FRAGILE",
   "agreement_score": 50,
   "confidence_band": "LOW",
+  "route_state": "CONTEXT",
+  "route_market": "",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "FRAGILE",
+  "audit_agreement_score": 50,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "CONTEXT",
+    "route_market": "",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "FRAGILE",
+    "agreement_score": 50,
+    "confidence_band": "LOW",
+    "supporting_layers": [],
+    "caution_layers": [],
+    "context_signal": "Fixture context",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [],
   "caution_layers": [],
   "profile_tags": {
@@ -197,7 +230,10 @@
     "ftr": {
       "alignment_score": 60,
       "state": "FRAGILE",
-      "model_lean": "HOME",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "HOME",
       "structural_support": [],
       "cautions": [],
       "public_summary": "FTR has some structural support from structural support, but the overall layer fit remains fragile.",
@@ -207,7 +243,10 @@
     "btts": {
       "alignment_score": 37,
       "state": "AVOID",
-      "model_lean": "NO",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "NO",
       "structural_support": [],
       "cautions": [],
       "public_summary": "BTTS is too contradicted by no major caution published to present as a clean public read.",
@@ -217,7 +256,10 @@
     "ou25": {
       "alignment_score": 36,
       "state": "AVOID",
-      "model_lean": "UNDER25",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "UNDER25",
       "structural_support": [],
       "cautions": [],
       "public_summary": "Over 2.5 is too contradicted by no major caution published to present as a clean public read.",
@@ -227,7 +269,10 @@
     "team_goals": {
       "alignment_score": 55,
       "state": "FRAGILE",
-      "model_lean": "Nashville SC 1.5+",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Nashville SC 1.5+",
       "structural_support": [],
       "cautions": [],
       "public_summary": "Team Goals has some structural support from structural support, but the overall layer fit remains fragile.",
@@ -237,7 +282,10 @@
     "correct_score": {
       "alignment_score": 74,
       "state": "MIXED",
-      "model_lean": "STRUCTURED",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "STRUCTURED",
       "structural_support": [],
       "cautions": [],
       "public_summary": "Correct Score has partial support from structural support, but no major caution published keeps it from reading clean.",
@@ -247,7 +295,10 @@
     "corners": {
       "alignment_score": 38,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [],
       "cautions": [],
       "public_summary": "Corners is too contradicted by no major caution published to present as a clean public read.",
@@ -257,7 +308,10 @@
     "cards": {
       "alignment_score": 43,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [],
       "cautions": [],
       "public_summary": "Cards is too contradicted by no major caution published to present as a clean public read.",
@@ -272,7 +326,7 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "Fixture read has some live shape in Nashville SC vs DC United, but the supporting layers remain fragile and need discipline.",
+  "public_safe_summary": "No published pick is active for Nashville SC vs DC United; the fixture read is context only.",
   "internal_reason_tokens": [],
   "summary": {
     "support_count": 0,
@@ -280,12 +334,9 @@
     "lineup_available": true,
     "h2h_available": true
   },
-  "preview": {
-    "headline": "Nashville SC vs DC United: Fixture read fragile",
-    "short_summary": "Fixture read has some live shape in Nashville SC vs DC United, but the supporting layers remain fragile and need discipline. Primary support comes from structural caution, while the main caution remains structural caution.",
-    "market_summary": "Best aligned market: Correct Score (Mixed). Secondary support: FTR. Weakest read: Over 2.5.",
-    "caution_line": "Main caution: structural caution.",
-    "telegram_summary": "Nashville SC vs DC United — Fixture read (Fragile, 50% agreement). Support: structural caution. Caution: structural caution.",
-    "premium_summary": "Fixture read is carrying a 50% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from no major caution published."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-10T01:15:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

@@ -1,15 +1,54 @@
 {
   "fixture_key": "2026_05_10_Minnesota_United_Austin",
   "fixture": "Minnesota United vs Austin",
-  "primary_signal": "BTTS Yes",
-  "signal_state": "AVOID",
-  "agreement_score": 36,
+  "primary_signal": "No published pick",
+  "context_signal": "BTTS Yes",
+  "signal_state": "FRAGILE",
+  "agreement_score": 42,
   "confidence_band": "LOW",
-  "supporting_layers": [],
+  "route_state": "OBSERVE",
+  "route_market": "BTTS",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "FRAGILE",
+  "audit_agreement_score": 42,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "BTTS",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "FRAGILE",
+    "agreement_score": 42,
+    "confidence_band": "LOW",
+    "supporting_layers": [
+      "H2H_BTTS_SUPPORT"
+    ],
+    "caution_layers": [
+      "BTTS_PRESSURE_WEAK",
+      "GOAL_ENVIRONMENT_SOFT"
+    ],
+    "context_signal": "BTTS Yes",
+    "conflict_level": "NONE"
+  },
+  "supporting_layers": [
+    "H2H_BTTS_SUPPORT"
+  ],
   "caution_layers": [
     "BTTS_PRESSURE_WEAK",
-    "GOAL_ENVIRONMENT_SOFT",
-    "H2H_UNAVAILABLE"
+    "GOAL_ENVIRONMENT_SOFT"
   ],
   "profile_tags": {
     "home": [
@@ -167,9 +206,14 @@
     }
   ],
   "h2h_context": {
-    "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "available": true,
+    "summary": "Using the latest available same-team-pair historical regime (1 prior meeting) as supporting context for this current fixture.",
+    "sample_size": 1,
+    "goal_environment": 3,
+    "btts_regime": 100,
+    "over25_rate": 100,
+    "draw_rate": 0,
+    "booking_heat": 4
   },
   "market_suitability": {
     "ftr": {
@@ -210,89 +254,180 @@
   },
   "market_intelligence": {
     "ftr": {
-      "alignment_score": 40,
-      "state": "AVOID",
-      "model_lean": "DRAW",
-      "structural_support": [],
+      "alignment_score": 46,
+      "state": "FRAGILE",
+      "audit_state": "FRAGILE",
+      "model_lean": "HOME",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "HOME",
+        "bookie_pick": "HOME",
+        "pick_probability": 0.37745098039215685,
+        "probabilities": {
+          "HOME": 0.5215971335654256,
+          "DRAW": 0.2565883681955779,
+          "AWAY": 0.22181449823899652
+        },
+        "xgb_pick": "HOME",
+        "xgb_pick_probability": 0.47817811369895935,
+        "xgb_probabilities": {
+          "HOME": 0.47817811369895935,
+          "DRAW": 0.052762195467948914,
+          "AWAY": 0.4690597355365753
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "DRAW",
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
         "GOAL_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "FTR is too contradicted by btts pressure weak to present as a clean public read.",
+      "public_summary": "FTR has some structural support from h2h btts support, but the overall layer fit remains fragile.",
       "rating": 51,
       "band": "Weak"
     },
     "btts": {
-      "alignment_score": 41,
-      "state": "AVOID",
-      "model_lean": "YES",
-      "structural_support": [],
+      "alignment_score": 44,
+      "state": "FRAGILE",
+      "audit_state": "FRAGILE",
+      "model_lean": "NO",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "NO",
+        "bookie_pick": "NO",
+        "pick_probability": 0.7166447866566209,
+        "probabilities": {
+          "YES": 0.2833552133433791,
+          "NO": 0.7166447866566209
+        },
+        "xgb_pick": "NO",
+        "xgb_pick_probability": 0.8586223125457764,
+        "xgb_probabilities": {
+          "NO": 0.8586223125457764,
+          "YES": 0.14137768745422363
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "YES",
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
         "GOAL_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "BTTS is too contradicted by btts pressure weak to present as a clean public read.",
+      "public_summary": "BTTS has some structural support from h2h btts support, but the overall layer fit remains fragile.",
       "rating": 48,
       "band": "Weak"
     },
     "ou25": {
-      "alignment_score": 45,
+      "alignment_score": 51,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "UNDER25",
-      "structural_support": [],
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "UNDER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.11249638604321832,
+        "probabilities": {
+          "OVER25": 0.11249638604321832,
+          "UNDER25": 0.8875036139567817
+        },
+        "xgb_pick": "UNDER25",
+        "xgb_pick_probability": 0.06603517383337021,
+        "xgb_probabilities": {
+          "UNDER25": 0.06603517383337021,
+          "OVER25": 0.9339648261666298
+        },
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "UNDER25",
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "GOAL_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Over 2.5 has some structural support from structural support, but the overall layer fit remains fragile.",
+      "public_summary": "Over 2.5 has some structural support from h2h btts support, but the overall layer fit remains fragile.",
       "rating": 52,
       "band": "Weak"
     },
     "team_goals": {
-      "alignment_score": 52,
+      "alignment_score": 58,
       "state": "FRAGILE",
-      "model_lean": "Austin 1.5+",
-      "structural_support": [],
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Austin 1.5+",
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "GOAL_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Team Goals has some structural support from structural support, but the overall layer fit remains fragile.",
+      "public_summary": "Team Goals has some structural support from h2h btts support, but the overall layer fit remains fragile.",
       "rating": 62,
       "band": "Mixed"
     },
     "correct_score": {
-      "alignment_score": 81,
+      "alignment_score": 87,
       "state": "SUPPORTED",
-      "model_lean": "OPEN",
-      "structural_support": [],
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "OPEN",
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "GOAL_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Correct Score is well supported by structural support, with caution still coming from goal environment soft.",
+      "public_summary": "Correct Score is well supported by h2h btts support, with caution still coming from goal environment soft.",
       "rating": 100,
       "band": "Elite"
     },
     "corners": {
-      "alignment_score": 46,
+      "alignment_score": 52,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
-      "structural_support": [],
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "BTTS_PRESSURE_WEAK"
       ],
-      "public_summary": "Corners has some structural support from structural support, but the overall layer fit remains fragile.",
+      "public_summary": "Corners has some structural support from h2h btts support, but the overall layer fit remains fragile.",
       "rating": 54,
       "band": "Weak"
     },
     "cards": {
-      "alignment_score": 41,
-      "state": "AVOID",
-      "model_lean": "ELEVATED",
-      "structural_support": [],
+      "alignment_score": 47,
+      "state": "FRAGILE",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
+      "structural_support": [
+        "H2H_BTTS_SUPPORT"
+      ],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
         "GOAL_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Cards is too contradicted by btts pressure weak to present as a clean public read.",
+      "public_summary": "Cards has some structural support from h2h btts support, but the overall layer fit remains fragile.",
       "rating": 52,
       "band": "Weak"
     }
@@ -304,24 +439,21 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "BTTS Yes is too contradicted across the current structural layers for Minnesota United vs Austin, so the clean read is caution rather than action.",
+  "public_safe_summary": "No published pick is active for Minnesota United vs Austin; the fixture read is context only.",
   "internal_reason_tokens": [
+    "H2H_BTTS_SUPPORT",
     "BTTS_PRESSURE_WEAK",
-    "GOAL_ENVIRONMENT_SOFT",
-    "H2H_UNAVAILABLE"
+    "GOAL_ENVIRONMENT_SOFT"
   ],
   "summary": {
-    "support_count": 0,
-    "caution_count": 3,
+    "support_count": 1,
+    "caution_count": 2,
     "lineup_available": true,
-    "h2h_available": false
+    "h2h_available": true
   },
-  "preview": {
-    "headline": "Minnesota United vs Austin: BTTS Yes avoid",
-    "short_summary": "BTTS Yes is too contradicted across the current structural layers for Minnesota United vs Austin, so the clean read is caution rather than action. Primary support comes from structural caution, while the main caution remains btts pressure weak.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: FTR.",
-    "caution_line": "Main caution: Btts Pressure Weak.",
-    "telegram_summary": "Minnesota United vs Austin — BTTS Yes (Avoid, 36% agreement). Support: structural caution. Caution: Btts Pressure Weak.",
-    "premium_summary": "BTTS Yes is carrying a 36% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from btts pressure weak, goal environment soft."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-10T23:00:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

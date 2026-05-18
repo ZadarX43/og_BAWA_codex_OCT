@@ -1,16 +1,53 @@
 {
   "fixture_key": "2026_05_09_Atl_tico_Madrid_Celta_de_Vigo",
   "fixture": "Atlético Madrid vs Celta de Vigo",
-  "primary_signal": "BTTS Yes",
+  "primary_signal": "No published pick",
+  "context_signal": "BTTS Yes",
   "signal_state": "AVOID",
-  "agreement_score": 26,
+  "agreement_score": 30,
   "confidence_band": "LOW",
+  "route_state": "OBSERVE",
+  "route_market": "BTTS",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "AVOID",
+  "audit_agreement_score": 30,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "BTTS",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "AVOID",
+    "agreement_score": 30,
+    "confidence_band": "LOW",
+    "supporting_layers": [],
+    "caution_layers": [
+      "BTTS_PRESSURE_WEAK",
+      "GOAL_ENVIRONMENT_SOFT",
+      "DEFENSIVE_SUPPRESSION_RISK",
+      "H2H_UNAVAILABLE"
+    ],
+    "context_signal": "BTTS Yes",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [],
   "caution_layers": [
     "BTTS_PRESSURE_WEAK",
     "GOAL_ENVIRONMENT_SOFT",
     "DEFENSIVE_SUPPRESSION_RISK",
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "profile_tags": {
@@ -75,30 +112,37 @@
       "leader": "Celta de Vigo"
     }
   ],
-  "unit_battle_summary": [],
-  "key_player_drivers": [
+  "unit_battle_summary": [
     {
-      "team": "Atlético Madrid",
-      "player": "Julián Álvarez",
-      "role": "Forward",
-      "power": 86,
-      "driver_metric": "Goal Threat",
-      "driver_value": 87
+      "label": "Attack vs Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "Atlético Madrid",
-      "player": "Ademola Lookman",
-      "role": "Forward",
-      "power": 73,
-      "driver_metric": "Goal Threat",
-      "driver_value": 74
+      "label": "Midfield Control",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
+    },
+    {
+      "label": "Away Attack vs Home Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     }
   ],
+  "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
     "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "summary": "No publish-safe H2H regime snapshot is available yet for this fixture, so H2H remains supporting-only.",
+    "sample_size": 0,
+    "goal_environment": 0,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 0
   },
   "market_suitability": {
     "ftr": {
@@ -141,7 +185,30 @@
     "ftr": {
       "alignment_score": 63,
       "state": "MIXED",
-      "model_lean": "HOME",
+      "audit_state": "MIXED",
+      "model_lean": "DRAW",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "DRAW",
+        "bookie_pick": "HOME",
+        "pick_probability": 0.01277826697601374,
+        "probabilities": {
+          "HOME": 0.2537222004228974,
+          "DRAW": 0.47673402808783716,
+          "AWAY": 0.26954377148926545
+        },
+        "xgb_pick": "HOME",
+        "xgb_pick_probability": 0.5120362043380737,
+        "xgb_probabilities": {
+          "HOME": 0.5120362043380737,
+          "DRAW": 0.3427872657775879,
+          "AWAY": 0.14517651498317719
+        },
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "HOME",
       "structural_support": [],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
@@ -152,9 +219,30 @@
       "band": "Strong"
     },
     "btts": {
-      "alignment_score": 36,
+      "alignment_score": 39,
       "state": "AVOID",
+      "audit_state": "AVOID",
       "model_lean": "YES",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "YES",
+        "bookie_pick": "YES",
+        "pick_probability": 0.6339778542268619,
+        "probabilities": {
+          "YES": 0.6339778542268619,
+          "NO": 0.3660221457731381
+        },
+        "xgb_pick": "YES",
+        "xgb_pick_probability": 0.7840617895126343,
+        "xgb_probabilities": {
+          "YES": 0.7840617895126343,
+          "NO": 0.21593821048736572
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "YES",
       "structural_support": [],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
@@ -168,7 +256,28 @@
     "ou25": {
       "alignment_score": 40,
       "state": "AVOID",
-      "model_lean": "UNDER25",
+      "audit_state": "AVOID",
+      "model_lean": "OVER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "OVER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.5539055971855575,
+        "probabilities": {
+          "OVER25": 0.5539055971855575,
+          "UNDER25": 0.44609440281444246
+        },
+        "xgb_pick": "OVER25",
+        "xgb_pick_probability": 0.6636541485786438,
+        "xgb_probabilities": {
+          "OVER25": 0.6636541485786438,
+          "UNDER25": 0.3363458514213562
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "UNDER25",
       "structural_support": [],
       "cautions": [
         "GOAL_ENVIRONMENT_SOFT",
@@ -179,22 +288,27 @@
       "band": "Weak"
     },
     "team_goals": {
-      "alignment_score": 42,
-      "state": "AVOID",
-      "model_lean": "Atlético Madrid 1.5+",
+      "alignment_score": 46,
+      "state": "FRAGILE",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Atlético Madrid 1.5+",
       "structural_support": [],
       "cautions": [
-        "GOAL_ENVIRONMENT_SOFT",
-        "LINEUP_DATA_MISSING"
+        "GOAL_ENVIRONMENT_SOFT"
       ],
-      "public_summary": "Team Goals is too contradicted by goal environment soft to present as a clean public read.",
+      "public_summary": "Team Goals has some structural support from structural support, but the overall layer fit remains fragile.",
       "rating": 54,
       "band": "Weak"
     },
     "correct_score": {
       "alignment_score": 72,
       "state": "MIXED",
-      "model_lean": "STRUCTURED",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "STRUCTURED",
       "structural_support": [],
       "cautions": [
         "GOAL_ENVIRONMENT_SOFT",
@@ -207,7 +321,10 @@
     "corners": {
       "alignment_score": 46,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [],
       "cautions": [
         "BTTS_PRESSURE_WEAK"
@@ -219,7 +336,10 @@
     "cards": {
       "alignment_score": 28,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [],
       "cautions": [
         "BTTS_PRESSURE_WEAK",
@@ -237,26 +357,22 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "BTTS Yes is too contradicted across the current structural layers for Atlético Madrid vs Celta de Vigo, so the clean read is caution rather than action.",
+  "public_safe_summary": "No published pick is active for Atlético Madrid vs Celta de Vigo; the context layer is too contradicted to present as an action.",
   "internal_reason_tokens": [
     "BTTS_PRESSURE_WEAK",
     "GOAL_ENVIRONMENT_SOFT",
     "DEFENSIVE_SUPPRESSION_RISK",
-    "LINEUP_DATA_MISSING",
     "H2H_UNAVAILABLE"
   ],
   "summary": {
     "support_count": 0,
-    "caution_count": 5,
-    "lineup_available": false,
+    "caution_count": 4,
+    "lineup_available": true,
     "h2h_available": false
   },
-  "preview": {
-    "headline": "Atlético Madrid vs Celta de Vigo: BTTS Yes avoid",
-    "short_summary": "BTTS Yes is too contradicted across the current structural layers for Atlético Madrid vs Celta de Vigo, so the clean read is caution rather than action. Primary support comes from structural caution, while the main caution remains btts pressure weak.",
-    "market_summary": "Best aligned market: Correct Score (Mixed). Secondary support: FTR. Weakest read: Cards.",
-    "caution_line": "Main caution: Btts Pressure Weak.",
-    "telegram_summary": "Atlético Madrid vs Celta de Vigo — BTTS Yes (Avoid, 26% agreement). Support: structural caution. Caution: Btts Pressure Weak.",
-    "premium_summary": "BTTS Yes is carrying a 26% agreement read across the published decision layers. Support is currently led by limited structural support, while caution is still coming from btts pressure weak, goal environment soft."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-09T16:30:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

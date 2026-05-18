@@ -1,17 +1,54 @@
 {
   "fixture_key": "2026_05_10_Monaco_Lille",
   "fixture": "Monaco vs Lille",
-  "primary_signal": "BTTS Yes",
-  "signal_state": "AVOID",
-  "agreement_score": 40,
+  "primary_signal": "No published pick",
+  "context_signal": "BTTS Yes",
+  "signal_state": "FRAGILE",
+  "agreement_score": 44,
   "confidence_band": "LOW",
+  "route_state": "OBSERVE",
+  "route_market": "BTTS",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "FRAGILE",
+  "audit_agreement_score": 44,
+  "audit_confidence_band": "LOW",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "BTTS",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "FRAGILE",
+    "agreement_score": 44,
+    "confidence_band": "LOW",
+    "supporting_layers": [
+      "GOAL_ENVIRONMENT_SUPPORT"
+    ],
+    "caution_layers": [
+      "BTTS_PRESSURE_WEAK",
+      "DEFENSIVE_SUPPRESSION_RISK"
+    ],
+    "context_signal": "BTTS Yes",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [
     "GOAL_ENVIRONMENT_SUPPORT"
   ],
   "caution_layers": [
     "BTTS_PRESSURE_WEAK",
-    "DEFENSIVE_SUPPRESSION_RISK",
-    "LINEUP_DATA_MISSING"
+    "DEFENSIVE_SUPPRESSION_RISK"
   ],
   "profile_tags": {
     "home": [
@@ -75,41 +112,27 @@
       "leader": "Monaco"
     }
   ],
-  "unit_battle_summary": [],
-  "key_player_drivers": [
+  "unit_battle_summary": [
     {
-      "team": "Monaco",
-      "player": "Maghnes Akliouche",
-      "role": "Forward",
-      "power": 72,
-      "driver_metric": "Goal Threat",
-      "driver_value": 70
+      "label": "Attack vs Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "Monaco",
-      "player": "Folarin Balogun",
-      "role": "Forward",
-      "power": 71,
-      "driver_metric": "Goal Threat",
-      "driver_value": 73
+      "label": "Midfield Control",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     },
     {
-      "team": "Lille",
-      "player": "Jonathan David",
-      "role": "Forward",
-      "power": 60,
-      "driver_metric": "Goal Threat",
-      "driver_value": 61
-    },
-    {
-      "team": "Lille",
-      "player": "Alexsandro Ribeiro",
-      "role": "Centre Back",
-      "power": 58,
-      "driver_metric": "Midfield Engine",
-      "driver_value": 56
+      "label": "Away Attack vs Home Defence",
+      "home_value": 0,
+      "away_value": 0,
+      "delta": 0
     }
   ],
+  "key_player_drivers": [],
   "key_mismatches": [],
   "h2h_context": {
     "available": true,
@@ -162,7 +185,30 @@
     "ftr": {
       "alignment_score": 64,
       "state": "MIXED",
+      "audit_state": "MIXED",
       "model_lean": "AWAY",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "AWAY",
+        "bookie_pick": "HOME",
+        "pick_probability": 0.8904109589041096,
+        "probabilities": {
+          "HOME": 0.38101976898149187,
+          "DRAW": 0.19778399104479077,
+          "AWAY": 0.4211962399737174
+        },
+        "xgb_pick": "HOME",
+        "xgb_pick_probability": 0.7476634383201599,
+        "xgb_probabilities": {
+          "HOME": 0.7476634383201599,
+          "DRAW": 0.17013126611709595,
+          "AWAY": 0.08220528066158295
+        },
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "AWAY",
       "structural_support": [
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
@@ -175,9 +221,30 @@
       "band": "Positive"
     },
     "btts": {
-      "alignment_score": 46,
-      "state": "AVOID",
-      "model_lean": "YES",
+      "alignment_score": 49,
+      "state": "FRAGILE",
+      "audit_state": "FRAGILE",
+      "model_lean": "NO",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "BTTS",
+        "pick": "NO",
+        "bookie_pick": "NO",
+        "pick_probability": 0.5254293683129517,
+        "probabilities": {
+          "YES": 0.47457063168704827,
+          "NO": 0.5254293683129517
+        },
+        "xgb_pick": "NO",
+        "xgb_pick_probability": 0.5813848078250885,
+        "xgb_probabilities": {
+          "NO": 0.5813848078250885,
+          "YES": 0.4186151921749115
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "YES",
       "structural_support": [
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
@@ -185,14 +252,35 @@
         "BTTS_PRESSURE_WEAK",
         "DEFENSIVE_SUPPRESSION_RISK"
       ],
-      "public_summary": "BTTS is too contradicted by btts pressure weak to present as a clean public read.",
+      "public_summary": "BTTS has some structural support from goal environment support, but the overall layer fit remains fragile.",
       "rating": 56,
       "band": "Mixed"
     },
     "ou25": {
       "alignment_score": 57,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "OVER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "OVER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.5602110414949626,
+        "probabilities": {
+          "OVER25": 0.5602110414949626,
+          "UNDER25": 0.4397889585050374
+        },
+        "xgb_pick": "OVER25",
+        "xgb_pick_probability": 0.7961772084236145,
+        "xgb_probabilities": {
+          "OVER25": 0.7961772084236145,
+          "UNDER25": 0.2038227915763855
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "OVER25",
       "structural_support": [
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
@@ -204,23 +292,30 @@
       "band": "Mixed"
     },
     "team_goals": {
-      "alignment_score": 80,
-      "state": "SUPPORTED",
-      "model_lean": "Monaco 1.5+",
+      "alignment_score": 76,
+      "state": "MIXED",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Monaco 1.5+",
       "structural_support": [
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
       "cautions": [
-        "LINEUP_DATA_MISSING"
+        "BTTS_PRESSURE_WEAK",
+        "DEFENSIVE_SUPPRESSION_RISK"
       ],
-      "public_summary": "Team Goals is well supported by goal environment support, with caution still coming from lineup data missing.",
+      "public_summary": "Team Goals has partial support from goal environment support, but btts pressure weak keeps it from reading clean.",
       "rating": 91,
       "band": "Strong"
     },
     "correct_score": {
       "alignment_score": 87,
       "state": "SUPPORTED",
-      "model_lean": "STRUCTURED",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "STRUCTURED",
       "structural_support": [
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
@@ -234,7 +329,10 @@
     "corners": {
       "alignment_score": 63,
       "state": "MIXED",
-      "model_lean": "ELEVATED",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
@@ -248,7 +346,10 @@
     "cards": {
       "alignment_score": 56,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "GOAL_ENVIRONMENT_SUPPORT"
       ],
@@ -268,25 +369,21 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "BTTS Yes is too contradicted across the current structural layers for Monaco vs Lille, so the clean read is caution rather than action.",
+  "public_safe_summary": "No published pick is active for Monaco vs Lille; the fixture read is context only.",
   "internal_reason_tokens": [
     "GOAL_ENVIRONMENT_SUPPORT",
     "BTTS_PRESSURE_WEAK",
-    "DEFENSIVE_SUPPRESSION_RISK",
-    "LINEUP_DATA_MISSING"
+    "DEFENSIVE_SUPPRESSION_RISK"
   ],
   "summary": {
     "support_count": 1,
-    "caution_count": 3,
-    "lineup_available": false,
+    "caution_count": 2,
+    "lineup_available": true,
     "h2h_available": true
   },
-  "preview": {
-    "headline": "Monaco vs Lille: BTTS Yes avoid",
-    "short_summary": "BTTS Yes is too contradicted across the current structural layers for Monaco vs Lille, so the clean read is caution rather than action. Primary support comes from goal environment support, while the main caution remains btts pressure weak.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Team Goals. Weakest read: BTTS.",
-    "caution_line": "Main caution: Btts Pressure Weak.",
-    "telegram_summary": "Monaco vs Lille — BTTS Yes (Avoid, 40% agreement). Support: Goal Environment Support. Caution: Btts Pressure Weak.",
-    "premium_summary": "BTTS Yes is carrying a 40% agreement read across the published decision layers. Support is currently led by goal environment support, while caution is still coming from btts pressure weak, defensive suppression risk."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-10T19:00:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

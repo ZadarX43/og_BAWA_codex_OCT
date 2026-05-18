@@ -1,10 +1,48 @@
 {
   "fixture_key": "2026_05_10_Bahia_Cruzeiro",
   "fixture": "Bahia vs Cruzeiro",
-  "primary_signal": "Over 2.5",
+  "primary_signal": "No published pick",
+  "context_signal": "Over 2.5",
   "signal_state": "WATCHLIST",
   "agreement_score": 72,
   "confidence_band": "MEDIUM",
+  "route_state": "OBSERVE",
+  "route_market": "OU25",
+  "route_pick": "",
+  "route_active": false,
+  "route_label": "No published pick",
+  "route_confidence_tier": null,
+  "route_bookie_od": null,
+  "route_value_edge_label": null,
+  "audit_state": "WATCHLIST",
+  "audit_agreement_score": 72,
+  "audit_confidence_band": "MEDIUM",
+  "conflict_level": "NONE",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "OBSERVE",
+    "route_market": "OU25",
+    "route_pick": "",
+    "route_active": false,
+    "confidence_tier": null,
+    "bookie_od": null,
+    "value_edge_label": null,
+    "premium_tier": null
+  },
+  "context_audit": {
+    "state": "WATCHLIST",
+    "agreement_score": 72,
+    "confidence_band": "MEDIUM",
+    "supporting_layers": [
+      "OVER25_HEAT_SUPPORT",
+      "CHAOS_ENVIRONMENT_SUPPORT",
+      "LINEUP_GOAL_PRESSURE_SUPPORT",
+      "H2H_OVER_SUPPORT"
+    ],
+    "caution_layers": [],
+    "context_signal": "Over 2.5",
+    "conflict_level": "NONE"
+  },
   "supporting_layers": [
     "OVER25_HEAT_SUPPORT",
     "CHAOS_ENVIRONMENT_SUPPORT",
@@ -218,7 +256,30 @@
     "ftr": {
       "alignment_score": 69,
       "state": "MIXED",
+      "audit_state": "MIXED",
       "model_lean": "HOME",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "HOME",
+        "bookie_pick": "HOME",
+        "pick_probability": 0.4344262295081967,
+        "probabilities": {
+          "HOME": 0.4484522953845533,
+          "DRAW": 0.2834725251423473,
+          "AWAY": 0.26807517947309933
+        },
+        "xgb_pick": "HOME",
+        "xgb_pick_probability": 0.5043838620185852,
+        "xgb_probabilities": {
+          "HOME": 0.5043838620185852,
+          "DRAW": 0.1609046459197998,
+          "AWAY": 0.3347115218639374
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "HOME",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT"
@@ -231,7 +292,10 @@
     "btts": {
       "alignment_score": 58,
       "state": "FRAGILE",
-      "model_lean": "YES",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "YES",
       "structural_support": [
         "LINEUP_GOAL_PRESSURE_SUPPORT"
       ],
@@ -243,7 +307,28 @@
     "ou25": {
       "alignment_score": 69,
       "state": "WATCHLIST",
+      "audit_state": "WATCHLIST",
       "model_lean": "OVER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "OVER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.5377037980855705,
+        "probabilities": {
+          "OVER25": 0.5377037980855705,
+          "UNDER25": 0.46229620191442955
+        },
+        "xgb_pick": "OVER25",
+        "xgb_pick_probability": 0.8202135562896729,
+        "xgb_probabilities": {
+          "OVER25": 0.8202135562896729,
+          "UNDER25": 0.17978644371032715
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "OVER25",
       "structural_support": [
         "OVER25_HEAT_SUPPORT",
         "CHAOS_ENVIRONMENT_SUPPORT",
@@ -257,7 +342,10 @@
     "team_goals": {
       "alignment_score": 66,
       "state": "MIXED",
-      "model_lean": "Bahia 1.5+",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "Bahia 1.5+",
       "structural_support": [
         "LINEUP_GOAL_PRESSURE_SUPPORT"
       ],
@@ -269,7 +357,10 @@
     "correct_score": {
       "alignment_score": 86,
       "state": "SUPPORTED",
-      "model_lean": "OPEN",
+      "audit_state": "SUPPORTED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "OPEN",
       "structural_support": [
         "CHAOS_ENVIRONMENT_SUPPORT",
         "LINEUP_GOAL_PRESSURE_SUPPORT"
@@ -282,7 +373,10 @@
     "corners": {
       "alignment_score": 59,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "LINEUP_GOAL_PRESSURE_SUPPORT"
       ],
@@ -294,7 +388,10 @@
     "cards": {
       "alignment_score": 59,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "CHAOS_ENVIRONMENT_SUPPORT"
       ],
@@ -315,7 +412,7 @@
     "public_state": "Watchlist: wait for live confirmation",
     "mode": "OU25:OVER25"
   },
-  "public_safe_summary": "Over 2.5 has useful structure for Bahia vs Cruzeiro, but the current layer fit is better treated as watch-first than pre-match deploy.",
+  "public_safe_summary": "No published pick is active for Bahia vs Cruzeiro; the context layer is watch-first around Over 2.5.",
   "internal_reason_tokens": [
     "OVER25_HEAT_SUPPORT",
     "CHAOS_ENVIRONMENT_SUPPORT",
@@ -328,12 +425,9 @@
     "lineup_available": true,
     "h2h_available": true
   },
-  "preview": {
-    "headline": "Bahia vs Cruzeiro: Over 2.5 watchlist",
-    "short_summary": "Over 2.5 has useful structure for Bahia vs Cruzeiro, but the current layer fit is better treated as watch-first than pre-match deploy. Primary support comes from over25 heat support, while the main caution remains structural caution.",
-    "market_summary": "Best aligned market: Correct Score (Supported). Secondary support: Over 2.5. Weakest read: BTTS.",
-    "caution_line": "Main caution: structural caution.",
-    "telegram_summary": "Bahia vs Cruzeiro — Over 2.5 (Watchlist, 72% agreement). Support: Over25 Heat Support. Caution: structural caution.",
-    "premium_summary": "Over 2.5 is carrying a 72% agreement read across the published decision layers. Support is currently led by over25 heat support, chaos environment support, while caution is still coming from no major caution published."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-10T00:00:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }

@@ -2,9 +2,48 @@
   "fixture_key": "2026_05_09_Zulte_Waregem_FCV_Dender_EH",
   "fixture": "Zulte-Waregem vs FCV Dender EH",
   "primary_signal": "Zulte-Waregem Win",
+  "context_signal": "Zulte-Waregem Win",
   "signal_state": "FRAGILE",
   "agreement_score": 54,
   "confidence_band": "STANDARD",
+  "route_state": "DEPLOY",
+  "route_market": "FTR",
+  "route_pick": "HOME",
+  "route_active": true,
+  "route_label": "Zulte-Waregem Win",
+  "route_confidence_tier": "STANDARD",
+  "route_bookie_od": 1.6,
+  "route_value_edge_label": "positive",
+  "audit_state": "FRAGILE",
+  "audit_agreement_score": 54,
+  "audit_confidence_band": "STANDARD",
+  "conflict_level": "CAUTION",
+  "decision_contract_version": "route_audit_v1",
+  "published_route": {
+    "route_state": "DEPLOY",
+    "route_market": "FTR",
+    "route_pick": "HOME",
+    "route_active": true,
+    "confidence_tier": "STANDARD",
+    "bookie_od": 1.6,
+    "value_edge_label": "positive",
+    "premium_tier": "STANDARD"
+  },
+  "context_audit": {
+    "state": "FRAGILE",
+    "agreement_score": 54,
+    "confidence_band": "STANDARD",
+    "supporting_layers": [
+      "TEAM_POWER_ADVANTAGE",
+      "HOME_FORTRESS_ADVANTAGE"
+    ],
+    "caution_layers": [
+      "LINEUP_UNIT_EDGE_SOFT",
+      "H2H_UNAVAILABLE"
+    ],
+    "context_signal": "Zulte-Waregem Win",
+    "conflict_level": "CAUTION"
+  },
   "supporting_layers": [
     "TEAM_POWER_ADVANTAGE",
     "HOME_FORTRESS_ADVANTAGE"
@@ -92,40 +131,7 @@
       "delta": 19
     }
   ],
-  "key_player_drivers": [
-    {
-      "team": "Zulte-Waregem",
-      "player": "Marley Ake",
-      "role": "Forward",
-      "power": 74,
-      "driver_metric": "Goal Threat",
-      "driver_value": 87
-    },
-    {
-      "team": "Zulte-Waregem",
-      "player": "Brent Gabriel",
-      "role": "Goalkeeper",
-      "power": 67,
-      "driver_metric": "Defensive Lock",
-      "driver_value": 49
-    },
-    {
-      "team": "FCV Dender EH",
-      "player": "Bruny Nsimba",
-      "role": "Forward",
-      "power": 82,
-      "driver_metric": "Goal Threat",
-      "driver_value": 91
-    },
-    {
-      "team": "FCV Dender EH",
-      "player": "David Toshevski",
-      "role": "Forward",
-      "power": 70,
-      "driver_metric": "Goal Threat",
-      "driver_value": 79
-    }
-  ],
+  "key_player_drivers": [],
   "key_mismatches": [
     {
       "zone": "Dender attack vs Zulte Waregem defence",
@@ -170,8 +176,13 @@
   ],
   "h2h_context": {
     "available": false,
-    "summary": "No publish-safe H2H regime summary is available for this fixture yet, so history is not being used as a supporting layer.",
-    "sample_size": 0
+    "summary": "No publish-safe H2H regime snapshot is available yet for this fixture, so H2H remains supporting-only.",
+    "sample_size": 0,
+    "goal_environment": 0,
+    "btts_regime": 0,
+    "over25_rate": 0,
+    "draw_rate": 0,
+    "booking_heat": 0
   },
   "market_suitability": {
     "ftr": {
@@ -214,7 +225,30 @@
     "ftr": {
       "alignment_score": 50,
       "state": "FRAGILE",
+      "audit_state": "FRAGILE",
       "model_lean": "HOME",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "FTR",
+        "pick": "HOME",
+        "bookie_pick": "HOME",
+        "pick_probability": 1.0,
+        "probabilities": {
+          "HOME": 0.5554180358075614,
+          "DRAW": 0.2564417580608909,
+          "AWAY": 0.18814020613154755
+        },
+        "xgb_pick": "AWAY",
+        "xgb_pick_probability": 0.7155683040618896,
+        "xgb_probabilities": {
+          "HOME": 0.22927260398864746,
+          "DRAW": 0.055159080773591995,
+          "AWAY": 0.7155683040618896
+        },
+        "agreement_with_bookie": true
+      },
+      "team_context_lean": "HOME",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
@@ -230,7 +264,10 @@
     "btts": {
       "alignment_score": 60,
       "state": "FRAGILE",
-      "model_lean": "YES",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "YES",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
@@ -246,7 +283,28 @@
     "ou25": {
       "alignment_score": 64,
       "state": "MIXED",
-      "model_lean": "OVER25",
+      "audit_state": "MIXED",
+      "model_lean": "UNDER25",
+      "model_output": {
+        "source": "ALLMARKETS",
+        "source_file": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11.csv",
+        "market": "Over 2.5",
+        "pick": "UNDER25",
+        "bookie_pick": "OVER25",
+        "pick_probability": 0.3539398088331487,
+        "probabilities": {
+          "OVER25": 0.3539398088331487,
+          "UNDER25": 0.6460601911668513
+        },
+        "xgb_pick": "UNDER25",
+        "xgb_pick_probability": 0.03672654926776886,
+        "xgb_probabilities": {
+          "UNDER25": 0.03672654926776886,
+          "OVER25": 0.9632734507322311
+        },
+        "agreement_with_bookie": false
+      },
+      "team_context_lean": "OVER25",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
@@ -262,7 +320,10 @@
     "team_goals": {
       "alignment_score": 73,
       "state": "MIXED",
-      "model_lean": "FCV Dender EH 1.5+",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "FCV Dender EH 1.5+",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
@@ -277,7 +338,10 @@
     "correct_score": {
       "alignment_score": 75,
       "state": "MIXED",
-      "model_lean": "OPEN",
+      "audit_state": "MIXED",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "OPEN",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE"
       ],
@@ -292,7 +356,10 @@
     "corners": {
       "alignment_score": 32,
       "state": "AVOID",
-      "model_lean": "ELEVATED",
+      "audit_state": "AVOID",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
@@ -308,7 +375,10 @@
     "cards": {
       "alignment_score": 60,
       "state": "FRAGILE",
-      "model_lean": "ELEVATED",
+      "audit_state": "FRAGILE",
+      "model_lean": "",
+      "model_output": null,
+      "team_context_lean": "ELEVATED",
       "structural_support": [
         "TEAM_POWER_ADVANTAGE",
         "HOME_FORTRESS_ADVANTAGE"
@@ -329,7 +399,7 @@
     "public_state": "No watchlist flag",
     "mode": ""
   },
-  "public_safe_summary": "Zulte-Waregem Win has some live shape in Zulte-Waregem vs FCV Dender EH, but the supporting layers remain fragile and need discipline.",
+  "public_safe_summary": "Published route remains Zulte-Waregem Win for Zulte-Waregem vs FCV Dender EH, while the context audit flags fragile because of lineup unit edge soft.",
   "internal_reason_tokens": [
     "TEAM_POWER_ADVANTAGE",
     "HOME_FORTRESS_ADVANTAGE",
@@ -342,12 +412,9 @@
     "lineup_available": true,
     "h2h_available": false
   },
-  "preview": {
-    "headline": "Zulte-Waregem vs FCV Dender EH: Zulte-Waregem Win fragile",
-    "short_summary": "Zulte-Waregem Win has some live shape in Zulte-Waregem vs FCV Dender EH, but the supporting layers remain fragile and need discipline. Primary support comes from team power advantage, while the main caution remains lineup unit edge soft.",
-    "market_summary": "Best aligned market: Correct Score (Mixed). Secondary support: Team Goals. Weakest read: Corners.",
-    "caution_line": "Main caution: Lineup Unit Edge Soft.",
-    "telegram_summary": "Zulte-Waregem vs FCV Dender EH — Zulte-Waregem Win (Fragile, 54% agreement). Support: Team Power Advantage. Caution: Lineup Unit Edge Soft.",
-    "premium_summary": "Zulte-Waregem Win is carrying a 54% agreement read across the published decision layers. Support is currently led by team power advantage, home fortress advantage, while caution is still coming from lineup unit edge soft, h2h unavailable."
-  }
+  "capture_generated_at": "2026-05-18T20:14:45Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-09T14:00:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "post_kickoff"
 }
