@@ -2589,6 +2589,7 @@
     const selectedPick = selectedMarketPick(fixture, key);
     const modelLean = normalizeMarketPick(key, modelLeanForMarket(fixture, key, intel), fixture);
     const contextLean = normalizeMarketPick(key, teamContextLeanForMarket(fixture, key, intel), fixture);
+    const canHighlightContext = key === "team_goals" || !modelLean;
     if (key === "ftr") {
       return [
         { label: "Home", pick: "HOME", odds: odds.home_win_odds },
@@ -2597,7 +2598,7 @@
       ].map((row) => {
         const active = selectedPick === row.pick;
         const modelSelected = !active && modelLean === row.pick;
-        const context = !active && !modelSelected && contextLean === row.pick;
+        const context = canHighlightContext && !active && !modelSelected && contextLean === row.pick;
         return {
           ...row,
           active,
@@ -2615,7 +2616,7 @@
       ].map((row) => {
         const active = selectedPick === row.pick;
         const modelSelected = !active && modelLean === row.pick;
-        const context = !active && !modelSelected && contextLean === row.pick;
+        const context = canHighlightContext && !active && !modelSelected && contextLean === row.pick;
         return {
           ...row,
           active,
@@ -2633,7 +2634,7 @@
       ].map((row) => {
         const active = selectedPick === row.pick;
         const modelSelected = !active && modelLean === row.pick;
-        const context = !active && !modelSelected && contextLean === row.pick;
+        const context = canHighlightContext && !active && !modelSelected && contextLean === row.pick;
         return {
           ...row,
           active,
@@ -2650,7 +2651,7 @@
     ].map((row) => {
       const active = selectedPick === row.pick;
       const modelSelected = !active && modelLean === row.pick;
-      const context = !active && !modelSelected && contextLean === row.pick;
+      const context = canHighlightContext && !active && !modelSelected && contextLean === row.pick;
       return {
         ...row,
         active,
