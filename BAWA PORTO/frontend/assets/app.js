@@ -2419,6 +2419,92 @@
     return Number.isFinite(numeric) ? compactPercent(numeric) : "";
   };
 
+  const normalizeMarketPick = (key, pick = "", fixture = null) => {
+    const value = normalizeLeanKey(pick);
+    if (!value) return "";
+    if (key === "ftr") {
+      if (value.includes("DRAW")) return "DRAW";
+      if (value.includes("AWAY")) return "AWAY";
+      if (value.includes("HOME")) return "HOME";
+    }
+    if (key === "ou25") {
+      if (value.includes("UNDER") || value.includes("U25")) return "UNDER25";
+      if (value.includes("OVER") || value.includes("O25")) return "OVER25";
+    }
+    if (key === "btts") {
+      if (value.includes("NO")) return "NO";
+      if (value.includes("YES")) return "YES";
+    }
+    if (key === "team_goals") {
+      const homeKey = normalizeLeanKey(fixture?.home_team);
+      const awayKey = normalizeLeanKey(fixture?.away_team);
+      if (value.includes(homeKey) || value.includes("HOME")) return "HOME15";
+      if (value.includes(awayKey) || value.includes("AWAY")) return "AWAY15";
+    }
+    return value;
+  };
+
+  const marketKeyFromFamily = (family = "") => {
+    const value = String(family || "").toUpperCase();
+    if (value === "FTR") return "ftr";
+    if (value === "OU25" || value === "OVER25") return "ou25";
+    if (value === "BTTS") return "btts";
+    if (value === "TG15" || value.includes("TEAM")) return "team_goals";
+    return "";
+  };
+
+  const explicitRoutedMarketPick = (fixture, key) => {
+    const publishClass = String(fixture?.publish_class || fixture?.fixture_class || "").toUpperCase();
+    const familyKey = marketKeyFromFamily(fixture?.signal_summary?.market_family || fixture?.deploy_summary?.market || "");
+    const rawPick = fixture?.signal_summary?.deploy_pick || fixture?.deploy_summary?.pick || "";
+    if (publishClass !== "DEPLOY" || familyKey !== key || !rawPick) {
+      return "";
+    }
+    return normalizeMarketPick(key, rawPick, fixture);
+  };
+
+  const selectedMarketPick = (fixture, key) => {
+    const published = publishedMarketRow(fixture, key);
+    return normalizeMarketPick(key, published?.pick || "", fixture) || explicitRoutedMarketPick(fixture, key);
+  };
+
+  const marketPickDisplay = (fixture, key, pick = "") => {
+    const normalized = normalizeMarketPick(key, pick, fixture);
+    if (key === "ftr") {
+      if (normalized === "HOME") return `${teamCardName(fixture?.home_team) || "Home"} Win`;
+      if (normalized === "DRAW") return "Draw";
+      if (normalized === "AWAY") return `${teamCardName(fixture?.away_team) || "Away"} Win`;
+    }
+    if (key === "ou25") {
+      return normalized === "UNDER25" ? "Under 2.5" : normalized === "OVER25" ? "Over 2.5" : "Totals read";
+    }
+    if (key === "btts") {
+      return normalized === "NO" ? "BTTS No" : normalized === "YES" ? "BTTS Yes" : "BTTS read";
+    }
+    if (key === "team_goals") {
+      return normalized === "HOME15"
+        ? `${teamCardName(fixture?.home_team) || "Home"} 1.5+`
+        : normalized === "AWAY15"
+          ? `${teamCardName(fixture?.away_team) || "Away"} 1.5+`
+          : "Team-goals support";
+    }
+    return deployPickDisplay(pick);
+  };
+
+  const fixturePublishedSelection = (fixture) => {
+    const familyKey = marketKeyFromFamily(fixture?.signal_summary?.market_family || fixture?.deploy_summary?.market || "");
+    const pick = explicitRoutedMarketPick(fixture, familyKey);
+    if (!familyKey || !pick) {
+      return null;
+    }
+    return {
+      key: familyKey,
+      pick,
+      label: marketPickDisplay(fixture, familyKey, pick),
+      confidence: fixture?.signal_summary?.confidence_tier || fixture?.deploy_summary?.confidence_tier || "",
+    };
+  };
+
   const decisionMarketItem = (decision, key) => {
     const normalizedKey = String(key || "").toLowerCase().replace(/[^a-z0-9]/g, "");
     return (
@@ -2456,18 +2542,19 @@
     return "";
   };
 
-  const modelSignalText = (fixture, key, pick, intel = null, active = false) => {
-    const probability = publishedModelProbability(fixture, key, pick);
-    if (probability) {
-      return `Model ${probability}`;
+  const modelSignalText = (fixture, key, pick, intel = null, state = {}) => {
+    if (state.selected) {
+      const probability = publishedModelProbability(fixture, key, pick);
+      return probability ? `Model ${probability}` : "Published pick";
     }
-    if (Number.isFinite(Number(intel?.rating)) && active) {
-      return `Support ${Math.round(Number(intel.rating))}%`;
+    if (state.context && Number.isFinite(Number(intel?.rating))) {
+      const label = String(intel?.band || intel?.state || "").toUpperCase() === "AVOID" ? "Caution" : "Context";
+      return `${label} ${Math.round(Number(intel.rating))}%`;
     }
-    if (active) {
-      return "Model lean";
+    if (state.context) {
+      return "Context lean";
     }
-    return "Price only";
+    return hasUsableOdds(state.odds) ? "Book price" : "No selection";
   };
 
   const outcomeOddsText = (odds, unavailableCopy = "Odds pending") => (hasUsableOdds(odds) ? bookmakerLineDisplay(odds) : unavailableCopy);
@@ -2476,18 +2563,21 @@
 
   const marketOutcomeRows = (fixture, key, intel = null) => {
     const odds = fixture?.odds_summary || {};
-    const lean = leanForMarket(fixture, key, intel);
+    const selectedPick = selectedMarketPick(fixture, key);
+    const contextLean = normalizeMarketPick(key, leanForMarket(fixture, key, intel), fixture);
     if (key === "ftr") {
       return [
         { label: "Home", pick: "HOME", odds: odds.home_win_odds },
         { label: "Draw", pick: "DRAW", odds: odds.draw_odds },
         { label: "Away", pick: "AWAY", odds: odds.away_win_odds },
       ].map((row) => {
-        const active = lean === row.pick;
+        const active = selectedPick === row.pick;
+        const context = !selectedPick && contextLean === row.pick;
         return {
           ...row,
           active,
-          model: modelSignalText(fixture, key, row.pick, intel, active),
+          context,
+          model: modelSignalText(fixture, key, row.pick, intel, { selected: active, context, odds: row.odds }),
           implied: outcomeImpliedText(row.odds),
         };
       });
@@ -2497,11 +2587,13 @@
         { label: "Over 2.5", pick: "OVER25", odds: odds.over25_odds },
         { label: "Under 2.5", pick: "UNDER25", odds: odds.under25_odds },
       ].map((row) => {
-        const active = lean === row.pick;
+        const active = selectedPick === row.pick;
+        const context = !selectedPick && contextLean === row.pick;
         return {
           ...row,
           active,
-          model: modelSignalText(fixture, key, row.pick, intel, active),
+          context,
+          model: modelSignalText(fixture, key, row.pick, intel, { selected: active, context, odds: row.odds }),
           implied: outcomeImpliedText(row.odds),
         };
       });
@@ -2511,32 +2603,43 @@
         { label: "Yes", pick: "YES", odds: odds.btts_yes_odds },
         { label: "No", pick: "NO", odds: odds.btts_no_odds },
       ].map((row) => {
-        const active = lean === row.pick;
+        const active = selectedPick === row.pick;
+        const context = !selectedPick && contextLean === row.pick;
         return {
           ...row,
           active,
-          model: modelSignalText(fixture, key, row.pick, intel, active),
+          context,
+          model: modelSignalText(fixture, key, row.pick, intel, { selected: active, context, odds: row.odds }),
           implied: outcomeImpliedText(row.odds),
         };
       });
     }
-    const homeKey = normalizeLeanKey(fixture.home_team);
-    const awayKey = normalizeLeanKey(fixture.away_team);
     return [
-      { label: `${teamCardName(fixture.home_team) || "Home"} 1.5+`, pick: "HOME15", active: Boolean(lean && (lean.includes(homeKey) || lean.includes("HOME"))) },
-      { label: `${teamCardName(fixture.away_team) || "Away"} 1.5+`, pick: "AWAY15", active: Boolean(lean && (lean.includes(awayKey) || lean.includes("AWAY"))) },
-    ].map((row) => ({
-      ...row,
-      odds: null,
-      model: row.active && Number.isFinite(Number(intel?.rating)) ? `Support ${Math.round(Number(intel.rating))}%` : row.active ? "Model support" : "Support watch",
-      implied: "No odds feed",
-    }));
+      { label: `${teamCardName(fixture.home_team) || "Home"} 1.5+`, pick: "HOME15" },
+      { label: `${teamCardName(fixture.away_team) || "Away"} 1.5+`, pick: "AWAY15" },
+    ].map((row) => {
+      const active = selectedPick === row.pick;
+      const context = !selectedPick && contextLean === row.pick;
+      return {
+        ...row,
+        active,
+        context,
+        odds: null,
+        model: context && Number.isFinite(Number(intel?.rating)) ? `Context ${Math.round(Number(intel.rating))}%` : context ? "Context lean" : "Support watch",
+        implied: "No odds feed",
+      };
+    });
   };
 
   const marketLeadText = (fixture, key, intel = null) => {
     const active = marketOutcomeRows(fixture, key, intel).find((row) => row.active);
     if (active) {
-      return `${active.label} · ${active.model}`;
+      return `Published ${marketPickDisplay(fixture, key, active.pick)} · ${active.model}`;
+    }
+    const context = marketOutcomeRows(fixture, key, intel).find((row) => row.context);
+    if (context) {
+      const label = String(intel?.band || intel?.state || "").toUpperCase() === "AVOID" ? "Caution lean" : "Context lean";
+      return `${label} ${context.label} · ${context.model}`;
     }
     if (Number.isFinite(Number(intel?.rating))) {
       return `${safeTitleLabel(intel?.band, "Context")} · ${Math.round(Number(intel.rating))}% support`;
@@ -2554,7 +2657,7 @@
       ${rows
         .map(
           (row) => `
-            <div class="fixture-market-outcome-row ${row.active ? "is-active" : ""}">
+            <div class="fixture-market-outcome-row ${row.active ? "is-active" : row.context ? "is-context" : ""}">
               <div>
                 <span>${escapeHtml(row.label)}</span>
                 <small>${escapeHtml(row.model)}</small>
@@ -2637,16 +2740,32 @@
             .map((def) => {
               const intel = decisionMarketItem(decision, def.key) || null;
               const stateLabel = safeTitleLabel(intel?.band || intel?.state || fixture?.signal_summary?.signal_state, "Pending");
-              const tone = def.active ? valueEdgeTone(fixture) : decisionStateTone(intel?.band || intel?.state || "");
               const outcomeRows = marketOutcomeRows(fixture, def.key, intel);
+              const hasPublishedSelection = outcomeRows.some((row) => row.active);
+              const hasContextLean = outcomeRows.some((row) => row.context);
+              const intelligenceState = String(intel?.band || intel?.state || "").toUpperCase();
+              const tone = hasPublishedSelection
+                ? intelligenceState === "AVOID"
+                  ? "fragile"
+                  : valueEdgeTone(fixture)
+                : decisionStateTone(intel?.band || intel?.state || "");
+              const stateCopy = hasPublishedSelection
+                ? "Published pick"
+                : hasContextLean
+                  ? intelligenceState === "AVOID"
+                    ? "Context caution"
+                    : "Context lean"
+                  : def.key === "team_goals"
+                    ? "Support only"
+                    : "No pick";
               return `
-                <article class="fixture-market-card fixture-market-card-${escapeHtml(tone)} ${def.active ? "fixture-market-card-active" : ""}">
+                <article class="fixture-market-card fixture-market-card-${escapeHtml(tone)} ${hasPublishedSelection ? "fixture-market-card-active" : ""}">
                   <div class="fixture-market-card-head">
                     <div>
                       <span class="metric-label">${escapeHtml(def.title)}</span>
                       <strong>${escapeHtml(marketLeadText(fixture, def.key, intel))}</strong>
                     </div>
-                    <span class="fixture-market-state">${escapeHtml(def.active ? "Active read" : stateLabel)}</span>
+                    <span class="fixture-market-state">${escapeHtml(`${stateCopy}${stateLabel && !hasPublishedSelection ? ` · ${stateLabel}` : ""}`)}</span>
                   </div>
                   <p class="fixture-market-card-copy">${escapeHtml(def.copy)}</p>
                   ${marketOutcomeRowsMarkup(outcomeRows)}
@@ -3652,18 +3771,23 @@
   const renderFixturePredictionDeck = (fixture, clarity, matchedEntry, publishClass) => {
     const decision = state.selectedFixtureDecisionIntelligence || null;
     const verdictLabel = marketVerdictDisplay(fixture);
+    const publishedSelection = fixturePublishedSelection(fixture);
+    const decisionState = String(decision?.signal_state || "").toUpperCase();
+    const hasDecisionConflict = Boolean(publishedSelection && ["AVOID", "FRAGILE"].includes(decisionState));
+    const deckLabel = publishedSelection ? "Published prediction" : "Fixture context";
+    const deckTitle = publishedSelection ? publishedSelection.label : "No published pick";
+    const deckCopy = publishedSelection
+      ? hasDecisionConflict
+        ? `${fixture.signal_summary?.summary_text || clarity.action_copy} Context audit flags ${safeTitleLabel(decisionState, "caution")} at ${decision?.agreement_score ?? "—"}% agreement, so treat the deeper cards as caution context rather than a second selection.`
+        : fixture.signal_summary?.summary_text || decision?.preview?.short_summary || decision?.public_safe_summary || clarity.action_copy
+      : `This fixture is ${safeTitleLabel(publishClass || fixture.publish_class || "observe", "context")} only. Market cards show context posture, pricing, and cautions, but no Odds Genius pick is published for this fixture.`;
     return `
       <section class="section fixture-prediction-section">
         <article class="panel fixture-prediction-card">
           <div>
-            <span class="metric-label">Odds Genius prediction</span>
-            <h2>${escapeHtml(decision?.primary_signal || verdictLabel)}</h2>
-            <p>${escapeHtml(
-              decision?.preview?.short_summary ||
-                decision?.public_safe_summary ||
-                fixture.signal_summary?.summary_text ||
-                clarity.action_copy
-            )}</p>
+            <span class="metric-label">${escapeHtml(deckLabel)}</span>
+            <h2>${escapeHtml(deckTitle || verdictLabel)}</h2>
+            <p>${escapeHtml(deckCopy)}</p>
           </div>
           <div class="cta-row">
             <a class="button" href="./dashboard.html">Back to dashboard</a>
@@ -5313,7 +5437,7 @@
     const marketHighlights = decisionMarketSuitabilityItems(decision).slice(0, 3);
     return `
       <article class="panel compact-panel compact-panel-primary">
-        <span class="metric-label">Decision verdict</span>
+        <span class="metric-label">Context audit</span>
         <div class="metric-stack">
           <strong class="metric-value">${escapeHtml(decision.primary_signal || verdictLabel)}</strong>
           <p class="muted">${escapeHtml(`${safeTitleLabel(decision.signal_state, "Pending")} • ${safeTitleLabel(decision.confidence_band, "Pending")} confidence • ${decision.agreement_score ?? "—"}% agreement`)}</p>
