@@ -44,6 +44,7 @@ html,
 body {
   margin: 0;
   min-height: 100%;
+  overflow-x: hidden;
   font-family:
     Inter,
     ui-sans-serif,
@@ -285,6 +286,7 @@ body::after {
 .hero-main,
 .hero-side,
 .surface {
+  min-width: 0;
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   background:
@@ -335,6 +337,7 @@ body::after {
   color: var(--muted);
   line-height: 1.58;
   font-size: 1rem;
+  overflow-wrap: anywhere;
 }
 
 .entity-hero {
@@ -1173,6 +1176,82 @@ body::after {
   display: grid;
   gap: 12px;
   align-content: start;
+}
+
+.fixture-market-card-section {
+  margin-top: 4px;
+}
+
+.fixture-market-card-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.fixture-market-card {
+  display: grid;
+  gap: 12px;
+  min-height: 230px;
+  padding: 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(122, 148, 132, 0.16);
+  background: linear-gradient(180deg, rgba(18, 29, 25, 0.98), rgba(10, 18, 16, 0.98));
+  box-shadow: inset 3px 0 0 rgba(107, 122, 143, 0.55);
+}
+
+.fixture-market-card-active {
+  border-color: rgba(78, 222, 163, 0.32);
+  box-shadow:
+    inset 3px 0 0 rgba(78, 222, 163, 0.95),
+    0 18px 46px rgba(78, 222, 163, 0.08);
+}
+
+.fixture-market-card-positive,
+.fixture-market-card-deploy {
+  box-shadow:
+    inset 3px 0 0 rgba(78, 222, 163, 0.9),
+    0 18px 46px rgba(78, 222, 163, 0.06);
+}
+
+.fixture-market-card-fragile,
+.fixture-market-card-observe {
+  box-shadow:
+    inset 3px 0 0 rgba(246, 179, 109, 0.88),
+    0 18px 46px rgba(246, 179, 109, 0.05);
+}
+
+.fixture-market-card-head,
+.fixture-market-card-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.fixture-market-card strong {
+  font-size: 1.14rem;
+  line-height: 1.28;
+}
+
+.fixture-market-card-meta {
+  padding-top: 10px;
+  border-top: 1px solid rgba(122, 148, 132, 0.12);
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.fixture-market-card-meta b {
+  color: var(--ink);
+  text-align: right;
+  font-size: 0.86rem;
+}
+
+.fixture-market-state {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 .badge-has-image .badge-fallback {
@@ -4654,7 +4733,7 @@ tbody tr:hover {
 
 .pricing-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
   gap: 16px;
 }
 
@@ -4970,6 +5049,105 @@ tbody tr:hover {
 
 .proof-strip-home {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.launch-capability-panel {
+  display: grid;
+  gap: 14px;
+}
+
+.launch-capability-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+  gap: 10px;
+}
+
+.world-cup-founder-module {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+  gap: 18px;
+  align-items: stretch;
+  padding-top: 28px;
+}
+
+.world-cup-founder-copy,
+.world-cup-founder-actions {
+  display: grid;
+  gap: 14px;
+  padding: 24px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(78, 222, 163, 0.22);
+  background:
+    linear-gradient(135deg, rgba(78, 222, 163, 0.09), rgba(246, 179, 109, 0.07)),
+    rgba(255, 255, 255, 0.035);
+}
+
+.world-cup-founder-copy h2 {
+  margin: 0;
+  font-size: clamp(1.8rem, 3vw, 3.1rem);
+  letter-spacing: 0;
+}
+
+.world-cup-founder-copy p {
+  max-width: 820px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 1.02rem;
+  line-height: 1.58;
+}
+
+.world-cup-founder-actions {
+  align-content: space-between;
+}
+
+.freshness-panel {
+  display: grid;
+  gap: 16px;
+}
+
+.freshness-grid .signal-cell {
+  min-height: 112px;
+}
+
+.capability-pill {
+  display: grid;
+  gap: 4px;
+  min-height: 76px;
+  padding: 13px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(122, 148, 132, 0.14);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.capability-pill strong {
+  font-size: 0.96rem;
+}
+
+.capability-pill span {
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.proof-market-split {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 16px 0 12px;
+}
+
+.proof-market-split-card {
+  display: grid;
+  gap: 6px;
+  min-height: 104px;
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(122, 148, 132, 0.14);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.proof-market-split-card strong {
+  font-size: 1.35rem;
 }
 
 .proof-tile strong {
@@ -5371,17 +5549,31 @@ tbody tr:hover {
 
 .public-result-row-won {
   border-color: rgba(80, 222, 163, 0.42);
-  box-shadow: 0 0 0 1px rgba(80, 222, 163, 0.12), 0 18px 52px rgba(40, 184, 130, 0.1);
+  box-shadow:
+    0 0 0 1px rgba(80, 222, 163, 0.2),
+    0 0 24px rgba(80, 222, 163, 0.16),
+    0 18px 52px rgba(40, 184, 130, 0.1);
 }
 
 .public-result-row-lost {
-  border-color: rgba(246, 139, 109, 0.46);
-  box-shadow: 0 0 0 1px rgba(246, 139, 109, 0.12), 0 18px 52px rgba(246, 139, 109, 0.08);
+  border-color: rgba(255, 116, 82, 0.64);
+  box-shadow:
+    0 0 0 1px rgba(255, 116, 82, 0.22),
+    0 0 28px rgba(255, 116, 82, 0.2),
+    0 18px 52px rgba(246, 139, 109, 0.1);
 }
 
 .public-result-row-cashed {
   border-color: rgba(105, 202, 255, 0.48);
   box-shadow: 0 0 0 1px rgba(105, 202, 255, 0.12), 0 18px 52px rgba(105, 202, 255, 0.08);
+}
+
+.public-result-row-pending,
+.public-result-row-void {
+  border-color: rgba(105, 145, 190, 0.28);
+  box-shadow:
+    0 0 0 1px rgba(105, 145, 190, 0.1),
+    0 18px 52px rgba(48, 86, 135, 0.06);
 }
 
 .public-result-row-observe {
@@ -5537,7 +5729,8 @@ code {
   .pricing-grid,
   .results-highlight,
   .result-window-grid,
-  .pricing-band {
+  .pricing-band,
+  .world-cup-founder-module {
     grid-template-columns: 1fr;
   }
 
@@ -5550,6 +5743,8 @@ code {
   .entity-surface-grid,
   .card-grid,
   .card-grid-compact,
+  .fixture-market-card-grid,
+  .proof-market-split,
   .locked-grid,
   .loading-skeleton-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -5685,6 +5880,7 @@ code {
   }
 
   .topbar {
+    overflow: visible;
     padding: 16px;
     border-radius: 28px;
     align-items: flex-start;
@@ -5701,6 +5897,17 @@ code {
     width: 100%;
     flex-wrap: wrap;
     justify-content: flex-start;
+  }
+
+  .nav-main,
+  .nav-utility {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .nav a {
+    min-width: 0;
+    text-align: center;
   }
 
   .nav-utility {
@@ -5729,6 +5936,8 @@ code {
   .signal-grid,
   .team-hero-intel-grid,
   .proof-strip-home,
+  .fixture-market-card-grid,
+  .proof-market-split,
   .prediction-meta-grid,
   .standings-table-head,
   .standings-row,

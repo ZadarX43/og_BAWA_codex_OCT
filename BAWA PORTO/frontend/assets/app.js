@@ -38,6 +38,7 @@
     securePremiumPredictions: [],
     fixtureIntelligence: [],
     weeklyResults: null,
+    resultsArchive: null,
     liveResultsFeed: null,
     teamIntelligenceIndex: [],
     clubSquadIntelligenceIndex: [],
@@ -2346,6 +2347,121 @@
     };
   };
 
+  const marketOddsDisplay = (fixture, key) => {
+    const odds = fixture?.odds_summary || {};
+    if (key === "ftr") {
+      return `H ${bookmakerLineDisplay(odds.home_win_odds)} / D ${bookmakerLineDisplay(odds.draw_odds)} / A ${bookmakerLineDisplay(odds.away_win_odds)}`;
+    }
+    if (key === "ou25") {
+      return `Over ${bookmakerLineDisplay(odds.over25_odds)} / Under ${bookmakerLineDisplay(odds.under25_odds)}`;
+    }
+    if (key === "btts") {
+      return `Yes ${bookmakerLineDisplay(odds.btts_yes_odds)} / No ${bookmakerLineDisplay(odds.btts_no_odds)}`;
+    }
+    return "Team-goals price pending";
+  };
+
+  const publishedModelProbability = (fixture, key) => {
+    const fixtureKey = String(fixture?.fixture_key || "");
+    const aliases = {
+      ftr: ["FTR"],
+      ou25: ["OU25", "OVER25"],
+      btts: ["BTTS"],
+      team_goals: ["TG15", "TEAM_GOALS", "TEAMGOALS"],
+    }[key] || [];
+    const rows = [...state.publicPredictions, ...state.premiumPredictions, ...state.securePremiumPredictions];
+    const match = rows.find((row) => {
+      const rowFixtureKey = String(row.fixture_key || "");
+      const market = String(row.market || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+      return rowFixtureKey === fixtureKey && aliases.some((alias) => market === alias.replace(/[^A-Z0-9]/g, ""));
+    });
+    if (!match) {
+      return "";
+    }
+    if (match.model_prob_display) {
+      return String(match.model_prob_display);
+    }
+    const numeric = Number(match.model_prob);
+    return Number.isFinite(numeric) ? compactPercent(numeric) : "";
+  };
+
+  const marketProbabilityLine = (fixture, key, intelligence = null) => {
+    const odds = fixture?.odds_summary || {};
+    const lean = String(intelligence?.modelLean || "").toUpperCase();
+    const support = Number.isFinite(Number(intelligence?.rating)) ? `${Math.round(Number(intelligence.rating))}%` : "Pending";
+    const modelProbability = publishedModelProbability(fixture, key);
+    if (modelProbability) {
+      return `Selected model lean ${modelProbability} · ${deployPickDisplay(lean || fixture?.signal_summary?.deploy_pick || "")}`;
+    }
+    if (key === "ftr") {
+      return `Model/support ${support} · ${deployPickDisplay(lean || "lean pending")}`;
+    }
+    if (key === "ou25") {
+      return `Model/support ${support} · Over ${formatImpliedProbability(odds.over25_odds)}`;
+    }
+    if (key === "btts") {
+      return `Yes ${formatImpliedProbability(odds.btts_yes_odds)} · No ${formatImpliedProbability(odds.btts_no_odds)}`;
+    }
+    return `Home over 1.5 ${lean === "HOME" ? support : "Pending"} · Away over 1.5 ${lean === "AWAY" ? support : "Pending"}`;
+  };
+
+  const fixtureMarketCardsMarkup = (fixture, decision = null) => {
+    const items = decisionMarketSuitabilityItems(decision);
+    const byKey = items.reduce((acc, item) => {
+      const key = String(item.key || item.label || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+      if (key.includes("ftr")) acc.ftr = item;
+      if (key.includes("btts")) acc.btts = item;
+      if (key.includes("ou25") || key.includes("over25")) acc.ou25 = item;
+      if (key.includes("teamgoals")) acc.team_goals = item;
+      return acc;
+    }, {});
+    const deployFamily = String(fixture?.signal_summary?.market_family || "").toUpperCase();
+    const cardDefs = [
+      { key: "ftr", title: "Full Time Result", lean: "Selected lean", active: deployFamily === "FTR" },
+      { key: "ou25", title: "Over 2.5", lean: "Signal state", active: deployFamily === "OU25" },
+      { key: "btts", title: "BTTS", lean: "Signal state", active: deployFamily === "BTTS" },
+      { key: "team_goals", title: "Team 1.5 Goals", lean: "TG1.5 support", active: deployFamily === "TG15" || deployFamily.includes("TEAM") },
+    ];
+    return `
+      <section class="section section-tight fixture-market-card-section">
+        <div class="section-head">
+          <div>
+            <h2>Fixture prediction cards</h2>
+            <p class="section-copy">Compact market reads for the main launch families. Expand the tabs for the deeper expert context.</p>
+          </div>
+        </div>
+        <div class="fixture-market-card-grid">
+          ${cardDefs
+            .map((def) => {
+              const intel = byKey[def.key] || null;
+              const stateLabel = safeTitleLabel(intel?.band || intel?.state || fixture?.signal_summary?.signal_state, "Pending");
+              const modelLean = intel?.modelLean ? deployPickDisplay(intel.modelLean) : def.active ? marketVerdictDisplay(fixture) : "No clean lean";
+              const tone = def.active ? valueEdgeTone(fixture) : decisionStateTone(intel?.band || intel?.state || "");
+              return `
+                <article class="fixture-market-card fixture-market-card-${escapeHtml(tone)} ${def.active ? "fixture-market-card-active" : ""}">
+                  <div class="fixture-market-card-head">
+                    <span class="metric-label">${escapeHtml(def.title)}</span>
+                    <span class="fixture-market-state">${escapeHtml(def.active ? "Active read" : stateLabel)}</span>
+                  </div>
+                  <strong>${escapeHtml(marketProbabilityLine(fixture, def.key, intel))}</strong>
+                  <div class="fixture-market-card-meta">
+                    <span>${escapeHtml(def.lean)}</span>
+                    <b>${escapeHtml(modelLean)}</b>
+                  </div>
+                  <div class="fixture-market-card-meta">
+                    <span>Bookmaker odds</span>
+                    <b>${escapeHtml(marketOddsDisplay(fixture, def.key))}</b>
+                  </div>
+                  <p class="muted">${escapeHtml(intel?.read || "No published expert read for this family yet.")}</p>
+                </article>
+              `;
+            })
+            .join("")}
+        </div>
+      </section>
+    `;
+  };
+
   const computeRouteTone = (entry) => {
     const priority = dashboardPriorityProfile(entry);
     if (priority.bucket === "send_now") {
@@ -2943,6 +3059,75 @@
       </section>
     `;
   };
+
+  const fixtureFreshnessMeta = (fixture, decision = null, lineup = null, h2hSupport = null) => {
+    const lastUpdated =
+      fixture?.updated_at ||
+      fixture?.capture_generated_at ||
+      fixture?.source_data_cutoff_at ||
+      decision?.generated_at ||
+      state.summary?.generated_at ||
+      "";
+    const nextRefresh =
+      fixture?.next_refresh_at ||
+      decision?.next_refresh_at ||
+      state.summary?.next_refresh_at ||
+      "Next publish automation";
+    const coverage = String(fixture?.coverage_status || decision?.coverage_status || "coverage pending").replace(/_/g, " ");
+    const sourceCutoff = fixture?.source_data_cutoff_at || fixture?.capture_generated_at || state.summary?.selected_source_mtime_utc || "";
+    return [
+      {
+        label: "Last updated",
+        value: formatDateTime(lastUpdated) || "Not published",
+        note: fixture?.snapshot_phase ? `Snapshot ${String(fixture.snapshot_phase).replace(/_/g, " ")}` : "Published fixture feed",
+      },
+      {
+        label: "Next refresh",
+        value: formatDateTime(nextRefresh) || nextRefresh,
+        note: "Refresh timing is shown from publish metadata when available.",
+      },
+      {
+        label: "Coverage",
+        value: safeTitleLabel(coverage, "Coverage pending"),
+        note: [
+          lineup ? "lineups" : "lineup fallback",
+          h2hSupport ? "h2h" : "h2h fallback",
+          decision ? "decision" : "decision fallback",
+        ].join(" · "),
+      },
+      {
+        label: "Data cutoff",
+        value: formatDateTime(sourceCutoff) || "Source cutoff pending",
+        note: fixture?.fixture_kickoff_source ? `Kickoff from ${String(fixture.fixture_kickoff_source).replace(/_/g, " ")}` : "Website-safe export",
+      },
+    ];
+  };
+
+  const renderFixtureFreshnessPanel = (fixture, decision = null, lineup = null, h2hSupport = null) => `
+    <section class="section section-tight">
+      <article class="panel freshness-panel">
+        <div class="section-head">
+          <div>
+            <span class="metric-label">Freshness</span>
+            <h2>Data status and coverage</h2>
+          </div>
+        </div>
+        <div class="prediction-meta-grid dashboard-odds-grid freshness-grid">
+          ${fixtureFreshnessMeta(fixture, decision, lineup, h2hSupport)
+            .map(
+              (entry) => `
+                <div class="signal-cell signal-cell-model">
+                  <span class="signal-label">${escapeHtml(entry.label)}</span>
+                  <span class="signal-value">${escapeHtml(entry.value)}</span>
+                  <span class="muted">${escapeHtml(entry.note)}</span>
+                </div>
+              `
+            )
+            .join("")}
+        </div>
+      </article>
+    </section>
+  `;
 
   const renderTeamOverviewDrivers = (payload) => {
     if (!payload || !Array.isArray(payload.players) || !payload.players.length) {
@@ -3596,6 +3781,126 @@
       workerConfigured() ? "Unlock founding membership" : "Open checkout placeholder"
     }</a>`;
 
+  const capabilityPill = (label, detail = "") => `
+    <article class="capability-pill">
+      <strong>${escapeHtml(label)}</strong>
+      ${detail ? `<span>${escapeHtml(detail)}</span>` : ""}
+    </article>
+  `;
+
+  const launchCapabilityGrid = (title, items, note = "") => `
+    <article class="panel launch-capability-panel">
+      <span class="metric-label">${escapeHtml(title)}</span>
+      <div class="launch-capability-grid">
+        ${items.map((item) => capabilityPill(item.label || item, item.detail || "")).join("")}
+      </div>
+      ${note ? `<p class="muted">${escapeHtml(note)}</p>` : ""}
+    </article>
+  `;
+
+  const worldCupFounderModule = () => `
+    <section class="section world-cup-founder-module">
+      <article class="world-cup-founder-copy">
+        <span class="metric-label">OG Founder Early Access</span>
+        <h2>World Cup + pre-season edition.</h2>
+        <p>
+          A launch window for public proof, premium fixture context, and player-event beta intelligence while the product hardens in the open.
+        </p>
+        <div class="pill-row">
+          <span class="stat-chip">First 250 founders</span>
+          <span class="stat-chip">£20/month while active</span>
+          <span class="stat-chip">Protected premium route</span>
+        </div>
+      </article>
+      <article class="world-cup-founder-actions">
+        <div class="metric">
+          <span class="metric-label">Launch edition</span>
+          <span class="metric-value">Football v0.12</span>
+        </div>
+        <div class="cta-row">
+          <a class="button" href="./pricing.html">Secure founder access</a>
+          <a class="ghost-button" href="./methodology.html">Read methodology</a>
+          <a class="ghost-button" href="./results.html">See live proof</a>
+        </div>
+      </article>
+    </section>
+  `;
+
+  const marketLabelCanonical = (value) => {
+    const key = String(value || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+    if (key === "OU25" || key === "OVER25") return "OU25";
+    if (key === "BTTS") return "BTTS";
+    if (key === "FTR") return "FTR";
+    if (key === "TG15" || key === "TEAMGOALS" || key === "TEAMGOALS15") return "TG1.5";
+    return value || "Market";
+  };
+
+  const resultItemsByMarket = (window = {}) => {
+    const rows = Array.isArray(window.featured_results) ? window.featured_results : Array.isArray(window.items) ? window.items : [];
+    return rows.reduce((groups, row) => {
+      const market = marketLabelCanonical(row.market);
+      groups[market] = groups[market] || [];
+      groups[market].push(row);
+      return groups;
+    }, {});
+  };
+
+  const recentResultPreview = (feed) => {
+    const window = Array.isArray(feed?.windows) ? feed.windows[0] || null : null;
+    if (!window) {
+      return `<div class="notice">Recent live proof will appear here after the next settlement publish.</div>`;
+    }
+    const grouped = resultItemsByMarket(window);
+    const cards = ["FTR", "BTTS", "OU25", "TG1.5"]
+      .map((market) => {
+        const rows = grouped[market] || [];
+        const settled = rows.filter((row) => ["won", "lost", "void", "cashed"].includes(String(row.result_status || "").toLowerCase())).length;
+        const wins = rows.filter((row) => ["won", "cashed"].includes(String(row.result_status || "").toLowerCase())).length;
+        const pending = rows.filter((row) => String(row.result_status || "").toLowerCase() === "pending").length;
+        const rate = settled ? compactPercent(wins / settled) : "Pending";
+        return `
+          <article class="proof-market-split-card">
+            <span class="metric-label">${escapeHtml(market)}</span>
+            <strong>${escapeHtml(rate)}</strong>
+            <span class="muted">${escapeHtml(`${wins}/${settled} settled${pending ? `, ${pending} pending` : ""}`)}</span>
+          </article>
+        `;
+      })
+      .join("");
+    return `
+      <div class="proof-market-split">${cards}</div>
+      <p class="muted">Markets stay separated so totals, BTTS, result, and TG1.5 proof are never blended into one vague headline.</p>
+    `;
+  };
+
+  const renderResultsMarketSplit = (weekly = {}) => {
+    const weeklyMarketRollups = (weekly.by_market || []).reduce((acc, item) => {
+      acc[marketLabelCanonical(item.market)] = item;
+      return acc;
+    }, {});
+    return `
+      <div class="stats-grid">
+        ${["FTR", "BTTS", "OU25", "TG1.5"]
+          .map((market) => {
+            const item = weeklyMarketRollups[market] || {
+              market,
+              hit_rate: null,
+              settled_picks: 0,
+              total_picks: 0,
+            };
+            return `
+              <article class="panel market-proof-card market-proof-card--${resultsStatusTone(item.hit_rate)}">
+                <span class="muted">${escapeHtml(market)}</span>
+                <strong>${escapeHtml(item.hit_rate == null ? "Pending" : compactPercent(item.hit_rate))}</strong>
+                <span>${escapeHtml(`${item.settled_picks || 0}/${item.total_picks || 0} settled`)}</span>
+              </article>
+            `;
+          })
+          .join("")}
+      </div>
+    `;
+  };
+
   const homeView = () => {
     const publicDeskRows = [...state.fixtureIntelligence]
       .sort((left, right) => {
@@ -3611,30 +3916,31 @@
     <section class="hero">
       <div class="hero-main">
         <div class="hero-copy-stack">
-          <p class="hero-kicker">Prediction intelligence system</p>
-          <h1>Signal over noise.</h1>
+          <p class="hero-kicker">Sports Prediction Intelligence System</p>
+          <h1>Football v0.12</h1>
           <p>
-            Odds Genius is a calm football intelligence surface built to help users think better under uncertainty.
-            It combines selective deployment, bookmaker value, and goal-shape reading without turning every fixture
-            into a forced bet.
+            OG Founder Early Access is the World Cup + pre-season edition of Odds Genius: public proof, premium fixture context,
+            market intelligence, and beta player-event surfaces without turning the product into a tips feed.
           </p>
           <div class="pill-row">
-            <span class="stat-chip">Better decisions, not more bets</span>
-            <span class="stat-chip">Clarity under uncertainty</span>
-            <span class="stat-chip">Selective deployment only</span>
+            <span class="stat-chip">FTR</span>
+            <span class="stat-chip">BTTS</span>
+            <span class="stat-chip">Over 2.5 goals</span>
+            <span class="stat-chip">TG1.5</span>
+            <span class="stat-chip">Goal market combos</span>
           </div>
           <div class="hero-actions">
             <a class="button" href="./matches.html">Open matches desk</a>
             <a class="ghost-button" href="./results.html">See proof</a>
-            <a class="ghost-button" href="./premium.html">Unlock premium</a>
+            <a class="ghost-button" href="./pricing.html">Founder early access</a>
           </div>
           <p class="footer-note">Historical walk-forward validation. Not a guarantee of future results.</p>
         </div>
         <div class="proof-command">
           <div class="section-head home-proof-head">
             <div>
-              <h2>ELITE / PREMIUM system performance</h2>
-              <p class="section-copy">Benchmark-safe proof across the current production intelligence stack.</p>
+              <h2>Walk-forward proof, not vibes</h2>
+              <p class="section-copy">Benchmark-safe proof across the current football intelligence stack, with live public results settled separately.</p>
             </div>
             <span class="pill">139 rolling windows</span>
           </div>
@@ -3661,27 +3967,85 @@
             <article class="system-row system-row-founder">
               <span class="metric-label">OG Founder</span>
               <strong>£20/mo for life while active</strong>
-              <p class="muted">First 250 users. Early access to new markets and selected future systems.</p>
+              <p class="muted">World Cup + pre-season early access for the first 250 users.</p>
               <a class="button button-small" href="./pricing.html">Claim founder pricing</a>
             </article>
             <article class="system-row">
-              <span class="metric-label">Production core</span>
-              <strong>FTR • BTTS • Over 2.5 • Value edge overlays</strong>
-              <p class="muted">Dominant team over 1.5 goals is emerging as the cleanest next commercial lane.</p>
+              <span class="metric-label">What it predicts</span>
+              <strong>Match result, goal shape, team goals, and value posture</strong>
+              <p class="muted">Each fixture gets a deploy, observe, monitor, or pass state instead of a forced pick.</p>
             </article>
             <article class="system-row">
-              <span class="metric-label">Weekly production</span>
-              <strong>65+ picks every week, year-round</strong>
-              <p class="muted">Lowest reported weekly accuracy 87%. Average 92% across the current stack.</p>
+              <span class="metric-label">Why trust it</span>
+              <strong>Walk-forward record plus public live settlement</strong>
+              <p class="muted">Wins, losses, voids, and pending rows are separated by market and tier.</p>
             </article>
             <article class="system-row system-row-soon">
-              <span class="metric-label">Coming soon</span>
+              <span class="metric-label">Beta surfaces</span>
               <strong>Player events</strong>
-              <p class="muted">Shots, tackles, fouls, and bookings as the next controlled intelligence layer.</p>
+              <p class="muted">Shots, SOT, tackles, fouls, player fouled, key passes, saves, corners, and bookings.</p>
             </article>
           </div>
         </article>
       </aside>
+    </section>
+
+    ${worldCupFounderModule()}
+
+    <section class="section split">
+      ${launchCapabilityGrid(
+        "Models",
+        [
+          { label: "FTR", detail: "Home / draw / away posture" },
+          { label: "BTTS", detail: "Two-way scoring pressure" },
+          { label: "Over 2.5", detail: "Match goal total shape" },
+          { label: "TG1.5", detail: "Team over 1.5 support" },
+          { label: "Goal combos", detail: "Aligned market families" },
+        ],
+        "Public pages show the approved signal. Premium adds the fixture intelligence behind the read."
+      )}
+      ${launchCapabilityGrid(
+        "Player Events",
+        [
+          "Shots",
+          "Shots on Target",
+          "Tackles",
+          "Fouls",
+          "Player Fouled",
+          "Key Passes",
+          "Goalkeeper Saves",
+          "Corners",
+          "Bookings",
+        ],
+        "Player-event surfaces are beta intelligence cards for review, not public-priced prop tips."
+      )}
+    </section>
+
+    <section class="section split">
+      <article class="panel featured-proof-panel">
+        <span class="metric-label">Recent public live results</span>
+        <h3>Settled outcomes stay visible.</h3>
+        ${recentResultPreview(state.liveResultsFeed)}
+        <div class="cta-row">
+          <a class="button" href="./results.html">Open results page</a>
+        </div>
+      </article>
+      <article class="panel">
+        <span class="metric-label">Founder Early Access</span>
+        <h3>World Cup + pre-season edition.</h3>
+        <p class="muted">
+          Founder access is a discounted early seat for the football intelligence system: core fixture reads,
+          proof archive, premium market posture, and selected beta surfaces as they harden.
+        </p>
+        <ul class="method-list">
+          <li>Free users see public proof and a limited board.</li>
+          <li>Founder/Premium users see the core premium fixture intelligence.</li>
+          <li>Pro and Pro+ expand into player events, filters, downloads, and audit-style dashboards.</li>
+        </ul>
+        <div class="cta-row">
+          <a class="button" href="./pricing.html">See access tiers</a>
+        </div>
+      </article>
     </section>
 
     <section class="section split">
@@ -6747,6 +7111,16 @@
     return "pending";
   };
 
+  const resultScoreLabel = (item = {}) => {
+    if (item.score) return item.score;
+    const home = item.final_home_score;
+    const away = item.final_away_score;
+    if (home !== null && home !== undefined && away !== null && away !== undefined) {
+      return `${home}-${away}`;
+    }
+    return "Score pending";
+  };
+
   const feedPercent = (value) => (value == null || Number.isNaN(Number(value)) ? "Pending" : compactPercent(Number(value)));
 
   const resultSummaryCopy = (summary) => {
@@ -6774,17 +7148,17 @@
                   <span class="result-status-pill result-status-pill-${escapeHtml(tone)}">${escapeHtml(resultOutcomeLabel(item.result_status))}</span>
                   <div>
                     <strong>${escapeHtml(item.home_team)} vs ${escapeHtml(item.away_team)}</strong>
-                    <p class="muted">${escapeHtml(item.league || "League")} · ${escapeHtml(item.score || "Score pending")}</p>
+                    <p class="muted">${escapeHtml(item.league || "League")} · ${escapeHtml(resultScoreLabel(item))}</p>
                   </div>
                 </div>
                 <div class="public-result-pick">
                   <span class="metric-label">${escapeHtml(`${item.market || "Market"} · ${item.tier || "Tier"}`)}</span>
                   <strong>${escapeHtml(item.pick || "Pick")}</strong>
-                  <span class="muted">Actual ${escapeHtml(item.actual || "pending")}</span>
+                  <span class="muted">Actual ${escapeHtml(item.actual || "pending")}${item.bookie_od ? ` · Odds ${escapeHtml(item.bookie_od)}` : ""}</span>
                 </div>
                 <div class="public-result-signal">
                   <span class="metric-label">${isObserve ? "Watchlist" : "Model + intelligence"}</span>
-                  <span>${escapeHtml(signal || (isObserve ? "Observe only" : "Deploy row"))}</span>
+                  <span>${escapeHtml(signal || (item.profit_units != null ? `${Number(item.profit_units) >= 0 ? "+" : ""}${item.profit_units}u` : isObserve ? "Observe only" : "Deploy row"))}</span>
                 </div>
               </article>
             `;
@@ -6817,16 +7191,21 @@
       })
       .join("");
 
-    const marketCards = (primaryWindow.by_market || [])
-      .map(
-        (item) => `
+    const marketRollupMap = (primaryWindow.by_market || []).reduce((acc, item) => {
+      acc[marketLabelCanonical(item.market)] = item;
+      return acc;
+    }, {});
+    const marketCards = ["FTR", "BTTS", "OU25", "TG1.5"]
+      .map((market) => {
+        const item = marketRollupMap[market] || { market, hit_rate: null, wins: 0, settled: 0, rows: 0 };
+        return `
           <article class="panel market-proof-card market-proof-card--${resultsStatusTone(item.hit_rate)}">
-            <span class="muted">${escapeHtml(item.market)}</span>
+            <span class="muted">${escapeHtml(market)}</span>
             <strong>${escapeHtml(feedPercent(item.hit_rate))}</strong>
-            <span>${escapeHtml(`${item.wins}/${item.settled} settled`)}</span>
+            <span>${escapeHtml(`${item.wins || 0}/${item.settled || 0} settled`)}</span>
           </article>
-        `
-      )
+        `;
+      })
       .join("");
 
     return `
@@ -6913,8 +7292,9 @@
 
   const resultsView = () => {
     const weekly = state.weeklyResults;
+    const archive = state.resultsArchive;
     const liveFeed = state.liveResultsFeed;
-    if (liveFeed?.windows?.length) {
+    if (!weekly && liveFeed?.windows?.length) {
       return liveResultsView(liveFeed, weekly);
     }
     if (!weekly) {
@@ -6941,22 +7321,32 @@
         </section>
         <section class="section">
           <div class="notice">
-            Run grade_weekend_results.py after settled outcomes are available to publish weekly proof.
+            Run python3 scripts/publish_results_proof.py after settled outcomes are available to publish weekly proof.
           </div>
         </section>
       `;
     }
 
-    const marketCards = weekly.by_market
-      .map(
-        (item) => `
+    const weeklyMarketRollups = (weekly.by_market || []).reduce((acc, item) => {
+      acc[marketLabelCanonical(item.market)] = item;
+      return acc;
+    }, {});
+    const marketCards = ["FTR", "BTTS", "OU25", "TG1.5"]
+      .map((market) => {
+        const item = weeklyMarketRollups[market] || {
+          market,
+          hit_rate: null,
+          settled_picks: 0,
+          total_picks: 0,
+        };
+        return `
           <article class="panel market-proof-card market-proof-card--${resultsStatusTone(item.hit_rate)}">
-            <span class="muted">${escapeHtml(item.market)}</span>
+            <span class="muted">${escapeHtml(market)}</span>
             <strong>${escapeHtml(item.hit_rate == null ? "Pending" : `${Math.round(item.hit_rate * 100)}%`)}</strong>
-            <span>${escapeHtml(`${item.settled_picks}/${item.total_picks} settled`)}</span>
+            <span>${escapeHtml(`${item.settled_picks || 0}/${item.total_picks || 0} settled`)}</span>
           </article>
-        `
-      )
+        `;
+      })
       .join("");
 
     const tierCards = weekly.by_tier
@@ -6985,14 +7375,18 @@
             .join("")
         : `<li>${escapeHtml(emptyLabel)}</li>`;
 
+    const recentRows = [...(weekly.items || [])]
+      .sort((left, right) => String(right.kickoff_time || "").localeCompare(String(left.kickoff_time || "")))
+      .slice(0, 16);
+
     return `
       <section class="section split">
         <article class="hero-main">
           <p class="hero-kicker">Weekly Proof</p>
           <h1>Settled board proof.</h1>
           <p>
-            Public-safe weekly proof generated from scored deploy outputs. Use this page to evaluate settled
-            performance, not hype.
+            Public-safe weekly proof generated from published picks and final provider results. Every row is
+            automatically graded as won, lost, void, or pending.
           </p>
           <p class="section-copy">Results are published independently from predictions.</p>
         </article>
@@ -7020,6 +7414,16 @@
           ${statPanel("Pending picks", weekly.pending_picks, "Awaiting graded resolution")}
           ${statPanel("Hit rate", weekly.overall_hit_rate == null ? "Pending" : compactPercent(weekly.overall_hit_rate), weekly.generated_at.slice(0, 10))}
         </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>Recent graded picks</h2>
+            <p class="section-copy">The public proof ledger. Winning selections carry a mint border, losing selections carry an orange/red border, pending and void rows stay neutral.</p>
+          </div>
+        </div>
+        ${renderResultFeedItems(recentRows, 16)}
       </section>
 
       <section class="section">
@@ -7057,6 +7461,35 @@
         </article>
       </section>
 
+      ${
+        archive
+          ? `<section class="section">
+              <div class="section-head">
+                <div>
+                  <h2>Archive context</h2>
+                  <p class="section-copy">Cumulative idempotent archive across previous published proof windows.</p>
+                </div>
+              </div>
+              <div class="results-highlight results-highlight--four">
+                ${statPanel("Archive picks", archive.total_picks || 0, `${archive.period_start || ""} → ${archive.period_end || ""}`)}
+                ${statPanel("Archive settled", archive.settled_picks || 0, `${archive.pending_picks || 0} pending`)}
+                ${statPanel("Archive hit rate", archive.overall_hit_rate == null ? "Pending" : compactPercent(archive.overall_hit_rate), `${archive.wins || 0}/${archive.settled_picks || 0} settled`)}
+                ${statPanel("Archive ROI", archive.overall_roi == null ? "Pending" : compactPercent(archive.overall_roi), `${archive.overall_profit_units || 0} units`)}
+              </div>
+            </section>`
+          : ""
+      }
+
+      ${
+        liveFeed?.windows?.length
+          ? `<section class="section">
+              <div class="notice">
+                Older live proof feed is still available as supporting context, but the primary public proof source is now the automated weekly/archive settlement JSON.
+              </div>
+            </section>`
+          : ""
+      }
+
       <section class="section">
         <div class="notice">
           ${(weekly.notes || []).map((note) => escapeHtml(note)).join("<br />") || "No additional notes."}
@@ -7071,7 +7504,7 @@
           <p class="hero-kicker">Pricing</p>
           <h1>Choose your intelligence level.</h1>
           <p>
-            Start free. Secure founder pricing before the main Pro ladder expands.
+            Start free. Secure OG Founder Early Access before the Premium, Pro, and Pro+ ladder expands.
           </p>
           <div class="pill-row">
             <span class="stat-chip">Worker-protected access</span>
@@ -7086,6 +7519,10 @@
         <div class="metric">
           <span class="metric-label">Plan</span>
           <span class="metric-value">OG Founder</span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Launch window</span>
+          <span class="metric-value">World Cup + pre-season</span>
         </div>
         <div class="metric">
           <span class="metric-label">Founder pricing</span>
@@ -7117,16 +7554,14 @@
           <span class="pricing-ribbon">First 250 users</span>
           <span class="pricing-tag">OG Founder</span>
           <div class="pricing-price">£20<span class="pricing-price-note">/month</span></div>
-          <p class="pricing-subcopy">Fixed founder pricing while active. Full deployable board access, founder-only upside, and early access to selected advanced systems.</p>
+          <p class="pricing-subcopy">Discounted early access to the core premium fixture intelligence while the launch system hardens.</p>
           <ul class="feature-list">
-            <li>Full deployable board.</li>
-            <li>ELITE and STANDARD signals.</li>
-            <li>Full value-edge layer.</li>
-            <li>Correct score shortlist support.</li>
-            <li>Acca safety indicators.</li>
+            <li>Core premium fixture intelligence.</li>
+            <li>Model cards and market posture.</li>
+            <li>Results archive and proof context.</li>
+            <li>Founder-only discounted access while active.</li>
             <li>Protected Worker-backed access.</li>
-            <li>Early access to new markets.</li>
-            <li>Early access to selected future systems.</li>
+            <li>Selected beta surfaces as they become safe to expose.</li>
           </ul>
           <div class="notice founder-guardrail">
             £20/month for life while active. Non-transferable. Founder pricing ends after the first 250 users.
@@ -7134,6 +7569,39 @@
           <div class="cta-row">
             ${checkoutCta().replace("Unlock founding membership", "Secure founder access")}
           </div>
+        </article>
+        <article class="card pricing-card pricing-card-pro">
+          <span class="pricing-tag">Premium</span>
+          <div class="pricing-price">£49<span class="pricing-price-note">/month</span></div>
+          <p class="pricing-subcopy">The standard paid intelligence layer once Founder closes.</p>
+          <ul class="feature-list">
+            <li>Model cards and fixture reads.</li>
+            <li>Results archive.</li>
+            <li>Market posture and pass/no-edge context.</li>
+            <li>Premium route gating.</li>
+          </ul>
+        </article>
+        <article class="card pricing-card pricing-card-pro">
+          <span class="pricing-tag">Pro</span>
+          <div class="pricing-price">£99<span class="pricing-price-note">/month</span></div>
+          <p class="pricing-subcopy">Expanded football intelligence for users who want deeper context.</p>
+          <ul class="feature-list">
+            <li>Player-event beta cards.</li>
+            <li>Deeper team and player intelligence.</li>
+            <li>Goal-combo and TG1.5 context.</li>
+            <li>Expert expandable panels.</li>
+          </ul>
+        </article>
+        <article class="card pricing-card pricing-card-pro-plus">
+          <span class="pricing-tag">Pro+</span>
+          <div class="pricing-price">£500<span class="pricing-price-note">/month</span></div>
+          <p class="pricing-subcopy">Audit-style workflow layer for serious operators.</p>
+          <ul class="feature-list">
+            <li>Advanced filters and audit dashboards.</li>
+            <li>Downloadable intelligence.</li>
+            <li>Operational freshness and coverage views.</li>
+            <li>B2B/API path later.</li>
+          </ul>
         </article>
       </div>
       <div class="pricing-band">
@@ -7143,13 +7611,13 @@
         </article>
         <article class="pricing-band-card">
           <span class="metric-label">Expansion path</span>
-          <strong>Selected future systems and new markets unlocked earlier</strong>
+          <strong>World Cup + pre-season edition of the core premium product</strong>
         </article>
       </div>
       <div class="section-head pricing-matrix-head">
         <div>
-          <h2>Technical matrix comparison</h2>
-          <p class="section-copy">Useful for quickly seeing what the free board proves versus what founder access actually unlocks.</p>
+          <h2>Tier visibility contract</h2>
+          <p class="section-copy">What each access level is intended to see at launch.</p>
         </div>
       </div>
       <div class="table-shell pricing-matrix-shell">
@@ -7159,38 +7627,59 @@
               <th>Feature detail</th>
               <th>Free tier</th>
               <th>OG Founder</th>
+              <th>Premium</th>
+              <th>Pro</th>
+              <th>Pro+</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>Board scope</td>
               <td>Limited public board</td>
-              <td>Full deployable board</td>
+              <td>Core premium fixture intelligence</td>
+              <td>Core premium fixture intelligence</td>
+              <td>Full premium plus player-event context</td>
+              <td>Full premium plus audit views</td>
             </tr>
             <tr>
-              <td>Signal depth</td>
-              <td>Rounded confidence and rounded edge display</td>
-              <td>Full value-edge layer and premium explanation</td>
+              <td>Proof layer</td>
+              <td>Public results and methodology</td>
+              <td>Results archive and market split</td>
+              <td>Results archive and market split</td>
+              <td>Results archive and deeper filters</td>
+              <td>Audit-style result dashboards</td>
             </tr>
             <tr>
-              <td>Shortlist support</td>
-              <td>No shortlist or premium context</td>
-              <td>Correct score shortlist support</td>
+              <td>Fixture intelligence</td>
+              <td>Public-safe summary only</td>
+              <td>Market cards, fixture reads, posture</td>
+              <td>Market cards, fixture reads, posture</td>
+              <td>Team/player depth and combos</td>
+              <td>Advanced filters and downloads</td>
             </tr>
             <tr>
-              <td>Slip support</td>
-              <td>Public board only</td>
-              <td>Acca safety indicators</td>
+              <td>Player events</td>
+              <td>Not included</td>
+              <td>Selected beta previews only</td>
+              <td>Selected beta previews only</td>
+              <td>Player-event intelligence cards</td>
+              <td>Player-event filters and exports</td>
             </tr>
             <tr>
-              <td>Protection layer</td>
+              <td>Account state</td>
               <td>Static public access</td>
               <td>Protected access through live Worker entitlement</td>
+              <td>Protected access through live Worker entitlement</td>
+              <td>Protected access through live Worker entitlement</td>
+              <td>Protected access plus billing/admin workflow</td>
             </tr>
             <tr>
-              <td>Founder upside</td>
+              <td>Future path</td>
               <td>None</td>
-              <td>Early markets and selected advanced-system access</td>
+              <td>Discounted while active</td>
+              <td>Standard paid access</td>
+              <td>Advanced football intelligence</td>
+              <td>B2B/API and licensing later</td>
             </tr>
           </tbody>
         </table>
@@ -7198,9 +7687,9 @@
       <section class="pricing-visual-note">
         <article class="pricing-visual-card">
           <span class="metric-label">Founder access</span>
-          <h2>Founder pricing now. Pro ladder later.</h2>
+          <h2>Founder pricing now. Premium ladder next.</h2>
           <p class="section-copy">
-            OG Founder sits above the free board and below the future Pro ladder. It gives the first cohort more than a normal entry tier without promising unlimited access to every future product line.
+            OG Founder sits above the free board and maps to the core premium fixture intelligence contract. Pro, Pro+, Syndicate, and B2B/API can expand later without muddying launch access.
           </p>
         </article>
       </section>
@@ -7223,48 +7712,124 @@
     </section>
   `;
 
-  const methodologyView = () => `
-    <section class="section split">
-      <article class="hero-main">
-        <p class="hero-kicker">Methodology</p>
-        <h1>Built on generated outputs, not frontend guesswork.</h1>
-        <p>
-          Odds Genius does not re-run model logic in the browser. The website displays approved exports from the
-          live deployment engine.
-        </p>
-        <p class="section-copy">
-          The live shell reflects historical walk-forward validation across 139 rolling windows and a wider
-          28-competition research estate, while only benchmark-safe production markets are presented as commercial proof.
-        </p>
-      </article>
-      <aside class="hero-side">
-        <div class="metric">
-          <span class="metric-label">Public schema fields</span>
-          <span class="metric-value">${state.summary.public_fields.length}</span>
+  const methodologyView = () => {
+    const summary = state.summary || {};
+    const weekly = state.weeklyResults || {};
+    const settled = Number(weekly.settled_picks || 0);
+    const pending = Number(weekly.pending_picks || 0);
+    const weeklyHitRate = weekly.overall_hit_rate == null ? "Pending" : compactPercent(weekly.overall_hit_rate);
+    const generatedAt = weekly.generated_at || summary.generated_at || "";
+    return `
+      <section class="section split">
+        <article class="hero-main">
+          <p class="hero-kicker">Methodology</p>
+          <h1>Walk-forward validation and live proof are separate.</h1>
+          <p>
+            Odds Genius does not re-run model logic in the browser. The website displays approved exports from the
+            deployment and publishing pipeline, then settles published picks against final results.
+          </p>
+          <p class="section-copy">
+            Walk-forward validation explains how the system behaved across historical rolling windows. Live proof shows what was actually published and then graded in public.
+          </p>
+          <div class="cta-row">
+            <a class="button" href="./results.html">Open live proof</a>
+            <a class="ghost-button" href="./pricing.html">Founder access</a>
+          </div>
+        </article>
+        <aside class="hero-side">
+          <div class="metric">
+            <span class="metric-label">Weekly live hit rate</span>
+            <span class="metric-value">${escapeHtml(weeklyHitRate)}</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Settled / pending</span>
+            <span class="metric-value">${escapeHtml(`${settled} / ${pending}`)}</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Last proof update</span>
+            <span class="metric-value">${escapeHtml(formatDateTime(generatedAt) || "Pending")}</span>
+          </div>
+        </aside>
+      </section>
+
+      <section class="section split">
+        <article class="panel featured-proof-panel">
+          <span class="metric-label">Walk-forward validation</span>
+          <h3>Historical replay before launch claims.</h3>
+          <p class="muted">
+            Walk-forward tests replay the system through rolling historical windows so each window is judged on data that would have been available at that point. This is research proof, not a promise that the next fixture will behave the same way.
+          </p>
+          <div class="proof-strip">
+            ${proofTile("Rolling windows", "139", "Historical validation estate")}
+            ${proofTile("Competitions", "28", "Research coverage")}
+          </div>
+        </article>
+        <article class="panel">
+          <span class="metric-label">Live public proof</span>
+          <h3>Published first, graded later.</h3>
+          <p class="muted">
+            Live proof only counts rows that were published to the site before settlement. Each pick becomes won, lost, void, or pending from the settlement pipeline.
+          </p>
+          <ul class="method-list">
+            <li>Pending picks remain visible until final results are available.</li>
+            <li>Void picks stay separate from wins and losses.</li>
+            <li>FTR, BTTS, OU25, and TG1.5 are reported separately.</li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>What the site is allowed to show</h2>
+            <p class="section-copy">The public product is an export surface. It shows approved intelligence, proof, and premium context without exposing private model files or pipeline internals.</p>
+          </div>
         </div>
-        <div class="metric">
-          <span class="metric-label">Premium schema fields</span>
-          <span class="metric-value">${state.summary.premium_fields.length}</span>
+        <div class="card-grid">
+          <article class="panel">
+            <h3>Pipeline boundary</h3>
+            <p class="muted">Ingest, enrichment, routing, and settlement stay in controlled scripts. The browser reads website-safe JSON only.</p>
+          </article>
+          <article class="panel">
+            <h3>Decision stack</h3>
+            <p class="muted">Signals can deploy, observe, monitor, or pass. The system is not designed to force a pick on every fixture.</p>
+          </article>
+          <article class="panel">
+            <h3>Commercial proof</h3>
+            <p class="muted">Founder access is sold on public proof, premium fixture context, and disciplined market posture, not guaranteed outcomes.</p>
+          </article>
         </div>
-      </aside>
-    </section>
-    <section class="section">
-      <div class="card-grid">
+      </section>
+
+      <section class="section split">
         <article class="panel">
-          <h3>Pipeline boundary</h3>
-          <p class="muted">Built on generated outputs, not frontend guesswork. Ingest, enrichment, routing, and slip logic remain in Python.</p>
+          <span class="metric-label">Market discipline</span>
+          <h3>No blended proof headline.</h3>
+          <p class="muted">
+            Football markets behave differently, so the public stats keep match result, both-teams-to-score, match totals, and team-goal lines apart.
+          </p>
+          ${renderResultsMarketSplit(weekly)}
         </article>
         <article class="panel">
-          <h3>Decision stack</h3>
-          <p class="muted">The system combines independent modelling approaches and only publishes signals that pass probability, structure, value, goal-shape, and stability checks.</p>
+          <span class="metric-label">Schema boundary</span>
+          <h3>Free and premium payloads are different.</h3>
+          <div class="prediction-meta-grid dashboard-odds-grid">
+            <div class="signal-cell signal-cell-model">
+              <span class="signal-label">Public fields</span>
+              <span class="signal-value">${escapeHtml(String((summary.public_fields || []).length || 0))}</span>
+              <span class="muted">Free board and proof surfaces</span>
+            </div>
+            <div class="signal-cell signal-cell-model">
+              <span class="signal-label">Premium fields</span>
+              <span class="signal-value">${escapeHtml(String((summary.premium_fields || []).length || 0))}</span>
+              <span class="muted">Worker-gated intelligence payload</span>
+            </div>
+          </div>
+          <p class="footer-note">Historical performance and live settlement are informational. They are not financial advice and do not guarantee future results.</p>
         </article>
-        <article class="panel">
-          <h3>Final line</h3>
-          <p class="muted">Odds Genius is not built to predict every game. It is built to identify when the market is wrong.</p>
-        </article>
-      </div>
-    </section>
-  `;
+      </section>
+    `;
+  };
 
   const accountView = () => {
     const checkoutNotice =
@@ -9110,121 +9675,64 @@
             ${fixtureSummaryNotice}
             <div class="fixture-detail-grid">
               <article class="panel">
-                <h3>BAWA PORTO read</h3>
+                <h3>Publish-safe stats</h3>
                 <div class="prediction-meta-grid dashboard-odds-grid">
                   <div class="signal-cell signal-cell-model">
-                    <span class="signal-label">Verdict</span>
-                    <span class="signal-value">${escapeHtml(verdictLabel)}</span>
+                    <span class="signal-label">Fixture key</span>
+                    <span class="signal-value">${escapeHtml(fixture.fixture_key || fixture.fixture_id || "Pending")}</span>
                   </div>
                   <div class="signal-cell signal-cell-model">
-                    <span class="signal-label">Confidence</span>
-                    <span class="signal-value">${escapeHtml(confidenceBandDisplay(confidenceTier))}</span>
+                    <span class="signal-label">Provider fixture</span>
+                    <span class="signal-value">${escapeHtml(String(fixture.api_fixture_id || "Unmapped"))}</span>
                   </div>
                   <div class="signal-cell signal-cell-model">
-                    <span class="signal-label">Signal strength</span>
-                    <span class="signal-value">${escapeHtml(signalStrengthDisplay(fixture.signal_summary?.signal_strength))}</span>
+                    <span class="signal-label">League id</span>
+                    <span class="signal-value">${escapeHtml(String(fixture.api_league_id || "Unmapped"))}</span>
                   </div>
                   <div class="signal-cell signal-cell-model">
-                    <span class="signal-label">Edge posture</span>
-                    <span class="signal-value">${escapeHtml(valueEdgeDisplay(fixture))}</span>
+                    <span class="signal-label">Season</span>
+                    <span class="signal-value">${escapeHtml(String(fixture.api_season || "Pending"))}</span>
                   </div>
                   <div class="signal-cell signal-cell-model">
-                    <span class="signal-label">Support notes</span>
-                    <span class="signal-value">${escapeHtml(`${notes.length} published`)}</span>
+                    <span class="signal-label">Snapshot phase</span>
+                    <span class="signal-value">${escapeHtml(safeTitleLabel(fixture.snapshot_phase || "Pending"))}</span>
                   </div>
                   <div class="signal-cell signal-cell-model">
-                    <span class="signal-label">Context tags</span>
-                    <span class="signal-value">${escapeHtml((fixture.signal_summary?.context_tags || []).length ? `${fixture.signal_summary.context_tags.length} active` : "None published")}</span>
+                    <span class="signal-label">Coverage</span>
+                    <span class="signal-value">${escapeHtml(safeTitleLabel(fixture.coverage_status || "Pending"))}</span>
                   </div>
                 </div>
                 <div class="fixture-stats-note">
-                  <span class="metric-label">Public-safe model frame</span>
-                  <p class="muted">This is the approved public model layer for the fixture: verdict, confidence, strength, and caution structure. Raw model probabilities stay private outside premium and internal review tooling.</p>
+                  <span class="metric-label">Stats tab ownership</span>
+                  <p class="muted">This tab is now for data identity, freshness, and coverage. Prediction language stays in Prediction; bookmaker posture stays in Markets.</p>
                 </div>
               </article>
               <article class="panel">
-                <h3>Active market comparison</h3>
+                <h3>Freshness metadata</h3>
                 <div class="prediction-meta-grid dashboard-odds-grid">
-                  <div class="signal-cell signal-cell-market">
-                    <span class="signal-label">Active line</span>
-                    <span class="signal-value">${escapeHtml(`${marketLine.label} • ${bookmakerLineDisplay(marketLine.odds)}`)}</span>
-                    <span class="muted">${escapeHtml(impliedLineDisplay(marketLine.odds))}</span>
-                  </div>
-                  <div class="signal-cell signal-cell-market">
-                    <span class="signal-label">Opposition</span>
-                    <span class="signal-value">${escapeHtml(`${alternativeLine.label} • ${bookmakerLineDisplay(alternativeLine.odds)}`)}</span>
-                    <span class="muted">${escapeHtml(impliedLineDisplay(alternativeLine.odds))}</span>
-                  </div>
-                  <div class="signal-cell signal-cell-market">
-                    <span class="signal-label">Snapshot</span>
-                    <span class="signal-value">${escapeHtml(String(odds.odds_snapshot_status || "unknown").replace(/_/g, " "))}</span>
-                    <span class="muted">${escapeHtml(fixture.league)}</span>
-                  </div>
-                  <div class="signal-cell signal-cell-market">
-                    <span class="signal-label">Active family</span>
-                    <span class="signal-value">${escapeHtml(marketFamilyDisplay(fixture.signal_summary?.market_family) || "Market frame pending")}</span>
-                    <span class="muted">${escapeHtml(verdictLabel)}</span>
-                  </div>
-                  <div class="signal-cell signal-cell-market">
-                    <span class="signal-label">Confidence band</span>
-                    <span class="signal-value">${escapeHtml(confidenceBandDisplay(confidenceTier))}</span>
-                    <span class="muted">${escapeHtml(signalStrengthDisplay(fixture.signal_summary?.signal_strength))}</span>
-                  </div>
-                  <div class="signal-cell signal-cell-market">
-                    <span class="signal-label">Edge posture</span>
-                    <span class="signal-value edge-tone-${escapeHtml(valueEdgeTone(fixture))}">${escapeHtml(valueEdgeDisplay(fixture))}</span>
-                    <span class="muted">${escapeHtml(notes.length ? `${notes.length} caution note${notes.length === 1 ? "" : "s"}` : "No caution notes published")}</span>
-                  </div>
+                  ${fixtureFreshnessMeta(
+                    fixture,
+                    state.selectedFixtureDecisionIntelligence || null,
+                    state.selectedFixtureLineupIntelligence || null,
+                    state.selectedFixtureDecisionSupport?.h2hSupport || null
+                  )
+                    .map(
+                      (entry) => `
+                        <div class="signal-cell signal-cell-market">
+                          <span class="signal-label">${escapeHtml(entry.label)}</span>
+                          <span class="signal-value">${escapeHtml(entry.value)}</span>
+                          <span class="muted">${escapeHtml(entry.note)}</span>
+                        </div>
+                      `
+                    )
+                    .join("")}
                 </div>
-                ${compactMarketBarMarkup({
-                  activeLabel: marketLine.label,
-                  activeOdds: marketLine.odds,
-                  oppositionLabel: alternativeLine.label,
-                  oppositionOdds: alternativeLine.odds,
-                  tone: valueEdgeTone(fixture),
-                })}
                 <div class="fixture-stats-note">
-                  <span class="metric-label">Market framing</span>
-                  <p class="muted">The active line and its best available opposition are shown side by side so the deploy read stays anchored to a real bookmaker price rather than a floating verdict.</p>
+                  <span class="metric-label">Automation state</span>
+                  <p class="muted">If a timestamp is unavailable, the UI shows the fallback state rather than pretending the layer is fresher than the published payload.</p>
                 </div>
               </article>
             </div>
-          </section>
-          <section class="section split">
-            <article class="panel">
-              <h3>Market structure</h3>
-              <div class="card-grid market-structure-grid">
-                ${marketStructure
-                  .map(
-                    (entry) => `
-                      <article class="signal-cell ${entry.key === String(fixture.signal_summary?.market_family || "").toUpperCase() ? "signal-cell-market-active" : "signal-cell-market"}">
-                        <span class="signal-label">${escapeHtml(entry.label)}</span>
-                        <span class="signal-value">${escapeHtml(entry.value)}</span>
-                        <span class="muted">${escapeHtml(entry.meta)}</span>
-                        ${marketStructureBarMarkup(entry, entry.key === String(fixture.signal_summary?.market_family || "").toUpperCase())}
-                      </article>
-                    `
-                  )
-                  .join("")}
-              </div>
-              <p class="muted">This is the rounded bookmaker map around the fixture. It shows which family the deploy sits in, while keeping neighbouring reference markets visible.</p>
-            </article>
-            <article class="panel">
-              <h3>Support and caution</h3>
-              ${
-                notes.length
-                  ? `<ul class="feature-list">${notes.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}</ul>`
-                  : `<div class="notice">No caution or support notes are currently published for this fixture.</div>`
-              }
-              <div class="fixture-stats-note">
-                <span class="metric-label">What is public here</span>
-                <ul class="feature-list compact-list">
-                  <li>Rounded odds and implied pricing.</li>
-                  <li>Approved deploy verdict, not raw model probability.</li>
-                  <li>Public-safe caution framing from the active export.</li>
-                </ul>
-              </div>
-            </article>
           </section>
         `;
       }
@@ -9392,7 +9900,14 @@
       ${renderFixtureWeatherContext(fixture)}
       ${renderFixtureHeroMedia(fixture)}
       ${renderFixturePredictionDeck(fixture, clarity, matchedEntry, publishClass)}
+      ${fixtureMarketCardsMarkup(fixture, state.selectedFixtureDecisionIntelligence || null)}
       ${renderFixtureCoverageTruthStrip(
+        fixture,
+        state.selectedFixtureDecisionIntelligence || null,
+        state.selectedFixtureLineupIntelligence || null,
+        state.selectedFixtureDecisionSupport?.h2hSupport || null
+      )}
+      ${renderFixtureFreshnessPanel(
         fixture,
         state.selectedFixtureDecisionIntelligence || null,
         state.selectedFixtureLineupIntelligence || null,
@@ -11779,12 +12294,14 @@
         fetchOptionalJson(`${DATA_ROOT}/fixture_h2h_support/index.json`),
       ]);
       const weeklyResults = await fetchOptionalJson(`${DATA_ROOT}/weekly_results.json`);
+      const resultsArchive = await fetchOptionalJson(`${DATA_ROOT}/results_archive.json`);
       const liveResultsFeed = await fetchOptionalJson(`${DATA_ROOT}/live_results_feed.json`);
       const fixtureIntelligenceRows = await loadFixtureIntelligenceRows();
       state.summary = summary;
       state.publicPredictions = publicPredictions;
       state.premiumPredictions = Array.isArray(premiumPredictions) ? premiumPredictions : [];
       state.weeklyResults = weeklyResults;
+      state.resultsArchive = resultsArchive;
       state.liveResultsFeed = liveResultsFeed;
       state.fixtureIntelligence = fixtureIntelligenceRows;
       state.teamIntelligenceIndex = Array.isArray(teamIntelligenceIndex) ? teamIntelligenceIndex : [];

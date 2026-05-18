@@ -217,15 +217,24 @@ That means:
 Recommended key:
 - `fixture_id + market + pick + tier`
 
-## Recommended Script Layer
+## Current Script Layer
 
-Likely implementation path:
-- one grading script
-- one rollup builder
-- one publish/export step
+Canonical publish command:
 
-Possible future wrapper:
-- `scripts/settle_latest_board.sh`
+```bash
+python3 scripts/publish_results_proof.py
+```
+
+This runs:
+- `scripts/settle_published_results.py`
+- `scripts/smoke_results_page.py`
+
+Primary outputs:
+- `frontend/public/data/weekly_results.json`
+- `frontend/public/data/results_archive.json`
+- `reports/latest/RESULTS_SETTLEMENT_REPORT.md`
+- `reports/latest/RESULTS_PAGE_SMOKE_REPORT.md`
+- `reports/latest/RESULTS_PUBLISH_RUN_REPORT.md`
 
 ## Publish Workflow At Scale
 
@@ -233,8 +242,8 @@ Weekend operating loop:
 1. publish board
 2. serve board
 3. wait for matches to finish
-4. run settlement pipeline
-5. publish results JSON
+4. run `python3 scripts/publish_results_proof.py`
+5. publish results JSON after the smoke report is green
 6. Cloudflare Pages updates proof page
 
 ## Relationship To Premium/Public
@@ -260,10 +269,4 @@ But it may still be useful to preserve:
 
 ## Recommended Next Implementation Step
 
-Build the first canonical grading script and define:
-- input files
-- grading rules per market
-- archive JSON schema
-- rollup JSON schema
-
-That should become the backend source of truth for the results page.
+Wire the canonical publish command into the scheduler/automation layer after the website-safe prediction export has completed and provider final scores are available.

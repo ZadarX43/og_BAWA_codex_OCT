@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 
 import worker from "./src/index.js";
 
-const PREMIUM_ALLOWED_FIELDS = [
+const FOUNDER_ALLOWED_FIELDS = [
   "fixture_id",
   "fixture_key",
   "kickoff_time",
@@ -23,6 +23,16 @@ const PREMIUM_ALLOWED_FIELDS = [
   "safe_for_large_acca_flag",
   "correct_score_shortlist",
   "premium_tier",
+];
+const PRO_ALLOWED_FIELDS = [
+  ...FOUNDER_ALLOWED_FIELDS,
+  "player_event_signals",
+  "team_intelligence",
+];
+const PRO_PLUS_ALLOWED_FIELDS = [
+  ...PRO_ALLOWED_FIELDS,
+  "audit_summary",
+  "downloadable_payload",
 ];
 
 class MockKVStore {
@@ -436,6 +446,10 @@ const premiumSourcePayload = {
         { scoreline: "2-0", probability: 0.11 },
       ],
       premium_tier: "ELITE",
+      player_event_signals: [{ player: "Team A Forward", market: "shots", probability: 0.58 }],
+      team_intelligence: { home_press: "strong" },
+      audit_summary: { calibration_bucket: "walk_forward_green" },
+      downloadable_payload: { export_id: "downloadable_should_only_reach_pro_plus" },
       gate_detail: "should_not_leak",
       model_path: "/Users/secret/model.cbm",
     },
@@ -521,6 +535,9 @@ const createEnv = () => {
     SUBSCRIBER_STATE: store,
     ACCOUNT_DB: new MockD1(),
     TELEGRAM_BOT_USERNAME: "oddsgeniusbot",
+    STRIPE_SECRET_KEY: "sk_test_worker_harness",
+    STRIPE_WEBHOOK_SECRET: "whsec_test_worker_harness",
+    STRIPE_PRICE_ID: "price_test_founding",
   };
 };
 
@@ -553,9 +570,14 @@ const installMockFetch = () => {
     telegramSendFetches: 0,
     widgetStandingsFetches: 0,
     widgetFixtureLookupFetches: 0,
+    stripeCheckoutFetches: 0,
+    stripePortalFetches: 0,
+    stripeSubscriptionFetches: 0,
   };
   const sentEmails = [];
   const sentTelegramMessages = [];
+  const stripeCheckoutRequests = [];
+  const stripePortalRequests = [];
 
   globalThis.fetch = async (input, init) => {
     const url = typeof input === "string" ? input : input.url;
@@ -652,8 +674,75 @@ const installMockFetch = () => {
       );
     }
 
+    if (url === "https://api.stripe.com/v1/checkout/sessions") {
+      counters.stripeCheckoutFetches += 1;
+      stripeCheckoutRequests.push({
+        headers: Object.fromEntries(new Headers(init?.headers || {}).entries()),
+        body: Object.fromEntries(new URLSearchParams(String(init?.body || "")).entries()),
+      });
+      return new Response(
+        JSON.stringify({
+          id: "cs_test_worker_checkout",
+          url: "https://checkout.stripe.com/c/pay/cs_test_worker_checkout",
+        }),
+        {
+          status: 200,
+          headers: {
+            "content-type": "application/json; charset=utf-8",
+          },
+        }
+      );
+    }
+
+    if (url === "https://api.stripe.com/v1/billing_portal/sessions") {
+      counters.stripePortalFetches += 1;
+      stripePortalRequests.push({
+        headers: Object.fromEntries(new Headers(init?.headers || {}).entries()),
+        body: Object.fromEntries(new URLSearchParams(String(init?.body || "")).entries()),
+      });
+      return new Response(
+        JSON.stringify({
+          id: "bps_test_worker_portal",
+          url: "https://billing.stripe.com/p/session/test_worker_portal",
+        }),
+        {
+          status: 200,
+          headers: {
+            "content-type": "application/json; charset=utf-8",
+          },
+        }
+      );
+    }
+
+    if (url === "https://api.stripe.com/v1/subscriptions/sub_test_checkout_active") {
+      counters.stripeSubscriptionFetches += 1;
+      return new Response(
+        JSON.stringify({
+          id: "sub_test_checkout_active",
+          customer: "cus_test_checkout_active",
+          status: "active",
+          current_period_end: 1780185600,
+          items: {
+            data: [
+              {
+                price: {
+                  id: "price_test_founding",
+                },
+              },
+            ],
+          },
+        }),
+        {
+          status: 200,
+          headers: {
+            "content-type": "application/json; charset=utf-8",
+          },
+        }
+      );
+    }
+
     if (url.includes("api.stripe.com")) {
-      throw new Error("Stripe should not be called during local Worker harness tests.");
+      throw new Error(`Unexpected Stripe call during local Worker harness tests: ${url}`);
     }
 
     return originalFetch(input, init);
@@ -663,6 +752,8 @@ const installMockFetch = () => {
     counters,
     sentEmails,
     sentTelegramMessages,
+    stripeCheckoutRequests,
+    stripePortalRequests,
     restore: () => {
       globalThis.fetch = originalFetch;
     },
@@ -682,11 +773,11 @@ const issueTokenThroughRoute = async (env, body) => {
   return payload.token;
 };
 
-const assertPremiumRowAllowlist = (row) => {
+const assertPremiumRowAllowlist = (row, allowedFields = FOUNDER_ALLOWED_FIELDS) => {
   const keys = Object.keys(row).sort();
   for (const key of keys) {
     assert.ok(
-      PREMIUM_ALLOWED_FIELDS.includes(key),
+      allowedFields.includes(key),
       `protected premium response leaked non-allowlisted field: ${key}`
     );
   }
@@ -712,12 +803,72 @@ const testProtectedRouteSuccess = async () => {
   assert.equal(payload.ok, true);
   assert.equal(payload.subscriber_customer_id, "cus_test_active");
   assert.equal(payload.generated_at, premiumSourcePayload.generated_at);
+  assert.equal(payload.access_tier, "founder");
+  assert.equal(payload.field_policy.access_tier, "founder");
   assert.equal(payload.count, 1);
   assert.equal(Array.isArray(payload.predictions), true);
   assert.equal(payload.predictions.length, 1);
   assertPremiumRowAllowlist(payload.predictions[0]);
   assert.equal("gate_detail" in payload.predictions[0], false);
   assert.equal("model_path" in payload.predictions[0], false);
+  assert.equal("player_event_signals" in payload.predictions[0], false);
+  assert.equal("audit_summary" in payload.predictions[0], false);
+};
+
+const testPremiumTierAllowlistBoundaries = async () => {
+  const proEnv = createEnv();
+  proEnv.STRIPE_PRO_PRICE_IDS = "price_test_pro";
+  await writeSubscriberRecord(
+    proEnv,
+    buildSubscriberRecord({
+      price_id: "price_test_pro",
+    })
+  );
+  const proToken = await issueTokenThroughRoute(proEnv, {
+    customer_id: "cus_test_active",
+    subscription_id: "sub_test_active",
+  });
+  const proResponse = await worker.fetch(
+    makeGetRequest("http://localhost/api/premium/predictions", {
+      authorization: `Bearer ${proToken}`,
+    }),
+    proEnv
+  );
+  const proPayload = await proResponse.json();
+  assert.equal(proResponse.status, 200);
+  assert.equal(proPayload.access_tier, "pro");
+  assertPremiumRowAllowlist(proPayload.predictions[0], PRO_ALLOWED_FIELDS);
+  assert.equal(Array.isArray(proPayload.predictions[0].player_event_signals), true);
+  assert.equal(Boolean(proPayload.predictions[0].team_intelligence), true);
+  assert.equal("audit_summary" in proPayload.predictions[0], false);
+  assert.equal("downloadable_payload" in proPayload.predictions[0], false);
+
+  const proPlusEnv = createEnv();
+  proPlusEnv.STRIPE_PRO_PLUS_PRICE_IDS = "price_test_pro_plus";
+  await writeSubscriberRecord(
+    proPlusEnv,
+    buildSubscriberRecord({
+      price_id: "price_test_pro_plus",
+    })
+  );
+  const proPlusToken = await issueTokenThroughRoute(proPlusEnv, {
+    customer_id: "cus_test_active",
+    subscription_id: "sub_test_active",
+  });
+  const proPlusResponse = await worker.fetch(
+    makeGetRequest("http://localhost/api/premium/predictions", {
+      authorization: `Bearer ${proPlusToken}`,
+    }),
+    proPlusEnv
+  );
+  const proPlusPayload = await proPlusResponse.json();
+  assert.equal(proPlusResponse.status, 200);
+  assert.equal(proPlusPayload.access_tier, "pro_plus");
+  assertPremiumRowAllowlist(proPlusPayload.predictions[0], PRO_PLUS_ALLOWED_FIELDS);
+  assert.equal(Boolean(proPlusPayload.predictions[0].audit_summary), true);
+  assert.equal(Boolean(proPlusPayload.predictions[0].downloadable_payload), true);
+  assert.equal("gate_detail" in proPlusPayload.predictions[0], false);
+  assert.equal("model_path" in proPlusPayload.predictions[0], false);
 };
 
 const testPremiumRouteCachesSharedPayload = async (counters) => {
@@ -766,6 +917,20 @@ const buildExpiredToken = async (env) => {
   const signature = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(payloadSegment));
   const signatureSegment = Buffer.from(new Uint8Array(signature)).toString("base64url");
   return `${payloadSegment}.${signatureSegment}`;
+};
+
+const buildStripeSignatureHeader = async (env, rawBody) => {
+  const timestamp = Math.floor(Date.now() / 1000);
+  const signedPayload = `${timestamp}.${rawBody}`;
+  const key = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(env.STRIPE_WEBHOOK_SECRET),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"]
+  );
+  const signature = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(signedPayload));
+  return `t=${timestamp},v1=${Buffer.from(new Uint8Array(signature)).toString("hex")}`;
 };
 
 const testMissingToken = async () => {
@@ -899,6 +1064,202 @@ const testAuthSessionSkeleton = async () => {
 const extractCookieValue = (setCookieHeader, name) => {
   const match = String(setCookieHeader || "").match(new RegExp(`${name}=([^;]+)`));
   return match ? match[1] : "";
+};
+
+const establishMemberSessionCookie = async (fetchHarness, env, email = "member@example.com") => {
+  await writeSubscriberRecord(
+    env,
+    buildSubscriberRecord({
+      email,
+    })
+  );
+
+  const requestResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/auth/magic-link/request", "POST", {
+      email,
+    }),
+    env
+  );
+  assert.equal(requestResponse.status, 200);
+  const emailBody = fetchHarness.sentEmails.at(-1);
+  const verifyMatch = String(emailBody?.html || "").match(/verify\?token=([^"&]+)/);
+  assert.ok(verifyMatch?.[1], "expected magic-link token in email body");
+  const token = decodeURIComponent(verifyMatch[1]);
+
+  const tokenResponse = await worker.fetch(
+    makeGetRequest(`http://localhost/api/auth/magic-link/verify?token=${encodeURIComponent(token)}`),
+    env
+  );
+  assert.equal(tokenResponse.status, 303);
+  const sessionCookie = extractCookieValue(tokenResponse.headers.get("set-cookie"), "og_premium_session");
+  assert.ok(sessionCookie, "expected premium session cookie after verify");
+  return sessionCookie;
+};
+
+const testStripeCheckoutSmoke = async (fetchHarness) => {
+  const missingEnv = createEnv();
+  delete missingEnv.STRIPE_SECRET_KEY;
+  const missingResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/stripe/checkout", "POST", {
+      email: "member@example.com",
+    }),
+    missingEnv
+  );
+  const missingPayload = await missingResponse.json();
+  assert.equal(missingResponse.status, 500);
+  assert.equal(missingPayload.status, "config_error");
+  assert.deepEqual(missingPayload.missing_env_vars, ["STRIPE_SECRET_KEY"]);
+
+  const env = createEnv();
+  const response = await worker.fetch(
+    jsonRequest("http://localhost/api/stripe/checkout", "POST", {
+      email: " member@example.com ",
+      reference: "founder-smoke",
+    }),
+    env
+  );
+  const payload = await response.json();
+  assert.equal(response.status, 200);
+  assert.equal(payload.ok, true);
+  assert.equal(payload.url, "https://checkout.stripe.com/c/pay/cs_test_worker_checkout");
+  assert.equal(fetchHarness.counters.stripeCheckoutFetches >= 1, true);
+
+  const stripeRequest = fetchHarness.stripeCheckoutRequests.at(-1);
+  assert.equal(stripeRequest.headers.authorization, "Bearer sk_test_worker_harness");
+  assert.equal(stripeRequest.body.mode, "subscription");
+  assert.equal(stripeRequest.body.success_url, "http://localhost/account.html?checkout=success");
+  assert.equal(stripeRequest.body.cancel_url, "http://localhost/pricing.html?checkout=cancelled");
+  assert.equal(stripeRequest.body["line_items[0][price]"], "price_test_founding");
+  assert.equal(stripeRequest.body["line_items[0][quantity]"], "1");
+  assert.equal(stripeRequest.body.allow_promotion_codes, "true");
+  assert.equal(stripeRequest.body.customer_email, "member@example.com");
+  assert.equal(stripeRequest.body.client_reference_id, "founder-smoke");
+};
+
+const testStripeCheckoutWebhookEnrichesSubscriptionState = async (fetchHarness) => {
+  const env = createEnv();
+  const event = {
+    id: "evt_test_checkout_completed",
+    type: "checkout.session.completed",
+    created: Math.floor(Date.now() / 1000),
+    data: {
+      object: {
+        id: "cs_test_checkout_active",
+        customer: "cus_test_checkout_active",
+        subscription: "sub_test_checkout_active",
+        customer_details: {
+          email: "checkout-active@example.com",
+        },
+      },
+    },
+  };
+  const rawBody = JSON.stringify(event);
+  const signature = await buildStripeSignatureHeader(env, rawBody);
+  const response = await worker.fetch(
+    new Request("http://localhost/api/stripe/webhook", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "stripe-signature": signature,
+      },
+      body: rawBody,
+    }),
+    env
+  );
+  const payload = await response.json();
+  assert.equal(response.status, 200);
+  assert.equal(payload.ok, true);
+  assert.equal(payload.event_type, "checkout.session.completed");
+  assert.equal(payload.record.status, "active");
+  assert.equal(payload.record.price_id, "price_test_founding");
+  assert.equal(payload.record.current_period_end, "2026-05-31T00:00:00.000Z");
+  assert.equal(fetchHarness.counters.stripeSubscriptionFetches >= 1, true);
+
+  const subscriptionRaw = await env.SUBSCRIBER_STATE.get("subscription:sub_test_checkout_active");
+  const emailRaw = await env.SUBSCRIBER_STATE.get("email:checkout-active@example.com");
+  assert.ok(subscriptionRaw, "expected enriched subscription record in KV");
+  assert.ok(emailRaw, "expected enriched email lookup record in KV");
+  assert.equal(JSON.parse(subscriptionRaw).status, "active");
+  assert.equal(JSON.parse(emailRaw).customer_id, "cus_test_checkout_active");
+  assert.equal(env.ACCOUNT_DB.subscriptions.at(-1)?.subscription_status, "active");
+};
+
+const testStripePortalSmoke = async (fetchHarness) => {
+  const lockedEnv = createEnv();
+  const lockedResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/stripe/portal", "POST", null),
+    lockedEnv
+  );
+  const lockedPayload = await lockedResponse.json();
+  assert.equal(lockedResponse.status, 401);
+  assert.equal(lockedPayload.ok, false);
+  assert.equal(lockedPayload.locked, true);
+  assert.equal(lockedPayload.status, "missing_session");
+
+  const env = createEnv();
+  const sessionCookie = await establishMemberSessionCookie(fetchHarness, env);
+  const response = await worker.fetch(
+    jsonRequest("http://localhost/api/stripe/portal", "POST", null, {
+      cookie: `og_premium_session=${sessionCookie}`,
+    }),
+    env
+  );
+  const payload = await response.json();
+  assert.equal(response.status, 200);
+  assert.equal(payload.ok, true);
+  assert.equal(payload.url, "https://billing.stripe.com/p/session/test_worker_portal");
+  assert.equal(fetchHarness.counters.stripePortalFetches >= 1, true);
+
+  const stripeRequest = fetchHarness.stripePortalRequests.at(-1);
+  assert.equal(stripeRequest.headers.authorization, "Bearer sk_test_worker_harness");
+  assert.equal(stripeRequest.body.customer, "cus_test_active");
+  assert.equal(stripeRequest.body.return_url, "http://localhost/account.html?portal=return");
+};
+
+const testSessionRestoreAndPaymentIssueStates = async (fetchHarness) => {
+  const env = createEnv();
+  const sessionCookie = await establishMemberSessionCookie(fetchHarness, env);
+  const restoredResponse = await worker.fetch(
+    makeGetRequest("http://localhost/api/auth/session", {
+      cookie: `og_premium_session=${sessionCookie}`,
+    }),
+    env
+  );
+  const restoredPayload = await restoredResponse.json();
+  assert.equal(restoredResponse.status, 200);
+  assert.equal(restoredPayload.authenticated, true);
+  assert.equal(restoredPayload.entitled, true);
+  assert.equal(restoredPayload.subscription_status, "active");
+
+  await writeSubscriberRecord(
+    env,
+    buildSubscriberRecord({
+      email: "member@example.com",
+      status: "past_due",
+    })
+  );
+  const paymentIssueResponse = await worker.fetch(
+    makeGetRequest("http://localhost/api/auth/session", {
+      cookie: `og_premium_session=${sessionCookie}`,
+    }),
+    env
+  );
+  const paymentIssuePayload = await paymentIssueResponse.json();
+  assert.equal(paymentIssueResponse.status, 200);
+  assert.equal(paymentIssuePayload.authenticated, false);
+  assert.equal(paymentIssuePayload.entitled, false);
+  assert.equal(paymentIssuePayload.status, "inactive_subscription");
+
+  const premiumResponse = await worker.fetch(
+    makeGetRequest("http://localhost/api/premium/predictions", {
+      cookie: `og_premium_session=${sessionCookie}`,
+    }),
+    env
+  );
+  const premiumPayload = await premiumResponse.json();
+  assert.equal(premiumResponse.status, 401);
+  assert.equal(premiumPayload.locked, true);
+  assert.equal(premiumPayload.status, "inactive_subscription");
 };
 
 const testMagicLinkVerifyAndSessionFlow = async (fetchHarness) => {
@@ -2278,6 +2639,8 @@ const main = async () => {
     fetchHarness.counters.premiumSourceFetches = 0;
     await testProtectedRouteSuccess();
     cacheHarness.clear();
+    await testPremiumTierAllowlistBoundaries();
+    cacheHarness.clear();
     await testMissingToken();
     await testExpiredToken();
     await testInactiveSubscriber();
@@ -2299,9 +2662,14 @@ const main = async () => {
     await testWidgetFixtureLookupProxy(fetchHarness);
     await testMarketOnlyObserveDoesNotAutoQueue(fetchHarness);
     await testAnalystLeagueMarketDeployStaysWebsiteOnly(fetchHarness);
+    await testStripeCheckoutSmoke(fetchHarness);
+    await testStripeCheckoutWebhookEnrichesSubscriptionState(fetchHarness);
+    await testStripePortalSmoke(fetchHarness);
+    await testSessionRestoreAndPaymentIssueStates(fetchHarness);
     await testLogoutSkeleton();
     console.log("Worker local harness passed.");
     console.log("- success route with valid token: passed");
+    console.log("- premium tier payload allowlists: passed");
     console.log("- premium payload cache hit/miss path: passed");
     console.log("- missing token returns 401: passed");
     console.log("- expired token returns 401: passed");
@@ -2324,6 +2692,10 @@ const main = async () => {
     console.log("- widget fixture lookup proxy cache path: passed");
     console.log("- market-only observe suppression: passed");
     console.log("- analyst league+market deploy stays website-only: passed");
+    console.log("- Stripe checkout smoke path: passed");
+    console.log("- Stripe checkout webhook subscription enrichment: passed");
+    console.log("- Stripe billing portal smoke path: passed");
+    console.log("- session restore + payment issue states: passed");
     console.log("- logout skeleton: passed");
   } finally {
     fetchHarness.restore();

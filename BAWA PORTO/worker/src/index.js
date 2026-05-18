@@ -56,7 +56,7 @@ const AUTH_RATE_LIMIT_KEY_PREFIX = "auth_rl:";
 const TELEGRAM_LINK_KEY_PREFIX = "telegram_link:";
 const AUTH_SESSION_COOKIE = "og_premium_session";
 const TELEGRAM_WEBHOOK_SECRET_HEADER = "x-telegram-bot-api-secret-token";
-const PREMIUM_ALLOWED_FIELDS = [
+const FREE_PREDICTION_FIELDS = [
   "fixture_id",
   "fixture_key",
   "kickoff_time",
@@ -70,10 +70,14 @@ const PREMIUM_ALLOWED_FIELDS = [
   "market",
   "pick",
   "confidence_tier",
+  "bookie_od",
+  "logo_join_status",
+];
+const CORE_PREMIUM_FIELDS = [
+  ...FREE_PREDICTION_FIELDS,
   "model_prob",
   "bookie_implied_prob",
   "value_edge",
-  "bookie_od",
   "reason_tokens",
   "human_reason",
   "slip_role_hint",
@@ -81,8 +85,82 @@ const PREMIUM_ALLOWED_FIELDS = [
   "safe_for_large_acca_flag",
   "correct_score_shortlist",
   "premium_tier",
-  "logo_join_status",
 ];
+const PRO_PREMIUM_FIELDS = [
+  ...CORE_PREMIUM_FIELDS,
+  "player_event_signals",
+  "player_events",
+  "shots",
+  "shots_on_target",
+  "tackles",
+  "fouls",
+  "player_fouled",
+  "key_passes",
+  "goalkeeper_saves",
+  "corners",
+  "bookings",
+  "team_intelligence",
+  "player_intelligence",
+  "lineup_intelligence",
+  "injury_context",
+  "market_combo_signals",
+  "combo_signals",
+  "h2h_context",
+  "weather_context",
+];
+const PRO_PLUS_PREMIUM_FIELDS = [
+  ...PRO_PREMIUM_FIELDS,
+  "audit_summary",
+  "audit_trail",
+  "model_diagnostics",
+  "explainability",
+  "calibration",
+  "downloadable_payload",
+  "advanced_filters",
+  "settlement_key",
+  "proof_trace",
+  "data_coverage",
+  "freshness",
+  "source_refs",
+];
+const PREMIUM_ALLOWED_FIELDS_BY_TIER = {
+  free: FREE_PREDICTION_FIELDS,
+  founder: CORE_PREMIUM_FIELDS,
+  premium: CORE_PREMIUM_FIELDS,
+  pro: PRO_PREMIUM_FIELDS,
+  pro_plus: PRO_PLUS_PREMIUM_FIELDS,
+};
+const PREMIUM_ALLOWED_FIELDS = Array.from(new Set(PRO_PLUS_PREMIUM_FIELDS));
+const PREMIUM_ROUTE_ALLOWLIST_BY_TIER = {
+  free: [
+    "/public/data/public_predictions.json",
+    "/public/data/weekly_results.json",
+    "/public/data/results_archive.json",
+  ],
+  founder: ["/api/premium/predictions", "/api/site/fixtures/:fixture_key/context"],
+  premium: ["/api/premium/predictions", "/api/site/fixtures/:fixture_key/context"],
+  pro: [
+    "/api/premium/predictions",
+    "/api/site/fixtures/:fixture_key/context",
+    "/api/site/teams/:competition_key/:team_slug/premium",
+  ],
+  pro_plus: [
+    "/api/premium/predictions",
+    "/api/site/fixtures/:fixture_key/context",
+    "/api/site/teams/:competition_key/:team_slug/premium",
+    "downloadable premium intelligence exports",
+  ],
+};
+const ACCESS_TIER_ALIASES = {
+  og_founder: "founder",
+  founder_early_access: "founder",
+  proplus: "pro_plus",
+  pro_plus: "pro_plus",
+  pro: "pro",
+  premium: "premium",
+  founder: "founder",
+  free: "free",
+};
 
 const json = (payload, status = 200, extraHeaders = {}) =>
   new Response(JSON.stringify(payload, null, 2), {
@@ -368,6 +446,91 @@ const stripeError = (message, details = null, status = 502) =>
     },
     status
   );
+
+const normalizeStripeTimestamp = (value) => {
+  const numeric = Number(value);
+  if (!Number.isFinite(numeric) || numeric <= 0) {
+    return null;
+  }
+  return new Date(numeric * 1000).toISOString();
+};
+
+const firstStripeSubscriptionPriceId = (subscription) => {
+  const items = subscription?.items?.data;
+  if (!Array.isArray(items) || !items.length) {
+    return null;
+  }
+  return items[0]?.price?.id || null;
+};
+
+async function fetchStripeSubscriptionSnapshot(subscriptionId, env) {
+  if (!subscriptionId) {
+    return { ok: false, response: requestError("Checkout session did not include a Stripe subscription id.") };
+  }
+  if (!env.STRIPE_SECRET_KEY) {
+    return {
+      ok: false,
+      response: configError("Missing required Stripe subscription enrichment environment variables.", ["STRIPE_SECRET_KEY"]),
+    };
+  }
+
+  const stripeResponse = await fetch(
+    `https://api.stripe.com/v1/subscriptions/${encodeURIComponent(subscriptionId)}`,
+    {
+      method: "GET",
+      headers: {
+        authorization: `Bearer ${env.STRIPE_SECRET_KEY}`,
+      },
+    }
+  );
+
+  let subscription = null;
+  try {
+    subscription = await stripeResponse.json();
+  } catch (error) {
+    return {
+      ok: false,
+      response: stripeError("Stripe subscription response was not valid JSON.", error.message),
+    };
+  }
+
+  if (!stripeResponse.ok) {
+    return {
+      ok: false,
+      response: stripeError(
+        "Stripe subscription lookup failed after checkout completion.",
+        subscription?.error?.message || subscription?.error || subscription,
+        stripeResponse.status
+      ),
+    };
+  }
+
+  return { ok: true, subscription };
+}
+
+async function enrichCheckoutSubscriberRecord(record, event, env) {
+  if (event?.type !== "checkout.session.completed") {
+    return { ok: true, record };
+  }
+
+  const snapshot = await fetchStripeSubscriptionSnapshot(record?.subscription_id, env);
+  if (!snapshot.ok) {
+    return snapshot;
+  }
+
+  const subscription = snapshot.subscription;
+  return {
+    ok: true,
+    record: {
+      ...record,
+      customer_id: subscription?.customer || record.customer_id,
+      subscription_id: subscription?.id || record.subscription_id,
+      status: subscription?.status || record.status,
+      price_id: firstStripeSubscriptionPriceId(subscription) || record.price_id,
+      current_period_end: normalizeStripeTimestamp(subscription?.current_period_end) || record.current_period_end,
+    },
+  };
+}
 
 const unauthorizedError = (message, details = null) =>
   json(
@@ -1315,6 +1478,70 @@ async function createCheckoutSession(request, env) {
   });
 }
 
+async function createCustomerPortalSession(request, env) {
+  const missing = ["STRIPE_SECRET_KEY", "SITE_URL"].filter((key) => !env[key]);
+  if (missing.length) {
+    return configError("Missing required Stripe billing portal environment variables.", missing);
+  }
+
+  const sessionAccess = await verifySessionAccess(request, env);
+  if (!sessionAccess.ok) {
+    return json(
+      {
+        ok: false,
+        status: sessionAccess.status || "unauthenticated",
+        message: sessionAccess.message || "Verify your subscriber email before opening billing self-service.",
+        recommendation: sessionAccess.recommendation,
+        locked: true,
+      },
+      401,
+      sessionFailureHeaders(sessionAccess.status)
+    );
+  }
+
+  const siteUrl = normalizeSiteUrl(env.SITE_URL);
+  if (!/^https?:\/\//.test(siteUrl)) {
+    return configError("SITE_URL must be a full http or https URL.", ["SITE_URL"]);
+  }
+
+  const body = new URLSearchParams();
+  body.set("customer", sessionAccess.customer_id);
+  body.set("return_url", `${siteUrl}/account.html?portal=return`);
+
+  const stripeResponse = await fetch("https://api.stripe.com/v1/billing_portal/sessions", {
+    method: "POST",
+    headers: {
+      authorization: `Bearer ${env.STRIPE_SECRET_KEY}`,
+      "content-type": "application/x-www-form-urlencoded",
+    },
+    body: body.toString(),
+  });
+
+  let stripePayload = null;
+  try {
+    stripePayload = await stripeResponse.json();
+  } catch (error) {
+    return stripeError("Stripe billing portal response was not valid JSON.", error.message);
+  }
+
+  if (!stripeResponse.ok) {
+    return stripeError(
+      "Stripe billing portal session creation failed.",
+      stripePayload?.error?.message || stripePayload?.error || stripePayload,
+      stripeResponse.status
+    );
+  }
+
+  if (!stripePayload?.url) {
+    return stripeError("Stripe billing portal session succeeded but no redirect URL was returned.");
+  }
+
+  return json({
+    ok: true,
+    url: stripePayload.url,
+  });
+}
+
 async function handleStripeWebhook(request, env) {
   const store = getSubscriberStateStore(env);
   if (!store) {
@@ -1351,7 +1578,12 @@ async function handleStripeWebhook(request, env) {
     });
   }
 
-  const record = buildSubscriberRecord(event);
+  const initialRecord = buildSubscriberRecord(event);
+  const enrichment = await enrichCheckoutSubscriberRecord(initialRecord, event, env);
+  if (!enrichment.ok) {
+    return enrichment.response;
+  }
+  const record = enrichment.record;
   if (!record) {
     return requestError("Webhook event could not be converted into a subscriber state record.", event?.type);
   }
@@ -1420,14 +1652,20 @@ async function handlePremiumPredictions(request, env) {
     );
   }
 
+  const accessTier = normalizeAccessTier(access.access_tier) || "founder";
+  const filteredRows = loaded.rows.map((row) => filterPredictionFieldsForTier(row, accessTier)).filter(Boolean);
+  const fieldPolicy = buildPremiumFieldPolicy(accessTier);
+
   return json(
     {
       ok: true,
       generated_at: loaded.generated_at,
       subscriber_customer_id: access.customer_id,
       auth_mode: access.auth_mode || "token",
-      count: loaded.count,
-      predictions: loaded.rows,
+      access_tier: accessTier,
+      field_policy: fieldPolicy,
+      count: filteredRows.length,
+      predictions: filteredRows,
     },
     200,
     {
@@ -1868,6 +2106,8 @@ async function verifySessionAccess(request, env) {
     customer_id: record.customer_id,
     subscription_id: record.subscription_id,
     subscription_status: record.status,
+    price_id: record.price_id || null,
+    access_tier: resolveSubscriberAccessTier(record, env),
     session_id: sessionId || null,
   };
 }
@@ -1884,6 +2124,10 @@ async function resolvePremiumAccess(request, env) {
       return {
         ...tokenAccess,
         auth_mode: "transitional_token",
+        access_tier:
+          normalizeAccessTier(tokenAccess.access_tier) ||
+          resolveAccessTierFromPriceId(tokenAccess.price_id, env) ||
+          "founder",
       };
     }
     return tokenAccess;
@@ -1893,7 +2137,17 @@ async function resolvePremiumAccess(request, env) {
     return sessionAccess;
   }
 
-  return verifyPremiumAccess(request, env);
+  const tokenAccess = await verifyPremiumAccess(request, env);
+  if (tokenAccess.ok) {
+    return {
+      ...tokenAccess,
+      access_tier:
+        normalizeAccessTier(tokenAccess.access_tier) ||
+        resolveAccessTierFromPriceId(tokenAccess.price_id, env) ||
+        "founder",
+    };
+  }
+  return tokenAccess;
 }
 
 async function handleMagicLinkRequest(request, env) {
@@ -2174,6 +2428,7 @@ async function handleAuthSession(request, env) {
       customer_id: sessionAccess.customer_id,
       subscription_id: sessionAccess.subscription_id,
       subscription_status: sessionAccess.subscription_status,
+      access_tier: sessionAccess.access_tier,
     });
   }
 
@@ -2188,6 +2443,10 @@ async function handleAuthSession(request, env) {
         customer_id: access.customer_id,
         subscription_id: access.subscription_id,
         subscription_status: "active",
+        access_tier:
+          normalizeAccessTier(access.access_tier) ||
+          resolveAccessTierFromPriceId(access.price_id, env) ||
+          "founder",
       });
     }
     return json(
@@ -2242,6 +2501,7 @@ async function handleAccountState(request, env) {
       customer_id: sessionAccess.customer_id,
       subscription_id: sessionAccess.subscription_id,
       subscription_status: sessionAccess.subscription_status,
+      access_tier: sessionAccess.access_tier,
     });
   }
 
@@ -2256,6 +2516,7 @@ async function handleAccountState(request, env) {
     customer_id: sessionAccess.customer_id,
     subscription_id: sessionAccess.subscription_id,
     subscription_status: sessionAccess.subscription_status,
+    access_tier: sessionAccess.access_tier,
     account: accountState,
   });
 }
@@ -4352,6 +4613,75 @@ const sanitizeCorrectScoreShortlist = (value) => {
     .filter(Boolean);
 };
 
+const normalizeAccessTier = (value) => {
+  const normalized = String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[\s-]+/g, "_");
+  return ACCESS_TIER_ALIASES[normalized] || "";
+};
+
+const splitEnvList = (value) =>
+  String(value || "")
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+
+const resolveAccessTierFromPriceId = (priceId, env) => {
+  const price = String(priceId || "").trim();
+  if (!price) {
+    return "";
+  }
+
+  const tierPriceIds = {
+    founder: [...splitEnvList(env.STRIPE_FOUNDER_PRICE_IDS), env.STRIPE_FOUNDER_PRICE_ID, env.STRIPE_PRICE_ID],
+    premium: [...splitEnvList(env.STRIPE_PREMIUM_PRICE_IDS), env.STRIPE_PREMIUM_PRICE_ID],
+    pro: [...splitEnvList(env.STRIPE_PRO_PRICE_IDS), env.STRIPE_PRO_PRICE_ID],
+    pro_plus: [...splitEnvList(env.STRIPE_PRO_PLUS_PRICE_IDS), env.STRIPE_PRO_PLUS_PRICE_ID],
+  };
+
+  for (const [tier, values] of Object.entries(tierPriceIds)) {
+    if (values.filter(Boolean).includes(price)) {
+      return tier;
+    }
+  }
+  return "";
+};
+
+const resolveSubscriberAccessTier = (record, env) =>
+  normalizeAccessTier(record?.access_tier || record?.tier || record?.plan_tier) ||
+  resolveAccessTierFromPriceId(record?.price_id, env) ||
+  "founder";
+
+const allowedFieldsForTier = (tier) => {
+  const normalized = normalizeAccessTier(tier) || "founder";
+  return PREMIUM_ALLOWED_FIELDS_BY_TIER[normalized] || PREMIUM_ALLOWED_FIELDS_BY_TIER.founder;
+};
+
+const filterPredictionFieldsForTier = (row, tier) => {
+  if (!row || typeof row !== "object" || Array.isArray(row)) {
+    return null;
+  }
+
+  const allowed = allowedFieldsForTier(tier);
+  const filtered = {};
+  for (const key of allowed) {
+    if (key in row) {
+      filtered[key] = row[key];
+    }
+  }
+  return filtered;
+};
+
+const buildPremiumFieldPolicy = (tier) => {
+  const normalized = normalizeAccessTier(tier) || "founder";
+  return {
+    access_tier: normalized,
+    allowed_fields: allowedFieldsForTier(normalized),
+    allowed_routes: PREMIUM_ROUTE_ALLOWLIST_BY_TIER[normalized] || PREMIUM_ROUTE_ALLOWLIST_BY_TIER.founder,
+  };
+};
+
 const sanitizePremiumRow = (row) => {
   if (!row || typeof row !== "object" || Array.isArray(row)) {
     return null;
@@ -5023,14 +5353,7 @@ async function handleRequest(request, env) {
       response = methodNotAllowed("POST");
       return withCors(response, request, env);
     }
-    response = placeholder(
-      pathname,
-      "Verify subscriber identity and create a Stripe Customer Portal session.",
-      env,
-      {
-        security_note: "Portal access should require authenticated subscriber context.",
-      }
-    );
+    response = await createCustomerPortalSession(request, env);
     return withCors(response, request, env);
   }
 
