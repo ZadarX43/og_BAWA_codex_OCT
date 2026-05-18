@@ -324,6 +324,11 @@
       const isActive = anchor.getAttribute("href") === currentHref;
       anchor.classList.toggle("is-active", isActive);
     });
+    document.querySelectorAll("[data-mobile-nav]").forEach((select) => {
+      if (currentHref && Array.from(select.options).some((option) => option.value === currentHref)) {
+        select.value = currentHref;
+      }
+    });
   };
 
   const statPanel = (label, value, note = "") => `
@@ -3913,86 +3918,56 @@
       .slice(0, 12);
 
     return `
-    <section class="hero">
-      <div class="hero-main">
-        <div class="hero-copy-stack">
-          <p class="hero-kicker">Sports Prediction Intelligence System</p>
-          <h1>Football v0.12</h1>
-          <p>
-            OG Founder Early Access is the World Cup + pre-season edition of Odds Genius: public proof, premium fixture context,
-            market intelligence, and beta player-event surfaces without turning the product into a tips feed.
-          </p>
-          <div class="pill-row">
-            <span class="stat-chip">FTR</span>
-            <span class="stat-chip">BTTS</span>
-            <span class="stat-chip">Over 2.5 goals</span>
-            <span class="stat-chip">TG1.5</span>
-            <span class="stat-chip">Goal market combos</span>
+    <section class="hero launch-hero">
+      <div class="hero-main launch-hero-main">
+        <div class="launch-hero-copy">
+          <p class="hero-kicker launch-system-title">Sports Prediction Intelligence System</p>
+          <h1 class="launch-title">Football <span>v0.1.2</span></h1>
+          <div class="launch-proof-lines" aria-label="System positioning">
+            <strong>Advanced Machine Learning Systems.</strong>
+            <strong>Exclusive Modelling Architecture.</strong>
+            <strong>Industry Leading Benchmarks.</strong>
           </div>
-          <div class="hero-actions">
-            <a class="button" href="./matches.html">Open matches desk</a>
-            <a class="ghost-button" href="./results.html">See proof</a>
-            <a class="ghost-button" href="./pricing.html">Founder early access</a>
+          <div class="launch-founder-headline">
+            <span>OG Founder<br class="mobile-break" /> Early Access</span>
+            <strong>Memberships<br class="mobile-break" /> Now Open.</strong>
+          </div>
+          <h2 class="launch-window-title">World Cup 2026 <span>+ 26/27 Pre-Season<br class="mobile-break" /> Membership</span></h2>
+          <div class="hero-actions launch-hero-actions">
+            <a class="button button-large" href="./pricing.html">Secure founder access</a>
+            <a class="ghost-button" href="./results.html">See public proof</a>
+            <a class="ghost-button" href="./matches.html">Open matches desk</a>
           </div>
           <p class="footer-note">Historical walk-forward validation. Not a guarantee of future results.</p>
         </div>
-        <div class="proof-command">
-          <div class="section-head home-proof-head">
-            <div>
-              <h2>Walk-forward proof, not vibes</h2>
-              <p class="section-copy">Benchmark-safe proof across the current football intelligence stack, with live public results settled separately.</p>
-            </div>
-            <span class="pill">139 rolling windows</span>
-          </div>
-          <div class="proof-strip proof-strip-home">
-            ${proofTile("Over 2.5 calibrated", "95.35%", "3,828 historical rows")}
-            ${proofTile("BTTS calibrated", "93.55%", "3,382 historical rows")}
-            ${proofTile("Premium value-edge ROI", "+53.9%", "15,203 historical picks")}
-            ${proofTile("Home Team Over 1.5 premium", "93.24%", "1,643 graded rows")}
-            ${proofTile("Competitions analysed", "28", "3-year research estate")}
-            ${proofTile("Value edge system", "83.31%", "Premium historical hit rate")}
-          </div>
-        </div>
       </div>
-      <aside class="hero-side">
-        <article class="sample-board deployment-stack">
-          <div class="sample-board-head">
+      <aside class="hero-side launch-founder-side">
+        <article class="launch-founder-card">
+          <span class="metric-label">Founder access</span>
+          <h3>Memberships now open.</h3>
+          <div class="launch-founder-metrics">
             <div>
-              <span class="metric-label">System state</span>
-              <strong>Live board, proof layer, premium gate</strong>
+              <strong>First 250</strong>
+              <span>founders</span>
             </div>
-            <span class="pill">Founder access live</span>
-          </div>
-          <div class="system-stack">
-            <article class="system-row system-row-founder">
-              <span class="metric-label">OG Founder</span>
-              <strong>£20/mo for life while active</strong>
-              <p class="muted">World Cup + pre-season early access for the first 250 users.</p>
-              <a class="button button-small" href="./pricing.html">Claim founder pricing</a>
-            </article>
-            <article class="system-row">
-              <span class="metric-label">What it predicts</span>
-              <strong>Match result, goal shape, team goals, and value posture</strong>
-              <p class="muted">Each fixture gets a deploy, observe, monitor, or pass state instead of a forced pick.</p>
-            </article>
-            <article class="system-row">
-              <span class="metric-label">Why trust it</span>
-              <strong>Walk-forward record plus public live settlement</strong>
-              <p class="muted">Wins, losses, voids, and pending rows are separated by market and tier.</p>
-            </article>
-            <article class="system-row system-row-soon">
-              <span class="metric-label">Beta surfaces</span>
-              <strong>Player events</strong>
-              <p class="muted">Shots, SOT, tackles, fouls, player fouled, key passes, saves, corners, and bookings.</p>
-            </article>
+            <div>
+              <strong>£20/month</strong>
+              <span>while active</span>
+            </div>
+            <div>
+              <strong>Protected</strong>
+              <span>premium route</span>
+            </div>
+            <div>
+              <strong>Launch edition</strong>
+              <span>Football v0.1.2</span>
+            </div>
           </div>
         </article>
       </aside>
     </section>
 
-    ${worldCupFounderModule()}
-
-    <section class="section split">
+    <section class="section split launch-capabilities-section">
       ${launchCapabilityGrid(
         "Models",
         [
@@ -4019,6 +3994,24 @@
         ],
         "Player-event surfaces are beta intelligence cards for review, not public-priced prop tips."
       )}
+    </section>
+
+    <section class="section proof-command launch-proof-section">
+      <div class="section-head home-proof-head">
+        <div>
+          <h2>Walk-forward proof, not vibes</h2>
+          <p class="section-copy">Benchmark-safe proof across the current football intelligence stack, with live public results settled separately.</p>
+        </div>
+        <span class="pill">139 rolling windows</span>
+      </div>
+      <div class="proof-strip proof-strip-home">
+        ${proofTile("Over 2.5 calibrated", "95.35%", "3,828 historical rows")}
+        ${proofTile("BTTS calibrated", "93.55%", "3,382 historical rows")}
+        ${proofTile("Premium value-edge ROI", "+53.9%", "15,203 historical picks")}
+        ${proofTile("Home Team Over 1.5 premium", "93.24%", "1,643 graded rows")}
+        ${proofTile("Competitions analysed", "28", "3-year research estate")}
+        ${proofTile("Value edge system", "83.31%", "Premium historical hit rate")}
+      </div>
     </section>
 
     <section class="section split">
@@ -12245,6 +12238,15 @@
     if (event.target.id === "internal-note-form") {
       await addInternalNote(event);
     }
+  });
+
+  document.querySelectorAll("[data-mobile-nav]").forEach((select) => {
+    select.addEventListener("change", (event) => {
+      const targetHref = event.target.value;
+      if (targetHref) {
+        window.location.href = targetHref;
+      }
+    });
   });
 
   const boot = async () => {
