@@ -1249,24 +1249,22 @@
     }
     const fixture = findFixtureRowBySelectedKey();
     const siteData = await loadSelectedFixtureSiteData();
-    if (siteData?.decision) {
+    const directDecision = await fetchOptionalJson(
+      `${DATA_ROOT}/fixture_decision_intelligence/${encodeURIComponent(selectedFixtureKey)}.json`
+    );
+    if (directDecision) {
+      state.selectedFixtureDecisionIntelligence = directDecision;
+    } else if (siteData?.decision) {
       state.selectedFixtureDecisionIntelligence = siteData.decision;
     } else {
-      const directDecision = await fetchOptionalJson(
-        `${DATA_ROOT}/fixture_decision_intelligence/${encodeURIComponent(selectedFixtureKey)}.json`
+      const resolvedDecision = await loadFixturePayloadFromIndex(
+        "fixture_decision_intelligence",
+        state.fixtureDecisionIndex,
+        fixture,
+        selectedFixtureKey,
+        { allowHistoricalPairFallback: false }
       );
-      if (directDecision) {
-        state.selectedFixtureDecisionIntelligence = directDecision;
-      } else {
-        const resolvedDecision = await loadFixturePayloadFromIndex(
-          "fixture_decision_intelligence",
-          state.fixtureDecisionIndex,
-          fixture,
-          selectedFixtureKey,
-          { allowHistoricalPairFallback: false }
-        );
-        state.selectedFixtureDecisionIntelligence = resolvedDecision?.payload || null;
-      }
+      state.selectedFixtureDecisionIntelligence = resolvedDecision?.payload || null;
     }
     if (!fixture) {
       return;
