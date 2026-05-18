@@ -143,6 +143,110 @@ def data_size_bytes() -> int:
     return sum(path.stat().st_size for path in DATA_ROOT.rglob("*") if path.is_file())
 
 
+def weekly_proof_signature(payload: dict[str, Any]) -> dict[str, Any]:
+    def keep_rollup(items: Any, key: str) -> list[dict[str, Any]]:
+        if not isinstance(items, list):
+            return []
+        out = []
+        for item in items:
+            if not isinstance(item, dict):
+                continue
+            out.append(
+                {
+                    key: item.get(key),
+                    "total_picks": item.get("total_picks"),
+                    "settled_picks": item.get("settled_picks"),
+                    "pending_picks": item.get("pending_picks"),
+                    "wins": item.get("wins"),
+                    "losses": item.get("losses"),
+                    "voids": item.get("voids"),
+                    "hit_rate": item.get("hit_rate"),
+                    "roi": item.get("roi"),
+                    "profit_units": item.get("profit_units"),
+                }
+            )
+        return sorted(out, key=lambda row: str(row.get(key) or ""))
+
+    def keep_chart(items: Any) -> list[dict[str, Any]]:
+        if not isinstance(items, list):
+            return []
+        out = []
+        for item in items:
+            if not isinstance(item, dict):
+                continue
+            out.append(
+                {
+                    "date": item.get("date"),
+                    "settled_picks": item.get("settled_picks"),
+                    "wins": item.get("wins"),
+                    "losses": item.get("losses"),
+                    "voids": item.get("voids"),
+                    "profit_units": item.get("profit_units"),
+                    "cumulative_profit_units": item.get("cumulative_profit_units"),
+                    "rolling_hit_rate": item.get("rolling_hit_rate"),
+                    "cumulative_roi": item.get("cumulative_roi"),
+                    "cumulative_hit_rate": item.get("cumulative_hit_rate"),
+                }
+            )
+        return sorted(out, key=lambda row: str(row.get("date") or ""))
+
+    def keep_settlements(items: Any) -> list[dict[str, Any]]:
+        if not isinstance(items, list):
+            return []
+        out = []
+        for item in items:
+            if not isinstance(item, dict):
+                continue
+            out.append(
+                {
+                    "settlement_key": item.get("settlement_key"),
+                    "market": item.get("market"),
+                    "pick": item.get("pick"),
+                    "result_status": item.get("result_status"),
+                    "actual": item.get("actual"),
+                    "profit_units": item.get("profit_units"),
+                    "final_home_score": item.get("final_home_score"),
+                    "final_away_score": item.get("final_away_score"),
+                    "provider_status": item.get("provider_status"),
+                }
+            )
+        return sorted(out, key=lambda row: str(row.get("settlement_key") or ""))
+
+    return {
+        "period_start": payload.get("period_start"),
+        "period_end": payload.get("period_end"),
+        "source_file": payload.get("source_file"),
+        "published_run_id": payload.get("published_run_id"),
+        "total_picks": payload.get("total_picks"),
+        "settled_picks": payload.get("settled_picks"),
+        "pending_picks": payload.get("pending_picks"),
+        "wins": payload.get("wins"),
+        "losses": payload.get("losses"),
+        "voids": payload.get("voids"),
+        "hit_rate": payload.get("hit_rate"),
+        "roi": payload.get("roi"),
+        "profit_units": payload.get("profit_units"),
+        "by_market": keep_rollup(payload.get("by_market"), "market"),
+        "by_tier": keep_rollup(payload.get("by_tier"), "tier"),
+        "by_league": keep_rollup(payload.get("by_league"), "league"),
+        "by_visibility": keep_rollup(payload.get("by_visibility"), "visibility"),
+        "chart_points": keep_chart(payload.get("chart_points")),
+        "items": keep_settlements(payload.get("items")),
+    }
+
+
+def weekly_summary(payload: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "generated_at": payload.get("generated_at"),
+        "total_picks": payload.get("total_picks"),
+        "settled_picks": payload.get("settled_picks"),
+        "pending_picks": payload.get("pending_picks"),
+        "wins": payload.get("wins"),
+        "losses": payload.get("losses"),
+        "voids": payload.get("voids"),
+    }
+
+
 def parse_worker_vars() -> dict[str, str]:
     text = WRANGLER_TOML.read_text(encoding="utf-8") if WRANGLER_TOML.exists() else ""
     vars_block_match = re.search(r"\[vars\]\s*(.*?)(?:\n\[|\Z)", text, flags=re.S)
@@ -311,27 +415,15 @@ def check_live(worker_url: str, site_url: str) -> tuple[list[dict[str, Any]], li
         if local_weekly_path.exists():
             with local_weekly_path.open("r", encoding="utf-8") as handle:
                 local_weekly = json.load(handle)
-            local_signature = {
-                "generated_at": local_weekly.get("generated_at"),
-                "total_picks": local_weekly.get("total_picks"),
-                "settled_picks": local_weekly.get("settled_picks"),
-                "wins": local_weekly.get("wins"),
-                "losses": local_weekly.get("losses"),
-                "voids": local_weekly.get("voids"),
-            }
-            preview_signature = {
-                "generated_at": weekly.get("generated_at"),
-                "total_picks": weekly.get("total_picks"),
-                "settled_picks": weekly.get("settled_picks"),
-                "wins": weekly.get("wins"),
-                "losses": weekly.get("losses"),
-                "voids": weekly.get("voids"),
-            }
+            local_signature = weekly_proof_signature(local_weekly)
+            preview_signature = weekly_proof_signature(weekly)
+            local_brief = weekly_summary(local_weekly)
+            preview_brief = weekly_summary(weekly)
             checks.append(
                 {
                     "name": "preview_weekly_matches_local_bundle",
                     "ok": preview_signature == local_signature,
-                    "details": f"preview={preview_signature}; local={local_signature}",
+                    "details": f"preview={preview_brief}; local={local_brief}; volatile timestamps ignored",
                 }
             )
     else:
