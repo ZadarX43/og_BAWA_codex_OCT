@@ -4,7 +4,7 @@
   "competition": "Brazil Serie A",
   "competition_key": "brazil_serie_a",
   "season": "2026",
-  "home_team": "Gr\u00eamio",
+  "home_team": "Grêmio",
   "away_team": "Flamengo",
   "home_team_id": 130,
   "away_team_id": 127,
@@ -87,5 +87,10 @@
     "formation_attack_delta": 0.0,
     "formation_defence_delta": 0.0
   },
-  "site_alias_source_fixture_key": "2026-05-10_gremio_flamengo"
+  "site_alias_source_fixture_key": "2026-05-10_gremio_flamengo",
+  "capture_generated_at": "2026-05-13T21:10:44Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-10T22:30:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "backfill"
 }

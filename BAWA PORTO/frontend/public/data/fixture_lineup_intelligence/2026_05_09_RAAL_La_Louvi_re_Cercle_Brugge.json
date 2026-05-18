@@ -4,7 +4,7 @@
   "competition": "Belgium Pro",
   "competition_key": "belgium_pro",
   "season": "2025/2026",
-  "home_team": "RAAL La Louvi\u00e8re",
+  "home_team": "RAAL La Louvière",
   "away_team": "Cercle Brugge",
   "home_team_id": 5902,
   "away_team_id": 741,
@@ -39,39 +39,39 @@
   "key_mismatches": [
     {
       "zone": "Midfield control battle",
-      "advantage": "RAAL La Louvi\u00e8re",
+      "advantage": "RAAL La Louvière",
       "mismatch_score": 34,
-      "left_label": "RAAL La Louvi\u00e8re midfield",
+      "left_label": "RAAL La Louvière midfield",
       "left_value": 56,
       "right_label": "Cercle Brugge midfield",
       "right_value": 22,
-      "summary": "RAAL La Louvi\u00e8re should control more of the central game-state"
+      "summary": "RAAL La Louvière should control more of the central game-state"
     },
     {
-      "zone": "Cercle Brugge attack vs RAAL La Louvi\u00e8re defence",
+      "zone": "Cercle Brugge attack vs RAAL La Louvière defence",
       "advantage": "Cercle Brugge",
       "mismatch_score": 17,
       "left_label": "Cercle Brugge attack",
       "left_value": 69,
-      "right_label": "RAAL La Louvi\u00e8re defence",
+      "right_label": "RAAL La Louvière defence",
       "right_value": 52,
       "summary": "Major Cercle Brugge attacking advantage"
     },
     {
-      "zone": "Cercle Brugge wide threat vs RAAL La Louvi\u00e8re resistance",
+      "zone": "Cercle Brugge wide threat vs RAAL La Louvière resistance",
       "advantage": "Cercle Brugge",
       "mismatch_score": 17,
       "left_label": "Cercle Brugge wide threat",
       "left_value": 69,
-      "right_label": "RAAL La Louvi\u00e8re resistance",
+      "right_label": "RAAL La Louvière resistance",
       "right_value": 52,
       "summary": "Cercle Brugge wide channel has a live attacking edge"
     },
     {
-      "zone": "RAAL La Louvi\u00e8re attack vs Cercle Brugge defence",
+      "zone": "RAAL La Louvière attack vs Cercle Brugge defence",
       "advantage": "Cercle Brugge",
       "mismatch_score": 16,
-      "left_label": "RAAL La Louvi\u00e8re attack",
+      "left_label": "RAAL La Louvière attack",
       "left_value": 12,
       "right_label": "Cercle Brugge defence",
       "right_value": 28,
@@ -87,5 +87,10 @@
     "formation_attack_delta": 0.0,
     "formation_defence_delta": 0.0
   },
-  "site_alias_source_fixture_key": "2026-05-09_raal_la_louviere_cercle_brugge"
+  "site_alias_source_fixture_key": "2026-05-09_raal_la_louviere_cercle_brugge",
+  "capture_generated_at": "2026-05-13T21:10:44Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-09T14:00:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "backfill"
 }

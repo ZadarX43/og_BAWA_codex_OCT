@@ -336,6 +336,11 @@ def execute_schema(conn: sqlite3.Connection) -> None:
           fixture_class TEXT,
           publish_class TEXT,
           coverage_status TEXT,
+          capture_generated_at TEXT,
+          source_data_cutoff_at TEXT,
+          fixture_kickoff_at TEXT,
+          pre_kickoff_eligible INTEGER,
+          snapshot_phase TEXT,
           payload_json TEXT NOT NULL
         );
 
@@ -345,6 +350,11 @@ def execute_schema(conn: sqlite3.Connection) -> None:
           signal_state TEXT,
           agreement_score INTEGER,
           confidence_band TEXT,
+          capture_generated_at TEXT,
+          source_data_cutoff_at TEXT,
+          fixture_kickoff_at TEXT,
+          pre_kickoff_eligible INTEGER,
+          snapshot_phase TEXT,
           payload_json TEXT NOT NULL
         );
 
@@ -356,6 +366,11 @@ def execute_schema(conn: sqlite3.Connection) -> None:
           lineup_mode TEXT,
           home_team TEXT,
           away_team TEXT,
+          capture_generated_at TEXT,
+          source_data_cutoff_at TEXT,
+          fixture_kickoff_at TEXT,
+          pre_kickoff_eligible INTEGER,
+          snapshot_phase TEXT,
           payload_json TEXT NOT NULL
         );
 
@@ -365,6 +380,11 @@ def execute_schema(conn: sqlite3.Connection) -> None:
           coverage_status TEXT,
           fallback_mode TEXT,
           sample_size INTEGER,
+          capture_generated_at TEXT,
+          source_data_cutoff_at TEXT,
+          fixture_kickoff_at TEXT,
+          pre_kickoff_eligible INTEGER,
+          snapshot_phase TEXT,
           payload_json TEXT NOT NULL
         );
 
@@ -677,6 +697,11 @@ def insert_fixtures(conn: sqlite3.Connection, data_root: Path) -> int:
                 fixture.get("fixture_class"),
                 fixture.get("publish_class"),
                 fixture.get("coverage_status"),
+                fixture.get("capture_generated_at"),
+                fixture.get("source_data_cutoff_at"),
+                fixture.get("fixture_kickoff_at"),
+                1 if fixture.get("pre_kickoff_eligible") is True else 0,
+                fixture.get("snapshot_phase"),
                 json_text(fixture),
             )
         )
@@ -685,9 +710,10 @@ def insert_fixtures(conn: sqlite3.Connection, data_root: Path) -> int:
         INSERT INTO fixtures(
           fixture_key, fixture_id, kickoff_time, league, league_key, api_league_id,
           api_season, home_team, away_team, fixture_class, publish_class,
-          coverage_status, payload_json
+          coverage_status, capture_generated_at, source_data_cutoff_at,
+          fixture_kickoff_at, pre_kickoff_eligible, snapshot_phase, payload_json
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
         rows,
     )
@@ -728,13 +754,30 @@ def insert_fixture_decisions(conn: sqlite3.Connection, data_root: Path) -> int:
         data_root,
         "fixture_decision_intelligence",
         "fixture_decisions",
-        ("fixture_key", "primary_signal", "signal_state", "agreement_score", "confidence_band", "payload_json"),
+        (
+            "fixture_key",
+            "primary_signal",
+            "signal_state",
+            "agreement_score",
+            "confidence_band",
+            "capture_generated_at",
+            "source_data_cutoff_at",
+            "fixture_kickoff_at",
+            "pre_kickoff_eligible",
+            "snapshot_phase",
+            "payload_json",
+        ),
         lambda index_row, payload: (
             index_row.get("fixture_key"),
             payload.get("primary_signal") or index_row.get("primary_signal"),
             payload.get("signal_state") or index_row.get("signal_state"),
             safe_int(payload.get("agreement_score") or index_row.get("agreement_score")),
             payload.get("confidence_band") or index_row.get("confidence_band"),
+            payload.get("capture_generated_at") or index_row.get("capture_generated_at"),
+            payload.get("source_data_cutoff_at") or index_row.get("source_data_cutoff_at"),
+            payload.get("fixture_kickoff_at") or index_row.get("fixture_kickoff_at"),
+            1 if (payload.get("pre_kickoff_eligible") if "pre_kickoff_eligible" in payload else index_row.get("pre_kickoff_eligible")) is True else 0,
+            payload.get("snapshot_phase") or index_row.get("snapshot_phase"),
             json_text(payload),
         ),
     )
@@ -746,7 +789,21 @@ def insert_fixture_lineups(conn: sqlite3.Connection, data_root: Path) -> int:
         data_root,
         "fixture_lineup_intelligence",
         "fixture_lineups",
-        ("fixture_key", "competition_key", "coverage_status", "lineup_status", "lineup_mode", "home_team", "away_team", "payload_json"),
+        (
+            "fixture_key",
+            "competition_key",
+            "coverage_status",
+            "lineup_status",
+            "lineup_mode",
+            "home_team",
+            "away_team",
+            "capture_generated_at",
+            "source_data_cutoff_at",
+            "fixture_kickoff_at",
+            "pre_kickoff_eligible",
+            "snapshot_phase",
+            "payload_json",
+        ),
         lambda index_row, payload: (
             index_row.get("fixture_key"),
             payload.get("competition_key") or index_row.get("competition_key"),
@@ -755,6 +812,11 @@ def insert_fixture_lineups(conn: sqlite3.Connection, data_root: Path) -> int:
             payload.get("lineup_mode") or index_row.get("lineup_mode"),
             payload.get("home_team") or index_row.get("home_team"),
             payload.get("away_team") or index_row.get("away_team"),
+            payload.get("capture_generated_at") or index_row.get("capture_generated_at"),
+            payload.get("source_data_cutoff_at") or index_row.get("source_data_cutoff_at"),
+            payload.get("fixture_kickoff_at") or index_row.get("fixture_kickoff_at"),
+            1 if (payload.get("pre_kickoff_eligible") if "pre_kickoff_eligible" in payload else index_row.get("pre_kickoff_eligible")) is True else 0,
+            payload.get("snapshot_phase") or index_row.get("snapshot_phase"),
             json_text(payload),
         ),
     )
@@ -766,13 +828,30 @@ def insert_fixture_h2h(conn: sqlite3.Connection, data_root: Path) -> int:
         data_root,
         "fixture_h2h_support",
         "fixture_h2h",
-        ("fixture_key", "competition", "coverage_status", "fallback_mode", "sample_size", "payload_json"),
+        (
+            "fixture_key",
+            "competition",
+            "coverage_status",
+            "fallback_mode",
+            "sample_size",
+            "capture_generated_at",
+            "source_data_cutoff_at",
+            "fixture_kickoff_at",
+            "pre_kickoff_eligible",
+            "snapshot_phase",
+            "payload_json",
+        ),
         lambda index_row, payload: (
             index_row.get("fixture_key"),
             payload.get("competition") or index_row.get("competition"),
             payload.get("coverage_status") or index_row.get("coverage_status"),
             payload.get("fallback_mode") or index_row.get("fallback_mode"),
             safe_int(payload.get("sample_size") or index_row.get("sample_size")),
+            payload.get("capture_generated_at") or index_row.get("capture_generated_at"),
+            payload.get("source_data_cutoff_at") or index_row.get("source_data_cutoff_at"),
+            payload.get("fixture_kickoff_at") or index_row.get("fixture_kickoff_at"),
+            1 if (payload.get("pre_kickoff_eligible") if "pre_kickoff_eligible" in payload else index_row.get("pre_kickoff_eligible")) is True else 0,
+            payload.get("snapshot_phase") or index_row.get("snapshot_phase"),
             json_text(payload),
         ),
     )

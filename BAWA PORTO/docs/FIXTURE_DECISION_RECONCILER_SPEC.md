@@ -17,6 +17,7 @@ This is the layer that turns:
 - ratings
 - lineup structure
 - matchup context
+- injury shock / lineup risk context
 
 into:
 - one decision state
@@ -108,6 +109,10 @@ Allowed states:
 
 ### H2H support layer
 - `frontend/public/data/fixture_h2h_support/<fixture_key>.json`
+
+### Injury shock / lineup risk layer
+- `reports/latest/injury_shock_engine_<WINDOW>/INJURY_SHOCK_BOARD.csv`
+- future publish-safe JSON path to be defined after backtest proof
 
 ## Deterministic Rules
 
@@ -209,6 +214,32 @@ Examples:
 - `HIGH_HOME_CHAOS`
 - `OPPOSITION_ATTACK_ACCESS`
 - `DISCIPLINE_HEAT_RISK`
+- `HOME_ATTACK_SHOCK`
+- `AWAY_ATTACK_SHOCK`
+- `HOME_DEFENCE_SPINE_SHOCK`
+- `AWAY_DEFENCE_SPINE_SHOCK`
+- `MOTIVATION_VOLATILITY`
+- `REQUIRE_LINEUP_CONFIRMATION`
+
+## Injury Shock Discipline
+
+The injury shock layer must remain a caution / review layer until it has token-level walk-forward proof.
+
+It should not directly publish raw injury reports, provider text, or unsupported player medical detail. It should publish only public-safe structural reads, for example:
+
+- attacking unit weakened
+- defensive spine weakened
+- keeper absence risk
+- mobility / late fitness-test risk
+- lineup confirmation required
+- motivation volatility elevated
+
+Market interpretation:
+
+- `ATTACK_SHOCK` can downgrade Over 2.5, BTTS Yes, and team-goals confidence.
+- `DEFENCE_SPINE_SHOCK` can increase BTTS/Over danger but also FTR volatility.
+- `MOTIVATION_VOLATILITY` can downgrade dominant favourite certainty.
+- `REQUIRE_LINEUP_CONFIRMATION` should keep the fixture in pre-slip review until confirmed lineups are available.
 
 ## Team Faceoff Summary
 Should contain:

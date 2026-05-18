@@ -11,6 +11,7 @@ from pathlib import Path
 
 import pandas as pd
 
+from publish_snapshot_metadata import metadata_from_fixture, utc_now_iso
 from ratings_engine_utils import clean_columns
 
 
@@ -196,9 +197,14 @@ def augment_with_fixture_feed(
     existing_keys = set(payloads.keys())
     augmented = dict(payloads)
     augmented_index = list(index_rows)
+    capture_generated_at = utc_now_iso()
     for fixture in fixture_feed_rows:
         fixture_key = str(fixture.get("fixture_key") or "").strip()
-        if not fixture_key or fixture_key in existing_keys:
+        if not fixture_key:
+            continue
+        if fixture_key in existing_keys:
+            if fixture_key in augmented:
+                augmented[fixture_key].update(metadata_from_fixture(fixture, capture_generated_at=capture_generated_at))
             continue
         pair = (
             competition_key(fixture.get("league")),
@@ -233,6 +239,7 @@ def augment_with_fixture_feed(
             )
         else:
             payload = placeholder_payload(fixture)
+        payload.update(metadata_from_fixture(fixture, capture_generated_at=capture_generated_at))
         augmented[fixture_key] = payload
         augmented_index.append(
             {
@@ -244,9 +251,35 @@ def augment_with_fixture_feed(
                 "sample_size": payload["sample_size"],
                 "fallback_mode": payload.get("fallback_mode"),
                 "coverage_status": payload.get("coverage_status"),
+                "capture_generated_at": payload.get("capture_generated_at"),
+                "source_data_cutoff_at": payload.get("source_data_cutoff_at"),
+                "fixture_kickoff_at": payload.get("fixture_kickoff_at"),
+                "pre_kickoff_eligible": payload.get("pre_kickoff_eligible"),
+                "snapshot_phase": payload.get("snapshot_phase"),
             }
         )
         existing_keys.add(fixture_key)
+    current_keys = {str(row.get("fixture_key") or "").strip() for row in fixture_feed_rows if row.get("fixture_key")}
+    if current_keys:
+        augmented_index = [
+            {
+                "fixture_key": key,
+                "fixture_id": payload.get("fixture_id"),
+                "competition": payload.get("competition"),
+                "competition_key": payload.get("competition_key"),
+                "season": payload.get("season"),
+                "sample_size": payload.get("sample_size"),
+                "fallback_mode": payload.get("fallback_mode"),
+                "coverage_status": payload.get("coverage_status"),
+                "capture_generated_at": payload.get("capture_generated_at"),
+                "source_data_cutoff_at": payload.get("source_data_cutoff_at"),
+                "fixture_kickoff_at": payload.get("fixture_kickoff_at"),
+                "pre_kickoff_eligible": payload.get("pre_kickoff_eligible"),
+                "snapshot_phase": payload.get("snapshot_phase"),
+            }
+            for key, payload in augmented.items()
+            if key in current_keys
+        ]
     return augmented, augmented_index
 
 

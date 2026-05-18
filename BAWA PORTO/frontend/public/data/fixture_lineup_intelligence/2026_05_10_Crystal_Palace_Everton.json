@@ -118,7 +118,7 @@
   ],
   "home_lineup_profiles": [
     {
-      "name": "J\u00f8rgen Strand Larsen",
+      "name": "Jørgen Strand Larsen",
       "surname": "Larsen",
       "lineup_position": "F",
       "position_group": "forward",
@@ -137,7 +137,7 @@
       "tags": []
     },
     {
-      "name": "Isma\u00efla Sarr",
+      "name": "Ismaïla Sarr",
       "surname": "Sarr",
       "lineup_position": "F",
       "position_group": "forward",
@@ -175,8 +175,8 @@
       "tags": []
     },
     {
-      "name": "Daniel Mu\u00f1oz",
-      "surname": "Mu\u00f1oz",
+      "name": "Daniel Muñoz",
+      "surname": "Muñoz",
       "lineup_position": "M",
       "position_group": "centre_back",
       "power": 61,
@@ -481,8 +481,8 @@
       "tags": []
     },
     {
-      "name": "Merlin R\u00f6hl",
-      "surname": "R\u00f6hl",
+      "name": "Merlin Röhl",
+      "surname": "Röhl",
       "lineup_position": "M",
       "position_group": "central_midfielder",
       "power": 39,
@@ -500,8 +500,8 @@
       "tags": []
     },
     {
-      "name": "Jake O\u00b4Brien",
-      "surname": "O\u00b4Brien",
+      "name": "Jake O´Brien",
+      "surname": "O´Brien",
       "lineup_position": "D",
       "position_group": "centre_back",
       "power": 63,
@@ -544,5 +544,10 @@
     "formation_attack_delta": 0.5,
     "formation_defence_delta": -1.0
   },
-  "site_alias_source_fixture_key": "2026-05-10_crystal_palace_everton"
+  "site_alias_source_fixture_key": "2026-05-10_crystal_palace_everton",
+  "capture_generated_at": "2026-05-13T21:10:44Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-10T13:00:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "backfill"
 }

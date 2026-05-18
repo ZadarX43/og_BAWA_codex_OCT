@@ -14,10 +14,17 @@ import email.utils
 import html
 import json
 import re
+import sys
 import urllib.request
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Any
+
+ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from publish_snapshot_metadata import metadata_from_fixture, utc_now_iso
 
 
 DEFAULT_DATA_ROOT = Path("frontend/public/data")
@@ -358,7 +365,12 @@ def merge_fixture_payload(data_root: Path, fixture_key: str, updates: dict[str, 
     path = data_root / "external_content" / "fixture_media" / f"{fixture_key}.json"
     payload = read_json(path, {"fixture_key": fixture_key, "media": [], "news_signals": [], "weather_signals": [], "space_weather_signals": [], "sentiment_signals": []})
     payload["fixture_key"] = fixture_key
-    payload["updated_at"] = dt.datetime.now(dt.timezone.utc).date().isoformat()
+    capture_generated_at = utc_now_iso()
+    payload["updated_at"] = capture_generated_at
+    fixture_feed = read_json(data_root / "fixture_intelligence_public.json", {})
+    fixture_rows = fixture_feed.get("fixtures") if isinstance(fixture_feed, dict) else []
+    fixture = next((row for row in fixture_rows if str(row.get("fixture_key") or "") == fixture_key), {}) if isinstance(fixture_rows, list) else {}
+    payload.update(metadata_from_fixture(fixture, capture_generated_at=capture_generated_at))
     for key, items in updates.items():
         existing = payload.get(key)
         if not isinstance(existing, list):

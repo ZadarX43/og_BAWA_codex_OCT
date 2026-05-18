@@ -28,6 +28,7 @@ from publish_predictions import (
     utc_now_iso,
     write_json,
 )
+from publish_snapshot_metadata import build_snapshot_metadata
 
 OUTPUT_PATH = FRONTEND_DATA_DIR / "fixture_intelligence_public.json"
 REPORT_PATH = REPORTS_DIR / "FIXTURE_INTELLIGENCE_REPORT.md"
@@ -894,6 +895,13 @@ def classify_context_monitor_fixture(
         },
         "updated_at": generated_at,
     }
+    record.update(
+        build_snapshot_metadata(
+            capture_generated_at=generated_at,
+            source_data_cutoff_at=generated_at,
+            fixture_kickoff_at=record["kickoff_time"],
+        )
+    )
     counters[f"publish_class:{publish_class}"] += 1
     counters[f"context_monitor:{publish_class.lower()}"] += 1
     return record
@@ -962,6 +970,13 @@ def build_fixture_record(
         "follow_relevance": {},
         "updated_at": generated_at,
     }
+    record.update(
+        build_snapshot_metadata(
+            capture_generated_at=generated_at,
+            source_data_cutoff_at=generated_at,
+            fixture_kickoff_at=record["kickoff_time"],
+        )
+    )
 
     if deploy_rows:
         primary = select_primary_deploy(deploy_rows)

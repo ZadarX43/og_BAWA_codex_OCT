@@ -12,6 +12,7 @@ import pandas as pd
 from player_rating_engine import build_player_scores, build_ranks, prepare_player_frame
 from ratings_engine_utils import clean_columns, ensure_dir, score_to_int, slugify, write_json
 from team_rating_engine import build_team_scores, prepare_team_frame
+from publish_snapshot_metadata import metadata_from_fixture, utc_now_iso
 
 
 CONFIRMED_LINEUP_UPDATE_MODEL = {
@@ -1043,6 +1044,7 @@ def build_current_fixture_snapshot_payloads(
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     records: list[dict[str, Any]] = []
     index_rows: list[dict[str, Any]] = []
+    capture_generated_at = utc_now_iso()
     for fixture in fixture_feed_rows:
         fixture_key = str(fixture.get("fixture_key") or "").strip()
         if not fixture_key:
@@ -1106,6 +1108,7 @@ def build_current_fixture_snapshot_payloads(
                 },
                 "summary": "Predicted lineups are built from each team's most recent published lineup and bench snapshot.",
             }
+        payload.update(metadata_from_fixture(fixture, capture_generated_at=capture_generated_at))
         records.append(payload)
         index_rows.append(
             {
@@ -1119,6 +1122,11 @@ def build_current_fixture_snapshot_payloads(
                 "coverage_status": payload.get("coverage_status"),
                 "lineup_status": payload.get("lineup_status"),
                 "lineup_mode": payload.get("lineup_mode"),
+                "capture_generated_at": payload.get("capture_generated_at"),
+                "source_data_cutoff_at": payload.get("source_data_cutoff_at"),
+                "fixture_kickoff_at": payload.get("fixture_kickoff_at"),
+                "pre_kickoff_eligible": payload.get("pre_kickoff_eligible"),
+                "snapshot_phase": payload.get("snapshot_phase"),
             }
         )
     return records, index_rows

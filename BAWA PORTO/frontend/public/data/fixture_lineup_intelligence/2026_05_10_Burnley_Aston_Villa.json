@@ -118,8 +118,8 @@
   ],
   "home_lineup_profiles": [
     {
-      "name": "Florentino Lu\u00eds",
-      "surname": "Lu\u00eds",
+      "name": "Florentino Luís",
+      "surname": "Luís",
       "lineup_position": "M",
       "position_group": "central_midfielder",
       "power": 56,
@@ -329,8 +329,8 @@
   ],
   "away_lineup_profiles": [
     {
-      "name": "Victor Lindel\u00f6f",
-      "surname": "Lindel\u00f6f",
+      "name": "Victor Lindelöf",
+      "surname": "Lindelöf",
       "lineup_position": "M",
       "position_group": "centre_back",
       "power": 42,
@@ -500,8 +500,8 @@
       "tags": []
     },
     {
-      "name": "Emiliano Mart\u00ednez",
-      "surname": "Mart\u00ednez",
+      "name": "Emiliano Martínez",
+      "surname": "Martínez",
       "lineup_position": "G",
       "position_group": "goalkeeper",
       "power": 68,
@@ -544,5 +544,10 @@
     "formation_attack_delta": 0.0,
     "formation_defence_delta": 0.0
   },
-  "site_alias_source_fixture_key": "2026-05-10_burnley_aston_villa"
+  "site_alias_source_fixture_key": "2026-05-10_burnley_aston_villa",
+  "capture_generated_at": "2026-05-13T21:10:44Z",
+  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
+  "fixture_kickoff_at": "2026-05-10T13:00:00Z",
+  "pre_kickoff_eligible": false,
+  "snapshot_phase": "backfill"
 }
