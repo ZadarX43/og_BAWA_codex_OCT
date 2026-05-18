@@ -2366,7 +2366,7 @@
     return "Team-goals price pending";
   };
 
-  const publishedModelProbability = (fixture, key) => {
+  const publishedMarketRow = (fixture, key, pick = "") => {
     const fixtureKey = String(fixture?.fixture_key || "");
     const aliases = {
       ftr: ["FTR"],
@@ -2374,88 +2374,285 @@
       btts: ["BTTS"],
       team_goals: ["TG15", "TEAM_GOALS", "TEAMGOALS"],
     }[key] || [];
+    const wantedPick = String(pick || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
     const rows = [...state.publicPredictions, ...state.premiumPredictions, ...state.securePremiumPredictions];
-    const match = rows.find((row) => {
-      const rowFixtureKey = String(row.fixture_key || "");
-      const market = String(row.market || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
-      return rowFixtureKey === fixtureKey && aliases.some((alias) => market === alias.replace(/[^A-Z0-9]/g, ""));
-    });
-    if (!match) {
+    return (
+      rows.find((row) => {
+        const rowFixtureKey = String(row.fixture_key || "");
+        const market = String(row.market || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+        const rowPick = String(row.pick || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+        const marketMatches = rowFixtureKey === fixtureKey && aliases.some((alias) => market === alias.replace(/[^A-Z0-9]/g, ""));
+        return marketMatches && (!wantedPick || rowPick === wantedPick);
+      }) || null
+    );
+  };
+
+  const publishedModelProbability = (fixture, key, pick = "") => {
+    const match = publishedMarketRow(fixture, key, pick);
+    if (!match && pick) {
       return "";
     }
-    if (match.model_prob_display) {
-      return String(match.model_prob_display);
+    const fallbackMatch =
+      match ||
+      (() => {
+        const fixtureKey = String(fixture?.fixture_key || "");
+        const aliases = {
+          ftr: ["FTR"],
+          ou25: ["OU25", "OVER25"],
+          btts: ["BTTS"],
+          team_goals: ["TG15", "TEAM_GOALS", "TEAMGOALS"],
+        }[key] || [];
+        const rows = [...state.publicPredictions, ...state.premiumPredictions, ...state.securePremiumPredictions];
+        return rows.find((row) => {
+          const rowFixtureKey = String(row.fixture_key || "");
+          const market = String(row.market || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+          return rowFixtureKey === fixtureKey && aliases.some((alias) => market === alias.replace(/[^A-Z0-9]/g, ""));
+        });
+      })();
+    if (!fallbackMatch) {
+      return "";
     }
-    const numeric = Number(match.model_prob);
+    if (fallbackMatch.model_prob_display) {
+      return String(fallbackMatch.model_prob_display);
+    }
+    const numeric = Number(fallbackMatch.model_prob);
     return Number.isFinite(numeric) ? compactPercent(numeric) : "";
   };
 
-  const marketProbabilityLine = (fixture, key, intelligence = null) => {
-    const odds = fixture?.odds_summary || {};
-    const lean = String(intelligence?.modelLean || "").toUpperCase();
-    const support = Number.isFinite(Number(intelligence?.rating)) ? `${Math.round(Number(intelligence.rating))}%` : "Pending";
-    const modelProbability = publishedModelProbability(fixture, key);
-    if (modelProbability) {
-      return `Selected model lean ${modelProbability} · ${deployPickDisplay(lean || fixture?.signal_summary?.deploy_pick || "")}`;
-    }
-    if (key === "ftr") {
-      return `Model/support ${support} · ${deployPickDisplay(lean || "lean pending")}`;
-    }
-    if (key === "ou25") {
-      return `Model/support ${support} · Over ${formatImpliedProbability(odds.over25_odds)}`;
-    }
-    if (key === "btts") {
-      return `Yes ${formatImpliedProbability(odds.btts_yes_odds)} · No ${formatImpliedProbability(odds.btts_no_odds)}`;
-    }
-    return `Home over 1.5 ${lean === "HOME" ? support : "Pending"} · Away over 1.5 ${lean === "AWAY" ? support : "Pending"}`;
+  const decisionMarketItem = (decision, key) => {
+    const normalizedKey = String(key || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+    return (
+      decisionMarketSuitabilityItems(decision).find((item) => {
+        const itemKey = String(item.key || item.label || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+        if (normalizedKey === "ftr") return itemKey.includes("ftr");
+        if (normalizedKey === "ou25") return itemKey.includes("ou25") || itemKey.includes("over25");
+        if (normalizedKey === "btts") return itemKey.includes("btts");
+        if (normalizedKey === "teamgoals") return itemKey.includes("teamgoals");
+        return itemKey === normalizedKey;
+      }) || null
+    );
   };
 
+  const normalizeLeanKey = (value) => String(value || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+
+  const leanForMarket = (fixture, key, intel = null) => {
+    const rawLean = normalizeLeanKey(intel?.modelLean);
+    if (rawLean) {
+      if (key === "team_goals") {
+        return rawLean;
+      }
+      if (rawLean.includes("OVER25")) return "OVER25";
+      if (rawLean.includes("UNDER25")) return "UNDER25";
+      if (rawLean.includes("YES")) return "YES";
+      if (rawLean.includes("NO")) return "NO";
+      if (rawLean.includes("DRAW")) return "DRAW";
+      if (rawLean.includes("AWAY")) return "AWAY";
+      if (rawLean.includes("HOME")) return "HOME";
+    }
+    const signal = fixtureSignalProfile(fixture);
+    if (String(signal.family || "").toLowerCase() === String(key || "").replace("ou25", "OU25").toLowerCase()) {
+      return signal.pick;
+    }
+    return "";
+  };
+
+  const modelSignalText = (fixture, key, pick, intel = null, active = false) => {
+    const probability = publishedModelProbability(fixture, key, pick);
+    if (probability) {
+      return `Model ${probability}`;
+    }
+    if (Number.isFinite(Number(intel?.rating)) && active) {
+      return `Support ${Math.round(Number(intel.rating))}%`;
+    }
+    if (active) {
+      return "Model lean";
+    }
+    return "Price only";
+  };
+
+  const outcomeOddsText = (odds, unavailableCopy = "Odds pending") => (hasUsableOdds(odds) ? bookmakerLineDisplay(odds) : unavailableCopy);
+
+  const outcomeImpliedText = (odds, unavailableCopy = "No public price") => (hasUsableOdds(odds) ? impliedLineDisplay(odds) : unavailableCopy);
+
+  const marketOutcomeRows = (fixture, key, intel = null) => {
+    const odds = fixture?.odds_summary || {};
+    const lean = leanForMarket(fixture, key, intel);
+    if (key === "ftr") {
+      return [
+        { label: "Home", pick: "HOME", odds: odds.home_win_odds },
+        { label: "Draw", pick: "DRAW", odds: odds.draw_odds },
+        { label: "Away", pick: "AWAY", odds: odds.away_win_odds },
+      ].map((row) => {
+        const active = lean === row.pick;
+        return {
+          ...row,
+          active,
+          model: modelSignalText(fixture, key, row.pick, intel, active),
+          implied: outcomeImpliedText(row.odds),
+        };
+      });
+    }
+    if (key === "ou25") {
+      return [
+        { label: "Over 2.5", pick: "OVER25", odds: odds.over25_odds },
+        { label: "Under 2.5", pick: "UNDER25", odds: odds.under25_odds },
+      ].map((row) => {
+        const active = lean === row.pick;
+        return {
+          ...row,
+          active,
+          model: modelSignalText(fixture, key, row.pick, intel, active),
+          implied: outcomeImpliedText(row.odds),
+        };
+      });
+    }
+    if (key === "btts") {
+      return [
+        { label: "Yes", pick: "YES", odds: odds.btts_yes_odds },
+        { label: "No", pick: "NO", odds: odds.btts_no_odds },
+      ].map((row) => {
+        const active = lean === row.pick;
+        return {
+          ...row,
+          active,
+          model: modelSignalText(fixture, key, row.pick, intel, active),
+          implied: outcomeImpliedText(row.odds),
+        };
+      });
+    }
+    const homeKey = normalizeLeanKey(fixture.home_team);
+    const awayKey = normalizeLeanKey(fixture.away_team);
+    return [
+      { label: `${teamCardName(fixture.home_team) || "Home"} 1.5+`, pick: "HOME15", active: Boolean(lean && (lean.includes(homeKey) || lean.includes("HOME"))) },
+      { label: `${teamCardName(fixture.away_team) || "Away"} 1.5+`, pick: "AWAY15", active: Boolean(lean && (lean.includes(awayKey) || lean.includes("AWAY"))) },
+    ].map((row) => ({
+      ...row,
+      odds: null,
+      model: row.active && Number.isFinite(Number(intel?.rating)) ? `Support ${Math.round(Number(intel.rating))}%` : row.active ? "Model support" : "Support watch",
+      implied: "No odds feed",
+    }));
+  };
+
+  const marketLeadText = (fixture, key, intel = null) => {
+    const active = marketOutcomeRows(fixture, key, intel).find((row) => row.active);
+    if (active) {
+      return `${active.label} · ${active.model}`;
+    }
+    if (Number.isFinite(Number(intel?.rating))) {
+      return `${safeTitleLabel(intel?.band, "Context")} · ${Math.round(Number(intel.rating))}% support`;
+    }
+    return key === "team_goals" ? "Support-only read" : "Market read pending";
+  };
+
+  const marketAccessLabel = (key) => {
+    if (key === "team_goals") return "Founder context";
+    return "Standard view";
+  };
+
+  const marketOutcomeRowsMarkup = (rows) => `
+    <div class="fixture-market-outcome-list">
+      ${rows
+        .map(
+          (row) => `
+            <div class="fixture-market-outcome-row ${row.active ? "is-active" : ""}">
+              <div>
+                <span>${escapeHtml(row.label)}</span>
+                <small>${escapeHtml(row.model)}</small>
+              </div>
+              <div>
+                <b>${escapeHtml(outcomeOddsText(row.odds, "No odds"))}</b>
+                <small>${escapeHtml(row.implied)}</small>
+              </div>
+            </div>
+          `
+        )
+        .join("")}
+    </div>
+  `;
+
+  const fixtureTierUnlockRail = () => `
+    <div class="fixture-tier-rail" aria-label="Fixture intelligence tier visibility">
+      <article class="fixture-tier-card fixture-tier-card-open">
+        <span class="metric-label">Standard view</span>
+        <strong>Top market cards</strong>
+        <p>FTR, OU25, BTTS, TG1.5 posture with public-safe odds and model signal state.</p>
+      </article>
+      <article class="fixture-tier-card">
+        <span class="metric-label">Founder / Premium</span>
+        <strong>Fixture context</strong>
+        <p>Team reads, H2H, weather, freshness, lineups, and market suitability.</p>
+      </article>
+      <article class="fixture-tier-card">
+        <span class="metric-label">Pro</span>
+        <strong>Player-event intelligence</strong>
+        <p>Shots, SOT, tackles, fouls, key passes, saves, corners, and bookings.</p>
+      </article>
+      <article class="fixture-tier-card">
+        <span class="metric-label">Pro+</span>
+        <strong>Audit dashboard</strong>
+        <p>Advanced filters, downloadable intelligence, and model-feature drilldowns.</p>
+      </article>
+    </div>
+  `;
+
   const fixtureMarketCardsMarkup = (fixture, decision = null) => {
-    const items = decisionMarketSuitabilityItems(decision);
-    const byKey = items.reduce((acc, item) => {
-      const key = String(item.key || item.label || "").toLowerCase().replace(/[^a-z0-9]/g, "");
-      if (key.includes("ftr")) acc.ftr = item;
-      if (key.includes("btts")) acc.btts = item;
-      if (key.includes("ou25") || key.includes("over25")) acc.ou25 = item;
-      if (key.includes("teamgoals")) acc.team_goals = item;
-      return acc;
-    }, {});
     const deployFamily = String(fixture?.signal_summary?.market_family || "").toUpperCase();
     const cardDefs = [
-      { key: "ftr", title: "Full Time Result", lean: "Selected lean", active: deployFamily === "FTR" },
-      { key: "ou25", title: "Over 2.5", lean: "Signal state", active: deployFamily === "OU25" },
-      { key: "btts", title: "BTTS", lean: "Signal state", active: deployFamily === "BTTS" },
-      { key: "team_goals", title: "Team 1.5 Goals", lean: "TG1.5 support", active: deployFamily === "TG15" || deployFamily.includes("TEAM") },
+      {
+        key: "ftr",
+        title: "Full Time Result",
+        copy: "Home / Draw / Away odds with the model lean surfaced clearly.",
+        active: deployFamily === "FTR",
+      },
+      {
+        key: "ou25",
+        title: "Over 2.5 Match Goals",
+        copy: "Totals posture with Over/Under pricing and signal state.",
+        active: deployFamily === "OU25",
+      },
+      {
+        key: "btts",
+        title: "BTTS",
+        copy: "Both-teams-to-score pricing with Yes/No model posture.",
+        active: deployFamily === "BTTS",
+      },
+      {
+        key: "team_goals",
+        title: "Team 1.5 Goals",
+        copy: "Support-only TG1.5 read. Odds feed is not live for this market yet.",
+        active: deployFamily === "TG15" || deployFamily.includes("TEAM"),
+      },
     ];
     return `
       <section class="section section-tight fixture-market-card-section">
         <div class="section-head">
           <div>
-            <h2>Fixture prediction cards</h2>
-            <p class="section-copy">Compact market reads for the main launch families. Expand the tabs for the deeper expert context.</p>
+            <h2>Standard market cards</h2>
+            <p class="section-copy">The top fixture view is intentionally simple: odds, model signal, and confidence posture for the launch markets. Deeper context sits behind the tiered tabs below.</p>
           </div>
+          <span class="pill">Standard view</span>
         </div>
         <div class="fixture-market-card-grid">
           ${cardDefs
             .map((def) => {
-              const intel = byKey[def.key] || null;
+              const intel = decisionMarketItem(decision, def.key) || null;
               const stateLabel = safeTitleLabel(intel?.band || intel?.state || fixture?.signal_summary?.signal_state, "Pending");
-              const modelLean = intel?.modelLean ? deployPickDisplay(intel.modelLean) : def.active ? marketVerdictDisplay(fixture) : "No clean lean";
               const tone = def.active ? valueEdgeTone(fixture) : decisionStateTone(intel?.band || intel?.state || "");
+              const outcomeRows = marketOutcomeRows(fixture, def.key, intel);
               return `
                 <article class="fixture-market-card fixture-market-card-${escapeHtml(tone)} ${def.active ? "fixture-market-card-active" : ""}">
                   <div class="fixture-market-card-head">
-                    <span class="metric-label">${escapeHtml(def.title)}</span>
+                    <div>
+                      <span class="metric-label">${escapeHtml(def.title)}</span>
+                      <strong>${escapeHtml(marketLeadText(fixture, def.key, intel))}</strong>
+                    </div>
                     <span class="fixture-market-state">${escapeHtml(def.active ? "Active read" : stateLabel)}</span>
                   </div>
-                  <strong>${escapeHtml(marketProbabilityLine(fixture, def.key, intel))}</strong>
-                  <div class="fixture-market-card-meta">
-                    <span>${escapeHtml(def.lean)}</span>
-                    <b>${escapeHtml(modelLean)}</b>
-                  </div>
-                  <div class="fixture-market-card-meta">
-                    <span>Bookmaker odds</span>
-                    <b>${escapeHtml(marketOddsDisplay(fixture, def.key))}</b>
+                  <p class="fixture-market-card-copy">${escapeHtml(def.copy)}</p>
+                  ${marketOutcomeRowsMarkup(outcomeRows)}
+                  <div class="fixture-market-card-meta fixture-market-card-meta-access">
+                    <span>${escapeHtml(marketAccessLabel(def.key))}</span>
+                    <b>${escapeHtml(def.key === "team_goals" ? "No odds feed" : marketOddsDisplay(fixture, def.key))}</b>
                   </div>
                   <p class="muted">${escapeHtml(intel?.read || "No published expert read for this family yet.")}</p>
                 </article>
@@ -2463,6 +2660,7 @@
             })
             .join("")}
         </div>
+        ${fixtureTierUnlockRail()}
       </section>
     `;
   };
@@ -9596,19 +9794,19 @@
       .filter((row) => row.fixture_key !== fixture.fixture_key && row.league === fixture.league)
       .slice(0, 4);
     const fixtureTabs = [
-      ["lineups", "Lineups"],
       ["prediction", "Prediction"],
+      ["markets", "Markets"],
+      ["lineups", "Lineups"],
       ["stats", "Stats"],
       ["table", "Table"],
       ["h2h", "H2H"],
-      ["markets", "Markets"],
       ["form", "Form"],
       ["news", "News"],
       ["context", "Context"],
     ];
     const requestedFixtureTab =
       selectedFixtureTab === "overview" || selectedFixtureTab === "intelligence" ? "prediction" : selectedFixtureTab;
-    const activeFixtureTab = fixtureTabs.some(([key]) => key === requestedFixtureTab) ? requestedFixtureTab : "lineups";
+    const activeFixtureTab = fixtureTabs.some(([key]) => key === requestedFixtureTab) ? requestedFixtureTab : "prediction";
     const followMatchLabel = matchedEntry ? matchedEntry.reasons.join(" / ") : "Not followed";
     const fixtureSummaryNotice = renderNotice(
       state.runtime.fixtureAlertMessage,
@@ -9890,10 +10088,8 @@
           ${renderFixtureHeroScoreboard(fixture, clarity)}
         </article>
       </section>
-      ${renderFixtureWeatherContext(fixture)}
-      ${renderFixtureHeroMedia(fixture)}
-      ${renderFixturePredictionDeck(fixture, clarity, matchedEntry, publishClass)}
       ${fixtureMarketCardsMarkup(fixture, state.selectedFixtureDecisionIntelligence || null)}
+      ${renderFixturePredictionDeck(fixture, clarity, matchedEntry, publishClass)}
       ${renderFixtureCoverageTruthStrip(
         fixture,
         state.selectedFixtureDecisionIntelligence || null,
@@ -9906,6 +10102,8 @@
         state.selectedFixtureLineupIntelligence || null,
         state.selectedFixtureDecisionSupport?.h2hSupport || null
       )}
+      ${renderFixtureWeatherContext(fixture)}
+      ${renderFixtureHeroMedia(fixture)}
       <section class="section section-tight">
         <nav class="page-subnav" aria-label="Fixture sections">
           <div class="page-subnav-scroll">

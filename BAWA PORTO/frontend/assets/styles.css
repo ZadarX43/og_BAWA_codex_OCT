@@ -1407,14 +1407,14 @@ body::after {
 
 .fixture-market-card-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
 }
 
 .fixture-market-card {
   display: grid;
   gap: 12px;
-  min-height: 230px;
+  min-height: 330px;
   padding: 18px;
   border-radius: var(--radius-md);
   border: 1px solid rgba(122, 148, 132, 0.16);
@@ -1452,8 +1452,71 @@ body::after {
 }
 
 .fixture-market-card strong {
-  font-size: 1.14rem;
-  line-height: 1.28;
+  display: block;
+  margin-top: 8px;
+  font-size: clamp(1.1rem, 1.5vw, 1.55rem);
+  line-height: 1.12;
+  letter-spacing: -0.04em;
+}
+
+.fixture-market-card-copy {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.fixture-market-outcome-list {
+  display: grid;
+  gap: 8px;
+}
+
+.fixture-market-outcome-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(112px, auto);
+  gap: 12px;
+  align-items: center;
+  min-height: 62px;
+  padding: 11px 12px;
+  border: 1px solid rgba(122, 148, 132, 0.13);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.fixture-market-outcome-row.is-active {
+  border-color: rgba(78, 222, 163, 0.3);
+  background:
+    linear-gradient(90deg, rgba(78, 222, 163, 0.1), rgba(48, 199, 255, 0.045)),
+    rgba(255, 255, 255, 0.035);
+  box-shadow: inset 3px 0 0 rgba(78, 222, 163, 0.88);
+}
+
+.fixture-market-outcome-row > div {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.fixture-market-outcome-row > div:last-child {
+  justify-items: end;
+  text-align: right;
+}
+
+.fixture-market-outcome-row span,
+.fixture-market-outcome-row b {
+  color: var(--ink);
+  font-size: 0.96rem;
+  line-height: 1.15;
+}
+
+.fixture-market-outcome-row small {
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.2;
+}
+
+.fixture-market-card-meta-access b {
+  max-width: 60%;
 }
 
 .fixture-market-card-meta {
@@ -1475,6 +1538,43 @@ body::after {
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.1em;
+}
+
+.fixture-tier-rail {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.fixture-tier-card {
+  display: grid;
+  gap: 7px;
+  min-height: 132px;
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(122, 148, 132, 0.14);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.028), rgba(255, 255, 255, 0.012)),
+    rgba(7, 15, 22, 0.34);
+}
+
+.fixture-tier-card-open {
+  border-color: rgba(78, 222, 163, 0.28);
+  background: rgba(78, 222, 163, 0.065);
+}
+
+.fixture-tier-card strong {
+  color: var(--ink);
+  font-size: 1rem;
+  line-height: 1.18;
+}
+
+.fixture-tier-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.38;
 }
 
 .badge-has-image .badge-fallback {
@@ -5967,6 +6067,7 @@ code {
   .card-grid,
   .card-grid-compact,
   .fixture-market-card-grid,
+  .fixture-tier-rail,
   .proof-market-split,
   .locked-grid,
   .loading-skeleton-grid {
@@ -6251,6 +6352,7 @@ code {
   .team-hero-intel-grid,
   .proof-strip-home,
   .fixture-market-card-grid,
+  .fixture-tier-rail,
   .proof-market-split,
   .prediction-meta-grid,
   .standings-table-head,
@@ -6311,10 +6413,67 @@ code {
   }
 
   .fixture-hero-side-end,
+  .fixture-hero-side,
   .fixture-hero-center {
+    width: 100%;
     justify-items: start;
     text-align: left;
     justify-content: flex-start;
+  }
+
+  .fixture-hero-shell .hero-main {
+    padding: 22px 18px;
+  }
+
+  .fixture-hero-score-row {
+    gap: 18px;
+  }
+
+  .fixture-hero-side {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .fixture-hero-side-end {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .fixture-entity-link {
+    max-width: 100%;
+  }
+
+  .fixture-hero-scoreboard-scoreboard .fixture-hero-side strong {
+    font-size: clamp(1.85rem, 8.5vw, 2.25rem);
+    line-height: 0.98;
+  }
+
+  .fixture-market-card {
+    min-width: 0;
+    min-height: auto;
+    overflow: hidden;
+    padding: 16px;
+  }
+
+  .fixture-market-outcome-row {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: auto;
+  }
+
+  .fixture-market-outcome-row > div:last-child {
+    justify-items: start;
+    text-align: left;
+  }
+
+  .fixture-market-card-meta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .fixture-market-card-meta b,
+  .fixture-market-card-meta-access b {
+    max-width: 100%;
+    text-align: left;
+    overflow-wrap: anywhere;
   }
 
   .fixture-hero-meta-bottom {
