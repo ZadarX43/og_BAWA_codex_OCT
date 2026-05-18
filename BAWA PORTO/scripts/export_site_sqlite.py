@@ -2169,55 +2169,153 @@ def json_rows(conn: sqlite3.Connection, query: str, params: Iterable[Any] = ()) 
     return payloads
 
 
+def compact_rows(conn: sqlite3.Connection, query: str, columns: Iterable[str], params: Iterable[Any] = ()) -> list[dict[str, Any]]:
+    rows = conn.execute(query, tuple(params)).fetchall()
+    column_list = list(columns)
+    compacted = []
+    for row in rows:
+        payload = {
+            key: value
+            for key, value in zip(column_list, row)
+            if value is not None and value != ""
+        }
+        compacted.append(payload)
+    return compacted
+
+
 def insert_site_fixture_stats_payloads(conn: sqlite3.Connection) -> int:
     fixture_keys = [row[0] for row in conn.execute("SELECT fixture_key FROM fixtures ORDER BY kickoff_time, fixture_key")]
     rows = []
     for fixture_key in fixture_keys:
         payload = {
-            "team_stats": json_rows(
+            "team_stats": compact_rows(
                 conn,
                 """
-                SELECT payload_json
+                SELECT team_name, team_slug, is_home, possession_pct, shots_total,
+                       shots_on_goal, corners_for, fouls_for, yellow_cards,
+                       red_cards, passes_total, passes_accurate
                 FROM site_team_match_stats
                 WHERE fixture_key = ?
                 ORDER BY is_home DESC, team_name
                 """,
+                (
+                    "team_name",
+                    "team_slug",
+                    "is_home",
+                    "possession_pct",
+                    "shots_total",
+                    "shots_on_goal",
+                    "corners_for",
+                    "fouls_for",
+                    "yellow_cards",
+                    "red_cards",
+                    "passes_total",
+                    "passes_accurate",
+                ),
                 (fixture_key,),
             ),
-            "player_stats": json_rows(
+            "player_stats": compact_rows(
                 conn,
                 """
-                SELECT payload_json
+                SELECT player_key, api_player_id, json_extract(payload_json, '$.player_name') AS player_name, team_name,
+                       team_slug, is_home, position, position_group, minutes,
+                       started_flag, rating, goals, assists, shots_total,
+                       shots_on_target, passes_key, tackles, duels_total,
+                       duels_won, yellow_cards, red_cards
                 FROM site_player_match_stats
                 WHERE fixture_key = ?
                 ORDER BY is_home DESC, started_flag DESC, minutes DESC, rating DESC, player_key
                 """,
+                (
+                    "player_key",
+                    "api_player_id",
+                    "player_name",
+                    "team_name",
+                    "team_slug",
+                    "is_home",
+                    "position",
+                    "position_group",
+                    "minutes",
+                    "started_flag",
+                    "rating",
+                    "goals",
+                    "assists",
+                    "shots_total",
+                    "shots_on_target",
+                    "passes_key",
+                    "tackles",
+                    "duels_total",
+                    "duels_won",
+                    "yellow_cards",
+                    "red_cards",
+                ),
                 (fixture_key,),
             ),
-            "match_events": json_rows(
+            "match_events": compact_rows(
                 conn,
                 """
-                SELECT payload_json
+                SELECT minute, extra_minute, team_name, is_home, player_key,
+                       player_name, event_type, event_detail, score_home_after,
+                       score_away_after
                 FROM site_match_events
                 WHERE fixture_key = ?
                 ORDER BY minute, extra_minute, event_id
                 """,
+                (
+                    "minute",
+                    "extra_minute",
+                    "team_name",
+                    "is_home",
+                    "player_key",
+                    "player_name",
+                    "event_type",
+                    "event_detail",
+                    "score_home_after",
+                    "score_away_after",
+                ),
                 (fixture_key,),
             ),
-            "lineup_slots": json_rows(
+            "lineup_slots": compact_rows(
                 conn,
                 """
-                SELECT payload_json
+                SELECT player_key, api_player_id, player_name, team_name,
+                       team_slug, is_home, formation, is_starting_xi,
+                       broad_position, position_group, slot_code, pitch_x,
+                       pitch_y, rating_power, rank_overall, rank_position,
+                       rank_club
                 FROM site_lineup_slots
                 WHERE fixture_key = ?
                 ORDER BY is_home DESC, is_starting_xi DESC, broad_position, slot_code, player_name
                 """,
+                (
+                    "player_key",
+                    "api_player_id",
+                    "player_name",
+                    "team_name",
+                    "team_slug",
+                    "is_home",
+                    "formation",
+                    "is_starting_xi",
+                    "broad_position",
+                    "position_group",
+                    "slot_code",
+                    "pitch_x",
+                    "pitch_y",
+                    "rating_power",
+                    "rank_overall",
+                    "rank_position",
+                    "rank_club",
+                ),
                 (fixture_key,),
             ),
-            "market_intelligence": json_rows(
+            "market_intelligence": compact_rows(
                 conn,
                 """
-                SELECT payload_json
+                SELECT market_key, market_family, market_group, market_label,
+                       selection_label, rank_role, state, alignment_score,
+                       rating, band, model_lean, confidence_band, signal_state,
+                       support_count, caution_count, source_status,
+                       public_summary
                 FROM site_fixture_market_intelligence
                 WHERE fixture_key = ?
                 ORDER BY
@@ -2232,16 +2330,64 @@ def insert_site_fixture_stats_payloads(conn: sqlite3.Connection) -> int:
                   rating DESC,
                   market_key
                 """,
+                (
+                    "market_key",
+                    "market_family",
+                    "market_group",
+                    "market_label",
+                    "selection_label",
+                    "rank_role",
+                    "state",
+                    "alignment_score",
+                    "rating",
+                    "band",
+                    "model_lean",
+                    "confidence_band",
+                    "signal_state",
+                    "support_count",
+                    "caution_count",
+                    "source_status",
+                    "public_summary",
+                ),
                 (fixture_key,),
             ),
-            "player_event_shortlists": json_rows(
+            "player_event_shortlists": compact_rows(
                 conn,
                 """
-                SELECT payload_json
+                SELECT event_key, event_family, event_label, threshold,
+                       player_key, api_player_id, player_name, team_name,
+                       team_slug, is_home, position, position_group,
+                       is_starting_xi, shortlist_rank, shortlist_score,
+                       recent_per90, recent_average, sample_size,
+                       minutes_sample, rating_power, confidence_label, reason
                 FROM site_player_event_shortlists
                 WHERE fixture_key = ?
                 ORDER BY event_family, event_key, shortlist_rank, team_name, player_name
                 """,
+                (
+                    "event_key",
+                    "event_family",
+                    "event_label",
+                    "threshold",
+                    "player_key",
+                    "api_player_id",
+                    "player_name",
+                    "team_name",
+                    "team_slug",
+                    "is_home",
+                    "position",
+                    "position_group",
+                    "is_starting_xi",
+                    "shortlist_rank",
+                    "shortlist_score",
+                    "recent_per90",
+                    "recent_average",
+                    "sample_size",
+                    "minutes_sample",
+                    "rating_power",
+                    "confidence_label",
+                    "reason",
+                ),
                 (fixture_key,),
             ),
         }
@@ -2264,48 +2410,140 @@ def insert_site_team_premium_payloads(conn: sqlite3.Connection, limit: int = DEF
     rows = []
     for competition_key, team_slug in teams:
         payload = {
-            "players": json_rows(
+            "players": compact_rows(
                 conn,
                 """
-                SELECT payload_json
+                SELECT player_key, api_player_id, rating_player_id, name, club,
+                       club_slug, competition_key, season, position,
+                       position_group, rating_power, rank_overall,
+                       rank_position, rank_club
                 FROM site_player_identity_map
                 WHERE competition_key = ? AND club_slug = ?
                 ORDER BY rating_power DESC, rank_club ASC, name
                 LIMIT ?
                 """,
+                (
+                    "player_key",
+                    "api_player_id",
+                    "rating_player_id",
+                    "name",
+                    "club",
+                    "club_slug",
+                    "competition_key",
+                    "season",
+                    "position",
+                    "position_group",
+                    "rating_power",
+                    "rank_overall",
+                    "rank_position",
+                    "rank_club",
+                ),
                 (competition_key, team_slug, limit),
             ),
-            "recent_team_stats": json_rows(
+            "recent_team_stats": compact_rows(
                 conn,
                 """
-                SELECT payload_json
+                SELECT fixture_key, team_name, team_slug, is_home,
+                       possession_pct, shots_total, shots_on_goal,
+                       corners_for, fouls_for, yellow_cards, red_cards,
+                       passes_total, passes_accurate
                 FROM site_team_match_stats
                 WHERE team_slug = ?
                 ORDER BY fixture_key DESC
                 LIMIT ?
                 """,
+                (
+                    "fixture_key",
+                    "team_name",
+                    "team_slug",
+                    "is_home",
+                    "possession_pct",
+                    "shots_total",
+                    "shots_on_goal",
+                    "corners_for",
+                    "fouls_for",
+                    "yellow_cards",
+                    "red_cards",
+                    "passes_total",
+                    "passes_accurate",
+                ),
                 (team_slug, limit),
             ),
-            "recent_lineup_slots": json_rows(
+            "recent_lineup_slots": compact_rows(
                 conn,
                 """
-                SELECT payload_json
+                SELECT fixture_key, player_key, api_player_id, player_name,
+                       team_name, team_slug, is_home, formation,
+                       is_starting_xi, broad_position, position_group,
+                       slot_code, pitch_x, pitch_y, rating_power,
+                       rank_overall, rank_position, rank_club
                 FROM site_lineup_slots
                 WHERE team_slug = ?
                 ORDER BY fixture_key DESC, is_starting_xi DESC, broad_position, slot_code, player_name
                 LIMIT ?
                 """,
+                (
+                    "fixture_key",
+                    "player_key",
+                    "api_player_id",
+                    "player_name",
+                    "team_name",
+                    "team_slug",
+                    "is_home",
+                    "formation",
+                    "is_starting_xi",
+                    "broad_position",
+                    "position_group",
+                    "slot_code",
+                    "pitch_x",
+                    "pitch_y",
+                    "rating_power",
+                    "rank_overall",
+                    "rank_position",
+                    "rank_club",
+                ),
                 (team_slug, limit * 2),
             ),
-            "player_event_shortlists": json_rows(
+            "player_event_shortlists": compact_rows(
                 conn,
                 """
-                SELECT payload_json
+                SELECT fixture_key, event_key, event_family, event_label,
+                       threshold, player_key, api_player_id, player_name,
+                       team_name, team_slug, is_home, position,
+                       position_group, is_starting_xi, shortlist_rank,
+                       shortlist_score, recent_per90, recent_average,
+                       sample_size, minutes_sample, rating_power,
+                       confidence_label, reason
                 FROM site_player_event_shortlists
                 WHERE team_slug = ?
                 ORDER BY fixture_key DESC, event_family, shortlist_rank
                 LIMIT ?
                 """,
+                (
+                    "fixture_key",
+                    "event_key",
+                    "event_family",
+                    "event_label",
+                    "threshold",
+                    "player_key",
+                    "api_player_id",
+                    "player_name",
+                    "team_name",
+                    "team_slug",
+                    "is_home",
+                    "position",
+                    "position_group",
+                    "is_starting_xi",
+                    "shortlist_rank",
+                    "shortlist_score",
+                    "recent_per90",
+                    "recent_average",
+                    "sample_size",
+                    "minutes_sample",
+                    "rating_power",
+                    "confidence_label",
+                    "reason",
+                ),
                 (team_slug, limit),
             ),
         }

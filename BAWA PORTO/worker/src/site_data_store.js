@@ -127,7 +127,7 @@ export const getFixtureStats = async (db, fixtureKey) => {
     return cachedPayload;
   }
 
-  const [teamStats, playerStats, lineupSlots] = await Promise.all([
+  const [teamStats, playerStats, matchEvents, lineupSlots, marketIntelligence, playerEventShortlists] = await Promise.all([
     all(
       db
         .prepare(
@@ -136,6 +136,18 @@ export const getFixtureStats = async (db, fixtureKey) => {
           FROM site_team_match_stats
           WHERE fixture_key = ?
           ORDER BY is_home DESC, team_name
+          `
+        )
+        .bind(fixtureKey)
+    ),
+    all(
+      db
+        .prepare(
+          `
+          SELECT payload_json
+          FROM site_match_events
+          WHERE fixture_key = ?
+          ORDER BY minute, extra_minute, event_id
           `
         )
         .bind(fixtureKey)
@@ -164,12 +176,49 @@ export const getFixtureStats = async (db, fixtureKey) => {
         )
         .bind(fixtureKey)
     ),
+    all(
+      db
+        .prepare(
+          `
+          SELECT payload_json
+          FROM site_fixture_market_intelligence
+          WHERE fixture_key = ?
+          ORDER BY
+            CASE rank_role
+              WHEN 'best' THEN 1
+              WHEN 'secondary' THEN 2
+              WHEN 'weak' THEN 3
+              WHEN 'avoid' THEN 4
+              ELSE 5
+            END,
+            alignment_score DESC,
+            rating DESC,
+            market_key
+          `
+        )
+        .bind(fixtureKey)
+    ),
+    all(
+      db
+        .prepare(
+          `
+          SELECT payload_json
+          FROM site_player_event_shortlists
+          WHERE fixture_key = ?
+          ORDER BY event_family, event_key, shortlist_rank, team_name, player_name
+          `
+        )
+        .bind(fixtureKey)
+    ),
   ]);
 
   return {
     team_stats: teamStats.map((row) => parsePayload(row)).filter(Boolean),
     player_stats: playerStats.map((row) => parsePayload(row)).filter(Boolean),
+    match_events: matchEvents.map((row) => parsePayload(row)).filter(Boolean),
     lineup_slots: lineupSlots.map((row) => parsePayload(row)).filter(Boolean),
+    market_intelligence: marketIntelligence.map((row) => parsePayload(row)).filter(Boolean),
+    player_event_shortlists: playerEventShortlists.map((row) => parsePayload(row)).filter(Boolean),
   };
 };
 
@@ -223,7 +272,7 @@ export const getTeamPremiumData = async (db, competitionKey, teamSlug, { limit =
     }
   }
 
-  const [players, teamStats, lineupSlots] = await Promise.all([
+  const [players, teamStats, lineupSlots, playerEventShortlists] = await Promise.all([
     all(
       db
         .prepare(
@@ -263,12 +312,26 @@ export const getTeamPremiumData = async (db, competitionKey, teamSlug, { limit =
         )
         .bind(teamSlug, safeLimit * 2)
     ),
+    all(
+      db
+        .prepare(
+          `
+          SELECT payload_json
+          FROM site_player_event_shortlists
+          WHERE team_slug = ?
+          ORDER BY fixture_key DESC, event_family, shortlist_rank
+          LIMIT ?
+          `
+        )
+        .bind(teamSlug, safeLimit)
+    ),
   ]);
 
   return {
     players: players.map((row) => parsePayload(row)).filter(Boolean),
     recent_team_stats: teamStats.map((row) => parsePayload(row)).filter(Boolean),
     recent_lineup_slots: lineupSlots.map((row) => parsePayload(row)).filter(Boolean),
+    player_event_shortlists: playerEventShortlists.map((row) => parsePayload(row)).filter(Boolean),
   };
 };
 

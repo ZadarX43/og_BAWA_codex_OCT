@@ -23,6 +23,13 @@ TABLES = (
     "team_intelligence",
     "club_squads",
     "team_lineup_snapshots",
+    "site_external_sources",
+    "site_fixture_external_content",
+    "site_fixture_context_payloads",
+    "site_fixture_stats_payloads",
+    "site_team_premium_payloads",
+)
+SOURCE_DETAIL_TABLES = (
     "site_player_identity_map",
     "site_player_match_stats",
     "site_team_match_stats",
@@ -31,11 +38,6 @@ TABLES = (
     "site_formation_slots",
     "site_fixture_market_intelligence",
     "site_player_event_shortlists",
-    "site_external_sources",
-    "site_fixture_external_content",
-    "site_fixture_context_payloads",
-    "site_fixture_stats_payloads",
-    "site_team_premium_payloads",
 )
 
 
@@ -81,7 +83,7 @@ def write_chunk(output_dir: Path, index: int, statements: list[str]) -> Path:
     return path
 
 
-def export_chunks(db_path: Path, output_dir: Path, max_bytes: int) -> dict[str, Any]:
+def export_chunks(db_path: Path, output_dir: Path, max_bytes: int, include_source_tables: bool = False) -> dict[str, Any]:
     if output_dir.exists():
         shutil.rmtree(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -95,7 +97,9 @@ def export_chunks(db_path: Path, output_dir: Path, max_bytes: int) -> dict[str, 
         chunk_index = 1
         pending: list[str] = []
         pending_bytes = 0
-        for table in TABLES:
+        tables = TABLES + (SOURCE_DETAIL_TABLES if include_source_tables else ())
+        skipped_tables = [] if include_source_tables else list(SOURCE_DETAIL_TABLES)
+        for table in tables:
             columns = table_columns(conn, table)
             column_sql = ", ".join(columns)
             counts[table] = 0
@@ -120,6 +124,7 @@ def export_chunks(db_path: Path, output_dir: Path, max_bytes: int) -> dict[str, 
         "chunks": len(chunks),
         "counts": counts,
         "output_dir": str(output_dir),
+        "skipped_source_detail_tables": skipped_tables,
         "total_bytes": sum(path.stat().st_size for path in chunks),
     }
 
@@ -129,12 +134,20 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--db", default=str(DEFAULT_DB))
     parser.add_argument("--output-dir", default=str(DEFAULT_OUTPUT_DIR))
     parser.add_argument("--max-bytes", type=int, default=DEFAULT_MAX_BYTES)
+    parser.add_argument(
+        "--include-source-tables",
+        action="store_true",
+        help=(
+            "Include large source/evidence tables for audit exports. Default D1 exports "
+            "ship compact route payloads and keep source-level calculation local."
+        ),
+    )
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
-    summary = export_chunks(Path(args.db), Path(args.output_dir), args.max_bytes)
+    summary = export_chunks(Path(args.db), Path(args.output_dir), args.max_bytes, args.include_source_tables)
     print(json.dumps(summary, indent=2, sort_keys=True))
 
 

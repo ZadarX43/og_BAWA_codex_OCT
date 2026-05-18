@@ -203,7 +203,7 @@ Stop signs:
 - fixture/decision/lineup/H2H counts drift unexpectedly
 - `site_player_match_stats` or `site_lineup_slots` returns to 0 after an import that was expected to carry current provider files
 - active competition data is silently backfilled from old historical rows
-- route payload rows disappear
+- compact route payload rows disappear. D1 exports intentionally skip source/evidence detail tables by default, not the site payloads.
 
 ## Step 3: Export D1 SQL Chunks
 
@@ -213,12 +213,31 @@ Create D1-compatible chunks from the SQLite file:
 python3 scripts/export_site_d1_chunks.py --db /private/tmp/odds_genius_current_stats_slice.sqlite --output-dir /private/tmp/og_d1_current_stats_chunks --max-bytes 4194304
 ```
 
-Latest D1 chunk baseline:
+Default D1 exports insert compact route payloads and skip the heavy source/evidence detail tables:
+
+- `site_player_identity_map`
+- `site_player_match_stats`
+- `site_team_match_stats`
+- `site_match_events`
+- `site_lineup_slots`
+- `site_formation_slots`
+- `site_fixture_market_intelligence`
+- `site_player_event_shortlists`
+
+The local Mac build calculates player, team, fixture, H2H, market, and player-event surfaces before export. Cloudflare D1 receives compact precomputed site payloads such as `site_fixture_stats_payloads` and `site_team_premium_payloads`.
+
+Only include source/evidence detail rows for an explicit audit export:
+
+```bash
+python3 scripts/export_site_d1_chunks.py --db /private/tmp/odds_genius_current_stats_slice.sqlite --output-dir /private/tmp/og_d1_with_source_tables --include-source-tables
+```
+
+Latest compact D1 chunk baseline:
 
 ```text
-chunks: 33
-total SQL bytes: 132,028,443
-human size: about 132MB
+chunks: 12
+total SQL bytes: 42,544,322
+human size: about 43MB
 ```
 
 The first chunk contains schema. Later chunks contain inserts.
