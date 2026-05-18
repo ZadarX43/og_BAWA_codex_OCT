@@ -265,6 +265,8 @@ export async function verifyPremiumAccess(request, env) {
     ok: true,
     customer_id: record.customer_id,
     subscription_id: record.subscription_id,
+    price_id: record.price_id || null,
+    access_tier: record.access_tier || null,
   };
 }
 
