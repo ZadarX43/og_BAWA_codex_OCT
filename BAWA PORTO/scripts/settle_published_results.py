@@ -39,6 +39,8 @@ DEFAULT_REPORT = ROOT / "reports" / "latest" / "RESULTS_SETTLEMENT_REPORT.md"
 FINAL_STATUSES = {"FT", "AET", "PEN"}
 SETTLED_STATUSES = {"won", "lost", "void"}
 MARKET_ORDER = ["FTR", "BTTS", "OU25", "TG1.5"]
+ROW_TIMESTAMP_FIELDS = {"settled_at"}
+PAYLOAD_TIMESTAMP_FIELDS = {"generated_at"}
 
 LEAGUE_TAG_HINTS = {
     "Australia A-League": "Australia_A_League",
@@ -80,6 +82,25 @@ def read_json(path: Path, fallback: Any) -> Any:
 def write_json(path: Path, payload: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, indent=2, ensure_ascii=False, allow_nan=False) + "\n", encoding="utf-8")
+
+
+def display_path(path: Path) -> str:
+    try:
+        return str(path.relative_to(ROOT))
+    except ValueError:
+        return str(path)
+
+
+def comparable(value: Any, excluded_keys: set[str]) -> Any:
+    if isinstance(value, dict):
+        return {key: comparable(value[key], excluded_keys) for key in sorted(value) if key not in excluded_keys}
+    if isinstance(value, list):
+        return [comparable(item, excluded_keys) for item in value]
+    return value
+
+
+def materially_equal(left: Any, right: Any, *, excluded_keys: set[str]) -> bool:
+    return comparable(left, excluded_keys) == comparable(right, excluded_keys)
 
 
 def read_csv(path: Path) -> list[dict[str, str]]:
@@ -499,6 +520,42 @@ def settle_row(row: dict[str, Any], result: dict[str, Any] | None, *, run_id: st
     return item
 
 
+def existing_rows_by_key(*payloads: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    rows_by_key: dict[str, dict[str, Any]] = {}
+    for payload in payloads:
+        items = payload.get("items") if isinstance(payload, dict) else []
+        if not isinstance(items, list):
+            continue
+        for row in items:
+            if not isinstance(row, dict):
+                continue
+            key = row.get("settlement_key") or settlement_identity(row, str(row.get("published_run_id") or ""))
+            if key:
+                rows_by_key[str(key)] = row
+    return rows_by_key
+
+
+def preserve_settled_at(new_row: dict[str, Any], existing_row: dict[str, Any] | None) -> dict[str, Any]:
+    if new_row.get("result_status") not in SETTLED_STATUSES:
+        new_row["settled_at"] = ""
+        return new_row
+    if not existing_row:
+        return new_row
+    existing_settled_at = str(existing_row.get("settled_at") or "")
+    if existing_settled_at and materially_equal(new_row, existing_row, excluded_keys=ROW_TIMESTAMP_FIELDS):
+        new_row["settled_at"] = existing_settled_at
+    return new_row
+
+
+def preserve_generated_at(new_payload: dict[str, Any], existing_payload: dict[str, Any]) -> dict[str, Any]:
+    if not isinstance(existing_payload, dict):
+        return new_payload
+    existing_generated_at = str(existing_payload.get("generated_at") or "")
+    if existing_generated_at and materially_equal(new_payload, existing_payload, excluded_keys=PAYLOAD_TIMESTAMP_FIELDS):
+        new_payload["generated_at"] = existing_generated_at
+    return new_payload
+
+
 def summarize(rows: list[dict[str, Any]], label_field: str | None = None) -> dict[str, Any] | list[dict[str, Any]]:
     def block(items: list[dict[str, Any]]) -> dict[str, Any]:
         settled = [row for row in items if row.get("result_status") in SETTLED_STATUSES]
@@ -714,7 +771,6 @@ def main() -> int:
     archive_out = args.archive_out if args.archive_out.is_absolute() else ROOT / args.archive_out
     report_out = args.report_out if args.report_out.is_absolute() else ROOT / args.report_out
 
-    generated_at = utc_now()
     publish_summary = read_json(summary_path, {})
     run_id = (
         str(publish_summary.get("published_run_id") or "")
@@ -722,19 +778,25 @@ def main() -> int:
     )
     predictions = prediction_rows(public_path, premium_path)
     results = collect_proof_feed_results(proof_feed_path) + collect_local_results(args.results_root)
+    existing_weekly = read_json(weekly_out, {})
+    existing_archive = read_json(archive_out, {})
+    existing_rows = existing_rows_by_key(existing_archive, existing_weekly)
+    generated_at = utc_now()
 
     settled_rows: list[dict[str, Any]] = []
     unmatched: list[dict[str, Any]] = []
     for row in predictions:
         result = resolve_result(row, results)
         settled = settle_row(row, result, run_id=run_id, settled_at=generated_at)
+        settled = preserve_settled_at(settled, existing_rows.get(str(settled.get("settlement_key") or "")))
         settled_rows.append(settled)
         if settled["result_status"] == "pending":
             unmatched.append(settled)
 
     weekly = build_weekly_payload(settled_rows, generated_at=generated_at, run_id=run_id)
-    existing_archive = read_json(archive_out, {})
     archive = merge_archive(existing_archive, settled_rows, generated_at=generated_at)
+    weekly = preserve_generated_at(weekly, existing_weekly)
+    archive = preserve_generated_at(archive, existing_archive)
 
     write_json(weekly_out, weekly)
     write_json(archive_out, archive)
@@ -742,9 +804,9 @@ def main() -> int:
     print(
         json.dumps(
             {
-                "weekly_out": str(weekly_out.relative_to(ROOT)),
-                "archive_out": str(archive_out.relative_to(ROOT)),
-                "report_out": str(report_out.relative_to(ROOT)),
+                "weekly_out": display_path(weekly_out),
+                "archive_out": display_path(archive_out),
+                "report_out": display_path(report_out),
                 "published_run_id": run_id,
                 "current_total": weekly["total_picks"],
                 "current_settled": weekly["settled_picks"],
