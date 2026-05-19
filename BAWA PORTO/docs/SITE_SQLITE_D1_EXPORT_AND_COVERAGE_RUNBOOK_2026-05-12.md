@@ -207,6 +207,20 @@ Stop signs:
 
 ## Step 3: Export D1 SQL Chunks
 
+For incremental publishing, prefer the publish compiler before doing a full D1 chunk replacement:
+
+```bash
+python3 scripts/publish_compiler.py
+```
+
+This writes compact payload objects, `upload_plan.json`, and changed-only D1 SQL:
+
+```text
+build/site_publish/current/d1_changed_index.sql
+```
+
+Use the full D1 chunk export below when rebuilding or replacing the whole site-data database.
+
 Create D1-compatible chunks from the SQLite file:
 
 ```bash
@@ -321,7 +335,7 @@ Run:
 
 ```bash
 python3 scripts/smoke_frontend_static.py
-python3 -m py_compile scripts/api_football/import_current_site_normalized.py scripts/export_site_sqlite.py scripts/export_site_d1_chunks.py scripts/benchmark_site_sqlite.py scripts/benchmark_site_worker_routes.py
+python3 -m py_compile scripts/api_football/import_current_site_normalized.py scripts/export_site_sqlite.py scripts/export_site_d1_chunks.py scripts/publish_compiler.py scripts/benchmark_site_sqlite.py scripts/benchmark_site_worker_routes.py
 ```
 
 Optional file-size check:
