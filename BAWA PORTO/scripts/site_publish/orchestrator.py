@@ -25,6 +25,8 @@ DEFAULT_DB = ROOT / "build" / "site_data" / "odds_genius.sqlite"
 DEFAULT_PUBLISH_DIR = ROOT / "build" / "site_publish" / "current"
 DEFAULT_REPORT_JSON = ROOT / "reports" / "latest" / "SITE_PUBLISH_ORCHESTRATION_REPORT.json"
 DEFAULT_REPORT_MD = ROOT / "reports" / "latest" / "SITE_PUBLISH_ORCHESTRATION_REPORT.md"
+DEFAULT_UPSTREAM_JSON = ROOT / "reports" / "latest" / "SITE_UPSTREAM_INVENTORY.json"
+DEFAULT_UPSTREAM_MD = ROOT / "reports" / "latest" / "SITE_UPSTREAM_INVENTORY.md"
 DEFAULT_COMPLETENESS_JSON = ROOT / "reports" / "latest" / "UPCOMING_FIXTURE_COMPLETENESS_AUDIT.json"
 DEFAULT_COMPLETENESS_CSV = ROOT / "reports" / "latest" / "UPCOMING_FIXTURE_COMPLETENESS_AUDIT.csv"
 DEFAULT_COMPLETENESS_MD = ROOT / "reports" / "latest" / "UPCOMING_FIXTURE_COMPLETENESS_AUDIT.md"
@@ -51,6 +53,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--to-date", default="")
     parser.add_argument("--days", type=int, default=14)
     parser.add_argument("--all-fixtures", action="store_true")
+    parser.add_argument("--skip-upstream-inventory", action="store_true")
     parser.add_argument("--skip-settlement", action="store_true")
     parser.add_argument("--skip-compiler", action="store_true")
     parser.add_argument("--skip-completeness-audit", action="store_true")
@@ -161,24 +164,55 @@ def completeness_summary(path: Path) -> dict[str, Any]:
     }
 
 
-def next_actions(artifact_state: dict[str, Any], completeness: dict[str, Any], compiler: dict[str, Any]) -> list[str]:
+def upstream_summary(path: Path) -> dict[str, Any]:
+    payload = read_json(path, {})
+    if not isinstance(payload, dict):
+        return {}
+    return {
+        "report_path": str(path),
+        "window": payload.get("window", {}),
+        "readiness": payload.get("readiness", {}),
+        "site_db": {
+            "fixture_date_min": (payload.get("site_db") or {}).get("fixture_date_min", ""),
+            "fixture_date_max": (payload.get("site_db") or {}).get("fixture_date_max", ""),
+            "window_fixture_count": (payload.get("site_db") or {}).get("window_fixture_count", 0),
+        },
+        "prediction_outputs": {
+            "window_csv_count": (payload.get("prediction_outputs") or {}).get("window_csv_count", 0),
+            "selected_source_rows": (payload.get("prediction_outputs") or {}).get("selected_source_rows", 0),
+        },
+        "api_football": {
+            "fixture_window_rows": (payload.get("api_football") or {}).get("fixture_window_rows", 0),
+            "fixture_window_leagues": len((payload.get("api_football") or {}).get("fixture_window_leagues", {})),
+        },
+    }
+
+
+def next_actions(artifact_state: dict[str, Any], upstream: dict[str, Any], completeness: dict[str, Any], compiler: dict[str, Any]) -> list[str]:
     actions: list[str] = []
     if artifact_state.get("missing"):
         actions.append("Resolve missing upstream artifacts before publishing: " + ", ".join(artifact_state["missing"]))
-    fixtures_total = (((completeness.get("summary") or {}).get("fixtures_total")) or 0)
-    if fixtures_total == 0:
-        actions.append("Refresh the active fixture/model/site DB window, then rerun the orchestrator for the upcoming weekend.")
-    page_status = (((completeness.get("summary") or {}).get("page_status")) or {})
-    if page_status.get("blocked"):
-        actions.append("Fix Standard blockers from the completeness CSV before promoting the website payload.")
-    check_summary = (((completeness.get("summary") or {}).get("checks")) or {})
-    if (check_summary.get("weather") or {}).get("missing"):
-        actions.append("Wire weather/stadium context into compact fixture payloads or mark weather as graceful fallback.")
-    upload_plan = compiler.get("upload_plan") or {}
-    if upload_plan.get("changed_objects", 0):
-        actions.append("Upload changed payload objects, apply D1 changed index SQL, then run Cloudflare readiness smoke.")
-    else:
-        actions.append("No changed compact payload objects detected; Cloudflare upload can wait unless upstream data refreshes.")
+    readiness = upstream.get("readiness") or {}
+    if readiness.get("blockers"):
+        actions.append("Resolve upstream inventory blockers: " + ", ".join(readiness["blockers"]))
+    if "site_db_window_empty" in (readiness.get("blockers") or []):
+        actions.append("Rebuild compact site DB after the fresh model/API-football run so the target fixture window is present.")
+    if completeness.get("summary"):
+        fixtures_total = (((completeness.get("summary") or {}).get("fixtures_total")) or 0)
+        if fixtures_total == 0:
+            actions.append("Refresh the active fixture/model/site DB window, then rerun the orchestrator for the upcoming weekend.")
+        page_status = (((completeness.get("summary") or {}).get("page_status")) or {})
+        if page_status.get("blocked"):
+            actions.append("Fix Standard blockers from the completeness CSV before promoting the website payload.")
+        check_summary = (((completeness.get("summary") or {}).get("checks")) or {})
+        if (check_summary.get("weather") or {}).get("missing"):
+            actions.append("Wire weather/stadium context into compact fixture payloads or mark weather as graceful fallback.")
+    if compiler.get("upload_plan"):
+        upload_plan = compiler.get("upload_plan") or {}
+        if upload_plan.get("changed_objects", 0):
+            actions.append("Upload changed payload objects, apply D1 changed index SQL, then run Cloudflare readiness smoke.")
+        else:
+            actions.append("No changed compact payload objects detected; Cloudflare upload can wait unless upstream data refreshes.")
     return actions
 
 
@@ -190,6 +224,7 @@ def write_report_json(path: Path, payload: dict[str, Any]) -> None:
 def write_report_md(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     artifact_state = payload["artifact_state"]
+    upstream = payload.get("upstream_inventory", {})
     compiler = payload.get("compiler", {})
     completeness = payload.get("completeness", {})
     lines = [
@@ -205,6 +240,19 @@ def write_report_md(path: Path, payload: dict[str, Any]) -> None:
     for command in payload["commands"]:
         status = "PASS" if command["ok"] else "FAIL"
         lines.append(f"- {command['name']}: `{status}`")
+    lines.extend(["", "## Upstream Inventory", ""])
+    readiness = upstream.get("readiness") or {}
+    site_db = upstream.get("site_db") or {}
+    prediction_outputs = upstream.get("prediction_outputs") or {}
+    api_football = upstream.get("api_football") or {}
+    lines.extend(
+        [
+            f"- Readiness: `{readiness.get('state', 'unknown')}`",
+            f"- Site DB window fixtures: `{site_db.get('window_fixture_count', 0)}`",
+            f"- Prediction CSVs in window: `{prediction_outputs.get('window_csv_count', 0)}`",
+            f"- API-football fixture rows in window: `{api_football.get('fixture_window_rows', 0)}`",
+        ]
+    )
     lines.extend(["", "## Publish Compiler", ""])
     summary = compiler.get("summary") or {}
     upload_plan = compiler.get("upload_plan") or {}
@@ -246,6 +294,27 @@ def main() -> int:
     commands: list[CommandResult] = []
 
     artifact_state = artifact_checks(db_path)
+
+    if not args.skip_upstream_inventory:
+        commands.append(
+            run_command(
+                "upstream_inventory",
+                [
+                    sys.executable,
+                    "scripts/site_publish/upstream_inventory.py",
+                    "--db",
+                    str(db_path),
+                    "--from-date",
+                    start.isoformat(),
+                    "--to-date",
+                    end.isoformat(),
+                    "--json-out",
+                    str(DEFAULT_UPSTREAM_JSON),
+                    "--md-out",
+                    str(DEFAULT_UPSTREAM_MD),
+                ],
+            )
+        )
 
     if not args.skip_settlement:
         commands.append(run_command("results_settlement", [sys.executable, "scripts/settle_published_results.py"]))
@@ -289,17 +358,19 @@ def main() -> int:
     if args.run_cloudflare_readiness:
         commands.append(run_command("cloudflare_preview_readiness", [sys.executable, "scripts/cloudflare_preview_readiness.py"]))
 
-    compiler = compiler_summary(publish_dir)
-    completeness = completeness_summary(DEFAULT_COMPLETENESS_JSON)
+    compiler = {} if args.skip_compiler else compiler_summary(publish_dir)
+    upstream = {} if args.skip_upstream_inventory else upstream_summary(DEFAULT_UPSTREAM_JSON)
+    completeness = {} if args.skip_completeness_audit else completeness_summary(DEFAULT_COMPLETENESS_JSON)
     payload = {
         "schema": "site_publish_orchestration_report_v1",
         "generated_at": utc_now(),
         "window": {"from": start.isoformat(), "to": end.isoformat(), "all_fixtures": bool(args.all_fixtures)},
         "artifact_state": artifact_state,
         "commands": [summarize_command(result) for result in commands],
+        "upstream_inventory": upstream,
         "compiler": compiler,
         "completeness": completeness,
-        "next_actions": next_actions(artifact_state, completeness, compiler),
+        "next_actions": next_actions(artifact_state, upstream, completeness, compiler),
     }
     write_report_json(report_json, payload)
     write_report_md(report_md, payload)
