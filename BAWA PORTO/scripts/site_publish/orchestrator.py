@@ -23,10 +23,13 @@ ROOT = Path(__file__).resolve().parents[2]
 DATA_ROOT = ROOT / "frontend" / "public" / "data"
 DEFAULT_DB = ROOT / "build" / "site_data" / "odds_genius.sqlite"
 DEFAULT_PUBLISH_DIR = ROOT / "build" / "site_publish" / "current"
+DEFAULT_FIXTURE_BRAIN_DIR = ROOT / "build" / "site_brain" / "current"
 DEFAULT_REPORT_JSON = ROOT / "reports" / "latest" / "SITE_PUBLISH_ORCHESTRATION_REPORT.json"
 DEFAULT_REPORT_MD = ROOT / "reports" / "latest" / "SITE_PUBLISH_ORCHESTRATION_REPORT.md"
 DEFAULT_UPSTREAM_JSON = ROOT / "reports" / "latest" / "SITE_UPSTREAM_INVENTORY.json"
 DEFAULT_UPSTREAM_MD = ROOT / "reports" / "latest" / "SITE_UPSTREAM_INVENTORY.md"
+DEFAULT_FIXTURE_BRAIN_JSON = ROOT / "reports" / "latest" / "FIXTURE_BRAIN_COMPILER_REPORT.json"
+DEFAULT_FIXTURE_BRAIN_MD = ROOT / "reports" / "latest" / "FIXTURE_BRAIN_COMPILER_REPORT.md"
 DEFAULT_COMPLETENESS_JSON = ROOT / "reports" / "latest" / "UPCOMING_FIXTURE_COMPLETENESS_AUDIT.json"
 DEFAULT_COMPLETENESS_CSV = ROOT / "reports" / "latest" / "UPCOMING_FIXTURE_COMPLETENESS_AUDIT.csv"
 DEFAULT_COMPLETENESS_MD = ROOT / "reports" / "latest" / "UPCOMING_FIXTURE_COMPLETENESS_AUDIT.md"
@@ -49,6 +52,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run the local website publish orchestration pipeline.")
     parser.add_argument("--db", type=Path, default=DEFAULT_DB)
     parser.add_argument("--publish-dir", type=Path, default=DEFAULT_PUBLISH_DIR)
+    parser.add_argument("--fixture-brain-dir", type=Path, default=DEFAULT_FIXTURE_BRAIN_DIR)
     parser.add_argument("--from-date", default=date.today().isoformat())
     parser.add_argument("--to-date", default="")
     parser.add_argument("--days", type=int, default=14)
@@ -56,6 +60,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--skip-upstream-inventory", action="store_true")
     parser.add_argument("--skip-settlement", action="store_true")
     parser.add_argument("--skip-compiler", action="store_true")
+    parser.add_argument("--skip-fixture-brain", action="store_true")
     parser.add_argument("--skip-completeness-audit", action="store_true")
     parser.add_argument("--run-cloudflare-readiness", action="store_true")
     parser.add_argument("--report-json", type=Path, default=DEFAULT_REPORT_JSON)
@@ -153,6 +158,17 @@ def compiler_summary(publish_dir: Path) -> dict[str, Any]:
     }
 
 
+def fixture_brain_summary(path: Path) -> dict[str, Any]:
+    manifest = read_json(path / "manifest.json", {})
+    if not isinstance(manifest, dict):
+        return {}
+    return {
+        "manifest_path": str(path / "manifest.json"),
+        "summary": manifest.get("summary", {}),
+        "source_summary": manifest.get("source_summary", {}),
+    }
+
+
 def completeness_summary(path: Path) -> dict[str, Any]:
     payload = read_json(path, {})
     if not isinstance(payload, dict):
@@ -188,7 +204,13 @@ def upstream_summary(path: Path) -> dict[str, Any]:
     }
 
 
-def next_actions(artifact_state: dict[str, Any], upstream: dict[str, Any], completeness: dict[str, Any], compiler: dict[str, Any]) -> list[str]:
+def next_actions(
+    artifact_state: dict[str, Any],
+    upstream: dict[str, Any],
+    completeness: dict[str, Any],
+    compiler: dict[str, Any],
+    fixture_brain: dict[str, Any],
+) -> list[str]:
     actions: list[str] = []
     if artifact_state.get("missing"):
         actions.append("Resolve missing upstream artifacts before publishing: " + ", ".join(artifact_state["missing"]))
@@ -213,6 +235,9 @@ def next_actions(artifact_state: dict[str, Any], upstream: dict[str, Any], compl
             actions.append("Upload changed payload objects, apply D1 changed index SQL, then run Cloudflare readiness smoke.")
         else:
             actions.append("No changed compact payload objects detected; Cloudflare upload can wait unless upstream data refreshes.")
+    brain_summary = fixture_brain.get("summary") or {}
+    if brain_summary and brain_summary.get("fixtures_compiled", 0) == 0:
+        actions.append("Fixture-brain compiler is wired, but the active window has no local site DB fixtures yet.")
     return actions
 
 
@@ -265,6 +290,14 @@ def write_report_md(path: Path, payload: dict[str, Any]) -> None:
             f"- Upload-plan changed objects: `{upload_plan.get('changed_objects', 0)}`",
         ]
     )
+    lines.extend(["", "## Fixture Brain", ""])
+    brain_summary = payload.get("fixture_brain", {}).get("summary", {})
+    lines.extend(
+        [
+            f"- Fixtures compiled: `{brain_summary.get('fixtures_compiled', 0)}`",
+            f"- Total bytes: `{brain_summary.get('total_bytes', 0)}`",
+        ]
+    )
     lines.extend(["", "## Completeness", ""])
     comp_summary = completeness.get("summary") or {}
     page_status = comp_summary.get("page_status") or {}
@@ -287,6 +320,7 @@ def main() -> int:
     args = parse_args()
     db_path = resolve(args.db)
     publish_dir = resolve(args.publish_dir)
+    fixture_brain_dir = resolve(args.fixture_brain_dir)
     report_json = resolve(args.report_json)
     report_md = resolve(args.report_md)
     start = date.fromisoformat(args.from_date)
@@ -334,6 +368,27 @@ def main() -> int:
             )
         )
 
+    if not args.skip_fixture_brain:
+        brain_command = [
+            sys.executable,
+            "scripts/site_publish/fixture_brain_compiler.py",
+            "--db",
+            str(db_path),
+            "--output-dir",
+            str(fixture_brain_dir),
+            "--from-date",
+            start.isoformat(),
+            "--to-date",
+            end.isoformat(),
+            "--report-json",
+            str(DEFAULT_FIXTURE_BRAIN_JSON),
+            "--report-md",
+            str(DEFAULT_FIXTURE_BRAIN_MD),
+        ]
+        if args.all_fixtures:
+            brain_command.append("--all-fixtures")
+        commands.append(run_command("fixture_brain_compiler", brain_command))
+
     if not args.skip_completeness_audit:
         audit_command = [
             sys.executable,
@@ -359,6 +414,7 @@ def main() -> int:
         commands.append(run_command("cloudflare_preview_readiness", [sys.executable, "scripts/cloudflare_preview_readiness.py"]))
 
     compiler = {} if args.skip_compiler else compiler_summary(publish_dir)
+    fixture_brain = {} if args.skip_fixture_brain else fixture_brain_summary(fixture_brain_dir)
     upstream = {} if args.skip_upstream_inventory else upstream_summary(DEFAULT_UPSTREAM_JSON)
     completeness = {} if args.skip_completeness_audit else completeness_summary(DEFAULT_COMPLETENESS_JSON)
     payload = {
@@ -369,8 +425,9 @@ def main() -> int:
         "commands": [summarize_command(result) for result in commands],
         "upstream_inventory": upstream,
         "compiler": compiler,
+        "fixture_brain": fixture_brain,
         "completeness": completeness,
-        "next_actions": next_actions(artifact_state, upstream, completeness, compiler),
+        "next_actions": next_actions(artifact_state, upstream, completeness, compiler, fixture_brain),
     }
     write_report_json(report_json, payload)
     write_report_md(report_md, payload)
