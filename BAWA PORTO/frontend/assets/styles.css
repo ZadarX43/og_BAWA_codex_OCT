@@ -1585,6 +1585,142 @@ body::after {
   line-height: 1.38;
 }
 
+.fixture-player-event-section {
+  margin-top: 8px;
+}
+
+.fixture-player-event-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.fixture-player-event-card,
+.fixture-player-event-lock {
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(48, 199, 255, 0.18);
+  background:
+    linear-gradient(180deg, rgba(13, 28, 34, 0.96), rgba(9, 18, 22, 0.98)),
+    rgba(255, 255, 255, 0.02);
+  box-shadow:
+    inset 3px 0 0 rgba(48, 199, 255, 0.7),
+    0 16px 38px rgba(48, 199, 255, 0.045);
+}
+
+.fixture-player-event-card {
+  display: grid;
+  gap: 12px;
+  min-height: 310px;
+  padding: 16px;
+}
+
+.fixture-player-event-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.fixture-player-event-head strong {
+  display: block;
+  margin-top: 6px;
+  color: var(--ink);
+  font-size: clamp(1rem, 1.2vw, 1.22rem);
+  line-height: 1.12;
+}
+
+.fixture-player-event-head > span {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-align: right;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+}
+
+.player-event-candidate-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.player-event-candidate {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(58px, auto);
+  gap: 10px;
+  align-items: center;
+  min-height: 58px;
+  padding: 10px 11px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(123, 154, 184, 0.13);
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.player-event-candidate div {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.player-event-candidate div:last-child {
+  justify-items: end;
+  text-align: right;
+}
+
+.player-event-candidate strong,
+.player-event-candidate b {
+  color: var(--ink);
+  font-size: 0.92rem;
+  line-height: 1.15;
+}
+
+.player-event-candidate span,
+.player-event-candidate small {
+  color: var(--muted);
+  font-size: 0.72rem;
+  line-height: 1.2;
+}
+
+.fixture-player-event-lock {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.7fr) auto;
+  gap: 18px;
+  align-items: center;
+  padding: 18px;
+}
+
+.fixture-player-event-lock strong {
+  display: block;
+  margin-top: 6px;
+  color: var(--ink);
+  font-size: clamp(1.08rem, 1.35vw, 1.45rem);
+  line-height: 1.12;
+}
+
+.player-event-lock-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.player-event-lock-grid span {
+  padding: 8px 10px;
+  border-radius: var(--radius-xs);
+  border: 1px solid rgba(123, 154, 184, 0.12);
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  background: rgba(255, 255, 255, 0.026);
+}
+
+.fixture-player-event-missing {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
 .badge-has-image .badge-fallback {
   opacity: 0.16;
   transform: scale(0.92);
@@ -6075,6 +6211,7 @@ code {
   .card-grid,
   .card-grid-compact,
   .fixture-market-card-grid,
+  .fixture-player-event-grid,
   .fixture-tier-rail,
   .proof-market-split,
   .locked-grid,
@@ -6360,6 +6497,7 @@ code {
   .team-hero-intel-grid,
   .proof-strip-home,
   .fixture-market-card-grid,
+  .fixture-player-event-grid,
   .fixture-tier-rail,
   .proof-market-split,
   .prediction-meta-grid,
@@ -6482,6 +6620,24 @@ code {
     max-width: 100%;
     text-align: left;
     overflow-wrap: anywhere;
+  }
+
+  .fixture-player-event-lock {
+    grid-template-columns: 1fr;
+  }
+
+  .fixture-player-event-head {
+    flex-direction: column;
+  }
+
+  .fixture-player-event-head > span,
+  .player-event-candidate div:last-child {
+    justify-items: start;
+    text-align: left;
+  }
+
+  .player-event-candidate {
+    grid-template-columns: 1fr;
   }
 
   .fixture-hero-meta-bottom {

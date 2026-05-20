@@ -57,6 +57,9 @@
     selectedFixtureExternalContentKey: "",
     selectedFixtureSiteData: null,
     selectedFixtureSiteDataKey: "",
+    selectedFixtureStats: null,
+    selectedFixtureStatsKey: "",
+    selectedFixtureStatsError: "",
     runtime: {
       workerApiBase,
       siteDataApiBase,
@@ -78,6 +81,7 @@
       sessionAuthMode: "",
       sessionCustomerId: "",
       sessionSubscriptionId: "",
+      sessionAccessTier: "",
       accountState: null,
       accountSessions: [],
       accountAlerts: [],
@@ -253,6 +257,29 @@
       }
       return null;
     }
+  };
+
+  const fetchProtectedSiteDataJson = async (path, options = {}) => {
+    if (!siteDataApiConfigured()) {
+      return { response: null, payload: null };
+    }
+    const headers = new Headers(options.headers || {});
+    headers.set("accept", "application/json");
+    if (options.withToken && state.runtime.premiumToken) {
+      headers.set("authorization", `Bearer ${state.runtime.premiumToken}`);
+    }
+    const response = await fetch(siteDataApiUrl(path), {
+      method: options.method || "GET",
+      headers,
+      credentials: "include",
+    });
+    let payload = null;
+    try {
+      payload = await response.json();
+    } catch {
+      payload = null;
+    }
+    return { response, payload };
   };
 
   const fetchWorkerJson = async (path, options = {}) => {
@@ -870,6 +897,40 @@
     const payload = await fetchSiteDataJson(`/api/site/fixtures/${encodeURIComponent(selectedFixtureKey)}`);
     state.selectedFixtureSiteData = payload?.data || null;
     return state.selectedFixtureSiteData;
+  };
+
+  const loadSelectedFixtureStats = async () => {
+    if (page !== "fixture" || !selectedFixtureKey) {
+      return null;
+    }
+    if (state.selectedFixtureStatsKey === selectedFixtureKey) {
+      return state.selectedFixtureStats;
+    }
+    state.selectedFixtureStatsKey = selectedFixtureKey;
+    state.selectedFixtureStats = null;
+    state.selectedFixtureStatsError = "";
+    if (!siteDataApiConfigured() || (!state.runtime.sessionAuthenticated && !premiumTokenPresent())) {
+      return null;
+    }
+    try {
+      const { response, payload } = await fetchProtectedSiteDataJson(`/api/site/fixtures/${encodeURIComponent(selectedFixtureKey)}/stats`, {
+        method: "GET",
+        withToken: true,
+      });
+      if (!response?.ok || !payload?.ok) {
+        state.selectedFixtureStatsError =
+          payload?.status === "tier_locked"
+            ? "pro_required"
+            : payload?.status || payload?.message || "premium_stats_unavailable";
+        return null;
+      }
+      state.runtime.sessionAccessTier = String(payload.access_tier || state.runtime.sessionAccessTier || "");
+      state.selectedFixtureStats = payload;
+      return state.selectedFixtureStats;
+    } catch (error) {
+      state.selectedFixtureStatsError = error.message || "premium_stats_unavailable";
+      return null;
+    }
   };
 
   const loadSelectedFixtureExternalContent = async () => {
@@ -2731,6 +2792,270 @@
       </article>
     </div>
   `;
+
+  const normalizeAccessTierLabel = (value) =>
+    String(value || "")
+      .trim()
+      .toLowerCase()
+      .replace(/[\s-]+/g, "_");
+
+  const accessTierRank = (value) => {
+    const ranks = {
+      free: 0,
+      founder: 1,
+      founder_early_access: 1,
+      premium: 2,
+      pro: 3,
+      pro_plus: 4,
+    };
+    return ranks[normalizeAccessTierLabel(value)] ?? 0;
+  };
+
+  const currentAccessTier = () =>
+    normalizeAccessTierLabel(
+      state.runtime.sessionAccessTier ||
+        state.runtime.accountState?.subscription?.access_tier ||
+        state.runtime.accountState?.subscription?.tier ||
+        state.runtime.accountState?.subscription?.plan_tier ||
+        ""
+    ) || (state.runtime.sessionEntitled ? "founder" : "free");
+
+  const playerEventPhaseLabel = (value) => {
+    const normalized = String(value || "").toLowerCase();
+    if (normalized === "lineup_confirmed_refresh") return "Confirmed lineup refresh";
+    if (normalized === "pre_tournament_projection") return "Pre-tournament projection";
+    if (normalized === "lineup_pending") return "Lineup pending";
+    return "Pre-lineup preview";
+  };
+
+  const playerEventFamilyTitle = (family) => {
+    const labels = {
+      shots: "Player Shots",
+      shots_on_target: "Shots On Target",
+      key_passes: "Key Passes",
+      tackles: "Player Tackles",
+      fouls: "Player Fouls",
+      player_fouled: "Player Fouled",
+      bookings: "Bookings Watch",
+      cards: "Bookings Watch",
+      yellow_cards: "Bookings Watch",
+      keeper_saves: "Keeper Saves",
+      goalkeeper_saves: "Keeper Saves",
+      saves: "Keeper Saves",
+      team_tackles: "Team / Match Tackles",
+    };
+    return labels[String(family || "").trim()] || safeTitleLabel(family || "Player event");
+  };
+
+  const normalizePlayerEventFamily = (item) => {
+    const raw = String(item?.event_family || item?.event_key || "").trim();
+    const aliases = {
+      cards: "bookings",
+      yellow_cards: "bookings",
+      goalkeeper_saves: "keeper_saves",
+      saves: "keeper_saves",
+      passes_key: "key_passes",
+    };
+    if (aliases[raw]) return aliases[raw];
+    const key = String(item?.event_key || "").toLowerCase();
+    if (key.includes("card") || key.includes("booking")) return "bookings";
+    if (key.includes("save")) return "keeper_saves";
+    if (key.includes("key_pass") || key.includes("passes_key")) return "key_passes";
+    return raw;
+  };
+
+  const buildPlayerEventCardsFromShortlists = (shortlists = [], source = {}) => {
+    const families = ["shots", "shots_on_target", "key_passes", "tackles", "fouls", "player_fouled", "bookings", "keeper_saves", "team_tackles"];
+    const grouped = new Map();
+    shortlists.forEach((item) => {
+      const family = normalizePlayerEventFamily(item);
+      if (!families.includes(family)) {
+        return;
+      }
+      if (!grouped.has(family)) {
+        grouped.set(family, []);
+      }
+      grouped.get(family).push(item);
+    });
+    const cards = families
+      .map((family) => {
+        const rows = (grouped.get(family) || [])
+          .slice()
+          .sort(
+            (left, right) =>
+              Number(right.shortlist_score ?? right.score ?? 0) - Number(left.shortlist_score ?? left.score ?? 0) ||
+              Number(left.shortlist_rank ?? left.rank ?? 999) - Number(right.shortlist_rank ?? right.rank ?? 999)
+          );
+        const seen = new Set();
+        const shortlist = rows
+          .filter((item) => {
+            const key = `${normalizePreferenceText(item.team_name)}:${normalizePreferenceText(item.player_name)}`;
+            if (seen.has(key)) {
+              return false;
+            }
+            seen.add(key);
+            return true;
+          })
+          .slice(0, 4)
+          .map((item) => ({
+            player_name: item.player_name || item.player || "",
+            team_name: item.team_name || item.team || "",
+            is_home: Boolean(item.is_home),
+            position_group: item.position_group || item.position || "",
+            rank: item.shortlist_rank ?? item.rank ?? "",
+            score: item.shortlist_score ?? item.score ?? "",
+            confidence_label: item.confidence_label || "manual_review",
+            sample_size: item.sample_size ?? "",
+            minutes_sample: item.minutes_sample ?? "",
+            reason: item.reason || "",
+          }));
+        if (!shortlist.length) {
+          return null;
+        }
+        return {
+          event_family: family,
+          card_title: playerEventFamilyTitle(family),
+          beta_status: "beta_shortlist",
+          lineup_status: source.lineup_status || rows[0]?.source_lineup_status || "last_fixture_snapshot",
+          shortlist,
+        };
+      })
+      .filter(Boolean);
+    return {
+      status: cards.length ? "available" : "missing",
+      phase: source.phase || (shortlists.some((item) => String(item?.source_lineup_status || "").includes("confirmed")) ? "lineup_confirmed_refresh" : "pre_lineup_preview"),
+      lineup_status: source.lineup_status || shortlists.find((item) => item?.source_lineup_status)?.source_lineup_status || "",
+      cards,
+      missing_event_families: families.filter((family) => !grouped.has(family)),
+    };
+  };
+
+  const fixturePlayerEventCardsSource = () => {
+    const brainCards = state.selectedFixtureSiteData?.player_event_cards;
+    if (brainCards?.status === "available" && Array.isArray(brainCards.cards)) {
+      return brainCards;
+    }
+    const protectedShortlists = state.selectedFixtureStats?.data?.player_event_shortlists;
+    if (Array.isArray(protectedShortlists) && protectedShortlists.length) {
+      return buildPlayerEventCardsFromShortlists(protectedShortlists, {
+        phase: "pre_lineup_preview",
+      });
+    }
+    const fixtureStatsShortlists = state.selectedFixtureSiteData?.stats?.player_event_shortlists;
+    if (Array.isArray(fixtureStatsShortlists) && fixtureStatsShortlists.length && accessTierRank(currentAccessTier()) >= 3) {
+      return buildPlayerEventCardsFromShortlists(fixtureStatsShortlists, {
+        phase: "pre_lineup_preview",
+      });
+    }
+    return null;
+  };
+
+  const renderPlayerEventCandidate = (item) => {
+    const score = Number(item?.score);
+    const sample = item?.sample_size ? `${item.sample_size} samples` : item?.minutes_sample ? `${item.minutes_sample} mins` : "Sample tracked";
+    return `
+      <li class="player-event-candidate">
+        <div>
+          <strong>${escapeHtml(item?.player_name || "Player pending")}</strong>
+          <span>${escapeHtml([item?.team_name, safeTitleLabel(item?.position_group || "")].filter(Boolean).join(" · "))}</span>
+        </div>
+        <div>
+          <b>${escapeHtml(Number.isFinite(score) ? Math.round(score).toString() : "Watch")}</b>
+          <small>${escapeHtml(sample)}</small>
+        </div>
+      </li>
+    `;
+  };
+
+  const fixturePlayerEventTeaser = (fixture) => `
+    <section class="section section-tight fixture-player-event-section">
+      <div class="section-head">
+        <div>
+          <h2>Player-event intelligence</h2>
+          <p class="section-copy">Preview shortlists for shots, SOT, tackles, fouls, player fouled, key passes, keeper saves, and bookings sit behind Pro access. They refresh again when confirmed lineups land.</p>
+        </div>
+        <span class="pill">Pro preview</span>
+      </div>
+      <article class="fixture-player-event-lock">
+        <div>
+          <span class="metric-label">Standard view</span>
+          <strong>Goal markets stay public. Player events unlock at Pro.</strong>
+          <p class="muted">The public page keeps the top market cards clean. Pro adds pre-lineup player-event watchlists immediately below, then updates around T-60 when lineup automation confirms starters and bench.</p>
+        </div>
+        <div class="player-event-lock-grid" aria-label="Locked player-event families">
+          ${["Shots", "SOT", "Tackles", "Fouls", "Fouled", "Key passes", "Saves", "Bookings"]
+            .map((label) => `<span>${escapeHtml(label)}</span>`)
+            .join("")}
+        </div>
+        <div class="cta-row">
+          <a class="button" href="./pricing.html">See Pro access</a>
+          <a class="ghost-button" href="./methodology.html">Read methodology</a>
+        </div>
+      </article>
+    </section>
+  `;
+
+  const fixturePlayerEventCardsMarkup = (fixture) => {
+    const accessTier = currentAccessTier();
+    const hasProAccess = accessTierRank(accessTier) >= 3;
+    const cardSource = fixturePlayerEventCardsSource();
+    if (!hasProAccess) {
+      return fixturePlayerEventTeaser(fixture);
+    }
+    if (!cardSource?.cards?.length) {
+      return `
+        <section class="section section-tight fixture-player-event-section">
+          <div class="section-head">
+            <div>
+              <h2>Player-event intelligence</h2>
+              <p class="section-copy">Pro access is active, but this fixture does not have a publish-safe player-event shortlist yet.</p>
+            </div>
+            <span class="pill">Pro</span>
+          </div>
+          <div class="notice">Player-event cards will appear after the local player/team/lineup compiler publishes shortlists for this fixture.</div>
+        </section>
+      `;
+    }
+    return `
+      <section class="section section-tight fixture-player-event-section">
+        <div class="section-head">
+          <div>
+            <h2>Player-event intelligence</h2>
+            <p class="section-copy">Beta shortlists based on recent player/team event rates and current lineup context. These are watchlists, not priced picks.</p>
+          </div>
+          <span class="pill">Pro · ${escapeHtml(playerEventPhaseLabel(cardSource.phase))}</span>
+        </div>
+        <div class="fixture-player-event-grid">
+          ${cardSource.cards
+            .map(
+              (card) => `
+                <article class="fixture-player-event-card">
+                  <div class="fixture-player-event-head">
+                    <div>
+                      <span class="metric-label">${escapeHtml(card.beta_status || "Beta shortlist")}</span>
+                      <strong>${escapeHtml(card.card_title || playerEventFamilyTitle(card.event_family))}</strong>
+                    </div>
+                    <span>${escapeHtml(safeTitleLabel(card.lineup_status || cardSource.lineup_status || "Preview"))}</span>
+                  </div>
+                  <ul class="player-event-candidate-list">
+                    ${(card.shortlist || []).map((item) => renderPlayerEventCandidate(item)).join("")}
+                  </ul>
+                  <p class="muted">${escapeHtml((card.shortlist || [])[0]?.reason || "Shortlist reason will refresh with the next player-event compile.")}</p>
+                </article>
+              `
+            )
+            .join("")}
+        </div>
+        ${
+          (cardSource.missing_event_families || []).length
+            ? `<p class="fixture-player-event-missing">Missing producer coverage: ${escapeHtml(
+                cardSource.missing_event_families.map((family) => playerEventFamilyTitle(family)).join(", ")
+              )}.</p>`
+            : ""
+        }
+      </section>
+    `;
+  };
 
   const fixtureMarketCardsMarkup = (fixture, decision = null) => {
     const deployFamily = String(fixture?.signal_summary?.market_family || "").toUpperCase();
@@ -10313,6 +10638,7 @@
         </article>
       </section>
       ${fixtureMarketCardsMarkup(fixture, state.selectedFixtureDecisionIntelligence || null)}
+      ${fixturePlayerEventCardsMarkup(fixture)}
       ${renderFixturePredictionDeck(fixture, clarity, matchedEntry, publishClass)}
       ${renderFixtureCoverageTruthStrip(
         fixture,
@@ -11236,6 +11562,7 @@
     state.runtime.sessionAuthMode = "";
     state.runtime.sessionCustomerId = "";
     state.runtime.sessionSubscriptionId = "";
+    state.runtime.sessionAccessTier = "";
     state.runtime.accountState = null;
     state.runtime.accountSessions = [];
     state.runtime.accountAlerts = [];
@@ -11276,6 +11603,7 @@
     state.runtime.sessionAuthMode = String(payload.auth_mode || "");
     state.runtime.sessionCustomerId = String(payload.customer_id || "");
     state.runtime.sessionSubscriptionId = String(payload.subscription_id || "");
+    state.runtime.sessionAccessTier = String(payload.access_tier || "");
   };
 
   const loadAccountState = async () => {
@@ -12385,6 +12713,7 @@
     state.runtime.sessionAuthMode = "";
     state.runtime.sessionCustomerId = "";
     state.runtime.sessionSubscriptionId = "";
+    state.runtime.sessionAccessTier = "";
     state.runtime.accountState = null;
     state.runtime.accountSessions = [];
     state.runtime.accountStateError = "";
@@ -12734,6 +13063,8 @@
       state.fixtureLineupIndex = Array.isArray(fixtureLineupIndex) ? fixtureLineupIndex : [];
       state.fixtureH2HIndex = Array.isArray(fixtureH2HIndex) ? fixtureH2HIndex : [];
       await loadSelectedTeamIntelligence();
+      await loadSelectedFixtureSiteData();
+      await loadSelectedFixtureStats();
       await loadSelectedFixtureExternalContent();
       await loadSelectedFixtureLineupIntelligence();
       await loadSelectedFixtureDecisionIntelligence();
