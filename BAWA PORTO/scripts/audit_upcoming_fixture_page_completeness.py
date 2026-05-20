@@ -22,6 +22,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DB = ROOT / "build" / "site_data" / "odds_genius.sqlite"
 DEFAULT_DATA_ROOT = ROOT / "frontend" / "public" / "data"
+DEFAULT_PUBLISH_DIR = ROOT / "build" / "site_publish" / "current"
 DEFAULT_REPORT_JSON = ROOT / "reports" / "latest" / "UPCOMING_FIXTURE_COMPLETENESS_AUDIT.json"
 DEFAULT_REPORT_CSV = ROOT / "reports" / "latest" / "UPCOMING_FIXTURE_COMPLETENESS_AUDIT.csv"
 DEFAULT_REPORT_MD = ROOT / "reports" / "latest" / "UPCOMING_FIXTURE_COMPLETENESS_AUDIT.md"
@@ -32,6 +33,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Audit upcoming fixture page content completeness.")
     parser.add_argument("--db", type=Path, default=DEFAULT_DB)
     parser.add_argument("--data-root", type=Path, default=DEFAULT_DATA_ROOT)
+    parser.add_argument("--publish-dir", type=Path, default=DEFAULT_PUBLISH_DIR)
     parser.add_argument("--from-date", default=date.today().isoformat())
     parser.add_argument("--to-date", default="")
     parser.add_argument("--days", type=int, default=14)
@@ -205,6 +207,21 @@ def h2h_status(h2h: dict[str, Any] | None) -> tuple[str, int, str]:
     return "missing", sample_size, "No H2H sample"
 
 
+def is_world_cup_fixture(fixture: dict[str, Any]) -> bool:
+    haystack = " ".join(
+        str(fixture.get(key) or "")
+        for key in ("league", "league_key", "competition", "competition_key", "fixture_key")
+    ).lower()
+    return "world_cup" in haystack or "world cup" in haystack or "fifa" in haystack
+
+
+def h2h_status_for_fixture(h2h: dict[str, Any] | None, fixture: dict[str, Any]) -> tuple[str, int, str, bool]:
+    state, sample_size, summary = h2h_status(h2h)
+    if state == "missing" and is_world_cup_fixture(fixture):
+        return "partial", sample_size, "World Cup H2H sparse; graceful fallback allowed", True
+    return state, sample_size, summary, False
+
+
 def lineup_status(lineup: dict[str, Any] | None) -> tuple[str, str]:
     if not isinstance(lineup, dict) or not lineup:
         return "missing", "No lineup payload"
@@ -251,6 +268,44 @@ def player_status(stats: dict[str, Any] | None, fixture: dict[str, Any], premium
     return "missing", "No player intelligence payload"
 
 
+def compact_payload_status(path: Path, payload: Any) -> tuple[str, str]:
+    if not path.exists():
+        return "missing", "No compact R2 payload file"
+    if not isinstance(payload, dict):
+        return "partial", "Compact payload file is unreadable or malformed"
+    if payload.get("schema") == "fixture_page_payload_v2":
+        return "complete", "fixture_page_payload_v2"
+    return "partial", str(payload.get("schema") or "schema missing")
+
+
+def fixture_brain_status(payload: Any) -> tuple[str, str]:
+    if not isinstance(payload, dict):
+        return "missing", "No compact payload"
+    brain = payload.get("fixture_brain")
+    if not isinstance(brain, dict) or not brain:
+        return "missing", "No fixture brain payload"
+    coverage = brain.get("coverage")
+    tier_visibility = brain.get("tier_visibility")
+    has_core = bool(brain.get("market_cards") or brain.get("team_context") or brain.get("fixture_stats"))
+    if has_core and isinstance(coverage, dict) and isinstance(tier_visibility, dict):
+        return "complete", "Fixture brain contract populated"
+    if has_core or coverage or tier_visibility:
+        return "partial", "Fixture brain contract partially populated"
+    return "missing", "Fixture brain has no usable sections"
+
+
+def player_event_cards_status(stats: dict[str, Any] | None, publish_payload: Any) -> tuple[str, int, str]:
+    brain = publish_payload.get("fixture_brain") if isinstance(publish_payload, dict) else {}
+    cards_payload = brain.get("player_event_cards") if isinstance(brain, dict) else {}
+    cards = cards_payload.get("cards") if isinstance(cards_payload, dict) else []
+    if isinstance(cards, list) and cards:
+        return "complete", len(cards), "Fixture-brain player-event cards available"
+    protected_shortlists = stats.get("player_event_shortlists") if isinstance(stats, dict) else []
+    if isinstance(protected_shortlists, list) and protected_shortlists:
+        return "partial", len(protected_shortlists), "Shortlists available; fixture-brain cards not yet compiled"
+    return "missing", 0, "No player-event cards or shortlists"
+
+
 def logo_status(fixture: dict[str, Any]) -> tuple[str, list[str]]:
     missing: list[str] = []
     if not fixture.get("home_team_logo_url"):
@@ -261,11 +316,24 @@ def logo_status(fixture: dict[str, Any]) -> tuple[str, list[str]]:
 
 
 def tier_readiness(checks: dict[str, str]) -> dict[str, str]:
-    standard = "ready" if all(checks[name] == "complete" for name in ("logos", "prediction", "odds")) else "blocked"
-    founder = "ready" if standard == "ready" and checks["h2h"] in {"complete", "partial"} and checks["weather"] != "missing" else "partial"
-    premium = "ready" if founder == "ready" and checks["team_intelligence"] == "complete" else "partial"
-    pro = "ready" if premium == "ready" and checks["player_intelligence"] in {"complete", "partial"} else "partial"
-    pro_plus = "ready" if pro == "ready" and checks["fixture_stats"] in {"complete", "partial"} else "partial"
+    standard = "ready" if all(checks[name] == "complete" for name in ("logos", "prediction", "odds", "compact_payload")) else "blocked"
+    founder = (
+        "ready"
+        if standard == "ready"
+        and checks["fixture_brain"] in {"complete", "partial"}
+        and checks["h2h"] in {"complete", "partial"}
+        and checks["weather"] != "missing"
+        else "partial"
+    )
+    premium = "ready" if founder == "ready" and checks["team_intelligence"] == "complete" and checks["lineups"] != "missing" else "partial"
+    pro = (
+        "ready"
+        if premium == "ready"
+        and checks["player_intelligence"] in {"complete", "partial"}
+        and checks["player_event_cards"] in {"complete", "partial"}
+        else "partial"
+    )
+    pro_plus = "ready" if pro == "ready" and checks["fixture_stats"] in {"complete", "partial"} and checks["compact_payload"] == "complete" else "partial"
     return {
         "standard": standard,
         "founder": founder,
@@ -280,7 +348,7 @@ def page_status(checks: dict[str, str], tiers: dict[str, str]) -> str:
         return "blocked"
     if all(value == "ready" for value in tiers.values()):
         return "launch_ready"
-    if checks["weather"] == "missing" or checks["team_intelligence"] == "missing":
+    if checks["weather"] == "missing" or checks["team_intelligence"] == "missing" or checks["fixture_brain"] == "missing":
         return "partial"
     return "tier_partial"
 
@@ -289,11 +357,14 @@ def audit_fixture(
     conn: sqlite3.Connection,
     fixture_row: sqlite3.Row,
     data_root: Path,
+    publish_dir: Path,
     team_index: dict[tuple[str, str], sqlite3.Row],
     premium_team_index: set[tuple[str, str]],
 ) -> dict[str, Any]:
     fixture_key = fixture_row["fixture_key"]
     fixture = parse_json(fixture_row["payload_json"], {}) or {}
+    compact_payload_path = publish_dir / "payloads" / "fixtures" / f"{fixture_key}.json"
+    compact_payload = read_json(compact_payload_path, None)
     decision_row = one_by_key(conn, "fixture_decisions", "fixture_key", fixture_key)
     h2h_row = one_by_key(conn, "fixture_h2h", "fixture_key", fixture_key)
     lineup_row = one_by_key(conn, "fixture_lineups", "fixture_key", fixture_key)
@@ -309,11 +380,20 @@ def audit_fixture(
     logos, missing_logos = logo_status(fixture)
     prediction, model_markets, missing_model_markets = model_market_status(decision)
     odds, odds_markets, missing_odds_markets = odds_status(fixture)
-    h2h_state, h2h_sample_size, h2h_summary = h2h_status(h2h)
+    h2h_state, h2h_sample_size, h2h_summary, world_cup_h2h_graceful_fallback = h2h_status_for_fixture(h2h, fixture)
     lineup_state, lineup_summary = lineup_status(lineup)
     team_state, teams_present, teams_missing = team_status(fixture, team_index, premium_team_index)
     player_state, player_summary = player_status(stats, fixture, premium_team_index)
-    weather = "complete" if recursive_has_key_fragment(fixture, "weather") or recursive_has_key_fragment(context, "weather") else "missing"
+    compact_state, compact_summary = compact_payload_status(compact_payload_path, compact_payload)
+    brain_state, brain_summary = fixture_brain_status(compact_payload)
+    player_event_state, player_event_count, player_event_summary = player_event_cards_status(stats, compact_payload)
+    weather = (
+        "complete"
+        if recursive_has_key_fragment(fixture, "weather")
+        or recursive_has_key_fragment(context, "weather")
+        or recursive_has_key_fragment(compact_payload, "weather")
+        else "missing"
+    )
     fixture_stats = "complete" if isinstance(stats, dict) and bool(stats.get("team_stats")) else "partial" if isinstance(stats, dict) and bool(stats.get("market_intelligence")) else "missing"
     static_payload_exists = (data_root / "fixture_decision_intelligence" / f"{fixture_key}.json").exists()
     h2h_static_exists = (data_root / "fixture_h2h_support" / f"{fixture_key}.json").exists()
@@ -323,10 +403,13 @@ def audit_fixture(
         "logos": logos,
         "prediction": prediction,
         "odds": odds,
+        "compact_payload": compact_state,
+        "fixture_brain": brain_state,
         "weather": weather,
         "h2h": h2h_state,
         "team_intelligence": team_state,
         "player_intelligence": player_state,
+        "player_event_cards": player_event_state,
         "lineups": lineup_state,
         "fixture_stats": fixture_stats,
     }
@@ -351,12 +434,18 @@ def audit_fixture(
             "missing_model_markets": missing_model_markets,
             "odds_markets": odds_markets,
             "missing_odds_markets": missing_odds_markets,
+            "compact_payload_path": str(compact_payload_path),
+            "compact_payload_summary": compact_summary,
+            "fixture_brain_summary": brain_summary,
             "h2h_sample_size": h2h_sample_size,
             "h2h_summary": h2h_summary,
+            "world_cup_h2h_graceful_fallback": world_cup_h2h_graceful_fallback,
             "lineup_summary": lineup_summary,
             "teams_present": teams_present,
             "teams_missing": teams_missing,
             "player_summary": player_summary,
+            "player_event_cards_count": player_event_count,
+            "player_event_cards_summary": player_event_summary,
             "static_payload_exists": static_payload_exists,
             "h2h_static_exists": h2h_static_exists,
             "lineup_static_exists": lineup_static_exists,
@@ -402,15 +491,20 @@ def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
         "logos",
         "prediction",
         "odds",
+        "compact_payload",
+        "fixture_brain",
         "weather",
         "h2h",
         "team_intelligence",
         "player_intelligence",
+        "player_event_cards",
         "lineups",
         "fixture_stats",
         "missing_model_markets",
         "missing_odds_markets",
         "teams_missing",
+        "player_event_cards_count",
+        "world_cup_h2h_graceful_fallback",
     ]
     with path.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fields)
@@ -424,6 +518,8 @@ def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
                     "missing_model_markets": "|".join(row["details"]["missing_model_markets"]),
                     "missing_odds_markets": "|".join(row["details"]["missing_odds_markets"]),
                     "teams_missing": "|".join(row["details"]["teams_missing"]),
+                    "player_event_cards_count": row["details"]["player_event_cards_count"],
+                    "world_cup_h2h_graceful_fallback": row["details"]["world_cup_h2h_graceful_fallback"],
                 }
             )
 
@@ -431,10 +527,13 @@ def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
 def write_markdown(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     summary = payload["summary"]
+    window_label = f"{payload['window']['from']} to {payload['window']['to']}"
+    if payload["window"].get("all"):
+        window_label += " (all fixtures)"
     lines = [
         "# Upcoming Fixture Page Completeness Audit",
         "",
-        f"- Window: `{payload['window']['from']}` to `{payload['window']['to']}`",
+        f"- Window: `{window_label}`",
         f"- Fixtures audited: `{summary['fixtures_total']}`",
         f"- Launch-ready: `{summary['page_status'].get('launch_ready', 0)}`",
         f"- Partial: `{summary['page_status'].get('partial', 0) + summary['page_status'].get('tier_partial', 0)}`",
@@ -453,7 +552,7 @@ def write_markdown(path: Path, payload: dict[str, Any]) -> None:
     lines.extend(["", "## Blocked Fixtures", ""])
     if blocked:
         for row in blocked[:60]:
-            blockers = [key for key in ("logos", "prediction", "odds") if row["checks"][key] != "complete"]
+            blockers = [key for key in ("logos", "prediction", "odds", "compact_payload") if row["checks"][key] != "complete"]
             missing = [key for key, value in row["checks"].items() if value == "missing" and key not in blockers]
             suffix = f" | missing: {', '.join(missing)}" if missing else ""
             lines.append(
@@ -475,7 +574,20 @@ def summarize(rows: list[dict[str, Any]]) -> dict[str, Any]:
     page_counter = Counter(row["page_status"] for row in rows)
     check_counters: dict[str, dict[str, int]] = {}
     tier_counters: dict[str, dict[str, int]] = {}
-    for check in ("logos", "prediction", "odds", "weather", "h2h", "team_intelligence", "player_intelligence", "lineups", "fixture_stats"):
+    for check in (
+        "logos",
+        "prediction",
+        "odds",
+        "compact_payload",
+        "fixture_brain",
+        "weather",
+        "h2h",
+        "team_intelligence",
+        "player_intelligence",
+        "player_event_cards",
+        "lineups",
+        "fixture_stats",
+    ):
         check_counters[check] = dict(Counter(row["checks"][check] for row in rows))
     for tier in ("standard", "founder", "premium", "pro", "pro_plus"):
         tier_counters[tier] = dict(Counter(row["tiers"][tier] for row in rows))
@@ -491,6 +603,7 @@ def main() -> int:
     args = parse_args()
     db_path = resolve_path(args.db)
     data_root = resolve_path(args.data_root)
+    publish_dir = resolve_path(args.publish_dir)
     start = parse_date(args.from_date) or date.today()
     end = parse_date(args.to_date) if args.to_date else start + timedelta(days=args.days)
     if end is None:
@@ -499,13 +612,14 @@ def main() -> int:
     team_index = load_team_index(conn)
     premium_team_index = load_premium_team_index(conn)
     rows = [
-        audit_fixture(conn, row, data_root, team_index, premium_team_index)
+        audit_fixture(conn, row, data_root, publish_dir, team_index, premium_team_index)
         for row in fixture_rows(conn, start, end, args.all)
     ]
     payload = {
         "schema": "upcoming_fixture_page_completeness_audit_v1",
         "generated_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
         "db": str(db_path),
+        "publish_dir": str(publish_dir),
         "window": {"from": start.isoformat(), "to": end.isoformat(), "all": args.all},
         "summary": summarize(rows),
         "fixtures": rows,

@@ -2768,30 +2768,63 @@
     </div>
   `;
 
-  const fixtureTierUnlockRail = () => `
-    <div class="fixture-tier-rail" aria-label="Fixture intelligence tier visibility">
-      <article class="fixture-tier-card fixture-tier-card-open">
-        <span class="metric-label">Standard view</span>
-        <strong>Top market cards</strong>
-        <p>FTR, OU25, BTTS, TG1.5 posture with public-safe odds and model output state.</p>
-      </article>
-      <article class="fixture-tier-card">
-        <span class="metric-label">Founder / Premium</span>
-        <strong>Fixture context</strong>
-        <p>Team reads, H2H, weather, freshness, lineups, and market suitability.</p>
-      </article>
-      <article class="fixture-tier-card">
-        <span class="metric-label">Pro</span>
-        <strong>Player-event intelligence</strong>
-        <p>Shots, SOT, tackles, fouls, key passes, saves, corners, and bookings.</p>
-      </article>
-      <article class="fixture-tier-card">
-        <span class="metric-label">Pro+</span>
-        <strong>Audit dashboard</strong>
-        <p>Advanced filters, downloadable intelligence, and model-feature drilldowns.</p>
-      </article>
-    </div>
-  `;
+  const fixtureTierDefinitions = () => [
+    {
+      key: "free",
+      label: "Standard",
+      title: "Top market cards",
+      copy: "FTR, OU25, BTTS, and TG1.5 support cards with public-safe odds and model output state.",
+      requiredRank: 0,
+    },
+    {
+      key: "founder",
+      label: "Founder / Premium",
+      title: "Fixture context",
+      copy: "Prediction deck, team reads, H2H, weather, freshness, lineups, news, and market suitability.",
+      requiredRank: 1,
+    },
+    {
+      key: "pro",
+      label: "Pro",
+      title: "Player-event intelligence",
+      copy: "Shots, SOT, tackles, fouls, player fouled, key passes, keeper saves, bookings, and team tackles.",
+      requiredRank: 3,
+    },
+    {
+      key: "pro_plus",
+      label: "Pro+",
+      title: "Audit dashboard",
+      copy: "Data identity, coverage metadata, model-feature drilldowns, downloadable intelligence, and audit filters.",
+      requiredRank: 4,
+    },
+  ];
+
+  const fixtureTierUnlockRail = () => {
+    const rank = accessTierRank(currentAccessTier());
+    return `
+      <div class="fixture-tier-rail" aria-label="Fixture intelligence tier visibility">
+        ${fixtureTierDefinitions()
+          .map((tier) => {
+            const available = rank >= tier.requiredRank;
+            const current =
+              rank === tier.requiredRank ||
+              (tier.key === "founder" && rank > 1 && rank < 3) ||
+              (rank > 4 && tier.key === "pro_plus");
+            return `
+              <article class="fixture-tier-card ${available ? "fixture-tier-card-open" : "fixture-tier-card-locked"} ${current ? "fixture-tier-card-current" : ""}">
+                <div class="fixture-tier-card-top">
+                  <span class="metric-label">${escapeHtml(tier.label)}</span>
+                  <span class="fixture-tier-status">${escapeHtml(available ? "Available" : "Upgrade")}</span>
+                </div>
+                <strong>${escapeHtml(tier.title)}</strong>
+                <p>${escapeHtml(tier.copy)}</p>
+              </article>
+            `;
+          })
+          .join("")}
+      </div>
+    `;
+  };
 
   const normalizeAccessTierLabel = (value) =>
     String(value || "")
@@ -2819,6 +2852,66 @@
         state.runtime.accountState?.subscription?.plan_tier ||
         ""
     ) || (state.runtime.sessionEntitled ? "founder" : "free");
+
+  const hasTierAccess = (requiredTier) => accessTierRank(currentAccessTier()) >= accessTierRank(requiredTier);
+
+  const fixtureTierGate = (requiredTier, title, copy, features = []) => {
+    const tierLabel = safeTitleLabel(requiredTier === "pro_plus" ? "Pro+" : requiredTier);
+    return `
+      <section class="section section-tight fixture-tier-gate-section">
+        <article class="fixture-tier-gate">
+          <div>
+            <span class="metric-label">${escapeHtml(`${tierLabel} layer`)}</span>
+            <h3>${escapeHtml(title)}</h3>
+            <p class="muted">${escapeHtml(copy)}</p>
+          </div>
+          ${
+            features.length
+              ? `<div class="fixture-tier-gate-grid">${features.map((feature) => `<span>${escapeHtml(feature)}</span>`).join("")}</div>`
+              : ""
+          }
+          <div class="cta-row">
+            <a class="button" href="./pricing.html">See access</a>
+            <a class="ghost-button" href="./account.html">Account</a>
+          </div>
+        </article>
+      </section>
+    `;
+  };
+
+  const fixtureContextGate = () =>
+    fixtureTierGate("founder", "Fixture context unlocks at Founder.", "Standard keeps the first screen focused on the public market cards. Founder and above opens the deeper read behind the pick.", [
+      "Prediction deck",
+      "H2H",
+      "Weather",
+      "Lineups",
+      "Team reads",
+      "News",
+    ]);
+
+  const fixtureTabRequiredTier = (tabKey) => {
+    if (tabKey === "stats") return "pro_plus";
+    return "founder";
+  };
+
+  const fixtureLockedTabContent = (tabKey) => {
+    if (tabKey === "stats") {
+      return fixtureTierGate("pro_plus", "Audit dashboard unlocks at Pro+.", "This tab is for data identity, coverage metadata, and the audit view behind the fixture payload.", [
+        "Coverage metadata",
+        "Source identity",
+        "Freshness audit",
+        "Feature drilldowns",
+      ]);
+    }
+    return fixtureTierGate("founder", "Deeper fixture context unlocks at Founder.", "The public view shows the top market cards. Founder and above adds the full fixture read and supporting context.", [
+      "Prediction",
+      "Markets",
+      "Lineups",
+      "H2H",
+      "Form",
+      "News",
+    ]);
+  };
 
   const playerEventPhaseLabel = (value) => {
     const normalized = String(value || "").toLowerCase();
@@ -10377,6 +10470,10 @@
         </div>`
       : `<div class="notice">No related fixtures are available from the current published intelligence window.</div>`;
     const activeTabContent = (() => {
+      const requiredTier = fixtureTabRequiredTier(activeFixtureTab);
+      if (!hasTierAccess(requiredTier)) {
+        return fixtureLockedTabContent(activeFixtureTab);
+      }
       if (activeFixtureTab === "prediction") {
         return `
           ${renderFixtureOverviewPrimer(fixture, clarity)}
@@ -10639,35 +10736,45 @@
       </section>
       ${fixtureMarketCardsMarkup(fixture, state.selectedFixtureDecisionIntelligence || null)}
       ${fixturePlayerEventCardsMarkup(fixture)}
-      ${renderFixturePredictionDeck(fixture, clarity, matchedEntry, publishClass)}
-      ${renderFixtureCoverageTruthStrip(
-        fixture,
-        state.selectedFixtureDecisionIntelligence || null,
-        state.selectedFixtureLineupIntelligence || null,
-        state.selectedFixtureDecisionSupport?.h2hSupport || null
-      )}
-      ${renderFixtureFreshnessPanel(
-        fixture,
-        state.selectedFixtureDecisionIntelligence || null,
-        state.selectedFixtureLineupIntelligence || null,
-        state.selectedFixtureDecisionSupport?.h2hSupport || null
-      )}
-      ${renderFixtureWeatherContext(fixture)}
-      ${renderFixtureHeroMedia(fixture)}
+      ${
+        hasTierAccess("founder")
+          ? `
+            ${renderFixturePredictionDeck(fixture, clarity, matchedEntry, publishClass)}
+            ${renderFixtureCoverageTruthStrip(
+              fixture,
+              state.selectedFixtureDecisionIntelligence || null,
+              state.selectedFixtureLineupIntelligence || null,
+              state.selectedFixtureDecisionSupport?.h2hSupport || null
+            )}
+            ${renderFixtureFreshnessPanel(
+              fixture,
+              state.selectedFixtureDecisionIntelligence || null,
+              state.selectedFixtureLineupIntelligence || null,
+              state.selectedFixtureDecisionSupport?.h2hSupport || null
+            )}
+            ${renderFixtureWeatherContext(fixture)}
+            ${renderFixtureHeroMedia(fixture)}
+          `
+          : fixtureContextGate()
+      }
       <section class="section section-tight">
         <nav class="page-subnav" aria-label="Fixture sections">
           <div class="page-subnav-scroll">
             ${fixtureTabs
               .map(
-                ([key, label]) => `
+                ([key, label]) => {
+                  const locked = !hasTierAccess(fixtureTabRequiredTier(key));
+                  return `
                   <a
                     id="fixture-tab-${escapeHtml(key)}"
-                    class="page-subnav-link ${activeFixtureTab === key ? "is-active" : ""}"
+                    class="page-subnav-link ${activeFixtureTab === key ? "is-active" : ""} ${locked ? "is-locked" : ""}"
                     href="${fixtureTabHref(key)}"
                   >
                     ${escapeHtml(label)}
+                    ${locked ? `<span>Locked</span>` : ""}
                   </a>
-                `
+                `;
+                }
               )
               .join("")}
           </div>

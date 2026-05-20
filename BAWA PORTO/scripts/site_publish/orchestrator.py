@@ -30,6 +30,7 @@ DEFAULT_UPSTREAM_JSON = ROOT / "reports" / "latest" / "SITE_UPSTREAM_INVENTORY.j
 DEFAULT_UPSTREAM_MD = ROOT / "reports" / "latest" / "SITE_UPSTREAM_INVENTORY.md"
 DEFAULT_FIXTURE_BRAIN_JSON = ROOT / "reports" / "latest" / "FIXTURE_BRAIN_COMPILER_REPORT.json"
 DEFAULT_FIXTURE_BRAIN_MD = ROOT / "reports" / "latest" / "FIXTURE_BRAIN_COMPILER_REPORT.md"
+DEFAULT_R2_UPLOAD_JSON = ROOT / "reports" / "latest" / "SITE_PUBLISH_R2_UPLOAD_REPORT.json"
 DEFAULT_COMPLETENESS_JSON = ROOT / "reports" / "latest" / "UPCOMING_FIXTURE_COMPLETENESS_AUDIT.json"
 DEFAULT_COMPLETENESS_CSV = ROOT / "reports" / "latest" / "UPCOMING_FIXTURE_COMPLETENESS_AUDIT.csv"
 DEFAULT_COMPLETENESS_MD = ROOT / "reports" / "latest" / "UPCOMING_FIXTURE_COMPLETENESS_AUDIT.md"
@@ -62,6 +63,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--skip-compiler", action="store_true")
     parser.add_argument("--skip-fixture-brain", action="store_true")
     parser.add_argument("--skip-completeness-audit", action="store_true")
+    parser.add_argument("--run-r2-upload", action="store_true", help="Upload changed compact payload objects to R2.")
+    parser.add_argument("--r2-all-objects", action="store_true", help="Upload every compact object instead of changed objects only.")
+    parser.add_argument("--r2-start-index", type=int, default=1, help="Start index for resumable R2 uploads.")
+    parser.add_argument("--r2-retries", type=int, default=3)
+    parser.add_argument("--apply-d1", action="store_true", help="Apply the changed D1 index SQL after R2 upload.")
     parser.add_argument("--run-cloudflare-readiness", action="store_true")
     parser.add_argument("--report-json", type=Path, default=DEFAULT_REPORT_JSON)
     parser.add_argument("--report-md", type=Path, default=DEFAULT_REPORT_MD)
@@ -180,6 +186,20 @@ def completeness_summary(path: Path) -> dict[str, Any]:
     }
 
 
+def r2_upload_summary(path: Path) -> dict[str, Any]:
+    payload = read_json(path, {})
+    if not isinstance(payload, dict):
+        return {}
+    return {
+        "report_path": str(path),
+        "ok": payload.get("ok", False),
+        "uploaded_objects": payload.get("uploaded_objects", 0),
+        "failed_objects": len(payload.get("errors") or []),
+        "uploaded_bytes": payload.get("uploaded_bytes", 0),
+        "d1_applied": bool((payload.get("d1") or {}).get("applied")),
+    }
+
+
 def upstream_summary(path: Path) -> dict[str, Any]:
     payload = read_json(path, {})
     if not isinstance(payload, dict):
@@ -210,6 +230,7 @@ def next_actions(
     completeness: dict[str, Any],
     compiler: dict[str, Any],
     fixture_brain: dict[str, Any],
+    r2_upload: dict[str, Any],
 ) -> list[str]:
     actions: list[str] = []
     if artifact_state.get("missing"):
@@ -231,8 +252,12 @@ def next_actions(
             actions.append("Wire weather/stadium context into compact fixture payloads or mark weather as graceful fallback.")
     if compiler.get("upload_plan"):
         upload_plan = compiler.get("upload_plan") or {}
-        if upload_plan.get("changed_objects", 0):
+        if upload_plan.get("changed_objects", 0) and not r2_upload:
             actions.append("Upload changed payload objects, apply D1 changed index SQL, then run Cloudflare readiness smoke.")
+        elif r2_upload and not r2_upload.get("ok", False):
+            actions.append("R2 upload was attempted but failed; inspect SITE_PUBLISH_R2_UPLOAD_REPORT.json before promotion.")
+        elif upload_plan.get("changed_objects", 0) and r2_upload.get("ok", False):
+            actions.append("Changed compact payload objects were uploaded; run or review Cloudflare readiness before promotion.")
         else:
             actions.append("No changed compact payload objects detected; Cloudflare upload can wait unless upstream data refreshes.")
     brain_summary = fixture_brain.get("summary") or {}
@@ -298,6 +323,20 @@ def write_report_md(path: Path, payload: dict[str, Any]) -> None:
             f"- Total bytes: `{brain_summary.get('total_bytes', 0)}`",
         ]
     )
+    r2_upload = payload.get("r2_upload", {})
+    lines.extend(["", "## R2 / D1 Publish", ""])
+    if r2_upload:
+        lines.extend(
+            [
+                f"- Upload ok: `{r2_upload.get('ok', False)}`",
+                f"- Uploaded objects: `{r2_upload.get('uploaded_objects', 0)}`",
+                f"- Failed objects: `{r2_upload.get('failed_objects', 0)}`",
+                f"- Uploaded bytes: `{r2_upload.get('uploaded_bytes', 0)}`",
+                f"- D1 applied: `{r2_upload.get('d1_applied', False)}`",
+            ]
+        )
+    else:
+        lines.append("- Upload not run in this orchestration pass.")
     lines.extend(["", "## Completeness", ""])
     comp_summary = completeness.get("summary") or {}
     page_status = comp_summary.get("page_status") or {}
@@ -395,6 +434,8 @@ def main() -> int:
             "scripts/audit_upcoming_fixture_page_completeness.py",
             "--db",
             str(db_path),
+            "--publish-dir",
+            str(publish_dir),
             "--from-date",
             start.isoformat(),
             "--to-date",
@@ -410,6 +451,23 @@ def main() -> int:
             audit_command.append("--all")
         commands.append(run_command("fixture_completeness_audit", audit_command))
 
+    if args.run_r2_upload:
+        upload_command = [
+            sys.executable,
+            "scripts/site_publish/upload_publish_plan_r2.py",
+            "--publish-dir",
+            str(publish_dir),
+            "--start-index",
+            str(args.r2_start_index),
+            "--retries",
+            str(args.r2_retries),
+        ]
+        if args.r2_all_objects:
+            upload_command.append("--all-objects")
+        if args.apply_d1:
+            upload_command.append("--apply-d1")
+        commands.append(run_command("r2_publish_upload", upload_command))
+
     if args.run_cloudflare_readiness:
         commands.append(run_command("cloudflare_preview_readiness", [sys.executable, "scripts/cloudflare_preview_readiness.py"]))
 
@@ -417,6 +475,7 @@ def main() -> int:
     fixture_brain = {} if args.skip_fixture_brain else fixture_brain_summary(fixture_brain_dir)
     upstream = {} if args.skip_upstream_inventory else upstream_summary(DEFAULT_UPSTREAM_JSON)
     completeness = {} if args.skip_completeness_audit else completeness_summary(DEFAULT_COMPLETENESS_JSON)
+    r2_upload = r2_upload_summary(DEFAULT_R2_UPLOAD_JSON) if args.run_r2_upload else {}
     payload = {
         "schema": "site_publish_orchestration_report_v1",
         "generated_at": utc_now(),
@@ -426,8 +485,9 @@ def main() -> int:
         "upstream_inventory": upstream,
         "compiler": compiler,
         "fixture_brain": fixture_brain,
+        "r2_upload": r2_upload,
         "completeness": completeness,
-        "next_actions": next_actions(artifact_state, upstream, completeness, compiler, fixture_brain),
+        "next_actions": next_actions(artifact_state, upstream, completeness, compiler, fixture_brain, r2_upload),
     }
     write_report_json(report_json, payload)
     write_report_md(report_md, payload)
