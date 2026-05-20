@@ -127,7 +127,7 @@ export const getFixtureStats = async (db, fixtureKey) => {
     return cachedPayload;
   }
 
-  const [teamStats, playerStats, matchEvents, lineupSlots, marketIntelligence, playerEventShortlists] = await Promise.all([
+  const [teamStats, matchEvents, playerStats, lineupSlots, marketIntelligence, playerEventShortlists] = await Promise.all([
     all(
       db
         .prepare(

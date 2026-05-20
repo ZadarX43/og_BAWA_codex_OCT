@@ -137,16 +137,26 @@ const PREMIUM_ROUTE_ALLOWLIST_BY_TIER = {
     "/public/data/weekly_results.json",
     "/public/data/results_archive.json",
   ],
-  founder: ["/api/premium/predictions", "/api/site/fixtures/:fixture_key/context"],
-  premium: ["/api/premium/predictions", "/api/site/fixtures/:fixture_key/context"],
+  founder: [
+    "/api/premium/predictions",
+    "/api/site/fixtures/:fixture_key/context",
+    "/api/site/fixtures/:fixture_key/stats",
+  ],
+  premium: [
+    "/api/premium/predictions",
+    "/api/site/fixtures/:fixture_key/context",
+    "/api/site/fixtures/:fixture_key/stats",
+  ],
   pro: [
     "/api/premium/predictions",
     "/api/site/fixtures/:fixture_key/context",
+    "/api/site/fixtures/:fixture_key/stats",
     "/api/site/teams/:competition_key/:team_slug/premium",
   ],
   pro_plus: [
     "/api/premium/predictions",
     "/api/site/fixtures/:fixture_key/context",
+    "/api/site/fixtures/:fixture_key/stats",
     "/api/site/teams/:competition_key/:team_slug/premium",
     "downloadable premium intelligence exports",
   ],
@@ -347,7 +357,11 @@ const handleSiteFixtureDetail = async (_request, env, fixtureKey) => {
   return json({ ok: true, fixture_key: fixtureKey, meta: { worker_elapsed_ms: elapsedMs(started) }, data }, 200, siteDataCacheHeaders);
 };
 
-const handleSiteFixtureStats = async (_request, env, fixtureKey) => {
+const handleSiteFixtureStats = async (request, env, fixtureKey) => {
+  const access = await requireSiteDataTier(request, env, "founder", "/api/site/fixtures/:fixture_key/stats");
+  if (!access.ok) {
+    return access.response;
+  }
   const db = getSiteDataDb(env);
   if (!db) {
     return siteDataDbRequired();
@@ -357,7 +371,19 @@ const handleSiteFixtureStats = async (_request, env, fixtureKey) => {
   if (!data.team_stats.length && !data.player_stats.length && !data.lineup_slots.length) {
     return requestError("Premium fixture stats were not found in the site data store.", { fixture_key: fixtureKey }, 404);
   }
-  return json({ ok: true, fixture_key: fixtureKey, meta: { worker_elapsed_ms: elapsedMs(started) }, data }, 200, siteDataCacheHeaders);
+  const filteredData = filterFixtureStatsForTier(data, access.access_tier);
+  return json(
+    {
+      ok: true,
+      fixture_key: fixtureKey,
+      auth_mode: access.auth_mode || "session",
+      access_tier: access.access_tier,
+      tier_filter: buildFixtureStatsTierPolicy(access.access_tier),
+      meta: { worker_elapsed_ms: elapsedMs(started) },
+      data: filteredData,
+    },
+    200
+  );
 };
 
 const handleSiteFixtureContext = async (_request, env, fixtureKey) => {
@@ -401,6 +427,10 @@ const handleSiteTeamDetail = async (_request, env, competitionKey, teamSlug) => 
 };
 
 const handleSiteTeamPremium = async (request, env, competitionKey, teamSlug) => {
+  const access = await requireSiteDataTier(request, env, "pro", "/api/site/teams/:competition_key/:team_slug/premium");
+  if (!access.ok) {
+    return access.response;
+  }
   const db = getSiteDataDb(env);
   if (!db) {
     return siteDataDbRequired();
@@ -417,9 +447,16 @@ const handleSiteTeamPremium = async (request, env, competitionKey, teamSlug) => 
     );
   }
   return json(
-    { ok: true, competition_key: competitionKey, team_slug: teamSlug, meta: { worker_elapsed_ms: elapsedMs(started) }, data },
-    200,
-    siteDataCacheHeaders
+    {
+      ok: true,
+      competition_key: competitionKey,
+      team_slug: teamSlug,
+      auth_mode: access.auth_mode || "session",
+      access_tier: access.access_tier,
+      meta: { worker_elapsed_ms: elapsedMs(started) },
+      data,
+    },
+    200
   );
 };
 
@@ -4682,6 +4719,94 @@ const buildPremiumFieldPolicy = (tier) => {
   };
 };
 
+const ACCESS_TIER_RANK = {
+  free: 0,
+  founder: 1,
+  premium: 2,
+  pro: 3,
+  pro_plus: 4,
+};
+
+const accessTierMeets = (actual, required) => {
+  const actualTier = normalizeAccessTier(actual) || "free";
+  const requiredTier = normalizeAccessTier(required) || "free";
+  return (ACCESS_TIER_RANK[actualTier] ?? 0) >= (ACCESS_TIER_RANK[requiredTier] ?? 0);
+};
+
+const requireSiteDataTier = async (request, env, requiredTier, route) => {
+  const access = await resolvePremiumAccess(request, env);
+  if (!access.ok) {
+    return {
+      ok: false,
+      response: json(
+        {
+          ok: false,
+          status: access.status,
+          message: access.message,
+          recommendation: access.recommendation,
+          route,
+          locked: true,
+          data_note: "This site-data route requires verified premium access.",
+        },
+        401,
+        sessionFailureHeaders(access.status)
+      ),
+    };
+  }
+
+  const accessTier = normalizeAccessTier(access.access_tier) || "founder";
+  if (!accessTierMeets(accessTier, requiredTier)) {
+    return {
+      ok: false,
+      response: json(
+        {
+          ok: false,
+          status: "tier_locked",
+          message: `This route requires ${requiredTier} access or higher.`,
+          route,
+          locked: true,
+          access_tier: accessTier,
+          required_tier: requiredTier,
+        },
+        403
+      ),
+    };
+  }
+
+  return {
+    ok: true,
+    ...access,
+    access_tier: accessTier,
+  };
+};
+
+const buildFixtureStatsTierPolicy = (tier) => {
+  const accessTier = normalizeAccessTier(tier) || "founder";
+  const includesProData = accessTierMeets(accessTier, "pro");
+  return {
+    access_tier: accessTier,
+    visible_sections: includesProData
+      ? ["team_stats", "player_stats", "match_events", "lineup_slots", "market_intelligence", "player_event_shortlists"]
+      : ["team_stats", "lineup_slots", "market_intelligence"],
+    hidden_until_pro: includesProData ? [] : ["player_stats", "match_events", "player_event_shortlists"],
+  };
+};
+
+const filterFixtureStatsForTier = (data, tier) => {
+  const accessTier = normalizeAccessTier(tier) || "founder";
+  if (accessTierMeets(accessTier, "pro")) {
+    return data;
+  }
+  return {
+    team_stats: data.team_stats || [],
+    player_stats: [],
+    match_events: [],
+    lineup_slots: data.lineup_slots || [],
+    market_intelligence: data.market_intelligence || [],
+    player_event_shortlists: [],
+  };
+};
+
 const sanitizePremiumRow = (row) => {
   if (!row || typeof row !== "object" || Array.isArray(row)) {
     return null;
@@ -5263,9 +5388,7 @@ async function handleRequest(request, env) {
       response = methodNotAllowed("GET");
       return withCors(response, request, env);
     }
-    response = await handleCachedSiteData(request, () =>
-      handleSiteFixtureStats(request, env, decodeURIComponent(siteFixtureStatsMatch[1] || ""))
-    );
+    response = await handleSiteFixtureStats(request, env, decodeURIComponent(siteFixtureStatsMatch[1] || ""));
     return withCors(response, request, env);
   }
 
@@ -5287,13 +5410,11 @@ async function handleRequest(request, env) {
       response = methodNotAllowed("GET");
       return withCors(response, request, env);
     }
-    response = await handleCachedSiteData(request, () =>
-      handleSiteTeamPremium(
-        request,
-        env,
-        decodeURIComponent(siteTeamPremiumMatch[1] || ""),
-        decodeURIComponent(siteTeamPremiumMatch[2] || "")
-      )
+    response = await handleSiteTeamPremium(
+      request,
+      env,
+      decodeURIComponent(siteTeamPremiumMatch[1] || ""),
+      decodeURIComponent(siteTeamPremiumMatch[2] || "")
     );
     return withCors(response, request, env);
   }
