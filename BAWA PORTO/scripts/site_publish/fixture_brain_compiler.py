@@ -512,19 +512,148 @@ def compact_shortlists(rows: list[sqlite3.Row], limit: int = 24) -> list[dict[st
         out.append(
             {
                 "event_key": row["event_key"],
+                "event_family": row["event_family"],
                 "event_label": row["event_label"],
                 "player_name": row["player_name"],
                 "team_name": row["team_name"],
                 "is_home": bool(row["is_home"]),
                 "position_group": row["position_group"],
+                "source_lineup_status": row["source_lineup_status"],
                 "rank": row["shortlist_rank"],
                 "score": row["shortlist_score"],
+                "recent_per90": row["recent_per90"],
+                "recent_average": row["recent_average"],
+                "sample_size": row["sample_size"],
+                "minutes_sample": row["minutes_sample"],
                 "confidence_label": row["confidence_label"],
                 "beta_status": row["beta_status"],
                 "reason": row["reason"],
             }
         )
     return out
+
+
+def player_event_phase(shortlists: list[dict[str, Any]], fixture: dict[str, Any], lineup: dict[str, Any]) -> dict[str, Any]:
+    statuses = sorted({str(item.get("source_lineup_status") or "").strip() for item in shortlists if item.get("source_lineup_status")})
+    lineup_text = canonical_json(lineup).lower() if lineup else ""
+    fixture_phase = str(fixture.get("snapshot_phase") or "").strip()
+    if any(status in {"confirmed_lineups", "confirmed_lineup", "lineup_confirmed"} for status in statuses) or "confirmed" in lineup_text:
+        phase = "lineup_confirmed_refresh"
+        lineup_status = "confirmed"
+    elif statuses:
+        phase = "pre_lineup_preview"
+        lineup_status = statuses[0] if len(statuses) == 1 else "mixed_pre_lineup_sources"
+    elif fixture_phase:
+        phase = fixture_phase
+        lineup_status = "unknown"
+    else:
+        phase = "lineup_pending"
+        lineup_status = "missing"
+    return {
+        "phase": phase,
+        "lineup_status": lineup_status,
+        "source_lineup_statuses": statuses,
+    }
+
+
+def compact_player_event_cards(
+    shortlist_rows: list[sqlite3.Row],
+    fixture: dict[str, Any],
+    lineup: dict[str, Any],
+    limit_per_card: int = 4,
+) -> dict[str, Any]:
+    shortlists = compact_shortlists(shortlist_rows, limit=48)
+    phase = player_event_phase(shortlists, fixture, lineup)
+    families = {
+        "shots": "Player Shots",
+        "shots_on_target": "Shots On Target",
+        "key_passes": "Key Passes",
+        "tackles": "Player Tackles",
+        "fouls": "Player Fouls",
+        "player_fouled": "Player Fouled",
+        "bookings": "Bookings Watch",
+        "keeper_saves": "Keeper Saves",
+        "team_tackles": "Team / Match Tackles",
+    }
+    aliases = {
+        "cards": "bookings",
+        "yellow_cards": "bookings",
+        "saves": "keeper_saves",
+        "goalkeeper_saves": "keeper_saves",
+        "passes_key": "key_passes",
+    }
+    grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for item in shortlists:
+        family = str(item.get("event_family") or item.get("event_key") or "").strip()
+        family = aliases.get(family, family)
+        if family not in families:
+            key = str(item.get("event_key") or "")
+            if "card" in key or "booking" in key:
+                family = "bookings"
+            elif "save" in key:
+                family = "keeper_saves"
+            elif "key_pass" in key or "passes_key" in key:
+                family = "key_passes"
+        if family in families:
+            grouped[family].append(item)
+
+    cards: list[dict[str, Any]] = []
+    for family, label in families.items():
+        sorted_items = sorted(
+            grouped.get(family, []),
+            key=lambda item: (float(item.get("score") or 0), -int(item.get("rank") or 999)),
+            reverse=True,
+        )
+        items: list[dict[str, Any]] = []
+        seen_players: set[tuple[str, str]] = set()
+        for item in sorted_items:
+            player_key = (
+                normalize_key(item.get("team_name")),
+                normalize_key(item.get("player_name")),
+            )
+            if player_key in seen_players:
+                continue
+            seen_players.add(player_key)
+            items.append(item)
+        if not items:
+            continue
+        cards.append(
+            {
+                "event_family": family,
+                "card_title": label,
+                "status": "available",
+                "beta_status": "beta_shortlist",
+                "market_availability": "watchlist_only",
+                "lineup_status": phase["lineup_status"],
+                "shortlist": [
+                    {
+                        "player_name": item.get("player_name"),
+                        "team_name": item.get("team_name"),
+                        "is_home": item.get("is_home"),
+                        "position_group": item.get("position_group"),
+                        "rank": item.get("rank"),
+                        "score": item.get("score"),
+                        "confidence_label": item.get("confidence_label"),
+                        "sample_size": item.get("sample_size"),
+                        "minutes_sample": item.get("minutes_sample"),
+                        "reason": item.get("reason"),
+                    }
+                    for item in items[:limit_per_card]
+                ],
+            }
+        )
+    missing = [family for family in families if family not in grouped]
+    return {
+        "status": "available" if cards else "missing",
+        "research_only": True,
+        "phase": phase["phase"],
+        "lineup_status": phase["lineup_status"],
+        "source_lineup_statuses": phase["source_lineup_statuses"],
+        "source_scope": "last_starting_xi_and_bench_until_confirmed_lineups_refresh",
+        "refresh_policy": "Rebuild after lineup automation at roughly T-60, then republish compact fixture payload.",
+        "cards": cards,
+        "missing_event_families": missing,
+    }
 
 
 def compact_table_payloads(rows: list[sqlite3.Row], limit: int = 40) -> list[dict[str, Any]]:
@@ -590,7 +719,7 @@ def tier_contract() -> dict[str, list[str]]:
         "free": ["fixture_core", "market_cards", "freshness", "coverage"],
         "founder": ["fixture_core", "market_cards", "h2h", "weather", "team_context_summary", "lineup_summary", "injury_summary"],
         "premium": ["fixture_core", "market_cards", "decision", "h2h", "weather", "team_context", "lineup_context", "fixture_stats"],
-        "pro": ["fixture_core", "market_cards", "team_context", "lineup_context", "player_context", "injury_context", "player_event_shortlists"],
+        "pro": ["fixture_core", "market_cards", "team_context", "lineup_context", "player_context", "player_event_cards", "injury_context", "player_event_shortlists"],
         "pro_plus": ["all_sections", "audit", "source_refs", "raw_compact_debug"],
     }
 
@@ -678,6 +807,7 @@ def compile_fixture(
             "player_match_stats": compact_table_payloads(player_stat_rows, limit=18),
             "player_event_shortlists": compact_shortlists(shortlist_rows, limit=18),
         },
+        "player_event_cards": compact_player_event_cards(shortlist_rows, fixture, lineup),
         "lineup_context": {"meta": compact_row(lineup_row), "payload": lineup} if lineup_row else {"status": "missing"},
         "injury_context": {
             "fixture_shock": injury_fixture,
