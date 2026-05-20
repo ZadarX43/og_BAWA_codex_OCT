@@ -19,6 +19,7 @@ from typing import Any
 
 DEFAULT_DB = Path("build/site_data/odds_genius.sqlite")
 DEFAULT_OUTPUT_DIR = Path("build/site_publish/current")
+DEFAULT_FIXTURE_BRAIN_DIR = Path("build/site_brain/current")
 DEFAULT_RESULTS_ARCHIVE = Path("frontend/public/data/results_archive.json")
 DEFAULT_WEEKLY_RESULTS = Path("frontend/public/data/weekly_results.json")
 DEFAULT_R2_PREFIX = "site-data/v1"
@@ -83,6 +84,12 @@ def write_json(path: Path, payload: Any) -> tuple[str, int]:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(text, encoding="utf-8")
     return sha256_text(canonical_json(payload)), len(text.encode("utf-8"))
+
+
+def read_fixture_brain_payload(fixture_brain_dir: Path, fixture_key: str) -> dict[str, Any] | None:
+    payload_path = fixture_brain_dir / "payloads" / "fixtures" / f"{fixture_key}.json"
+    payload = read_json(payload_path, None)
+    return payload if isinstance(payload, dict) else None
 
 
 def sql_quote(value: Any) -> str:
@@ -199,7 +206,13 @@ def latest_team_sidecar(conn: sqlite3.Connection, table: str, competition_key: s
     ).fetchone()
 
 
-def compile_fixture_objects(conn: sqlite3.Connection, output_dir: Path, r2_prefix: str, previous: dict[str, str]) -> list[dict[str, Any]]:
+def compile_fixture_objects(
+    conn: sqlite3.Connection,
+    output_dir: Path,
+    r2_prefix: str,
+    previous: dict[str, str],
+    fixture_brain_dir: Path,
+) -> list[dict[str, Any]]:
     objects: list[dict[str, Any]] = []
     payload_root = output_dir / "payloads"
     for fixture in fixture_rows(conn):
@@ -208,14 +221,16 @@ def compile_fixture_objects(conn: sqlite3.Connection, output_dir: Path, r2_prefi
         lineup = one_by_key(conn, "fixture_lineups", "fixture_key", fixture_key)
         h2h = one_by_key(conn, "fixture_h2h", "fixture_key", fixture_key)
         stats = one_by_key(conn, "site_fixture_stats_payloads", "fixture_key", fixture_key)
+        fixture_brain = read_fixture_brain_payload(fixture_brain_dir, fixture_key)
         payload = {
-            "schema": "fixture_page_payload_v1",
+            "schema": "fixture_page_payload_v2",
             "fixture_key": fixture_key,
             "fixture": parse_payload(fixture),
             "decision": parse_payload(decision),
             "lineup": parse_payload(lineup),
             "h2h": parse_payload(h2h),
             "stats": parse_payload(stats),
+            "fixture_brain": fixture_brain,
             "source_tables": [
                 "fixtures",
                 "fixture_decisions",
@@ -223,6 +238,9 @@ def compile_fixture_objects(conn: sqlite3.Connection, output_dir: Path, r2_prefi
                 "fixture_h2h",
                 "site_fixture_stats_payloads",
             ],
+            "source_payloads": {
+                "fixture_brain": str(fixture_brain_dir / "payloads" / "fixtures" / f"{fixture_key}.json") if fixture_brain else "",
+            },
         }
         rel_path = Path("payloads") / "fixtures" / f"{fixture_key}.json"
         object_key = f"{r2_prefix}/{rel_path.as_posix()}"
@@ -368,6 +386,7 @@ def write_upload_plan(output_dir: Path, objects: list[dict[str, Any]]) -> None:
 def compile_publish(
     db_path: Path,
     output_dir: Path,
+    fixture_brain_dir: Path,
     r2_prefix: str,
     previous_manifest_path: Path | None,
     results_archive: Path,
@@ -385,7 +404,7 @@ def compile_publish(
     started = time.time()
     with connect(db_path) as conn:
         objects: list[dict[str, Any]] = []
-        objects.extend(compile_fixture_objects(conn, output_dir, r2_prefix, previous_objects))
+        objects.extend(compile_fixture_objects(conn, output_dir, r2_prefix, previous_objects, fixture_brain_dir))
         objects.extend(compile_team_objects(conn, output_dir, r2_prefix, previous_objects))
         objects.extend(compile_result_objects(output_dir, r2_prefix, previous_objects, results_archive, weekly_results))
         d1_rows, d1_statements = compile_d1_delta(conn, previous_d1_rows)
@@ -397,6 +416,7 @@ def compile_publish(
         "schema": "site_publish_manifest_v1",
         "created_unix": int(started),
         "source_db": str(db_path),
+        "fixture_brain_dir": str(fixture_brain_dir),
         "r2_prefix": r2_prefix,
         "objects": objects,
         "d1_rows": d1_rows,
@@ -405,6 +425,7 @@ def compile_publish(
             "objects_changed": sum(1 for item in objects if item.get("changed")),
             "objects_total_bytes": sum(int(item.get("bytes") or 0) for item in objects),
             "objects_changed_bytes": sum(int(item.get("bytes") or 0) for item in objects if item.get("changed")),
+            "fixture_brain_payloads_embedded": sum(1 for item in objects if item.get("domain") == "fixture" and read_fixture_brain_payload(fixture_brain_dir, item.get("entity_key") or "")),
             "d1_rows_total": len(d1_rows),
             "d1_rows_changed": sum(1 for item in d1_rows if item.get("changed")),
             "d1_delta_sql": str(output_dir / "d1_changed_index.sql"),
@@ -425,6 +446,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Compile compact incremental site publish artifacts from local SQLite.")
     parser.add_argument("--db", default=str(DEFAULT_DB))
     parser.add_argument("--output-dir", default=str(DEFAULT_OUTPUT_DIR))
+    parser.add_argument("--fixture-brain-dir", default=str(DEFAULT_FIXTURE_BRAIN_DIR))
     parser.add_argument("--previous-manifest", default="")
     parser.add_argument("--r2-prefix", default=DEFAULT_R2_PREFIX)
     parser.add_argument("--results-archive", default=str(DEFAULT_RESULTS_ARCHIVE))
@@ -438,6 +460,7 @@ def main() -> None:
     summary = compile_publish(
         Path(args.db),
         Path(args.output_dir),
+        Path(args.fixture_brain_dir),
         args.r2_prefix.strip("/"),
         previous,
         Path(args.results_archive),
