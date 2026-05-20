@@ -39,7 +39,21 @@ import {
   updateNotificationPreferences,
 } from "./account_store.js";
 import { issuePremiumToken, verifyPremiumAccess } from "./auth.js";
-import { getCurrentFixtures, getFixtureContext, getFixtureDetail, getFixtureStats, getTeamDetail, getTeamPremiumData } from "./site_data_store.js";
+import {
+  fixtureContextFromPublishPayload,
+  fixtureDetailFromPublishPayload,
+  fixtureStatsFromPublishPayload,
+  getCurrentFixtures,
+  getFixtureContext,
+  getFixtureDetail,
+  getFixturePublishPayload,
+  getFixtureStats,
+  getTeamDetail,
+  getTeamPremiumData,
+  getTeamPublishPayload,
+  teamDetailFromPublishPayload,
+  teamPremiumFromPublishPayload,
+} from "./site_data_store.js";
 
 const STRIPE_WEBHOOK_TOLERANCE_SECONDS = 300;
 const PREMIUM_CACHE_TTL_SECONDS = 300;
@@ -217,6 +231,7 @@ const envSummary = (env) => ({
   has_auth_email_from: Boolean(env.AUTH_EMAIL_FROM),
   has_account_db: Boolean(getAccountDb(env)),
   has_site_data_db: Boolean(env.SITE_DATA_DB),
+  has_site_payloads: Boolean(env.SITE_PAYLOADS),
   has_telegram_bot_token: Boolean(getTelegramBotToken(env)),
   has_telegram_bot_username: Boolean(env.TELEGRAM_BOT_USERNAME),
   has_telegram_webhook_secret: Boolean(getTelegramWebhookSecret(env)),
@@ -304,11 +319,12 @@ const requestError = (message, details = null, status = 400) =>
   );
 
 const getSiteDataDb = (env) => env.SITE_DATA_DB || null;
+const getSitePayloads = (env) => env.SITE_PAYLOADS || null;
 
 const siteDataCacheHeaders = {
   "cache-control": "public, max-age=60, s-maxage=300, stale-while-revalidate=600",
 };
-const SITE_DATA_CACHE_VERSION = "active-site-rich-team-v2";
+const SITE_DATA_CACHE_VERSION = "active-site-r2-readthrough-v1";
 
 const siteDataDbRequired = () =>
   configError("SITE_DATA_DB D1/libSQL-compatible binding is required for site data API routes.", ["SITE_DATA_DB"]);
@@ -344,17 +360,57 @@ const handleCachedSiteData = async (request, handler) => {
   return withSiteDataCacheStatus(response, "MISS");
 };
 
+const fixtureStatsHasData = (data) =>
+  Boolean(data?.team_stats?.length || data?.player_stats?.length || data?.lineup_slots?.length);
+
+const fixtureContextHasData = (data) =>
+  Boolean(
+    data?.media?.length ||
+      data?.news_signals?.length ||
+      data?.weather_signals?.length ||
+      (data?.space_weather_signals || []).length ||
+      data?.sentiment_signals?.length
+  );
+
+const fixtureDetailHasData = (data) => Boolean(data?.fixture || data?.decision || data?.lineup || data?.h2h);
+
+const teamDetailHasData = (data) => Boolean(data?.team || data?.squad || data?.lineup_snapshot);
+
+const teamPremiumHasData = (data) =>
+  Boolean(data?.players?.length || data?.recent_team_stats?.length || data?.recent_lineup_slots?.length);
+
 const handleSiteFixtureDetail = async (_request, env, fixtureKey) => {
+  const started = performance.now();
+  const publish = await getFixturePublishPayload(getSitePayloads(env), fixtureKey);
   const db = getSiteDataDb(env);
-  if (!db) {
+  if (!publish && !db) {
     return siteDataDbRequired();
   }
-  const started = performance.now();
-  const data = await getFixtureDetail(db, fixtureKey);
+  let source = publish ? "r2" : "d1";
+  let objectKey = publish?.object_key || "";
+  let data = publish ? fixtureDetailFromPublishPayload(publish.payload) : await getFixtureDetail(db, fixtureKey);
+  if (!fixtureDetailHasData(data) && publish && db) {
+    data = await getFixtureDetail(db, fixtureKey);
+    source = "d1";
+    objectKey = "";
+  }
   if (!data.fixture) {
     return requestError("Fixture was not found in the site data store.", { fixture_key: fixtureKey }, 404);
   }
-  return json({ ok: true, fixture_key: fixtureKey, meta: { worker_elapsed_ms: elapsedMs(started) }, data }, 200, siteDataCacheHeaders);
+  return json(
+    {
+      ok: true,
+      fixture_key: fixtureKey,
+      meta: {
+        worker_elapsed_ms: elapsedMs(started),
+        payload_source: source,
+        payload_object_key: objectKey,
+      },
+      data,
+    },
+    200,
+    siteDataCacheHeaders
+  );
 };
 
 const handleSiteFixtureStats = async (request, env, fixtureKey) => {
@@ -362,13 +418,21 @@ const handleSiteFixtureStats = async (request, env, fixtureKey) => {
   if (!access.ok) {
     return access.response;
   }
+  const started = performance.now();
+  const publish = await getFixturePublishPayload(getSitePayloads(env), fixtureKey);
   const db = getSiteDataDb(env);
-  if (!db) {
+  if (!publish && !db) {
     return siteDataDbRequired();
   }
-  const started = performance.now();
-  const data = await getFixtureStats(db, fixtureKey);
-  if (!data.team_stats.length && !data.player_stats.length && !data.lineup_slots.length) {
+  let source = publish ? "r2" : "d1";
+  let objectKey = publish?.object_key || "";
+  let data = publish ? fixtureStatsFromPublishPayload(publish.payload) : await getFixtureStats(db, fixtureKey);
+  if (!fixtureStatsHasData(data) && publish && db) {
+    data = await getFixtureStats(db, fixtureKey);
+    source = "d1";
+    objectKey = "";
+  }
+  if (!fixtureStatsHasData(data)) {
     return requestError("Premium fixture stats were not found in the site data store.", { fixture_key: fixtureKey }, 404);
   }
   const filteredData = filterFixtureStatsForTier(data, access.access_tier);
@@ -379,7 +443,11 @@ const handleSiteFixtureStats = async (request, env, fixtureKey) => {
       auth_mode: access.auth_mode || "session",
       access_tier: access.access_tier,
       tier_filter: buildFixtureStatsTierPolicy(access.access_tier),
-      meta: { worker_elapsed_ms: elapsedMs(started) },
+      meta: {
+        worker_elapsed_ms: elapsedMs(started),
+        payload_source: source,
+        payload_object_key: objectKey,
+      },
       data: filteredData,
     },
     200
@@ -387,32 +455,55 @@ const handleSiteFixtureStats = async (request, env, fixtureKey) => {
 };
 
 const handleSiteFixtureContext = async (_request, env, fixtureKey) => {
+  const started = performance.now();
+  const publish = await getFixturePublishPayload(getSitePayloads(env), fixtureKey);
   const db = getSiteDataDb(env);
-  if (!db) {
+  if (!publish && !db) {
     return siteDataDbRequired();
   }
-  const started = performance.now();
-  const data = await getFixtureContext(db, fixtureKey);
-  if (
-    !data.media.length &&
-    !data.news_signals.length &&
-    !data.weather_signals.length &&
-    !(data.space_weather_signals || []).length &&
-    !data.sentiment_signals.length
-  ) {
+  let source = publish ? "r2" : "d1";
+  let objectKey = publish?.object_key || "";
+  let data = publish ? fixtureContextFromPublishPayload(publish.payload) : await getFixtureContext(db, fixtureKey);
+  if (!fixtureContextHasData(data) && publish && db) {
+    data = await getFixtureContext(db, fixtureKey);
+    source = "d1";
+    objectKey = "";
+  }
+  if (!fixtureContextHasData(data)) {
     return requestError("Fixture context was not found in the site data store.", { fixture_key: fixtureKey }, 404);
   }
-  return json({ ok: true, fixture_key: fixtureKey, meta: { worker_elapsed_ms: elapsedMs(started) }, data }, 200, siteDataCacheHeaders);
+  return json(
+    {
+      ok: true,
+      fixture_key: fixtureKey,
+      meta: {
+        worker_elapsed_ms: elapsedMs(started),
+        payload_source: source,
+        payload_object_key: objectKey,
+      },
+      data,
+    },
+    200,
+    siteDataCacheHeaders
+  );
 };
 
 const handleSiteTeamDetail = async (_request, env, competitionKey, teamSlug) => {
+  const started = performance.now();
+  const publish = await getTeamPublishPayload(getSitePayloads(env), competitionKey, teamSlug);
   const db = getSiteDataDb(env);
-  if (!db) {
+  if (!publish && !db) {
     return siteDataDbRequired();
   }
-  const started = performance.now();
-  const data = await getTeamDetail(db, competitionKey, teamSlug);
-  if (!data.team && !data.squad && !data.lineup_snapshot) {
+  let source = publish ? "r2" : "d1";
+  let objectKey = publish?.object_key || "";
+  let data = publish ? teamDetailFromPublishPayload(publish.payload) : await getTeamDetail(db, competitionKey, teamSlug);
+  if (!teamDetailHasData(data) && publish && db) {
+    data = await getTeamDetail(db, competitionKey, teamSlug);
+    source = "d1";
+    objectKey = "";
+  }
+  if (!teamDetailHasData(data)) {
     return requestError(
       "Team was not found in the site data store.",
       { competition_key: competitionKey, team_slug: teamSlug },
@@ -420,7 +511,17 @@ const handleSiteTeamDetail = async (_request, env, competitionKey, teamSlug) => 
     );
   }
   return json(
-    { ok: true, competition_key: competitionKey, team_slug: teamSlug, meta: { worker_elapsed_ms: elapsedMs(started) }, data },
+    {
+      ok: true,
+      competition_key: competitionKey,
+      team_slug: teamSlug,
+      meta: {
+        worker_elapsed_ms: elapsedMs(started),
+        payload_source: source,
+        payload_object_key: objectKey,
+      },
+      data,
+    },
     200,
     siteDataCacheHeaders
   );
@@ -431,15 +532,23 @@ const handleSiteTeamPremium = async (request, env, competitionKey, teamSlug) => 
   if (!access.ok) {
     return access.response;
   }
-  const db = getSiteDataDb(env);
-  if (!db) {
-    return siteDataDbRequired();
-  }
   const url = new URL(request.url);
   const limit = Number(url.searchParams.get("limit") || 20);
   const started = performance.now();
-  const data = await getTeamPremiumData(db, competitionKey, teamSlug, { limit });
-  if (!data.players.length && !data.recent_team_stats.length && !data.recent_lineup_slots.length) {
+  const publish = limit === 20 ? await getTeamPublishPayload(getSitePayloads(env), competitionKey, teamSlug) : null;
+  const db = getSiteDataDb(env);
+  if (!publish && !db) {
+    return siteDataDbRequired();
+  }
+  let source = publish ? "r2" : "d1";
+  let objectKey = publish?.object_key || "";
+  let data = publish ? teamPremiumFromPublishPayload(publish.payload) : await getTeamPremiumData(db, competitionKey, teamSlug, { limit });
+  if (!teamPremiumHasData(data) && publish && db) {
+    data = await getTeamPremiumData(db, competitionKey, teamSlug, { limit });
+    source = "d1";
+    objectKey = "";
+  }
+  if (!teamPremiumHasData(data)) {
     return requestError(
       "Premium team data was not found in the site data store.",
       { competition_key: competitionKey, team_slug: teamSlug },
@@ -453,7 +562,11 @@ const handleSiteTeamPremium = async (request, env, competitionKey, teamSlug) => 
       team_slug: teamSlug,
       auth_mode: access.auth_mode || "session",
       access_tier: access.access_tier,
-      meta: { worker_elapsed_ms: elapsedMs(started) },
+      meta: {
+        worker_elapsed_ms: elapsedMs(started),
+        payload_source: source,
+        payload_object_key: objectKey,
+      },
       data,
     },
     200

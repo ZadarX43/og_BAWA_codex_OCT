@@ -221,6 +221,7 @@ def compile_fixture_objects(
         lineup = one_by_key(conn, "fixture_lineups", "fixture_key", fixture_key)
         h2h = one_by_key(conn, "fixture_h2h", "fixture_key", fixture_key)
         stats = one_by_key(conn, "site_fixture_stats_payloads", "fixture_key", fixture_key)
+        context = one_by_key(conn, "site_fixture_context_payloads", "fixture_key", fixture_key)
         fixture_brain = read_fixture_brain_payload(fixture_brain_dir, fixture_key)
         payload = {
             "schema": "fixture_page_payload_v2",
@@ -230,6 +231,7 @@ def compile_fixture_objects(
             "lineup": parse_payload(lineup),
             "h2h": parse_payload(h2h),
             "stats": parse_payload(stats),
+            "context": parse_payload(context),
             "fixture_brain": fixture_brain,
             "source_tables": [
                 "fixtures",
@@ -237,6 +239,7 @@ def compile_fixture_objects(
                 "fixture_lineups",
                 "fixture_h2h",
                 "site_fixture_stats_payloads",
+                "site_fixture_context_payloads",
             ],
             "source_payloads": {
                 "fixture_brain": str(fixture_brain_dir / "payloads" / "fixtures" / f"{fixture_key}.json") if fixture_brain else "",

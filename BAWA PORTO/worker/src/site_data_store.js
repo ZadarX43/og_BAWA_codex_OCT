@@ -12,6 +12,106 @@ const all = async (statement) => {
   return Array.isArray(result?.results) ? result.results : [];
 };
 
+const DEFAULT_SITE_PAYLOAD_PREFIX = "site-data/v1";
+
+const emptyFixtureStatsPayload = () => ({
+  team_stats: [],
+  player_stats: [],
+  match_events: [],
+  lineup_slots: [],
+  market_intelligence: [],
+  player_event_shortlists: [],
+});
+
+const emptyFixtureContextPayload = () => ({
+  media: [],
+  news_signals: [],
+  weather_signals: [],
+  space_weather_signals: [],
+  sentiment_signals: [],
+});
+
+const sitePayloadObjectKey = (relativePath, prefix = DEFAULT_SITE_PAYLOAD_PREFIX) =>
+  `${String(prefix || DEFAULT_SITE_PAYLOAD_PREFIX).replace(/^\/+|\/+$/g, "")}/${relativePath.replace(/^\/+/, "")}`;
+
+const readJsonObject = async (bucket, objectKey) => {
+  if (!bucket?.get) {
+    return null;
+  }
+  const object = await bucket.get(objectKey);
+  if (!object) {
+    return null;
+  }
+  const text = await object.text();
+  return JSON.parse(text);
+};
+
+export const getFixturePublishPayload = async (bucket, fixtureKey, { prefix = DEFAULT_SITE_PAYLOAD_PREFIX } = {}) => {
+  const safeFixtureKey = String(fixtureKey || "").trim();
+  if (!safeFixtureKey) {
+    return null;
+  }
+  const object_key = sitePayloadObjectKey(`payloads/fixtures/${safeFixtureKey}.json`, prefix);
+  const payload = await readJsonObject(bucket, object_key);
+  return payload ? { payload, object_key } : null;
+};
+
+export const getTeamPublishPayload = async (
+  bucket,
+  competitionKey,
+  teamSlug,
+  { prefix = DEFAULT_SITE_PAYLOAD_PREFIX } = {}
+) => {
+  const safeCompetitionKey = String(competitionKey || "").trim();
+  const safeTeamSlug = String(teamSlug || "").trim();
+  if (!safeCompetitionKey || !safeTeamSlug) {
+    return null;
+  }
+  const object_key = sitePayloadObjectKey(`payloads/teams/${safeCompetitionKey}/${safeTeamSlug}.json`, prefix);
+  const payload = await readJsonObject(bucket, object_key);
+  return payload ? { payload, object_key } : null;
+};
+
+export const fixtureDetailFromPublishPayload = (payload) => ({
+  fixture: payload?.fixture || null,
+  decision: payload?.decision || null,
+  lineup: payload?.lineup || null,
+  h2h: payload?.h2h || null,
+  fixture_brain: payload?.fixture_brain || null,
+});
+
+export const fixtureStatsFromPublishPayload = (payload) => {
+  const stats = payload?.stats && typeof payload.stats === "object" ? payload.stats : {};
+  return {
+    ...emptyFixtureStatsPayload(),
+    ...stats,
+  };
+};
+
+export const fixtureContextFromPublishPayload = (payload) => {
+  const context = payload?.context && typeof payload.context === "object" ? payload.context : {};
+  return {
+    ...emptyFixtureContextPayload(),
+    ...context,
+  };
+};
+
+export const teamDetailFromPublishPayload = (payload) => ({
+  team: payload?.team || null,
+  squad: payload?.squad || null,
+  lineup_snapshot: payload?.lineup_snapshot || null,
+});
+
+export const teamPremiumFromPublishPayload = (payload) => {
+  const premium = payload?.premium && typeof payload.premium === "object" ? payload.premium : {};
+  return {
+    players: premium.players || [],
+    recent_team_stats: premium.recent_team_stats || [],
+    recent_lineup_slots: premium.recent_lineup_slots || [],
+    player_event_shortlists: premium.player_event_shortlists || [],
+  };
+};
+
 const normalizeTeamKey = (value) =>
   String(value || "")
     .trim()

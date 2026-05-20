@@ -67,6 +67,28 @@ class MockKVStore {
   }
 }
 
+class MockR2Bucket {
+  constructor() {
+    this.map = new Map();
+  }
+
+  async get(key) {
+    if (!this.map.has(key)) {
+      return null;
+    }
+    const value = this.map.get(key);
+    return {
+      async text() {
+        return value;
+      },
+    };
+  }
+
+  async put(key, value) {
+    this.map.set(key, typeof value === "string" ? value : JSON.stringify(value));
+  }
+}
+
 class MockCacheStore {
   constructor() {
     this.map = new Map();
@@ -502,6 +524,60 @@ const fixtureIntelligencePayload = {
   ],
 };
 
+const r2FixturePayload = {
+  schema: "fixture_page_payload_v2",
+  fixture_key: "fixture_r2",
+  fixture: {
+    fixture_key: "fixture_r2",
+    league: "Test League",
+    home_team: "R2 Home",
+    away_team: "R2 Away",
+  },
+  decision: {
+    fixture_key: "fixture_r2",
+    context_signal: "R2 Home Win",
+  },
+  lineup: {
+    predicted_lineups: true,
+  },
+  h2h: {
+    sample_size: 4,
+  },
+  stats: {
+    team_stats: [{ team_name: "R2 Home", shots: 13 }],
+    player_stats: [{ player_name: "R2 Forward", shots: 3 }],
+    match_events: [{ minute: 12, event_type: "shot" }],
+    lineup_slots: [{ player_name: "R2 Forward", is_starting_xi: true }],
+    market_intelligence: [{ market_key: "FTR", rank_role: "best" }],
+    player_event_shortlists: [{ player_name: "R2 Forward", event_family: "shots", shortlist_rank: 1 }],
+  },
+  context: {
+    media: [{ type: "youtube_embed", title: "Preview" }],
+    news_signals: [{ type: "news_signal", title: "Team news" }],
+    weather_signals: [{ type: "weather_context", summary: "Calm" }],
+    space_weather_signals: [],
+    sentiment_signals: [],
+  },
+  fixture_brain: {
+    player_event_cards: [{ event_family: "shots", title: "Shots shortlist" }],
+  },
+};
+
+const r2TeamPayload = {
+  schema: "team_page_payload_v1",
+  competition_key: "test_league",
+  team_slug: "r2_home",
+  team: { team: "R2 Home", team_slug: "r2_home" },
+  squad: { club: "R2 Home", players: 20 },
+  lineup_snapshot: { team: "R2 Home", shape: "4-3-3" },
+  premium: {
+    players: [{ player_name: "R2 Forward", rating_power: 88 }],
+    recent_team_stats: [{ fixture_key: "fixture_r2", shots: 13 }],
+    recent_lineup_slots: [{ player_name: "R2 Forward", is_starting_xi: true }],
+    player_event_shortlists: [{ player_name: "R2 Forward", event_family: "shots" }],
+  },
+};
+
 const installMockCache = () => {
   const originalCaches = globalThis.caches;
   const store = new MockCacheStore();
@@ -534,6 +610,7 @@ const createEnv = () => {
     SITE_URL: "http://localhost",
     SUBSCRIBER_STATE: store,
     ACCOUNT_DB: new MockD1(),
+    SITE_PAYLOADS: new MockR2Bucket(),
     TELEGRAM_BOT_USERNAME: "oddsgeniusbot",
     STRIPE_SECRET_KEY: "sk_test_worker_harness",
     STRIPE_WEBHOOK_SECRET: "whsec_test_worker_harness",
@@ -869,6 +946,71 @@ const testPremiumTierAllowlistBoundaries = async () => {
   assert.equal(Boolean(proPlusPayload.predictions[0].downloadable_payload), true);
   assert.equal("gate_detail" in proPlusPayload.predictions[0], false);
   assert.equal("model_path" in proPlusPayload.predictions[0], false);
+};
+
+const testSitePayloadRoutesReadThroughR2 = async () => {
+  const env = createEnv();
+  env.STRIPE_PRO_PRICE_IDS = "price_test_pro";
+  await env.SITE_PAYLOADS.put(
+    "site-data/v1/payloads/fixtures/fixture_r2.json",
+    JSON.stringify(r2FixturePayload)
+  );
+  await env.SITE_PAYLOADS.put(
+    "site-data/v1/payloads/teams/test_league/r2_home.json",
+    JSON.stringify(r2TeamPayload)
+  );
+  await writeSubscriberRecord(
+    env,
+    buildSubscriberRecord({
+      price_id: "price_test_pro",
+    })
+  );
+  const token = await issueTokenThroughRoute(env, {
+    customer_id: "cus_test_active",
+    subscription_id: "sub_test_active",
+  });
+
+  const detailResponse = await worker.fetch(makeGetRequest("http://localhost/api/site/fixtures/fixture_r2"), env);
+  const detailPayload = await detailResponse.json();
+  assert.equal(detailResponse.status, 200);
+  assert.equal(detailPayload.meta.payload_source, "r2");
+  assert.equal(detailPayload.data.fixture.home_team, "R2 Home");
+  assert.equal(detailPayload.data.fixture_brain.player_event_cards.length, 1);
+
+  const contextResponse = await worker.fetch(makeGetRequest("http://localhost/api/site/fixtures/fixture_r2/context"), env);
+  const contextPayload = await contextResponse.json();
+  assert.equal(contextResponse.status, 200);
+  assert.equal(contextPayload.meta.payload_source, "r2");
+  assert.equal(contextPayload.data.weather_signals.length, 1);
+
+  const statsResponse = await worker.fetch(
+    makeGetRequest("http://localhost/api/site/fixtures/fixture_r2/stats", {
+      authorization: `Bearer ${token}`,
+    }),
+    env
+  );
+  const statsPayload = await statsResponse.json();
+  assert.equal(statsResponse.status, 200);
+  assert.equal(statsPayload.access_tier, "pro");
+  assert.equal(statsPayload.meta.payload_source, "r2");
+  assert.equal(statsPayload.data.player_event_shortlists.length, 1);
+
+  const teamResponse = await worker.fetch(makeGetRequest("http://localhost/api/site/teams/test_league/r2_home"), env);
+  const teamPayload = await teamResponse.json();
+  assert.equal(teamResponse.status, 200);
+  assert.equal(teamPayload.meta.payload_source, "r2");
+  assert.equal(teamPayload.data.lineup_snapshot.shape, "4-3-3");
+
+  const teamPremiumResponse = await worker.fetch(
+    makeGetRequest("http://localhost/api/site/teams/test_league/r2_home/premium", {
+      authorization: `Bearer ${token}`,
+    }),
+    env
+  );
+  const teamPremiumPayload = await teamPremiumResponse.json();
+  assert.equal(teamPremiumResponse.status, 200);
+  assert.equal(teamPremiumPayload.meta.payload_source, "r2");
+  assert.equal(teamPremiumPayload.data.player_event_shortlists.length, 1);
 };
 
 const testPremiumRouteCachesSharedPayload = async (counters) => {
@@ -2641,6 +2783,8 @@ const main = async () => {
     cacheHarness.clear();
     await testPremiumTierAllowlistBoundaries();
     cacheHarness.clear();
+    await testSitePayloadRoutesReadThroughR2();
+    cacheHarness.clear();
     await testMissingToken();
     await testExpiredToken();
     await testInactiveSubscriber();
@@ -2670,6 +2814,7 @@ const main = async () => {
     console.log("Worker local harness passed.");
     console.log("- success route with valid token: passed");
     console.log("- premium tier payload allowlists: passed");
+    console.log("- site payload R2 read-through routes: passed");
     console.log("- premium payload cache hit/miss path: passed");
     console.log("- missing token returns 401: passed");
     console.log("- expired token returns 401: passed");

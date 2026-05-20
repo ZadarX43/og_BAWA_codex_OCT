@@ -17,6 +17,7 @@ import hashlib
 import json
 import subprocess
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -38,8 +39,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--report", type=Path, default=DEFAULT_REPORT)
     parser.add_argument("--d1-database", default=DEFAULT_D1_DATABASE)
     parser.add_argument("--apply-d1", action="store_true", help="Apply d1_changed_index.sql when it contains SQL statements.")
+    parser.add_argument("--all-objects", action="store_true", help="Upload every object in manifest.json instead of only upload_plan.json changes.")
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--limit", type=int, default=0, help="Upload at most N objects, for smoke testing.")
+    parser.add_argument("--start-index", type=int, default=1, help="One-based object index to start from, for resuming a failed upload.")
+    parser.add_argument("--retries", type=int, default=3)
+    parser.add_argument("--retry-delay", type=float, default=2.0)
     return parser.parse_args()
 
 
@@ -99,13 +104,16 @@ def d1_sql_has_statements(path: Path) -> bool:
 def upload_objects(args: argparse.Namespace, objects: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], list[str]]:
     uploaded: list[dict[str, Any]] = []
     errors: list[str] = []
-    selected = objects[: args.limit] if args.limit and args.limit > 0 else objects
-    for index, item in enumerate(selected, start=1):
+    start_offset = max(0, int(args.start_index or 1) - 1)
+    selected = objects[start_offset:]
+    if args.limit and args.limit > 0:
+        selected = selected[: args.limit]
+    for offset, item in enumerate(selected, start=start_offset + 1):
         rel_path = str(item.get("relative_path") or "")
         object_key = str(item.get("object_key") or "")
         source_path = args.publish_dir / rel_path
         if not rel_path or not object_key:
-            errors.append(f"Object {index} is missing relative_path or object_key.")
+            errors.append(f"Object {offset} is missing relative_path or object_key.")
             continue
         if not source_path.exists():
             errors.append(f"{rel_path} does not exist under {args.publish_dir}.")
@@ -137,9 +145,18 @@ def upload_objects(args: argparse.Namespace, objects: list[dict[str, Any]]) -> t
             "--remote",
             "--force",
         ]
-        result = run(command, args.worker_dir, args.dry_run)
+        attempts: list[dict[str, Any]] = []
+        result = None
+        for attempt in range(1, max(1, int(args.retries or 1)) + 1):
+            result = run(command, args.worker_dir, args.dry_run)
+            attempts.append(result)
+            if result["returncode"] == 0:
+                break
+            if attempt < max(1, int(args.retries or 1)) and not args.dry_run:
+                time.sleep(max(0.0, float(args.retry_delay or 0.0)) * attempt)
+        result = result or attempts[-1]
         record = {
-            "index": index,
+            "index": offset,
             "relative_path": rel_path,
             "object_key": object_key,
             "bytes": actual_bytes,
@@ -149,6 +166,7 @@ def upload_objects(args: argparse.Namespace, objects: list[dict[str, Any]]) -> t
             "command": result["command"],
             "stdout_tail": result["stdout"],
             "stderr_tail": result["stderr"],
+            "attempts": len(attempts),
         }
         uploaded.append(record)
         if not record["ok"]:
@@ -206,9 +224,9 @@ def main() -> int:
     args.worker_dir = args.worker_dir if args.worker_dir.is_absolute() else ROOT / args.worker_dir
     args.report = args.report if args.report.is_absolute() else ROOT / args.report
 
-    plan_path = args.publish_dir / "upload_plan.json"
+    plan_path = args.publish_dir / ("manifest.json" if args.all_objects else "upload_plan.json")
     if not plan_path.exists():
-        print(f"Missing upload plan: {plan_path}", file=sys.stderr)
+        print(f"Missing upload source: {plan_path}", file=sys.stderr)
         return 2
 
     plan = read_json(plan_path)
@@ -226,12 +244,20 @@ def main() -> int:
         "bucket": args.bucket,
         "publish_dir": str(args.publish_dir),
         "plan_path": str(plan_path),
+        "upload_mode": "all_objects" if args.all_objects else "changed_objects",
         "planned_changed_objects": len(objects),
-        "planned_changed_bytes": int(plan.get("total_changed_bytes") or 0) if isinstance(plan, dict) else 0,
+        "planned_changed_bytes": (
+            sum(int(item.get("bytes") or 0) for item in objects)
+            if args.all_objects
+            else int(plan.get("total_changed_bytes") or 0)
+            if isinstance(plan, dict)
+            else 0
+        ),
         "uploaded_objects": len([item for item in uploaded if item.get("ok")]),
         "uploaded_bytes": sum(int(item.get("bytes") or 0) for item in uploaded if item.get("ok")),
         "errors": errors,
-        "ok": not errors and len(uploaded) == (args.limit if args.limit and args.limit > 0 else len(objects)),
+        "start_index": int(args.start_index or 1),
+        "ok": not errors and len(uploaded) == len(objects[max(0, int(args.start_index or 1) - 1):][: args.limit or None]),
         "d1": d1,
         "objects": uploaded,
     }
