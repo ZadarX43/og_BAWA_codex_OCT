@@ -316,7 +316,7 @@ def logo_status(fixture: dict[str, Any]) -> tuple[str, list[str]]:
 
 
 def tier_readiness(checks: dict[str, str]) -> dict[str, str]:
-    standard = "ready" if all(checks[name] == "complete" for name in ("logos", "prediction", "odds", "compact_payload")) else "blocked"
+    standard = "ready" if not standard_blockers(checks) else "blocked"
     founder = (
         "ready"
         if standard == "ready"
@@ -341,6 +341,30 @@ def tier_readiness(checks: dict[str, str]) -> dict[str, str]:
         "pro": pro,
         "pro_plus": pro_plus,
     }
+
+
+def standard_blockers(checks: dict[str, str]) -> list[str]:
+    blockers: list[str] = []
+    if checks.get("logos") == "missing":
+        blockers.append("logos")
+    if checks.get("prediction") == "missing":
+        blockers.append("prediction")
+    if checks.get("compact_payload") != "complete":
+        blockers.append("compact_payload")
+    if checks.get("odds") == "missing":
+        blockers.append("odds")
+    return blockers
+
+
+def standard_notes(checks: dict[str, str]) -> list[str]:
+    notes: list[str] = []
+    if checks.get("odds") == "partial":
+        notes.append("odds_partial_line_pending")
+    if checks.get("prediction") == "partial":
+        notes.append("prediction_partial_context_only")
+    if checks.get("logos") == "partial":
+        notes.append("logo_partial_initial_fallback")
+    return notes
 
 
 def page_status(checks: dict[str, str], tiers: dict[str, str]) -> str:
@@ -414,6 +438,8 @@ def audit_fixture(
         "fixture_stats": fixture_stats,
     }
     tiers = tier_readiness(checks)
+    std_blockers = standard_blockers(checks)
+    std_notes = standard_notes(checks)
     kickoff_date = parse_date(fixture.get("kickoff_time") or fixture_row["kickoff_time"])
     row = {
         "fixture_key": fixture_key,
@@ -434,6 +460,8 @@ def audit_fixture(
             "missing_model_markets": missing_model_markets,
             "odds_markets": odds_markets,
             "missing_odds_markets": missing_odds_markets,
+            "standard_blockers": std_blockers,
+            "standard_notes": std_notes,
             "compact_payload_path": str(compact_payload_path),
             "compact_payload_summary": compact_summary,
             "fixture_brain_summary": brain_summary,
@@ -505,6 +533,8 @@ def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
         "teams_missing",
         "player_event_cards_count",
         "world_cup_h2h_graceful_fallback",
+        "standard_blockers",
+        "standard_notes",
     ]
     with path.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fields)
@@ -517,6 +547,8 @@ def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
                     **row["tiers"],
                     "missing_model_markets": "|".join(row["details"]["missing_model_markets"]),
                     "missing_odds_markets": "|".join(row["details"]["missing_odds_markets"]),
+                    "standard_blockers": "|".join(row["details"]["standard_blockers"]),
+                    "standard_notes": "|".join(row["details"]["standard_notes"]),
                     "teams_missing": "|".join(row["details"]["teams_missing"]),
                     "player_event_cards_count": row["details"]["player_event_cards_count"],
                     "world_cup_h2h_graceful_fallback": row["details"]["world_cup_h2h_graceful_fallback"],
@@ -552,7 +584,7 @@ def write_markdown(path: Path, payload: dict[str, Any]) -> None:
     lines.extend(["", "## Blocked Fixtures", ""])
     if blocked:
         for row in blocked[:60]:
-            blockers = [key for key in ("logos", "prediction", "odds", "compact_payload") if row["checks"][key] != "complete"]
+            blockers = row["details"].get("standard_blockers") or []
             missing = [key for key, value in row["checks"].items() if value == "missing" and key not in blockers]
             suffix = f" | missing: {', '.join(missing)}" if missing else ""
             lines.append(

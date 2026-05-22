@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import math
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -110,6 +111,8 @@ SUSPICIOUS_VALUE_SNIPPETS = {
     "ModelStore\\",
 }
 
+TOKEN_RE = re.compile(r"[a-z0-9]+")
+
 
 def load_json(path: Path) -> Any:
     with path.open("r", encoding="utf-8") as handle:
@@ -118,6 +121,19 @@ def load_json(path: Path) -> Any:
 
 def is_bad_number(value: Any) -> bool:
     return isinstance(value, float) and (math.isnan(value) or math.isinf(value))
+
+
+def contains_forbidden_term(value: str, term: str) -> bool:
+    """Match private terms as tokens, not substrings inside public names.
+
+    Public football data can legitimately contain strings like "Rapids" or
+    "Draw"; those should not fail just because they contain "api" or "raw".
+    """
+
+    lowered = value.lower()
+    if "_" in term:
+        return term in lowered
+    return term in set(TOKEN_RE.findall(lowered))
 
 
 def walk_values(value: Any, path: str, errors: list[str]) -> None:
@@ -133,7 +149,7 @@ def walk_values(value: Any, path: str, errors: list[str]) -> None:
                 errors.append(f"{path}: contains suspicious path/model snippet `{snippet}`")
         lowered = text.lower()
         for term in FORBIDDEN_TERMS:
-            if term in lowered:
+            if contains_forbidden_term(lowered, term):
                 errors.append(f"{path}: contains forbidden/private term `{term}`")
         return
     if isinstance(value, list):
@@ -145,7 +161,7 @@ def walk_values(value: Any, path: str, errors: list[str]) -> None:
             lowered_key = key.lower()
             if key not in ALLOWED_KEY_NAMES:
                 for term in FORBIDDEN_TERMS:
-                    if term in lowered_key:
+                    if contains_forbidden_term(lowered_key, term):
                         errors.append(f"{path}: key `{key}` contains forbidden/private term `{term}`")
             walk_values(item, f"{path}.{key}", errors)
 
@@ -283,14 +299,20 @@ def validate_archive(payload: Any, errors: list[str]) -> None:
             "confidence_tier",
             "premium_tier",
             "result_status",
-            "profit_units",
             "published_run_id",
         ):
             value = item.get(key)
             if value is None or str(value).strip() == "":
                 errors.append(f"{item_path}: missing `{key}`")
-        if item.get("result_status") not in {"pending", "won", "lost", "void"}:
+        result_status = item.get("result_status")
+        if result_status not in {"pending", "won", "lost", "void"}:
             errors.append(f"{item_path}: invalid `result_status`")
+        profit_units = item.get("profit_units")
+        if result_status == "pending":
+            if profit_units is not None:
+                errors.append(f"{item_path}: pending `profit_units` must be null")
+        elif not isinstance(profit_units, (int, float)):
+            errors.append(f"{item_path}: settled `profit_units` must be numeric")
     walk_values(payload, "results_archive", errors)
 
 

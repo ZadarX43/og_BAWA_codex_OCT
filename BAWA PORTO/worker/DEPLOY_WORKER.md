@@ -101,6 +101,31 @@ wrangler secret put STRIPE_WEBHOOK_SECRET
 wrangler secret put PREMIUM_TOKEN_SECRET
 ```
 
+For the `site_data_test` Worker environment, set the same required launch-smoke
+secrets against that environment as well. Cloudflare Worker environments do not
+expose secret values back through Wrangler, so these must be re-entered rather
+than copied from the primary Worker:
+
+```bash
+cd worker
+wrangler secret put STRIPE_SECRET_KEY --env site_data_test
+wrangler secret put STRIPE_WEBHOOK_SECRET --env site_data_test
+wrangler secret put PREMIUM_TOKEN_SECRET --env site_data_test
+wrangler secret put AUTH_MAGIC_LINK_SECRET --env site_data_test
+wrangler secret put AUTH_SESSION_SECRET --env site_data_test
+wrangler secret put RESEND_API_KEY --env site_data_test
+wrangler secret put AUTH_EMAIL_FROM --env site_data_test
+```
+
+After setting them, verify the test Worker against the active Pages preview:
+
+```bash
+python3 scripts/cloudflare_preview_readiness.py \
+  --worker-url https://odds-genius-worker-site-data-test.hughcwade.workers.dev \
+  --site-url <active-pages-preview-url> \
+  --skip-local-publish
+```
+
 ## Step 5 — Run Local Harness Before Deploy
 
 Run:

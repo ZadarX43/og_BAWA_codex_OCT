@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Coordinate the local website intelligence publish pipeline.
 
-This is the first central "site brain" runner. It does not create predictions
-or change deploy routing. It verifies upstream artifacts, settles public proof,
-compiles compact publish payloads, audits fixture-page completeness, and writes
-one orchestration report for the website handoff.
+This is the central "site brain" runner. It does not create predictions or
+change deploy routing. It settles proof, rebuilds the local site SQLite,
+recalculates injury market impact, compiles fixture-brain payloads, compiles
+compact publish artifacts, audits fixture-page completeness, and writes one
+orchestration report for the website handoff.
 """
 
 from __future__ import annotations
@@ -30,10 +31,17 @@ DEFAULT_UPSTREAM_JSON = ROOT / "reports" / "latest" / "SITE_UPSTREAM_INVENTORY.j
 DEFAULT_UPSTREAM_MD = ROOT / "reports" / "latest" / "SITE_UPSTREAM_INVENTORY.md"
 DEFAULT_FIXTURE_BRAIN_JSON = ROOT / "reports" / "latest" / "FIXTURE_BRAIN_COMPILER_REPORT.json"
 DEFAULT_FIXTURE_BRAIN_MD = ROOT / "reports" / "latest" / "FIXTURE_BRAIN_COMPILER_REPORT.md"
+DEFAULT_SUMMARY_DRY_RUN_DIR = ROOT / "reports" / "latest" / "fixture_summary_dry_run"
 DEFAULT_R2_UPLOAD_JSON = ROOT / "reports" / "latest" / "SITE_PUBLISH_R2_UPLOAD_REPORT.json"
 DEFAULT_COMPLETENESS_JSON = ROOT / "reports" / "latest" / "UPCOMING_FIXTURE_COMPLETENESS_AUDIT.json"
 DEFAULT_COMPLETENESS_CSV = ROOT / "reports" / "latest" / "UPCOMING_FIXTURE_COMPLETENESS_AUDIT.csv"
 DEFAULT_COMPLETENESS_MD = ROOT / "reports" / "latest" / "UPCOMING_FIXTURE_COMPLETENESS_AUDIT.md"
+DEFAULT_INJURY_MARKET_IMPACT_DIR = ROOT / "reports" / "latest" / "injury_shock_market_impact"
+DEFAULT_INJURY_MARKET_IMPACT_FIXTURE = DEFAULT_INJURY_MARKET_IMPACT_DIR / "INJURY_SHOCK_MARKET_IMPACT_FIXTURE.csv"
+DEFAULT_INJURY_MARKET_IMPACT_PLAYER = DEFAULT_INJURY_MARKET_IMPACT_DIR / "INJURY_SHOCK_MARKET_IMPACT_PLAYER.csv"
+DEFAULT_INJURY_MARKET_IMPACT_REPORT = DEFAULT_INJURY_MARKET_IMPACT_DIR / "INJURY_SHOCK_MARKET_IMPACT_REPORT.md"
+INJURY_COVERAGE_NAME = "INJURY_SHOCK_ELITE_STANDARD_COVERAGE.csv"
+INJURY_PLAYER_RATINGS_NAME = "INJURY_SHOCK_ELITE_STANDARD_PLAYER_IMPACT_WITH_RATINGS.csv"
 
 
 @dataclass
@@ -60,11 +68,24 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--all-fixtures", action="store_true")
     parser.add_argument("--skip-upstream-inventory", action="store_true")
     parser.add_argument("--skip-settlement", action="store_true")
+    parser.add_argument("--skip-results-validation", action="store_true")
+    parser.add_argument("--skip-site-db-export", action="store_true")
+    parser.add_argument("--include-history", action="store_true", help="Pass through to export_site_sqlite.py.")
+    parser.add_argument("--data-root", type=Path, default=DATA_ROOT)
+    parser.add_argument("--normalized-root", type=Path, default=ROOT / "data_sources" / "api_football" / "normalized")
+    parser.add_argument("--skip-injury-market-impact", action="store_true")
+    parser.add_argument("--injury-coverage-csv", type=Path, default=None)
+    parser.add_argument("--injury-player-impact-csv", type=Path, default=None)
+    parser.add_argument("--injury-market-impact-dir", type=Path, default=DEFAULT_INJURY_MARKET_IMPACT_DIR)
+    parser.add_argument("--skip-summary-dry-run", action="store_true")
+    parser.add_argument("--summary-dry-run-dir", type=Path, default=DEFAULT_SUMMARY_DRY_RUN_DIR)
     parser.add_argument("--skip-compiler", action="store_true")
     parser.add_argument("--skip-fixture-brain", action="store_true")
     parser.add_argument("--skip-completeness-audit", action="store_true")
     parser.add_argument("--run-r2-upload", action="store_true", help="Upload changed compact payload objects to R2.")
     parser.add_argument("--r2-all-objects", action="store_true", help="Upload every compact object instead of changed objects only.")
+    parser.add_argument("--r2-bucket", default="", help="Override the R2 bucket used by upload_publish_plan_r2.py.")
+    parser.add_argument("--d1-database", default="", help="Override the D1 database used by upload_publish_plan_r2.py.")
     parser.add_argument("--r2-start-index", type=int, default=1, help="Start index for resumable R2 uploads.")
     parser.add_argument("--r2-retries", type=int, default=3)
     parser.add_argument("--apply-d1", action="store_true", help="Apply the changed D1 index SQL after R2 upload.")
@@ -102,6 +123,17 @@ def file_status(path: Path) -> dict[str, Any]:
         if stat
         else "",
     }
+
+
+def latest_injury_source(filename: str) -> Path:
+    candidates = sorted(
+        (ROOT / "reports" / "latest").glob(f"injury_shock_elite_standard_*/{filename}"),
+        key=lambda path: path.stat().st_mtime if path.exists() else 0,
+        reverse=True,
+    )
+    if candidates:
+        return candidates[0]
+    return ROOT / "reports" / "latest" / "injury_shock_elite_standard_2026_05_22_to_2026_05_26" / filename
 
 
 def run_command(name: str, command: list[str]) -> CommandResult:
@@ -172,6 +204,18 @@ def fixture_brain_summary(path: Path) -> dict[str, Any]:
         "manifest_path": str(path / "manifest.json"),
         "summary": manifest.get("summary", {}),
         "source_summary": manifest.get("source_summary", {}),
+    }
+
+
+def summary_dry_run_summary(path: Path) -> dict[str, Any]:
+    payload = read_json(path / "index.json", {})
+    if not isinstance(payload, dict):
+        return {}
+    return {
+        "index_path": str(path / "index.json"),
+        "report_path": str(path / "FIXTURE_SUMMARY_DRY_RUN_REPORT.md"),
+        "fixtures_rendered": payload.get("fixtures_rendered", 0),
+        "tiers": payload.get("tiers", []),
     }
 
 
@@ -282,6 +326,7 @@ def write_report_md(path: Path, payload: dict[str, Any]) -> None:
         "",
         f"- Generated: `{payload['generated_at']}`",
         f"- Window: `{payload['window']['from']}` to `{payload['window']['to']}`",
+        f"- Pipeline blocked: `{payload.get('pipeline_blocked', False)}`",
         f"- Missing artifacts: `{len(artifact_state.get('missing', []))}`",
         "",
         "## Commands",
@@ -323,6 +368,18 @@ def write_report_md(path: Path, payload: dict[str, Any]) -> None:
             f"- Total bytes: `{brain_summary.get('total_bytes', 0)}`",
         ]
     )
+    lines.extend(["", "## Summary Dry Run", ""])
+    dry_run = payload.get("summary_dry_run", {})
+    if dry_run:
+        lines.extend(
+            [
+                f"- Fixtures rendered: `{dry_run.get('fixtures_rendered', 0)}`",
+                f"- Tiers: `{', '.join(dry_run.get('tiers', []))}`",
+                f"- Report: `{dry_run.get('report_path', '')}`",
+            ]
+        )
+    else:
+        lines.append("- Summary dry run not run in this orchestration pass.")
     r2_upload = payload.get("r2_upload", {})
     lines.extend(["", "## R2 / D1 Publish", ""])
     if r2_upload:
@@ -365,46 +422,78 @@ def main() -> int:
     start = date.fromisoformat(args.from_date)
     end = date.fromisoformat(args.to_date) if args.to_date else start + timedelta(days=args.days)
     commands: list[CommandResult] = []
+    pipeline_blocked = False
+    data_root = resolve(args.data_root)
+    normalized_root = resolve(args.normalized_root)
+    summary_dry_run_dir = resolve(args.summary_dry_run_dir)
+    injury_market_impact_dir = resolve(args.injury_market_impact_dir)
+    injury_coverage_csv = resolve(args.injury_coverage_csv) if args.injury_coverage_csv else latest_injury_source(INJURY_COVERAGE_NAME)
+    injury_player_csv = resolve(args.injury_player_impact_csv) if args.injury_player_impact_csv else latest_injury_source(INJURY_PLAYER_RATINGS_NAME)
+    injury_market_fixture_csv = injury_market_impact_dir / "INJURY_SHOCK_MARKET_IMPACT_FIXTURE.csv"
+    injury_market_player_csv = injury_market_impact_dir / "INJURY_SHOCK_MARKET_IMPACT_PLAYER.csv"
 
-    artifact_state = artifact_checks(db_path)
-
-    if not args.skip_upstream_inventory:
-        commands.append(
-            run_command(
-                "upstream_inventory",
-                [
-                    sys.executable,
-                    "scripts/site_publish/upstream_inventory.py",
-                    "--db",
-                    str(db_path),
-                    "--from-date",
-                    start.isoformat(),
-                    "--to-date",
-                    end.isoformat(),
-                    "--json-out",
-                    str(DEFAULT_UPSTREAM_JSON),
-                    "--md-out",
-                    str(DEFAULT_UPSTREAM_MD),
-                ],
-            )
-        )
+    def run_step(name: str, command: list[str], required: bool = True) -> None:
+        nonlocal pipeline_blocked
+        if pipeline_blocked:
+            return
+        result = run_command(name, command)
+        commands.append(result)
+        if required and not result.ok:
+            pipeline_blocked = True
 
     if not args.skip_settlement:
-        commands.append(run_command("results_settlement", [sys.executable, "scripts/settle_published_results.py"]))
+        run_step("results_settlement", [sys.executable, "scripts/settle_published_results.py"])
 
-    if not args.skip_compiler:
-        commands.append(
-            run_command(
-                "publish_compiler",
-                [
-                    sys.executable,
-                    "scripts/publish_compiler.py",
-                    "--db",
-                    str(db_path),
-                    "--output-dir",
-                    str(publish_dir),
-                ],
-            )
+    if not args.skip_results_validation:
+        run_step("results_validation", [sys.executable, "validate_weekly_results.py"])
+
+    if not args.skip_site_db_export:
+        export_command = [
+            sys.executable,
+            "scripts/export_site_sqlite.py",
+            "--data-root",
+            str(data_root),
+            "--normalized-root",
+            str(normalized_root),
+            "--output",
+            str(db_path),
+        ]
+        if args.include_history:
+            export_command.append("--include-history")
+        run_step("site_sqlite_export", export_command)
+
+    if not args.skip_upstream_inventory:
+        run_step(
+            "upstream_inventory",
+            [
+                sys.executable,
+                "scripts/site_publish/upstream_inventory.py",
+                "--db",
+                str(db_path),
+                "--from-date",
+                start.isoformat(),
+                "--to-date",
+                end.isoformat(),
+                "--json-out",
+                str(DEFAULT_UPSTREAM_JSON),
+                "--md-out",
+                str(DEFAULT_UPSTREAM_MD),
+            ],
+        )
+
+    if not args.skip_injury_market_impact:
+        run_step(
+            "injury_market_impact",
+            [
+                sys.executable,
+                "scripts/build_injury_shock_market_impact_sidecar.py",
+                "--coverage-csv",
+                str(injury_coverage_csv),
+                "--player-impact-csv",
+                str(injury_player_csv),
+                "--outdir",
+                str(injury_market_impact_dir),
+            ],
         )
 
     if not args.skip_fixture_brain:
@@ -419,6 +508,12 @@ def main() -> int:
             start.isoformat(),
             "--to-date",
             end.isoformat(),
+            "--injury-fixture-csv",
+            str(injury_coverage_csv),
+            "--injury-player-csv",
+            str(injury_market_player_csv),
+            "--injury-market-impact-csv",
+            str(injury_market_fixture_csv),
             "--report-json",
             str(DEFAULT_FIXTURE_BRAIN_JSON),
             "--report-md",
@@ -426,7 +521,35 @@ def main() -> int:
         ]
         if args.all_fixtures:
             brain_command.append("--all-fixtures")
-        commands.append(run_command("fixture_brain_compiler", brain_command))
+        run_step("fixture_brain_compiler", brain_command)
+
+    if not args.skip_summary_dry_run:
+        run_step(
+            "fixture_summary_dry_run",
+            [
+                sys.executable,
+                "scripts/build_fixture_summary_dry_run.py",
+                "--fixture-brain-dir",
+                str(fixture_brain_dir),
+                "--outdir",
+                str(summary_dry_run_dir),
+            ],
+        )
+
+    if not args.skip_compiler:
+        run_step(
+            "publish_compiler",
+            [
+                sys.executable,
+                "scripts/publish_compiler.py",
+                "--db",
+                str(db_path),
+                "--output-dir",
+                str(publish_dir),
+                "--fixture-brain-dir",
+                str(fixture_brain_dir),
+            ],
+        )
 
     if not args.skip_completeness_audit:
         audit_command = [
@@ -449,7 +572,7 @@ def main() -> int:
         ]
         if args.all_fixtures:
             audit_command.append("--all")
-        commands.append(run_command("fixture_completeness_audit", audit_command))
+        run_step("fixture_completeness_audit", audit_command)
 
     if args.run_r2_upload:
         upload_command = [
@@ -462,17 +585,24 @@ def main() -> int:
             "--retries",
             str(args.r2_retries),
         ]
+        if args.r2_bucket:
+            upload_command.extend(["--bucket", args.r2_bucket])
+        if args.d1_database:
+            upload_command.extend(["--d1-database", args.d1_database])
         if args.r2_all_objects:
             upload_command.append("--all-objects")
         if args.apply_d1:
             upload_command.append("--apply-d1")
-        commands.append(run_command("r2_publish_upload", upload_command))
+        run_step("r2_publish_upload", upload_command)
 
     if args.run_cloudflare_readiness:
-        commands.append(run_command("cloudflare_preview_readiness", [sys.executable, "scripts/cloudflare_preview_readiness.py"]))
+        run_step("cloudflare_preview_readiness", [sys.executable, "scripts/cloudflare_preview_readiness.py"], required=False)
+
+    artifact_state = artifact_checks(db_path)
 
     compiler = {} if args.skip_compiler else compiler_summary(publish_dir)
     fixture_brain = {} if args.skip_fixture_brain else fixture_brain_summary(fixture_brain_dir)
+    summary_dry_run = {} if args.skip_summary_dry_run else summary_dry_run_summary(summary_dry_run_dir)
     upstream = {} if args.skip_upstream_inventory else upstream_summary(DEFAULT_UPSTREAM_JSON)
     completeness = {} if args.skip_completeness_audit else completeness_summary(DEFAULT_COMPLETENESS_JSON)
     r2_upload = r2_upload_summary(DEFAULT_R2_UPLOAD_JSON) if args.run_r2_upload else {}
@@ -480,11 +610,19 @@ def main() -> int:
         "schema": "site_publish_orchestration_report_v1",
         "generated_at": utc_now(),
         "window": {"from": start.isoformat(), "to": end.isoformat(), "all_fixtures": bool(args.all_fixtures)},
+        "pipeline_blocked": pipeline_blocked,
+        "injury_market_sources": {
+            "coverage_csv": str(injury_coverage_csv),
+            "player_impact_csv": str(injury_player_csv),
+            "market_fixture_csv": str(injury_market_fixture_csv),
+            "market_player_csv": str(injury_market_player_csv),
+        },
         "artifact_state": artifact_state,
         "commands": [summarize_command(result) for result in commands],
         "upstream_inventory": upstream,
         "compiler": compiler,
         "fixture_brain": fixture_brain,
+        "summary_dry_run": summary_dry_run,
         "r2_upload": r2_upload,
         "completeness": completeness,
         "next_actions": next_actions(artifact_state, upstream, completeness, compiler, fixture_brain, r2_upload),

@@ -478,6 +478,12 @@ def row_visibility(row: dict[str, Any]) -> str:
     return "premium"
 
 
+def public_result_source(result: dict[str, Any] | None) -> str:
+    if not result:
+        return ""
+    return "provider_results"
+
+
 def settle_row(row: dict[str, Any], result: dict[str, Any] | None, *, run_id: str, settled_at: str) -> dict[str, Any]:
     market = market_key(row.get("market"))
     pick = normalize_pick(row.get("pick") or row.get("selection") or row.get("bookie_pick"))
@@ -512,7 +518,7 @@ def settle_row(row: dict[str, Any], result: dict[str, Any] | None, *, run_id: st
         "final_home_score": home_score,
         "final_away_score": away_score,
         "provider_status": status,
-        "actual_source": result.get("source_root") if result else "",
+        "actual_source": public_result_source(result),
         "match_score": result.get("match_score") if result else None,
         "settled_at": settled_at if result_status in SETTLED_STATUSES else "",
         "published_run_id": run_id,
@@ -660,7 +666,7 @@ def build_weekly_payload(rows: list[dict[str, Any]], *, generated_at: str, run_i
     return payload
 
 
-def merge_archive(existing: dict[str, Any], new_items: list[dict[str, Any]], *, generated_at: str) -> dict[str, Any]:
+def merge_archive(existing: dict[str, Any], new_items: list[dict[str, Any]], *, generated_at: str, run_id: str) -> dict[str, Any]:
     existing_items = existing.get("items") if isinstance(existing, dict) else []
     rows_by_key: dict[str, dict[str, Any]] = {}
     if isinstance(existing_items, list):
@@ -678,6 +684,8 @@ def merge_archive(existing: dict[str, Any], new_items: list[dict[str, Any]], *, 
         "period_start": min(dates) if dates else "",
         "period_end": max(dates) if dates else "",
         "generated_at": generated_at,
+        "source_file": "published_website_predictions",
+        "published_run_id": run_id,
         **overall,
         "overall_hit_rate": overall.get("hit_rate"),
         "overall_roi": overall.get("roi"),
@@ -794,7 +802,7 @@ def main() -> int:
             unmatched.append(settled)
 
     weekly = build_weekly_payload(settled_rows, generated_at=generated_at, run_id=run_id)
-    archive = merge_archive(existing_archive, settled_rows, generated_at=generated_at)
+    archive = merge_archive(existing_archive, settled_rows, generated_at=generated_at, run_id=run_id)
     weekly = preserve_generated_at(weekly, existing_weekly)
     archive = preserve_generated_at(archive, existing_archive)
 
