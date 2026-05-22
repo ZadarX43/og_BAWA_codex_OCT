@@ -76,5 +76,10 @@ data_sources/api_football/normalized/
 # Keep schema and manifest files tracked, but ignore regenerated data payloads by default.
 frontend/public/data/*.json
 frontend/public/data/internal/
+frontend/public/data/fixture_decision_intelligence/
+frontend/public/data/fixture_lineup_intelligence/
+frontend/public/data/fixture_h2h_support/
+frontend/public/data/player_intelligence/
+frontend/public/data/team_intelligence/
 !frontend/public/data/api_football_logo_asset_manifest.json
 !frontend/public/data/live_results_feed.json

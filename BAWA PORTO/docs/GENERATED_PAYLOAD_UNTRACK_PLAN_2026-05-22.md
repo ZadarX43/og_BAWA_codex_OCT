@@ -41,9 +41,7 @@ Verification:
 
 ## Phase 2 - Gated Website Payload Batch
 
-Do not run this yet.
-
-Candidate generated frontend payload directories:
+Untrack the deep generated frontend payload directories:
 
 - `frontend/public/data/fixture_decision_intelligence/`
 - `frontend/public/data/fixture_lineup_intelligence/`
@@ -51,17 +49,52 @@ Candidate generated frontend payload directories:
 - `frontend/public/data/player_intelligence/`
 - `frontend/public/data/team_intelligence/`
 
-Reason for gating:
+Reason:
 
-- `frontend/public/data` still acts as a static/public fallback for parts of the site and Worker path.
-- The compact R2/D1 path is the preferred future source, but the static allowlist needs to stay deliberate.
+- These directories are generated fixture/team/player payload mirrors.
+- The compact R2/D1 path is the preferred source for active payloads.
+- The files should remain available locally after untracking so local frontend fallback and publish diagnostics still work.
+- Rebuild/publish scripts can regenerate them when needed.
 
-Before Phase 2:
+Expected command:
 
-- Confirm Worker routes read compact R2 payloads for active fixture pages.
-- Preserve small public proof/static allowlist files.
-- Confirm local frontend dev and Cloudflare preview still load expected fallback data.
-- Commit Phase 2 separately.
+```bash
+git rm --cached -r \
+  frontend/public/data/fixture_decision_intelligence \
+  frontend/public/data/fixture_lineup_intelligence \
+  frontend/public/data/fixture_h2h_support \
+  frontend/public/data/player_intelligence \
+  frontend/public/data/team_intelligence
+```
+
+Verification:
+
+- Confirm representative payload files still exist locally after untracking.
+- Confirm protected production spine remains clean.
+- Confirm top-level/public proof files remain tracked.
+- Confirm `frontend/public/data/external_content/` remains tracked for manual/news/demo content.
+
+## Frontend Data Allowlist
+
+Keep these top-level/static contract files tracked for now:
+
+- `frontend/public/data/api_football_logo_asset_manifest.json`
+- `frontend/public/data/covered_fixture_universe.json`
+- `frontend/public/data/fixture_intelligence_public.json`
+- `frontend/public/data/league_coverage_audit.json`
+- `frontend/public/data/league_remediation_plan.json`
+- `frontend/public/data/live_results_feed.json`
+- `frontend/public/data/premium_predictions.json`
+- `frontend/public/data/public_predictions.json`
+- `frontend/public/data/publish_summary.json`
+- `frontend/public/data/results_archive.json`
+- `frontend/public/data/weekly_results.json`
+
+Keep this small content family tracked for now:
+
+- `frontend/public/data/external_content/`
+
+Review this allowlist again after Worker/R2/D1 is fully authoritative for public proof and fixture pages.
 
 ## Keep Tracked For Now
 
