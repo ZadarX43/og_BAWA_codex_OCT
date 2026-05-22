@@ -29,17 +29,75 @@ def safe_int(value: object) -> int | None:
     return int(numeric)
 
 
+def pct_avg(*values: object) -> int:
+    numeric = [clamp_percent(value) for value in values if value not in (None, "")]
+    numeric = [value for value in numeric if value > 0]
+    if not numeric:
+        return 0
+    return int(round(sum(numeric) / len(numeric)))
+
+
+def h2h_signal_fields(row: dict) -> dict:
+    sample = int(row.get("sample_size") or 0)
+    if sample <= 0:
+        return {
+            "status": "fallback",
+            "goal_heat": 0,
+            "over25_heat": 0,
+            "btts_pressure": 0,
+            "attack_flow": 0,
+            "defensive_lock": 0,
+            "chaos_rating": 0,
+            "first_strike": 0,
+            "first_strike_side": "",
+        }
+    goal_heat = clamp_percent(row.get("goal_environment"))
+    over25_heat = clamp_percent(row.get("over25_rate"))
+    btts_pressure = clamp_percent(row.get("btts_regime"))
+    booking_heat = clamp_percent(row.get("booking_heat"))
+    foul_intensity = clamp_percent(row.get("foul_intensity"))
+    style_conflict = clamp_percent(row.get("style_conflict_index"))
+    attack_flow = pct_avg(goal_heat, over25_heat, btts_pressure)
+    defensive_lock = max(0, min(100, 100 - pct_avg(goal_heat, btts_pressure)))
+    chaos_rating = pct_avg(style_conflict, booking_heat, foul_intensity)
+    home_win = clamp_percent(row.get("home_win_rate"))
+    draw_rate = clamp_percent(row.get("draw_rate"))
+    away_win = max(0, min(100, 100 - home_win - draw_rate))
+    return {
+        "status": "available" if int(row.get("sample_size") or 0) > 0 else "fallback",
+        "goal_heat": goal_heat,
+        "over25_heat": over25_heat,
+        "btts_pressure": btts_pressure,
+        "attack_flow": attack_flow,
+        "defensive_lock": defensive_lock,
+        "chaos_rating": chaos_rating,
+        "first_strike": max(home_win, away_win),
+        "first_strike_side": "home" if home_win >= away_win else "away",
+    }
+
+
+def finalize_payload(payload: dict, *, fallback_mode: str = "direct_fixture_history") -> dict:
+    payload.update(h2h_signal_fields(payload))
+    sample = int(payload.get("sample_size") or 0)
+    payload.setdefault("coverage_status", "available" if sample > 0 else "thin_history")
+    payload.setdefault("fallback_mode", fallback_mode if sample > 0 else "thin_history")
+    payload["summary"] = summary_for_row(payload)
+    return payload
+
+
 def summary_for_row(row: dict) -> str:
     sample = int(row.get("sample_size") or 0)
     if sample <= 0:
       return "Historic matchup regime is not established enough yet, so this block stays supporting-only."
-    goal = int(row.get("goal_environment") or 0)
-    btts = int(row.get("btts_regime") or 0)
-    over = int(row.get("over25_rate") or 0)
-    booking = int(row.get("booking_heat") or 0)
+    goal = int(row.get("goal_heat") or row.get("goal_environment") or 0)
+    btts = int(row.get("btts_pressure") or row.get("btts_regime") or 0)
+    over = int(row.get("over25_heat") or row.get("over25_rate") or 0)
+    attack = int(row.get("attack_flow") or 0)
+    chaos = int(row.get("chaos_rating") or 0)
     return (
         f"Last-{sample} meeting regime shows {goal}% goal environment, {btts}% BTTS pressure, "
-        f"{over}% Over 2.5 frequency, and {booking}% booking heat. Treat this as supporting context rather than the primary read."
+        f"{over}% Over 2.5 frequency, {attack}% attack flow, and {chaos}% chaos rating. "
+        "Treat this as supporting context rather than the primary read."
     )
 
 
@@ -133,7 +191,7 @@ def build_payloads(features_root: Path, active_competitions: set[str] | None = N
                 "same_referee_overlap": bool(row.get("h2h_same_referee_overlap")),
                 "same_referee_count": int(row.get("h2h_same_referee_count_l5") or 0),
             }
-            payload["summary"] = summary_for_row(payload)
+            payload = finalize_payload(payload)
             payloads[fixture_key] = payload
             index_rows.append(
                 {
@@ -150,7 +208,7 @@ def build_payloads(features_root: Path, active_competitions: set[str] | None = N
 
 def placeholder_payload(fixture: dict) -> dict:
     fixture_key = str(fixture.get("fixture_key") or "").strip()
-    return {
+    payload = {
         "fixture_key": fixture_key,
         "fixture_id": safe_int(fixture.get("api_fixture_id") or fixture.get("fixture_id")),
         "competition": fixture.get("league"),
@@ -172,8 +230,10 @@ def placeholder_payload(fixture: dict) -> dict:
         "same_referee_count": 0,
         "coverage_status": "unpublished",
         "fallback_mode": "unpublished",
-        "summary": "No publish-safe H2H regime snapshot is available yet for this fixture, so H2H remains supporting-only.",
     }
+    payload.update(h2h_signal_fields(payload))
+    payload["summary"] = "No publish-safe H2H regime snapshot is available yet for this fixture, so H2H remains supporting-only."
+    return payload
 
 
 def augment_with_fixture_feed(
@@ -232,6 +292,7 @@ def augment_with_fixture_feed(
                     "source_fixture_key": source.get("fixture_key"),
                 }
             )
+            payload.update(h2h_signal_fields(payload))
             sample = int(payload.get("sample_size") or 0)
             payload["summary"] = (
                 f"Using the latest available same-team-pair historical regime ({sample} prior meeting"

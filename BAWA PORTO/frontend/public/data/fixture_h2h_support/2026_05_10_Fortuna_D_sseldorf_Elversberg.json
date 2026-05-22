@@ -20,10 +20,19 @@
   "same_referee_count": 0,
   "coverage_status": "unpublished",
   "fallback_mode": "unpublished",
+  "status": "fallback",
+  "goal_heat": 0,
+  "over25_heat": 0,
+  "btts_pressure": 0,
+  "attack_flow": 0,
+  "defensive_lock": 0,
+  "chaos_rating": 0,
+  "first_strike": 0,
+  "first_strike_side": "",
   "summary": "No publish-safe H2H regime snapshot is available yet for this fixture, so H2H remains supporting-only.",
-  "capture_generated_at": "2026-05-13T21:10:44Z",
-  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
-  "fixture_kickoff_at": "2026-05-10T11:30:00Z",
+  "capture_generated_at": "2026-05-22T01:26:59Z",
+  "source_data_cutoff_at": "2026-05-21T22:54:26Z",
+  "fixture_kickoff_at": "2026-05-10T00:00:00Z",
   "pre_kickoff_eligible": false,
-  "snapshot_phase": "backfill"
+  "snapshot_phase": "post_kickoff"
 }

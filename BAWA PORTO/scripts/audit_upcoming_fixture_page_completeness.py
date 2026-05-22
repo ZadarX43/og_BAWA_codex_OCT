@@ -411,6 +411,9 @@ def audit_fixture(
     compact_state, compact_summary = compact_payload_status(compact_payload_path, compact_payload)
     brain_state, brain_summary = fixture_brain_status(compact_payload)
     player_event_state, player_event_count, player_event_summary = player_event_cards_status(stats, compact_payload)
+    if player_state == "missing" and player_event_state in {"complete", "partial"}:
+        player_state = "partial"
+        player_summary = "Player-event fixture brain fallback available"
     weather = (
         "complete"
         if recursive_has_key_fragment(fixture, "weather")
@@ -418,7 +421,17 @@ def audit_fixture(
         or recursive_has_key_fragment(compact_payload, "weather")
         else "missing"
     )
-    fixture_stats = "complete" if isinstance(stats, dict) and bool(stats.get("team_stats")) else "partial" if isinstance(stats, dict) and bool(stats.get("market_intelligence")) else "missing"
+    brain_stats = {}
+    if isinstance(compact_payload, dict):
+        brain_stats = (((compact_payload.get("fixture_brain") or {}).get("fixture_stats") or {}).get("stats_payload") or {})
+    has_readable_stats_cards = isinstance(brain_stats, dict) and bool(brain_stats.get("readable_cards"))
+    fixture_stats = (
+        "complete"
+        if (isinstance(stats, dict) and bool(stats.get("team_stats"))) or has_readable_stats_cards
+        else "partial"
+        if isinstance(stats, dict) and bool(stats.get("market_intelligence"))
+        else "missing"
+    )
     static_payload_exists = (data_root / "fixture_decision_intelligence" / f"{fixture_key}.json").exists()
     h2h_static_exists = (data_root / "fixture_h2h_support" / f"{fixture_key}.json").exists()
     lineup_static_exists = (data_root / "fixture_lineup_intelligence" / f"{fixture_key}.json").exists()

@@ -3,22 +3,44 @@
   "fixture_id": 1394729,
   "competition": "Turkey Super Lig",
   "competition_key": "turkey_super_lig",
-  "season": "2025/2026",
+  "season": "2025",
   "home_team": "Konyaspor",
-  "away_team": "Fenerbahçe",
+  "away_team": "Fenerbah\u00e7e",
   "home_formation": "",
   "away_formation": "",
   "home_units": {},
   "away_units": {},
-  "home_lineup_profiles": [],
-  "away_lineup_profiles": [],
+  "home_resolution": {
+    "starting_xi_count": 0,
+    "resolved_profiles": 0,
+    "fallback_profiles": 0
+  },
+  "away_resolution": {
+    "starting_xi_count": 0,
+    "resolved_profiles": 0,
+    "fallback_profiles": 0
+  },
   "key_mismatches": [],
   "player_matchups": [],
+  "home_lineup_profiles": [],
+  "away_lineup_profiles": [],
+  "home_bench_profiles": [],
+  "away_bench_profiles": [],
   "coverage_status": "unpublished",
-  "summary": "No publish-safe lineup intelligence has been produced for this fixture yet, so the page should fall back to squad and team intelligence.",
-  "capture_generated_at": "2026-05-13T21:10:44Z",
-  "source_data_cutoff_at": "2026-05-10T17:28:49Z",
-  "fixture_kickoff_at": "2026-05-09T17:00:00Z",
+  "lineup_status": "unavailable",
+  "lineup_mode": "unavailable_fallback",
+  "lineup_label": "Lineup unavailable",
+  "fallback_mode": "unpublished",
+  "confirmed_lineup_update_model": {
+    "trigger": "provider_lineups_available",
+    "target_window_minutes_before_kickoff": 50,
+    "frontend_contract": "Keep the fixture_lineup_intelligence payload shape stable. Replace predicted last-fixture starters/bench with confirmed provider starters/bench, set lineup_status to confirmed_lineup, and republish both D1 and static fallback.",
+    "fallback_before_confirmation": "predicted_from_last_fixture"
+  },
+  "summary": "No publish-safe last-known lineup snapshot is available yet for at least one team in this fixture.",
+  "capture_generated_at": "2026-05-22T01:27:02Z",
+  "source_data_cutoff_at": "2026-05-21T22:54:26Z",
+  "fixture_kickoff_at": "2026-05-10T00:00:00Z",
   "pre_kickoff_eligible": false,
-  "snapshot_phase": "backfill"
+  "snapshot_phase": "post_kickoff"
 }

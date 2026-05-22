@@ -69,10 +69,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--skip-upstream-inventory", action="store_true")
     parser.add_argument("--skip-settlement", action="store_true")
     parser.add_argument("--skip-results-validation", action="store_true")
+    parser.add_argument("--skip-h2h-compiler", action="store_true")
+    parser.add_argument("--skip-lineup-compiler", action="store_true")
     parser.add_argument("--skip-site-db-export", action="store_true")
     parser.add_argument("--include-history", action="store_true", help="Pass through to export_site_sqlite.py.")
     parser.add_argument("--data-root", type=Path, default=DATA_ROOT)
     parser.add_argument("--normalized-root", type=Path, default=ROOT / "data_sources" / "api_football" / "normalized")
+    parser.add_argument("--api-features-root", type=Path, default=ROOT / "data_sources" / "api_football" / "features_calendar_year")
+    parser.add_argument("--ratings-config", type=Path, default=ROOT / "ratings_publish_sources.json")
     parser.add_argument("--skip-injury-market-impact", action="store_true")
     parser.add_argument("--injury-coverage-csv", type=Path, default=None)
     parser.add_argument("--injury-player-impact-csv", type=Path, default=None)
@@ -425,6 +429,9 @@ def main() -> int:
     pipeline_blocked = False
     data_root = resolve(args.data_root)
     normalized_root = resolve(args.normalized_root)
+    api_features_root = resolve(args.api_features_root)
+    ratings_config = resolve(args.ratings_config)
+    fixture_feed = data_root / "fixture_intelligence_public.json"
     summary_dry_run_dir = resolve(args.summary_dry_run_dir)
     injury_market_impact_dir = resolve(args.injury_market_impact_dir)
     injury_coverage_csv = resolve(args.injury_coverage_csv) if args.injury_coverage_csv else latest_injury_source(INJURY_COVERAGE_NAME)
@@ -446,6 +453,40 @@ def main() -> int:
 
     if not args.skip_results_validation:
         run_step("results_validation", [sys.executable, "validate_weekly_results.py"])
+
+    if not args.skip_h2h_compiler:
+        run_step(
+            "fixture_h2h_compiler",
+            [
+                sys.executable,
+                "fixture_h2h_support_engine.py",
+                "--features-root",
+                str(api_features_root),
+                "--fixture-feed",
+                str(fixture_feed),
+                "--output-root",
+                str(data_root),
+            ],
+        )
+
+    if not args.skip_lineup_compiler:
+        run_step(
+            "fixture_lineup_compiler",
+            [
+                sys.executable,
+                "fixture_lineup_intelligence_engine.py",
+                "--config",
+                str(ratings_config),
+                "--normalized-lineups-root",
+                str(normalized_root),
+                "--features-root",
+                str(api_features_root),
+                "--fixture-feed",
+                str(fixture_feed),
+                "--output-root",
+                str(data_root),
+            ],
+        )
 
     if not args.skip_site_db_export:
         export_command = [
