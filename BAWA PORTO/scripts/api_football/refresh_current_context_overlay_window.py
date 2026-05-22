@@ -90,6 +90,13 @@ def _to_float(value: object) -> float:
         return 0.0
 
 
+def _read_csv_optional(path: str | Path) -> pd.DataFrame:
+    try:
+        return pd.read_csv(path)
+    except (pd.errors.EmptyDataError, FileNotFoundError):
+        return pd.DataFrame()
+
+
 def build_current_overlay_summary(
     fixtures_df: pd.DataFrame,
     player_stats_df: pd.DataFrame,
@@ -428,20 +435,20 @@ def main() -> None:
     all_referees = []
     for bundle in bundles:
         paths = bundle["paths"]
-        all_fixtures.append(pd.read_csv(paths["fixtures_csv"]))
-        all_injuries.append(pd.read_csv(paths["injury_features_csv"]))
-        all_lineups.append(pd.read_csv(paths["lineup_features_csv"]))
-        all_team_features.append(pd.read_csv(paths["team_features_csv"]))
-        all_matchups.append(pd.read_csv(paths["matchup_csv"]))
-        all_referees.append(pd.read_csv(paths["referee_csv"]))
+        all_fixtures.append(_read_csv_optional(paths["fixtures_csv"]))
+        all_injuries.append(_read_csv_optional(paths["injury_features_csv"]))
+        all_lineups.append(_read_csv_optional(paths["lineup_features_csv"]))
+        all_team_features.append(_read_csv_optional(paths["team_features_csv"]))
+        all_matchups.append(_read_csv_optional(paths["matchup_csv"]))
+        all_referees.append(_read_csv_optional(paths["referee_csv"]))
 
     fixtures_df = pd.concat(all_fixtures, ignore_index=True) if all_fixtures else pd.DataFrame()
     injuries_df = pd.concat(all_injuries, ignore_index=True) if all_injuries else pd.DataFrame()
     lineups_df = pd.concat(all_lineups, ignore_index=True) if all_lineups else pd.DataFrame()
     team_df = pd.concat(all_team_features, ignore_index=True) if all_team_features else pd.DataFrame()
     matchup_df = pd.concat(all_matchups, ignore_index=True) if all_matchups else pd.DataFrame()
-    odds_df = pd.concat([pd.read_csv(bundle["paths"]["odds_features_csv"]) for bundle in bundles], ignore_index=True) if bundles else pd.DataFrame()
-    player_stats_df = pd.concat([pd.read_csv(bundle["paths"]["player_stats_csv"]) for bundle in bundles], ignore_index=True) if bundles else pd.DataFrame()
+    odds_df = pd.concat([_read_csv_optional(bundle["paths"]["odds_features_csv"]) for bundle in bundles], ignore_index=True) if bundles else pd.DataFrame()
+    player_stats_df = pd.concat([_read_csv_optional(bundle["paths"]["player_stats_csv"]) for bundle in bundles], ignore_index=True) if bundles else pd.DataFrame()
     referee_df = pd.concat(all_referees, ignore_index=True) if all_referees else pd.DataFrame()
 
     summary_csv = args.outdir / "CURRENT_CONTEXT_OVERLAY_BUILD_SUMMARY.csv"

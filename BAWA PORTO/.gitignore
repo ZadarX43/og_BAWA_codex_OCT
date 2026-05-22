@@ -19,6 +19,7 @@ __pycache__/
 
 # Cloudflare / local worker state
 .wrangler/
+worker/site-data/
 
 # Logs and temporary runtime output
 logs/
@@ -72,5 +73,6 @@ reports/
 # Frontend publish artifacts
 # Keep schema and manifest files tracked, but ignore regenerated data payloads by default.
 frontend/public/data/*.json
+frontend/public/data/internal/
 !frontend/public/data/api_football_logo_asset_manifest.json
 !frontend/public/data/live_results_feed.json

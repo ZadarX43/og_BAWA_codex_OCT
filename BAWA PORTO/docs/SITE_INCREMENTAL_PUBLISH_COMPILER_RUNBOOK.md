@@ -30,15 +30,36 @@ Website publish layer:
 
 ## Run Order
 
-Build or refresh the local site SQLite artifact:
+After the fresh data/model/deploy overlay systems have produced their outputs, run the central site publish orchestrator:
+
+```bash
+python3 scripts/site_publish/orchestrator.py --from-date 2026-05-22 --to-date 2026-05-26
+```
+
+The orchestrator runs the publish-safe order:
+
+1. settle public proof/result files
+2. rebuild `build/site_data/odds_genius.sqlite`
+3. inventory upstream coverage for the target window
+4. recalculate injury shock impact against `FTR`, `BTTS`, and `OU25`
+5. compile compact fixture-brain payloads
+6. build local summary dry-run drafts from `summary_inputs`
+7. compile compact publish artifacts from SQLite plus fixture brain
+8. audit upcoming fixture page completeness
+
+Upload/apply can be added to the same run when ready:
+
+```bash
+python3 scripts/site_publish/orchestrator.py --from-date 2026-05-22 --to-date 2026-05-26 --run-r2-upload --apply-d1
+```
+
+For manual/debug runs, the core individual commands are:
 
 ```bash
 python3 scripts/export_site_sqlite.py
-```
-
-Compile incremental publish artifacts:
-
-```bash
+python3 scripts/build_injury_shock_market_impact_sidecar.py
+python3 scripts/site_publish/fixture_brain_compiler.py
+python3 scripts/build_fixture_summary_dry_run.py
 python3 scripts/publish_compiler.py
 ```
 
@@ -106,5 +127,7 @@ https://odds-genius-worker.hughcwade.workers.dev
 
 - `scripts/publish_compiler.py` does not train models and does not touch deploy routing.
 - The compiler reads `build/site_data/odds_genius.sqlite`.
+- The fixture brain is compiled before `scripts/publish_compiler.py`, so fixture payloads can include the latest H2H/team/player/weather/injury intelligence.
+- `scripts/build_fixture_summary_dry_run.py` reads only `summary_inputs`; it is a local GPT-summary contract smoke and does not call the OpenAI API.
 - Source/evidence tables are excluded from the publish layer by design.
 - R2/static object upload can be automated later from `upload_plan.json` without changing the compiler contract.
