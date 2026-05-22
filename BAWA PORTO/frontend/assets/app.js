@@ -114,6 +114,10 @@
       internalNotes: [],
       internalTimeline: [],
       matchFavourites: [],
+      timelineExpandedFixture: "",
+      timelineFixturePayloads: {},
+      timelineFixturePayloadLoading: {},
+      timelineFixturePayloadErrors: {},
     },
   };
 
@@ -231,6 +235,47 @@
       : [...state.runtime.matchFavourites, key];
     state.runtime.matchFavourites = [...new Set(next)];
     writeMatchFavourites(state.runtime.matchFavourites);
+  };
+  const timelineFixturePayloadState = (fixtureKey) => {
+    const key = String(fixtureKey || "").trim();
+    return {
+      data: state.runtime.timelineFixturePayloads[key] || null,
+      loading: Boolean(state.runtime.timelineFixturePayloadLoading[key]),
+      error: state.runtime.timelineFixturePayloadErrors[key] || "",
+    };
+  };
+  const loadTimelineFixturePayload = async (fixtureKey) => {
+    const key = String(fixtureKey || "").trim();
+    if (!key || state.runtime.timelineFixturePayloads[key] || state.runtime.timelineFixturePayloadLoading[key]) {
+      return;
+    }
+    state.runtime.timelineFixturePayloadLoading = {
+      ...state.runtime.timelineFixturePayloadLoading,
+      [key]: true,
+    };
+    state.runtime.timelineFixturePayloadErrors = {
+      ...state.runtime.timelineFixturePayloadErrors,
+      [key]: "",
+    };
+    render();
+    try {
+      const payload = await fetchSiteDataJson(`/api/site/fixtures/${encodeURIComponent(key)}`);
+      state.runtime.timelineFixturePayloads = {
+        ...state.runtime.timelineFixturePayloads,
+        [key]: payload?.data || payload || null,
+      };
+    } catch (error) {
+      state.runtime.timelineFixturePayloadErrors = {
+        ...state.runtime.timelineFixturePayloadErrors,
+        [key]: error.message || "fixture_brain_unavailable",
+      };
+    } finally {
+      state.runtime.timelineFixturePayloadLoading = {
+        ...state.runtime.timelineFixturePayloadLoading,
+        [key]: false,
+      };
+      render();
+    }
   };
   const readStoredInternalAdminKey = () => {
     try {
@@ -2179,6 +2224,279 @@
         (!matchesFavouritesOnly || isMatchFavourite(row.fixture_key))
     );
 
+  const timelineLockedPanel = (tier, title, copy, features = []) => `
+    <article class="timeline-tier-panel timeline-tier-locked">
+      <div class="timeline-tier-panel-head">
+        <span>${escapeHtml(tier)}</span>
+        <strong>${escapeHtml(title)}</strong>
+      </div>
+      <p>${escapeHtml(copy)}</p>
+      ${
+        features.length
+          ? `<div class="timeline-tier-pills">${features.map((feature) => `<span>${escapeHtml(feature)}</span>`).join("")}</div>`
+          : ""
+      }
+      <a class="ghost-button" href="./pricing.html">See plans</a>
+    </article>
+  `;
+
+  const timelineMetricTiles = (items = []) => `
+    <div class="timeline-metric-tiles">
+      ${items
+        .map(
+          (item) => `
+            <span>
+              <b>${escapeHtml(item.label)}</b>
+              <strong>${escapeHtml(item.value)}</strong>
+            </span>
+          `
+        )
+        .join("")}
+    </div>
+  `;
+
+  const timelineBrain = (payloadState) => {
+    const data = payloadState?.data || null;
+    return data?.fixture_brain || data?.brain || data || null;
+  };
+
+  const timelineBrainPayload = (section) => section?.payload || section || null;
+  const timelineInjurySummary = (injury, row) => {
+    const summary = injury?.summary;
+    if (typeof summary === "string" && summary.trim()) {
+      return summary;
+    }
+    if (summary && typeof summary === "object") {
+      const impacts = summary.market_impacts || {};
+      const impactText = ["ftr", "btts", "ou25"]
+        .map((key) => impacts[key])
+        .filter(Boolean)
+        .map((value) => safeTitleLabel(value))
+        .join(" / ");
+      if (summary.warning_flag) {
+        return `Injury shock warning is active${impactText ? `: ${impactText}` : "."}`;
+      }
+      if (impactText) {
+        return `Injury market impact is tracked: ${impactText}.`;
+      }
+      if (summary.status) {
+        return `Injury context status: ${safeTitleLabel(summary.status)}.`;
+      }
+    }
+    return injuryFeedSummary(row);
+  };
+
+  const timelineFounderContextPanel = (row, brain, rank) => {
+    if (rank < 1) {
+      return timelineLockedPanel(
+        "Founder / Premium",
+        "Fixture context unlock",
+        "Founder and above adds the context layer behind the public read: H2H, weather, lineup mode, team intelligence, and injury notes.",
+        ["H2H", "Weather", "Lineups", "Team reads", "Injury notes"]
+      );
+    }
+    const h2h = timelineBrainPayload(brain?.h2h);
+    const lineup = timelineBrainPayload(brain?.lineup_context || brain?.lineup);
+    const injury = brain?.injury_context || null;
+    const weather = brain?.weather || null;
+    const h2hItems = h2h
+      ? [
+          { label: "Goal heat", value: h2h.goal_heat ?? "Pending" },
+          { label: "OU25 heat", value: h2h.over25_heat ?? "Pending" },
+          { label: "BTTS pressure", value: h2h.btts_pressure ?? "Pending" },
+          { label: "Chaos", value: h2h.chaos_rating ?? "Pending" },
+        ]
+      : [];
+    return `
+      <article class="timeline-tier-panel timeline-tier-open timeline-tier-founder">
+        <div class="timeline-tier-panel-head">
+          <span>Founder / Premium</span>
+          <strong>Fixture context</strong>
+        </div>
+        <p>${escapeHtml(
+          h2h?.summary ||
+            row.context_summary?.volatility_note ||
+            "Compact fixture context is loaded for this match. H2H and lineup fallbacks stay explicit when source depth is thin."
+        )}</p>
+        ${h2hItems.length ? timelineMetricTiles(h2hItems) : ""}
+        <div class="timeline-context-list">
+          <span><b>Weather</b>${escapeHtml(weather?.summary || weatherFeedSummary(row))}</span>
+          <span><b>Lineups</b>${escapeHtml(lineup?.summary || safeTitleLabel(lineup?.lineup_status || "Lineup context pending"))}</span>
+          <span><b>Injuries</b>${escapeHtml(timelineInjurySummary(injury, row))}</span>
+        </div>
+      </article>
+    `;
+  };
+
+  const timelinePremiumPanel = (row, brain, rank) => {
+    if (rank < 2) {
+      return timelineLockedPanel(
+        "Premium",
+        "Deeper market posture",
+        "Premium opens the supporting market context and team profile that explains why the public read is clean, mixed, or fragile.",
+        ["Market posture", "Team context", "Contradictions"]
+      );
+    }
+    const marketRows = Object.entries(brain?.market_cards || {})
+      .map(([key, value]) => ({
+        key,
+        label: key === "ftr" ? "FTR" : key === "btts" ? "BTTS" : key === "ou25" ? "Over 2.5" : "Team Goals",
+        lean: value?.model_lean || value?.team_context_lean || value?.selection_label || "Pending",
+        state: value?.state || value?.band || "Pending",
+        summary: value?.public_summary || "",
+      }))
+      .slice(0, 4);
+    const teams = brain?.team_context || null;
+    const homeRating = teams?.home?.meta?.headline_rating;
+    const awayRating = teams?.away?.meta?.headline_rating;
+    return `
+      <article class="timeline-tier-panel timeline-tier-open timeline-tier-premium">
+        <div class="timeline-tier-panel-head">
+          <span>Premium</span>
+          <strong>Market posture</strong>
+        </div>
+        <div class="timeline-market-read-grid">
+          ${marketRows
+            .map(
+              (item) => `
+                <span>
+                  <b>${escapeHtml(item.label)}</b>
+                  <strong>${escapeHtml(item.lean)}</strong>
+                  <small>${escapeHtml(item.state)}</small>
+                </span>
+              `
+            )
+            .join("")}
+        </div>
+        <p>${escapeHtml(marketRows.find((item) => item.summary)?.summary || row.context_summary?.volatility_note || "Premium context is available for this fixture.")}</p>
+        ${
+          homeRating || awayRating
+            ? timelineMetricTiles([
+                { label: `${teamCardName(row.home_team)} rating`, value: homeRating ?? "Pending" },
+                { label: `${teamCardName(row.away_team)} rating`, value: awayRating ?? "Pending" },
+              ])
+            : ""
+        }
+      </article>
+    `;
+  };
+
+  const timelinePlayerEventPanel = (brain, rank) => {
+    if (rank < 3) {
+      return timelineLockedPanel(
+        "Pro",
+        "Player-event watchlists",
+        "Pro adds pre-lineup player-event cards for shots, SOT, tackles, fouls, player fouled, key passes, keeper saves, and bookings.",
+        ["Shots", "SOT", "Tackles", "Fouls", "Fouled", "Key passes", "Saves", "Bookings"]
+      );
+    }
+    const source = brain?.player_event_cards || null;
+    const cards = Array.isArray(source?.cards) ? source.cards.slice(0, 4) : [];
+    if (!cards.length) {
+      return `
+        <article class="timeline-tier-panel timeline-tier-open timeline-tier-pro">
+          <div class="timeline-tier-panel-head">
+            <span>Pro</span>
+            <strong>Player-event watchlists</strong>
+          </div>
+          <p>Pro access is active, but this fixture has not published player-event cards yet. They will appear after the next player-event compiler refresh.</p>
+        </article>
+      `;
+    }
+    return `
+      <article class="timeline-tier-panel timeline-tier-open timeline-tier-pro">
+        <div class="timeline-tier-panel-head">
+          <span>Pro · ${escapeHtml(playerEventPhaseLabel(source.phase))}</span>
+          <strong>Player-event watchlists</strong>
+        </div>
+        <div class="timeline-player-card-grid">
+          ${cards
+            .map(
+              (card) => `
+                <section>
+                  <div>
+                    <b>${escapeHtml(card.card_title || playerEventFamilyTitle(card.event_family))}</b>
+                    <small>${escapeHtml(safeTitleLabel(card.lineup_status || source.lineup_status || "Preview"))}</small>
+                  </div>
+                  <ul>
+                    ${(card.shortlist || []).slice(0, 3).map((item) => renderPlayerEventCandidate(item)).join("")}
+                  </ul>
+                </section>
+              `
+            )
+            .join("")}
+        </div>
+      </article>
+    `;
+  };
+
+  const timelineAuditPanel = (brain, rank) => {
+    if (rank < 4) {
+      return timelineLockedPanel(
+        "Pro+",
+        "Audit and explainability",
+        "Pro+ opens the compact audit trail: route/audit split, source freshness, coverage flags, and downloadable debug payload references.",
+        ["Route audit", "Freshness", "Coverage", "Source refs"]
+      );
+    }
+    const decision = timelineBrainPayload(brain?.decision);
+    const audit = routeAuditProfile(brain?.fixture_core?.payload || {}, decision);
+    const coverage = brain?.coverage || {};
+    const freshness = brain?.freshness || {};
+    const sourceRefs = brain?.source_refs || {};
+    return `
+      <article class="timeline-tier-panel timeline-tier-open timeline-tier-pro-plus">
+        <div class="timeline-tier-panel-head">
+          <span>Pro+</span>
+          <strong>Audit dashboard</strong>
+        </div>
+        ${timelineMetricTiles([
+          { label: "Route", value: audit.routeLabel || "Pending" },
+          { label: "Audit", value: audit.auditState || "Pending" },
+          { label: "Agreement", value: audit.agreement != null ? `${Math.round(Number(audit.agreement))}%` : "Pending" },
+          { label: "Freshness", value: freshness.coverage_status || "Compiled" },
+        ])}
+        <div class="timeline-tier-pills">
+          ${Object.entries(coverage)
+            .slice(0, 8)
+            .map(([key, value]) => `<span>${escapeHtml(`${safeTitleLabel(key)}: ${value ? "yes" : "no"}`)}</span>`)
+            .join("")}
+        </div>
+        <p>${escapeHtml(sourceRefs.site_db ? "Source identity and compact payload references are attached." : "Compact audit source references are pending for this fixture.")}</p>
+      </article>
+    `;
+  };
+
+  const timelineTierPanels = (row) => {
+    const payloadState = timelineFixturePayloadState(row.fixture_key);
+    const brain = timelineBrain(payloadState);
+    const rank = accessTierRank(currentAccessTier());
+    if (payloadState.loading) {
+      return `<div class="timeline-tier-loading">Loading compact fixture brain...</div>`;
+    }
+    if (payloadState.error) {
+      return `<div class="notice">Could not load the compact fixture brain yet: ${escapeHtml(payloadState.error)}</div>`;
+    }
+    if (!brain) {
+      return `<div class="timeline-tier-loading">Open this read to load the compact fixture brain.</div>`;
+    }
+    return `
+      <div class="timeline-tier-stack">
+        <article class="timeline-tier-panel timeline-tier-standard">
+          <div class="timeline-tier-panel-head">
+            <span>Standard</span>
+            <strong>Public read</strong>
+          </div>
+          <p>${escapeHtml(row.signal_summary?.summary_text || predictionFeedSummary(row))}</p>
+        </article>
+        ${timelineFounderContextPanel(row, brain, rank)}
+        ${timelinePremiumPanel(row, brain, rank)}
+        ${timelinePlayerEventPanel(brain, rank)}
+        ${timelineAuditPanel(brain, rank)}
+      </div>
+    `;
+  };
+
   const adminTimelinePost = (post, index = 0) => `
     <article class="x-feed-post x-feed-admin" style="--enter-index:${index}">
       <div class="x-post-rail">
@@ -2206,6 +2524,7 @@
   const matchTimelinePost = (row, index = 0) => {
     const deskState = publicDeskState(row);
     const favourite = isMatchFavourite(row.fixture_key);
+    const expanded = state.runtime.timelineExpandedFixture === row.fixture_key;
     const home = teamCardName(row.home_team);
     const away = teamCardName(row.away_team);
     return `
@@ -2244,8 +2563,8 @@
               <p>${escapeHtml(injuryFeedSummary(row))}</p>
             </div>
           </div>
-          <details class="x-post-expand">
-            <summary>Expand match read</summary>
+          <details class="x-post-expand" ${expanded ? "open" : ""}>
+            <summary data-action="timeline-expand" data-fixture-key="${escapeHtml(row.fixture_key)}">Expand match read</summary>
             <div>
               <p>${escapeHtml(row.signal_summary?.summary_text || row.context_summary?.volatility_note || predictionFeedSummary(row))}</p>
               ${
@@ -2256,6 +2575,7 @@
                       .join("")}</ul>`
                   : ""
               }
+              ${expanded ? timelineTierPanels(row) : ""}
               <div class="x-post-actions">
                 <a class="button" href="${fixtureDetailHref(row)}">Open full fixture</a>
                 <a class="ghost-button" href="./premium.html">Unlock deeper cards</a>
@@ -13134,6 +13454,18 @@
     if (historyForwardTarget) {
       event.preventDefault();
       window.history.forward();
+      return;
+    }
+
+    const timelineExpandTarget = event.target.closest("[data-action='timeline-expand']");
+    if (timelineExpandTarget) {
+      event.preventDefault();
+      const fixtureKey = String(timelineExpandTarget.dataset.fixtureKey || "");
+      state.runtime.timelineExpandedFixture = state.runtime.timelineExpandedFixture === fixtureKey ? "" : fixtureKey;
+      render();
+      if (state.runtime.timelineExpandedFixture) {
+        await loadTimelineFixturePayload(fixtureKey);
+      }
       return;
     }
 
