@@ -1,6 +1,7 @@
 (function () {
   const DATA_ROOT = "./public/data";
   const PREMIUM_TOKEN_STORAGE_KEY = "og_premium_token";
+  const MATCH_FAVOURITES_STORAGE_KEY = "og_match_favourites";
   const INTERNAL_ADMIN_KEY_STORAGE_KEY = "og_internal_admin_key";
   const INTERNAL_OPERATOR_ID_STORAGE_KEY = "og_internal_operator_id";
   const app = document.getElementById("app");
@@ -17,6 +18,8 @@
   const selectedTeamTab = String(query.get("tab") || "overview").toLowerCase();
   const selectedCompetition = query.get("competition") || "";
   const selectedCompetitionTab = String(query.get("tab") || "overview").toLowerCase();
+  const matchesSearchQuery = String(query.get("q") || "").trim();
+  const matchesFavouritesOnly = query.get("favs") === "1";
   const runtimeConfig = window.OG_CONFIG || {};
   const workerApiBase = String(runtimeConfig.WORKER_API_BASE || "").replace(/\/+$/, "");
   const siteDataApiBase = String(runtimeConfig.SITE_DATA_API_BASE || runtimeConfig.WORKER_API_BASE || "").replace(/\/+$/, "");
@@ -110,8 +113,23 @@
       internalFlags: [],
       internalNotes: [],
       internalTimeline: [],
+      matchFavourites: [],
     },
   };
+
+  const OG_ADMIN_FEED_POSTS = [
+    {
+      id: "founder-window-note",
+      timestamp: "2026-05-22T08:00:00Z",
+      title: "Founder window note",
+      summary:
+        "The May 22-26 board is running through the compact Brain publish path: model output, fixture context, H2H fallback, lineup fallback, player-event cards, and public proof.",
+      detail:
+        "Use the timeline as the calm front door. Open fixtures when you want the full audit view; favourite anything you want to track when alerts go live.",
+      cta: "Methodology",
+      href: "./methodology.html",
+    },
+  ];
 
   const parseJsonResponse = async (response, path, { optional = false } = {}) => {
     const contentType = String(response.headers.get("content-type") || "").toLowerCase();
@@ -184,6 +202,35 @@
     } catch {
       return;
     }
+  };
+  const readMatchFavourites = () => {
+    try {
+      const raw = window.localStorage.getItem(MATCH_FAVOURITES_STORAGE_KEY) || "[]";
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed.map((item) => String(item || "")).filter(Boolean) : [];
+    } catch {
+      return [];
+    }
+  };
+  const writeMatchFavourites = (items) => {
+    try {
+      window.localStorage.setItem(MATCH_FAVOURITES_STORAGE_KEY, JSON.stringify([...new Set(items)].filter(Boolean)));
+    } catch {
+      return;
+    }
+  };
+  const isMatchFavourite = (fixtureKey) =>
+    state.runtime.matchFavourites.includes(String(fixtureKey || ""));
+  const toggleMatchFavourite = (fixtureKey) => {
+    const key = String(fixtureKey || "").trim();
+    if (!key) {
+      return;
+    }
+    const next = isMatchFavourite(key)
+      ? state.runtime.matchFavourites.filter((item) => item !== key)
+      : [...state.runtime.matchFavourites, key];
+    state.runtime.matchFavourites = [...new Set(next)];
+    writeMatchFavourites(state.runtime.matchFavourites);
   };
   const readStoredInternalAdminKey = () => {
     try {
@@ -2035,6 +2082,223 @@
       </details>
     `;
   };
+
+  const formatTimelineDate = (value) => {
+    const parsed = new Date(value || "");
+    if (Number.isNaN(parsed.getTime())) {
+      return "Date pending";
+    }
+    return parsed.toLocaleDateString("en-GB", {
+      weekday: "short",
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  };
+
+  const fixtureLocationLabel = (row) => row?.league || "Competition pending";
+
+  const weatherFeedSummary = (row) => {
+    const notes = Array.isArray(row?.context_summary?.notes) ? row.context_summary.notes : [];
+    const weatherNote = notes.find((note) => /weather|wind|rain|temperature|storm/i.test(String(note || "")));
+    if (weatherNote) {
+      return weatherNote;
+    }
+    if (row?.context_summary?.fatigue_note) {
+      return "Weather pending. Rotation and travel context is already active.";
+    }
+    return "Weather context pending for public timeline.";
+  };
+
+  const injuryFeedSummary = (row) => {
+    const notes = Array.isArray(row?.context_summary?.notes) ? row.context_summary.notes : [];
+    const injuryNote = notes.find((note) => /injur|lineup|rotation|sidelined|bench/i.test(String(note || "")));
+    if (injuryNote) {
+      return injuryNote;
+    }
+    if (row?.signal_summary?.context_tags?.includes?.("lineup_pending")) {
+      return "Lineup layer pending. Check back near kickoff for player movement.";
+    }
+    return "No public injury shock flag is attached to this fixture yet.";
+  };
+
+  const predictionFeedSummary = (row) => {
+    const route = row?.deploy_summary;
+    if (route?.market && route?.pick) {
+      return `${marketFamilyDisplay(route.market)} ${String(route.pick).replace(/_/g, " ")} sits as the published route.`;
+    }
+    return row?.signal_summary?.headline || row?.signal_summary?.summary_text || "Fixture intelligence update available.";
+  };
+
+  const renderTimelineMarketChips = (row) => {
+    const odds = row?.odds_summary || {};
+    const chips = [
+      {
+        label: "FTR",
+        value:
+          odds.home_win_odds || odds.draw_odds || odds.away_win_odds
+            ? `H ${odds.home_win_odds || "-"} / D ${odds.draw_odds || "-"} / A ${odds.away_win_odds || "-"}`
+            : "Line pending",
+      },
+      {
+        label: "OU25",
+        value: odds.over25_odds || odds.under25_odds ? `O ${odds.over25_odds || "-"} / U ${odds.under25_odds || "-"}` : "Line pending",
+      },
+      {
+        label: "BTTS",
+        value: odds.btts_yes_odds || odds.btts_no_odds ? `Y ${odds.btts_yes_odds || "-"} / N ${odds.btts_no_odds || "-"}` : "Line pending",
+      },
+    ];
+    return `
+      <div class="timeline-market-strip">
+        ${chips
+          .map(
+            (chip) => `
+              <span class="timeline-market-chip">
+                <b>${escapeHtml(chip.label)}</b>
+                <span>${escapeHtml(chip.value)}</span>
+              </span>
+            `
+          )
+          .join("")}
+      </div>
+    `;
+  };
+
+  const matchSearchMatchesRow = (row, search) => {
+    const target = normalizePreferenceText(
+      [row?.home_team, row?.away_team, row?.league, row?.signal_summary?.market_family, row?.deploy_summary?.market].filter(Boolean).join(" ")
+    );
+    return !search || target.includes(normalizePreferenceText(search));
+  };
+
+  const matchesFeedRows = (rows) =>
+    orderedFixtureRows(rows).filter(
+      (row) =>
+        matchSearchMatchesRow(row, matchesSearchQuery) &&
+        (!matchesFavouritesOnly || isMatchFavourite(row.fixture_key))
+    );
+
+  const adminTimelinePost = (post, index = 0) => `
+    <article class="x-feed-post x-feed-admin" style="--enter-index:${index}">
+      <div class="x-post-rail">
+        <span class="x-admin-avatar">OG</span>
+      </div>
+      <div class="x-post-main">
+        <div class="x-post-meta">
+          <strong>Odds Genius</strong>
+          <span>@oddsgenius</span>
+          <span>${escapeHtml(formatKickoffLabel(post.timestamp))}</span>
+        </div>
+        <h2>${escapeHtml(post.title)}</h2>
+        <p>${escapeHtml(post.summary)}</p>
+        <details class="x-post-expand">
+          <summary>Open update</summary>
+          <div>
+            <p>${escapeHtml(post.detail)}</p>
+            <a class="ghost-button" href="${escapeHtml(post.href)}">${escapeHtml(post.cta || "Open")}</a>
+          </div>
+        </details>
+      </div>
+    </article>
+  `;
+
+  const matchTimelinePost = (row, index = 0) => {
+    const deskState = publicDeskState(row);
+    const favourite = isMatchFavourite(row.fixture_key);
+    const home = teamCardName(row.home_team);
+    const away = teamCardName(row.away_team);
+    return `
+      <article class="x-feed-post x-feed-fixture x-feed-fixture-${escapeHtml(deskState.tone)}" style="--enter-index:${index}">
+        <div class="x-post-rail">
+          ${badgeMarkup(row.home_team_logo_url, row.home_team, "x-team-avatar")}
+          <span class="x-post-rail-line"></span>
+          ${badgeMarkup(row.away_team_logo_url, row.away_team, "x-team-avatar")}
+        </div>
+        <div class="x-post-main">
+          <div class="x-post-meta">
+            <strong>${escapeHtml(home)} x ${escapeHtml(away)}</strong>
+            <span>${escapeHtml(formatKickoffLabel(row.kickoff_time))}</span>
+          </div>
+          <div class="x-post-title-row">
+            <h2>${escapeHtml(row.home_team)} x ${escapeHtml(row.away_team)}</h2>
+            <button
+              class="x-fav-button ${favourite ? "is-active" : ""}"
+              type="button"
+              data-action="toggle-match-favourite"
+              data-fixture-key="${escapeHtml(row.fixture_key)}"
+              aria-label="${favourite ? "Remove fixture from favourites" : "Add fixture to favourites"}"
+              title="${favourite ? "Remove from favourites" : "Add to favourites"}"
+            >${favourite ? "♥" : "♡"}</button>
+          </div>
+          <p class="x-post-location">${escapeHtml(formatTimelineDate(row.kickoff_time))} / ${escapeHtml(fixtureLocationLabel(row))}</p>
+          <p class="x-post-summary">${escapeHtml(predictionFeedSummary(row))}</p>
+          ${renderTimelineMarketChips(row)}
+          <div class="x-post-context-grid">
+            <div>
+              <span class="x-context-label">Weather</span>
+              <p>${escapeHtml(weatherFeedSummary(row))}</p>
+            </div>
+            <div>
+              <span class="x-context-label">Player injury news</span>
+              <p>${escapeHtml(injuryFeedSummary(row))}</p>
+            </div>
+          </div>
+          <details class="x-post-expand">
+            <summary>Expand match read</summary>
+            <div>
+              <p>${escapeHtml(row.signal_summary?.summary_text || row.context_summary?.volatility_note || predictionFeedSummary(row))}</p>
+              ${
+                Array.isArray(row.context_summary?.notes) && row.context_summary.notes.length
+                  ? `<ul class="feature-list compact-list">${row.context_summary.notes
+                      .slice(0, 4)
+                      .map((note) => `<li>${escapeHtml(note)}</li>`)
+                      .join("")}</ul>`
+                  : ""
+              }
+              <div class="x-post-actions">
+                <a class="button" href="${fixtureDetailHref(row)}">Open full fixture</a>
+                <a class="ghost-button" href="./premium.html">Unlock deeper cards</a>
+              </div>
+              <p class="x-swipe-note">On mobile, open the full fixture and use the browser back gesture to slide back into this timeline.</p>
+            </div>
+          </details>
+        </div>
+      </article>
+    `;
+  };
+
+  const renderMatchesTimeline = (rows) => {
+    const fixturePosts = matchesFeedRows(rows);
+    const fixtureItems = fixturePosts
+      .map((row) => ({ type: "fixture", timestamp: row.fixture_kickoff_at || row.kickoff_time, row }))
+      .sort((left, right) => kickoffTimestamp(left.timestamp) - kickoffTimestamp(right.timestamp));
+    const adminItems = OG_ADMIN_FEED_POSTS.map((post) => ({ type: "admin", timestamp: post.timestamp, post }));
+    const posts = fixtureItems.length ? [fixtureItems[0], ...adminItems, ...fixtureItems.slice(1)] : adminItems;
+    if (!posts.length) {
+      return `<div class="notice">No timeline posts match this search yet.</div>`;
+    }
+    return `
+      <div class="x-feed-shell">
+        ${posts
+          .map((item, index) =>
+            item.type === "admin" ? adminTimelinePost(item.post, index) : matchTimelinePost(item.row, index)
+          )
+          .join("")}
+      </div>
+    `;
+  };
+
+  const matchesBottomNav = () => `
+    <nav class="x-bottom-nav" aria-label="Matches timeline navigation">
+      <a href="./index.html"><span>Home</span></a>
+      <a href="./matches.html#matches-search"><span>Search</span></a>
+      <a href="./premium.html"><span>OG GPT</span></a>
+      <a href="./matches.html?favs=1"><span>Favs</span></a>
+      <button type="button" data-action="history-back" aria-label="Back page"><span>&lt;</span></button>
+      <button type="button" data-action="history-forward" aria-label="Forward page"><span>&gt;</span></button>
+    </nav>
+  `;
 
   const renderPublicFixtureGroups = (rows) => {
     if (!rows.length) {
@@ -6861,32 +7125,42 @@
 
   const matchesView = () => {
     const rows = orderedFixtureRows();
+    const visibleRows = matchesFeedRows(rows);
+    const nextFixture = visibleRows[0] || rows[0] || null;
     return `
-      <section class="hero">
-        <article class="hero-main entity-hero">
-          <p class="hero-kicker">Matches</p>
-          <h1>Fixture-first football intelligence.</h1>
-          <p>Browse the current window by league and fixture, then drop into a match-level intelligence page when a row deserves deeper reading.</p>
-          <div class="pill-row">
-            <span class="stat-chip">Competition grouped</span>
-            <span class="stat-chip">Fixture first</span>
-            <span class="stat-chip">Calm public orientation</span>
+      <section class="x-matches-page">
+        <header class="x-timeline-header">
+          <div>
+            <h1>Matches</h1>
+            <p>Timeline view for fixtures, model reads, weather context, injury notes, and admin updates.</p>
           </div>
-        </article>
-        <aside class="hero-side">
-          <div class="metric">
-            <span class="metric-label">Current window</span>
-            <span class="metric-value">${escapeHtml(rows.length)}</span>
+          <div class="x-next-kickoff">
+            <span>Next kickoff</span>
+            <strong>${escapeHtml(nextFixture ? `${teamCardName(nextFixture.home_team)} x ${teamCardName(nextFixture.away_team)}` : "No active fixture")}</strong>
+            <small>${escapeHtml(nextFixture ? formatKickoffLabel(nextFixture.kickoff_time) : "Window pending")}</small>
           </div>
-          <div class="metric">
-            <span class="metric-label">Competitions</span>
-            <span class="metric-value">${escapeHtml(new Set(rows.map((row) => row.league)).size)}</span>
-          </div>
-        </aside>
+        </header>
+        <form id="matches-search" class="x-search-bar" action="./matches.html" method="get">
+          <label>
+            <span>Search teams, players, fixtures</span>
+            <input name="q" value="${escapeHtml(matchesSearchQuery)}" placeholder="Search team, league, market..." autocomplete="off" />
+          </label>
+          <button class="button" type="submit">Search</button>
+          ${
+            matchesSearchQuery || matchesFavouritesOnly
+              ? `<a class="ghost-button" href="./matches.html">Clear</a>`
+              : ""
+          }
+        </form>
+        <div class="x-feed-stats">
+          <span>${escapeHtml(visibleRows.length)} visible fixtures</span>
+          <span>${escapeHtml(new Set(rows.map((row) => row.league)).size)} competitions</span>
+          <span>${escapeHtml(state.runtime.matchFavourites.length)} favourites</span>
+          ${matchesFavouritesOnly ? `<span>Favourite filter active</span>` : ""}
+        </div>
+        ${renderMatchesTimeline(rows)}
       </section>
-      <section class="section">
-        ${renderPublicFixtureGroups(rows)}
-      </section>
+      ${matchesBottomNav()}
     `;
   };
 
@@ -12841,6 +13115,28 @@
   };
 
   app.addEventListener("click", async (event) => {
+    const favouriteTarget = event.target.closest("[data-action='toggle-match-favourite']");
+    if (favouriteTarget) {
+      event.preventDefault();
+      toggleMatchFavourite(favouriteTarget.dataset.fixtureKey);
+      render();
+      return;
+    }
+
+    const historyBackTarget = event.target.closest("[data-action='history-back']");
+    if (historyBackTarget) {
+      event.preventDefault();
+      window.history.back();
+      return;
+    }
+
+    const historyForwardTarget = event.target.closest("[data-action='history-forward']");
+    if (historyForwardTarget) {
+      event.preventDefault();
+      window.history.forward();
+      return;
+    }
+
     const checkoutTarget = event.target.closest("[data-action='worker-checkout']");
     if (checkoutTarget) {
       event.preventDefault();
@@ -13126,6 +13422,7 @@
     app.innerHTML = loadingShell(loadingMessage);
     syncActiveNav();
     state.runtime.premiumToken = readStoredPremiumToken();
+    state.runtime.matchFavourites = readMatchFavourites();
     state.runtime.internalAdminKey = readStoredInternalAdminKey();
     state.runtime.internalOperatorId = readStoredInternalOperatorId();
     await loadAuthSession();
