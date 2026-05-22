@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-05-09T02:45:18+00:00",
-  "selected_source_csv": "predictions_output/2026-05-09/BOOKIE_IMP20_ALLMARKETS_2026-05-09_to_2026-05-11__DEPLOY_PRESET__PRESET_V1__FTR_accuracy.csv",
+  "generated_at": "2026-05-21T22:54:24+00:00",
+  "selected_source_csv": "predictions_output/2026-05-21_imp20_may22_to_may26/BOOKIE_IMP20_ALLMARKETS_2026-05-22_to_2026-05-26__DEPLOY_PRESET__PRESET_V1__FTR_accuracy.csv",
   "selected_by": "explicit_src",
-  "selected_source_mtime_utc": "2026-05-08T12:22:17.288014+00:00",
+  "selected_source_mtime_utc": "2026-05-21T17:00:45.413912+00:00",
   "logo_manifest_csv": "data_sources/api_football/normalized/api_football_logo_asset_manifest.csv",
-  "source_rows_read": 28,
+  "source_rows_read": 18,
   "public_predictions_count": 6,
-  "premium_predictions_count": 28,
+  "premium_predictions_count": 18,
   "public_output": "frontend/public/data/public_predictions.json",
   "premium_output": "frontend/public/data/premium_predictions.json",
   "report_output": "reports/latest/PUBLISH_REPORT.md",
@@ -60,8 +60,7 @@
     "premium_tier"
   ],
   "fallbacks_and_drops": {
-    "logo_join:FULL_MATCH": 26,
-    "logo_join:NO_MATCH": 1,
+    "logo_join:FULL_MATCH": 17,
     "logo_join:PARTIAL_MATCH": 1,
     "logo_manifest:global_alias_assets": 1276,
     "logo_manifest:global_team_assets": 1294,

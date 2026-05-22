@@ -96,6 +96,30 @@ Keep this small content family tracked for now:
 
 Review this allowlist again after Worker/R2/D1 is fully authoritative for public proof and fixture pages.
 
+## Phase 3 - Top-Level Static Contract Decision
+
+Decision: keep the top-level frontend JSON files tracked for the launch window.
+
+Reason:
+
+- `frontend/assets/app.js` still reads `publish_summary.json`, `public_predictions.json`, `premium_predictions.json`, and `fixture_intelligence_public.json` directly from `/public/data/`.
+- Worker bootstrap/fallback code still reads `public_predictions.json` and `fixture_intelligence_public.json`.
+- Cloudflare preview/readiness and static smoke scripts still validate these files as public contract artifacts.
+- These files are small compared with the deep generated fixture/team/player mirrors.
+
+Current policy:
+
+- Treat these files as canonical static launch snapshots.
+- Commit deliberate publish-window refreshes.
+- Do not let routine local regeneration sit dirty without either committing the launch snapshot or replacing the static readers.
+
+Move them out of Git only after:
+
+- frontend pages read equivalent public contract data from Worker/R2/D1 routes;
+- Worker no longer depends on Pages-hosted static fallback for these files;
+- preview readiness validates the Worker/R2 path instead of `/public/data/` static files;
+- the publish compiler emits a manifest entry for the replacement contract.
+
 ## Keep Tracked For Now
 
 Keep these families tracked or review individually:

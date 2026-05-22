@@ -1,67 +1,247 @@
 [
   {
-    "fixture_id": "2026_05_10_Remo_Palmeiras__FTR__AWAY",
-    "fixture_key": "2026_05_10_Remo_Palmeiras",
-    "kickoff_time": "2026-05-10",
-    "league": "Brazil Serie A",
-    "home_team": "Remo",
-    "away_team": "Palmeiras",
-    "home_team_logo_url": "",
-    "away_team_logo_url": "https://media.api-sports.io/football/teams/121.png",
-    "league_logo_url": "https://media.api-sports.io/football/leagues/71.png",
-    "league_flag_url": "https://media.api-sports.io/flags/br.svg",
-    "logo_join_status": "PARTIAL_MATCH",
+    "fixture_id": "2026_05_24_Union_Saint_Gilloise_RSC_Anderlecht__FTR__HOME",
+    "fixture_key": "2026_05_24_Union_Saint_Gilloise_RSC_Anderlecht",
+    "kickoff_time": "2026-05-24",
+    "league": "Belgium Pro",
+    "home_team": "Union Saint-Gilloise",
+    "away_team": "RSC Anderlecht",
+    "home_team_logo_url": "https://media.api-sports.io/football/teams/1393.png",
+    "away_team_logo_url": "https://media.api-sports.io/football/teams/554.png",
+    "league_logo_url": "https://media.api-sports.io/football/leagues/144.png",
+    "league_flag_url": "https://media.api-sports.io/flags/be.svg",
+    "logo_join_status": "FULL_MATCH",
     "market": "FTR",
-    "pick": "AWAY",
+    "pick": "HOME",
     "confidence_tier": "ELITE",
-    "model_prob": 0.4344,
-    "bookie_implied_prob": 0.5525,
-    "value_edge": -0.0569,
-    "bookie_od": 1.81,
+    "model_prob": 1.0,
+    "bookie_implied_prob": 0.6667,
+    "value_edge": 0.3658,
+    "bookie_od": 1.5,
     "reason_tokens": [
-      "TEAM_CS_VS_CS",
+      "VALUE_EDGE_PREMIUM",
       "DEPLOYABLE",
       "MARKET_FTR",
       "TIER_ELITE"
     ],
-    "human_reason": "Away carried enough support to remain live in the elite board.",
+    "human_reason": "Home carried enough support to remain live in the elite board.",
     "slip_role_hint": "anchor",
     "safe_for_small_acca_flag": true,
     "safe_for_large_acca_flag": true,
     "correct_score_shortlist": [
       {
-        "scoreline": "0-1",
-        "probability": 0.228
+        "scoreline": "2-0",
+        "probability": 0.094
       },
       {
-        "scoreline": "0-0",
-        "probability": 0.178
+        "scoreline": "2-1",
+        "probability": 0.094
       },
       {
-        "scoreline": "0-2",
-        "probability": 0.146
+        "scoreline": "3-0",
+        "probability": 0.079
       }
     ],
     "premium_tier": "ELITE"
   },
   {
-    "fixture_id": "2026_05_10_FC_Dallas_Real_Salt_Lake__BTTS__YES",
-    "fixture_key": "2026_05_10_FC_Dallas_Real_Salt_Lake",
-    "kickoff_time": "2026-05-10",
+    "fixture_id": "2026_05_24_Club_Brugge_KAA_Gent__FTR__HOME",
+    "fixture_key": "2026_05_24_Club_Brugge_KAA_Gent",
+    "kickoff_time": "2026-05-24",
+    "league": "Belgium Pro",
+    "home_team": "Club Brugge",
+    "away_team": "KAA Gent",
+    "home_team_logo_url": "https://media.api-sports.io/football/teams/569.png",
+    "away_team_logo_url": "https://media.api-sports.io/football/teams/631.png",
+    "league_logo_url": "https://media.api-sports.io/football/leagues/144.png",
+    "league_flag_url": "https://media.api-sports.io/flags/be.svg",
+    "logo_join_status": "FULL_MATCH",
+    "market": "FTR",
+    "pick": "HOME",
+    "confidence_tier": "ELITE",
+    "model_prob": 1.0,
+    "bookie_implied_prob": 0.7634,
+    "value_edge": 0.2744,
+    "bookie_od": 1.31,
+    "reason_tokens": [
+      "VALUE_EDGE_PREMIUM",
+      "DEPLOYABLE",
+      "MARKET_FTR",
+      "TIER_ELITE"
+    ],
+    "human_reason": "Home carried enough support to remain live in the elite board.",
+    "slip_role_hint": "anchor",
+    "safe_for_small_acca_flag": true,
+    "safe_for_large_acca_flag": true,
+    "correct_score_shortlist": [
+      {
+        "scoreline": "2-0",
+        "probability": 0.126
+      },
+      {
+        "scoreline": "1-0",
+        "probability": 0.118
+      },
+      {
+        "scoreline": "2-1",
+        "probability": 0.096
+      }
+    ],
+    "premium_tier": "ELITE"
+  },
+  {
+    "fixture_id": "2026_05_23_FC_Cincinnati_Orlando_City__FTR__HOME",
+    "fixture_key": "2026_05_23_FC_Cincinnati_Orlando_City",
+    "kickoff_time": "2026-05-23",
     "league": "USA MLS",
-    "home_team": "FC Dallas",
-    "away_team": "Real Salt Lake",
-    "home_team_logo_url": "https://media.api-sports.io/football/teams/1597.png",
-    "away_team_logo_url": "https://media.api-sports.io/football/teams/1606.png",
+    "home_team": "FC Cincinnati",
+    "away_team": "Orlando City",
+    "home_team_logo_url": "https://media.api-sports.io/football/teams/2242.png",
+    "away_team_logo_url": "https://media.api-sports.io/football/teams/1598.png",
+    "league_logo_url": "https://media.api-sports.io/football/leagues/253.png",
+    "league_flag_url": "https://media.api-sports.io/flags/us.svg",
+    "logo_join_status": "FULL_MATCH",
+    "market": "FTR",
+    "pick": "HOME",
+    "confidence_tier": "ELITE",
+    "model_prob": 0.5217,
+    "bookie_implied_prob": 0.6536,
+    "value_edge": -0.0694,
+    "bookie_od": 1.53,
+    "reason_tokens": [
+      "DEPLOYABLE",
+      "MARKET_FTR",
+      "TIER_ELITE"
+    ],
+    "human_reason": "Home carried enough support to remain live in the elite board.",
+    "slip_role_hint": "anchor",
+    "safe_for_small_acca_flag": true,
+    "safe_for_large_acca_flag": true,
+    "correct_score_shortlist": [
+      {
+        "scoreline": "1-0",
+        "probability": 0.127
+      },
+      {
+        "scoreline": "1-1",
+        "probability": 0.117
+      },
+      {
+        "scoreline": "2-0",
+        "probability": 0.104
+      }
+    ],
+    "premium_tier": "ELITE"
+  },
+  {
+    "fixture_id": "2026_05_24_Sporting_KC_New_York_RB__BTTS__YES",
+    "fixture_key": "2026_05_24_Sporting_KC_New_York_RB",
+    "kickoff_time": "2026-05-24",
+    "league": "USA MLS",
+    "home_team": "Sporting KC",
+    "away_team": "New York RB",
+    "home_team_logo_url": "https://media.api-sports.io/football/teams/1611.png",
+    "away_team_logo_url": "https://media.api-sports.io/football/teams/1602.png",
     "league_logo_url": "https://media.api-sports.io/football/leagues/253.png",
     "league_flag_url": "https://media.api-sports.io/flags/us.svg",
     "logo_join_status": "FULL_MATCH",
     "market": "BTTS",
     "pick": "YES",
     "confidence_tier": "ELITE",
-    "model_prob": 0.7596,
+    "model_prob": 0.8036,
+    "bookie_implied_prob": 0.7519,
+    "value_edge": 0.1107,
+    "bookie_od": 1.33,
+    "reason_tokens": [
+      "VALUE_EDGE_PREMIUM",
+      "TEAM_HOME_GE2_POCKET",
+      "DEPLOYABLE",
+      "MARKET_BTTS",
+      "TIER_ELITE"
+    ],
+    "human_reason": "Yes met the live BTTS posture for the elite board.",
+    "slip_role_hint": "anchor",
+    "safe_for_small_acca_flag": true,
+    "safe_for_large_acca_flag": true,
+    "correct_score_shortlist": [
+      {
+        "scoreline": "0-1",
+        "probability": 0.113
+      },
+      {
+        "scoreline": "1-1",
+        "probability": 0.111
+      },
+      {
+        "scoreline": "0-2",
+        "probability": 0.1
+      }
+    ],
+    "premium_tier": "ELITE"
+  },
+  {
+    "fixture_id": "2026_05_23_Charlotte_New_England_Revolution__BTTS__YES",
+    "fixture_key": "2026_05_23_Charlotte_New_England_Revolution",
+    "kickoff_time": "2026-05-23",
+    "league": "USA MLS",
+    "home_team": "Charlotte",
+    "away_team": "New England Revolution",
+    "home_team_logo_url": "https://media.api-sports.io/football/teams/18310.png",
+    "away_team_logo_url": "https://media.api-sports.io/football/teams/1609.png",
+    "league_logo_url": "https://media.api-sports.io/football/leagues/253.png",
+    "league_flag_url": "https://media.api-sports.io/flags/us.svg",
+    "logo_join_status": "FULL_MATCH",
+    "market": "BTTS",
+    "pick": "YES",
+    "confidence_tier": "ELITE",
+    "model_prob": 0.7806,
+    "bookie_implied_prob": 0.6173,
+    "value_edge": 0.2103,
+    "bookie_od": 1.62,
+    "reason_tokens": [
+      "VALUE_EDGE_PREMIUM",
+      "DEPLOYABLE",
+      "MARKET_BTTS",
+      "TIER_ELITE"
+    ],
+    "human_reason": "Yes met the live BTTS posture for the elite board.",
+    "slip_role_hint": "anchor",
+    "safe_for_small_acca_flag": true,
+    "safe_for_large_acca_flag": true,
+    "correct_score_shortlist": [
+      {
+        "scoreline": "1-0",
+        "probability": 0.12
+      },
+      {
+        "scoreline": "1-1",
+        "probability": 0.119
+      },
+      {
+        "scoreline": "2-0",
+        "probability": 0.096
+      }
+    ],
+    "premium_tier": "ELITE"
+  },
+  {
+    "fixture_id": "2026_05_24_LA_Galaxy_Houston_Dynamo__BTTS__YES",
+    "fixture_key": "2026_05_24_LA_Galaxy_Houston_Dynamo",
+    "kickoff_time": "2026-05-24",
+    "league": "USA MLS",
+    "home_team": "LA Galaxy",
+    "away_team": "Houston Dynamo",
+    "home_team_logo_url": "https://media.api-sports.io/football/teams/1605.png",
+    "away_team_logo_url": "https://media.api-sports.io/football/teams/1600.png",
+    "league_logo_url": "https://media.api-sports.io/football/leagues/253.png",
+    "league_flag_url": "https://media.api-sports.io/flags/us.svg",
+    "logo_join_status": "FULL_MATCH",
+    "market": "BTTS",
+    "pick": "YES",
+    "confidence_tier": "ELITE",
+    "model_prob": 0.7538,
     "bookie_implied_prob": 0.6667,
-    "value_edge": 0.1393,
+    "value_edge": 0.1355,
     "bookie_od": 1.5,
     "reason_tokens": [
       "VALUE_EDGE_PREMIUM",
@@ -77,198 +257,11 @@
     "correct_score_shortlist": [
       {
         "scoreline": "1-1",
-        "probability": 0.114
-      },
-      {
-        "scoreline": "1-2",
-        "probability": 0.087
-      },
-      {
-        "scoreline": "0-1",
-        "probability": 0.081
-      }
-    ],
-    "premium_tier": "ELITE"
-  },
-  {
-    "fixture_id": "2026_05_09_Atlanta_United_FC_LA_Galaxy__BTTS__YES",
-    "fixture_key": "2026_05_09_Atlanta_United_FC_LA_Galaxy",
-    "kickoff_time": "2026-05-09",
-    "league": "USA MLS",
-    "home_team": "Atlanta United FC",
-    "away_team": "LA Galaxy",
-    "home_team_logo_url": "https://media.api-sports.io/football/teams/1608.png",
-    "away_team_logo_url": "https://media.api-sports.io/football/teams/1605.png",
-    "league_logo_url": "https://media.api-sports.io/football/leagues/253.png",
-    "league_flag_url": "https://media.api-sports.io/flags/us.svg",
-    "logo_join_status": "FULL_MATCH",
-    "market": "BTTS",
-    "pick": "YES",
-    "confidence_tier": "ELITE",
-    "model_prob": 0.7507,
-    "bookie_implied_prob": 0.6536,
-    "value_edge": 0.1451,
-    "bookie_od": 1.53,
-    "reason_tokens": [
-      "VALUE_EDGE_PREMIUM",
-      "TEAM_HOME_GE2_POCKET",
-      "DEPLOYABLE",
-      "MARKET_BTTS",
-      "TIER_ELITE"
-    ],
-    "human_reason": "Yes met the live BTTS posture for the elite board.",
-    "slip_role_hint": "anchor",
-    "safe_for_small_acca_flag": true,
-    "safe_for_large_acca_flag": true,
-    "correct_score_shortlist": [
-      {
-        "scoreline": "1-1",
-        "probability": 0.115
-      },
-      {
-        "scoreline": "1-2",
-        "probability": 0.086
-      },
-      {
-        "scoreline": "2-1",
-        "probability": 0.082
-      }
-    ],
-    "premium_tier": "ELITE"
-  },
-  {
-    "fixture_id": "2026_05_09_New_England_Revolution_Philadelphia_Union__OU25__OVER25",
-    "fixture_key": "2026_05_09_New_England_Revolution_Philadelphia_Union",
-    "kickoff_time": "2026-05-09",
-    "league": "USA MLS",
-    "home_team": "New England Revolution",
-    "away_team": "Philadelphia Union",
-    "home_team_logo_url": "https://media.api-sports.io/football/teams/1609.png",
-    "away_team_logo_url": "https://media.api-sports.io/football/teams/1599.png",
-    "league_logo_url": "https://media.api-sports.io/football/leagues/253.png",
-    "league_flag_url": "https://media.api-sports.io/flags/us.svg",
-    "logo_join_status": "FULL_MATCH",
-    "market": "OU25",
-    "pick": "OVER25",
-    "confidence_tier": "ELITE",
-    "model_prob": 0.6744,
-    "bookie_implied_prob": 0.5128,
-    "value_edge": 0.1203,
-    "bookie_od": 1.95,
-    "reason_tokens": [
-      "VALUE_EDGE_PREMIUM",
-      "OU25_HYBRID_STRUCT_PASS",
-      "OU25_HYBRID_MODEL_FAIL",
-      "OU25_OVER25_TIER2_PASS",
-      "OU25_OVER25_FALLBACK_PASS",
-      "DEPLOYABLE"
-    ],
-    "human_reason": "Over25 passed the live totals posture for the elite board.",
-    "slip_role_hint": "anchor",
-    "safe_for_small_acca_flag": true,
-    "safe_for_large_acca_flag": true,
-    "correct_score_shortlist": [
-      {
-        "scoreline": "1-1",
-        "probability": 0.116
-      },
-      {
-        "scoreline": "1-2",
-        "probability": 0.086
-      },
-      {
-        "scoreline": "2-1",
-        "probability": 0.082
-      }
-    ],
-    "premium_tier": "ELITE"
-  },
-  {
-    "fixture_id": "2026_05_09_Charlotte_FC_Cincinnati__OU25__OVER25",
-    "fixture_key": "2026_05_09_Charlotte_FC_Cincinnati",
-    "kickoff_time": "2026-05-09",
-    "league": "USA MLS",
-    "home_team": "Charlotte",
-    "away_team": "FC Cincinnati",
-    "home_team_logo_url": "https://media.api-sports.io/football/teams/18310.png",
-    "away_team_logo_url": "https://media.api-sports.io/football/teams/2242.png",
-    "league_logo_url": "https://media.api-sports.io/football/leagues/253.png",
-    "league_flag_url": "https://media.api-sports.io/flags/us.svg",
-    "logo_join_status": "FULL_MATCH",
-    "market": "OU25",
-    "pick": "OVER25",
-    "confidence_tier": "ELITE",
-    "model_prob": 0.6728,
-    "bookie_implied_prob": 0.6623,
-    "value_edge": 0.0697,
-    "bookie_od": 1.51,
-    "reason_tokens": [
-      "VALUE_EDGE_STANDARD",
-      "OU25_HYBRID_STRUCT_PASS",
-      "OU25_HYBRID_MODEL_FAIL",
-      "OU25_OVER25_TIER2_PASS",
-      "DEPLOYABLE",
-      "MARKET_OU25"
-    ],
-    "human_reason": "Over25 passed the live totals posture for the elite board.",
-    "slip_role_hint": "anchor",
-    "safe_for_small_acca_flag": true,
-    "safe_for_large_acca_flag": true,
-    "correct_score_shortlist": [
-      {
-        "scoreline": "1-1",
-        "probability": 0.107
+        "probability": 0.095
       },
       {
         "scoreline": "2-1",
         "probability": 0.086
-      },
-      {
-        "scoreline": "1-2",
-        "probability": 0.082
-      }
-    ],
-    "premium_tier": "ELITE"
-  },
-  {
-    "fixture_id": "2026_05_10_New_York_City_Columbus_Crew__OU25__OVER25",
-    "fixture_key": "2026_05_10_New_York_City_Columbus_Crew",
-    "kickoff_time": "2026-05-10",
-    "league": "USA MLS",
-    "home_team": "New York City",
-    "away_team": "Columbus Crew",
-    "home_team_logo_url": "https://media.api-sports.io/football/teams/1604.png",
-    "away_team_logo_url": "https://media.api-sports.io/football/teams/1613.png",
-    "league_logo_url": "https://media.api-sports.io/football/leagues/253.png",
-    "league_flag_url": "https://media.api-sports.io/flags/us.svg",
-    "logo_join_status": "FULL_MATCH",
-    "market": "OU25",
-    "pick": "OVER25",
-    "confidence_tier": "ELITE",
-    "model_prob": 0.6384,
-    "bookie_implied_prob": 0.5882,
-    "value_edge": 0.012,
-    "bookie_od": 1.7,
-    "reason_tokens": [
-      "TEAM_HOME_GE2_POCKET",
-      "OU25_HYBRID_STRUCT_PASS",
-      "OU25_HYBRID_MODEL_FAIL",
-      "OU25_OVER25_TIER2_PASS",
-      "DEPLOYABLE",
-      "MARKET_OU25"
-    ],
-    "human_reason": "Over25 passed the live totals posture for the elite board.",
-    "slip_role_hint": "anchor",
-    "safe_for_small_acca_flag": true,
-    "safe_for_large_acca_flag": true,
-    "correct_score_shortlist": [
-      {
-        "scoreline": "1-1",
-        "probability": 0.103
-      },
-      {
-        "scoreline": "2-1",
-        "probability": 0.089
       },
       {
         "scoreline": "1-2",
@@ -278,154 +271,60 @@
     "premium_tier": "ELITE"
   },
   {
-    "fixture_id": "2026_05_09_Zulte_Waregem_FCV_Dender_EH__FTR__HOME",
-    "fixture_key": "2026_05_09_Zulte_Waregem_FCV_Dender_EH",
-    "kickoff_time": "2026-05-09",
-    "league": "Belgium Pro",
-    "home_team": "Zulte-Waregem",
-    "away_team": "FCV Dender EH",
-    "home_team_logo_url": "https://media.api-sports.io/football/teams/600.png",
-    "away_team_logo_url": "https://media.api-sports.io/football/teams/6215.png",
-    "league_logo_url": "https://media.api-sports.io/football/leagues/144.png",
-    "league_flag_url": "https://media.api-sports.io/flags/be.svg",
+    "fixture_id": "2026_05_23_Valencia_CF_FC_Barcelona__FTR__AWAY",
+    "fixture_key": "2026_05_23_Valencia_CF_FC_Barcelona",
+    "kickoff_time": "2026-05-23 00:00:00",
+    "league": "Spain La Liga",
+    "home_team": "Valencia CF",
+    "away_team": "FC Barcelona",
+    "home_team_logo_url": "https://media.api-sports.io/football/teams/532.png",
+    "away_team_logo_url": "https://media.api-sports.io/football/teams/529.png",
+    "league_logo_url": "https://media.api-sports.io/football/leagues/140.png",
+    "league_flag_url": "https://media.api-sports.io/flags/es.svg",
     "logo_join_status": "FULL_MATCH",
     "market": "FTR",
-    "pick": "HOME",
+    "pick": "AWAY",
     "confidence_tier": "STANDARD",
     "model_prob": 1.0,
-    "bookie_implied_prob": 0.625,
-    "value_edge": 0.4285,
-    "bookie_od": 1.6,
+    "bookie_implied_prob": 0.5376,
+    "value_edge": 0.5025,
+    "bookie_od": 1.86,
     "reason_tokens": [
       "VALUE_EDGE_PREMIUM",
+      "TEAM_CS_VS_CS",
+      "FTR_NOT_GLUE_WARN",
       "FTR_ELITE_BLOCK_PICK_SIDE_MARGIN",
       "FTR_STRONG_STANDARD_RESCUE",
-      "DEPLOYABLE",
-      "MARKET_FTR",
-      "TIER_STANDARD"
+      "DEPLOYABLE"
     ],
-    "human_reason": "Home carried enough support to remain live in the standard board.",
+    "human_reason": "Away carried enough support to remain live in the standard board.",
     "slip_role_hint": "support",
     "safe_for_small_acca_flag": false,
     "safe_for_large_acca_flag": false,
     "correct_score_shortlist": [
       {
-        "scoreline": "2-1",
-        "probability": 0.099
+        "scoreline": "1-2",
+        "probability": 0.093
       },
       {
         "scoreline": "1-1",
-        "probability": 0.092
+        "probability": 0.09
       },
       {
-        "scoreline": "2-0",
-        "probability": 0.089
+        "scoreline": "2-2",
+        "probability": 0.066
       }
     ],
     "premium_tier": "STANDARD"
   },
   {
-    "fixture_id": "2026_05_10_KRC_Genk_KVC_Westerlo__FTR__HOME",
-    "fixture_key": "2026_05_10_KRC_Genk_KVC_Westerlo",
-    "kickoff_time": "2026-05-10",
+    "fixture_id": "2026_05_24_Sint_Truiden_KV_Mechelen__FTR__HOME",
+    "fixture_key": "2026_05_24_Sint_Truiden_KV_Mechelen",
+    "kickoff_time": "2026-05-24",
     "league": "Belgium Pro",
-    "home_team": "KRC Genk",
-    "away_team": "KVC Westerlo",
-    "home_team_logo_url": "https://media.api-sports.io/football/teams/742.png",
-    "away_team_logo_url": "https://media.api-sports.io/football/teams/261.png",
-    "league_logo_url": "https://media.api-sports.io/football/leagues/144.png",
-    "league_flag_url": "https://media.api-sports.io/flags/be.svg",
-    "logo_join_status": "FULL_MATCH",
-    "market": "FTR",
-    "pick": "HOME",
-    "confidence_tier": "STANDARD",
-    "model_prob": 1.0,
-    "bookie_implied_prob": 0.6173,
-    "value_edge": 0.4142,
-    "bookie_od": 1.62,
-    "reason_tokens": [
-      "VALUE_EDGE_PREMIUM",
-      "FTR_ELITE_BLOCK_PICK_SIDE_MARGIN",
-      "FTR_STRONG_STANDARD_RESCUE",
-      "DEPLOYABLE",
-      "MARKET_FTR",
-      "TIER_STANDARD"
-    ],
-    "human_reason": "Home carried enough support to remain live in the standard board.",
-    "slip_role_hint": "support",
-    "safe_for_small_acca_flag": false,
-    "safe_for_large_acca_flag": false,
-    "correct_score_shortlist": [
-      {
-        "scoreline": "1-1",
-        "probability": 0.117
-      },
-      {
-        "scoreline": "2-1",
-        "probability": 0.088
-      },
-      {
-        "scoreline": "1-0",
-        "probability": 0.087
-      }
-    ],
-    "premium_tier": "STANDARD"
-  },
-  {
-    "fixture_id": "2026_05_09_Club_Brugge_Sint_Truiden__FTR__HOME",
-    "fixture_key": "2026_05_09_Club_Brugge_Sint_Truiden",
-    "kickoff_time": "2026-05-09",
-    "league": "Belgium Pro",
-    "home_team": "Club Brugge",
-    "away_team": "Sint-Truiden",
-    "home_team_logo_url": "https://media.api-sports.io/football/teams/569.png",
-    "away_team_logo_url": "https://media.api-sports.io/football/teams/735.png",
-    "league_logo_url": "https://media.api-sports.io/football/leagues/144.png",
-    "league_flag_url": "https://media.api-sports.io/flags/be.svg",
-    "logo_join_status": "FULL_MATCH",
-    "market": "FTR",
-    "pick": "HOME",
-    "confidence_tier": "STANDARD",
-    "model_prob": 1.0,
-    "bookie_implied_prob": 0.7143,
-    "value_edge": 0.3534,
-    "bookie_od": 1.4,
-    "reason_tokens": [
-      "VALUE_EDGE_PREMIUM",
-      "FTR_HARD_NOT_GLUE_RESCUE_SHADOW",
-      "FTR_STRONG_STANDARD_RESCUE",
-      "DEPLOYABLE",
-      "MARKET_FTR",
-      "TIER_STANDARD"
-    ],
-    "human_reason": "Home carried enough support to remain live in the standard board.",
-    "slip_role_hint": "support",
-    "safe_for_small_acca_flag": false,
-    "safe_for_large_acca_flag": false,
-    "correct_score_shortlist": [
-      {
-        "scoreline": "2-1",
-        "probability": 0.097
-      },
-      {
-        "scoreline": "1-1",
-        "probability": 0.094
-      },
-      {
-        "scoreline": "2-0",
-        "probability": 0.078
-      }
-    ],
-    "premium_tier": "STANDARD"
-  },
-  {
-    "fixture_id": "2026_05_10_Union_Saint_Gilloise_KV_Mechelen__FTR__HOME",
-    "fixture_key": "2026_05_10_Union_Saint_Gilloise_KV_Mechelen",
-    "kickoff_time": "2026-05-10",
-    "league": "Belgium Pro",
-    "home_team": "Union Saint-Gilloise",
+    "home_team": "Sint-Truiden",
     "away_team": "KV Mechelen",
-    "home_team_logo_url": "https://media.api-sports.io/football/teams/1393.png",
+    "home_team_logo_url": "https://media.api-sports.io/football/teams/735.png",
     "away_team_logo_url": "https://media.api-sports.io/football/teams/266.png",
     "league_logo_url": "https://media.api-sports.io/football/leagues/144.png",
     "league_flag_url": "https://media.api-sports.io/flags/be.svg",
@@ -434,106 +333,14 @@
     "pick": "HOME",
     "confidence_tier": "STANDARD",
     "model_prob": 1.0,
-    "bookie_implied_prob": 0.7519,
-    "value_edge": 0.3235,
-    "bookie_od": 1.33,
+    "bookie_implied_prob": 0.565,
+    "value_edge": 0.4607,
+    "bookie_od": 1.77,
     "reason_tokens": [
       "VALUE_EDGE_PREMIUM",
-      "FTR_NOT_GLUE_WARN",
-      "FTR_CHAOS_WARN",
-      "FTR_ELITE_BLOCK_DOUBLE_CHAOS_WARN",
-      "FTR_STRONG_STANDARD_RESCUE",
-      "DEPLOYABLE"
-    ],
-    "human_reason": "Home carried enough support to remain live in the standard board.",
-    "slip_role_hint": "support",
-    "safe_for_small_acca_flag": false,
-    "safe_for_large_acca_flag": false,
-    "correct_score_shortlist": [
-      {
-        "scoreline": "2-1",
-        "probability": 0.096
-      },
-      {
-        "scoreline": "2-0",
-        "probability": 0.092
-      },
-      {
-        "scoreline": "1-1",
-        "probability": 0.079
-      }
-    ],
-    "premium_tier": "STANDARD"
-  },
-  {
-    "fixture_id": "2026_05_10_PSG_Brest__FTR__HOME",
-    "fixture_key": "2026_05_10_PSG_Brest",
-    "kickoff_time": "2026-05-10",
-    "league": "France Ligue 1",
-    "home_team": "PSG",
-    "away_team": "Brest",
-    "home_team_logo_url": "https://media.api-sports.io/football/teams/85.png",
-    "away_team_logo_url": "https://media.api-sports.io/football/teams/106.png",
-    "league_logo_url": "https://media.api-sports.io/football/leagues/61.png",
-    "league_flag_url": "https://media.api-sports.io/flags/fr.svg",
-    "logo_join_status": "FULL_MATCH",
-    "market": "FTR",
-    "pick": "HOME",
-    "confidence_tier": "STANDARD",
-    "model_prob": 1.0,
-    "bookie_implied_prob": 0.8475,
-    "value_edge": 0.1655,
-    "bookie_od": 1.18,
-    "reason_tokens": [
-      "VALUE_EDGE_PREMIUM",
-      "TEAM_HOME_GE2_POCKET",
       "FTR_ELITE_BLOCK_PICK_SIDE_MARGIN",
       "FTR_STRONG_STANDARD_RESCUE",
       "DEPLOYABLE",
-      "MARKET_FTR"
-    ],
-    "human_reason": "Home carried enough support to remain live in the standard board.",
-    "slip_role_hint": "support",
-    "safe_for_small_acca_flag": false,
-    "safe_for_large_acca_flag": false,
-    "correct_score_shortlist": [
-      {
-        "scoreline": "1-1",
-        "probability": 0.123
-      },
-      {
-        "scoreline": "1-0",
-        "probability": 0.119
-      },
-      {
-        "scoreline": "2-1",
-        "probability": 0.093
-      }
-    ],
-    "premium_tier": "STANDARD"
-  },
-  {
-    "fixture_id": "2026_05_10_Royal_Antwerp_FC_Sporting_Charleroi__FTR__HOME",
-    "fixture_key": "2026_05_10_Royal_Antwerp_FC_Sporting_Charleroi",
-    "kickoff_time": "2026-05-10",
-    "league": "Belgium Pro",
-    "home_team": "Royal Antwerp FC",
-    "away_team": "Sporting Charleroi",
-    "home_team_logo_url": "https://media.api-sports.io/football/teams/740.png",
-    "away_team_logo_url": "https://media.api-sports.io/football/teams/736.png",
-    "league_logo_url": "https://media.api-sports.io/football/leagues/144.png",
-    "league_flag_url": "https://media.api-sports.io/flags/be.svg",
-    "logo_join_status": "FULL_MATCH",
-    "market": "FTR",
-    "pick": "HOME",
-    "confidence_tier": "STANDARD",
-    "model_prob": 0.8596,
-    "bookie_implied_prob": 0.4219,
-    "value_edge": 0.4652,
-    "bookie_od": 2.37,
-    "reason_tokens": [
-      "VALUE_EDGE_PREMIUM",
-      "DEPLOYABLE",
       "MARKET_FTR",
       "TIER_STANDARD"
     ],
@@ -544,283 +351,7 @@
     "correct_score_shortlist": [
       {
         "scoreline": "1-1",
-        "probability": 0.1
-      },
-      {
-        "scoreline": "2-1",
-        "probability": 0.086
-      },
-      {
-        "scoreline": "1-2",
-        "probability": 0.08
-      }
-    ],
-    "premium_tier": "STANDARD"
-  },
-  {
-    "fixture_id": "2026_05_10_AVS_Porto__FTR__AWAY",
-    "fixture_key": "2026_05_10_AVS_Porto",
-    "kickoff_time": "2026-05-10",
-    "league": "Portugal Liga",
-    "home_team": "AVS",
-    "away_team": "Porto",
-    "home_team_logo_url": "https://media.api-sports.io/football/teams/21595.png",
-    "away_team_logo_url": "https://media.api-sports.io/football/teams/212.png",
-    "league_logo_url": "https://media.api-sports.io/football/leagues/94.png",
-    "league_flag_url": "https://media.api-sports.io/flags/pt.svg",
-    "logo_join_status": "FULL_MATCH",
-    "market": "FTR",
-    "pick": "AWAY",
-    "confidence_tier": "STANDARD",
-    "model_prob": 0.6154,
-    "bookie_implied_prob": 0.8547,
-    "value_edge": -0.1675,
-    "bookie_od": 1.17,
-    "reason_tokens": [
-      "TEAM_AWAY_GE2_POCKET",
-      "DEMOTED_TO_OBSERVE",
-      "FTR_CS_PROMOTE_STANDARD",
-      "DEPLOYABLE",
-      "MARKET_FTR",
-      "TIER_STANDARD"
-    ],
-    "human_reason": "Away carried enough support to remain live in the standard board.",
-    "slip_role_hint": "support",
-    "safe_for_small_acca_flag": false,
-    "safe_for_large_acca_flag": false,
-    "correct_score_shortlist": [
-      {
-        "scoreline": "0-2",
-        "probability": 0.166
-      },
-      {
-        "scoreline": "0-1",
-        "probability": 0.146
-      },
-      {
-        "scoreline": "0-3",
-        "probability": 0.126
-      }
-    ],
-    "premium_tier": "STANDARD"
-  },
-  {
-    "fixture_id": "2026_05_10_Al_Ittihad_Dhamk__FTR__HOME",
-    "fixture_key": "2026_05_10_Al_Ittihad_Dhamk",
-    "kickoff_time": "2026-05-10",
-    "league": "Saudi Pro League",
-    "home_team": "Al Ittihad",
-    "away_team": "Dhamk",
-    "home_team_logo_url": "",
-    "away_team_logo_url": "",
-    "league_logo_url": "",
-    "league_flag_url": "",
-    "logo_join_status": "NO_MATCH",
-    "market": "FTR",
-    "pick": "HOME",
-    "confidence_tier": "STANDARD",
-    "model_prob": 0.3515,
-    "bookie_implied_prob": 0.6667,
-    "value_edge": -0.2879,
-    "bookie_od": 1.5,
-    "reason_tokens": [
-      "TEAM_HOME_GE2_POCKET",
-      "FTR_CS_PROMOTE_STANDARD",
-      "DEPLOYABLE",
-      "MARKET_FTR",
-      "TIER_STANDARD"
-    ],
-    "human_reason": "Home carried enough support to remain live in the standard board.",
-    "slip_role_hint": "support",
-    "safe_for_small_acca_flag": false,
-    "safe_for_large_acca_flag": false,
-    "correct_score_shortlist": [
-      {
-        "scoreline": "1-0",
-        "probability": 0.218
-      },
-      {
-        "scoreline": "2-0",
-        "probability": 0.179
-      },
-      {
-        "scoreline": "0-0",
-        "probability": 0.133
-      }
-    ],
-    "premium_tier": "STANDARD"
-  },
-  {
-    "fixture_id": "2026_05_10_FC_Barcelona_Real_Madrid__BTTS__YES",
-    "fixture_key": "2026_05_10_FC_Barcelona_Real_Madrid",
-    "kickoff_time": "2026-05-10",
-    "league": "Spain La Liga",
-    "home_team": "FC Barcelona",
-    "away_team": "Real Madrid",
-    "home_team_logo_url": "https://media.api-sports.io/football/teams/529.png",
-    "away_team_logo_url": "https://media.api-sports.io/football/teams/541.png",
-    "league_logo_url": "https://media.api-sports.io/football/leagues/140.png",
-    "league_flag_url": "https://media.api-sports.io/flags/es.svg",
-    "logo_join_status": "FULL_MATCH",
-    "market": "BTTS",
-    "pick": "YES",
-    "confidence_tier": "STANDARD",
-    "model_prob": 0.6013,
-    "bookie_implied_prob": 0.7874,
-    "value_edge": -0.1107,
-    "bookie_od": 1.27,
-    "reason_tokens": [
-      "TEAM_CS_VS_CS",
-      "BTTS_STANDARD_RESCUE_GLOBAL",
-      "DEPLOYABLE",
-      "MARKET_BTTS",
-      "TIER_STANDARD"
-    ],
-    "human_reason": "Yes met the live BTTS posture for the standard board.",
-    "slip_role_hint": "support",
-    "safe_for_small_acca_flag": false,
-    "safe_for_large_acca_flag": false,
-    "correct_score_shortlist": [
-      {
-        "scoreline": "2-1",
-        "probability": 0.075
-      },
-      {
-        "scoreline": "2-2",
-        "probability": 0.073
-      },
-      {
-        "scoreline": "1-1",
-        "probability": 0.07
-      }
-    ],
-    "premium_tier": "STANDARD"
-  },
-  {
-    "fixture_id": "2026_05_09_Wolfsburg_Bayern_M_nchen__OU25__OVER25",
-    "fixture_key": "2026_05_09_Wolfsburg_Bayern_M_nchen",
-    "kickoff_time": "2026-05-09",
-    "league": "Germany Bundesliga",
-    "home_team": "Wolfsburg",
-    "away_team": "Bayern München",
-    "home_team_logo_url": "https://media.api-sports.io/football/teams/161.png",
-    "away_team_logo_url": "https://media.api-sports.io/football/teams/157.png",
-    "league_logo_url": "https://media.api-sports.io/football/leagues/78.png",
-    "league_flag_url": "https://media.api-sports.io/flags/de.svg",
-    "logo_join_status": "FULL_MATCH",
-    "market": "OU25",
-    "pick": "OVER25",
-    "confidence_tier": "STANDARD",
-    "model_prob": 0.9251,
-    "bookie_implied_prob": 0.813,
-    "value_edge": 0.2444,
-    "bookie_od": 1.23,
-    "reason_tokens": [
-      "VALUE_EDGE_PREMIUM",
-      "OU25_HYBRID_BUNDESLIGA_PREMIUM_RESCUE",
-      "DEPLOYABLE",
-      "MARKET_OU25",
-      "TIER_STANDARD"
-    ],
-    "human_reason": "Over25 passed the live totals posture for the standard board.",
-    "slip_role_hint": "support",
-    "safe_for_small_acca_flag": false,
-    "safe_for_large_acca_flag": false,
-    "correct_score_shortlist": [
-      {
-        "scoreline": "1-1",
-        "probability": 0.092
-      },
-      {
-        "scoreline": "1-2",
-        "probability": 0.086
-      },
-      {
-        "scoreline": "2-1",
-        "probability": 0.075
-      }
-    ],
-    "premium_tier": "STANDARD"
-  },
-  {
-    "fixture_id": "2026_05_10_Fortuna_Sittard_PEC_Zwolle__OU25__OVER25",
-    "fixture_key": "2026_05_10_Fortuna_Sittard_PEC_Zwolle",
-    "kickoff_time": "2026-05-10",
-    "league": "Netherlands Eredivisie",
-    "home_team": "Fortuna Sittard",
-    "away_team": "PEC Zwolle",
-    "home_team_logo_url": "https://media.api-sports.io/football/teams/205.png",
-    "away_team_logo_url": "https://media.api-sports.io/football/teams/193.png",
-    "league_logo_url": "https://media.api-sports.io/football/leagues/88.png",
-    "league_flag_url": "https://media.api-sports.io/flags/nl.svg",
-    "logo_join_status": "FULL_MATCH",
-    "market": "OU25",
-    "pick": "OVER25",
-    "confidence_tier": "STANDARD",
-    "model_prob": 0.8316,
-    "bookie_implied_prob": 0.6667,
-    "value_edge": 0.4588,
-    "bookie_od": 1.5,
-    "reason_tokens": [
-      "VALUE_EDGE_PREMIUM",
-      "OU25_STANDARD_RESCUE_BTTS_PHASE7C",
-      "DEPLOYABLE",
-      "MARKET_OU25",
-      "TIER_STANDARD"
-    ],
-    "human_reason": "Over25 passed the live totals posture for the standard board.",
-    "slip_role_hint": "support",
-    "safe_for_small_acca_flag": false,
-    "safe_for_large_acca_flag": false,
-    "correct_score_shortlist": [
-      {
-        "scoreline": "1-1",
-        "probability": 0.121
-      },
-      {
-        "scoreline": "0-1",
-        "probability": 0.091
-      },
-      {
-        "scoreline": "1-0",
-        "probability": 0.087
-      }
-    ],
-    "premium_tier": "STANDARD"
-  },
-  {
-    "fixture_id": "2026_05_09_Montreal_Impact_Orlando_City__OU25__OVER25",
-    "fixture_key": "2026_05_09_Montreal_Impact_Orlando_City",
-    "kickoff_time": "2026-05-09",
-    "league": "USA MLS",
-    "home_team": "Montreal Impact",
-    "away_team": "Orlando City",
-    "home_team_logo_url": "https://media.api-sports.io/football/teams/1614.png",
-    "away_team_logo_url": "https://media.api-sports.io/football/teams/1598.png",
-    "league_logo_url": "https://media.api-sports.io/football/leagues/253.png",
-    "league_flag_url": "https://media.api-sports.io/flags/us.svg",
-    "logo_join_status": "FULL_MATCH",
-    "market": "OU25",
-    "pick": "OVER25",
-    "confidence_tier": "STANDARD",
-    "model_prob": 0.8141,
-    "bookie_implied_prob": 0.6494,
-    "value_edge": 0.4907,
-    "bookie_od": 1.54,
-    "reason_tokens": [
-      "VALUE_EDGE_PREMIUM",
-      "DEPLOYABLE",
-      "MARKET_OU25",
-      "TIER_STANDARD"
-    ],
-    "human_reason": "Over25 passed the live totals posture for the standard board.",
-    "slip_role_hint": "support",
-    "safe_for_small_acca_flag": false,
-    "safe_for_large_acca_flag": false,
-    "correct_score_shortlist": [
-      {
-        "scoreline": "1-1",
-        "probability": 0.124
+        "probability": 0.106
       },
       {
         "scoreline": "1-0",
@@ -828,74 +359,30 @@
       },
       {
         "scoreline": "2-1",
-        "probability": 0.088
+        "probability": 0.099
       }
     ],
     "premium_tier": "STANDARD"
   },
   {
-    "fixture_id": "2026_05_09_Stuttgart_Bayer_Leverkusen__OU25__OVER25",
-    "fixture_key": "2026_05_09_Stuttgart_Bayer_Leverkusen",
-    "kickoff_time": "2026-05-09",
-    "league": "Germany Bundesliga",
-    "home_team": "Stuttgart",
-    "away_team": "Bayer Leverkusen",
-    "home_team_logo_url": "https://media.api-sports.io/football/teams/172.png",
-    "away_team_logo_url": "https://media.api-sports.io/football/teams/168.png",
-    "league_logo_url": "https://media.api-sports.io/football/leagues/78.png",
-    "league_flag_url": "https://media.api-sports.io/flags/de.svg",
-    "logo_join_status": "FULL_MATCH",
-    "market": "OU25",
-    "pick": "OVER25",
-    "confidence_tier": "STANDARD",
-    "model_prob": 0.8044,
-    "bookie_implied_prob": 0.7634,
-    "value_edge": 0.0575,
-    "bookie_od": 1.31,
-    "reason_tokens": [
-      "DEPLOYABLE",
-      "MARKET_OU25",
-      "TIER_STANDARD"
-    ],
-    "human_reason": "Over25 passed the live totals posture for the standard board.",
-    "slip_role_hint": "support",
-    "safe_for_small_acca_flag": false,
-    "safe_for_large_acca_flag": false,
-    "correct_score_shortlist": [
-      {
-        "scoreline": "2-1",
-        "probability": 0.086
-      },
-      {
-        "scoreline": "1-1",
-        "probability": 0.075
-      },
-      {
-        "scoreline": "2-2",
-        "probability": 0.068
-      }
-    ],
-    "premium_tier": "STANDARD"
-  },
-  {
-    "fixture_id": "2026_05_09_Toronto_Inter_Miami__OU25__OVER25",
-    "fixture_key": "2026_05_09_Toronto_Inter_Miami",
-    "kickoff_time": "2026-05-09",
+    "fixture_id": "2026_05_24_Nashville_SC_New_York_City__OU25__OVER25",
+    "fixture_key": "2026_05_24_Nashville_SC_New_York_City",
+    "kickoff_time": "2026-05-24",
     "league": "USA MLS",
-    "home_team": "Toronto",
-    "away_team": "Inter Miami",
-    "home_team_logo_url": "https://media.api-sports.io/football/teams/1601.png",
-    "away_team_logo_url": "https://media.api-sports.io/football/teams/9568.png",
+    "home_team": "Nashville SC",
+    "away_team": "New York City",
+    "home_team_logo_url": "https://media.api-sports.io/football/teams/9569.png",
+    "away_team_logo_url": "https://media.api-sports.io/football/teams/1604.png",
     "league_logo_url": "https://media.api-sports.io/football/leagues/253.png",
     "league_flag_url": "https://media.api-sports.io/flags/us.svg",
     "logo_join_status": "FULL_MATCH",
     "market": "OU25",
     "pick": "OVER25",
     "confidence_tier": "STANDARD",
-    "model_prob": 0.8022,
-    "bookie_implied_prob": 0.6944,
-    "value_edge": 0.2413,
-    "bookie_od": 1.44,
+    "model_prob": 0.8351,
+    "bookie_implied_prob": 0.5682,
+    "value_edge": 0.2673,
+    "bookie_od": 1.76,
     "reason_tokens": [
       "VALUE_EDGE_PREMIUM",
       "DEPLOYABLE",
@@ -907,182 +394,42 @@
     "safe_for_small_acca_flag": false,
     "safe_for_large_acca_flag": false,
     "correct_score_shortlist": [
-      {
-        "scoreline": "1-1",
-        "probability": 0.114
-      },
-      {
-        "scoreline": "2-1",
-        "probability": 0.087
-      },
-      {
-        "scoreline": "1-0",
-        "probability": 0.081
-      }
-    ],
-    "premium_tier": "STANDARD"
-  },
-  {
-    "fixture_id": "2026_05_10_Go_Ahead_Eagles_PSV__OU25__OVER25",
-    "fixture_key": "2026_05_10_Go_Ahead_Eagles_PSV",
-    "kickoff_time": "2026-05-10",
-    "league": "Netherlands Eredivisie",
-    "home_team": "Go Ahead Eagles",
-    "away_team": "PSV",
-    "home_team_logo_url": "https://media.api-sports.io/football/teams/410.png",
-    "away_team_logo_url": "https://media.api-sports.io/football/teams/197.png",
-    "league_logo_url": "https://media.api-sports.io/football/leagues/88.png",
-    "league_flag_url": "https://media.api-sports.io/flags/nl.svg",
-    "logo_join_status": "FULL_MATCH",
-    "market": "OU25",
-    "pick": "OVER25",
-    "confidence_tier": "STANDARD",
-    "model_prob": 0.7911,
-    "bookie_implied_prob": 0.7692,
-    "value_edge": 0.2891,
-    "bookie_od": 1.3,
-    "reason_tokens": [
-      "VALUE_EDGE_PREMIUM",
-      "OU25_STANDARD_RESCUE_BTTS_PHASE7C",
-      "DEPLOYABLE",
-      "MARKET_OU25",
-      "TIER_STANDARD"
-    ],
-    "human_reason": "Over25 passed the live totals posture for the standard board.",
-    "slip_role_hint": "support",
-    "safe_for_small_acca_flag": false,
-    "safe_for_large_acca_flag": false,
-    "correct_score_shortlist": [
-      {
-        "scoreline": "0-1",
-        "probability": 0.123
-      },
-      {
-        "scoreline": "0-2",
-        "probability": 0.11
-      },
       {
         "scoreline": "1-1",
         "probability": 0.109
+      },
+      {
+        "scoreline": "2-1",
+        "probability": 0.096
+      },
+      {
+        "scoreline": "1-0",
+        "probability": 0.091
       }
     ],
     "premium_tier": "STANDARD"
   },
   {
-    "fixture_id": "2026_05_09_Atlanta_United_FC_LA_Galaxy__OU25__OVER25",
-    "fixture_key": "2026_05_09_Atlanta_United_FC_LA_Galaxy",
-    "kickoff_time": "2026-05-09",
+    "fixture_id": "2026_05_24_Portland_Timbers_SJ_Earthquakes__OU25__OVER25",
+    "fixture_key": "2026_05_24_Portland_Timbers_SJ_Earthquakes",
+    "kickoff_time": "2026-05-24",
     "league": "USA MLS",
-    "home_team": "Atlanta United FC",
-    "away_team": "LA Galaxy",
-    "home_team_logo_url": "https://media.api-sports.io/football/teams/1608.png",
-    "away_team_logo_url": "https://media.api-sports.io/football/teams/1605.png",
+    "home_team": "Portland Timbers",
+    "away_team": "SJ Earthquakes",
+    "home_team_logo_url": "https://media.api-sports.io/football/teams/1617.png",
+    "away_team_logo_url": "https://media.api-sports.io/football/teams/1596.png",
     "league_logo_url": "https://media.api-sports.io/football/leagues/253.png",
     "league_flag_url": "https://media.api-sports.io/flags/us.svg",
     "logo_join_status": "FULL_MATCH",
     "market": "OU25",
     "pick": "OVER25",
     "confidence_tier": "STANDARD",
-    "model_prob": 0.7449,
-    "bookie_implied_prob": 0.5988,
-    "value_edge": 0.1886,
-    "bookie_od": 1.67,
-    "reason_tokens": [
-      "VALUE_EDGE_PREMIUM",
-      "TEAM_HOME_GE2_POCKET",
-      "OU25_HYBRID_STRUCT_PASS",
-      "OU25_HYBRID_MODEL_FAIL",
-      "OU25_OVER25_TIER2_PASS",
-      "DEPLOYABLE"
-    ],
-    "human_reason": "Over25 passed the live totals posture for the standard board.",
-    "slip_role_hint": "support",
-    "safe_for_small_acca_flag": false,
-    "safe_for_large_acca_flag": false,
-    "correct_score_shortlist": [
-      {
-        "scoreline": "1-1",
-        "probability": 0.115
-      },
-      {
-        "scoreline": "1-2",
-        "probability": 0.086
-      },
-      {
-        "scoreline": "2-1",
-        "probability": 0.082
-      }
-    ],
-    "premium_tier": "STANDARD"
-  },
-  {
-    "fixture_id": "2026_05_10_NAC_Breda_Heerenveen__OU25__OVER25",
-    "fixture_key": "2026_05_10_NAC_Breda_Heerenveen",
-    "kickoff_time": "2026-05-10",
-    "league": "Netherlands Eredivisie",
-    "home_team": "NAC Breda",
-    "away_team": "Heerenveen",
-    "home_team_logo_url": "https://media.api-sports.io/football/teams/203.png",
-    "away_team_logo_url": "https://media.api-sports.io/football/teams/210.png",
-    "league_logo_url": "https://media.api-sports.io/football/leagues/88.png",
-    "league_flag_url": "https://media.api-sports.io/flags/nl.svg",
-    "logo_join_status": "FULL_MATCH",
-    "market": "OU25",
-    "pick": "OVER25",
-    "confidence_tier": "STANDARD",
-    "model_prob": 0.7424,
-    "bookie_implied_prob": 0.6944,
-    "value_edge": 0.4227,
-    "bookie_od": 1.44,
-    "reason_tokens": [
-      "VALUE_EDGE_PREMIUM",
-      "OU25_STANDARD_RESCUE_BTTS_PHASE7C",
-      "DEPLOYABLE",
-      "MARKET_OU25",
-      "TIER_STANDARD"
-    ],
-    "human_reason": "Over25 passed the live totals posture for the standard board.",
-    "slip_role_hint": "support",
-    "safe_for_small_acca_flag": false,
-    "safe_for_large_acca_flag": false,
-    "correct_score_shortlist": [
-      {
-        "scoreline": "0-1",
-        "probability": 0.117
-      },
-      {
-        "scoreline": "1-1",
-        "probability": 0.113
-      },
-      {
-        "scoreline": "0-2",
-        "probability": 0.101
-      }
-    ],
-    "premium_tier": "STANDARD"
-  },
-  {
-    "fixture_id": "2026_05_10_Telstar_Heracles__OU25__OVER25",
-    "fixture_key": "2026_05_10_Telstar_Heracles",
-    "kickoff_time": "2026-05-10",
-    "league": "Netherlands Eredivisie",
-    "home_team": "Telstar",
-    "away_team": "Heracles",
-    "home_team_logo_url": "https://media.api-sports.io/football/teams/427.png",
-    "away_team_logo_url": "https://media.api-sports.io/football/teams/206.png",
-    "league_logo_url": "https://media.api-sports.io/football/leagues/88.png",
-    "league_flag_url": "https://media.api-sports.io/flags/nl.svg",
-    "logo_join_status": "FULL_MATCH",
-    "market": "OU25",
-    "pick": "OVER25",
-    "confidence_tier": "STANDARD",
-    "model_prob": 0.7404,
+    "model_prob": 0.8349,
     "bookie_implied_prob": 0.7353,
-    "value_edge": 0.2945,
+    "value_edge": 0.4442,
     "bookie_od": 1.36,
     "reason_tokens": [
       "VALUE_EDGE_PREMIUM",
-      "OU25_STANDARD_RESCUE_BTTS_PHASE7C",
       "DEPLOYABLE",
       "MARKET_OU25",
       "TIER_STANDARD"
@@ -1094,44 +441,45 @@
     "correct_score_shortlist": [
       {
         "scoreline": "1-1",
-        "probability": 0.129
+        "probability": 0.133
       },
       {
         "scoreline": "1-0",
-        "probability": 0.112
+        "probability": 0.125
       },
       {
         "scoreline": "0-1",
-        "probability": 0.098
+        "probability": 0.112
       }
     ],
     "premium_tier": "STANDARD"
   },
   {
-    "fixture_id": "2026_05_10_Groningen_NEC__OU25__OVER25",
-    "fixture_key": "2026_05_10_Groningen_NEC",
-    "kickoff_time": "2026-05-10",
-    "league": "Netherlands Eredivisie",
-    "home_team": "Groningen",
-    "away_team": "NEC",
-    "home_team_logo_url": "https://media.api-sports.io/football/teams/202.png",
-    "away_team_logo_url": "https://media.api-sports.io/football/teams/413.png",
-    "league_logo_url": "https://media.api-sports.io/football/leagues/88.png",
-    "league_flag_url": "https://media.api-sports.io/flags/nl.svg",
+    "fixture_id": "2026_05_24_LA_Galaxy_Houston_Dynamo__OU25__OVER25",
+    "fixture_key": "2026_05_24_LA_Galaxy_Houston_Dynamo",
+    "kickoff_time": "2026-05-24",
+    "league": "USA MLS",
+    "home_team": "LA Galaxy",
+    "away_team": "Houston Dynamo",
+    "home_team_logo_url": "https://media.api-sports.io/football/teams/1605.png",
+    "away_team_logo_url": "https://media.api-sports.io/football/teams/1600.png",
+    "league_logo_url": "https://media.api-sports.io/football/leagues/253.png",
+    "league_flag_url": "https://media.api-sports.io/flags/us.svg",
     "logo_join_status": "FULL_MATCH",
     "market": "OU25",
     "pick": "OVER25",
     "confidence_tier": "STANDARD",
-    "model_prob": 0.7216,
-    "bookie_implied_prob": 0.7143,
-    "value_edge": 0.2314,
-    "bookie_od": 1.4,
+    "model_prob": 0.8345,
+    "bookie_implied_prob": 0.6329,
+    "value_edge": 0.1666,
+    "bookie_od": 1.58,
     "reason_tokens": [
       "VALUE_EDGE_PREMIUM",
-      "OU25_STANDARD_RESCUE_BTTS_PHASE7C",
+      "TEAM_HOME_GE2_POCKET",
+      "OU25_OVER25_BTTS_YES_RESCUE_DENYLIST",
+      "OU25_HYBRID_MLS_PREMIUM_RESCUE",
       "DEPLOYABLE",
-      "MARKET_OU25",
-      "TIER_STANDARD"
+      "MARKET_OU25"
     ],
     "human_reason": "Over25 passed the live totals posture for the standard board.",
     "slip_role_hint": "support",
@@ -1140,87 +488,41 @@
     "correct_score_shortlist": [
       {
         "scoreline": "1-1",
-        "probability": 0.118
+        "probability": 0.095
       },
       {
-        "scoreline": "0-1",
-        "probability": 0.116
+        "scoreline": "2-1",
+        "probability": 0.086
       },
       {
         "scoreline": "1-2",
-        "probability": 0.095
+        "probability": 0.077
       }
     ],
     "premium_tier": "STANDARD"
   },
   {
-    "fixture_id": "2026_05_10_Feyenoord_AZ__OU25__OVER25",
-    "fixture_key": "2026_05_10_Feyenoord_AZ",
-    "kickoff_time": "2026-05-10",
-    "league": "Netherlands Eredivisie",
-    "home_team": "Feyenoord",
-    "away_team": "AZ",
-    "home_team_logo_url": "https://media.api-sports.io/football/teams/209.png",
-    "away_team_logo_url": "https://media.api-sports.io/football/teams/201.png",
-    "league_logo_url": "https://media.api-sports.io/football/leagues/88.png",
-    "league_flag_url": "https://media.api-sports.io/flags/nl.svg",
+    "fixture_id": "2026_05_24_Sporting_KC_New_York_RB__OU25__OVER25",
+    "fixture_key": "2026_05_24_Sporting_KC_New_York_RB",
+    "kickoff_time": "2026-05-24",
+    "league": "USA MLS",
+    "home_team": "Sporting KC",
+    "away_team": "New York RB",
+    "home_team_logo_url": "https://media.api-sports.io/football/teams/1611.png",
+    "away_team_logo_url": "https://media.api-sports.io/football/teams/1602.png",
+    "league_logo_url": "https://media.api-sports.io/football/leagues/253.png",
+    "league_flag_url": "https://media.api-sports.io/flags/us.svg",
     "logo_join_status": "FULL_MATCH",
     "market": "OU25",
     "pick": "OVER25",
     "confidence_tier": "STANDARD",
-    "model_prob": 0.7204,
+    "model_prob": 0.8329,
     "bookie_implied_prob": 0.7353,
-    "value_edge": 0.2766,
+    "value_edge": 0.3143,
     "bookie_od": 1.36,
     "reason_tokens": [
       "VALUE_EDGE_PREMIUM",
-      "TEAM_CS_VS_CS",
-      "OU25_STANDARD_RESCUE_BTTS_PHASE7C",
-      "DEPLOYABLE",
-      "MARKET_OU25",
-      "TIER_STANDARD"
-    ],
-    "human_reason": "Over25 passed the live totals posture for the standard board.",
-    "slip_role_hint": "support",
-    "safe_for_small_acca_flag": false,
-    "safe_for_large_acca_flag": false,
-    "correct_score_shortlist": [
-      {
-        "scoreline": "0-1",
-        "probability": 0.134
-      },
-      {
-        "scoreline": "1-1",
-        "probability": 0.12
-      },
-      {
-        "scoreline": "0-2",
-        "probability": 0.104
-      }
-    ],
-    "premium_tier": "STANDARD"
-  },
-  {
-    "fixture_id": "2026_05_10_FC_Barcelona_Real_Madrid__OU25__OVER25",
-    "fixture_key": "2026_05_10_FC_Barcelona_Real_Madrid",
-    "kickoff_time": "2026-05-10",
-    "league": "Spain La Liga",
-    "home_team": "FC Barcelona",
-    "away_team": "Real Madrid",
-    "home_team_logo_url": "https://media.api-sports.io/football/teams/529.png",
-    "away_team_logo_url": "https://media.api-sports.io/football/teams/541.png",
-    "league_logo_url": "https://media.api-sports.io/football/leagues/140.png",
-    "league_flag_url": "https://media.api-sports.io/flags/es.svg",
-    "logo_join_status": "FULL_MATCH",
-    "market": "OU25",
-    "pick": "OVER25",
-    "confidence_tier": "STANDARD",
-    "model_prob": 0.7117,
-    "bookie_implied_prob": 0.7812,
-    "value_edge": -0.0617,
-    "bookie_od": 1.28,
-    "reason_tokens": [
-      "TEAM_CS_VS_CS",
+      "TEAM_HOME_GE2_POCKET",
       "OU25_OVER25_BTTS_YES_RESCUE_DENYLIST",
       "DEPLOYABLE",
       "MARKET_OU25",
@@ -1232,12 +534,57 @@
     "safe_for_large_acca_flag": false,
     "correct_score_shortlist": [
       {
-        "scoreline": "2-1",
-        "probability": 0.075
+        "scoreline": "0-1",
+        "probability": 0.113
+      },
+      {
+        "scoreline": "1-1",
+        "probability": 0.111
+      },
+      {
+        "scoreline": "0-2",
+        "probability": 0.1
+      }
+    ],
+    "premium_tier": "STANDARD"
+  },
+  {
+    "fixture_id": "2026_05_23_OH_Leuven_KRC_Genk__OU25__OVER25",
+    "fixture_key": "2026_05_23_OH_Leuven_KRC_Genk",
+    "kickoff_time": "2026-05-23",
+    "league": "Belgium Pro",
+    "home_team": "OH Leuven",
+    "away_team": "KRC Genk",
+    "home_team_logo_url": "https://media.api-sports.io/football/teams/260.png",
+    "away_team_logo_url": "https://media.api-sports.io/football/teams/742.png",
+    "league_logo_url": "https://media.api-sports.io/football/leagues/144.png",
+    "league_flag_url": "https://media.api-sports.io/flags/be.svg",
+    "logo_join_status": "FULL_MATCH",
+    "market": "OU25",
+    "pick": "OVER25",
+    "confidence_tier": "STANDARD",
+    "model_prob": 0.8305,
+    "bookie_implied_prob": 0.6024,
+    "value_edge": 0.059,
+    "bookie_od": 1.66,
+    "reason_tokens": [
+      "OU25_HYBRID_BELGIUM_PREMIUM_RESCUE",
+      "DEPLOYABLE",
+      "MARKET_OU25",
+      "TIER_STANDARD"
+    ],
+    "human_reason": "Over25 passed the live totals posture for the standard board.",
+    "slip_role_hint": "support",
+    "safe_for_small_acca_flag": false,
+    "safe_for_large_acca_flag": false,
+    "correct_score_shortlist": [
+      {
+        "scoreline": "1-2",
+        "probability": 0.079
       },
       {
         "scoreline": "2-2",
-        "probability": 0.073
+        "probability": 0.071
       },
       {
         "scoreline": "1-1",
@@ -1247,24 +594,162 @@
     "premium_tier": "STANDARD"
   },
   {
-    "fixture_id": "2026_05_09_Real_Sociedad_Real_Betis__OU25__OVER25",
-    "fixture_key": "2026_05_09_Real_Sociedad_Real_Betis",
-    "kickoff_time": "2026-05-09",
-    "league": "Spain La Liga",
-    "home_team": "Real Sociedad",
-    "away_team": "Real Betis",
-    "home_team_logo_url": "https://media.api-sports.io/football/teams/548.png",
-    "away_team_logo_url": "https://media.api-sports.io/football/teams/543.png",
-    "league_logo_url": "https://media.api-sports.io/football/leagues/140.png",
-    "league_flag_url": "https://media.api-sports.io/flags/es.svg",
+    "fixture_id": "2026_05_23_Charlotte_New_England_Revolution__OU25__OVER25",
+    "fixture_key": "2026_05_23_Charlotte_New_England_Revolution",
+    "kickoff_time": "2026-05-23",
+    "league": "USA MLS",
+    "home_team": "Charlotte",
+    "away_team": "New England Revolution",
+    "home_team_logo_url": "https://media.api-sports.io/football/teams/18310.png",
+    "away_team_logo_url": "https://media.api-sports.io/football/teams/1609.png",
+    "league_logo_url": "https://media.api-sports.io/football/leagues/253.png",
+    "league_flag_url": "https://media.api-sports.io/flags/us.svg",
     "logo_join_status": "FULL_MATCH",
     "market": "OU25",
     "pick": "OVER25",
     "confidence_tier": "STANDARD",
-    "model_prob": 0.7056,
-    "bookie_implied_prob": 0.6024,
-    "value_edge": 0.1401,
-    "bookie_od": 1.66,
+    "model_prob": 0.8293,
+    "bookie_implied_prob": 0.5882,
+    "value_edge": 0.3502,
+    "bookie_od": 1.7,
+    "reason_tokens": [
+      "VALUE_EDGE_PREMIUM",
+      "OU25_OVER25_BTTS_YES_RESCUE_DENYLIST",
+      "DEPLOYABLE",
+      "MARKET_OU25",
+      "TIER_STANDARD"
+    ],
+    "human_reason": "Over25 passed the live totals posture for the standard board.",
+    "slip_role_hint": "support",
+    "safe_for_small_acca_flag": false,
+    "safe_for_large_acca_flag": false,
+    "correct_score_shortlist": [
+      {
+        "scoreline": "1-0",
+        "probability": 0.12
+      },
+      {
+        "scoreline": "1-1",
+        "probability": 0.119
+      },
+      {
+        "scoreline": "2-0",
+        "probability": 0.096
+      }
+    ],
+    "premium_tier": "STANDARD"
+  },
+  {
+    "fixture_id": "2026_05_24_San_Diego_Vancouver_Whitecaps__OU25__OVER25",
+    "fixture_key": "2026_05_24_San_Diego_Vancouver_Whitecaps",
+    "kickoff_time": "2026-05-24",
+    "league": "USA MLS",
+    "home_team": "San Diego",
+    "away_team": "Vancouver Whitecaps",
+    "home_team_logo_url": "",
+    "away_team_logo_url": "https://media.api-sports.io/football/teams/1603.png",
+    "league_logo_url": "https://media.api-sports.io/football/leagues/253.png",
+    "league_flag_url": "https://media.api-sports.io/flags/us.svg",
+    "logo_join_status": "PARTIAL_MATCH",
+    "market": "OU25",
+    "pick": "OVER25",
+    "confidence_tier": "STANDARD",
+    "model_prob": 0.8289,
+    "bookie_implied_prob": 0.7092,
+    "value_edge": 0.1535,
+    "bookie_od": 1.41,
+    "reason_tokens": [
+      "VALUE_EDGE_PREMIUM",
+      "OU25_HYBRID_MLS_PREMIUM_RESCUE",
+      "DEPLOYABLE",
+      "MARKET_OU25",
+      "TIER_STANDARD"
+    ],
+    "human_reason": "Over25 passed the live totals posture for the standard board.",
+    "slip_role_hint": "support",
+    "safe_for_small_acca_flag": false,
+    "safe_for_large_acca_flag": false,
+    "correct_score_shortlist": [
+      {
+        "scoreline": "1-1",
+        "probability": 0.091
+      },
+      {
+        "scoreline": "1-2",
+        "probability": 0.091
+      },
+      {
+        "scoreline": "2-1",
+        "probability": 0.067
+      }
+    ],
+    "premium_tier": "STANDARD"
+  },
+  {
+    "fixture_id": "2026_05_24_FK_Bodo_Glimt_Brann__OU25__OVER25",
+    "fixture_key": "2026_05_24_FK_Bodo_Glimt_Brann",
+    "kickoff_time": "2026-05-24",
+    "league": "Norway Eliteserien",
+    "home_team": "FK Bodo - Glimt",
+    "away_team": "Brann",
+    "home_team_logo_url": "https://media.api-sports.io/football/teams/327.png",
+    "away_team_logo_url": "https://media.api-sports.io/football/teams/319.png",
+    "league_logo_url": "https://media.api-sports.io/football/leagues/103.png",
+    "league_flag_url": "https://media.api-sports.io/flags/no.svg",
+    "logo_join_status": "FULL_MATCH",
+    "market": "OU25",
+    "pick": "OVER25",
+    "confidence_tier": "STANDARD",
+    "model_prob": 0.8155,
+    "bookie_implied_prob": 0.7692,
+    "value_edge": 0.2147,
+    "bookie_od": 1.3,
+    "reason_tokens": [
+      "VALUE_EDGE_PREMIUM",
+      "OU25_HYBRID_ELITESERIEN_PREMIUM_RESCUE",
+      "DEPLOYABLE",
+      "MARKET_OU25",
+      "TIER_STANDARD"
+    ],
+    "human_reason": "Over25 passed the live totals posture for the standard board.",
+    "slip_role_hint": "support",
+    "safe_for_small_acca_flag": false,
+    "safe_for_large_acca_flag": false,
+    "correct_score_shortlist": [
+      {
+        "scoreline": "1-1",
+        "probability": 0.108
+      },
+      {
+        "scoreline": "2-1",
+        "probability": 0.088
+      },
+      {
+        "scoreline": "1-2",
+        "probability": 0.08
+      }
+    ],
+    "premium_tier": "STANDARD"
+  },
+  {
+    "fixture_id": "2026_05_24_Colorado_Rapids_FC_Dallas__OU25__OVER25",
+    "fixture_key": "2026_05_24_Colorado_Rapids_FC_Dallas",
+    "kickoff_time": "2026-05-24",
+    "league": "USA MLS",
+    "home_team": "Colorado Rapids",
+    "away_team": "FC Dallas",
+    "home_team_logo_url": "https://media.api-sports.io/football/teams/1610.png",
+    "away_team_logo_url": "https://media.api-sports.io/football/teams/1597.png",
+    "league_logo_url": "https://media.api-sports.io/football/leagues/253.png",
+    "league_flag_url": "https://media.api-sports.io/flags/us.svg",
+    "logo_join_status": "FULL_MATCH",
+    "market": "OU25",
+    "pick": "OVER25",
+    "confidence_tier": "STANDARD",
+    "model_prob": 0.7837,
+    "bookie_implied_prob": 0.6369,
+    "value_edge": 0.1196,
+    "bookie_od": 1.57,
     "reason_tokens": [
       "VALUE_EDGE_PREMIUM",
       "DEPLOYABLE",
@@ -1278,15 +763,60 @@
     "correct_score_shortlist": [
       {
         "scoreline": "1-1",
-        "probability": 0.114
+        "probability": 0.095
       },
       {
         "scoreline": "2-1",
-        "probability": 0.088
+        "probability": 0.085
+      },
+      {
+        "scoreline": "1-2",
+        "probability": 0.078
+      }
+    ],
+    "premium_tier": "STANDARD"
+  },
+  {
+    "fixture_id": "2026_05_23_DC_United_Montreal_Impact__OU25__OVER25",
+    "fixture_key": "2026_05_23_DC_United_Montreal_Impact",
+    "kickoff_time": "2026-05-23",
+    "league": "USA MLS",
+    "home_team": "DC United",
+    "away_team": "Montreal Impact",
+    "home_team_logo_url": "https://media.api-sports.io/football/teams/1615.png",
+    "away_team_logo_url": "https://media.api-sports.io/football/teams/1614.png",
+    "league_logo_url": "https://media.api-sports.io/football/leagues/253.png",
+    "league_flag_url": "https://media.api-sports.io/flags/us.svg",
+    "logo_join_status": "FULL_MATCH",
+    "market": "OU25",
+    "pick": "OVER25",
+    "confidence_tier": "STANDARD",
+    "model_prob": 0.7334,
+    "bookie_implied_prob": 0.5556,
+    "value_edge": 0.2271,
+    "bookie_od": 1.8,
+    "reason_tokens": [
+      "VALUE_EDGE_PREMIUM",
+      "DEPLOYABLE",
+      "MARKET_OU25",
+      "TIER_STANDARD"
+    ],
+    "human_reason": "Over25 passed the live totals posture for the standard board.",
+    "slip_role_hint": "support",
+    "safe_for_small_acca_flag": false,
+    "safe_for_large_acca_flag": false,
+    "correct_score_shortlist": [
+      {
+        "scoreline": "1-1",
+        "probability": 0.122
       },
       {
         "scoreline": "1-0",
-        "probability": 0.081
+        "probability": 0.091
+      },
+      {
+        "scoreline": "0-1",
+        "probability": 0.09
       }
     ],
     "premium_tier": "STANDARD"
