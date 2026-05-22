@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import shutil
 import sqlite3
 import time
@@ -53,11 +54,27 @@ SOURCE_DETAIL_TABLES = (
 
 
 def canonical_json(payload: Any) -> str:
-    return json.dumps(payload, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
+    return json.dumps(
+        json_safe(payload),
+        ensure_ascii=False,
+        separators=(",", ":"),
+        sort_keys=True,
+        allow_nan=False,
+    )
 
 
 def pretty_json(payload: Any) -> str:
-    return json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+    return json.dumps(json_safe(payload), ensure_ascii=False, indent=2, sort_keys=True, allow_nan=False) + "\n"
+
+
+def json_safe(value: Any) -> Any:
+    if isinstance(value, float):
+        return value if math.isfinite(value) else None
+    if isinstance(value, dict):
+        return {str(key): json_safe(child) for key, child in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [json_safe(child) for child in value]
+    return value
 
 
 def sha256_text(text: str) -> str:
@@ -92,7 +109,19 @@ def read_fixture_brain_payload(fixture_brain_dir: Path, fixture_key: str) -> dic
     return payload if isinstance(payload, dict) else None
 
 
-def sql_quote(value: Any) -> str:
+def sql_safe_value(value: Any, column: str = "") -> Any:
+    if isinstance(value, float):
+        return value if math.isfinite(value) else None
+    if isinstance(value, str) and column.endswith("_json"):
+        try:
+            return canonical_json(json.loads(value))
+        except (TypeError, json.JSONDecodeError, ValueError):
+            return value
+    return value
+
+
+def sql_quote(value: Any, column: str = "") -> str:
+    value = sql_safe_value(value, column)
     if value is None:
         return "NULL"
     if isinstance(value, bool):
@@ -117,7 +146,7 @@ def row_identity(row: sqlite3.Row, pk_columns: list[str]) -> str:
 
 def insert_statement(table: str, columns: list[str], row: sqlite3.Row) -> str:
     column_sql = ", ".join(columns)
-    values_sql = ", ".join(sql_quote(row[column]) for column in columns)
+    values_sql = ", ".join(sql_quote(row[column], column) for column in columns)
     return f"INSERT OR REPLACE INTO {table}({column_sql}) VALUES ({values_sql});"
 
 

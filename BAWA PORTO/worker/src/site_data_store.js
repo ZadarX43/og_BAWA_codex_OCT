@@ -435,34 +435,28 @@ export const getTeamPremiumData = async (db, competitionKey, teamSlug, { limit =
   };
 };
 
-export const getCurrentFixtures = async (db, { leagueKey = "", limit = 80 } = {}) => {
+export const getCurrentFixtures = async (db, { leagueKey = "", limit = 80, includePast = false, fromIso = "" } = {}) => {
   const safeLimit = Math.max(1, Math.min(Number(limit) || 80, 200));
-  const rows = leagueKey
-    ? await all(
-        db
-        .prepare(
-          `
+  const params = [];
+  const activeClause = includePast ? "" : "pre_kickoff_eligible = 1";
+  const fromClause = !includePast && fromIso ? "COALESCE(fixture_kickoff_at, kickoff_time) >= ?" : "";
+  if (fromClause) {
+    params.push(fromIso);
+  }
+  const leagueClause = leagueKey ? "league_key = ?" : "";
+  if (leagueClause) {
+    params.push(leagueKey);
+  }
+  const whereClause = [activeClause, fromClause, leagueClause].filter(Boolean).join(" AND ");
+  const sql = `
             SELECT payload_json
             FROM fixtures
-            WHERE league_key = ?
-            ORDER BY kickoff_time, home_team
-            LIMIT ?
-            `
-          )
-          .bind(leagueKey, safeLimit)
-      )
-    : await all(
-        db
-        .prepare(
-          `
-            SELECT payload_json
-            FROM fixtures
+            ${whereClause ? `WHERE ${whereClause}` : ""}
             ORDER BY kickoff_time, league, home_team
             LIMIT ?
-            `
-          )
-          .bind(safeLimit)
-      );
+            `;
+  const statement = db.prepare(sql);
+  const rows = await all(statement.bind(...params, safeLimit));
 
   return rows.map((row) => parsePayload(row)).filter(Boolean);
 };

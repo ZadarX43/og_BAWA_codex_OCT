@@ -12,6 +12,7 @@ import argparse
 import csv
 import hashlib
 import json
+import math
 import re
 import shutil
 import sqlite3
@@ -65,11 +66,27 @@ def utc_now() -> str:
 
 
 def canonical_json(payload: Any) -> str:
-    return json.dumps(payload, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
+    return json.dumps(
+        json_safe(payload),
+        ensure_ascii=False,
+        separators=(",", ":"),
+        sort_keys=True,
+        allow_nan=False,
+    )
 
 
 def pretty_json(payload: Any) -> str:
-    return json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+    return json.dumps(json_safe(payload), ensure_ascii=False, indent=2, sort_keys=True, allow_nan=False) + "\n"
+
+
+def json_safe(value: Any) -> Any:
+    if isinstance(value, float):
+        return value if math.isfinite(value) else None
+    if isinstance(value, dict):
+        return {str(key): json_safe(child) for key, child in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [json_safe(child) for child in value]
+    return value
 
 
 def sha256_payload(payload: Any) -> str:

@@ -581,8 +581,12 @@ const handleSiteCurrentFixtures = async (request, env) => {
   const url = new URL(request.url);
   const leagueKey = String(url.searchParams.get("league_key") || "").trim();
   const limit = Number(url.searchParams.get("limit") || 80);
+  const includePast = ["1", "true", "yes"].includes(String(url.searchParams.get("include_past") || "").toLowerCase());
+  const today = new Date();
+  today.setUTCHours(0, 0, 0, 0);
+  const fromIso = String(url.searchParams.get("from") || today.toISOString()).trim();
   const started = performance.now();
-  const fixtures = await getCurrentFixtures(db, { leagueKey, limit });
+  const fixtures = await getCurrentFixtures(db, { leagueKey, limit, includePast, fromIso });
   return json({ ok: true, count: fixtures.length, meta: { worker_elapsed_ms: elapsedMs(started) }, fixtures }, 200, siteDataCacheHeaders);
 };
 
