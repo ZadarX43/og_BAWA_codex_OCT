@@ -69,6 +69,8 @@ dist/
 # Large raw/derived data dumps that should not be casually tracked
 predictions_output/
 reports/
+reports/latest/
+data_sources/api_football/normalized/
 
 # Frontend publish artifacts
 # Keep schema and manifest files tracked, but ignore regenerated data payloads by default.
