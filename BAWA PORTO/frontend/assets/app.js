@@ -2254,11 +2254,12 @@
           title: fixtureLabel,
           meta: `${formatKickoffLabel(row.kickoff_time)} / ${row.league || "Competition pending"}`,
           query: `${row.home_team} ${row.away_team}`,
+          href: "",
         });
       }
       [
-        { title: row.home_team, meta: row.league, query: row.home_team },
-        { title: row.away_team, meta: row.league, query: row.away_team },
+        { title: row.home_team, meta: row.league, query: row.home_team, href: teamPageHref(row.home_team) },
+        { title: row.away_team, meta: row.league, query: row.away_team, href: teamPageHref(row.away_team) },
       ].forEach((item) => {
         if (normalizePreferenceText(`${item.title} ${item.meta}`).includes(normalizedSearch)) {
           push({ ...item, type: "Team" });
@@ -2270,6 +2271,7 @@
           title: row.league,
           meta: "Current fixture window",
           query: row.league,
+          href: "",
         });
       }
     });
@@ -2298,7 +2300,9 @@
                       type="button"
                       role="option"
                       data-action="apply-match-search"
+                      data-type="${escapeHtml(item.type)}"
                       data-query="${escapeHtml(item.query)}"
+                      data-href="${escapeHtml(item.href || "")}"
                     >
                       <span>${escapeHtml(item.type)}</span>
                       <strong>${escapeHtml(item.title || "Suggestion")}</strong>
@@ -13585,6 +13589,11 @@
     const matchSearchTarget = event.target.closest("[data-action='apply-match-search']");
     if (matchSearchTarget) {
       event.preventDefault();
+      const href = String(matchSearchTarget.dataset.href || "").trim();
+      if (href) {
+        window.location.href = href;
+        return;
+      }
       const queryValue = String(matchSearchTarget.dataset.query || "").trim();
       state.runtime.matchesSearchDraft = queryValue;
       state.runtime.matchesTypeaheadOpen = false;
