@@ -118,6 +118,8 @@
       timelineFixturePayloads: {},
       timelineFixturePayloadLoading: {},
       timelineFixturePayloadErrors: {},
+      matchesSearchDraft: matchesSearchQuery,
+      matchesTypeaheadOpen: false,
     },
   };
 
@@ -2217,12 +2219,123 @@
     return !search || target.includes(normalizePreferenceText(search));
   };
 
+  const activeMatchesSearchQuery = () => String(state.runtime.matchesSearchDraft ?? matchesSearchQuery).trim();
+
   const matchesFeedRows = (rows) =>
     orderedFixtureRows(rows).filter(
       (row) =>
-        matchSearchMatchesRow(row, matchesSearchQuery) &&
+        matchSearchMatchesRow(row, activeMatchesSearchQuery()) &&
         (!matchesFavouritesOnly || isMatchFavourite(row.fixture_key))
     );
+
+  const matchesTypeaheadSuggestions = (rows, search) => {
+    const normalizedSearch = normalizePreferenceText(search);
+    if (normalizedSearch.length < 2) {
+      return [];
+    }
+    const seen = new Set();
+    const suggestions = [];
+    const push = (item) => {
+      const key = `${item.type}:${normalizePreferenceText(item.query)}`;
+      if (seen.has(key)) {
+        return;
+      }
+      seen.add(key);
+      suggestions.push(item);
+    };
+    orderedFixtureRows(rows).forEach((row) => {
+      const home = teamCardName(row.home_team);
+      const away = teamCardName(row.away_team);
+      const fixtureLabel = `${home} x ${away}`;
+      const fixtureTarget = normalizePreferenceText(`${fixtureLabel} ${row.home_team} ${row.away_team} ${row.league}`);
+      if (fixtureTarget.includes(normalizedSearch)) {
+        push({
+          type: "Fixture",
+          title: fixtureLabel,
+          meta: `${formatKickoffLabel(row.kickoff_time)} / ${row.league || "Competition pending"}`,
+          query: `${row.home_team} ${row.away_team}`,
+        });
+      }
+      [
+        { title: row.home_team, meta: row.league, query: row.home_team },
+        { title: row.away_team, meta: row.league, query: row.away_team },
+      ].forEach((item) => {
+        if (normalizePreferenceText(`${item.title} ${item.meta}`).includes(normalizedSearch)) {
+          push({ ...item, type: "Team" });
+        }
+      });
+      if (normalizePreferenceText(row.league).includes(normalizedSearch)) {
+        push({
+          type: "Competition",
+          title: row.league,
+          meta: "Current fixture window",
+          query: row.league,
+        });
+      }
+    });
+    return suggestions.slice(0, 8);
+  };
+
+  const renderMatchesTypeahead = (rows, search, forceOpen = false) => {
+    const suggestions = matchesTypeaheadSuggestions(rows, search);
+    const shouldShow = forceOpen && String(search || "").trim().length >= 2;
+    return `
+      <div
+        class="matches-typeahead ${shouldShow ? "is-open" : ""}"
+        data-role="matches-typeahead"
+        id="matches-typeahead"
+        role="listbox"
+        aria-label="Search suggestions"
+        ${shouldShow ? "" : "hidden"}
+      >
+        ${
+          suggestions.length
+            ? suggestions
+                .map(
+                  (item) => `
+                    <button
+                      class="matches-typeahead-option"
+                      type="button"
+                      role="option"
+                      data-action="apply-match-search"
+                      data-query="${escapeHtml(item.query)}"
+                    >
+                      <span>${escapeHtml(item.type)}</span>
+                      <strong>${escapeHtml(item.title || "Suggestion")}</strong>
+                      <small>${escapeHtml(item.meta || "Current window")}</small>
+                    </button>
+                  `
+                )
+                .join("")
+            : `<div class="matches-typeahead-empty">No current-window match yet. Player autocomplete joins when the player index is published.</div>`
+        }
+      </div>
+    `;
+  };
+
+  const updateMatchesTypeaheadDom = (value) => {
+    const container = document.querySelector("[data-role='matches-typeahead']");
+    const input = document.querySelector("#matches-search-input");
+    if (!container || !input) {
+      return;
+    }
+    const markup = renderMatchesTypeahead(orderedFixtureRows(), value, true);
+    const template = document.createElement("template");
+    template.innerHTML = markup.trim();
+    container.replaceWith(template.content.firstElementChild);
+    input.setAttribute("aria-expanded", String(String(value || "").trim().length >= 2));
+  };
+
+  const updateMatchesSearchUrl = (value) => {
+    const url = new URL(window.location.href);
+    const next = String(value || "").trim();
+    if (next) {
+      url.searchParams.set("q", next);
+    } else {
+      url.searchParams.delete("q");
+    }
+    window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
+  };
 
   const timelineLockedPanel = (tier, title, copy, features = []) => `
     <article class="timeline-tier-panel timeline-tier-locked">
@@ -7447,6 +7560,8 @@
     const rows = orderedFixtureRows();
     const visibleRows = matchesFeedRows(rows);
     const nextFixture = visibleRows[0] || rows[0] || null;
+    const activeSearch = activeMatchesSearchQuery();
+    const typeaheadOpen = state.runtime.matchesTypeaheadOpen && activeSearch.length >= 2;
     return `
       <section class="x-matches-page">
         <header class="x-timeline-header">
@@ -7462,12 +7577,22 @@
         </header>
         <form id="matches-search" class="x-search-bar" action="./matches.html" method="get">
           <label>
-            <span>Search teams, players, fixtures</span>
-            <input name="q" value="${escapeHtml(matchesSearchQuery)}" placeholder="Search team, league, market..." autocomplete="off" />
+            <span>Search teams, fixtures, competitions</span>
+            <input
+              id="matches-search-input"
+              name="q"
+              value="${escapeHtml(activeSearch)}"
+              placeholder="Search team, fixture, league..."
+              autocomplete="off"
+              aria-autocomplete="list"
+              aria-controls="matches-typeahead"
+              aria-expanded="${escapeHtml(typeaheadOpen ? "true" : "false")}"
+            />
+            ${renderMatchesTypeahead(rows, activeSearch, typeaheadOpen)}
           </label>
           <button class="button" type="submit">Search</button>
           ${
-            matchesSearchQuery || matchesFavouritesOnly
+            activeSearch || matchesFavouritesOnly
               ? `<a class="ghost-button" href="./matches.html">Clear</a>`
               : ""
           }
@@ -13457,6 +13582,18 @@
       return;
     }
 
+    const matchSearchTarget = event.target.closest("[data-action='apply-match-search']");
+    if (matchSearchTarget) {
+      event.preventDefault();
+      const queryValue = String(matchSearchTarget.dataset.query || "").trim();
+      state.runtime.matchesSearchDraft = queryValue;
+      state.runtime.matchesTypeaheadOpen = false;
+      state.runtime.timelineExpandedFixture = "";
+      updateMatchesSearchUrl(queryValue);
+      render();
+      return;
+    }
+
     const timelineExpandTarget = event.target.closest("[data-action='timeline-expand']");
     if (timelineExpandTarget) {
       event.preventDefault();
@@ -13689,6 +13826,14 @@
   });
 
   app.addEventListener("input", (event) => {
+    const matchesSearchInput = event.target.closest("#matches-search-input");
+    if (matchesSearchInput) {
+      state.runtime.matchesSearchDraft = String(matchesSearchInput.value || "");
+      state.runtime.matchesTypeaheadOpen = true;
+      updateMatchesTypeaheadDom(state.runtime.matchesSearchDraft);
+      return;
+    }
+
     const internalReviewOutcomeNoteTarget = event.target.closest("[data-role='internal-review-outcome-note']");
     if (internalReviewOutcomeNoteTarget) {
       state.runtime.internalReviewOutcomeNote = String(internalReviewOutcomeNoteTarget.value || "");
@@ -13696,6 +13841,18 @@
   });
 
   app.addEventListener("submit", async (event) => {
+    if (event.target.id === "matches-search") {
+      event.preventDefault();
+      const formData = new FormData(event.target);
+      const queryValue = String(formData.get("q") || "").trim();
+      state.runtime.matchesSearchDraft = queryValue;
+      state.runtime.matchesTypeaheadOpen = false;
+      state.runtime.timelineExpandedFixture = "";
+      updateMatchesSearchUrl(queryValue);
+      render();
+      return;
+    }
+
     if (event.target.id === "premium-token-form") {
       await handleTokenSave(event);
       return;
