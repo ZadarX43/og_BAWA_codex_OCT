@@ -1,0 +1,324 @@
+file,kind,bucket,incoming_import_refs,imported_by_sample,reason
+ run_fast_ftr_predictions.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+-recover_rebuilt_.py,python,archive_review_scratch_backup,0,,"Looks like backup, scratch, malformed copy, or old research variant; archive after spot-check."
+94%_train_ftr_with_ROI_reports.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+94%_train_ftr_with_team_stats 2.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+94%_train_ftr_with_team_stats.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+_baseline_ftr_pipeline.py,python,keep_or_review_imported,9,probe_goal_model.py; weekend_smoke_test.py; build_ftr_apples_to_apples_eval.py; shadow_goal_rebuild_runner.py; train_investor_leagues_v2.py; prediction_overlay.py; prediction_overlay copy.py; side_prob_models.py,Imported by 9 local Python file(s); do not archive until owner/purpose is confirmed.
+acca_builder.py,python,keep_or_review_imported,1,slip_score_report.py,Imported by 1 local Python file(s); do not archive until owner/purpose is confirmed.
+aggregate_gated_backtests.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+apply_btts_proxy_overlay_from_config.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+apply_frozen_product_gates.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+apply_frozen_specialist_profiles.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+apply_ou25_proxy_overlay_from_config.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+apply_specialist_deploy_config.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+apply_specialist_overlay_bridge.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+apply_stadium_coord_overrides.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+attack_identity_audit.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+attack_identity_refined_audit.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+audit_backtest_run.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+audit_btts_full_universe_scenarios.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+audit_btts_proxy_feature_ablation_from_a.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+audit_btts_proxy_feature_ablation_from_allmarkets.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+audit_btts_proxy_lift_from_allmarkets.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+audit_btts_scenario_grid.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+audit_btts_shadow_bucket.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+audit_ftr_dual_paths.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+audit_market_proxy_delta.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+audit_merged_side_coverage.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+audit_ou25_btts_support_experiment.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+audit_ou25_fullgrid_signal.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+audit_ou25_proxy_feature_ablation_from_a.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+audit_ou25_proxy_feature_ablation_from_allmarkets.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+audit_ou25_proxy_lift_from_allmarkets.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+audit_power_freshness.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+audit_snapshot_proxy_feature_coverage.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+audit_snapshot_proxy_feature_coverage_v2_batch.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+auto_leagues.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+auto_leagues.py.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+backfill_walkforward_exact_scores.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+backtest_deploy_csv.py,python,keep_or_review_imported,1,scripts/_archive_review/2026_05_23/build_phase8h_replay_sweeps.py,Imported by 1 local Python file(s); do not archive until owner/purpose is confirmed.
+backtest_ftr_consensus.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+backtest_ftr_from_merged.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+backtest_ou25_from_merged.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+backtest_uefa_ab.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+batch_build_hybrid_consensus_inputs.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+batch_build_hybrid_threshold_policies.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+batch_fetch_api_historical_context.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+batch_run_hybrid_upstream_pipeline.py,python,keep_or_review_imported,1,batch_fetch_api_historical_context.py,Imported by 1 local Python file(s); do not archive until owner/purpose is confirmed.
+bookie_allmarkets_btts_proxy_wrapper.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+bookie_allmarkets_ou25_proxy_wrapper.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+bookie_allmarkets_proxy_experiment.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+bookie_allmarkets_research_no_recent_btts_regime.py,python,archive_review_scratch_backup,0,,"Looks like backup, scratch, malformed copy, or old research variant; archive after spot-check."
+bookie_allmarkets_research_pre_hybrid_modelstore.py,python,archive_review_scratch_backup,0,,"Looks like backup, scratch, malformed copy, or old research variant; archive after spot-check."
+btts_league_policy.json,config,keep_commit_candidate,0,,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+BTTS_MODEL_VS_VALUEEV_POLICY_NOTE.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+btts_no_live_allowlist.json,config,keep_commit_candidate,0,,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+btts_over25 match goals.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+btts_over25_match_goals.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+btts_over25_pipeline.py,python,keep_or_review_imported,2,btts_over25_predict.py; BAWA-PORTO-recovery-2025-08-24-2308/btts_over25_predict.py,Imported by 2 local Python file(s); do not archive until owner/purpose is confirmed.
+btts_over25_predict.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+BTTS_WALKFORWARD_SUMMARY.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_acca_extension_audit.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_batch_join_quality_audit.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_branch_comparison.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_branch_cumulative_stats.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_btts_deploy_policy.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_btts_from_walkforward_audit.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_btts_model_vs_valueev_comparison.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_btts_walkforward_league_audit.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_btts_xgb_consensus_audit.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_correct_score_backtest_summary.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_correct_score_deploy.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_cs_market_bucket_features.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_ftr_apples_to_apples_eval.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_ftr_btts_ou25_rescue_audit.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_ftr_combo_rescue_audit.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_ftr_consensus_elite_policy.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_ftr_league_calibration.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_ftr_league_weighting.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_ftr_meta_inject_into_tiers.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_ftr_meta_priority_walkforward_audit.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_ftr_meta_super_score_walkforward.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_ftr_meta_vs_consensus_summary.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_ftr_priority_walkforward_audit.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_ftr_validation_backtests_3y19l.sh,shell,archive_review_shell_runner,0,,Shell runner for research/backtest workflows; archive/review unless still in an active runbook.
+build_ftr_xgb_consensus_elite_audit.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_ftr_xgb_feature_pruning_audit.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_ftr_xgb_hyperparam_sweep.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_ftr_xgb_side_by_side_audit.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_full_walkforward_backtest_summary.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_fullgrid_cs_market_bucket_features.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_fullgrid_cs_market_shape_features.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_hybrid_benchmark_scoreboard_v1.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_hybrid_benchmark_scoreboard_v2.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_hybrid_consensus_inputs.py,python,keep_or_review_imported,2,batch_run_hybrid_upstream_pipeline.py; batch_build_hybrid_consensus_inputs.py,Imported by 2 local Python file(s); do not archive until owner/purpose is confirmed.
+build_hybrid_estate_scorecard.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_hybrid_goal_mass_inputs.py,python,keep_or_review_imported,1,batch_run_hybrid_upstream_pipeline.py,Imported by 1 local Python file(s); do not archive until owner/purpose is confirmed.
+build_hybrid_parity_review.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_hybrid_threshold_policy.py,python,keep_or_review_imported,2,batch_run_hybrid_upstream_pipeline.py; batch_build_hybrid_threshold_policies.py,Imported by 2 local Python file(s); do not archive until owner/purpose is confirmed.
+build_learned_gates.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_monster_release_gate_audit.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_months.sh,shell,archive_review_shell_runner,0,,Shell runner for research/backtest workflows; archive/review unless still in an active runbook.
+build_months_2022_2024.sh,shell,archive_review_shell_runner,0,,Shell runner for research/backtest workflows; archive/review unless still in an active runbook.
+build_months_specialists.sh,shell,archive_review_shell_runner,0,,Shell runner for research/backtest workflows; archive/review unless still in an active runbook.
+build_ou25_branch_comparison.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_ou25_cumulative_stats.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_ou25_investor_summary.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_ou25_rulebook_audit.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_ou25_walkforward_comparison.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_ou25_walkforward_league_audit.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_ou25_xgb_consensus_audit.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_over25_from_ou25_audit.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_over25_model_vs_filtered_ou25_comp.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_phase7c_cross_market_rescue_audit.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_player_prop_beta_board.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_product_branch_comparison.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_product_branch_cumulative_stats.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_same_fixture_composite_audit.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_same_fixture_composite_from_walkforward.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_slip_audit_dataset.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_snapshot_proxy_features_from_merge.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_snapshot_proxy_features_from_merged_v2_batch.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_stadium_registry.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_team_snapshot_matchup_features.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_team_snapshot_matchup_features_all.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_uefa_team_map.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_under25_btts_no_audit.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_validated_league_manifest.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+build_weakest_failed_leg_audit.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+check_ftr_v2_mapping_all.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+compare_goal_manifest_sets.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+compare_rulebook_agg.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+config.yaml.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+conflict_zones.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+constants.py,python,keep_commit_candidate,31,train_draw_classifier.py; -recover_rebuilt_.py; bookie_allmarkets.py; bookie_allmarkets_research_no_recent_btts_regime.py; weekend_smoke_test.py; ftr_meta_backtest.py; debug_draw.py; _baseline_ftr_pipeline.py,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+correct_score_product.py,python,keep_commit_candidate,2,build_correct_score_backtest_summary.py; build_correct_score_deploy.py,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+cross_audit_shortlist.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+cs_signal_audit.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+debug_draw.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+debug_home_away_swap.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+deploy_gates.py,python,keep_commit_candidate,3,deploy_rulebook.py; deploy_rulebook_research_no_ou25_hybrid_meta.py; deploy_rulebook_research_pre_hybrid_modelstore.py,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+deploy_gates_backup.py,python,archive_review_scratch_backup,0,,"Looks like backup, scratch, malformed copy, or old research variant; archive after spot-check."
+deploy_presets.py,python,keep_commit_candidate,1,filter_deploy_by_rulebook.py,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+deploy_rulebook_backup.py,python,archive_review_scratch_backup,0,,"Looks like backup, scratch, malformed copy, or old research variant; archive after spot-check."
+deploy_rulebook_research_no_ou25_hybrid_meta.py,python,archive_review_scratch_backup,0,,"Looks like backup, scratch, malformed copy, or old research variant; archive after spot-check."
+deploy_rulebook_research_phase8h_c4_shadow.py,python,keep_or_review_imported,2,scripts/_archive_review/2026_05_23/run_ou25_c4_live_shadow_repeat_qa.py; scripts/_archive_review/2026_05_23/build_live_shadow_research_dashboard.py,Imported by 2 local Python file(s); do not archive until owner/purpose is confirmed.
+deploy_rulebook_research_pre_hybrid_modelstore.py,python,archive_review_scratch_backup,0,,"Looks like backup, scratch, malformed copy, or old research variant; archive after spot-check."
+deploy_top_slips.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+deploy_weekend_runner.sh,shell,keep_commit_candidate,0,,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+eval_ftr_consensus.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+extract_predictions.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+fetch_api_league_catalog.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+fill_stadium_registry_coords.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+filter_deploy_by_rulebook.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+fit_draw_prone.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+fit_signal_bands.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+fix_names.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+forensic_ou25_audit.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+forensic_sideproduct_walkforward_audit.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+forensic_walkforward_audit.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+ftr_accuracy_report.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+ftr_consensus.py,python,keep_or_review_imported,1,backtest_ftr_consensus.py,Imported by 1 local Python file(s); do not archive until owner/purpose is confirmed.
+ftr_meta_backtest.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+FTR_MetaPredictor.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+ftr_variant_tests.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+game_context.py,python,keep_commit_candidate,0,,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+ge2_defence_candidate_rule_table.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+ge2_defence_deploy_triage.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+goal_bias_holdout_eval.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+inject_btts_proxy_columns_from_merged.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+inject_ou25_proxy_columns_from_merged.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+injury_shock_engine.py,python,keep_commit_candidate,1,scripts/build_injury_shock_coverage_scan.py,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+league_competition_audit.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+leak_probes.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+leak_tests.py,python,keep_or_review_imported,11,"train_draw_classifier.py; -recover_rebuilt_.py; _baseline_ftr_pipeline.py; BAWA-PORTO-recovery-2025-08-24-2308/train_draw_classifier.py; BAWA-PORTO-recovery-2025-08-24-2308/00_baseline_ftr_pipeline.py; tests/test_no_leak.py; MAIN BACKUP BACKUPS/_baseline_ftr_pipeline - august 24, 25 9pm.py; MAIN BACKUP BACKUPS/_baseline_ftr_pipeline.py",Imported by 11 local Python file(s); do not archive until owner/purpose is confirmed.
+live_feature_signal_audit.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+make_feb_sandbox_modelstore.sh,shell,archive_review_shell_runner,0,,Shell runner for research/backtest workflows; archive/review unless still in an active runbook.
+make_league_odds_enriched_synth.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+manifest_and_calendar_flags.py,python,keep_commit_candidate,0,,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+margin_sweep_ftr.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+market_cs_proxy_promotion_config.json,config,keep_commit_candidate,0,,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+market_proxy_league_config.json,config,keep_commit_candidate,0,,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+market_proxy_promotion_config.json,config,keep_commit_candidate,0,,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+master_specialist_candidate_consolidator.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+merge_fd_odds_into_matches.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+merge_snapshot_proxy_into_fullgrid_cs_shape.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+merge_snapshot_proxy_into_merged_master.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+merged_pipeline_dashboard.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+meta_builder.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+meta_builder_v3.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+meta_to_allmarkets.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+model train test.py,python,archive_review_scratch_backup,0,,"Looks like backup, scratch, malformed copy, or old research variant; archive after spot-check."
+model_coverage_report.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+modelstore_goal_ensemble_audit.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+modelstore_goal_ensemble_audit_shadow.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+mypy.ini,config,keep_commit_candidate,0,,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+odds_synth.py,python,keep_commit_candidate,0,,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+OG : BAWA WEEKEND RUNBOOK April_26.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+og_deploy_rulepack.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+og_goal_tracker.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+OG_HYBRID_AB_INSIGHTS.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+og_model_paths.py,python,keep_commit_candidate,5,bookie_allmarkets.py; bookie_allmarkets_research_no_recent_btts_regime.py; bookie_allmarkets_research_pre_hybrid_modelstore.py; pack_builder.py; backup_pre_rebuild_2026-03-16/bookie_allmarkets.py,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+og_public_match_cards.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+og_xray.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+ou25_league_policy.json,config,keep_commit_candidate,0,,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+ou25_variant_tests.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+over25_deploy_policy.json,config,keep_commit_candidate,0,,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+over25_from_ou25_policy.json,config,keep_commit_candidate,0,,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+overlay_candidate_registry.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+pack_builder.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+parse_rulebook_ftr_sweeps.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+patch_merge_add_fd_odds.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+patch_merge_add_legacy_derived.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+patch_overrides_missing_teams.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+player_prop_models.py,python,keep_commit_candidate,0,,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+player_usage_profiles.py,python,keep_commit_candidate,0,,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+poisson_source_audit.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+pre constants.py,python,archive_review_scratch_backup,0,,"Looks like backup, scratch, malformed copy, or old research variant; archive after spot-check."
+prediction_overlay copy.py,python,archive_review_scratch_backup,0,,"Looks like backup, scratch, malformed copy, or old research variant; archive after spot-check."
+prediction_overlay.py,python,keep_commit_candidate,48,-recover_rebuilt_.py; side_meta_backtest.py; bookie_allmarkets.py; 94%_train_ftr_with_team_stats 2.py; margin_sweep_ftr.py; train_ftr_with_team_stats.py; run_fast_ftr_predictions.py; top50_check.py,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+prediction_report.py,python,keep_commit_candidate,16,-recover_rebuilt_.py; 94%_train_ftr_with_team_stats 2.py; train_ftr_with_team_stats.py; btts_over25_predict.py; 94%_train_ftr_with_team_stats.py; _baseline_ftr_pipeline.py; BAWA-PORTO-recovery-2025-08-24-2308/94%_train_ftr_with_team_stats 2.py; BAWA-PORTO-recovery-2025-08-24-2308/train_ftr_with_team_stats.py,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+probe_goal_model.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+promote_shadow_goal_ensembles_to_prod.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+pyproject.toml,config,keep_commit_candidate,0,,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+ratings_publish_sources.sample.json,config,keep_commit_candidate,0,,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+README.ini,config,needs_manual_review_config,0,,Config-like file not in current keep list; inspect references before tracking or archiving.
+rebuild_all_merged.sh,shell,keep_commit_candidate,0,,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+report_constants_impact.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+report_ftr_engine_compare.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+report_ftr_feature_diff.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+retrain-over25_expanded.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+retrain_all.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+retrain_btts_expanded.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+retrain_over25_expanded.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+retrain_secondary_goal_markets_all.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+retrain_secondary_goal_markets_all.sh,shell,archive_review_shell_runner,0,,Shell runner for research/backtest workflows; archive/review unless still in an active runbook.
+rollback_shadow_goal_ensembles.sh,shell,archive_review_shell_runner,0,,Shell runner for research/backtest workflows; archive/review unless still in an active runbook.
+run_audits_feb_sandbox.sh,shell,archive_review_shell_runner,0,,Shell runner for research/backtest workflows; archive/review unless still in an active runbook.
+run_bypass_bundle.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+run_fast_ftr_predictions.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+run_frozen_specialist_walkforward.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+run_frozen_walkforward.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+run_fts_frozen_sweeps.sh,shell,archive_review_shell_runner,0,,Shell runner for research/backtest workflows; archive/review unless still in an active runbook.
+run_ge2_frozen_sweeps.sh,shell,archive_review_shell_runner,0,,Shell runner for research/backtest workflows; archive/review unless still in an active runbook.
+run_ou25_frozen_sweeps.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+run_ou25_frozen_sweeps.sh,shell,archive_review_shell_runner,0,,Shell runner for research/backtest workflows; archive/review unless still in an active runbook.
+run_ou25_walkforward.sh,shell,archive_review_shell_runner,0,,Shell runner for research/backtest workflows; archive/review unless still in an active runbook.
+run_out_of_sample_test.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+run_pre_post_bypass_compare.py,python,keep_or_review_imported,1,run_pre_post_overlay_compare.py,Imported by 1 local Python file(s); do not archive until owner/purpose is confirmed.
+run_pre_post_overlay_compare.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+run_rulebook_ftr_sweeps.sh,shell,archive_review_shell_runner,0,,Shell runner for research/backtest workflows; archive/review unless still in an active runbook.
+run_slip_walkforward_audit.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+run_walkforward_feb_sandbox.sh,shell,archive_review_shell_runner,0,,Shell runner for research/backtest workflows; archive/review unless still in an active runbook.
+run_walkforward_windows.py,python,keep_or_review_imported,2,run_walkforward_windows_research_harness.py; backfill_walkforward_exact_scores.py,Imported by 2 local Python file(s); do not archive until owner/purpose is confirmed.
+run_walkforward_windows_research_harness.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+run_weekend_portfolio.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+run_window.sh,shell,archive_review_shell_runner,0,,Shell runner for research/backtest workflows; archive/review unless still in an active runbook.
+run_wtn_frozen_sweeps.sh,shell,archive_review_shell_runner,0,,Shell runner for research/backtest workflows; archive/review unless still in an active runbook.
+score_public_match_cards.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+season_goal_tracker_runner.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+season_leave_one_out.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+season_leave_one_out_2022_2023.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+season_leave_one_out_2023_2024.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+season_leave_one_out__2024_2025.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+season_public_match_cards_runner.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+season_sim.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+seasonal_market_ledger.py,python,keep_commit_candidate,0,,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+segment_stats.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+segment_stats_full.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+shadow_goal_rebuild_plan.sh,shell,archive_review_shell_runner,0,,Shell runner for research/backtest workflows; archive/review unless still in an active runbook.
+shadow_goal_rebuild_runner.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+side_meta_backtest.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+side_prob_models.py,python,keep_or_review_imported,10,"-recover_rebuilt_.py; weekend_bets.py; _baseline_ftr_pipeline.py; prediction_overlay.py; prediction_overlay copy.py; BAWA-PORTO-recovery-2025-08-24-2308/00_baseline_ftr_pipeline.py; MAIN BACKUP BACKUPS/_baseline_ftr_pipeline - august 24, 25 9pm.py; MAIN BACKUP BACKUPS/_baseline_ftr_pipeline.py",Imported by 10 local Python file(s); do not archive until owner/purpose is confirmed.
+signal_layers.py,python,keep_commit_candidate,7,bookie_allmarkets.py; bookie_allmarkets_research_no_recent_btts_regime.py; _baseline_ftr_pipeline.py; bookie_allmarkets_research_pre_hybrid_modelstore.py; prediction_overlay.py; v2_window_signals.py; backup_pre_rebuild_2026-03-16/bookie_allmarkets.py,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+slip_reconstruct.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+slip_score_report.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+small test.py,python,archive_review_scratch_backup,0,,"Looks like backup, scratch, malformed copy, or old research variant; archive after spot-check."
+specialist_defence_stability_audit.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+specialist_market_backtest_summary.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+specialist_market_report.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+specialist_threshold_sweep.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+streaks_module.py,python,keep_commit_candidate,10,bookie_allmarkets.py; bookie_allmarkets_research_no_recent_btts_regime.py; weekend_smoke_test.py; patch_merge_add_streaks.py; build_merged.py; backtest_ftr_consensus.py; _baseline_ftr_pipeline.py; bookie_allmarkets_research_pre_hybrid_modelstore.py,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+team_rating_engine.py,python,keep_commit_candidate,1,fixture_lineup_intelligence_engine.py,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+test_cs_market_bucket_feature_lift.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+test_fullgrid_cs_market_bucket_feature_lift.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+test_fullgrid_cs_market_shape_feature_li.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+test_ou25_cooperative_context_lift.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+test_snapshot_proxy_ablation_runner.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+test_snapshot_proxy_feature_lift.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+test_team_snapshot_feature_families.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+tests:test_no_leak.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+tests:test_poisson_cutoff.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+threshold_calibration.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+tier_audit.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+top50_check.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+train_draw_classifier .py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+train_draw_classifier.py,python,keep_or_review_imported,4,-recover_rebuilt_.py; _baseline_ftr_pipeline.py; MAIN BACKUP BACKUPS/_baseline_ftr_pipeline.py; BAWA-PORTO-recovery-2025-08-24-2308/ModelStore/England_Premier_League/_baseline_ftr_pipeline.py,Imported by 4 local Python file(s); do not archive until owner/purpose is confirmed.
+train_ftr_with_team_stats.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+train_hybrid_catboost.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+train_hybrid_goal_mass.py,python,keep_or_review_imported,1,batch_run_hybrid_upstream_pipeline.py,Imported by 1 local Python file(s); do not archive until owner/purpose is confirmed.
+train_hybrid_ou25_tuned.py,python,keep_or_review_imported,1,batch_run_hybrid_upstream_pipeline.py,Imported by 1 local Python file(s); do not archive until owner/purpose is confirmed.
+train_hybrid_side_markets.py,python,keep_or_review_imported,1,batch_run_hybrid_upstream_pipeline.py,Imported by 1 local Python file(s); do not archive until owner/purpose is confirmed.
+train_hybrid_xgb.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+train_investor_leagues_v2.py,python,keep_or_review_imported,3,build_ftr_xgb_hyperparam_sweep.py; build_ftr_apples_to_apples_eval.py; build_ftr_xgb_feature_pruning_audit.py,Imported by 3 local Python file(s); do not archive until owner/purpose is confirmed.
+train_markets.py,python,keep_or_review_imported,7,bookie_allmarkets.py; bookie_allmarkets_research_no_recent_btts_regime.py; bookie_allmarkets_research_pre_hybrid_modelstore.py; threshold_calibration.py; backup_pre_rebuild_2026-03-16/bookie_allmarkets.py; BAWA-PORTO-recovery-2025-08-24-2308/threshold_calibration.py; scripts/run_world_cup_trainer_native_research.py,Imported by 7 local Python file(s); do not archive until owner/purpose is confirmed.
+train_poison_leg_model.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+travel_fatigue.py,python,keep_commit_candidate,0,,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+uefa_context.py,python,keep_commit_candidate,4,bookie_allmarkets.py; bookie_allmarkets_research_no_recent_btts_regime.py; bookie_allmarkets_research_pre_hybrid_modelstore.py; backup_pre_rebuild_2026-03-16/bookie_allmarkets.py,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+under25_btts_no_support_allowlist.json,config,keep_commit_candidate,0,,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+Untitled-2.py,python,archive_review_scratch_backup,0,,"Looks like backup, scratch, malformed copy, or old research variant; archive after spot-check."
+v2_window_signals.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+walk_forward_runner.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+walkforward_cs_bucket_ablation.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+walkforward_cs_bucket_promotion_test.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+walkforward_fullgrid_cs_bucket_promotion.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+weather_backfill_audit.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+weather_data.py,python,keep_commit_candidate,2,weather_backfill_audit.py; fill_stadium_registry_coords.py,"Named production/support contract, config policy, or operational runner; inspect then track in a focused commit."
+weekend_bets.py,python,needs_manual_review_source,0,,Source-like root file with unclear ownership; inspect before moving.
+weekend_rerun_matrix.sh,shell,archive_review_shell_runner,0,,Shell runner for research/backtest workflows; archive/review unless still in an active runbook.
+weekend_smoke_test.py,python,keep_or_review_imported,2,meta_builder.py; weekend_bets.py,Imported by 2 local Python file(s); do not archive until owner/purpose is confirmed.
+weekend_snapshot_board_dashboard.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+weekend_snapshot_support_board.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+weekend_snapshot_support_board_all_leagu.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
+weekend_snapshot_support_board_all_leagues.py,python,archive_review_research_harness,0,,"Research/audit/training/backtest harness; keep only if tied to active runbook, otherwise archive/review."
