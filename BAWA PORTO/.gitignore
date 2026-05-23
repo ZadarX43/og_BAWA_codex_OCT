@@ -28,6 +28,11 @@ run_logs/
 tmp*/
 tmp_*/
 
+# Local backup / patch leftovers
+*.bak_*
+*.patch_*
+*.orig
+
 # Generated prediction and reporting outputs
 predictions_output/
 reports/
@@ -36,6 +41,16 @@ PredictionComplete/
 ROIReports/
 BankerReports/
 diagnostics/
+*_audit.csv
+*_comparison.csv
+*_manifest.csv
+*_summary.csv
+*_report.csv
+*_DIRLIST.txt
+*_dirlist.txt
+mypy_report.txt
+pyflakes_report.txt
+tmp_*.csv
 
 # Backup and snapshot sprawl
 archive/
