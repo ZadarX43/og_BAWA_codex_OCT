@@ -5264,8 +5264,8 @@ tbody tr:hover {
 
 .x-feed-post {
   display: grid;
-  grid-template-columns: 58px minmax(0, 1fr);
-  gap: 12px;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 14px;
   padding: 18px 0;
   border-bottom: 1px solid rgba(123, 154, 184, 0.16);
   opacity: 0;
@@ -5282,12 +5282,13 @@ tbody tr:hover {
   display: grid;
   justify-items: center;
   align-content: start;
-  gap: 8px;
+  gap: 10px;
+  padding-top: 2px;
 }
 
 .x-post-rail-line {
   width: 2px;
-  min-height: 18px;
+  min-height: 16px;
   border-radius: 999px;
   background: rgba(123, 154, 184, 0.18);
 }
@@ -5296,18 +5297,22 @@ tbody tr:hover {
 .x-team-avatar {
   display: inline-grid;
   place-items: center;
-  width: 42px;
-  height: 42px;
-  border-radius: 999px;
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
   overflow: hidden;
   border: 1px solid rgba(123, 154, 184, 0.24);
-  background: rgba(255, 255, 255, 0.055);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.035)),
+    rgba(8, 21, 20, 0.84);
   color: var(--ink);
   font-size: 0.78rem;
   font-weight: 900;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.16);
 }
 
 .x-admin-avatar {
+  border-radius: 999px;
   background: var(--glow);
   color: #04111a;
 }
@@ -5316,12 +5321,12 @@ tbody tr:hover {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  padding: 5px;
+  padding: 4px;
 }
 
 .x-post-main {
   display: grid;
-  gap: 10px;
+  gap: 8px;
   min-width: 0;
 }
 
@@ -5336,7 +5341,7 @@ tbody tr:hover {
 .x-post-meta {
   flex-wrap: wrap;
   color: var(--muted-2);
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 800;
 }
 
@@ -5352,7 +5357,7 @@ tbody tr:hover {
 
 .x-post-main h2 {
   margin: 0;
-  font-size: clamp(1.08rem, 3vw, 1.42rem);
+  font-size: clamp(1.16rem, 3vw, 1.56rem);
   line-height: 1.08;
   letter-spacing: 0;
 }
@@ -5360,11 +5365,20 @@ tbody tr:hover {
 .x-post-location,
 .x-post-summary,
 .x-post-context-grid p,
+.x-post-mini-context,
 .x-post-expand p,
 .x-swipe-note {
   margin: 0;
   color: rgba(220, 234, 242, 0.88);
   line-height: 1.5;
+}
+
+.x-post-summary {
+  display: -webkit-box;
+  max-width: 880px;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
 .x-post-location {
@@ -5823,6 +5837,68 @@ tbody tr:hover {
   display: grid;
   gap: 12px;
   padding: 12px 0 0;
+}
+
+.x-post-expand-body {
+  max-width: 940px;
+}
+
+.x-post-mini-context {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.x-post-mini-context span {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid rgba(123, 154, 184, 0.12);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 750;
+}
+
+.x-post-mini-context b {
+  color: var(--ink);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.timeline-unlock-strip {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.timeline-unlock-strip span {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  padding: 9px 10px;
+  border: 1px solid rgba(123, 154, 184, 0.13);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.timeline-unlock-strip .is-open {
+  border-color: rgba(78, 222, 163, 0.25);
+  background: rgba(78, 222, 163, 0.08);
+}
+
+.timeline-unlock-strip b {
+  color: var(--ink);
+  font-size: 0.76rem;
+}
+
+.timeline-unlock-strip small {
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 800;
 }
 
 .timeline-tier-stack {
@@ -7838,22 +7914,28 @@ code {
   }
 
   .x-feed-post {
-    grid-template-columns: 46px minmax(0, 1fr);
+    grid-template-columns: 56px minmax(0, 1fr);
     gap: 10px;
     padding: 16px 0;
   }
 
   .x-admin-avatar,
   .x-team-avatar {
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
   }
 
   .timeline-market-strip,
   .x-post-context-grid,
+  .x-post-mini-context,
   .timeline-metric-tiles,
   .timeline-market-read-grid {
     grid-template-columns: 1fr;
+  }
+
+  .timeline-unlock-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .timeline-tier-panel {

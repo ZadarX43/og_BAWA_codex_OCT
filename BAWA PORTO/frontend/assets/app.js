@@ -2785,6 +2785,38 @@
     `;
   };
 
+  const timelineCompactUnlockStrip = () => {
+    const rank = accessTierRank(currentAccessTier());
+    const items = [
+      { label: "Standard", title: "Public read", rank: 0 },
+      { label: "Founder", title: "Context", rank: 1 },
+      { label: "Premium", title: "Market posture", rank: 2 },
+      { label: "Pro", title: "Player events", rank: 3 },
+      { label: "Pro+", title: "Audit", rank: 4 },
+    ];
+    return `
+      <div class="timeline-unlock-strip" aria-label="Fixture access layers">
+        ${items
+          .map(
+            (item) => `
+              <span class="${rank >= item.rank ? "is-open" : "is-locked"}">
+                <b>${escapeHtml(item.label)}</b>
+                <small>${escapeHtml(item.title)}</small>
+              </span>
+            `
+          )
+          .join("")}
+      </div>
+    `;
+  };
+
+  const timelineQuickContext = (row) => `
+    <div class="x-post-mini-context">
+      <span><b>Weather</b>${escapeHtml(weatherFeedSummary(row))}</span>
+      <span><b>Injuries</b>${escapeHtml(injuryFeedSummary(row))}</span>
+    </div>
+  `;
+
   const adminTimelinePost = (post, index = 0) => `
     <article class="x-feed-post x-feed-admin" style="--enter-index:${index}">
       <div class="x-post-rail">
@@ -2824,11 +2856,11 @@
         </div>
         <div class="x-post-main">
           <div class="x-post-meta">
-            <strong>${escapeHtml(home)} x ${escapeHtml(away)}</strong>
-            <span>${escapeHtml(formatKickoffLabel(row.kickoff_time))}</span>
+            <span>${escapeHtml(formatTimelineDate(row.kickoff_time))}</span>
+            <span>${escapeHtml(fixtureLocationLabel(row))}</span>
           </div>
           <div class="x-post-title-row">
-            <h2>${escapeHtml(row.home_team)} x ${escapeHtml(row.away_team)}</h2>
+            <h2>${escapeHtml(home)} x ${escapeHtml(away)}</h2>
             <button
               class="x-fav-button ${favourite ? "is-active" : ""}"
               type="button"
@@ -2838,37 +2870,26 @@
               title="${favourite ? "Remove from favourites" : "Add to favourites"}"
             ><span>${favourite ? "♥" : "♡"}</span></button>
           </div>
-          <p class="x-post-location">${escapeHtml(formatTimelineDate(row.kickoff_time))} / ${escapeHtml(fixtureLocationLabel(row))}</p>
           <p class="x-post-summary">${escapeHtml(predictionFeedSummary(row))}</p>
           ${renderTimelineMarketChips(row)}
-          <div class="x-post-context-grid">
-            <div>
-              <span class="x-context-label">Weather</span>
-              <p>${escapeHtml(weatherFeedSummary(row))}</p>
-            </div>
-            <div>
-              <span class="x-context-label">Player injury news</span>
-              <p>${escapeHtml(injuryFeedSummary(row))}</p>
-            </div>
-          </div>
           <details class="x-post-expand" ${expanded ? "open" : ""}>
-            <summary data-action="timeline-expand" data-fixture-key="${escapeHtml(row.fixture_key)}">Expand match read</summary>
-            <div>
-              <p>${escapeHtml(row.signal_summary?.summary_text || row.context_summary?.volatility_note || predictionFeedSummary(row))}</p>
+            <summary data-action="timeline-expand" data-fixture-key="${escapeHtml(row.fixture_key)}">Quick read</summary>
+            <div class="x-post-expand-body">
+              <p>${escapeHtml(row.signal_summary?.summary_text || predictionFeedSummary(row))}</p>
+              ${timelineQuickContext(row)}
               ${
                 Array.isArray(row.context_summary?.notes) && row.context_summary.notes.length
                   ? `<ul class="feature-list compact-list">${row.context_summary.notes
-                      .slice(0, 4)
+                      .slice(0, 2)
                       .map((note) => `<li>${escapeHtml(note)}</li>`)
                       .join("")}</ul>`
                   : ""
               }
-              ${expanded ? timelineTierPanels(row) : ""}
+              ${timelineCompactUnlockStrip()}
               <div class="x-post-actions">
-                <a class="button" href="${fixtureDetailHref(row)}">Open full fixture</a>
-                <a class="ghost-button" href="./premium.html">Unlock deeper cards</a>
+                <a class="button" href="${fixtureDetailHref(row)}">Open fixture</a>
+                <a class="ghost-button" href="./matches.html#paper-slip-builder">View slip</a>
               </div>
-              <p class="x-swipe-note">On mobile, open the full fixture and use the browser back gesture to slide back into this timeline.</p>
             </div>
           </details>
         </div>
@@ -8016,7 +8037,7 @@
         <header class="x-timeline-header">
           <div>
             <h1>Matches</h1>
-            <p>Timeline view for fixtures, model reads, weather context, injury notes, and admin updates.</p>
+            <p>Fixture feed for model reads, odds, context, and saved paper slips.</p>
           </div>
           <div class="x-next-kickoff">
             <span>Next kickoff</span>
@@ -8055,8 +8076,8 @@
           ${matchesFavouritesOnly ? `<span>Favourite filter active</span>` : ""}
         </div>
         ${renderMatchesShortlistPanel(visibleRows)}
-        ${renderPaperSlipPanel()}
         ${renderMatchesTimeline(rows)}
+        ${renderPaperSlipPanel()}
       </section>
       ${matchesBottomNav()}
     `;
