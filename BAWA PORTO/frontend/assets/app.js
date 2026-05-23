@@ -431,7 +431,7 @@
       competitions: "./competitions.html",
       teams: "./teams.html",
       dashboard: "./dashboard.html",
-      fixture: "./dashboard.html",
+      fixture: "./matches.html",
       onboarding: "./account.html",
       predictions: "./predictions.html",
       premium: "./premium.html",
@@ -2221,12 +2221,39 @@
 
   const activeMatchesSearchQuery = () => String(state.runtime.matchesSearchDraft ?? matchesSearchQuery).trim();
 
-  const matchesFeedRows = (rows) =>
-    orderedFixtureRows(rows).filter(
+  const shortWindowDateLabel = (timestamp) => {
+    if (!Number.isFinite(timestamp) || timestamp === Number.MAX_SAFE_INTEGER) {
+      return "Pending";
+    }
+    return new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short" }).format(new Date(timestamp));
+  };
+
+  const fixtureWindowLabel = (rows = []) => {
+    const timestamps = rows
+      .map((row) => kickoffTimestamp(row?.kickoff_time))
+      .filter((timestamp) => Number.isFinite(timestamp) && timestamp !== Number.MAX_SAFE_INTEGER)
+      .sort((left, right) => left - right);
+    if (!timestamps.length) {
+      return "Window pending";
+    }
+    return `${shortWindowDateLabel(timestamps[0])} -> ${shortWindowDateLabel(timestamps[timestamps.length - 1])}`;
+  };
+
+  const currentMatchesWindowRows = (rows = state.fixtureIntelligence) => {
+    const ordered = orderedFixtureRows(rows);
+    const upcoming = ordered.filter((row) => !isCompletedWindowFixture(row));
+    return upcoming.length ? upcoming : ordered.slice(0, 40);
+  };
+
+  const matchesFeedRows = (rows) => {
+    const activeSearch = activeMatchesSearchQuery();
+    const sourceRows = activeSearch || matchesFavouritesOnly ? orderedFixtureRows(rows) : currentMatchesWindowRows(rows);
+    return sourceRows.filter(
       (row) =>
-        matchSearchMatchesRow(row, activeMatchesSearchQuery()) &&
+        matchSearchMatchesRow(row, activeSearch) &&
         (!matchesFavouritesOnly || isMatchFavourite(row.fixture_key))
     );
+  };
 
   const matchesTypeaheadSuggestions = (rows, search) => {
     const normalizedSearch = normalizePreferenceText(search);
@@ -2243,7 +2270,12 @@
       seen.add(key);
       suggestions.push(item);
     };
-    orderedFixtureRows(rows).forEach((row) => {
+    const currentKeys = new Set(currentMatchesWindowRows(rows).map((row) => row.fixture_key));
+    const suggestionRows = [
+      ...currentMatchesWindowRows(rows),
+      ...orderedFixtureRows(rows).filter((row) => !currentKeys.has(row.fixture_key)),
+    ];
+    suggestionRows.forEach((row) => {
       const home = teamCardName(row.home_team);
       const away = teamCardName(row.away_team);
       const fixtureLabel = `${home} x ${away}`;
@@ -2254,7 +2286,7 @@
           title: fixtureLabel,
           meta: `${formatKickoffLabel(row.kickoff_time)} / ${row.league || "Competition pending"}`,
           query: `${row.home_team} ${row.away_team}`,
-          href: "",
+          href: fixtureDetailHref(row),
         });
       }
       [
@@ -3325,11 +3357,11 @@
   const modelSignalText = (fixture, key, pick, intel = null, state = {}) => {
     if (state.selected) {
       const probability = publishedModelProbability(fixture, key, pick);
-      return probability ? `Model ${probability}` : "Published pick";
+      return probability ? `Published pick · Model ${probability}` : "Published pick";
     }
     if (state.modelSelected) {
       const probability = modelOutputProbability(intel, key, pick);
-      return probability ? `Model ${probability}` : "Model output";
+      return probability ? `Model output ${probability}` : "Model output";
     }
     if (state.context && Number.isFinite(Number(intel?.rating))) {
       return `Team context ${Math.round(Number(intel.rating))}%`;
@@ -3337,7 +3369,7 @@
     if (state.context) {
       return "Team context";
     }
-    return hasUsableOdds(state.odds) ? "Book price" : "No selection";
+    return hasUsableOdds(state.odds) ? "Book price only" : "Line pending";
   };
 
   const outcomeOddsText = (odds, unavailableCopy = "Odds pending") => (hasUsableOdds(odds) ? bookmakerLineDisplay(odds) : unavailableCopy);
@@ -3427,15 +3459,15 @@
   const marketLeadText = (fixture, key, intel = null) => {
     const active = marketOutcomeRows(fixture, key, intel).find((row) => row.active);
     if (active) {
-      return `Published ${marketPickDisplay(fixture, key, active.pick)} · ${active.model}`;
+      return `${marketPickDisplay(fixture, key, active.pick)} · ${active.model}`;
     }
     const model = marketOutcomeRows(fixture, key, intel).find((row) => row.modelSelected);
     if (model) {
-      return `Model ${model.label} · ${model.model}`;
+      return `${model.label} · ${model.model}`;
     }
     const context = marketOutcomeRows(fixture, key, intel).find((row) => row.context);
     if (context) {
-      return `Team context ${context.label} · ${context.model}`;
+      return `${context.label} · ${context.model}`;
     }
     if (Number.isFinite(Number(intel?.rating))) {
       return `${safeTitleLabel(intel?.band, "Context")} · ${Math.round(Number(intel.rating))}% support`;
@@ -3857,7 +3889,7 @@
       {
         key: "ftr",
         title: "Full Time Result",
-        copy: "Home / Draw / Away odds with the actual model output surfaced clearly.",
+        copy: "Home / Draw / Away pricing with model output, published pick, or team context labelled separately.",
         active: deployFamily === "FTR",
       },
       {
@@ -3884,7 +3916,7 @@
         <div class="section-head">
           <div>
             <h2>Standard market cards</h2>
-            <p class="section-copy">The top fixture view is intentionally simple: odds, model output, and confidence posture for the launch markets. Deeper context sits behind the tiered tabs below.</p>
+            <p class="section-copy">The top fixture view is intentionally simple: odds, model output when available, published picks, and team context where the model layer is not published. Deeper context sits behind the tiered tabs below.</p>
           </div>
           <span class="pill">Standard view</span>
         </div>
@@ -7562,10 +7594,12 @@
 
   const matchesView = () => {
     const rows = orderedFixtureRows();
+    const currentRows = currentMatchesWindowRows(rows);
     const visibleRows = matchesFeedRows(rows);
-    const nextFixture = visibleRows[0] || rows[0] || null;
+    const nextFixture = visibleRows[0] || currentRows[0] || rows[0] || null;
     const activeSearch = activeMatchesSearchQuery();
     const typeaheadOpen = state.runtime.matchesTypeaheadOpen && activeSearch.length >= 2;
+    const competitionRows = activeSearch || matchesFavouritesOnly ? visibleRows : currentRows;
     return `
       <section class="x-matches-page">
         <header class="x-timeline-header">
@@ -7603,8 +7637,10 @@
         </form>
         <div class="x-feed-stats">
           <span>${escapeHtml(visibleRows.length)} visible fixtures</span>
-          <span>${escapeHtml(new Set(rows.map((row) => row.league)).size)} competitions</span>
+          <span>Current window ${escapeHtml(fixtureWindowLabel(currentRows))}</span>
+          <span>${escapeHtml(new Set(competitionRows.map((row) => row.league)).size)} competitions</span>
           <span>${escapeHtml(state.runtime.matchFavourites.length)} favourites</span>
+          ${activeSearch ? `<span>Search includes archive</span>` : ""}
           ${matchesFavouritesOnly ? `<span>Favourite filter active</span>` : ""}
         </div>
         ${renderMatchesTimeline(rows)}
