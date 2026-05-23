@@ -2,6 +2,8 @@
   const DATA_ROOT = "./public/data";
   const PREMIUM_TOKEN_STORAGE_KEY = "og_premium_token";
   const MATCH_FAVOURITES_STORAGE_KEY = "og_match_favourites";
+  const PAPER_SLIP_STORAGE_KEY = "og_paper_slip_builder";
+  const SAVED_PAPER_SLIPS_STORAGE_KEY = "og_saved_paper_slips";
   const INTERNAL_ADMIN_KEY_STORAGE_KEY = "og_internal_admin_key";
   const INTERNAL_OPERATOR_ID_STORAGE_KEY = "og_internal_operator_id";
   const app = document.getElementById("app");
@@ -114,6 +116,8 @@
       internalNotes: [],
       internalTimeline: [],
       matchFavourites: [],
+      paperSlip: { picks: [], stake: 10, note: "" },
+      savedPaperSlips: [],
       timelineExpandedFixture: "",
       timelineFixturePayloads: {},
       timelineFixturePayloadLoading: {},
@@ -237,6 +241,117 @@
       : [...state.runtime.matchFavourites, key];
     state.runtime.matchFavourites = [...new Set(next)];
     writeMatchFavourites(state.runtime.matchFavourites);
+  };
+
+  const normalizePaperSlip = (value = {}) => ({
+    picks: Array.isArray(value.picks) ? value.picks.filter((item) => item?.id) : [],
+    stake: Number.isFinite(Number(value.stake)) && Number(value.stake) > 0 ? Number(value.stake) : 10,
+    note: String(value.note || ""),
+  });
+
+  const readPaperSlip = () => {
+    try {
+      return normalizePaperSlip(JSON.parse(window.localStorage.getItem(PAPER_SLIP_STORAGE_KEY) || "{}"));
+    } catch {
+      return normalizePaperSlip();
+    }
+  };
+
+  const writePaperSlip = (slip) => {
+    try {
+      window.localStorage.setItem(PAPER_SLIP_STORAGE_KEY, JSON.stringify(normalizePaperSlip(slip)));
+    } catch {
+      return;
+    }
+  };
+
+  const readSavedPaperSlips = () => {
+    try {
+      const parsed = JSON.parse(window.localStorage.getItem(SAVED_PAPER_SLIPS_STORAGE_KEY) || "[]");
+      return Array.isArray(parsed) ? parsed.filter((item) => item?.id) : [];
+    } catch {
+      return [];
+    }
+  };
+
+  const writeSavedPaperSlips = (items = []) => {
+    try {
+      window.localStorage.setItem(SAVED_PAPER_SLIPS_STORAGE_KEY, JSON.stringify(items.filter((item) => item?.id).slice(0, 20)));
+    } catch {
+      return;
+    }
+  };
+
+  const paperSlipPickId = ({ fixtureKey, marketKey, pick }) =>
+    [fixtureKey, marketKey, pick].map((part) => String(part || "").replaceAll("|", "")).join("|");
+
+  const persistPaperSlip = () => writePaperSlip(state.runtime.paperSlip);
+
+  const addPaperSlipPick = (pick) => {
+    const nextPick = {
+      id: paperSlipPickId(pick),
+      fixtureKey: String(pick.fixtureKey || ""),
+      fixtureLabel: String(pick.fixtureLabel || ""),
+      kickoffTime: String(pick.kickoffTime || ""),
+      league: String(pick.league || ""),
+      marketKey: String(pick.marketKey || ""),
+      marketLabel: String(pick.marketLabel || ""),
+      pick: String(pick.pick || ""),
+      pickLabel: String(pick.pickLabel || ""),
+      odds: Number(pick.odds),
+      modelText: String(pick.modelText || ""),
+      confidenceText: String(pick.confidenceText || ""),
+      contradictionText: String(pick.contradictionText || ""),
+      addedAt: new Date().toISOString(),
+    };
+    if (!nextPick.fixtureKey || !nextPick.marketKey || !nextPick.pick || !hasUsableOdds(nextPick.odds)) {
+      return;
+    }
+    state.runtime.paperSlip.picks = [
+      nextPick,
+      ...state.runtime.paperSlip.picks.filter((item) => item.id !== nextPick.id),
+    ].slice(0, 12);
+    persistPaperSlip();
+  };
+
+  const removePaperSlipPick = (id) => {
+    state.runtime.paperSlip.picks = state.runtime.paperSlip.picks.filter((item) => item.id !== String(id || ""));
+    persistPaperSlip();
+  };
+
+  const clearPaperSlip = () => {
+    state.runtime.paperSlip = { picks: [], stake: 10, note: "" };
+    persistPaperSlip();
+  };
+
+  const savePaperSlip = () => {
+    const slip = normalizePaperSlip(state.runtime.paperSlip);
+    if (!slip.picks.length) {
+      return;
+    }
+    const saved = {
+      id: `paper_slip_${Date.now()}`,
+      savedAt: new Date().toISOString(),
+      ...slip,
+    };
+    state.runtime.savedPaperSlips = [saved, ...state.runtime.savedPaperSlips].slice(0, 20);
+    writeSavedPaperSlips(state.runtime.savedPaperSlips);
+  };
+
+  const decimalOddsProduct = (picks = []) =>
+    picks.reduce((total, pick) => (hasUsableOdds(pick.odds) ? total * Number(pick.odds) : total), 1);
+
+  const paperSlipMath = (slip = state.runtime.paperSlip) => {
+    const normalized = normalizePaperSlip(slip);
+    const odds = normalized.picks.length ? decimalOddsProduct(normalized.picks) : 0;
+    const stake = normalized.stake;
+    const returnValue = odds ? stake * odds : 0;
+    return {
+      stake,
+      odds,
+      returnValue,
+      profit: Math.max(0, returnValue - stake),
+    };
   };
   const timelineFixturePayloadState = (fixtureKey) => {
     const key = String(fixtureKey || "").trim();
@@ -2784,6 +2899,117 @@
     `;
   };
 
+  const moneyDisplay = (value) => `£${Number(value || 0).toFixed(2)}`;
+
+  const renderSettlementBadge = (settlement) => `
+    <span class="paper-slip-status paper-slip-status-${escapeHtml(settlement.status)}">
+      <b>${escapeHtml(settlement.symbol)}</b>
+      <span>${escapeHtml(settlement.label)}</span>
+    </span>
+  `;
+
+  const renderPaperSlipPick = (pick, index = 0) => {
+    const settlement = paperPickSettlement(pick);
+    return `
+      <article class="paper-slip-pick" style="--enter-index:${index}">
+        <div class="paper-slip-pick-main">
+          <div>
+            <span class="metric-label">${escapeHtml(pick.marketLabel || "Market")}</span>
+            <strong>${escapeHtml(pick.pickLabel || "Selection")}</strong>
+            <p>${escapeHtml(pick.fixtureLabel || "Fixture pending")} · ${escapeHtml(formatKickoffLabel(pick.kickoffTime))}</p>
+          </div>
+          <div class="paper-slip-pick-odds">
+            <b>${escapeHtml(bookmakerLineDisplay(pick.odds))}</b>
+            ${renderSettlementBadge(settlement)}
+          </div>
+        </div>
+        <div class="paper-slip-pick-meta">
+          <span>${escapeHtml(pick.modelText || "Model context pending")}</span>
+          <span>${escapeHtml(pick.confidenceText || "Confidence pending")}</span>
+        </div>
+        <p class="muted">${escapeHtml(pick.contradictionText || "Support and contradiction notes will follow the fixture intelligence payload.")}</p>
+        <button class="paper-slip-remove" type="button" data-action="remove-paper-slip-pick" data-pick-id="${escapeHtml(pick.id)}">Remove</button>
+      </article>
+    `;
+  };
+
+  const renderSavedPaperSlip = (slip) => {
+    const math = paperSlipMath(slip);
+    const settled = slip.picks.map((pick) => paperPickSettlement(pick));
+    const wins = settled.filter((item) => item.status === "won").length;
+    const losses = settled.filter((item) => item.status === "lost").length;
+    return `
+      <article class="saved-paper-slip">
+        <div>
+          <span class="metric-label">${escapeHtml(formatKickoffLabel(slip.savedAt))}</span>
+          <strong>${escapeHtml(`${slip.picks.length} pick${slip.picks.length === 1 ? "" : "s"} · ${formatOdds(math.odds)}`)}</strong>
+          <p>${escapeHtml(slip.note || "Saved paper slip")}</p>
+        </div>
+        <div class="saved-paper-slip-stats">
+          <span>${escapeHtml(`${moneyDisplay(math.stake)} stake`)}</span>
+          <span>${escapeHtml(`${moneyDisplay(math.returnValue)} est. return`)}</span>
+          <span>${escapeHtml(`${wins}W / ${losses}L`)}</span>
+        </div>
+      </article>
+    `;
+  };
+
+  const renderPaperSlipPanel = () => {
+    const slip = normalizePaperSlip(state.runtime.paperSlip);
+    const math = paperSlipMath(slip);
+    const pickCount = slip.picks.length;
+    return `
+      <section class="paper-slip-panel" aria-label="Paper slip builder">
+        <div class="paper-slip-head">
+          <div>
+            <span class="metric-label">Paper slip builder</span>
+            <h2>Build, test, and save picks without staking money.</h2>
+            <p>Use this like a bookie bet slip for research: add selections, set a unit stake, estimate returns, save the slip, and track won/lost badges when settlement data updates.</p>
+          </div>
+          <div class="paper-slip-math">
+            <span>${escapeHtml(`${pickCount} pick${pickCount === 1 ? "" : "s"}`)}</span>
+            <strong>${escapeHtml(pickCount ? formatOdds(math.odds) : "No odds")}</strong>
+            <small>${escapeHtml(`${moneyDisplay(math.returnValue)} est. return`)}</small>
+          </div>
+        </div>
+        <div class="paper-slip-controls">
+          <label>
+            <span>Unit stake</span>
+            <input class="text-input" type="number" min="0" step="0.5" value="${escapeHtml(String(slip.stake))}" data-role="paper-slip-stake" />
+          </label>
+          <label>
+            <span>Slip note</span>
+            <input class="text-input" type="text" value="${escapeHtml(slip.note)}" placeholder="e.g. MLS watchlist, cautious acca, model-only" data-role="paper-slip-note" />
+          </label>
+        </div>
+        <div class="paper-slip-summary-grid">
+          <div><span>Stake</span><strong>${escapeHtml(moneyDisplay(math.stake))}</strong></div>
+          <div><span>Total odds</span><strong>${escapeHtml(pickCount ? formatOdds(math.odds) : "0.00")}</strong></div>
+          <div><span>Est. return</span><strong>${escapeHtml(moneyDisplay(math.returnValue))}</strong></div>
+          <div><span>Est. profit</span><strong>${escapeHtml(moneyDisplay(math.profit))}</strong></div>
+        </div>
+        ${
+          pickCount
+            ? `<div class="paper-slip-pick-list">${slip.picks.map((pick, index) => renderPaperSlipPick(pick, index)).join("")}</div>`
+            : `<div class="paper-slip-empty">Add a priced market selection from a fixture card. This is for education and research only, not bet placement.</div>`
+        }
+        <div class="paper-slip-actions">
+          <button class="button" type="button" data-action="save-paper-slip" ${pickCount ? "" : "disabled"}>Save slip</button>
+          <button class="ghost-button" type="button" data-action="export-paper-slip" ${pickCount ? "" : "disabled"}>Copy slip</button>
+          <button class="ghost-button" type="button" data-action="clear-paper-slip" ${pickCount ? "" : "disabled"}>Clear</button>
+        </div>
+        ${
+          state.runtime.savedPaperSlips.length
+            ? `<div class="saved-paper-slip-list">
+                <span class="metric-label">Saved paper slips</span>
+                ${state.runtime.savedPaperSlips.slice(0, 4).map((slip) => renderSavedPaperSlip(slip)).join("")}
+              </div>`
+            : ""
+        }
+      </section>
+    `;
+  };
+
   const matchesBottomNav = () => `
     <nav class="x-bottom-nav" aria-label="Matches timeline navigation">
       <a href="./index.html"><span>Home</span></a>
@@ -3506,11 +3732,81 @@
     return "Standard view";
   };
 
-  const marketOutcomeRowsMarkup = (rows) => `
+  const marketLabelForKey = (key) => {
+    if (key === "ftr") return "Full Time Result";
+    if (key === "ou25") return "Over 2.5";
+    if (key === "btts") return "BTTS";
+    if (key === "team_goals") return "Team 1.5 Goals";
+    return safeTitleLabel(key || "Market");
+  };
+
+  const resultRecordForPaperPick = (pick) => {
+    const wantedFixture = String(pick?.fixtureKey || "");
+    const wantedMarket = String(pick?.marketKey || "").toUpperCase();
+    const marketAliases = {
+      FTR: ["FTR"],
+      OU25: ["OU25", "OVER25"],
+      BTTS: ["BTTS"],
+      TEAM_GOALS: ["TG15", "TEAM_GOALS", "TEAMGOALS"],
+      TEAM_GOALS_ALT: ["TG15", "TEAM_GOALS", "TEAMGOALS"],
+    };
+    const keyMap = {
+      ftr: "FTR",
+      ou25: "OU25",
+      btts: "BTTS",
+      team_goals: "TEAM_GOALS",
+    };
+    const aliases = marketAliases[keyMap[pick?.marketKey] || wantedMarket] || [wantedMarket];
+    const wantedPick = String(pick?.pick || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+    const items = [
+      ...(Array.isArray(state.weeklyResults?.items) ? state.weeklyResults.items : []),
+      ...(Array.isArray(state.resultsArchive?.items) ? state.resultsArchive.items : []),
+    ];
+    return (
+      items.find((item) => {
+        const itemMarket = String(item.market || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+        const itemPick = normalizeMarketPick(pick?.marketKey, item.pick || "").replace(/[^A-Z0-9]/g, "");
+        return (
+          String(item.fixture_key || "") === wantedFixture &&
+          aliases.some((alias) => itemMarket === String(alias).replace(/[^A-Z0-9]/g, "")) &&
+          (!wantedPick || itemPick === wantedPick)
+        );
+      }) || null
+    );
+  };
+
+  const paperPickSettlement = (pick) => {
+    const record = resultRecordForPaperPick(pick);
+    const status = String(record?.result_status || "pending").toLowerCase();
+    if (status === "won" || status === "win") return { status: "won", label: "Won", symbol: "✓" };
+    if (status === "lost" || status === "loss") return { status: "lost", label: "Lost", symbol: "×" };
+    if (status === "void") return { status: "void", label: "Void", symbol: "-" };
+    return { status: "pending", label: "Pending", symbol: "•" };
+  };
+
+  const slipPickPayload = (fixture, key, row, intel = null) => ({
+    fixtureKey: fixture?.fixture_key || "",
+    fixtureLabel: `${teamCardName(fixture?.home_team) || fixture?.home_team || "Home"} x ${teamCardName(fixture?.away_team) || fixture?.away_team || "Away"}`,
+    kickoffTime: fixture?.kickoff_time || fixture?.fixture_kickoff_at || "",
+    league: fixture?.league || "",
+    marketKey: key,
+    marketLabel: marketLabelForKey(key),
+    pick: row.pick || "",
+    pickLabel: row.label || marketPickDisplay(fixture, key, row.pick),
+    odds: row.odds,
+    modelText: row.model || "",
+    confidenceText: safeTitleLabel(intel?.band || intel?.state || fixture?.signal_summary?.signal_state, "Pending"),
+    contradictionText: intel?.read || predictionFeedSummary(fixture),
+  });
+
+  const marketOutcomeRowsMarkup = (fixture, key, rows, intel = null) => `
     <div class="fixture-market-outcome-list">
       ${rows
-        .map(
-          (row) => `
+        .map((row) => {
+          const slipPick = slipPickPayload(fixture, key, row, intel);
+          const inSlip = state.runtime.paperSlip.picks.some((item) => item.id === paperSlipPickId(slipPick));
+          const canAdd = hasUsableOdds(row.odds);
+          return `
             <div class="fixture-market-outcome-row ${row.active ? "is-active" : row.modelSelected || row.context ? "is-context" : ""}">
               <div>
                 <span>${escapeHtml(row.label)}</span>
@@ -3520,9 +3816,16 @@
                 <b>${escapeHtml(outcomeOddsText(row.odds, "No odds"))}</b>
                 <small>${escapeHtml(row.implied)}</small>
               </div>
+              <button
+                class="slip-add-button ${inSlip ? "is-active" : ""}"
+                type="button"
+                data-action="add-paper-slip-pick"
+                data-pick="${escapeHtml(JSON.stringify(slipPick))}"
+                ${canAdd ? "" : "disabled"}
+              >${escapeHtml(inSlip ? "Added" : canAdd ? "+ Slip" : "No line")}</button>
             </div>
-          `
-        )
+          `;
+        })
         .join("")}
     </div>
   `;
@@ -3982,7 +4285,7 @@
                     <span class="fixture-market-state">${escapeHtml(`${stateCopy}${stateLabel && !hasPublishedSelection ? ` · ${stateLabel}` : ""}`)}</span>
                   </div>
                   <p class="fixture-market-card-copy">${escapeHtml(def.copy)}</p>
-                  ${marketOutcomeRowsMarkup(outcomeRows)}
+                  ${marketOutcomeRowsMarkup(fixture, def.key, outcomeRows, intel)}
                   <div class="fixture-market-card-meta fixture-market-card-meta-access">
                     <span>${escapeHtml(marketAccessLabel(def.key))}</span>
                     <b>${escapeHtml(def.key === "team_goals" ? "No odds feed" : marketOddsDisplay(fixture, def.key))}</b>
@@ -7670,6 +7973,7 @@
           ${matchesFavouritesOnly ? `<span>Favourite filter active</span>` : ""}
         </div>
         ${renderMatchesShortlistPanel(visibleRows)}
+        ${renderPaperSlipPanel()}
         ${renderMatchesTimeline(rows)}
       </section>
       ${matchesBottomNav()}
@@ -11521,6 +11825,7 @@
         </article>
       </section>
       ${fixtureMarketCardsMarkup(fixture, state.selectedFixtureDecisionIntelligence || null)}
+      ${renderPaperSlipPanel()}
       ${fixturePlayerEventCardsMarkup(fixture)}
       ${
         hasTierAccess("founder")
@@ -13635,6 +13940,64 @@
       return;
     }
 
+    const addSlipTarget = event.target.closest("[data-action='add-paper-slip-pick']");
+    if (addSlipTarget) {
+      event.preventDefault();
+      try {
+        addPaperSlipPick(JSON.parse(addSlipTarget.dataset.pick || "{}"));
+      } catch {
+        return;
+      }
+      render();
+      return;
+    }
+
+    const removeSlipTarget = event.target.closest("[data-action='remove-paper-slip-pick']");
+    if (removeSlipTarget) {
+      event.preventDefault();
+      removePaperSlipPick(removeSlipTarget.dataset.pickId);
+      render();
+      return;
+    }
+
+    const clearSlipTarget = event.target.closest("[data-action='clear-paper-slip']");
+    if (clearSlipTarget) {
+      event.preventDefault();
+      clearPaperSlip();
+      render();
+      return;
+    }
+
+    const saveSlipTarget = event.target.closest("[data-action='save-paper-slip']");
+    if (saveSlipTarget) {
+      event.preventDefault();
+      savePaperSlip();
+      render();
+      return;
+    }
+
+    const exportSlipTarget = event.target.closest("[data-action='export-paper-slip']");
+    if (exportSlipTarget) {
+      event.preventDefault();
+      const slip = normalizePaperSlip(state.runtime.paperSlip);
+      const math = paperSlipMath(slip);
+      const text = [
+        "Odds Genius paper slip",
+        `Stake: ${moneyDisplay(math.stake)}`,
+        `Total odds: ${slip.picks.length ? formatOdds(math.odds) : "0.00"}`,
+        `Est. return: ${moneyDisplay(math.returnValue)}`,
+        "",
+        ...slip.picks.map((pick) => `${pick.fixtureLabel} | ${pick.marketLabel} | ${pick.pickLabel} @ ${formatOdds(pick.odds)} | ${pick.modelText}`),
+        slip.note ? `\nNote: ${slip.note}` : "",
+      ].join("\n");
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        window.prompt("Copy paper slip", text);
+      }
+      return;
+    }
+
     const historyBackTarget = event.target.closest("[data-action='history-back']");
     if (historyBackTarget) {
       event.preventDefault();
@@ -13906,6 +14269,22 @@
       return;
     }
 
+    const paperSlipStakeInput = event.target.closest("[data-role='paper-slip-stake']");
+    if (paperSlipStakeInput) {
+      const stake = Number(paperSlipStakeInput.value);
+      state.runtime.paperSlip.stake = Number.isFinite(stake) && stake > 0 ? stake : 0;
+      persistPaperSlip();
+      render();
+      return;
+    }
+
+    const paperSlipNoteInput = event.target.closest("[data-role='paper-slip-note']");
+    if (paperSlipNoteInput) {
+      state.runtime.paperSlip.note = String(paperSlipNoteInput.value || "");
+      persistPaperSlip();
+      return;
+    }
+
     const internalReviewOutcomeNoteTarget = event.target.closest("[data-role='internal-review-outcome-note']");
     if (internalReviewOutcomeNoteTarget) {
       state.runtime.internalReviewOutcomeNote = String(internalReviewOutcomeNoteTarget.value || "");
@@ -13984,6 +14363,8 @@
     syncActiveNav();
     state.runtime.premiumToken = readStoredPremiumToken();
     state.runtime.matchFavourites = readMatchFavourites();
+    state.runtime.paperSlip = readPaperSlip();
+    state.runtime.savedPaperSlips = readSavedPaperSlips();
     state.runtime.internalAdminKey = readStoredInternalAdminKey();
     state.runtime.internalOperatorId = readStoredInternalOperatorId();
     await loadAuthSession();

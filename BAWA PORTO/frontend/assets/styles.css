@@ -1473,7 +1473,7 @@ body::after {
 
 .fixture-market-outcome-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(112px, auto);
+  grid-template-columns: minmax(0, 1fr) minmax(112px, auto) auto;
   gap: 12px;
   align-items: center;
   min-height: 62px;
@@ -1505,7 +1505,7 @@ body::after {
   min-width: 0;
 }
 
-.fixture-market-outcome-row > div:last-child {
+.fixture-market-outcome-row > div:nth-child(2) {
   justify-items: end;
   text-align: right;
 }
@@ -5385,6 +5385,244 @@ tbody tr:hover {
   gap: 10px;
 }
 
+.slip-add-button {
+  justify-self: end;
+  min-width: 72px;
+  min-height: 32px;
+  border: 1px solid rgba(78, 222, 163, 0.24);
+  border-radius: 999px;
+  color: var(--ink);
+  background: rgba(78, 222, 163, 0.1);
+  font-size: 0.72rem;
+  font-weight: 950;
+  cursor: pointer;
+}
+
+.slip-add-button:hover,
+.slip-add-button.is-active {
+  border-color: rgba(78, 222, 163, 0.55);
+  background: rgba(78, 222, 163, 0.2);
+}
+
+.slip-add-button:disabled {
+  cursor: not-allowed;
+  color: rgba(178, 199, 188, 0.58);
+  border-color: rgba(123, 154, 184, 0.14);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.paper-slip-panel {
+  display: grid;
+  gap: 16px;
+  width: min(980px, 100%);
+  margin: 22px auto;
+  padding: 18px;
+  border: 1px solid rgba(123, 154, 184, 0.2);
+  border-radius: 22px;
+  background:
+    linear-gradient(145deg, rgba(12, 27, 39, 0.94), rgba(8, 18, 27, 0.82)),
+    rgba(6, 13, 19, 0.9);
+  box-shadow: 0 24px 68px rgba(0, 0, 0, 0.26);
+}
+
+.paper-slip-head,
+.paper-slip-pick-main,
+.saved-paper-slip {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: start;
+}
+
+.paper-slip-head h2 {
+  margin: 4px 0 8px;
+  font-size: clamp(1.24rem, 3vw, 1.82rem);
+  letter-spacing: 0;
+}
+
+.paper-slip-head p,
+.paper-slip-pick p,
+.saved-paper-slip p {
+  margin: 0;
+  color: rgba(220, 234, 242, 0.84);
+  line-height: 1.5;
+}
+
+.paper-slip-math {
+  min-width: 160px;
+  padding: 12px;
+  border: 1px solid rgba(78, 222, 163, 0.18);
+  border-radius: 16px;
+  background: rgba(78, 222, 163, 0.08);
+  text-align: right;
+}
+
+.paper-slip-math span,
+.paper-slip-math small,
+.paper-slip-summary-grid span,
+.saved-paper-slip-stats span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 850;
+}
+
+.paper-slip-math strong {
+  display: block;
+  margin: 4px 0;
+  color: var(--ink);
+  font-size: 1.45rem;
+}
+
+.paper-slip-controls {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  gap: 12px;
+}
+
+.paper-slip-controls label {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+}
+
+.paper-slip-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.paper-slip-summary-grid > div {
+  padding: 12px;
+  border: 1px solid rgba(123, 154, 184, 0.15);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.paper-slip-summary-grid strong {
+  display: block;
+  margin-top: 4px;
+  color: var(--ink);
+  font-size: 1.05rem;
+}
+
+.paper-slip-pick-list,
+.saved-paper-slip-list {
+  display: grid;
+  gap: 10px;
+}
+
+.paper-slip-pick,
+.saved-paper-slip {
+  position: relative;
+  padding: 14px;
+  border: 1px solid rgba(123, 154, 184, 0.15);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.paper-slip-pick-main strong,
+.saved-paper-slip strong {
+  display: block;
+  color: var(--ink);
+  font-size: 1.03rem;
+}
+
+.paper-slip-pick-odds {
+  display: grid;
+  justify-items: end;
+  gap: 8px;
+}
+
+.paper-slip-pick-odds > b {
+  color: var(--ink);
+  font-size: 1.15rem;
+}
+
+.paper-slip-pick-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.paper-slip-pick-meta span {
+  padding: 5px 8px;
+  border: 1px solid rgba(123, 154, 184, 0.14);
+  border-radius: 999px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.035);
+  font-size: 0.76rem;
+  font-weight: 850;
+}
+
+.paper-slip-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 950;
+}
+
+.paper-slip-status b {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  color: var(--ink);
+  background: rgba(123, 154, 184, 0.18);
+}
+
+.paper-slip-status-won b {
+  background: #31d992;
+}
+
+.paper-slip-status-lost b {
+  background: #e84f5f;
+}
+
+.paper-slip-status-void b {
+  background: rgba(242, 189, 100, 0.5);
+}
+
+.paper-slip-remove {
+  margin-top: 10px;
+  border: 0;
+  color: var(--muted);
+  background: transparent;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.paper-slip-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.paper-slip-empty {
+  padding: 16px;
+  border: 1px dashed rgba(123, 154, 184, 0.24);
+  border-radius: 16px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.025);
+  font-weight: 800;
+}
+
+.saved-paper-slip-stats {
+  display: grid;
+  justify-items: end;
+  gap: 4px;
+}
+
 .timeline-market-strip {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -7366,9 +7604,13 @@ code {
     min-height: auto;
   }
 
-  .fixture-market-outcome-row > div:last-child {
+  .fixture-market-outcome-row > div:nth-child(2) {
     justify-items: start;
     text-align: left;
+  }
+
+  .slip-add-button {
+    justify-self: start;
   }
 
   .fixture-market-card-meta {
@@ -7518,6 +7760,26 @@ code {
 
   .x-shortlist-actions .button,
   .x-shortlist-actions .ghost-button {
+    width: 100%;
+  }
+
+  .paper-slip-head,
+  .paper-slip-pick-main,
+  .saved-paper-slip,
+  .paper-slip-controls,
+  .paper-slip-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .paper-slip-math,
+  .paper-slip-pick-odds,
+  .saved-paper-slip-stats {
+    justify-items: start;
+    text-align: left;
+  }
+
+  .paper-slip-actions .button,
+  .paper-slip-actions .ghost-button {
     width: 100%;
   }
 
