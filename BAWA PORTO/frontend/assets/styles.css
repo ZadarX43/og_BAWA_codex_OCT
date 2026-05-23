@@ -1472,6 +1472,11 @@ body::after {
 }
 
 .fixture-market-outcome-row {
+  width: 100%;
+  appearance: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(112px, auto) auto;
   gap: 12px;
@@ -1483,12 +1488,37 @@ body::after {
   background: rgba(255, 255, 255, 0.025);
 }
 
+.fixture-market-outcome-row:disabled {
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
+.fixture-market-outcome-row:not(:disabled):hover {
+  border-color: rgba(78, 222, 163, 0.36);
+  background: rgba(78, 222, 163, 0.075);
+}
+
 .fixture-market-outcome-row.is-active {
   border-color: rgba(78, 222, 163, 0.3);
   background:
     linear-gradient(90deg, rgba(78, 222, 163, 0.1), rgba(48, 199, 255, 0.045)),
     rgba(255, 255, 255, 0.035);
   box-shadow: inset 3px 0 0 rgba(78, 222, 163, 0.88);
+}
+
+.fixture-market-outcome-row.is-slip-selected {
+  border-color: rgba(255, 255, 255, 0.7);
+  background: rgba(244, 247, 245, 0.94);
+  box-shadow: inset 0 0 0 1px rgba(78, 222, 163, 0.34);
+}
+
+.fixture-market-outcome-row.is-slip-selected span,
+.fixture-market-outcome-row.is-slip-selected b {
+  color: #173b2d;
+}
+
+.fixture-market-outcome-row.is-slip-selected small {
+  color: rgba(30, 50, 43, 0.72);
 }
 
 .fixture-market-outcome-row.is-context {
@@ -1521,6 +1551,25 @@ body::after {
   color: var(--muted);
   font-size: 0.75rem;
   line-height: 1.2;
+}
+
+.slip-select-label {
+  justify-self: end;
+  min-width: 54px;
+  padding: 7px 10px;
+  border: 1px solid rgba(78, 222, 163, 0.22);
+  border-radius: 999px;
+  color: var(--mint);
+  background: rgba(78, 222, 163, 0.08);
+  font-size: 0.72rem;
+  font-weight: 950;
+  text-align: center;
+}
+
+.fixture-market-outcome-row.is-slip-selected .slip-select-label {
+  color: #113327;
+  border-color: rgba(17, 51, 39, 0.26);
+  background: rgba(78, 222, 163, 0.24);
 }
 
 .fixture-market-card-meta-access b {
@@ -5385,58 +5434,55 @@ tbody tr:hover {
   gap: 10px;
 }
 
-.slip-add-button {
-  justify-self: end;
-  min-width: 72px;
-  min-height: 32px;
-  border: 1px solid rgba(78, 222, 163, 0.24);
-  border-radius: 999px;
-  color: var(--ink);
-  background: rgba(78, 222, 163, 0.1);
-  font-size: 0.72rem;
-  font-weight: 950;
-  cursor: pointer;
-}
-
-.slip-add-button:hover,
-.slip-add-button.is-active {
-  border-color: rgba(78, 222, 163, 0.55);
-  background: rgba(78, 222, 163, 0.2);
-}
-
-.slip-add-button:disabled {
-  cursor: not-allowed;
-  color: rgba(178, 199, 188, 0.58);
-  border-color: rgba(123, 154, 184, 0.14);
-  background: rgba(255, 255, 255, 0.035);
-}
-
 .paper-slip-panel {
   display: grid;
-  gap: 16px;
-  width: min(980px, 100%);
+  gap: 14px;
+  width: min(720px, 100%);
   margin: 22px auto;
-  padding: 18px;
-  border: 1px solid rgba(123, 154, 184, 0.2);
-  border-radius: 22px;
-  background:
-    linear-gradient(145deg, rgba(12, 27, 39, 0.94), rgba(8, 18, 27, 0.82)),
-    rgba(6, 13, 19, 0.9);
-  box-shadow: 0 24px 68px rgba(0, 0, 0, 0.26);
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.74);
+  border-radius: 18px;
+  color: #2e3431;
+  background: #f6f7f4;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.32);
 }
 
 .paper-slip-head,
-.paper-slip-pick-main,
 .saved-paper-slip {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 16px;
+  gap: 12px;
   align-items: start;
 }
 
+.paper-slip-pick-main {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+}
+
+.paper-slip-head > div:first-child {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.paper-slip-count {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  color: #fff;
+  background: #347b5a;
+  font-weight: 950;
+}
+
 .paper-slip-head h2 {
-  margin: 4px 0 8px;
-  font-size: clamp(1.24rem, 3vw, 1.82rem);
+  margin: 0;
+  color: #2e3431;
+  font-size: clamp(1.28rem, 3vw, 1.72rem);
   letter-spacing: 0;
 }
 
@@ -5444,25 +5490,22 @@ tbody tr:hover {
 .paper-slip-pick p,
 .saved-paper-slip p {
   margin: 0;
-  color: rgba(220, 234, 242, 0.84);
+  color: rgba(46, 52, 49, 0.72);
   line-height: 1.5;
 }
 
 .paper-slip-math {
-  min-width: 160px;
-  padding: 12px;
-  border: 1px solid rgba(78, 222, 163, 0.18);
-  border-radius: 16px;
-  background: rgba(78, 222, 163, 0.08);
+  min-width: 112px;
   text-align: right;
 }
 
 .paper-slip-math span,
 .paper-slip-math small,
-.paper-slip-summary-grid span,
+.paper-slip-footer span,
+.paper-slip-note-field span,
 .saved-paper-slip-stats span {
   display: block;
-  color: var(--muted);
+  color: rgba(46, 52, 49, 0.68);
   font-size: 0.78rem;
   font-weight: 850;
 }
@@ -5470,44 +5513,59 @@ tbody tr:hover {
 .paper-slip-math strong {
   display: block;
   margin: 4px 0;
-  color: var(--ink);
+  color: #2e3431;
   font-size: 1.45rem;
 }
 
-.paper-slip-controls {
+.paper-slip-footer {
   display: grid;
-  grid-template-columns: 180px minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) 160px minmax(0, 1fr);
   gap: 12px;
+  align-items: end;
+  padding-top: 12px;
+  border-top: 1px solid rgba(46, 52, 49, 0.12);
 }
 
-.paper-slip-controls label {
+.paper-slip-footer > div,
+.paper-slip-footer label,
+.paper-slip-note-field {
   display: grid;
   gap: 6px;
-  color: var(--muted);
-  font-size: 0.75rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.09em;
 }
 
-.paper-slip-summary-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
-}
-
-.paper-slip-summary-grid > div {
-  padding: 12px;
-  border: 1px solid rgba(123, 154, 184, 0.15);
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.04);
-}
-
-.paper-slip-summary-grid strong {
+.paper-slip-footer strong,
+.paper-slip-return strong {
   display: block;
-  margin-top: 4px;
-  color: var(--ink);
-  font-size: 1.05rem;
+  color: #2e3431;
+  font-size: 1.34rem;
+}
+
+.paper-slip-return {
+  text-align: right;
+}
+
+.paper-slip-note-field {
+  margin-top: -2px;
+}
+
+.paper-slip-panel .text-input {
+  color: #2e3431;
+  border-color: rgba(46, 52, 49, 0.14);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.paper-slip-panel .ghost-button {
+  color: #2e3431;
+  border-color: rgba(46, 52, 49, 0.18);
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.paper-slip-panel button:disabled,
+.paper-slip-panel .ghost-button:disabled {
+  cursor: not-allowed;
+  color: rgba(46, 52, 49, 0.34);
+  border-color: rgba(46, 52, 49, 0.08);
+  background: rgba(255, 255, 255, 0.18);
 }
 
 .paper-slip-pick-list,
@@ -5519,17 +5577,24 @@ tbody tr:hover {
 .paper-slip-pick,
 .saved-paper-slip {
   position: relative;
-  padding: 14px;
-  border: 1px solid rgba(123, 154, 184, 0.15);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.035);
+  padding: 12px 0;
+  border: 0;
+  border-top: 1px solid rgba(46, 52, 49, 0.1);
+  border-radius: 0;
+  background: transparent;
 }
 
 .paper-slip-pick-main strong,
 .saved-paper-slip strong {
   display: block;
-  color: var(--ink);
-  font-size: 1.03rem;
+  color: #347b5a;
+  font-size: 1.15rem;
+}
+
+.paper-slip-pick-main > div:nth-child(2) > span {
+  display: block;
+  color: #2e3431;
+  font-weight: 900;
 }
 
 .paper-slip-pick-odds {
@@ -5539,7 +5604,7 @@ tbody tr:hover {
 }
 
 .paper-slip-pick-odds > b {
-  color: var(--ink);
+  color: #2e3431;
   font-size: 1.15rem;
 }
 
@@ -5552,10 +5617,10 @@ tbody tr:hover {
 
 .paper-slip-pick-meta span {
   padding: 5px 8px;
-  border: 1px solid rgba(123, 154, 184, 0.14);
+  border: 1px solid rgba(46, 52, 49, 0.1);
   border-radius: 999px;
-  color: var(--muted);
-  background: rgba(255, 255, 255, 0.035);
+  color: rgba(46, 52, 49, 0.76);
+  background: rgba(52, 123, 90, 0.08);
   font-size: 0.76rem;
   font-weight: 850;
 }
@@ -5564,7 +5629,7 @@ tbody tr:hover {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: var(--muted);
+  color: rgba(46, 52, 49, 0.72);
   font-size: 0.72rem;
   font-weight: 950;
 }
@@ -5575,8 +5640,8 @@ tbody tr:hover {
   width: 22px;
   height: 22px;
   border-radius: 999px;
-  color: var(--ink);
-  background: rgba(123, 154, 184, 0.18);
+  color: #fff;
+  background: rgba(46, 52, 49, 0.32);
 }
 
 .paper-slip-status-won b {
@@ -5592,12 +5657,14 @@ tbody tr:hover {
 }
 
 .paper-slip-remove {
-  margin-top: 10px;
+  width: 30px;
+  height: 30px;
   border: 0;
-  color: var(--muted);
+  border-radius: 999px;
+  color: rgba(46, 52, 49, 0.72);
   background: transparent;
   font: inherit;
-  font-size: 0.78rem;
+  font-size: 1.35rem;
   font-weight: 900;
   cursor: pointer;
 }
@@ -5610,11 +5677,24 @@ tbody tr:hover {
 
 .paper-slip-empty {
   padding: 16px;
-  border: 1px dashed rgba(123, 154, 184, 0.24);
+  border: 1px dashed rgba(46, 52, 49, 0.24);
   border-radius: 16px;
-  color: var(--muted);
-  background: rgba(255, 255, 255, 0.025);
+  color: rgba(46, 52, 49, 0.72);
+  background: rgba(52, 123, 90, 0.07);
   font-weight: 800;
+}
+
+.paper-slip-save {
+  background: linear-gradient(135deg, #78f2aa, #9af4a8);
+  color: #213027;
+}
+
+.saved-paper-slip-list {
+  margin-top: 4px;
+  padding: 12px;
+  border-radius: 16px;
+  color: var(--ink);
+  background: rgba(9, 15, 14, 0.9);
 }
 
 .saved-paper-slip-stats {
@@ -7609,10 +7689,6 @@ code {
     text-align: left;
   }
 
-  .slip-add-button {
-    justify-self: start;
-  }
-
   .fixture-market-card-meta {
     flex-direction: column;
     align-items: flex-start;
@@ -7766,13 +7842,13 @@ code {
   .paper-slip-head,
   .paper-slip-pick-main,
   .saved-paper-slip,
-  .paper-slip-controls,
-  .paper-slip-summary-grid {
+  .paper-slip-footer {
     grid-template-columns: 1fr;
   }
 
   .paper-slip-math,
   .paper-slip-pick-odds,
+  .paper-slip-return,
   .saved-paper-slip-stats {
     justify-items: start;
     text-align: left;

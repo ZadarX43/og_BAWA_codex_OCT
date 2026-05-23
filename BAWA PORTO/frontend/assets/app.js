@@ -2913,10 +2913,11 @@
     return `
       <article class="paper-slip-pick" style="--enter-index:${index}">
         <div class="paper-slip-pick-main">
+          <button class="paper-slip-remove" type="button" data-action="remove-paper-slip-pick" data-pick-id="${escapeHtml(pick.id)}" aria-label="Remove selection">×</button>
           <div>
-            <span class="metric-label">${escapeHtml(pick.marketLabel || "Market")}</span>
             <strong>${escapeHtml(pick.pickLabel || "Selection")}</strong>
-            <p>${escapeHtml(pick.fixtureLabel || "Fixture pending")} · ${escapeHtml(formatKickoffLabel(pick.kickoffTime))}</p>
+            <span>${escapeHtml(pick.marketLabel || "Market")}</span>
+            <p>${escapeHtml(pick.fixtureLabel || "Fixture pending")}</p>
           </div>
           <div class="paper-slip-pick-odds">
             <b>${escapeHtml(bookmakerLineDisplay(pick.odds))}</b>
@@ -2928,7 +2929,6 @@
           <span>${escapeHtml(pick.confidenceText || "Confidence pending")}</span>
         </div>
         <p class="muted">${escapeHtml(pick.contradictionText || "Support and contradiction notes will follow the fixture intelligence payload.")}</p>
-        <button class="paper-slip-remove" type="button" data-action="remove-paper-slip-pick" data-pick-id="${escapeHtml(pick.id)}">Remove</button>
       </article>
     `;
   };
@@ -2962,39 +2962,42 @@
       <section class="paper-slip-panel" aria-label="Paper slip builder">
         <div class="paper-slip-head">
           <div>
-            <span class="metric-label">Paper slip builder</span>
-            <h2>Build, test, and save picks without staking money.</h2>
-            <p>Use this like a bookie bet slip for research: add selections, set a unit stake, estimate returns, save the slip, and track won/lost badges when settlement data updates.</p>
+            <span class="paper-slip-count">${escapeHtml(String(pickCount))}</span>
+            <div>
+              <h2>Selections</h2>
+              <p>Paper slip. No money is placed.</p>
+            </div>
           </div>
           <div class="paper-slip-math">
-            <span>${escapeHtml(`${pickCount} pick${pickCount === 1 ? "" : "s"}`)}</span>
-            <strong>${escapeHtml(pickCount ? formatOdds(math.odds) : "No odds")}</strong>
-            <small>${escapeHtml(`${moneyDisplay(math.returnValue)} est. return`)}</small>
+            <span>${escapeHtml(pickCount ? `${pickCount} Fold` : "Builder")}</span>
+            <strong>${escapeHtml(pickCount ? formatOdds(math.odds) : "0.00")}</strong>
           </div>
-        </div>
-        <div class="paper-slip-controls">
-          <label>
-            <span>Unit stake</span>
-            <input class="text-input" type="number" min="0" step="0.5" value="${escapeHtml(String(slip.stake))}" data-role="paper-slip-stake" />
-          </label>
-          <label>
-            <span>Slip note</span>
-            <input class="text-input" type="text" value="${escapeHtml(slip.note)}" placeholder="e.g. MLS watchlist, cautious acca, model-only" data-role="paper-slip-note" />
-          </label>
-        </div>
-        <div class="paper-slip-summary-grid">
-          <div><span>Stake</span><strong>${escapeHtml(moneyDisplay(math.stake))}</strong></div>
-          <div><span>Total odds</span><strong>${escapeHtml(pickCount ? formatOdds(math.odds) : "0.00")}</strong></div>
-          <div><span>Est. return</span><strong>${escapeHtml(moneyDisplay(math.returnValue))}</strong></div>
-          <div><span>Est. profit</span><strong>${escapeHtml(moneyDisplay(math.profit))}</strong></div>
         </div>
         ${
           pickCount
             ? `<div class="paper-slip-pick-list">${slip.picks.map((pick, index) => renderPaperSlipPick(pick, index)).join("")}</div>`
-            : `<div class="paper-slip-empty">Add a priced market selection from a fixture card. This is for education and research only, not bet placement.</div>`
+            : `<div class="paper-slip-empty">Tap any priced outcome tile to add it here.</div>`
         }
+        <div class="paper-slip-footer">
+          <div>
+            <span>${escapeHtml(pickCount ? `${pickCount} Fold` : "Paper Slip")}</span>
+            <strong>${escapeHtml(pickCount ? formatOdds(math.odds) : "0.00")}</strong>
+          </div>
+          <label>
+            <span>Stake</span>
+            <input class="text-input" type="number" min="0" step="0.5" value="${escapeHtml(String(slip.stake))}" data-role="paper-slip-stake" />
+          </label>
+          <div class="paper-slip-return">
+            <span>To Return</span>
+            <strong>${escapeHtml(moneyDisplay(math.returnValue))}</strong>
+          </div>
+        </div>
+        <label class="paper-slip-note-field">
+          <span>Research note</span>
+          <input class="text-input" type="text" value="${escapeHtml(slip.note)}" placeholder="e.g. MLS watchlist, cautious acca, model-only" data-role="paper-slip-note" />
+        </label>
         <div class="paper-slip-actions">
-          <button class="button" type="button" data-action="save-paper-slip" ${pickCount ? "" : "disabled"}>Save slip</button>
+          <button class="button paper-slip-save" type="button" data-action="save-paper-slip" ${pickCount ? "" : "disabled"}>Save Paper Slip ${escapeHtml(moneyDisplay(math.stake))}</button>
           <button class="ghost-button" type="button" data-action="export-paper-slip" ${pickCount ? "" : "disabled"}>Copy slip</button>
           <button class="ghost-button" type="button" data-action="clear-paper-slip" ${pickCount ? "" : "disabled"}>Clear</button>
         </div>
@@ -3807,7 +3810,13 @@
           const inSlip = state.runtime.paperSlip.picks.some((item) => item.id === paperSlipPickId(slipPick));
           const canAdd = hasUsableOdds(row.odds);
           return `
-            <div class="fixture-market-outcome-row ${row.active ? "is-active" : row.modelSelected || row.context ? "is-context" : ""}">
+            <button
+              class="fixture-market-outcome-row ${row.active ? "is-active" : row.modelSelected || row.context ? "is-context" : ""} ${inSlip ? "is-slip-selected" : ""}"
+              type="button"
+              data-action="add-paper-slip-pick"
+              data-pick="${escapeHtml(JSON.stringify(slipPick))}"
+              ${canAdd ? "" : "disabled"}
+            >
               <div>
                 <span>${escapeHtml(row.label)}</span>
                 <small>${escapeHtml(row.model)}</small>
@@ -3816,14 +3825,8 @@
                 <b>${escapeHtml(outcomeOddsText(row.odds, "No odds"))}</b>
                 <small>${escapeHtml(row.implied)}</small>
               </div>
-              <button
-                class="slip-add-button ${inSlip ? "is-active" : ""}"
-                type="button"
-                data-action="add-paper-slip-pick"
-                data-pick="${escapeHtml(JSON.stringify(slipPick))}"
-                ${canAdd ? "" : "disabled"}
-              >${escapeHtml(inSlip ? "Added" : canAdd ? "+ Slip" : "No line")}</button>
-            </div>
+              <span class="slip-select-label">${escapeHtml(inSlip ? "Added" : canAdd ? "Add" : "No line")}</span>
+            </button>
           `;
         })
         .join("")}
