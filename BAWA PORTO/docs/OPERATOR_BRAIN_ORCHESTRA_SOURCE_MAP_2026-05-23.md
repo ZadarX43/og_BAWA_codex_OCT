@@ -48,13 +48,16 @@ These files define policy/config contracts rather than generated reports:
 These should be tracked in the next group after a compile/import check:
 
 - `injury_shock_engine.py`: injury-to-market impact sidecar for FTR, BTTS, and OU25 support/contradiction.
-- `player_prop_models.py`: beta player-event modelling helpers.
-- `player_usage_profiles.py`: player usage/profile helpers for event cards and summary inputs.
 - `team_rating_engine.py`: team rating helper for fixture intelligence and team context cards.
 - `travel_fatigue.py`: travel/context helper for fixture support layers.
 - `uefa_context.py`: UEFA/world/international competition context helper.
 - `weather_data.py`: weather soft-context helper.
 - `seasonal_market_ledger.py`: market ledger/history helper.
+
+Do not commit yet:
+
+- `player_prop_models.py`: currently appears to be a filename-only stub.
+- `player_usage_profiles.py`: currently appears to be a filename-only stub.
 
 ## Already Tracked Orchestra / Website Spine
 
@@ -81,6 +84,7 @@ These files already exist in tracked history and are the current website/publish
 ## Explicitly Not Folded Yet
 
 - `game_context.py`: currently compiles but appears to contain only a filename expression; leave untracked until reviewed.
+- `player_prop_models.py` and `player_usage_profiles.py`: filename-only stubs; leave untracked until replaced by real player-event Brain modules.
 - `train_markets.py`, `train_investor_leagues_v2.py`, and other trainer files: imported and important, but should be committed in a training-specific group, not mixed into operator/brain/orchestra.
 - Research/backtest/audit harnesses: archive/review by family after checking current docs/runbooks.
 - Shell runners other than `deploy_weekend_runner.sh` and `rebuild_all_merged.sh`: review before tracking; many are old frozen/sandbox runners.
@@ -91,4 +95,3 @@ These files already exist in tracked history and are the current website/publish
 2. Brain owns compact per-fixture intelligence contracts and sidecars.
 3. Orchestra owns publish/export, R2/D1 deltas, site smoke checks, Telegram-ready summaries, and user tier payloads.
 4. Model/deploy behavior remains owned by the production spine, especially `bookie_allmarkets.py`, `deploy_rulebook.py`, and `slip_formatter.py`.
-
