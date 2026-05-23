@@ -285,6 +285,9 @@
   const paperSlipPickId = ({ fixtureKey, marketKey, pick }) =>
     [fixtureKey, marketKey, pick].map((part) => String(part || "").replaceAll("|", "")).join("|");
 
+  const paperSlipMarketGroupId = ({ fixtureKey, marketKey }) =>
+    [fixtureKey, marketKey].map((part) => String(part || "").replaceAll("|", "")).join("|");
+
   const persistPaperSlip = () => writePaperSlip(state.runtime.paperSlip);
 
   const addPaperSlipPick = (pick) => {
@@ -307,9 +310,16 @@
     if (!nextPick.fixtureKey || !nextPick.marketKey || !nextPick.pick || !hasUsableOdds(nextPick.odds)) {
       return;
     }
+    const existingExact = state.runtime.paperSlip.picks.some((item) => item.id === nextPick.id);
+    if (existingExact) {
+      return;
+    }
+    const nextGroup = paperSlipMarketGroupId(nextPick);
     state.runtime.paperSlip.picks = [
       nextPick,
-      ...state.runtime.paperSlip.picks.filter((item) => item.id !== nextPick.id),
+      ...state.runtime.paperSlip.picks.filter(
+        (item) => item.id !== nextPick.id && paperSlipMarketGroupId(item) !== nextGroup
+      ),
     ].slice(0, 12);
     persistPaperSlip();
   };
@@ -335,6 +345,20 @@
       ...slip,
     };
     state.runtime.savedPaperSlips = [saved, ...state.runtime.savedPaperSlips].slice(0, 20);
+    writeSavedPaperSlips(state.runtime.savedPaperSlips);
+  };
+
+  const loadSavedPaperSlip = (id) => {
+    const saved = state.runtime.savedPaperSlips.find((item) => item.id === String(id || ""));
+    if (!saved) {
+      return;
+    }
+    state.runtime.paperSlip = normalizePaperSlip(saved);
+    persistPaperSlip();
+  };
+
+  const removeSavedPaperSlip = (id) => {
+    state.runtime.savedPaperSlips = state.runtime.savedPaperSlips.filter((item) => item.id !== String(id || ""));
     writeSavedPaperSlips(state.runtime.savedPaperSlips);
   };
 
@@ -2950,16 +2974,21 @@
           <span>${escapeHtml(`${moneyDisplay(math.returnValue)} est. return`)}</span>
           <span>${escapeHtml(`${wins}W / ${losses}L`)}</span>
         </div>
+        <div class="saved-paper-slip-actions">
+          <button type="button" data-action="load-saved-paper-slip" data-slip-id="${escapeHtml(slip.id)}">Load</button>
+          <button type="button" data-action="remove-saved-paper-slip" data-slip-id="${escapeHtml(slip.id)}">Remove</button>
+        </div>
       </article>
     `;
   };
 
-  const renderPaperSlipPanel = () => {
+  const renderPaperSlipPanel = (options = {}) => {
     const slip = normalizePaperSlip(state.runtime.paperSlip);
     const math = paperSlipMath(slip);
     const pickCount = slip.picks.length;
+    const savedLimit = Number.isFinite(Number(options.savedLimit)) ? Number(options.savedLimit) : 4;
     return `
-      <section class="paper-slip-panel" aria-label="Paper slip builder">
+      <section class="paper-slip-panel" id="paper-slip-builder" aria-label="Paper slip builder">
         <div class="paper-slip-head">
           <div>
             <span class="paper-slip-count">${escapeHtml(String(pickCount))}</span>
@@ -3005,10 +3034,28 @@
           state.runtime.savedPaperSlips.length
             ? `<div class="saved-paper-slip-list">
                 <span class="metric-label">Saved paper slips</span>
-                ${state.runtime.savedPaperSlips.slice(0, 4).map((slip) => renderSavedPaperSlip(slip)).join("")}
+                ${state.runtime.savedPaperSlips.slice(0, savedLimit).map((slip) => renderSavedPaperSlip(slip)).join("")}
               </div>`
             : ""
         }
+      </section>
+    `;
+  };
+
+  const renderAccountPaperSlipWorkspace = (signedIn = false) => {
+    if (!signedIn && !state.runtime.paperSlip.picks.length && !state.runtime.savedPaperSlips.length) {
+      return "";
+    }
+    return `
+      <section class="section" id="paper-slips">
+        <div class="section-head">
+          <div>
+            <h2>Paper slip workspace</h2>
+            <p class="section-copy">Build several simulated slips, refine them, save the versions you like, and only leave Odds Genius when you are ready to copy selections elsewhere.</p>
+          </div>
+          <span class="pill">${escapeHtml(`${state.runtime.savedPaperSlips.length} saved`)}</span>
+        </div>
+        ${renderPaperSlipPanel({ savedLimit: 20 })}
       </section>
     `;
   };
@@ -3017,7 +3064,7 @@
     <nav class="x-bottom-nav" aria-label="Matches timeline navigation">
       <a href="./index.html"><span>Home</span></a>
       <a href="./matches.html#matches-search"><span>Search</span></a>
-      <a href="./premium.html"><span>OG GPT</span></a>
+      <a href="./matches.html#paper-slip-builder"><span>Slip${state.runtime.paperSlip.picks.length ? ` ${state.runtime.paperSlip.picks.length}` : ""}</span></a>
       <a href="./matches.html?favs=1"><span>Favs${state.runtime.matchFavourites.length ? ` ${state.runtime.matchFavourites.length}` : ""}</span></a>
       <button type="button" data-action="history-back" aria-label="Back page"><span>&lt;</span></button>
       <button type="button" data-action="history-forward" aria-label="Forward page"><span>&gt;</span></button>
@@ -3737,8 +3784,8 @@
 
   const marketLabelForKey = (key) => {
     if (key === "ftr") return "Full Time Result";
-    if (key === "ou25") return "Over 2.5";
-    if (key === "btts") return "BTTS";
+    if (key === "ou25") return "Total Goals";
+    if (key === "btts") return "Both Teams to Score";
     if (key === "team_goals") return "Team 1.5 Goals";
     return safeTitleLabel(key || "Market");
   };
@@ -9997,6 +10044,7 @@
               <nav class="page-subnav" aria-label="Account sections">
                 <div class="page-subnav-scroll">
                   <a class="page-subnav-link is-active" href="#account-overview">Workspace</a>
+                  <a class="page-subnav-link" href="#paper-slips">Paper slips</a>
                   <a class="page-subnav-link" href="#activity-desk">Activity</a>
                   <a class="page-subnav-link" href="#devices">Devices</a>
                   <a class="page-subnav-link" href="#preferences">Preferences</a>
@@ -10027,6 +10075,7 @@
                 `
                 : ""
             }
+            ${renderAccountPaperSlipWorkspace(signedIn)}
             <section class="section split" id="account-overview">
               <article class="panel">
                 <h3>Member workspace</h3>
@@ -13975,6 +14024,22 @@
     if (saveSlipTarget) {
       event.preventDefault();
       savePaperSlip();
+      render();
+      return;
+    }
+
+    const loadSavedSlipTarget = event.target.closest("[data-action='load-saved-paper-slip']");
+    if (loadSavedSlipTarget) {
+      event.preventDefault();
+      loadSavedPaperSlip(loadSavedSlipTarget.dataset.slipId);
+      render();
+      return;
+    }
+
+    const removeSavedSlipTarget = event.target.closest("[data-action='remove-saved-paper-slip']");
+    if (removeSavedSlipTarget) {
+      event.preventDefault();
+      removeSavedPaperSlip(removeSavedSlipTarget.dataset.slipId);
       render();
       return;
     }

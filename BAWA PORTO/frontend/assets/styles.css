@@ -5584,6 +5584,11 @@ tbody tr:hover {
   background: transparent;
 }
 
+.saved-paper-slip {
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  color: var(--ink);
+}
+
 .paper-slip-pick-main strong,
 .saved-paper-slip strong {
   display: block;
@@ -5701,6 +5706,31 @@ tbody tr:hover {
   display: grid;
   justify-items: end;
   gap: 4px;
+}
+
+.saved-paper-slip-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.saved-paper-slip-actions button {
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid rgba(123, 154, 184, 0.18);
+  border-radius: 999px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.06);
+  font: inherit;
+  font-size: 0.74rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.saved-paper-slip-actions button:hover {
+  border-color: rgba(78, 222, 163, 0.34);
+  background: rgba(78, 222, 163, 0.1);
 }
 
 .timeline-market-strip {
@@ -7852,6 +7882,14 @@ code {
   .saved-paper-slip-stats {
     justify-items: start;
     text-align: left;
+  }
+
+  .saved-paper-slip-actions {
+    justify-content: stretch;
+  }
+
+  .saved-paper-slip-actions button {
+    flex: 1 1 120px;
   }
 
   .paper-slip-actions .button,
