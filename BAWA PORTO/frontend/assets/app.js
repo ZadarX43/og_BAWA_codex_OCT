@@ -2316,33 +2316,85 @@
     return row?.signal_summary?.headline || row?.signal_summary?.summary_text || "Fixture intelligence update available.";
   };
 
+  const renderTimelineMarketButton = (row, key, outcome) => {
+    const slipPick = slipPickPayload(row, key, outcome, null);
+    const inSlip = state.runtime.paperSlip.picks.some((item) => item.id === paperSlipPickId(slipPick));
+    const canAdd = hasUsableOdds(outcome.odds);
+    return `
+      <button
+        class="timeline-market-button ${outcome.active ? "is-active" : outcome.modelSelected || outcome.context ? "is-context" : ""} ${inSlip ? "is-slip-selected" : ""}"
+        type="button"
+        data-action="add-paper-slip-pick"
+        data-pick="${escapeHtml(JSON.stringify(slipPick))}"
+        ${canAdd ? "" : "disabled"}
+      >
+        <span>${escapeHtml(outcome.label)}</span>
+        <b>${escapeHtml(outcomeOddsText(outcome.odds, "-"))}</b>
+      </button>
+    `;
+  };
+
   const renderTimelineMarketChips = (row) => {
-    const odds = row?.odds_summary || {};
-    const chips = [
-      {
-        label: "FTR",
-        value:
-          odds.home_win_odds || odds.draw_odds || odds.away_win_odds
-            ? `H ${odds.home_win_odds || "-"} / D ${odds.draw_odds || "-"} / A ${odds.away_win_odds || "-"}`
-            : "Line pending",
-      },
-      {
-        label: "OU25",
-        value: odds.over25_odds || odds.under25_odds ? `O ${odds.over25_odds || "-"} / U ${odds.under25_odds || "-"}` : "Line pending",
-      },
-      {
-        label: "BTTS",
-        value: odds.btts_yes_odds || odds.btts_no_odds ? `Y ${odds.btts_yes_odds || "-"} / N ${odds.btts_no_odds || "-"}` : "Line pending",
-      },
+    const groups = [
+      { key: "ftr", label: "FTR" },
+      { key: "ou25", label: "O/U 2.5" },
+      { key: "btts", label: "BTTS" },
     ];
     return `
       <div class="timeline-market-strip">
-        ${chips
+        ${groups
           .map(
-            (chip) => `
-              <span class="timeline-market-chip">
-                <b>${escapeHtml(chip.label)}</b>
-                <span>${escapeHtml(chip.value)}</span>
+            (group) => {
+              const outcomes = marketOutcomeRows(row, group.key, null);
+              const priced = outcomes.some((outcome) => hasUsableOdds(outcome.odds));
+              return `
+                <div class="timeline-market-chip ${priced ? "" : "is-line-pending"}">
+                  <b>${escapeHtml(group.label)}</b>
+                  <div class="timeline-market-button-row timeline-market-button-row-${escapeHtml(group.key)}">
+                    ${priced ? outcomes.map((outcome) => renderTimelineMarketButton(row, group.key, outcome)).join("") : `<span>Line pending</span>`}
+                  </div>
+                </div>
+              `;
+            }
+          )
+          .join("")}
+      </div>
+    `;
+  };
+
+  const renderPaperSlipDock = () => {
+    const slip = normalizePaperSlip(state.runtime.paperSlip);
+    const math = paperSlipMath(slip);
+    const pickCount = slip.picks.length;
+    return `
+      <a class="paper-slip-dock ${pickCount ? "has-picks" : ""}" href="./matches.html#paper-slip-builder" aria-label="Open paper slip builder">
+        <span class="paper-slip-dock-count">${escapeHtml(String(pickCount))}</span>
+        <span>
+          <b>${escapeHtml(pickCount ? `${pickCount} Fold` : "Paper slip")}</b>
+          <small>${escapeHtml(pickCount ? `Odds ${formatOdds(math.odds)} · Return ${moneyDisplay(math.returnValue)}` : "Tap odds to build a simulated slip")}</small>
+        </span>
+        <strong>${escapeHtml(pickCount ? moneyDisplay(math.stake) : "View")}</strong>
+      </a>
+    `;
+  };
+
+  const timelineCompactUnlockStrip = () => {
+    const rank = accessTierRank(currentAccessTier());
+    const items = [
+      { label: "Standard", title: "Public read", rank: 0 },
+      { label: "Founder", title: "Context", rank: 1 },
+      { label: "Premium", title: "Market posture", rank: 2 },
+      { label: "Pro", title: "Player events", rank: 3 },
+      { label: "Pro+", title: "Audit", rank: 4 },
+    ];
+    return `
+      <div class="timeline-unlock-strip" aria-label="Fixture access layers">
+        ${items
+          .map(
+            (item) => `
+              <span class="${rank >= item.rank ? "is-open" : "is-locked"}">
+                <b>${escapeHtml(item.label)}</b>
+                <small>${escapeHtml(item.title)}</small>
               </span>
             `
           )
@@ -2781,31 +2833,6 @@
         ${timelinePremiumPanel(row, brain, rank)}
         ${timelinePlayerEventPanel(brain, rank)}
         ${timelineAuditPanel(brain, rank)}
-      </div>
-    `;
-  };
-
-  const timelineCompactUnlockStrip = () => {
-    const rank = accessTierRank(currentAccessTier());
-    const items = [
-      { label: "Standard", title: "Public read", rank: 0 },
-      { label: "Founder", title: "Context", rank: 1 },
-      { label: "Premium", title: "Market posture", rank: 2 },
-      { label: "Pro", title: "Player events", rank: 3 },
-      { label: "Pro+", title: "Audit", rank: 4 },
-    ];
-    return `
-      <div class="timeline-unlock-strip" aria-label="Fixture access layers">
-        ${items
-          .map(
-            (item) => `
-              <span class="${rank >= item.rank ? "is-open" : "is-locked"}">
-                <b>${escapeHtml(item.label)}</b>
-                <small>${escapeHtml(item.title)}</small>
-              </span>
-            `
-          )
-          .join("")}
       </div>
     `;
   };
@@ -8079,6 +8106,7 @@
         ${renderMatchesTimeline(rows)}
         ${renderPaperSlipPanel()}
       </section>
+      ${renderPaperSlipDock()}
       ${matchesBottomNav()}
     `;
   };
