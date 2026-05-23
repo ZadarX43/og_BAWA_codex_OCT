@@ -5327,15 +5327,20 @@ tbody tr:hover {
   flex: 0 0 auto;
   display: inline-grid;
   place-items: center;
-  width: 42px;
-  height: 42px;
+  width: 58px;
+  height: 34px;
   border: 1px solid rgba(123, 154, 184, 0.16);
   border-radius: 999px;
   color: var(--muted);
   background: rgba(255, 255, 255, 0.045);
-  font-size: 1.26rem;
+  font-size: 1.08rem;
+  line-height: 1;
   cursor: pointer;
   transition: 160ms ease;
+}
+
+.x-fav-button span {
+  transform: translateY(-1px);
 }
 
 .x-fav-button:hover,
@@ -5343,6 +5348,41 @@ tbody tr:hover {
   color: var(--danger);
   border-color: rgba(255, 139, 139, 0.28);
   background: rgba(255, 139, 139, 0.1);
+}
+
+.x-shortlist-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: center;
+  margin: 18px 0;
+  padding: 18px;
+  border: 1px solid rgba(78, 222, 163, 0.2);
+  border-radius: 20px;
+  background:
+    linear-gradient(135deg, rgba(78, 222, 163, 0.12), rgba(43, 189, 240, 0.055)),
+    rgba(8, 18, 27, 0.72);
+  box-shadow: 0 18px 52px rgba(0, 0, 0, 0.18);
+}
+
+.x-shortlist-panel h2 {
+  margin: 4px 0 8px;
+  font-size: clamp(1.22rem, 3vw, 1.6rem);
+  letter-spacing: 0;
+}
+
+.x-shortlist-panel p {
+  max-width: 760px;
+  margin: 0;
+  color: rgba(220, 234, 242, 0.86);
+  line-height: 1.5;
+}
+
+.x-shortlist-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
 .timeline-market-strip {
@@ -7465,6 +7505,19 @@ code {
 
   .x-post-actions .button,
   .x-post-actions .ghost-button {
+    width: 100%;
+  }
+
+  .x-shortlist-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .x-shortlist-actions {
+    justify-content: stretch;
+  }
+
+  .x-shortlist-actions .button,
+  .x-shortlist-actions .ghost-button {
     width: 100%;
   }
 

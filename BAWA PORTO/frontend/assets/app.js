@@ -2697,7 +2697,7 @@
               data-fixture-key="${escapeHtml(row.fixture_key)}"
               aria-label="${favourite ? "Remove fixture from favourites" : "Add fixture to favourites"}"
               title="${favourite ? "Remove from favourites" : "Add to favourites"}"
-            >${favourite ? "♥" : "♡"}</button>
+            ><span>${favourite ? "♥" : "♡"}</span></button>
           </div>
           <p class="x-post-location">${escapeHtml(formatTimelineDate(row.kickoff_time))} / ${escapeHtml(fixtureLocationLabel(row))}</p>
           <p class="x-post-summary">${escapeHtml(predictionFeedSummary(row))}</p>
@@ -2743,6 +2743,9 @@
       .map((row) => ({ type: "fixture", timestamp: row.fixture_kickoff_at || row.kickoff_time, row }))
       .sort((left, right) => kickoffTimestamp(left.timestamp) - kickoffTimestamp(right.timestamp));
     const adminItems = OG_ADMIN_FEED_POSTS.map((post) => ({ type: "admin", timestamp: post.timestamp, post }));
+    if (matchesFavouritesOnly && !fixtureItems.length) {
+      return `<div class="notice">No favourite fixtures yet. Use the heart on a fixture to build your research shortlist.</div>`;
+    }
     const posts = fixtureItems.length ? [fixtureItems[0], ...adminItems, ...fixtureItems.slice(1)] : adminItems;
     if (!posts.length) {
       return `<div class="notice">No timeline posts match this search yet.</div>`;
@@ -2758,12 +2761,35 @@
     `;
   };
 
+  const renderMatchesShortlistPanel = (rows = []) => {
+    if (!matchesFavouritesOnly) {
+      return "";
+    }
+    const count = rows.length;
+    return `
+      <section class="x-shortlist-panel" aria-label="Favourite fixture shortlist">
+        <div>
+          <span class="metric-label">Research shortlist</span>
+          <h2>${count ? `${count} saved fixture${count === 1 ? "" : "s"}` : "No saved fixtures yet"}</h2>
+          <p>
+            Favourites are your working board: fixtures you want to monitor, compare, research, and come back to without keeping notes elsewhere.
+            Saved items live on this device now; account sync, Telegram alerts, and slip-builder export are the next layer.
+          </p>
+        </div>
+        <div class="x-shortlist-actions">
+          <a class="button" href="./matches.html">Back to timeline</a>
+          <a class="ghost-button" href="./account.html">Account alerts</a>
+        </div>
+      </section>
+    `;
+  };
+
   const matchesBottomNav = () => `
     <nav class="x-bottom-nav" aria-label="Matches timeline navigation">
       <a href="./index.html"><span>Home</span></a>
       <a href="./matches.html#matches-search"><span>Search</span></a>
       <a href="./premium.html"><span>OG GPT</span></a>
-      <a href="./matches.html?favs=1"><span>Favs</span></a>
+      <a href="./matches.html?favs=1"><span>Favs${state.runtime.matchFavourites.length ? ` ${state.runtime.matchFavourites.length}` : ""}</span></a>
       <button type="button" data-action="history-back" aria-label="Back page"><span>&lt;</span></button>
       <button type="button" data-action="history-forward" aria-label="Forward page"><span>&gt;</span></button>
     </nav>
@@ -7643,6 +7669,7 @@
           ${activeSearch ? `<span>Search includes archive</span>` : ""}
           ${matchesFavouritesOnly ? `<span>Favourite filter active</span>` : ""}
         </div>
+        ${renderMatchesShortlistPanel(visibleRows)}
         ${renderMatchesTimeline(rows)}
       </section>
       ${matchesBottomNav()}
