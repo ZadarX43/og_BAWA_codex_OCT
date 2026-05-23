@@ -117,6 +117,7 @@
       internalTimeline: [],
       matchFavourites: [],
       paperSlip: { picks: [], stake: 10, note: "" },
+      paperSlipDockOpen: false,
       savedPaperSlips: [],
       timelineExpandedFixture: "",
       timelineFixturePayloads: {},
@@ -2366,15 +2367,56 @@
     const slip = normalizePaperSlip(state.runtime.paperSlip);
     const math = paperSlipMath(slip);
     const pickCount = slip.picks.length;
+    const expanded = Boolean(state.runtime.paperSlipDockOpen);
     return `
-      <a class="paper-slip-dock ${pickCount ? "has-picks" : ""}" href="./matches.html#paper-slip-builder" aria-label="Open paper slip builder">
-        <span class="paper-slip-dock-count">${escapeHtml(String(pickCount))}</span>
-        <span>
-          <b>${escapeHtml(pickCount ? `${pickCount} Fold` : "Paper slip")}</b>
-          <small>${escapeHtml(pickCount ? `Odds ${formatOdds(math.odds)} · Return ${moneyDisplay(math.returnValue)}` : "Tap odds to build a simulated slip")}</small>
-        </span>
-        <strong>${escapeHtml(pickCount ? moneyDisplay(math.stake) : "View")}</strong>
-      </a>
+      <section class="paper-slip-dock ${pickCount ? "has-picks" : ""} ${expanded ? "is-expanded" : ""}" aria-label="Paper slip tray">
+        <div class="paper-slip-dock-bar">
+          <span class="paper-slip-dock-count">${escapeHtml(String(pickCount))}</span>
+          <span>
+            <b>${escapeHtml(pickCount ? `${pickCount} Fold` : "Paper slip")}</b>
+            <small>${escapeHtml(pickCount ? `Odds ${formatOdds(math.odds)} · Return ${moneyDisplay(math.returnValue)}` : "Tap odds to build a simulated slip")}</small>
+          </span>
+          <strong>${escapeHtml(pickCount ? moneyDisplay(math.stake) : "View")}</strong>
+          <button
+            class="paper-slip-dock-toggle"
+            type="button"
+            data-action="toggle-paper-slip-dock"
+            aria-expanded="${escapeHtml(String(expanded))}"
+            aria-label="${expanded ? "Collapse paper slip" : "Expand paper slip"}"
+          >${expanded ? "⌄" : "^"}</button>
+        </div>
+        ${
+          expanded
+            ? `<div class="paper-slip-dock-sheet">
+                ${
+                  pickCount
+                    ? `<div class="paper-slip-pick-list">${slip.picks.map((pick, index) => renderPaperSlipPick(pick, index)).join("")}</div>`
+                    : `<div class="paper-slip-empty">Tap any priced outcome tile to add it here.</div>`
+                }
+                <div class="paper-slip-footer">
+                  <div>
+                    <span>${escapeHtml(pickCount ? `${pickCount} Fold` : "Paper Slip")}</span>
+                    <strong>${escapeHtml(pickCount ? formatOdds(math.odds) : "0.00")}</strong>
+                  </div>
+                  <label>
+                    <span>Stake</span>
+                    <input class="text-input" type="number" min="0" step="0.5" value="${escapeHtml(String(slip.stake))}" data-role="paper-slip-stake" />
+                  </label>
+                  <div class="paper-slip-return">
+                    <span>To Return</span>
+                    <strong>${escapeHtml(moneyDisplay(math.returnValue))}</strong>
+                  </div>
+                </div>
+                <div class="paper-slip-dock-actions">
+                  <button class="button paper-slip-save" type="button" data-action="save-paper-slip" ${pickCount ? "" : "disabled"}>Save</button>
+                  <button class="ghost-button" type="button" data-action="export-paper-slip" ${pickCount ? "" : "disabled"}>Copy</button>
+                  <button class="ghost-button" type="button" data-action="clear-paper-slip" ${pickCount ? "" : "disabled"}>Clear</button>
+                  <a class="ghost-button" href="./account.html#paper-slips">Saved slips</a>
+                </div>
+              </div>`
+            : ""
+        }
+      </section>
     `;
   };
 
@@ -14081,6 +14123,14 @@
       } catch {
         return;
       }
+      render();
+      return;
+    }
+
+    const slipDockTarget = event.target.closest("[data-action='toggle-paper-slip-dock']");
+    if (slipDockTarget) {
+      event.preventDefault();
+      state.runtime.paperSlipDockOpen = !state.runtime.paperSlipDockOpen;
       render();
       return;
     }
