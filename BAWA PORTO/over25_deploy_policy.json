@@ -1,0 +1,90 @@
+{
+  "policy_name": "over25_deploy_policy",
+  "policy_version": "v1",
+  "created_for": "shared_window_head_to_head_2024-11_to_2025-04",
+  "default_live_system": "filtered_ou25_over",
+  "default_live_branch": "ou25_band1_124_176",
+  "premium_live_system": "filtered_ou25_over",
+  "premium_live_branch": "ou25_combined_topq_080",
+  "shadow_system": "dedicated_over25_model",
+  "shadow_model_name": "over25_v3",
+  "notes": [
+    "Filtered OU25 OVER is the primary live deployment lane.",
+    "Premium filtered OU25 branch remains available as a selective lane.",
+    "Dedicated over25 model remains shadow-only until it proves superior in shared-window testing.",
+    "England Premier League is held in review state."
+  ],
+  "global_policy": {
+    "live_mode": "filtered_ou25_over",
+    "live_branch": "ou25_band1_124_176",
+    "premium_mode": "filtered_ou25_over",
+    "premium_branch": "ou25_combined_topq_080",
+    "shadow_mode": "dedicated_over25_model",
+    "shadow_model": "over25_v3",
+    "use_dedicated_over25_live": false,
+    "allow_shadow_logging": true,
+    "allow_review_state": true
+  },
+  "league_overrides": {
+    "England Premier League": {
+      "state": "review",
+      "live_mode": "filtered_ou25_over",
+      "live_branch": "ou25_band1_124_176",
+      "premium_mode": "filtered_ou25_over",
+      "premium_branch": "ou25_combined_topq_080",
+      "shadow_mode": "dedicated_over25_model",
+      "shadow_model": "over25_v3",
+      "reason": "Dedicated over25 slightly outperformed filtered OU25 on shared-window ROI, but both remained negative overall."
+    },
+    "Scotland Premiership": {
+      "state": "live",
+      "live_mode": "filtered_ou25_over",
+      "live_branch": "ou25_band1_124_176",
+      "premium_mode": "filtered_ou25_over",
+      "premium_branch": "ou25_combined_topq_080",
+      "shadow_mode": "dedicated_over25_model",
+      "shadow_model": "over25_v3",
+      "reason": "Filtered OU25 outperformed dedicated over25 in the shared deployment window."
+    },
+    "Spain La Liga": {
+      "state": "live",
+      "live_mode": "filtered_ou25_over",
+      "live_branch": "ou25_band1_124_176",
+      "premium_mode": "filtered_ou25_over",
+      "premium_branch": "ou25_combined_topq_080",
+      "shadow_mode": "dedicated_over25_model",
+      "shadow_model": "over25_v3",
+      "reason": "Filtered OU25 outperformed dedicated over25 in the shared deployment window."
+    },
+    "Brazil Serie A": {
+      "state": "live",
+      "live_mode": "filtered_ou25_over",
+      "live_branch": "ou25_band1_124_176",
+      "premium_mode": "filtered_ou25_over",
+      "premium_branch": "ou25_combined_topq_080",
+      "shadow_mode": "dedicated_over25_model",
+      "shadow_model": "over25_v3",
+      "reason": "Filtered OU25 remained the stronger deploy candidate in the shared comparison window."
+    },
+    "England FA Cup": {
+      "state": "live",
+      "live_mode": "filtered_ou25_over",
+      "live_branch": "ou25_band1_124_176",
+      "premium_mode": "filtered_ou25_over",
+      "premium_branch": "ou25_combined_topq_080",
+      "shadow_mode": "dedicated_over25_model",
+      "shadow_model": "over25_v3",
+      "reason": "Filtered OU25 outperformed dedicated over25 in the shared deployment window."
+    },
+    "England EFL League 1": {
+      "state": "live",
+      "live_mode": "filtered_ou25_over",
+      "live_branch": "ou25_band1_124_176",
+      "premium_mode": "filtered_ou25_over",
+      "premium_branch": "ou25_combined_topq_080",
+      "shadow_mode": "dedicated_over25_model",
+      "shadow_model": "over25_v3",
+      "reason": "Filtered OU25 outperformed dedicated over25 in the shared deployment window."
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "ou25": {
+    "league_whitelist": [
+      "Netherlands Eredivisie",
+      "Belgium Pro"
+    ],
+    "approved_cs_feature_cols": [
+      "cs_mass_over25",
+      "cs_mass_under25",
+      "cs_mass_exact_2_goals",
+      "cs_mass_exact_3_goals",
+      "cs_mass_4plus_goals",
+      "cs_topk_over25_share"
+    ]
+  },
+  "btts": {
+    "league_whitelist": [
+      "Netherlands Eredivisie",
+      "Belgium Pro"
+    ],
+    "approved_cs_feature_cols": [
+      "cs_mass_btts_yes",
+      "cs_mass_btts_no",
+      "cs_mass_nil_nil",
+      "cs_mass_one_side_nil",
+      "cs_mass_1_1",
+      "cs_mass_2_1_or_1_2",
+      "cs_btts_yes_topk_share"
+    ]
+  },
+  "ftr": {
+    "league_whitelist": [],
+    "approved_cs_feature_cols": []
+  }
+}

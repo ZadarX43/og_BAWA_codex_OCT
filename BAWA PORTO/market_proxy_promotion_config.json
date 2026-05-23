@@ -1,0 +1,184 @@
+{
+  "config_version": "market_proxy_promotion_v1",
+  "description": "Whitelist of approved snapshot proxy features by market and league for walk-forward promotion testing.",
+  "global_settings": {
+    "baseline_only_label": "BASELINE",
+    "approved_proxy_label": "BASELINE_PLUS_APPROVED_PROXIES",
+    "require_columns_present": true,
+    "drop_missing_proxy_cols": true,
+    "minimum_proxy_coverage_rate": 0.7,
+    "track_live_threshold_bands": true,
+    "write_debug_columns": true
+  },
+  "markets": {
+    "ftr": {
+      "enabled": true,
+      "objective": "home_win_binary",
+      "league_whitelist": [
+        "USA_MLS__merged",
+        "England_Premier_League__merged",
+        "Engl***and_U21__merged",
+        "England_FA_Cup__merged",
+        "Germany_Bundesliga__merged",
+        "Europa_Conference__merged",
+        "Belgium_Pro__merged",
+        "Norway_Eliteserien__merged",
+        "Champions_League__merged",
+        "Netherlands_Eredivisie__merged"
+      ],
+      "approved_proxy_columns": [
+        "snap_strength_ppg_home_vs_away_proxy",
+        "snap_home_attack_vs_away_def_xg_proxy",
+        "snap_home_attack_vs_away_def_goals_proxy",
+        "snapshot_ftr_support_score_proxy"
+      ],
+      "optional_review_proxy_columns": [
+        "snap_xg_total_pressure_proxy",
+        "snap_style_chaos_index_proxy",
+        "snap_ou25_over_regime_blend_proxy",
+        "snapshot_ou25_support_score_proxy"
+      ],
+      "league_overrides": {
+        "USA_MLS__merged": {
+          "approved_proxy_columns": [
+            "snap_strength_ppg_home_vs_away_proxy",
+            "snap_home_attack_vs_away_def_xg_proxy",
+            "snap_home_attack_vs_away_def_goals_proxy",
+            "snapshot_ftr_support_score_proxy"
+          ]
+        },
+        "England_Premier_League__merged": {
+          "approved_proxy_columns": [
+            "snap_strength_ppg_home_vs_away_proxy",
+            "snap_home_attack_vs_away_def_xg_proxy",
+            "snap_home_attack_vs_away_def_goals_proxy",
+            "snapshot_ftr_support_score_proxy"
+          ]
+        },
+        "Engl***and_U21__merged": {
+          "approved_proxy_columns": [
+            "snap_home_attack_vs_away_def_xg_proxy",
+            "snap_home_attack_vs_away_def_goals_proxy",
+            "snapshot_ftr_support_score_proxy"
+          ]
+        },
+        "England_FA_Cup__merged": {
+          "approved_proxy_columns": [
+            "snap_strength_ppg_home_vs_away_proxy",
+            "snap_home_attack_vs_away_def_xg_proxy",
+            "snap_home_attack_vs_away_def_goals_proxy",
+            "snapshot_ftr_support_score_proxy"
+          ]
+        },
+        "Germany_Bundesliga__merged": {
+          "approved_proxy_columns": [
+            "snap_xg_total_pressure_proxy",
+            "snap_home_attack_vs_away_def_xg_proxy",
+            "snapshot_ftr_support_score_proxy"
+          ]
+        },
+        "Europa_Conference__merged": {
+          "approved_proxy_columns": [
+            "snap_strength_ppg_home_vs_away_proxy",
+            "snap_home_attack_vs_away_def_goals_proxy",
+            "snapshot_ftr_support_score_proxy",
+            "snap_xg_total_pressure_proxy"
+          ]
+        },
+        "Belgium_Pro__merged": {
+          "approved_proxy_columns": [
+            "snapshot_ftr_support_score_proxy"
+          ]
+        },
+        "Norway_Eliteserien__merged": {
+          "approved_proxy_columns": [
+            "snapshot_ftr_support_score_proxy",
+            "snap_strength_ppg_home_vs_away_proxy"
+          ]
+        },
+        "Champions_League__merged": {
+          "approved_proxy_columns": [
+            "snap_home_attack_vs_away_def_goals_proxy",
+            "snap_home_attack_vs_away_def_xg_proxy"
+          ]
+        },
+        "Netherlands_Eredivisie__merged": {
+          "approved_proxy_columns": [
+            "snap_home_attack_vs_away_def_xg_proxy",
+            "snap_home_attack_vs_away_def_goals_proxy"
+          ]
+        }
+      }
+    },
+    "ou25": {
+      "enabled": true,
+      "objective": "over25_binary",
+      "league_whitelist": [
+        "England_Premier_League__merged",
+        "Brazil_Serie_A__merged",
+        "Norway_Eliteserien__merged",
+        "Europa_League__merged"
+      ],
+      "approved_proxy_columns": [
+        "snap_xg_total_pressure_proxy",
+        "snap_style_chaos_index_proxy",
+        "snap_ou25_over_regime_blend_proxy",
+        "snapshot_ou25_support_score_proxy"
+      ],
+      "optional_review_proxy_columns": [
+        "snap_strength_ppg_home_vs_away_proxy",
+        "snap_home_attack_vs_away_def_xg_proxy",
+        "snap_home_attack_vs_away_def_goals_proxy",
+        "snapshot_ftr_support_score_proxy"
+      ],
+      "league_overrides": {
+        "England_Premier_League__merged": {
+          "approved_proxy_columns": [
+            "snap_xg_total_pressure_proxy",
+            "snap_style_chaos_index_proxy",
+            "snap_ou25_over_regime_blend_proxy",
+            "snapshot_ou25_support_score_proxy"
+          ]
+        },
+        "Brazil_Serie_A__merged": {
+          "approved_proxy_columns": [
+            "snap_xg_total_pressure_proxy",
+            "snap_style_chaos_index_proxy",
+            "snap_ou25_over_regime_blend_proxy",
+            "snapshot_ou25_support_score_proxy"
+          ]
+        },
+        "Norway_Eliteserien__merged": {
+          "approved_proxy_columns": [
+            "snap_xg_total_pressure_proxy",
+            "snap_style_chaos_index_proxy",
+            "snap_ou25_over_regime_blend_proxy",
+            "snapshot_ou25_support_score_proxy"
+          ]
+        },
+        "Europa_League__merged": {
+          "approved_proxy_columns": [
+            "snap_home_attack_vs_away_def_xg_proxy",
+            "snapshot_ou25_support_score_proxy",
+            "snap_xg_total_pressure_proxy"
+          ]
+        }
+      }
+    },
+    "btts": {
+      "enabled": false,
+      "objective": "btts_yes_binary",
+      "league_whitelist": [],
+      "approved_proxy_columns": [],
+      "optional_review_proxy_columns": [
+        "snap_xg_total_pressure_proxy",
+        "snap_style_chaos_index_proxy",
+        "snap_ou25_over_regime_blend_proxy",
+        "snapshot_ou25_support_score_proxy",
+        "snap_home_attack_vs_away_def_xg_proxy",
+        "snap_home_attack_vs_away_def_goals_proxy"
+      ],
+      "league_overrides": {}
+    }
+  }
+}

@@ -1,0 +1,7 @@
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+extend-ignore = ["E501","E402","E401","F811"]
+
+[tool.ruff.per-file-ignores]
+"prediction_overlay.py" = ["E501","E402","E401","F811"]

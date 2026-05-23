@@ -1,0 +1,195 @@
+{
+  "ou25": {
+    "England Premier League": {
+      "enabled": true,
+      "mode": "deploy",
+      "stack": "full_bundle",
+      "thresholds": {
+        "min_proxy_score": 0.60,
+        "min_model_prob": 0.60,
+        "min_confidence_band": "strong"
+      }
+    },
+    "Germany Bundesliga": {
+      "enabled": true,
+      "mode": "deploy",
+      "stack": "full_bundle",
+      "thresholds": {
+        "min_proxy_score": 0.58,
+        "min_model_prob": 0.58,
+        "min_confidence_band": "strong"
+      }
+    },
+    "Italy Serie A": {
+      "enabled": true,
+      "mode": "deploy",
+      "stack": "full_bundle",
+      "thresholds": {
+        "min_proxy_score": 0.58,
+        "min_model_prob": 0.58,
+        "min_confidence_band": "strong"
+      }
+    },
+    "Spain La Liga": {
+      "enabled": true,
+      "mode": "deploy",
+      "stack": "full_bundle",
+      "thresholds": {
+        "min_proxy_score": 0.58,
+        "min_model_prob": 0.58,
+        "min_confidence_band": "strong"
+      }
+    },
+    "France Ligue 1": {
+      "enabled": true,
+      "mode": "deploy",
+      "stack": "full_bundle",
+      "thresholds": {
+        "min_proxy_score": 0.60,
+        "min_model_prob": 0.60,
+        "min_confidence_band": "strong"
+      }
+    },
+    "Portugal Liga": {
+      "enabled": true,
+      "mode": "deploy",
+      "stack": "full_bundle",
+      "thresholds": {
+        "min_proxy_score": 0.58,
+        "min_model_prob": 0.58,
+        "min_confidence_band": "strong"
+      }
+    },
+    "Scotland Premiership": {
+      "enabled": true,
+      "mode": "deploy",
+      "stack": "full_bundle",
+      "thresholds": {
+        "min_proxy_score": 0.58,
+        "min_model_prob": 0.58,
+        "min_confidence_band": "strong"
+      }
+    },
+    "USA MLS": {
+      "enabled": true,
+      "mode": "deploy",
+      "stack": "full_bundle",
+      "thresholds": {
+        "min_proxy_score": 0.60,
+        "min_model_prob": 0.60,
+        "min_confidence_band": "strong"
+      }
+    },
+    "England Championship": {
+      "enabled": true,
+      "mode": "deploy",
+      "stack": "full_bundle",
+      "thresholds": {
+        "min_proxy_score": 0.58,
+        "min_model_prob": 0.58,
+        "min_confidence_band": "strong"
+      }
+    },
+    "England EFL League 1": {
+      "enabled": true,
+      "mode": "deploy",
+      "stack": "baseline_only",
+      "thresholds": {
+        "min_model_prob": 0.60,
+        "min_confidence_band": "strong"
+      }
+    },
+    "Netherlands Eredivisie": {
+      "enabled": false,
+      "mode": "baseline_only",
+      "stack": "none"
+    },
+    "Belgium Pro": {
+      "enabled": false,
+      "mode": "baseline_only",
+      "stack": "none"
+    },
+    "Brazil Serie A": {
+      "enabled": false,
+      "mode": "holdout_not_weekend",
+      "stack": "full_bundle"
+    }
+  },
+  "btts": {
+    "England Premier League": {
+      "enabled": true,
+      "mode": "deploy",
+      "stack": "full_bundle_high_threshold_only",
+      "thresholds": {
+        "min_proxy_score": 0.65,
+        "min_model_prob": 0.65,
+        "min_confidence_band": "very_strong"
+      }
+    },
+    "Germany Bundesliga": {
+      "enabled": false,
+      "mode": "baseline_only",
+      "stack": "none"
+    },
+    "Italy Serie A": {
+      "enabled": false,
+      "mode": "baseline_only",
+      "stack": "none"
+    },
+    "Spain La Liga": {
+      "enabled": false,
+      "mode": "baseline_only",
+      "stack": "none"
+    },
+    "France Ligue 1": {
+      "enabled": false,
+      "mode": "baseline_only",
+      "stack": "none"
+    },
+    "Portugal Liga": {
+      "enabled": false,
+      "mode": "baseline_only",
+      "stack": "none"
+    },
+    "Scotland Premiership": {
+      "enabled": true,
+      "mode": "deploy",
+      "stack": "full_bundle_high_threshold_only",
+      "thresholds": {
+        "min_proxy_score": 0.65,
+        "min_model_prob": 0.65,
+        "min_confidence_band": "very_strong"
+      }
+    },
+    "USA MLS": {
+      "enabled": false,
+      "mode": "baseline_only",
+      "stack": "none"
+    },
+    "England Championship": {
+      "enabled": false,
+      "mode": "baseline_only",
+      "stack": "none"
+    },
+    "England EFL League 1": {
+      "enabled": false,
+      "mode": "baseline_only",
+      "stack": "none"
+    },
+    "Brazil Serie A": {
+      "enabled": false,
+      "mode": "holdout_not_weekend",
+      "stack": "full_bundle"
+    },
+    "Netherlands Eredivisie": {
+      "enabled": false,
+      "mode": "baseline_only",
+      "stack": "none"
+    },
+    "Belgium Pro": {
+      "enabled": false,
+      "mode": "baseline_only",
+      "stack": "none"
+    }
+  }
+}

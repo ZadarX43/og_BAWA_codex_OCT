@@ -1,0 +1,115 @@
+{
+  "artifact": "ou25_league_policy",
+  "version": "2026-03-02",
+  "status": "locked_current_decision",
+  "source_window_months": 6,
+  "product": "ou25",
+  "deployment_mode": "league_filtered",
+  "branches": {
+    "default": "ou25_band1_124_176",
+    "premium": "ou25_combined_topq_080",
+    "control": "ou25_combined_baseline",
+    "deprioritised": [
+      "ou25_mode_over_only"
+    ]
+  },
+  "league_policy": {
+    "core_whitelist": [
+      "England Championship",
+      "Germany Bundesliga",
+      "Italy Serie A",
+      "Portugal Liga",
+      "Champions League",
+      "Europa League"
+    ],
+    "secondary_whitelist": [
+      "USA MLS",
+      "Norway Eliteserien",
+      "Netherlands Eredivisie",
+      "Belgium Pro"
+    ],
+    "conditional_watchlist": [
+      "Japan J1",
+      "France Ligue 1",
+      "Europa Conference",
+      "Brazil Serie A",
+      "Spain La Liga",
+      "England EFL League 1"
+    ],
+    "hard_blacklist": [
+      "England Premier League",
+      "Scotland Premiership"
+    ],
+    "soft_blacklist": [
+      "England FA Cup"
+    ]
+  },
+  "branch_policy": {
+    "ou25_band1_124_176": {
+      "role": "default_live_branch",
+      "allowed_league_groups": [
+        "core_whitelist",
+        "secondary_whitelist"
+      ],
+      "conditional_league_groups": [
+        "conditional_watchlist"
+      ],
+      "blocked_league_groups": [
+        "hard_blacklist",
+        "soft_blacklist"
+      ]
+    },
+    "ou25_combined_topq_080": {
+      "role": "premium_live_branch",
+      "allowed_league_groups": [
+        "core_whitelist"
+      ],
+      "conditional_league_groups": [
+        "secondary_whitelist",
+        "conditional_watchlist"
+      ],
+      "blocked_league_groups": [
+        "hard_blacklist",
+        "soft_blacklist"
+      ]
+    },
+    "ou25_combined_baseline": {
+      "role": "control_monitoring_branch",
+      "allowed_league_groups": [],
+      "conditional_league_groups": [
+        "core_whitelist",
+        "secondary_whitelist",
+        "conditional_watchlist"
+      ],
+      "blocked_league_groups": [
+        "hard_blacklist",
+        "soft_blacklist"
+      ]
+    },
+    "ou25_mode_over_only": {
+      "role": "deprioritised",
+      "allowed_league_groups": [],
+      "conditional_league_groups": [],
+      "blocked_league_groups": [
+        "core_whitelist",
+        "secondary_whitelist",
+        "conditional_watchlist",
+        "hard_blacklist",
+        "soft_blacklist"
+      ]
+    }
+  },
+  "live_rules": {
+    "all_league_deploy_allowed": false,
+    "require_league_filter": true,
+    "require_branch_lock": true,
+    "default_branch_requires_whitelist": true,
+    "premium_branch_requires_core_whitelist": true,
+    "blacklist_override_blocks_all": true
+  },
+  "notes": [
+    "Current decision is based on 6-month OU25 walk-forward validation.",
+    "Whitelist and blacklist should be re-evaluated after each new walk-forward month.",
+    "Conditional watchlist leagues should not be treated as unconditional production leagues."
+  ]
+}
