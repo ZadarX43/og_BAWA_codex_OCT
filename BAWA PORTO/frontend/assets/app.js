@@ -2932,8 +2932,9 @@
     </span>
   `;
 
-  const renderPaperSlipPick = (pick, index = 0) => {
+  const renderPaperSlipPick = (pick, index = 0, options = {}) => {
     const settlement = paperPickSettlement(pick);
+    const showLogic = Boolean(options.showLogic);
     return `
       <article class="paper-slip-pick" style="--enter-index:${index}">
         <div class="paper-slip-pick-main">
@@ -2948,20 +2949,27 @@
             ${renderSettlementBadge(settlement)}
           </div>
         </div>
-        <div class="paper-slip-pick-meta">
-          <span>${escapeHtml(pick.modelText || "Model context pending")}</span>
-          <span>${escapeHtml(pick.confidenceText || "Confidence pending")}</span>
-        </div>
-        <p class="muted">${escapeHtml(pick.contradictionText || "Support and contradiction notes will follow the fixture intelligence payload.")}</p>
+        ${
+          showLogic
+            ? `
+              <div class="paper-slip-pick-meta">
+                <span>${escapeHtml(pick.modelText || "Model context pending")}</span>
+                <span>${escapeHtml(pick.confidenceText || "Confidence pending")}</span>
+              </div>
+              <p class="muted">${escapeHtml(pick.contradictionText || "Support and contradiction notes will follow the fixture intelligence payload.")}</p>
+            `
+            : ""
+        }
       </article>
     `;
   };
 
-  const renderSavedPaperSlip = (slip) => {
+  const renderSavedPaperSlip = (slip, options = {}) => {
     const math = paperSlipMath(slip);
     const settled = slip.picks.map((pick) => paperPickSettlement(pick));
     const wins = settled.filter((item) => item.status === "won").length;
     const losses = settled.filter((item) => item.status === "lost").length;
+    const showLogic = Boolean(options.showLogic);
     return `
       <article class="saved-paper-slip">
         <div>
@@ -2978,6 +2986,29 @@
           <button type="button" data-action="load-saved-paper-slip" data-slip-id="${escapeHtml(slip.id)}">Load</button>
           <button type="button" data-action="remove-saved-paper-slip" data-slip-id="${escapeHtml(slip.id)}">Remove</button>
         </div>
+        ${
+          showLogic
+            ? `<div class="saved-paper-slip-selection-list">
+                ${(slip.picks || [])
+                  .map(
+                    (pick) => `
+                      <div class="saved-paper-slip-selection">
+                        <div>
+                          <strong>${escapeHtml(pick.pickLabel || "Selection")}</strong>
+                          <span>${escapeHtml(`${pick.marketLabel || "Market"} · ${pick.fixtureLabel || "Fixture pending"}`)}</span>
+                        </div>
+                        <div class="paper-slip-pick-meta">
+                          <span>${escapeHtml(pick.modelText || "Model context pending")}</span>
+                          <span>${escapeHtml(pick.confidenceText || "Confidence pending")}</span>
+                        </div>
+                        <p>${escapeHtml(pick.contradictionText || "Logic will populate from the fixture intelligence payload.")}</p>
+                      </div>
+                    `
+                  )
+                  .join("")}
+              </div>`
+            : ""
+        }
       </article>
     `;
   };
@@ -2987,6 +3018,7 @@
     const math = paperSlipMath(slip);
     const pickCount = slip.picks.length;
     const savedLimit = Number.isFinite(Number(options.savedLimit)) ? Number(options.savedLimit) : 4;
+    const savedDetailed = Boolean(options.savedDetailed);
     return `
       <section class="paper-slip-panel" id="paper-slip-builder" aria-label="Paper slip builder">
         <div class="paper-slip-head">
@@ -3034,7 +3066,7 @@
           state.runtime.savedPaperSlips.length
             ? `<div class="saved-paper-slip-list">
                 <span class="metric-label">Saved paper slips</span>
-                ${state.runtime.savedPaperSlips.slice(0, savedLimit).map((slip) => renderSavedPaperSlip(slip)).join("")}
+                ${state.runtime.savedPaperSlips.slice(0, savedLimit).map((slip) => renderSavedPaperSlip(slip, { showLogic: savedDetailed })).join("")}
               </div>`
             : ""
         }
@@ -3051,11 +3083,11 @@
         <div class="section-head">
           <div>
             <h2>Paper slip workspace</h2>
-            <p class="section-copy">Build several simulated slips, refine them, save the versions you like, and only leave Odds Genius when you are ready to copy selections elsewhere.</p>
+            <p class="section-copy">Build several simulated slips, refine them, save the versions you like, and only leave Odds Genius when you are ready to copy selections elsewhere. Premium and Pro saved slips show the reasoning behind each selection.</p>
           </div>
           <span class="pill">${escapeHtml(`${state.runtime.savedPaperSlips.length} saved`)}</span>
         </div>
-        ${renderPaperSlipPanel({ savedLimit: 20 })}
+        ${renderPaperSlipPanel({ savedLimit: 20, savedDetailed: accessTierRank(currentAccessTier()) >= 2 })}
       </section>
     `;
   };

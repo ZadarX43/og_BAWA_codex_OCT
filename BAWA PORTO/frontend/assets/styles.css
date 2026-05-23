@@ -5589,6 +5589,37 @@ tbody tr:hover {
   color: var(--ink);
 }
 
+.saved-paper-slip-selection-list {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 10px;
+  margin-top: 6px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(123, 154, 184, 0.14);
+}
+
+.saved-paper-slip-selection {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid rgba(123, 154, 184, 0.14);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.saved-paper-slip-selection strong {
+  color: var(--ink);
+  font-size: 0.96rem;
+}
+
+.saved-paper-slip-selection span,
+.saved-paper-slip-selection p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
 .paper-slip-pick-main strong,
 .saved-paper-slip strong {
   display: block;
