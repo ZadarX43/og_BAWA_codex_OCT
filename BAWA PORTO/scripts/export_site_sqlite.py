@@ -31,7 +31,43 @@ DEFAULT_CORRECT_SCORE_PUBLIC_SITE = Path(
 DEFAULT_CORRECT_SCORE_PRO_SHORTLIST = Path(
     "reports/latest/correct_score_premium_context/CORRECT_SCORE_PREMIUM_PRO_SHORTLIST.csv"
 )
-SCHEMA_VERSION = 6
+DEFAULT_FTR_EVIDENCE_BOARD = Path(
+    "reports/latest/ftr_next_season_decision_evidence_board/FTR_NEXT_SEASON_DECISION_EVIDENCE_BOARD.csv"
+)
+DEFAULT_FTR_FRESH_OOS_PROMOTION_REVIEW = Path(
+    "reports/latest/ftr_fresh_oos_promotion_review/FTR_FRESH_OOS_PROMOTION_REVIEW_BY_RULE.csv"
+)
+DEFAULT_TG15_LEDGER = Path(
+    "reports/latest/team_goal_15_promotion_candidate_tracker/TEAM_GOAL_15_PROMOTION_CANDIDATE_LEDGER.csv"
+)
+DEFAULT_FTR_PRODUCTION_BASELINE_REFS = (
+    {
+        "policy_id": "FTR_ELITE_PRODUCTION_BASELINE",
+        "evidence_label": "FTR_ELITE",
+        "reference_rows": None,
+        "reference_hit_rate": 0.9264,
+        "reference_roi": None,
+        "reference_profit": None,
+        "authority_status": "LOCKED_HISTORICAL_PRODUCTION_REFERENCE",
+        "note": "Old proven FTR ELITE production lane. Row-level deploy still comes from current deploy boards.",
+    },
+    {
+        "policy_id": "FTR_STANDARD_PRODUCTION_BASELINE",
+        "evidence_label": "FTR_STANDARD",
+        "reference_rows": None,
+        "reference_hit_rate": 0.8336,
+        "reference_roi": None,
+        "reference_profit": None,
+        "authority_status": "LOCKED_HISTORICAL_PRODUCTION_REFERENCE",
+        "note": "Old proven FTR STANDARD production lane. Row-level deploy still comes from current deploy boards.",
+    },
+)
+DEFAULT_BTTS_NO_POLICY_DOCS = (
+    Path("reports/2026-04-20/PHASE8G_BTTS_NO_META_ELITE__LOCKED.md"),
+    Path("reports/2026-05-01/BTTS_NO_HYBRID_META_RESCUE_LOCK__2026-05-01.md"),
+    Path("reports/2026-05-01/BTTS_NO_MLS_META_RESCUE_LOCK__2026-05-01.md"),
+)
+SCHEMA_VERSION = 7
 DEFAULT_ROUTE_CACHE_LIMIT = 20
 DEFAULT_EVENT_SHORTLIST_LIMIT = 3
 
@@ -42,6 +78,10 @@ def default_goal_evidence_boards() -> tuple[Path, ...]:
         sorted(Path("reports/latest").glob("live_goal_decision_evidence_board_*/LIVE_GOAL_DECISION_EVIDENCE_BOARD.csv"))
     )
     return tuple(dict.fromkeys(paths))
+
+
+def default_production_deploy_boards() -> tuple[Path, ...]:
+    return tuple(sorted(Path("reports/latest").glob("deploy_elite_standard_*/ELITE_STANDARD_COMBINED.csv")))
 
 
 def read_json(path: Path, default: Any = None) -> Any:
@@ -381,6 +421,8 @@ def execute_schema(conn: sqlite3.Connection) -> None:
         DROP TABLE IF EXISTS site_goal_evidence_board;
         DROP TABLE IF EXISTS site_correct_score_context;
         DROP TABLE IF EXISTS site_tg15_context;
+        DROP TABLE IF EXISTS site_product_estate_signals;
+        DROP TABLE IF EXISTS site_product_policy_references;
 
         CREATE TABLE metadata (
           key TEXT PRIMARY KEY,
@@ -779,6 +821,42 @@ def execute_schema(conn: sqlite3.Connection) -> None:
           payload_json TEXT NOT NULL
         );
 
+        CREATE TABLE site_product_estate_signals (
+          row_id TEXT PRIMARY KEY,
+          fixture_key TEXT NOT NULL,
+          source_fixture_key TEXT,
+          match_date TEXT,
+          league TEXT,
+          product_key TEXT NOT NULL,
+          market_key TEXT,
+          selection_key TEXT,
+          final_customer_state TEXT NOT NULL,
+          evidence_label TEXT,
+          product_segment TEXT,
+          authority_status TEXT,
+          production_tier TEXT,
+          model_attribution_bucket TEXT,
+          model_probability REAL,
+          bookie_od REAL,
+          reference_hit_rate REAL,
+          source_artifact TEXT,
+          payload_json TEXT NOT NULL
+        );
+
+        CREATE TABLE site_product_policy_references (
+          policy_id TEXT PRIMARY KEY,
+          product_key TEXT NOT NULL,
+          final_customer_state TEXT NOT NULL,
+          evidence_label TEXT,
+          reference_rows INTEGER,
+          reference_hit_rate REAL,
+          reference_roi REAL,
+          reference_profit REAL,
+          authority_status TEXT,
+          source_artifact TEXT,
+          payload_json TEXT NOT NULL
+        );
+
         CREATE INDEX idx_fixtures_league_time ON fixtures(league_key, kickoff_time);
         CREATE INDEX idx_fixtures_home ON fixtures(home_team);
         CREATE INDEX idx_fixtures_away ON fixtures(away_team);
@@ -810,6 +888,10 @@ def execute_schema(conn: sqlite3.Connection) -> None:
         CREATE INDEX idx_site_correct_score_segment ON site_correct_score_context(source_segment, website_segment);
         CREATE INDEX idx_site_tg15_fixture ON site_tg15_context(fixture_key);
         CREATE INDEX idx_site_tg15_support ON site_tg15_context(support_flag, support_grade);
+        CREATE INDEX idx_site_product_estate_fixture ON site_product_estate_signals(fixture_key);
+        CREATE INDEX idx_site_product_estate_product ON site_product_estate_signals(product_key, final_customer_state);
+        CREATE INDEX idx_site_product_estate_market ON site_product_estate_signals(market_key, selection_key, final_customer_state);
+        CREATE INDEX idx_site_product_policy_product ON site_product_policy_references(product_key, final_customer_state);
         """
     )
 
@@ -1958,16 +2040,35 @@ def evidence_customer_state(row: dict[str, Any]) -> str:
         first_value(row, "final_deploy_state_v2", "final_deploy_state", "deploy_state", "site_signal_state")
     ).strip().upper()
     label = str(first_value(row, "final_evidence_label_v2", "final_evidence_label", "decision_label")).strip().upper()
+    deploy_states = {
+        "DEPLOY",
+        "LIVE_DEPLOY",
+        "STANDARD_DEPLOY",
+        "ELITE_DEPLOY",
+        "DEPLOYABLE_SHADOW",
+        "DEPLOYABLE_WITH_CAUTION_SHADOW",
+    }
+    deploy_labels = {
+        "CORE_DEPLOY",
+        "LEAN_DEPLOY",
+        "CORE_FULL_STACK_DEPLOY",
+        "INTEL_FULL_STACK_DEPLOY",
+        "INTEL_DIRECTIONAL_DEPLOY",
+        "FULL_STACK_RECOVERY_CANDIDATE",
+        "FULL_STACK_RECOVERY_WITH_CAUTION",
+    }
+    if label in deploy_labels:
+        return "deploy"
+    if "AVOID" in state or "AVOID" in label or state in {"BLOCKED", "NO_DEPLOY"}:
+        return "avoid"
+    if any(token in state or token in label for token in ("WATCH", "CAUTION", "CONFLICT", "RESEARCH", "CANDIDATE", "RECOVERY", "UNLOCK")):
+        return "watch"
     if deploy_pass == 1:
         return "deploy"
     if deploy_pass == 0:
         return "avoid"
-    if state in {"DEPLOY", "LIVE_DEPLOY", "STANDARD_DEPLOY", "ELITE_DEPLOY"} or label == "CORE_FULL_STACK_DEPLOY":
+    if state in deploy_states:
         return "deploy"
-    if "AVOID" in state or "AVOID" in label or state in {"BLOCKED", "NO_DEPLOY"}:
-        return "avoid"
-    if any(token in state or token in label for token in ("WATCH", "CAUTION", "RESEARCH", "CANDIDATE", "RECOVERY", "UNLOCK")):
-        return "watch"
     return "watch"
 
 
@@ -2291,6 +2392,461 @@ def insert_site_tg15_context(
           away_research_label, policy_status, data_status, authority_status,
           payload_json
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        rows,
+    )
+    return len(rows)
+
+
+def ftr_customer_state(row: dict[str, Any]) -> str:
+    label = str(first_value(row, "final_ftr_research_label", "matched_ftr_research_label", "recommended_research_label")).upper()
+    policy_id = str(first_value(row, "matched_ftr_policy_id", "policy_id", "candidate_rule")).upper()
+    policy_group = str(first_value(row, "matched_ftr_policy_group", "policy_group")).upper()
+    deploy_state = str(first_value(row, "final_deploy_state", "deploy_state")).upper()
+    cs_shape = str(first_value(row, "correct_score_result_shape", "top_shape", "top_correct_score_shape")).upper()
+    rescue_support = "NETHERLANDS_HOME_LEAN_XGB_CS_EXCEPTION" in label or "NETHERLANDS_HOME_LEAN_XGB_CS_EXCEPTION" in policy_id
+    if any(token in label or token in policy_group or token in policy_id for token in ("DEMOTION", "REJECT", "BLOCK", "DRAW_DANGER", "FRAGILITY")):
+        return "avoid"
+    if cs_shape == "DRAW_MASS_DANGER":
+        return "avoid"
+    if cs_shape in {"HOME_LEAN_MASS", "AWAY_LEAN_MASS"} and not rescue_support:
+        return "avoid"
+    if "DEPLOY" in deploy_state and "WATCH_ONLY" not in deploy_state and "NO_DEPLOY" not in deploy_state:
+        return "deploy"
+    return "watch"
+
+
+def correct_score_customer_state(row: dict[str, Any], source_segment: str) -> str:
+    rule = str(first_value(row, "premium_primary_rule", "premium_rule", "decision_label")).upper()
+    rule_hits = str(row.get("premium_rule_hits") or "").upper()
+    if any(token in rule or token in rule_hits for token in ("PRO_CS_ELITE", "PRO_CS_BANKER", "PRO_CS_TRIPLE_ALIGN")):
+        return "deploy"
+    if "PREMIUM_WATCH" in rule or "PREMIUM_WATCH" in rule_hits:
+        return "watch"
+    return "watch" if source_segment else "watch"
+
+
+def tg15_customer_state(row: dict[str, Any]) -> str:
+    # TG15 is unlocked as a product-context lane, but it is not deploy authority yet.
+    return "watch"
+
+
+def product_payload(
+    row: dict[str, Any],
+    *,
+    product_key: str,
+    market_key: str,
+    selection_key: str,
+    final_customer_state: str,
+    evidence_label: str,
+    product_segment: str,
+    authority_status: str,
+    source_artifact: str,
+) -> dict[str, Any]:
+    payload = dict(row)
+    payload.update(
+        {
+            "product_key": product_key,
+            "market_key": market_key,
+            "selection_key": selection_key,
+            "final_customer_state": final_customer_state,
+            "evidence_label": evidence_label,
+            "product_segment": product_segment,
+            "authority_status": authority_status,
+            "source_artifact": source_artifact,
+        }
+    )
+    return payload
+
+
+def insert_site_product_estate_signals(
+    conn: sqlite3.Connection,
+    goal_evidence_paths: Iterable[Path],
+    production_deploy_boards: Iterable[Path],
+    ftr_evidence_board: Path,
+    correct_score_public_site: Path,
+    correct_score_pro_shortlist: Path,
+    tg15_ledger: Path,
+    site_fixture_aliases: dict[tuple[str, str, str], str] | None,
+) -> int:
+    rows = []
+    seen: set[str] = set()
+
+    def add_signal(
+        *,
+        row_id: str,
+        row: dict[str, Any],
+        fixture_key: str,
+        source_fixture_key: str,
+        product_key: str,
+        market_key: str,
+        selection_key: str,
+        final_customer_state: str,
+        evidence_label: str,
+        product_segment: str,
+        authority_status: str,
+        source_artifact: str,
+        production_tier: str = "",
+        model_attribution_bucket: str = "",
+        model_probability: Any = None,
+        bookie_od: Any = None,
+        reference_hit_rate: Any = None,
+    ) -> None:
+        if not row_id or row_id in seen:
+            return
+        seen.add(row_id)
+        rows.append(
+            (
+                row_id,
+                fixture_key,
+                source_fixture_key,
+                row.get("match_date"),
+                row.get("league"),
+                product_key,
+                market_key,
+                selection_key,
+                final_customer_state,
+                evidence_label,
+                product_segment,
+                authority_status,
+                production_tier,
+                model_attribution_bucket,
+                safe_float(model_probability),
+                safe_float(bookie_od),
+                safe_float(reference_hit_rate),
+                source_artifact,
+                json_text(
+                    product_payload(
+                        row,
+                        product_key=product_key,
+                        market_key=market_key,
+                        selection_key=selection_key,
+                        final_customer_state=final_customer_state,
+                        evidence_label=evidence_label,
+                        product_segment=product_segment,
+                        authority_status=authority_status,
+                        source_artifact=source_artifact,
+                    )
+                ),
+            )
+        )
+
+    for evidence_path in goal_evidence_paths:
+        source_id = evidence_path.stem
+        for row in read_csv_rows(evidence_path):
+            source_fixture_key = str(row.get("fixture_key") or "").strip()
+            market_key = normalize_market_key(first_value(row, "market_norm", "market"))
+            selection_key = normalize_selection_key(first_value(row, "selection_norm", "selection", "bookie_pick"))
+            if not source_fixture_key or market_key not in {"ou25", "btts", "ftr"}:
+                continue
+            if market_key == "btts" and selection_key == "NO":
+                product_key = "btts_no"
+                authority_status = "BTTS_NO_POLICY_AVAILABLE_WHEN_ROW_PRESENT"
+            elif market_key == "btts":
+                product_key = "btts_yes"
+                authority_status = "GOAL_EVIDENCE_BOARD"
+            elif market_key == "ou25":
+                product_key = "over_25"
+                authority_status = "GOAL_EVIDENCE_BOARD"
+            else:
+                product_key = "ftr"
+                authority_status = "FTR_CONTEXT_ONLY_USE_PRODUCTION_TIER_FOR_DEPLOY"
+            evidence_label = str(first_value(row, "final_evidence_label_v2", "final_evidence_label", "decision_label")).strip()
+            add_signal(
+                row_id=f"goal:{source_id}:{source_fixture_key}:{market_key}:{selection_key}",
+                row=row,
+                fixture_key=resolve_active_site_fixture_key(row, site_fixture_aliases),
+                source_fixture_key=source_fixture_key,
+                product_key=product_key,
+                market_key=market_key,
+                selection_key=selection_key,
+                final_customer_state="watch" if market_key == "ftr" else evidence_customer_state(row),
+                evidence_label=evidence_label,
+                product_segment="directional_goal_market" if market_key in {"ou25", "btts"} else "ftr_live_context",
+                authority_status=authority_status,
+                source_artifact=str(evidence_path),
+                production_tier=evidence_production_tier(row),
+                model_attribution_bucket=first_value(row, "model_attribution_bucket", "source_prob_col", "meta_score_source"),
+                model_probability=first_value(row, "model_probability", "model_prob", "model_p_for_bookie"),
+                bookie_od=row.get("bookie_od"),
+            )
+
+    for deploy_board in production_deploy_boards:
+        source_id = deploy_board.stem
+        for row in read_csv_rows(deploy_board):
+            source_fixture_key = str(row.get("fixture_key") or row.get("fixture_key_ascii") or "").strip()
+            market_key = normalize_market_key(first_value(row, "market_norm", "market"))
+            selection_key = normalize_selection_key(first_value(row, "selection_norm", "selection", "bookie_pick"))
+            tier = evidence_production_tier(row)
+            if not source_fixture_key or market_key != "ftr" or tier not in {"ELITE", "STANDARD"}:
+                continue
+            selection_price = first_value(row, "bookie_od", f"od_{selection_key.lower()}")
+            add_signal(
+                row_id=f"ftr_prod:{source_id}:{source_fixture_key}:{selection_key}:{tier}",
+                row=row,
+                fixture_key=resolve_active_site_fixture_key(row, site_fixture_aliases),
+                source_fixture_key=source_fixture_key,
+                product_key="ftr",
+                market_key="ftr",
+                selection_key=selection_key,
+                final_customer_state="deploy",
+                evidence_label=f"FTR_{tier}_PRODUCTION",
+                product_segment="ftr_production_tier",
+                authority_status="PROTECTED_DEPLOY_RULEBOOK_TIER_EXPORT",
+                source_artifact=str(deploy_board),
+                production_tier=tier,
+                model_attribution_bucket=first_value(row, "ftr_priority_tier", "model_attribution_bucket", "meta_score_source"),
+                model_probability=first_value(row, "model_p_for_bookie", "p_meta_ftr", "meta_super_score_cal"),
+                bookie_od=selection_price,
+                reference_hit_rate=0.9264 if tier == "ELITE" else 0.8336,
+            )
+
+    for row in read_csv_rows(ftr_evidence_board):
+        source_fixture_key = str(row.get("fixture_key") or "").strip()
+        if not source_fixture_key:
+            continue
+        label = str(first_value(row, "final_ftr_research_label", "matched_ftr_research_label")).strip()
+        add_signal(
+            row_id=f"ftr:{ftr_evidence_board.stem}:{source_fixture_key}:{row.get('selection_norm')}",
+            row=row,
+            fixture_key=resolve_active_site_fixture_key(row, site_fixture_aliases),
+            source_fixture_key=source_fixture_key,
+            product_key="ftr",
+            market_key="ftr",
+            selection_key=normalize_selection_key(row.get("selection_norm")),
+            final_customer_state=ftr_customer_state(row),
+            evidence_label=label,
+            product_segment="ftr_research_policy",
+            authority_status="FTR_SEPARATE_FRAMEWORK_NO_OU25_BTTS_MIXING",
+            source_artifact=str(ftr_evidence_board),
+            production_tier="FTR_RESEARCH_POLICY",
+            model_attribution_bucket=row.get("model_attribution_bucket"),
+            model_probability=first_value(row, "meta_selection_prob", "catboost_selection_prob", "xgb_selection_prob"),
+            bookie_od=row.get("bookie_od_num"),
+        )
+
+    for source_segment, path in (
+        ("correct_score_public_top3", correct_score_public_site),
+        ("correct_score_premium_pro", correct_score_pro_shortlist),
+    ):
+        for index, row in enumerate(read_csv_rows(path)):
+            source_fixture_key = str(row.get("fixture_key") or "").strip()
+            if not source_fixture_key:
+                continue
+            rule = str(first_value(row, "premium_primary_rule", "public_signal_strength", "cs_class")).strip()
+            add_signal(
+                row_id=f"cs:{source_segment}:{source_fixture_key}:{row.get('base_market') or 'all'}:{index}",
+                row=row,
+                fixture_key=resolve_active_site_fixture_key(row, site_fixture_aliases),
+                source_fixture_key=source_fixture_key,
+                product_key="correct_score",
+                market_key="correct_score",
+                selection_key=str(row.get("cs1") or "TOP3"),
+                final_customer_state=correct_score_customer_state(row, source_segment),
+                evidence_label=rule,
+                product_segment=source_segment,
+                authority_status="CORRECT_SCORE_PRODUCT_LAYER",
+                source_artifact=str(path),
+                production_tier=row.get("website_segment") or row.get("deploy_tier") or "",
+                model_attribution_bucket=row.get("cs_concentration_bucket"),
+                model_probability=row.get("cs1_p"),
+                reference_hit_rate=None,
+            )
+
+    for row in read_csv_rows(tg15_ledger):
+        source_fixture_key = str(row.get("fixture_key") or "").strip()
+        if not source_fixture_key:
+            continue
+        add_signal(
+            row_id=f"tg15:{row.get('ledger_key') or source_fixture_key + ':' + str(row.get('shadow_product')) + ':' + str(row.get('shadow_policy'))}",
+            row=row,
+            fixture_key=resolve_active_site_fixture_key(row, site_fixture_aliases),
+            source_fixture_key=source_fixture_key,
+            product_key="team_goal_15",
+            market_key="team_goal_15",
+            selection_key=normalize_selection_key(row.get("selection_norm")),
+            final_customer_state=tg15_customer_state(row),
+            evidence_label=str(first_value(row, "tg15_research_label", "shadow_policy")).strip(),
+            product_segment="tg15_shadow_context",
+            authority_status="SUPPORT_CONTEXT_ONLY_NO_DEPLOY_AUTHORITY",
+            source_artifact=str(tg15_ledger),
+            production_tier=str(row.get("shadow_policy") or ""),
+            model_attribution_bucket=str(row.get("shadow_product") or ""),
+            model_probability=row.get("model_prob"),
+        )
+
+    conn.executemany(
+        """
+        INSERT OR REPLACE INTO site_product_estate_signals(
+          row_id, fixture_key, source_fixture_key, match_date, league, product_key,
+          market_key, selection_key, final_customer_state, evidence_label,
+          product_segment, authority_status, production_tier,
+          model_attribution_bucket, model_probability, bookie_od,
+          reference_hit_rate, source_artifact, payload_json
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        rows,
+    )
+    return len(rows)
+
+
+def insert_site_product_policy_references(conn: sqlite3.Connection) -> int:
+    rows = []
+    for ref in DEFAULT_FTR_PRODUCTION_BASELINE_REFS:
+        payload = {
+            "policy_id": ref["policy_id"],
+            "product_key": "ftr",
+            "final_customer_state": "deploy",
+            "evidence_label": ref["evidence_label"],
+            "reference_rows": ref["reference_rows"],
+            "reference_hit_rate": ref["reference_hit_rate"],
+            "reference_roi": ref["reference_roi"],
+            "reference_profit": ref["reference_profit"],
+            "authority_status": ref["authority_status"],
+            "source_artifact": "historical_phase_8h_summary",
+            "note": ref["note"],
+        }
+        rows.append(
+            (
+                ref["policy_id"],
+                "ftr",
+                "deploy",
+                ref["evidence_label"],
+                ref["reference_rows"],
+                ref["reference_hit_rate"],
+                ref["reference_roi"],
+                ref["reference_profit"],
+                ref["authority_status"],
+                "historical_phase_8h_summary",
+                json_text(payload),
+            )
+        )
+
+    for review_row in read_csv_rows(DEFAULT_FTR_FRESH_OOS_PROMOTION_REVIEW):
+        candidate_rule = str(review_row.get("candidate_rule") or "").strip()
+        if not candidate_rule:
+            continue
+        status = str(review_row.get("promotion_review_status") or "").upper()
+        drift_caution = safe_bool_int(review_row.get("drift_caution_flag")) == 1 or str(
+            review_row.get("drift_caution_flag") or ""
+        ).strip().lower() == "true"
+        if "CAUTION_RULE_CONFIRMED_NOT_PROMOTABLE" in status:
+            final_customer_state = "avoid"
+        elif status == "FTR_PROMOTION_REVIEW_READY" and not drift_caution:
+            final_customer_state = "deploy"
+        else:
+            final_customer_state = "watch"
+        fresh_rows = safe_int(review_row.get("fresh_graded_rows"))
+        if not fresh_rows and final_customer_state == "watch":
+            continue
+        policy_id = f"{candidate_rule}_FRESH_OOS_REVIEW"
+        payload = {
+            "policy_id": policy_id,
+            "product_key": "ftr",
+            "candidate_rule": candidate_rule,
+            "final_customer_state": final_customer_state,
+            "evidence_label": candidate_rule,
+            "reference_rows": fresh_rows,
+            "reference_hit_rate": safe_float(review_row.get("fresh_hit_rate")),
+            "reference_roi": safe_float(review_row.get("fresh_roi_per_pick")),
+            "reference_profit": safe_float(review_row.get("fresh_roi_units")),
+            "authority_status": status,
+            "drift_caution_flag": drift_caution,
+            "top_league": review_row.get("top_league"),
+            "top_price_band": review_row.get("top_price_band"),
+            "top_correct_score_shape": review_row.get("top_correct_score_shape"),
+            "source_artifact": str(DEFAULT_FTR_FRESH_OOS_PROMOTION_REVIEW),
+            "note": "FTR-only fresh out-of-sample policy reference. Research labels remain separate from OU25/BTTS.",
+        }
+        rows.append(
+            (
+                policy_id,
+                "ftr",
+                final_customer_state,
+                candidate_rule,
+                fresh_rows,
+                safe_float(review_row.get("fresh_hit_rate")),
+                safe_float(review_row.get("fresh_roi_per_pick")),
+                safe_float(review_row.get("fresh_roi_units")),
+                status,
+                str(DEFAULT_FTR_FRESH_OOS_PROMOTION_REVIEW),
+                json_text(payload),
+            )
+        )
+
+    for path in DEFAULT_BTTS_NO_POLICY_DOCS:
+        if not path.exists():
+            continue
+        text = path.read_text(encoding="utf-8", errors="ignore")
+        stem = path.stem.upper()
+        if "PHASE8G_BTTS_NO_META_ELITE" in stem:
+            policy_id = "BTTS_NO_META_ELITE_LOCKED_BASELINE"
+            evidence_label = "BTTS_NO_META_ELITE"
+            match = re.search(
+                r"BTTS NO META_ELITE:\s*([\d,]+)\s*rows,\s*([\d.]+)% hit rate,\s*\+?([\d,.]+)\s*profit,\s*\+?([\d.]+)% ROI",
+                text,
+            )
+            reference_rows = int(match.group(1).replace(",", "")) if match else 2712
+            reference_hit_rate = float(match.group(2)) / 100 if match else 0.9015
+            reference_profit = float(match.group(3).replace(",", "")) if match else 1989.19
+            reference_roi = float(match.group(4)) / 100 if match else 0.7335
+            final_customer_state = "deploy"
+            authority_status = "LOCKED_HISTORICAL_POLICY_REFERENCE"
+        elif "HYBRID_META_RESCUE" in stem:
+            policy_id = "BTTS_NO_HYBRID_META_RESCUE_LOCKED_UEFA"
+            evidence_label = "BTTS_NO_HYBRID_META_RESCUE"
+            reference_rows = 2
+            reference_hit_rate = None
+            reference_profit = None
+            reference_roi = None
+            final_customer_state = "deploy"
+            authority_status = "LOCKED_NARROW_RESCUE_POLICY_REFERENCE"
+        elif "MLS_META_RESCUE" in stem:
+            policy_id = "BTTS_NO_MLS_META_RESCUE_LOCKED"
+            evidence_label = "BTTS_NO_MLS_META_RESCUE"
+            reference_rows = 3
+            reference_hit_rate = None
+            reference_profit = None
+            reference_roi = None
+            final_customer_state = "deploy"
+            authority_status = "LOCKED_NARROW_RESCUE_POLICY_REFERENCE"
+        else:
+            continue
+        payload = {
+            "policy_id": policy_id,
+            "product_key": "btts_no",
+            "final_customer_state": final_customer_state,
+            "evidence_label": evidence_label,
+            "reference_rows": reference_rows,
+            "reference_hit_rate": reference_hit_rate,
+            "reference_roi": reference_roi,
+            "reference_profit": reference_profit,
+            "authority_status": authority_status,
+            "source_artifact": str(path),
+            "note": "Policy reference only. Fixture-level BTTS No rows are exported separately when current boards contain BTTS/NO candidates.",
+        }
+        rows.append(
+            (
+                policy_id,
+                "btts_no",
+                final_customer_state,
+                evidence_label,
+                reference_rows,
+                reference_hit_rate,
+                reference_roi,
+                reference_profit,
+                authority_status,
+                str(path),
+                json_text(payload),
+            )
+        )
+    conn.executemany(
+        """
+        INSERT OR REPLACE INTO site_product_policy_references(
+          policy_id, product_key, final_customer_state, evidence_label,
+          reference_rows, reference_hit_rate, reference_roi, reference_profit,
+          authority_status, source_artifact, payload_json
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
         rows,
     )
@@ -3204,14 +3760,18 @@ def export_database(
     include_history: bool = False,
     normalized_root: Path = DEFAULT_NORMALIZED_ROOT,
     goal_evidence_boards: Iterable[Path] | None = None,
+    production_deploy_boards: Iterable[Path] | None = None,
     correct_score_public_site: Path = DEFAULT_CORRECT_SCORE_PUBLIC_SITE,
     correct_score_pro_shortlist: Path = DEFAULT_CORRECT_SCORE_PRO_SHORTLIST,
+    ftr_evidence_board: Path = DEFAULT_FTR_EVIDENCE_BOARD,
+    tg15_ledger: Path = DEFAULT_TG15_LEDGER,
 ) -> dict[str, int | str]:
     started = time.perf_counter()
     output_path.parent.mkdir(parents=True, exist_ok=True)
     if output_path.exists():
         output_path.unlink()
     goal_evidence_board_paths = tuple(goal_evidence_boards or default_goal_evidence_boards())
+    production_deploy_board_paths = tuple(production_deploy_boards or default_production_deploy_boards())
     active_seasons = None if include_history else active_competition_seasons(data_root)
     site_fixture_aliases = active_site_fixture_aliases(data_root)
 
@@ -3264,6 +3824,17 @@ def export_database(
                 site_fixture_aliases,
             ),
             "site_tg15_context": insert_site_tg15_context(conn, goal_evidence_board_paths, site_fixture_aliases),
+            "site_product_estate_signals": insert_site_product_estate_signals(
+                conn,
+                goal_evidence_board_paths,
+                production_deploy_board_paths,
+                ftr_evidence_board,
+                correct_score_public_site,
+                correct_score_pro_shortlist,
+                tg15_ledger,
+                site_fixture_aliases,
+            ),
+            "site_product_policy_references": insert_site_product_policy_references(conn),
         }
         counts = {key: table_count(conn, key) for key in insert_counts}
         insert_metadata(
@@ -3272,8 +3843,11 @@ def export_database(
                 "schema_version": SCHEMA_VERSION,
                 "source_data_root": str(data_root),
                 "goal_evidence_boards": json_text([str(path) for path in goal_evidence_board_paths]),
+                "production_deploy_boards": json_text([str(path) for path in production_deploy_board_paths]),
                 "correct_score_public_site": str(correct_score_public_site),
                 "correct_score_pro_shortlist": str(correct_score_pro_shortlist),
+                "ftr_evidence_board": str(ftr_evidence_board),
+                "tg15_ledger": str(tg15_ledger),
                 "created_unix": int(time.time()),
                 "scope": "full_history" if include_history else "active_site_latest_seasons",
                 "active_competition_count": len(active_seasons or {}),
@@ -3307,8 +3881,16 @@ def parse_args() -> argparse.Namespace:
         default=[],
         help="Goal evidence CSV to export. May be repeated. Defaults to historical V2 plus discovered live window boards.",
     )
+    parser.add_argument(
+        "--production-deploy-board",
+        action="append",
+        default=[],
+        help="Production ELITE/STANDARD combined deploy CSV to export. May be repeated. Defaults to discovered reports/latest deploy boards.",
+    )
     parser.add_argument("--correct-score-public-site", default=str(DEFAULT_CORRECT_SCORE_PUBLIC_SITE))
     parser.add_argument("--correct-score-pro-shortlist", default=str(DEFAULT_CORRECT_SCORE_PRO_SHORTLIST))
+    parser.add_argument("--ftr-evidence-board", default=str(DEFAULT_FTR_EVIDENCE_BOARD))
+    parser.add_argument("--tg15-ledger", default=str(DEFAULT_TG15_LEDGER))
     parser.add_argument(
         "--include-history",
         action="store_true",
@@ -3325,8 +3907,11 @@ def main() -> None:
         include_history=args.include_history,
         normalized_root=Path(args.normalized_root),
         goal_evidence_boards=[Path(path) for path in args.goal_evidence_board] or default_goal_evidence_boards(),
+        production_deploy_boards=[Path(path) for path in args.production_deploy_board] or default_production_deploy_boards(),
         correct_score_public_site=Path(args.correct_score_public_site),
         correct_score_pro_shortlist=Path(args.correct_score_pro_shortlist),
+        ftr_evidence_board=Path(args.ftr_evidence_board),
+        tg15_ledger=Path(args.tg15_ledger),
     )
     print(json.dumps(summary, indent=2, sort_keys=True))
 
