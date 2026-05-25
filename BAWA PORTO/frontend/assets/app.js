@@ -5569,6 +5569,152 @@
     </article>
   `;
 
+  const founderProofHeadlines = [
+    {
+      label: "Over 2.5 calibrated",
+      value: "95.35%",
+      note: "3,650 / 3,828 historical rows",
+    },
+    {
+      label: "BTTS calibrated",
+      value: "93.55%",
+      note: "3,164 / 3,382 historical rows",
+    },
+    {
+      label: "BTTS No META_ELITE",
+      value: "90.15%",
+      note: "2,712 rows · +73.35% ROI",
+    },
+    {
+      label: "Premium value edge",
+      value: "83.31%",
+      note: "15,203 picks · +53.90% ROI",
+    },
+  ];
+
+  const calibratedLeagueProof = [
+    {
+      product: "BTTS calibrated",
+      hitRate: "93.55%",
+      rows: "3,382 rows",
+      leagues: [
+        ["England FA Cup", "99.77%"],
+        ["Europa Conference", "98.26%"],
+        ["Champions League", "98.06%"],
+        ["Brazil Serie A", "97.59%"],
+        ["Italy Serie A", "96.65%"],
+        ["Spain La Liga", "95.56%"],
+        ["France Ligue 1", "91.74%"],
+        ["Scotland Premiership", "90.91%"],
+        ["Belgium Pro", "90.51%"],
+        ["Norway Eliteserien", "89.86%"],
+        ["Netherlands Eredivisie", "89.53%"],
+        ["Japan J1", "89.08%"],
+        ["USA MLS", "87.50%"],
+      ],
+    },
+    {
+      product: "Over 2.5 calibrated",
+      hitRate: "95.35%",
+      rows: "3,828 rows",
+      leagues: [
+        ["England FA Cup", "99.62%"],
+        ["Europa Conference", "97.41%"],
+        ["Germany Bundesliga", "97.10%"],
+        ["Europa League", "96.30%"],
+        ["Brazil Serie A", "95.65%"],
+        ["Champions League", "95.32%"],
+        ["Portugal Liga", "95.31%"],
+        ["Netherlands Eredivisie", "94.68%"],
+        ["Scotland Premiership", "94.44%"],
+        ["Spain La Liga", "93.75%"],
+        ["Japan J1", "93.36%"],
+        ["Norway Eliteserien", "91.45%"],
+        ["USA MLS", "91.06%"],
+      ],
+    },
+  ];
+
+  const broaderProductProof = [
+    ["FTR", "85.33%", "1,751 / 2,052"],
+    ["Correct Score top 3", "80.70%", "832 / 1,031"],
+    ["Team Goals 1.5+", "89.95%", "premium research/watch"],
+  ];
+
+  const renderLeagueProofCard = (proof) => `
+    <article class="founder-league-proof-card">
+      <div class="founder-league-proof-head">
+        <div>
+          <span class="metric-label">${escapeHtml(proof.product)}</span>
+          <strong>${escapeHtml(proof.hitRate)}</strong>
+        </div>
+        <span>${escapeHtml(proof.rows)}</span>
+      </div>
+      <div class="founder-league-proof-list">
+        ${proof.leagues
+          .map(
+            ([league, rate]) => `
+              <div class="founder-league-proof-row">
+                <span>${escapeHtml(league)}</span>
+                <strong>${escapeHtml(rate)}</strong>
+              </div>
+            `
+          )
+          .join("")}
+      </div>
+    </article>
+  `;
+
+  const heroProofTicker = () => `
+    <div class="hero-proof-stack" aria-label="Headline proof stats">
+      <div class="hero-proof-ticker">
+        <span><strong>95.35%</strong> Over 2.5 calibrated</span>
+        <span><strong>93.55%</strong> BTTS calibrated</span>
+        <span><strong>90.15%</strong> BTTS No META_ELITE</span>
+        <span><strong>83.31%</strong> Premium value edge</span>
+      </div>
+      <div class="hero-proof-secondary">
+        <span><strong>85.33%</strong> FTR</span>
+        <span><strong>80.70%</strong> Correct Score top 3</span>
+        <span><strong>89.95%</strong> Team Goals 1.5+</span>
+      </div>
+    </div>
+  `;
+
+  const founderProofSection = () => `
+    <section class="section founder-proof-section">
+      <div class="section-head founder-proof-head">
+        <div>
+          <h2>Founder proof layer.</h2>
+          <p class="section-copy">
+            These are the headline calibrated proof lanes for pre-season access. The broader product estate sits underneath, but this is the opening commercial proof.
+          </p>
+        </div>
+        <a class="ghost-button" href="./methodology.html">Read methodology</a>
+      </div>
+      <div class="founder-proof-headline-grid">
+        ${founderProofHeadlines.map((item) => proofTile(item.label, item.value, item.note)).join("")}
+      </div>
+      <div class="founder-product-proof-strip founder-product-proof-strip-primary" aria-label="Broader product proof estate">
+        ${broaderProductProof
+          .map(
+            ([label, value, note]) => `
+              <article>
+                <span class="metric-label">${escapeHtml(label)}</span>
+                <strong>${escapeHtml(value)}</strong>
+                <span>${escapeHtml(note)}</span>
+              </article>
+            `
+          )
+          .join("")}
+      </div>
+      <div class="founder-league-proof-grid">
+        ${calibratedLeagueProof.map(renderLeagueProofCard).join("")}
+      </div>
+      <p class="footer-note">Historical validation and artifact ROI are shown as proof context, not a guarantee of future outcomes.</p>
+    </section>
+  `;
+
   const compactPercent = (value) => {
     const numeric = Number(value);
     if (!Number.isFinite(numeric)) {
@@ -5982,6 +6128,7 @@
             <strong>Exclusive Modelling Architecture.</strong>
             <strong>Industry Leading Benchmarks.</strong>
           </div>
+          ${heroProofTicker()}
           <div class="launch-founder-headline">
             <span>OG Founder<br class="mobile-break" /> Early Access</span>
             <strong>Memberships<br class="mobile-break" /> Now Open.</strong>
@@ -6021,6 +6168,8 @@
       </aside>
     </section>
 
+    ${founderProofSection()}
+
     <section class="section split launch-capabilities-section">
       ${launchCapabilityGrid(
         "Models",
@@ -6048,24 +6197,6 @@
         ],
         "Player-event surfaces are beta intelligence cards for review, not public-priced prop tips."
       )}
-    </section>
-
-    <section class="section proof-command launch-proof-section">
-      <div class="section-head home-proof-head">
-        <div>
-          <h2>Walk-forward proof, not vibes</h2>
-          <p class="section-copy">Benchmark-safe proof across the current football intelligence stack, with live public results settled separately.</p>
-        </div>
-        <span class="pill">139 rolling windows</span>
-      </div>
-      <div class="proof-strip proof-strip-home">
-        ${proofTile("Over 2.5 calibrated", "95.35%", "3,828 historical rows")}
-        ${proofTile("BTTS calibrated", "93.55%", "3,382 historical rows")}
-        ${proofTile("Premium value-edge ROI", "+53.9%", "15,203 historical picks")}
-        ${proofTile("Home Team Over 1.5 premium", "93.24%", "1,643 graded rows")}
-        ${proofTile("Competitions analysed", "28", "3-year research estate")}
-        ${proofTile("Value edge system", "83.31%", "Premium historical hit rate")}
-      </div>
     </section>
 
     <section class="section split">
