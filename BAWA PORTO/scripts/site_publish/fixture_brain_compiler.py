@@ -833,6 +833,21 @@ def compact_table_payloads(rows: list[sqlite3.Row], limit: int = 40) -> list[dic
     return out
 
 
+def compact_evidence_payloads(rows: list[sqlite3.Row], limit: int = 40) -> list[dict[str, Any]]:
+    out: list[dict[str, Any]] = []
+    for row in rows[:limit]:
+        item = compact_row(row)
+        for raw_key, parsed_key in (
+            ("support_flags_json", "support_flags"),
+            ("caution_flags_json", "caution_flags"),
+            ("data_status_json", "data_status"),
+        ):
+            if raw_key in item:
+                item[parsed_key] = parse_json(item.pop(raw_key), {})
+        out.append(item)
+    return out
+
+
 def compact_fixture_stats_payload(stats: dict[str, Any]) -> dict[str, Any]:
     team_stats = stats.get("team_stats") if isinstance(stats.get("team_stats"), list) else []
     player_stats = stats.get("player_stats") if isinstance(stats.get("player_stats"), list) else []
@@ -1208,6 +1223,9 @@ def compile_fixture(
     context_row = one_by_fixture(conn, "site_fixture_context_payloads", fixture_key)
     stats_row = one_by_fixture(conn, "site_fixture_stats_payloads", fixture_key)
     market_rows = rows_by_fixture(conn, "site_fixture_market_intelligence", fixture_key, "alignment_score DESC")
+    goal_evidence_rows = rows_by_fixture(conn, "site_goal_evidence_board", fixture_key, "market_key, selection_key")
+    correct_score_rows = rows_by_fixture(conn, "site_correct_score_context", fixture_key, "source_segment, top3_total_probability DESC")
+    tg15_rows = rows_by_fixture(conn, "site_tg15_context", fixture_key, "support_flag DESC, support_grade DESC")
     shortlist_rows = rows_by_fixture(conn, "site_player_event_shortlists", fixture_key, "shortlist_score DESC")
     team_stat_rows = rows_by_fixture(conn, "site_team_match_stats", fixture_key, "is_home DESC")
     player_stat_rows = rows_by_fixture(conn, "site_player_match_stats", fixture_key, "rating DESC")
@@ -1264,6 +1282,15 @@ def compile_fixture(
         "market_intelligence_rows": compact_table_payloads(market_rows, limit=12),
         "team_match_stats": compact_table_payloads(team_stat_rows, limit=8),
     }
+    evidence_stack = {
+        "schema": "fixture_evidence_stack_v1",
+        "routing_guardrail": "production_tier_evidence_label_and_customer_state_are_separate",
+        "goal_evidence": compact_evidence_payloads(goal_evidence_rows, limit=8),
+        "correct_score_context": compact_table_payloads(correct_score_rows, limit=8),
+        "tg15_context": compact_table_payloads(tg15_rows, limit=8),
+        "tg15_authority": "support_context_only_no_deploy_authority",
+        "player_props_authority": "beta_confirmed_xi_gated",
+    }
     freshness = freshness_block(fixture, decision, h2h, lineup, context, stats, injury_admin=injury_admin)
     coverage = {
         "has_decision": bool(decision_row),
@@ -1275,6 +1302,9 @@ def compile_fixture(
         "has_injury_context": injury_fixture.get("status") == "matched",
         "has_injury_market_impact": injury_market_impact.get("status") == "matched",
         "has_fixture_stats": bool(stats_row),
+        "has_goal_evidence": bool(goal_evidence_rows),
+        "has_correct_score_context": bool(correct_score_rows),
+        "has_tg15_context": bool(tg15_rows),
     }
     payload = {
         "schema": "fixture_brain_payload_v2",
@@ -1295,6 +1325,7 @@ def compile_fixture(
         "lineup_context": {"meta": compact_row(lineup_row), "payload": lineup} if lineup_row else {"status": "missing"},
         "injury_context": injury_context,
         "fixture_stats": fixture_stats,
+        "evidence_stack": evidence_stack,
         "tier_visibility": tier_contract(),
         "freshness": freshness,
         "coverage": coverage,
@@ -1321,6 +1352,9 @@ def compile_fixture(
                 "site_fixture_context_payloads",
                 "site_fixture_stats_payloads",
                 "site_fixture_market_intelligence",
+                "site_goal_evidence_board",
+                "site_correct_score_context",
+                "site_tg15_context",
                 "site_player_event_shortlists",
                 "site_team_match_stats",
                 "site_player_match_stats",

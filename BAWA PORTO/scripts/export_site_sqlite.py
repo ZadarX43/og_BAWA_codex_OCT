@@ -22,9 +22,26 @@ from typing import Any, Iterable
 DEFAULT_DATA_ROOT = Path("frontend/public/data")
 DEFAULT_NORMALIZED_ROOT = Path("data_sources/api_football/normalized")
 DEFAULT_OUTPUT = Path("build/site_data/odds_genius.sqlite")
-SCHEMA_VERSION = 5
+DEFAULT_GOAL_EVIDENCE_BOARD = Path(
+    "reports/latest/goal_next_season_decision_evidence_board_v2/GOAL_NEXT_SEASON_DECISION_EVIDENCE_BOARD_V2.csv"
+)
+DEFAULT_CORRECT_SCORE_PUBLIC_SITE = Path(
+    "reports/latest/correct_score_premium_context/CORRECT_SCORE_PREMIUM_PUBLIC_SITE.csv"
+)
+DEFAULT_CORRECT_SCORE_PRO_SHORTLIST = Path(
+    "reports/latest/correct_score_premium_context/CORRECT_SCORE_PREMIUM_PRO_SHORTLIST.csv"
+)
+SCHEMA_VERSION = 6
 DEFAULT_ROUTE_CACHE_LIMIT = 20
 DEFAULT_EVENT_SHORTLIST_LIMIT = 3
+
+
+def default_goal_evidence_boards() -> tuple[Path, ...]:
+    paths = [DEFAULT_GOAL_EVIDENCE_BOARD]
+    paths.extend(
+        sorted(Path("reports/latest").glob("live_goal_decision_evidence_board_*/LIVE_GOAL_DECISION_EVIDENCE_BOARD.csv"))
+    )
+    return tuple(dict.fromkeys(paths))
 
 
 def read_json(path: Path, default: Any = None) -> Any:
@@ -159,6 +176,50 @@ def safe_float(value: Any) -> float | None:
         return float(text)
     except (TypeError, ValueError):
         return None
+
+
+def safe_bool_int(value: Any) -> int | None:
+    text = str(value or "").strip().lower()
+    if text in {"1", "true", "yes", "y"}:
+        return 1
+    if text in {"0", "false", "no", "n"}:
+        return 0
+    return None
+
+
+def split_signal_tokens(value: Any) -> list[str]:
+    text = str(value or "").strip()
+    if not text:
+        return []
+    return [part for part in re.split(r"[|;]", text) if part]
+
+
+def first_value(row: dict[str, Any], *keys: str) -> Any:
+    for key in keys:
+        value = row.get(key)
+        if value not in (None, ""):
+            return value
+    return ""
+
+
+def normalize_market_key(value: Any) -> str:
+    text = str(value or "").strip().lower()
+    if text in {"over_25", "over25", "o/u 2.5", "ou25"}:
+        return "ou25"
+    if text in {"both_teams_to_score", "btts"}:
+        return "btts"
+    if text in {"full_time_result", "ftr", "1x2"}:
+        return "ftr"
+    return text
+
+
+def normalize_selection_key(value: Any) -> str:
+    text = str(value or "").strip().upper()
+    if text in {"OVER 2.5", "OVER_25", "OVER25", "O25"}:
+        return "OVER25"
+    if text in {"UNDER 2.5", "UNDER_25", "UNDER25", "U25"}:
+        return "UNDER25"
+    return text
 
 
 def read_csv_rows(path: Path) -> list[dict[str, str]]:
@@ -317,6 +378,9 @@ def execute_schema(conn: sqlite3.Connection) -> None:
         DROP TABLE IF EXISTS site_fixture_context_payloads;
         DROP TABLE IF EXISTS site_fixture_stats_payloads;
         DROP TABLE IF EXISTS site_team_premium_payloads;
+        DROP TABLE IF EXISTS site_goal_evidence_board;
+        DROP TABLE IF EXISTS site_correct_score_context;
+        DROP TABLE IF EXISTS site_tg15_context;
 
         CREATE TABLE metadata (
           key TEXT PRIMARY KEY,
@@ -636,6 +700,85 @@ def execute_schema(conn: sqlite3.Connection) -> None:
           PRIMARY KEY (competition_key, team_slug)
         );
 
+        CREATE TABLE site_goal_evidence_board (
+          row_id TEXT PRIMARY KEY,
+          fixture_key TEXT NOT NULL,
+          source_fixture_key TEXT,
+          match_date TEXT,
+          league TEXT,
+          market_key TEXT,
+          selection_key TEXT,
+          production_tier TEXT,
+          final_evidence_label TEXT,
+          final_deploy_state TEXT,
+          final_customer_state TEXT,
+          model_attribution_bucket TEXT,
+          model_probability REAL,
+          catboost_probability REAL,
+          xgb_probability REAL,
+          meta_probability REAL,
+          bookie_od REAL,
+          implied_probability REAL,
+          model_vs_implied_delta REAL,
+          correct_score_mass REAL,
+          correct_score_shape TEXT,
+          value_edge_tier TEXT,
+          support_flags_json TEXT NOT NULL,
+          caution_flags_json TEXT NOT NULL,
+          data_status_json TEXT NOT NULL,
+          payload_json TEXT NOT NULL
+        );
+
+        CREATE TABLE site_correct_score_context (
+          row_id TEXT PRIMARY KEY,
+          fixture_key TEXT NOT NULL,
+          source_fixture_key TEXT,
+          match_date TEXT,
+          league TEXT,
+          home_team TEXT,
+          away_team TEXT,
+          source_segment TEXT,
+          base_market TEXT,
+          cs_class TEXT,
+          premium_primary_rule TEXT,
+          public_signal_strength TEXT,
+          concentration_bucket TEXT,
+          top1_scoreline TEXT,
+          top1_probability REAL,
+          top2_scoreline TEXT,
+          top2_probability REAL,
+          top3_scoreline TEXT,
+          top3_probability REAL,
+          top3_total_probability REAL,
+          cross_market_note TEXT,
+          website_segment TEXT,
+          payload_json TEXT NOT NULL
+        );
+
+        CREATE TABLE site_tg15_context (
+          row_id TEXT PRIMARY KEY,
+          fixture_key TEXT NOT NULL,
+          source_fixture_key TEXT,
+          match_date TEXT,
+          league TEXT,
+          market_key TEXT,
+          support_flag INTEGER,
+          support_grade TEXT,
+          support_sides TEXT,
+          support_policies TEXT,
+          max_model_probability REAL,
+          home_support_flag INTEGER,
+          away_support_flag INTEGER,
+          home_best_policy TEXT,
+          away_best_policy TEXT,
+          home_research_label TEXT,
+          away_research_label TEXT,
+          policy_status TEXT,
+          data_status TEXT,
+          authority_status TEXT,
+          payload_json TEXT NOT NULL
+        );
+
         CREATE INDEX idx_fixtures_league_time ON fixtures(league_key, kickoff_time);
         CREATE INDEX idx_fixtures_home ON fixtures(home_team);
         CREATE INDEX idx_fixtures_away ON fixtures(away_team);
@@ -660,6 +803,13 @@ def execute_schema(conn: sqlite3.Connection) -> None:
         CREATE INDEX idx_site_fixture_external_fixture ON site_fixture_external_content(fixture_key);
         CREATE INDEX idx_site_fixture_external_source ON site_fixture_external_content(source_id, content_type);
         CREATE INDEX idx_site_team_premium_comp_team ON site_team_premium_payloads(competition_key, team_slug);
+        CREATE INDEX idx_site_goal_evidence_fixture ON site_goal_evidence_board(fixture_key);
+        CREATE INDEX idx_site_goal_evidence_market ON site_goal_evidence_board(market_key, selection_key);
+        CREATE INDEX idx_site_goal_evidence_label ON site_goal_evidence_board(final_evidence_label, final_deploy_state);
+        CREATE INDEX idx_site_correct_score_fixture ON site_correct_score_context(fixture_key);
+        CREATE INDEX idx_site_correct_score_segment ON site_correct_score_context(source_segment, website_segment);
+        CREATE INDEX idx_site_tg15_fixture ON site_tg15_context(fixture_key);
+        CREATE INDEX idx_site_tg15_support ON site_tg15_context(support_flag, support_grade);
         """
     )
 
@@ -1753,6 +1903,7 @@ def insert_site_fixture_market_intelligence(conn: sqlite3.Connection) -> int:
                 "rating": rating,
                 "band": market_read.get("band") or suitability_read.get("label"),
                 "model_lean": market_read.get("model_lean"),
+                "model_output": market_read.get("model_output"),
                 "confidence_band": confidence_band,
                 "signal_state": signal_state,
                 "agreement_score": safe_int(agreement_score),
@@ -1795,6 +1946,353 @@ def insert_site_fixture_market_intelligence(conn: sqlite3.Connection) -> int:
           rating, band, model_lean, confidence_band, signal_state,
           support_count, caution_count, source_status, public_summary, payload_json
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        rows,
+    )
+    return len(rows)
+
+
+def evidence_customer_state(row: dict[str, Any]) -> str:
+    deploy_pass = safe_bool_int(row.get("deploy_pass"))
+    state = str(
+        first_value(row, "final_deploy_state_v2", "final_deploy_state", "deploy_state", "site_signal_state")
+    ).strip().upper()
+    label = str(first_value(row, "final_evidence_label_v2", "final_evidence_label", "decision_label")).strip().upper()
+    if deploy_pass == 1:
+        return "deploy"
+    if deploy_pass == 0:
+        return "no deploy"
+    if state in {"DEPLOY", "LIVE_DEPLOY", "STANDARD_DEPLOY", "ELITE_DEPLOY"} or label == "CORE_FULL_STACK_DEPLOY":
+        return "deploy"
+    if "AVOID" in state or "AVOID" in label or state in {"BLOCKED", "NO_DEPLOY"}:
+        return "avoid"
+    if "RESEARCH" in state or "RESEARCH" in label or "CANDIDATE" in label:
+        return "research-only"
+    if "WATCH" in state or "WATCH" in label or "CAUTION" in label:
+        return "watch"
+    return "no deploy"
+
+
+def evidence_production_tier(row: dict[str, Any]) -> str:
+    for key in ("production_tier", "deploy_tier", "confidence_tier", "baseline_tier", "pool_tier"):
+        value = str(row.get(key) or "").strip().upper()
+        if value:
+            return value
+    if safe_bool_int(row.get("baseline_deploy_flag")) == 1:
+        return "BASELINE_DEPLOY"
+    return "NO_PRODUCTION_TIER"
+
+
+def insert_site_goal_evidence_board(
+    conn: sqlite3.Connection,
+    evidence_paths: Iterable[Path],
+    site_fixture_aliases: dict[tuple[str, str, str], str] | None,
+) -> int:
+    rows = []
+    for evidence_path in evidence_paths:
+        source_id = evidence_path.stem
+        for row in read_csv_rows(evidence_path):
+            source_fixture_key = str(row.get("fixture_key") or "").strip()
+            market_key = normalize_market_key(first_value(row, "market_norm", "market"))
+            selection_key = normalize_selection_key(first_value(row, "selection_norm", "selection", "bookie_pick"))
+            if not source_fixture_key or market_key not in {"ou25", "btts"}:
+                continue
+            fixture_key = resolve_active_site_fixture_key(row, site_fixture_aliases)
+            correct_score_support = (
+                row.get("cs_ou25_support_label")
+                if market_key == "ou25"
+                else row.get("cs_btts_support_label")
+            ) or row.get("cs_ftr_support_label")
+            support_flags = {
+                "directional": split_signal_tokens(row.get("directional_support_layers")),
+                "research": split_signal_tokens(row.get("research_support_layers")),
+                "seasonal": split_signal_tokens(row.get("seasonal_support_layers")),
+                "tg15": split_signal_tokens(row.get("tg15_support_sides")),
+                "evidence": split_signal_tokens(row.get("evidence_flags")),
+                "correct_score": split_signal_tokens(correct_score_support),
+                "overlay": split_signal_tokens(row.get("overlay_support_verdict")),
+                "h2h": split_signal_tokens(row.get("h2h_support_verdict")),
+            }
+            caution_flags = {
+                "directional": split_signal_tokens(row.get("directional_caution_layers")),
+                "research": split_signal_tokens(row.get("research_caution_layers")),
+                "seasonal": split_signal_tokens(row.get("seasonal_caution_layers")),
+                "conflict": split_signal_tokens(row.get("conflict_flags")),
+                "caution": split_signal_tokens(row.get("caution_flags")),
+                "deploy_veto": split_signal_tokens(row.get("deploy_veto_reason")),
+            }
+            data_status = {
+                "uefa_context": row.get("uefa_context_data_status"),
+                "fixture_calendar": row.get("fixture_calendar_context_data_status"),
+                "fixture_calendar_production_grade": safe_bool_int(row.get("fixture_calendar_context_production_grade")),
+                "seasonal_context": row.get("seasonal_context_status"),
+                "seasonal_rule_policy": row.get("seasonal_rule_policy_status"),
+                "correct_score": row.get("cs_premium_data_status"),
+                "tg15": row.get("tg15_context_data_status"),
+                "tg15_policy": row.get("tg15_context_policy_status"),
+                "odds_source": row.get("od_source"),
+                "fixture_primary": safe_bool_int(row.get("is_fixture_primary")),
+                "moon_policy": "RESEARCH_ONLY_NO_DEPLOY_USE",
+            }
+            final_evidence_label = first_value(row, "final_evidence_label_v2", "final_evidence_label", "decision_label")
+            final_deploy_state = first_value(row, "final_deploy_state_v2", "final_deploy_state")
+            if not final_deploy_state:
+                final_deploy_state = "DEPLOY" if safe_bool_int(row.get("deploy_pass")) == 1 else "NO_DEPLOY"
+            rows.append(
+                (
+                    f"{source_id}:{source_fixture_key}:{market_key}:{selection_key}",
+                    fixture_key,
+                    source_fixture_key,
+                    row.get("match_date"),
+                    row.get("league"),
+                    market_key,
+                    selection_key,
+                    evidence_production_tier(row),
+                    final_evidence_label,
+                    final_deploy_state,
+                    evidence_customer_state(row),
+                    first_value(row, "model_attribution_bucket", "source_prob_col", "meta_score_source"),
+                    safe_float(first_value(row, "model_probability", "model_prob", "model_p_for_bookie")),
+                    safe_float(first_value(row, "catboost_probability", "cat_prob")),
+                    safe_float(first_value(row, "xgb_probability", "xgb_prob", "model_p_for_bookie_xgb")),
+                    safe_float(first_value(row, "meta_probability", "meta_prob")),
+                    safe_float(row.get("bookie_od")),
+                    safe_float(first_value(row, "implied_probability", "bookie_implied")),
+                    safe_float(first_value(row, "model_vs_implied_delta", "implied_prob_diff", "value_gap_pct_points")),
+                    safe_float(first_value(row, "correct_score_selection_mass", "cs_top3_support_mass")),
+                    first_value(row, "correct_score_shape") or correct_score_support,
+                    row.get("value_edge_tier") or row.get("price_band"),
+                    json_text(support_flags),
+                    json_text(caution_flags),
+                    json_text(data_status),
+                    json_text(row),
+                )
+            )
+    conn.executemany(
+        """
+        INSERT OR REPLACE INTO site_goal_evidence_board(
+          row_id, fixture_key, source_fixture_key, match_date, league,
+          market_key, selection_key, production_tier, final_evidence_label,
+          final_deploy_state, final_customer_state, model_attribution_bucket,
+          model_probability, catboost_probability, xgb_probability, meta_probability,
+          bookie_od, implied_probability, model_vs_implied_delta, correct_score_mass,
+          correct_score_shape, value_edge_tier, support_flags_json, caution_flags_json,
+          data_status_json, payload_json
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        rows,
+    )
+    return len(rows)
+
+
+def insert_site_correct_score_context(
+    conn: sqlite3.Connection,
+    public_path: Path,
+    pro_path: Path,
+    evidence_paths: Iterable[Path],
+    site_fixture_aliases: dict[tuple[str, str, str], str] | None,
+) -> int:
+    rows = []
+    active_fixture_keys = {
+        str(row[0])
+        for row in conn.execute("SELECT fixture_key FROM fixtures")
+        if row[0]
+    }
+
+    def append_row(row: dict[str, Any], source_segment: str, index: int) -> None:
+        source_fixture_key = str(row.get("fixture_key") or "").strip()
+        if not source_fixture_key:
+            return
+        fixture_key = resolve_active_site_fixture_key(row, site_fixture_aliases)
+        base_market = str(row.get("base_market") or "").strip().lower()
+        row_id = f"{source_fixture_key}:{source_segment}:{base_market or 'public'}:{index}"
+        rows.append(
+            (
+                row_id,
+                fixture_key,
+                source_fixture_key,
+                row.get("match_date"),
+                row.get("league"),
+                row.get("home_team_name"),
+                row.get("away_team_name"),
+                source_segment,
+                base_market,
+                row.get("cs_class"),
+                row.get("premium_primary_rule"),
+                row.get("public_signal_strength"),
+                row.get("cs_concentration_bucket"),
+                row.get("cs1"),
+                safe_float(row.get("cs1_p")),
+                row.get("cs2"),
+                safe_float(row.get("cs2_p")),
+                row.get("cs3"),
+                safe_float(row.get("cs3_p")),
+                safe_float(row.get("cs_top3_total_prob")),
+                row.get("cross_market_note"),
+                row.get("website_segment"),
+                json_text(row),
+            )
+        )
+
+    for index, row in enumerate(read_csv_rows(public_path)):
+        append_row(row, "public_top3", index)
+    for index, row in enumerate(read_csv_rows(pro_path)):
+        append_row(row, "premium_pro_rules", index)
+    evidence_index = 0
+    for evidence_path in evidence_paths:
+        source_id = evidence_path.stem
+        for row in read_csv_rows(evidence_path):
+            source_fixture_key = str(row.get("fixture_key") or "").strip()
+            if not source_fixture_key:
+                continue
+            fixture_key = resolve_active_site_fixture_key(row, site_fixture_aliases)
+            if fixture_key not in active_fixture_keys:
+                continue
+            top1 = first_value(row, "cs1", "cs_top1_scoreline")
+            top2 = first_value(row, "cs2", "cs_top2_scoreline")
+            top3 = first_value(row, "cs3", "cs_top3_scoreline")
+            if not any((top1, top2, top3)):
+                continue
+            base_market = normalize_market_key(first_value(row, "market_norm", "market"))
+            rows.append(
+                (
+                    f"{source_id}:{source_fixture_key}:{base_market}:goal_evidence_top3:{evidence_index}",
+                    fixture_key,
+                    source_fixture_key,
+                    row.get("match_date"),
+                    row.get("league"),
+                    row.get("home_team_name"),
+                    row.get("away_team_name"),
+                    "goal_evidence_top3",
+                    base_market,
+                    first_value(row, "cs_class", "decision_label"),
+                    first_value(row, "premium_primary_rule", "decision_label"),
+                    first_value(row, "public_signal_strength", "site_signal_state"),
+                    first_value(row, "cs_concentration_bucket", "correct_score_shape"),
+                    top1,
+                    safe_float(first_value(row, "cs1_p", "cs_top1_probability")),
+                    top2,
+                    safe_float(first_value(row, "cs2_p", "cs_top2_probability")),
+                    top3,
+                    safe_float(first_value(row, "cs3_p", "cs_top3_probability")),
+                    safe_float(first_value(row, "cs_top3_total_prob", "cs_top3_support_mass", "correct_score_selection_mass")),
+                    first_value(row, "cross_market_note", "phase7c_cross_market_note"),
+                    first_value(row, "website_segment", "deploy_tier"),
+                    json_text(row),
+                )
+            )
+            evidence_index += 1
+
+    conn.executemany(
+        """
+        INSERT OR REPLACE INTO site_correct_score_context(
+          row_id, fixture_key, source_fixture_key, match_date, league, home_team,
+          away_team, source_segment, base_market, cs_class, premium_primary_rule,
+          public_signal_strength, concentration_bucket, top1_scoreline,
+          top1_probability, top2_scoreline, top2_probability, top3_scoreline,
+          top3_probability, top3_total_probability, cross_market_note,
+          website_segment, payload_json
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        rows,
+    )
+    return len(rows)
+
+
+def insert_site_tg15_context(
+    conn: sqlite3.Connection,
+    evidence_paths: Iterable[Path],
+    site_fixture_aliases: dict[tuple[str, str, str], str] | None,
+) -> int:
+    rows = []
+    seen: set[str] = set()
+    for evidence_path in evidence_paths:
+        source_id = evidence_path.stem
+        for row in read_csv_rows(evidence_path):
+            source_fixture_key = str(row.get("fixture_key") or "").strip()
+            market_key = normalize_market_key(first_value(row, "market_norm", "market"))
+            if not source_fixture_key or market_key not in {"ou25", "btts"}:
+                continue
+            if not any(
+                first_value(row, key)
+                for key in (
+                    "tg15_support_flag",
+                    "tg15_support_grade",
+                    "tg15_support_sides",
+                    "tg15_home_best_policy",
+                    "tg15_away_best_policy",
+                )
+            ):
+                continue
+            row_id = f"{source_id}:{source_fixture_key}:{market_key}"
+            if row_id in seen:
+                continue
+            seen.add(row_id)
+            fixture_key = resolve_active_site_fixture_key(row, site_fixture_aliases)
+            payload = {
+                "authority_status": "SUPPORT_CONTEXT_ONLY_NO_DEPLOY_AUTHORITY",
+                "fixture_key": fixture_key,
+                "source_fixture_key": source_fixture_key,
+                "market_key": market_key,
+                "support_flag": safe_bool_int(row.get("tg15_support_flag")),
+                "support_grade": row.get("tg15_support_grade"),
+                "support_sides": split_signal_tokens(row.get("tg15_support_sides")),
+                "support_policies": split_signal_tokens(row.get("tg15_support_policies")),
+                "research_labels": split_signal_tokens(row.get("tg15_research_labels")),
+                "sample_classes": split_signal_tokens(row.get("tg15_context_sample_classes")),
+                "max_model_probability": safe_float(row.get("tg15_max_model_prob")),
+                "home": {
+                    "team": row.get("tg15_home_team_name"),
+                    "support_flag": safe_bool_int(row.get("tg15_home_support_flag")),
+                    "best_policy": row.get("tg15_home_best_policy"),
+                    "research_label": row.get("tg15_home_research_label"),
+                    "model_probability": safe_float(row.get("tg15_home_model_prob")),
+                    "policy_reason": row.get("tg15_home_policy_reason"),
+                },
+                "away": {
+                    "team": row.get("tg15_away_team_name"),
+                    "support_flag": safe_bool_int(row.get("tg15_away_support_flag")),
+                    "best_policy": row.get("tg15_away_best_policy"),
+                    "research_label": row.get("tg15_away_research_label"),
+                    "model_probability": safe_float(row.get("tg15_away_model_prob")),
+                    "policy_reason": row.get("tg15_away_policy_reason"),
+                },
+            }
+            rows.append(
+                (
+                    row_id,
+                    fixture_key,
+                    source_fixture_key,
+                    row.get("match_date"),
+                    row.get("league"),
+                    market_key,
+                    safe_bool_int(row.get("tg15_support_flag")),
+                    row.get("tg15_support_grade"),
+                    row.get("tg15_support_sides"),
+                    row.get("tg15_support_policies"),
+                    safe_float(row.get("tg15_max_model_prob")),
+                    safe_bool_int(row.get("tg15_home_support_flag")),
+                    safe_bool_int(row.get("tg15_away_support_flag")),
+                    row.get("tg15_home_best_policy"),
+                    row.get("tg15_away_best_policy"),
+                    row.get("tg15_home_research_label"),
+                    row.get("tg15_away_research_label"),
+                    row.get("tg15_context_policy_status"),
+                    row.get("tg15_context_data_status"),
+                    "SUPPORT_CONTEXT_ONLY_NO_DEPLOY_AUTHORITY",
+                    json_text(payload),
+                )
+            )
+    conn.executemany(
+        """
+        INSERT OR REPLACE INTO site_tg15_context(
+          row_id, fixture_key, source_fixture_key, match_date, league, market_key,
+          support_flag, support_grade, support_sides, support_policies,
+          max_model_probability, home_support_flag, away_support_flag,
+          home_best_policy, away_best_policy, home_research_label,
+          away_research_label, policy_status, data_status, authority_status,
+          payload_json
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
         rows,
     )
@@ -2707,11 +3205,15 @@ def export_database(
     output_path: Path,
     include_history: bool = False,
     normalized_root: Path = DEFAULT_NORMALIZED_ROOT,
+    goal_evidence_boards: Iterable[Path] | None = None,
+    correct_score_public_site: Path = DEFAULT_CORRECT_SCORE_PUBLIC_SITE,
+    correct_score_pro_shortlist: Path = DEFAULT_CORRECT_SCORE_PRO_SHORTLIST,
 ) -> dict[str, int | str]:
     started = time.perf_counter()
     output_path.parent.mkdir(parents=True, exist_ok=True)
     if output_path.exists():
         output_path.unlink()
+    goal_evidence_board_paths = tuple(goal_evidence_boards or default_goal_evidence_boards())
     active_seasons = None if include_history else active_competition_seasons(data_root)
     site_fixture_aliases = active_site_fixture_aliases(data_root)
 
@@ -2755,6 +3257,15 @@ def export_database(
             "site_fixture_context_payloads": insert_site_fixture_context_payloads(conn),
             "site_fixture_stats_payloads": insert_site_fixture_stats_payloads(conn),
             "site_team_premium_payloads": insert_site_team_premium_payloads(conn),
+            "site_goal_evidence_board": insert_site_goal_evidence_board(conn, goal_evidence_board_paths, site_fixture_aliases),
+            "site_correct_score_context": insert_site_correct_score_context(
+                conn,
+                correct_score_public_site,
+                correct_score_pro_shortlist,
+                goal_evidence_board_paths,
+                site_fixture_aliases,
+            ),
+            "site_tg15_context": insert_site_tg15_context(conn, goal_evidence_board_paths, site_fixture_aliases),
         }
         counts = {key: table_count(conn, key) for key in insert_counts}
         insert_metadata(
@@ -2762,6 +3273,9 @@ def export_database(
             {
                 "schema_version": SCHEMA_VERSION,
                 "source_data_root": str(data_root),
+                "goal_evidence_boards": json_text([str(path) for path in goal_evidence_board_paths]),
+                "correct_score_public_site": str(correct_score_public_site),
+                "correct_score_pro_shortlist": str(correct_score_pro_shortlist),
                 "created_unix": int(time.time()),
                 "scope": "full_history" if include_history else "active_site_latest_seasons",
                 "active_competition_count": len(active_seasons or {}),
@@ -2790,6 +3304,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--normalized-root", default=str(DEFAULT_NORMALIZED_ROOT))
     parser.add_argument("--output", default=str(DEFAULT_OUTPUT))
     parser.add_argument(
+        "--goal-evidence-board",
+        action="append",
+        default=[],
+        help="Goal evidence CSV to export. May be repeated. Defaults to historical V2 plus discovered live window boards.",
+    )
+    parser.add_argument("--correct-score-public-site", default=str(DEFAULT_CORRECT_SCORE_PUBLIC_SITE))
+    parser.add_argument("--correct-score-pro-shortlist", default=str(DEFAULT_CORRECT_SCORE_PRO_SHORTLIST))
+    parser.add_argument(
         "--include-history",
         action="store_true",
         help="Export all historical team/player club-season rows instead of the active-site latest-season footprint.",
@@ -2804,6 +3326,9 @@ def main() -> None:
         Path(args.output),
         include_history=args.include_history,
         normalized_root=Path(args.normalized_root),
+        goal_evidence_boards=[Path(path) for path in args.goal_evidence_board] or default_goal_evidence_boards(),
+        correct_score_public_site=Path(args.correct_score_public_site),
+        correct_score_pro_shortlist=Path(args.correct_score_pro_shortlist),
     )
     print(json.dumps(summary, indent=2, sort_keys=True))
 
