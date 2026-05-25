@@ -1961,16 +1961,14 @@ def evidence_customer_state(row: dict[str, Any]) -> str:
     if deploy_pass == 1:
         return "deploy"
     if deploy_pass == 0:
-        return "no deploy"
+        return "avoid"
     if state in {"DEPLOY", "LIVE_DEPLOY", "STANDARD_DEPLOY", "ELITE_DEPLOY"} or label == "CORE_FULL_STACK_DEPLOY":
         return "deploy"
     if "AVOID" in state or "AVOID" in label or state in {"BLOCKED", "NO_DEPLOY"}:
         return "avoid"
-    if "RESEARCH" in state or "RESEARCH" in label or "CANDIDATE" in label:
-        return "research-only"
-    if "WATCH" in state or "WATCH" in label or "CAUTION" in label:
+    if any(token in state or token in label for token in ("WATCH", "CAUTION", "RESEARCH", "CANDIDATE", "RECOVERY", "UNLOCK")):
         return "watch"
-    return "no deploy"
+    return "watch"
 
 
 def evidence_production_tier(row: dict[str, Any]) -> str:
