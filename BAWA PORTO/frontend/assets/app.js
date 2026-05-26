@@ -651,6 +651,7 @@
       competitions: "./competitions.html",
       teams: "./teams.html",
       dashboard: "./dashboard.html",
+      fantasy: "./fantasy.html",
       fixture: "./matches.html",
       onboarding: "./account.html",
       predictions: "./predictions.html",
@@ -9977,6 +9978,188 @@
     `;
   };
 
+  const fantasyFeaturePills = (items = []) => `
+    <div class="timeline-tier-pills fantasy-pill-grid">
+      ${items.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
+    </div>
+  `;
+
+  const fantasyLockedPanel = (requiredTier, title, copy, items = []) => `
+    <article class="panel fantasy-access-card fantasy-access-locked">
+      <div class="timeline-tier-panel-head">
+        <span>${escapeHtml(demoTierLabel(requiredTier))} layer</span>
+        <strong>Locked</strong>
+      </div>
+      <h3>${escapeHtml(title)}</h3>
+      <p class="muted">${escapeHtml(copy)}</p>
+      ${fantasyFeaturePills(items)}
+      <div class="cta-row">
+        <a class="button" href="./pricing.html">See plans</a>
+        <a class="ghost-button" href="./account.html">Account</a>
+      </div>
+    </article>
+  `;
+
+  const fantasyView = () => {
+    const tier = currentAccessTier();
+    const paidReady = accessTierRank(tier) >= 1;
+    const proReady = accessTierRank(tier) >= 3;
+    const decisionActions = ["Buy", "Sell", "Start", "Bench", "Captain", "Avoid", "Monitor", "Wildcard"];
+    const playerSignals = [
+      "Next 1/3/5/8 GW expected points",
+      "Expected minutes",
+      "Start probability",
+      "Rotation risk",
+      "Clean-sheet signal",
+      "Attacking return signal",
+      "Bonus profile",
+      "Price and ownership context",
+    ];
+    const squadSignals = [
+      "Squad health",
+      "Starting XI strength",
+      "Bench strength",
+      "Captain and vice",
+      "Roll/use transfer",
+      "Hit/no-hit",
+      "Wildcard pressure",
+      "Transfer route",
+    ];
+    return `
+      <section class="section split fantasy-hero">
+        <article class="hero-main">
+          <p class="hero-kicker">Fantasy 26/27</p>
+          <h1>Fantasy Football Intelligence System.</h1>
+          <p>Odds Genius Fantasy tells you what to do with your whole squad before the deadline: transfers, captaincy, benching, chips, trap flags, and rank strategy in one paid intelligence layer.</p>
+          <div class="pill-row">
+            <span class="stat-chip">FPL 26/27</span>
+            <span class="stat-chip">Paid members</span>
+            <span class="stat-chip">Squad decisions</span>
+          </div>
+          <div class="cta-row">
+            <a class="button button-large" href="${paidReady ? "./account.html#preferences" : "./pricing.html"}">${paidReady ? "Open account workspace" : "Join Founder access"}</a>
+            <a class="ghost-button" href="./methodology.html">Methodology</a>
+          </div>
+        </article>
+        <aside class="hero-side">
+          <div class="metric">
+            <span class="metric-label">Historical baseline</span>
+            <span class="metric-value">10 seasons</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Replay windows</span>
+            <span class="metric-value">360</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Best early edge</span>
+            <span class="metric-value">Transfers</span>
+          </div>
+        </aside>
+      </section>
+      ${demoAccountSimulatorPanel()}
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>Deadline decisions, not captaincy noise.</h2>
+            <p class="section-copy">The backend estate is already built. This page is the paid product home while the website payloads and user-squad upload flow get wired for launch.</p>
+          </div>
+        </div>
+        <div class="stats-grid">
+          ${statPanel("Strict captaincy", "5.9959", "Minutes-secure lane beats the simple 5.8333 floor")}
+          ${statPanel("BUY_PRIORITY", "5.6792", "Transfer intelligence vs 3.5222 baseline")}
+          ${statPanel("Strict rank-1 transfer", "5.7812", "Strongest early decision lane")}
+          ${statPanel("Strategy modes", "5", "Balanced, protect rank, chase rank, aggressive, value")}
+        </div>
+      </section>
+
+      <section class="section split">
+        <article class="panel">
+          <span class="metric-label">What the user gets</span>
+          <h3>One pre-deadline answer for the whole squad.</h3>
+          <p class="muted">The product job is simple: reduce deadline panic, avoid bad transfers, protect rank when needed, and identify when a differential is real enough to chase.</p>
+          ${fantasyFeaturePills(decisionActions)}
+        </article>
+        <article class="panel">
+          <span class="metric-label">Backend estate</span>
+          <h3>Built as an intelligence system.</h3>
+          <ul class="feature-list">
+            <li>FPL rules, game-state adapter, player mapping, fixture difficulty, and projection inputs.</li>
+            <li>Expected points, captaincy, transfer advisor, squad optimizer, chip planner, and briefing generator.</li>
+            <li>Historical importer, leak-safe lagger, baseline evaluator, OG replay, and OG-vs-baseline comparison.</li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="section">
+        <div class="card-grid">
+          <article class="panel fantasy-access-card">
+            <div class="timeline-tier-panel-head">
+              <span>Standard</span>
+              <strong>Preview</strong>
+            </div>
+            <h3>Public fantasy overview.</h3>
+            <p class="muted">Public users can understand the system, proof floor, and why squad decisions matter before joining.</p>
+            ${fantasyFeaturePills(["Product proof", "System overview", "Deadline education", "Founder CTA"])}
+          </article>
+          ${
+            paidReady
+              ? `
+                <article class="panel fantasy-access-card fantasy-access-open">
+                  <div class="timeline-tier-panel-head">
+                    <span>Founder / Premium</span>
+                    <strong>Unlocked</strong>
+                  </div>
+                  <h3>Squad decision intelligence.</h3>
+                  <p class="muted">Personalised squad advice, transfer route planning, hit/no-hit logic, wildcard pressure, trap flags, and deadline alerts.</p>
+                  ${fantasyFeaturePills(squadSignals)}
+                </article>
+              `
+              : fantasyLockedPanel(
+                  "premium",
+                  "Squad decision intelligence.",
+                  "Founder and Premium members unlock personalised squad advice, transfer route planning, hit/no-hit logic, wildcard pressure, and deadline alerts.",
+                  squadSignals
+                )
+          }
+          ${
+            proReady
+              ? `
+                <article class="panel fantasy-access-card fantasy-access-open fantasy-access-pro">
+                  <div class="timeline-tier-panel-head">
+                    <span>Pro</span>
+                    <strong>Unlocked</strong>
+                  </div>
+                  <h3>Strategy-mode optimization.</h3>
+                  <p class="muted">Pro turns the same squad through different risk lenses: protect rank, chase rank, aggressive, balanced, and value.</p>
+                  ${fantasyFeaturePills(playerSignals)}
+                </article>
+              `
+              : fantasyLockedPanel(
+                  "pro",
+                  "Strategy-mode optimization.",
+                  "Pro opens the richer player-level signal stack and rank-strategy layer for more serious FPL users.",
+                  playerSignals
+                )
+          }
+        </div>
+      </section>
+
+      <section class="section split">
+        <article class="panel">
+          <span class="metric-label">Product line</span>
+          <h3>Tell me what to do before deadline.</h3>
+          <p class="muted">The strongest proven lane is transfer and squad decision intelligence. Captaincy stays in the product, but it is not the whole product.</p>
+        </article>
+        <article class="panel">
+          <span class="metric-label">Website status</span>
+          <h3>Backend ready. Frontend payload wiring next.</h3>
+          <p class="muted">Next build step is the user-squad flow: import squad, select strategy mode, generate deadline briefing, then save decision history to Account.</p>
+        </article>
+      </section>
+    `;
+  };
+
   const pricingView = () => `
       <section class="section split">
         <article class="hero-main">
@@ -12446,6 +12629,7 @@
       fixture: fixtureView,
       predictions: predictionsView,
       premium: premiumView,
+      fantasy: fantasyView,
       results: resultsView,
       pricing: pricingView,
       methodology: methodologyView,

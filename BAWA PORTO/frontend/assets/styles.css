@@ -3108,6 +3108,36 @@ tbody tr:hover {
   line-height: 1.45;
 }
 
+.fantasy-hero .hero-main {
+  background:
+    linear-gradient(140deg, rgba(116, 232, 213, 0.13), transparent 42%),
+    linear-gradient(180deg, rgba(9, 22, 29, 0.98), rgba(6, 16, 20, 0.96));
+}
+
+.fantasy-access-card {
+  min-height: 330px;
+  align-content: start;
+}
+
+.fantasy-access-open {
+  border-color: rgba(138, 247, 185, 0.28);
+  background:
+    linear-gradient(135deg, rgba(138, 247, 185, 0.09), transparent 48%),
+    rgba(6, 17, 24, 0.9);
+}
+
+.fantasy-access-pro {
+  border-color: rgba(116, 232, 213, 0.34);
+}
+
+.fantasy-access-locked {
+  border-style: dashed;
+}
+
+.fantasy-pill-grid {
+  margin-top: 16px;
+}
+
 .split {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
