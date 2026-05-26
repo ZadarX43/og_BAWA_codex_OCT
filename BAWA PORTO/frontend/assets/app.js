@@ -4,12 +4,14 @@
   const MATCH_FAVOURITES_STORAGE_KEY = "og_match_favourites";
   const PAPER_SLIP_STORAGE_KEY = "og_paper_slip_builder";
   const SAVED_PAPER_SLIPS_STORAGE_KEY = "og_saved_paper_slips";
+  const DEMO_ACCOUNT_STORAGE_KEY = "og_demo_account_simulator";
   const INTERNAL_ADMIN_KEY_STORAGE_KEY = "og_internal_admin_key";
   const INTERNAL_OPERATOR_ID_STORAGE_KEY = "og_internal_operator_id";
   const app = document.getElementById("app");
   const page = document.body.dataset.page || "home";
   const query = new URLSearchParams(window.location.search);
   const premiumDemoMode = query.get("demo") === "1";
+  const demoTierParam = query.get("tier") || "";
   const debugMode = query.get("debug") === "1";
   const accountIntent = query.get("intent") || "";
   const checkoutState = query.get("checkout") || "";
@@ -93,6 +95,7 @@
       accountStateError: "",
       accountSessionsError: "",
       accountSessionsMessage: "",
+      demoAccount: null,
       dashboardClassFilter: "ALL",
       dashboardReasonFilter: "ALL",
       internalFlagSeverityFilter: "ALL",
@@ -194,6 +197,83 @@
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#39;");
+
+  const normalizeDemoTier = (value) => {
+    const tier = String(value || "")
+      .trim()
+      .toLowerCase()
+      .replace(/[\s-]+/g, "_");
+    if (tier === "standard") return "free";
+    if (["free", "founder", "premium", "pro", "pro_plus"].includes(tier)) return tier;
+    return "founder";
+  };
+
+  const demoTierLabel = (value) => {
+    const tier = normalizeDemoTier(value);
+    if (tier === "free") return "Standard";
+    if (tier === "founder") return "Founder";
+    if (tier === "premium") return "Premium";
+    if (tier === "pro") return "Pro";
+    if (tier === "pro_plus") return "Pro+";
+    return "Founder";
+  };
+
+  const demoTierQueryValue = (value) => (normalizeDemoTier(value) === "free" ? "standard" : normalizeDemoTier(value));
+
+  const readDemoAccount = () => {
+    try {
+      const parsed = JSON.parse(window.localStorage.getItem(DEMO_ACCOUNT_STORAGE_KEY) || "{}");
+      return parsed?.enabled
+        ? {
+            enabled: true,
+            tier: normalizeDemoTier(parsed.tier || demoTierParam || "founder"),
+          }
+        : { enabled: false, tier: normalizeDemoTier(demoTierParam || "founder") };
+    } catch {
+      return { enabled: false, tier: normalizeDemoTier(demoTierParam || "founder") };
+    }
+  };
+
+  const writeDemoAccount = (value) => {
+    try {
+      if (value?.enabled) {
+        window.localStorage.setItem(
+          DEMO_ACCOUNT_STORAGE_KEY,
+          JSON.stringify({ enabled: true, tier: normalizeDemoTier(value.tier) })
+        );
+      } else {
+        window.localStorage.removeItem(DEMO_ACCOUNT_STORAGE_KEY);
+      }
+    } catch {
+      return;
+    }
+  };
+
+  const demoAccountActive = () =>
+    Boolean(state.runtime.demoAccount?.enabled || new URLSearchParams(window.location.search).get("demo") === "1");
+
+  const currentDemoTier = () => normalizeDemoTier(state.runtime.demoAccount?.tier || demoTierParam || "founder");
+
+  const demoHref = (href) => {
+    if (!demoAccountActive()) {
+      return href;
+    }
+    const rawHref = String(href || "");
+    if (!rawHref || rawHref.startsWith("http") || rawHref.startsWith("mailto:") || rawHref.startsWith("tel:")) {
+      return href;
+    }
+    try {
+      const url = new URL(rawHref, window.location.href);
+      if (url.origin !== window.location.origin) {
+        return href;
+      }
+      url.searchParams.set("demo", "1");
+      url.searchParams.set("tier", demoTierQueryValue(currentDemoTier()));
+      return `${url.pathname.split("/").pop() || "index.html"}${url.search}${url.hash}`;
+    } catch {
+      return href;
+    }
+  };
 
   const readStoredPremiumToken = () => {
     try {
@@ -582,12 +662,21 @@
     };
     const currentHref = pageHrefMap[page] || "";
     document.querySelectorAll(".nav a").forEach((anchor) => {
-      const isActive = anchor.getAttribute("href") === currentHref;
+      const originalHref = anchor.dataset.baseHref || anchor.getAttribute("href") || "";
+      anchor.dataset.baseHref = originalHref;
+      const isActive = originalHref === currentHref;
       anchor.classList.toggle("is-active", isActive);
+      anchor.setAttribute("href", demoAccountActive() ? demoHref(originalHref) : originalHref);
     });
     document.querySelectorAll("[data-mobile-nav]").forEach((select) => {
-      if (currentHref && Array.from(select.options).some((option) => option.value === currentHref)) {
-        select.value = currentHref;
+      Array.from(select.options).forEach((option) => {
+        const originalValue = option.dataset.baseValue || option.value || "";
+        option.dataset.baseValue = originalValue;
+        option.value = demoAccountActive() ? demoHref(originalValue) : originalValue;
+      });
+      const targetValue = demoAccountActive() ? demoHref(currentHref) : currentHref;
+      if (targetValue && Array.from(select.options).some((option) => option.value === targetValue)) {
+        select.value = targetValue;
       }
     });
   };
@@ -4079,15 +4168,176 @@
   };
 
   const currentAccessTier = () =>
-    normalizeAccessTierLabel(
-      state.runtime.sessionAccessTier ||
-        state.runtime.accountState?.subscription?.access_tier ||
-        state.runtime.accountState?.subscription?.tier ||
-        state.runtime.accountState?.subscription?.plan_tier ||
-        ""
-    ) || (state.runtime.sessionEntitled ? "founder" : "free");
+    demoAccountActive()
+      ? currentDemoTier()
+      : normalizeAccessTierLabel(
+          state.runtime.sessionAccessTier ||
+            state.runtime.accountState?.subscription?.access_tier ||
+            state.runtime.accountState?.subscription?.tier ||
+            state.runtime.accountState?.subscription?.plan_tier ||
+            ""
+        ) || (state.runtime.sessionEntitled ? "founder" : "free");
 
   const hasTierAccess = (requiredTier) => accessTierRank(currentAccessTier()) >= accessTierRank(requiredTier);
+
+  const demoAccountEmail = (tier) => `${normalizeDemoTier(tier).replace("_", "-")}@oddsgenius.demo`;
+
+  const demoNotificationPreferences = (tier) => ({
+    user_style_preset: tier === "free" ? "analyst" : tier === "pro" || tier === "pro_plus" ? "researcher" : "disciplined_bettor",
+    language_preference: "en-GB",
+    calm_onboarding_completed_at: "2026-05-26T08:00:00Z",
+    favourite_teams: ["Liverpool", "FC Barcelona"],
+    favourite_leagues: ["England Premier League", "Spain La Liga", "USA MLS"],
+    favourite_markets: tier === "free" ? ["FTR", "OU25"] : ["FTR", "OU25", "BTTS", "Correct Score"],
+    followed_fixtures: ["Villarreal v Atletico Madrid"],
+    telegram_enabled: tier !== "free",
+    email_enabled: tier === "free",
+    website_only_mode: tier === "free",
+    elite_alerts_enabled: tier !== "free",
+    standard_alerts_enabled: true,
+    acca_alerts_enabled: accessTierRank(tier) >= 2,
+    correct_score_alerts_enabled: accessTierRank(tier) >= 2,
+    injury_alerts_enabled: accessTierRank(tier) >= 1,
+    team_news_alerts_enabled: accessTierRank(tier) >= 1,
+    weather_alerts_enabled: accessTierRank(tier) >= 1,
+    market_movement_alerts_enabled: accessTierRank(tier) >= 2,
+    volatility_alerts_enabled: accessTierRank(tier) >= 2,
+    allow_non_signal_intelligence: accessTierRank(tier) >= 3,
+    daily_digest_enabled: true,
+    results_digest_enabled: true,
+    weekend_slate_digest_enabled: true,
+    alert_frequency_mode: tier === "pro" || tier === "pro_plus" ? "mixed" : "digest_only",
+    pre_match_window_minutes: 90,
+    decision_companion_enabled: true,
+    reset_mode_enabled: true,
+  });
+
+  const buildDemoAccountState = (tierValue) => {
+    const tier = normalizeDemoTier(tierValue);
+    const entitled = accessTierRank(tier) > 0;
+    return {
+      user: {
+        id: `demo-${tier}`,
+        email: demoAccountEmail(tier),
+        account_status: "active",
+      },
+      subscription: {
+        access_tier: tier,
+        tier,
+        plan_tier: tier,
+        subscription_status: entitled ? "active" : "standard",
+        status: entitled ? "active" : "free",
+      },
+      notification_preferences: demoNotificationPreferences(tier),
+      telegram_link: entitled
+        ? {
+            link_status: "linked",
+            telegram_username: `og_${tier}_demo`,
+          }
+        : null,
+    };
+  };
+
+  const applyDemoAccountRuntime = (tierValue) => {
+    const tier = normalizeDemoTier(tierValue);
+    const entitled = accessTierRank(tier) > 0;
+    state.runtime.demoAccount = { enabled: true, tier };
+    state.runtime.sessionAuthenticated = true;
+    state.runtime.sessionEntitled = entitled;
+    state.runtime.sessionStatus = entitled ? "demo_active" : "demo_standard";
+    state.runtime.sessionAuthMode = "demo";
+    state.runtime.sessionCustomerId = `cus_demo_${tier}`;
+    state.runtime.sessionSubscriptionId = entitled ? `sub_demo_${tier}` : "";
+    state.runtime.sessionAccessTier = tier;
+    state.runtime.accountState = buildDemoAccountState(tier);
+    state.runtime.accountSessions = [
+      {
+        id: `session-demo-${tier}`,
+        is_current: true,
+        is_primary: true,
+        is_revoked: false,
+        session_kind: "browser",
+        device_label: `${demoTierLabel(tier)} QA browser`,
+        issued_at: "2026-05-26T08:00:00Z",
+        expires_at: "2026-06-26T08:00:00Z",
+        last_seen_at: new Date().toISOString(),
+      },
+    ];
+    state.runtime.accountAlerts = entitled
+      ? [
+          {
+            id: `alert-demo-${tier}`,
+            title: `${demoTierLabel(tier)} demo alert`,
+            body: "A followed fixture matched your saved markets.",
+            created_at: "2026-05-26T09:00:00Z",
+            delivery_status: "queued",
+          },
+        ]
+      : [];
+    state.runtime.authMessage = `Demo ${demoTierLabel(tier)} account active for navigation QA. Real access still depends on Stripe and Worker sessions.`;
+  };
+
+  const clearDemoAccountRuntime = () => {
+    writeDemoAccount(null);
+    state.runtime.demoAccount = { enabled: false, tier: "founder" };
+    state.runtime.sessionAuthenticated = false;
+    state.runtime.sessionEntitled = false;
+    state.runtime.sessionStatus = "";
+    state.runtime.sessionAuthMode = "";
+    state.runtime.sessionCustomerId = "";
+    state.runtime.sessionSubscriptionId = "";
+    state.runtime.sessionAccessTier = "";
+    state.runtime.accountState = null;
+    state.runtime.accountSessions = [];
+    state.runtime.accountAlerts = [];
+    state.runtime.authMessage = "Demo account cleared.";
+  };
+
+  const demoAccountSimulatorPanel = () => {
+    if (!demoAccountActive() && !debugMode) {
+      return "";
+    }
+    const activeTier = currentAccessTier();
+    const tiers = [
+      ["free", "Standard", "Public view, top cards, paper slips, account shell"],
+      ["founder", "Founder", "Founder context, H2H, weather, lineups, team reads"],
+      ["premium", "Premium", "Deeper market posture, contradictions, team context"],
+      ["pro", "Pro", "Player-event cards and richer watchlists"],
+      ["pro_plus", "Pro+", "Audit panels, data status, source freshness"],
+    ];
+    return `
+      <section class="section section-tight" id="demo-account-simulator">
+        <article class="panel demo-account-panel">
+          <div class="demo-account-head">
+            <div>
+              <span class="metric-label">QA simulator</span>
+              <h3>Simulate account tier navigation.</h3>
+              <p class="muted">Use this for launch-flow QA only. It changes local UI state and demo payload rendering; Stripe, Worker auth, and production entitlement checks remain the real authority.</p>
+            </div>
+            <span class="stat-chip">${escapeHtml(demoTierLabel(activeTier))} active</span>
+          </div>
+          <div class="demo-account-grid">
+            ${tiers
+              .map(
+                ([tier, label, copy]) => `
+                  <button class="demo-account-option ${normalizeAccessTierLabel(activeTier) === tier ? "is-active" : ""}" type="button" data-action="select-demo-account" data-tier="${escapeHtml(tier)}">
+                    <strong>${escapeHtml(label)}</strong>
+                    <span>${escapeHtml(copy)}</span>
+                  </button>
+                `
+              )
+              .join("")}
+          </div>
+          <div class="cta-row">
+            <a class="button" href="${escapeHtml(demoHref("./matches.html"))}">Open Matches as ${escapeHtml(demoTierLabel(activeTier))}</a>
+            <a class="ghost-button" href="${escapeHtml(demoHref("./fixture.html"))}">Open fixture page</a>
+            <a class="ghost-button" href="${escapeHtml(demoHref("./onboarding.html"))}">Open onboarding</a>
+            <button class="ghost-button" type="button" data-action="clear-demo-account">Clear demo</button>
+          </div>
+        </article>
+      </section>
+    `;
+  };
 
   const fixtureTierGate = (requiredTier, title, copy, features = []) => {
     const tierLabel = safeTitleLabel(requiredTier === "pro_plus" ? "Pro+" : requiredTier);
@@ -4766,8 +5016,9 @@
     if (selectedFixtureKey) {
       params.set("fixture", selectedFixtureKey);
     }
-    if (premiumDemoMode) {
+    if (demoAccountActive()) {
       params.set("demo", "1");
+      params.set("tier", demoTierQueryValue(currentDemoTier()));
     }
     if (debugMode) {
       params.set("debug", "1");
@@ -9168,14 +9419,14 @@
   `;
 
   const premiumView = () => {
-    if (premiumDemoMode && state.premiumPredictions.length) {
+    if (demoAccountActive() && accessTierRank(currentAccessTier()) >= 1 && state.premiumPredictions.length) {
       return `
         <section class="section split">
           <article class="hero-main">
-            <p class="hero-kicker">Premium Demo Mode</p>
-            <h1>Internal premium preview.</h1>
+            <p class="hero-kicker">Premium QA Mode</p>
+            <h1>${escapeHtml(demoTierLabel(currentAccessTier()))} premium preview.</h1>
             <p>
-              Demo mode is enabled for internal product review, so the exported premium board is rendered below.
+              Demo tier simulation is enabled for internal product review, so the exported premium board is rendered below.
               Customer-facing access should continue to rely on the Worker route.
             </p>
             <div class="cta-row">
@@ -9194,6 +9445,7 @@
             </div>
           </aside>
         </section>
+        ${demoAccountSimulatorPanel()}
         <section class="section">
           <div class="section-head">
             <div>
@@ -10234,6 +10486,7 @@
         ${renderNotice(state.runtime.preferencesMessage, state.runtime.preferencesMessage ? "success" : "default")}
         ${debugMode ? renderNotice(state.runtime.accountMessage, state.runtime.accountMessage ? "warning" : "default") : ""}
       </section>
+      ${demoAccountSimulatorPanel()}
 
       ${
         !signedIn
@@ -10635,6 +10888,7 @@
           </div>
         </aside>
       </section>
+      ${demoAccountSimulatorPanel()}
 
       <section class="section">
         ${renderNotice(state.runtime.preferencesMessage, state.runtime.preferencesMessage ? "success" : "default")}
@@ -13077,6 +13331,11 @@
     const notice = authNoticeFromQuery();
     state.runtime.authMessage = notice.message;
 
+    if (demoAccountActive()) {
+      applyDemoAccountRuntime(currentDemoTier());
+      return;
+    }
+
     if (!workerConfigured()) {
       return;
     }
@@ -13111,6 +13370,12 @@
   };
 
   const loadAccountState = async () => {
+    if (demoAccountActive()) {
+      state.runtime.accountState = buildDemoAccountState(currentDemoTier());
+      state.runtime.accountStateError = "";
+      return;
+    }
+
     state.runtime.accountState = null;
     state.runtime.accountStateError = "";
 
@@ -13136,6 +13401,12 @@
   };
 
   const loadAccountSessions = async () => {
+    if (demoAccountActive()) {
+      applyDemoAccountRuntime(currentDemoTier());
+      state.runtime.accountSessionsError = "";
+      return;
+    }
+
     state.runtime.accountSessions = [];
     state.runtime.accountSessionsError = "";
 
@@ -13174,6 +13445,11 @@
   };
 
   const loadAccountAlerts = async () => {
+    if (demoAccountActive()) {
+      applyDemoAccountRuntime(currentDemoTier());
+      return;
+    }
+
     state.runtime.accountAlerts = [];
     if (!workerConfigured() || !state.runtime.sessionAuthenticated) {
       return;
@@ -13200,7 +13476,7 @@
     state.runtime.premiumSourceLabel = "";
     state.securePremiumPredictions = [];
 
-    if (premiumDemoMode || page !== "premium") {
+    if (demoAccountActive() || page !== "premium") {
       return;
     }
     if (!workerConfigured() || (!premiumTokenPresent() && !state.runtime.sessionAuthenticated)) {
@@ -14238,6 +14514,45 @@
   };
 
   app.addEventListener("click", async (event) => {
+    const selectDemoTarget = event.target.closest("[data-action='select-demo-account']");
+    if (selectDemoTarget) {
+      event.preventDefault();
+      const tier = normalizeDemoTier(selectDemoTarget.dataset.tier || "founder");
+      writeDemoAccount({ enabled: true, tier });
+      applyDemoAccountRuntime(tier);
+      const url = new URL(window.location.href);
+      url.searchParams.set("demo", "1");
+      url.searchParams.set("tier", demoTierQueryValue(tier));
+      window.history.replaceState({}, "", url);
+      syncActiveNav();
+      render();
+      return;
+    }
+
+    const clearDemoTarget = event.target.closest("[data-action='clear-demo-account']");
+    if (clearDemoTarget) {
+      event.preventDefault();
+      clearDemoAccountRuntime();
+      const url = new URL(window.location.href);
+      url.searchParams.delete("demo");
+      url.searchParams.delete("tier");
+      window.history.replaceState({}, "", url);
+      syncActiveNav();
+      render();
+      return;
+    }
+
+    const demoLinkTarget = event.target.closest("a[href]");
+    if (demoLinkTarget && demoAccountActive() && !demoLinkTarget.closest("[data-action]") && !demoLinkTarget.hasAttribute("target")) {
+      const href = demoLinkTarget.getAttribute("href") || "";
+      const nextHref = demoHref(href);
+      if (nextHref && nextHref !== href) {
+        event.preventDefault();
+        window.location.href = nextHref;
+        return;
+      }
+    }
+
     const favouriteTarget = event.target.closest("[data-action='toggle-match-favourite']");
     if (favouriteTarget) {
       event.preventDefault();
@@ -14668,7 +14983,7 @@
     select.addEventListener("change", (event) => {
       const targetHref = event.target.value;
       if (targetHref) {
-        window.location.href = targetHref;
+        window.location.href = demoAccountActive() ? demoHref(targetHref) : targetHref;
       }
     });
   });
@@ -14697,6 +15012,11 @@
     state.runtime.savedPaperSlips = readSavedPaperSlips();
     state.runtime.internalAdminKey = readStoredInternalAdminKey();
     state.runtime.internalOperatorId = readStoredInternalOperatorId();
+    state.runtime.demoAccount = readDemoAccount();
+    if (premiumDemoMode) {
+      state.runtime.demoAccount = { enabled: true, tier: normalizeDemoTier(demoTierParam || state.runtime.demoAccount?.tier) };
+      writeDemoAccount(state.runtime.demoAccount);
+    }
     await loadAuthSession();
     await loadAccountState();
     await loadAccountSessions();
@@ -14715,7 +15035,7 @@
       ] = await Promise.all([
         fetchJson(`${DATA_ROOT}/publish_summary.json`),
         fetchJson(`${DATA_ROOT}/public_predictions.json`),
-        premiumDemoMode ? fetchOptionalJson(`${DATA_ROOT}/premium_predictions.json`) : Promise.resolve([]),
+        demoAccountActive() ? fetchOptionalJson(`${DATA_ROOT}/premium_predictions.json`) : Promise.resolve([]),
         fetchOptionalJson(`${DATA_ROOT}/team_intelligence/team_ratings_index.json`),
         siteDataApiConfigured() ? Promise.resolve([]) : fetchOptionalJson(`${DATA_ROOT}/player_intelligence/club_squad_ratings.json`),
         fetchOptionalJson(`${DATA_ROOT}/fixture_decision_intelligence/index.json`),

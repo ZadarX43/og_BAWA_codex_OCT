@@ -3041,6 +3041,73 @@ tbody tr:hover {
   background: rgba(61, 217, 176, 0.08);
 }
 
+.demo-account-panel {
+  border-color: rgba(116, 232, 213, 0.28);
+  background:
+    linear-gradient(135deg, rgba(116, 232, 213, 0.12), transparent 42%),
+    rgba(6, 17, 24, 0.9);
+}
+
+.demo-account-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+
+.demo-account-head h3 {
+  margin-bottom: 8px;
+}
+
+.demo-account-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.demo-account-option {
+  min-height: 118px;
+  border: 1px solid rgba(213, 232, 222, 0.16);
+  border-radius: 18px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.demo-account-option:hover,
+.demo-account-option:focus-visible {
+  border-color: rgba(116, 232, 213, 0.55);
+  background: rgba(116, 232, 213, 0.1);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.demo-account-option.is-active {
+  border-color: rgba(138, 247, 185, 0.78);
+  background: rgba(138, 247, 185, 0.14);
+  box-shadow: 0 0 0 1px rgba(138, 247, 185, 0.22) inset;
+}
+
+.demo-account-option strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 1rem;
+}
+
+.demo-account-option span {
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
 .split {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
@@ -8597,5 +8664,25 @@ code {
   th,
   td {
     padding: 14px 12px;
+  }
+}
+
+@media (max-width: 980px) {
+  .demo-account-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .demo-account-head {
+    display: grid;
+  }
+}
+
+@media (max-width: 620px) {
+  .demo-account-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .demo-account-option {
+    min-height: auto;
   }
 }
