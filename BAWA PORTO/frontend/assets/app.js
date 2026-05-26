@@ -10000,6 +10000,63 @@
     </article>
   `;
 
+  const fantasyRiskClass = (risk = "") => {
+    const key = String(risk || "").toLowerCase();
+    if (key.includes("injury") || key.includes("high")) return "fantasy-risk-high";
+    if (key.includes("rotation") || key.includes("medium") || key.includes("wait")) return "fantasy-risk-watch";
+    return "fantasy-risk-ok";
+  };
+
+  const fantasyPlayerCard = (player = {}) => `
+    <button class="fantasy-player-card ${fantasyRiskClass(player.risk)}" type="button" aria-label="${escapeHtml(player.name)} fantasy actions">
+      <span class="fantasy-player-top">
+        <strong>${escapeHtml(player.name)}</strong>
+        <span>${escapeHtml(player.badge || "")}</span>
+      </span>
+      <span>${escapeHtml(`${player.position} - ${player.club}`)}</span>
+      <span>${escapeHtml(player.fixture)}</span>
+      <span class="fantasy-player-metrics">
+        <b>${escapeHtml(player.xpts)}</b>
+        <small>${escapeHtml(player.start)}</small>
+      </span>
+      <em>${escapeHtml(player.risk || "Stable")}</em>
+    </button>
+  `;
+
+  const fantasyPitchLine = (label, players = []) => `
+    <div class="fantasy-pitch-line">
+      <span>${escapeHtml(label)}</span>
+      <div class="fantasy-pitch-players">
+        ${players.map((player) => fantasyPlayerCard(player)).join("")}
+      </div>
+    </div>
+  `;
+
+  const fantasyDecisionCard = (label, value, note, tokens = []) => `
+    <article class="fantasy-decision-card">
+      <span class="metric-label">${escapeHtml(label)}</span>
+      <strong>${escapeHtml(value)}</strong>
+      <p>${escapeHtml(note)}</p>
+      ${tokens.length ? fantasyFeaturePills(tokens) : ""}
+    </article>
+  `;
+
+  const fantasyTransferRows = (rows = []) =>
+    rows
+      .map(
+        (row) => `
+          <tr>
+            <td><strong>${escapeHtml(row.player)}</strong><br /><span class="muted">${escapeHtml(`${row.position} - ${row.club}`)}</span></td>
+            <td>${escapeHtml(row.price)}</td>
+            <td>${escapeHtml(row.points)}</td>
+            <td>${escapeHtml(row.start)}</td>
+            <td>${escapeHtml(row.swing)}</td>
+            <td><span class="chip">${escapeHtml(row.label)}</span></td>
+          </tr>
+        `
+      )
+      .join("");
+
   const fantasyView = () => {
     const tier = currentAccessTier();
     const paidReady = accessTierRank(tier) >= 1;
@@ -10025,12 +10082,55 @@
       "Wildcard pressure",
       "Transfer route",
     ];
+    const pitchLines = [
+      [
+        "FWD",
+        [
+          { name: "Haaland", position: "FWD", club: "MCI", fixture: "vs NEW (A)", xpts: "7.9 xPts", start: "Start 88%", badge: "VC", risk: "Stable" },
+          { name: "Watkins", position: "FWD", club: "AVL", fixture: "vs EVE (H)", xpts: "5.8 xPts", start: "Start 91%", badge: "", risk: "Stable" },
+          { name: "Pedro", position: "FWD", club: "BHA", fixture: "vs BRE (H)", xpts: "4.9 xPts", start: "Start 76%", badge: "", risk: "Wait news" },
+        ],
+      ],
+      [
+        "MID",
+        [
+          { name: "Salah", position: "MID", club: "LIV", fixture: "vs BOU (H)", xpts: "8.4 xPts", start: "Start 94%", badge: "C", risk: "Stable" },
+          { name: "Saka", position: "MID", club: "ARS", fixture: "vs FUL (H)", xpts: "7.1 xPts", start: "Start 92%", badge: "", risk: "Stable" },
+          { name: "Palmer", position: "MID", club: "CHE", fixture: "vs WHU (H)", xpts: "6.7 xPts", start: "Start 90%", badge: "", risk: "Differential" },
+          { name: "Foden", position: "MID", club: "MCI", fixture: "vs NEW (A)", xpts: "6.1 xPts", start: "Start 62%", badge: "", risk: "Rotation risk" },
+        ],
+      ],
+      [
+        "DEF",
+        [
+          { name: "Gabriel", position: "DEF", club: "ARS", fixture: "vs FUL (H)", xpts: "5.2 xPts", start: "Start 93%", badge: "", risk: "Stable" },
+          { name: "Porro", position: "DEF", club: "TOT", fixture: "vs LEE (A)", xpts: "4.7 xPts", start: "Start 89%", badge: "", risk: "Stable" },
+          { name: "Gvardiol", position: "DEF", club: "MCI", fixture: "vs NEW (A)", xpts: "4.4 xPts", start: "Start 73%", badge: "", risk: "Rotation watch" },
+        ],
+      ],
+      [
+        "GK",
+        [{ name: "Raya", position: "GK", club: "ARS", fixture: "vs FUL (H)", xpts: "4.8 xPts", start: "Start 96%", badge: "", risk: "Stable" }],
+      ],
+    ];
+    const benchPlayers = [
+      { name: "Areola", position: "GK", club: "WHU", fixture: "vs CHE (A)", xpts: "3.2 xPts", start: "Start 94%", badge: "B4", risk: "Bench" },
+      { name: "Andersen", position: "DEF", club: "FUL", fixture: "vs ARS (A)", xpts: "2.8 xPts", start: "Start 91%", badge: "B1", risk: "Bad fixture" },
+      { name: "Rogers", position: "MID", club: "AVL", fixture: "vs EVE (H)", xpts: "3.7 xPts", start: "Start 74%", badge: "B2", risk: "Bench option" },
+      { name: "Muniz", position: "FWD", club: "FUL", fixture: "vs ARS (A)", xpts: "2.9 xPts", start: "Start 68%", badge: "B3", risk: "Avoid start" },
+    ];
+    const transferRows = [
+      { player: "Eze", position: "MID", club: "CRY", price: "£7.0m", points: "27.8", start: "89%", swing: "+18", label: "BUY_PRIORITY" },
+      { player: "Bowen", position: "MID", club: "WHU", price: "£7.6m", points: "25.1", start: "92%", swing: "+12", label: "BUY_SOON" },
+      { player: "Mbeumo", position: "MID", club: "BRE", price: "£7.3m", points: "23.6", start: "94%", swing: "+9", label: "WATCHLIST" },
+      { player: "Nkunku", position: "FWD", club: "CHE", price: "£7.4m", points: "21.9", start: "61%", swing: "+14", label: "AVOID_TRAP" },
+    ];
     return `
       <section class="section split fantasy-hero">
         <article class="hero-main">
           <p class="hero-kicker">Fantasy 26/27</p>
           <h1>Fantasy Football Intelligence System.</h1>
-          <p>Odds Genius Fantasy tells you what to do with your whole squad before the deadline: transfers, captaincy, benching, chips, trap flags, and rank strategy in one paid intelligence layer.</p>
+          <p>Our Fantasy Football Intelligence system suggests what to do with your whole squad before the deadline: transfers, captaincy, benching, chips, trap flags, and rank strategy in one paid intelligence layer.</p>
           <div class="pill-row">
             <span class="stat-chip">FPL 26/27</span>
             <span class="stat-chip">Paid members</span>
@@ -10058,6 +10158,176 @@
       </section>
       ${demoAccountSimulatorPanel()}
 
+      <section class="section fantasy-command-bar">
+        <article class="panel fantasy-command-panel">
+          <div class="fantasy-command-top">
+            <div>
+              <span class="metric-label">Gameweek command bar</span>
+              <h2>GW4 decision: Use 1 free transfer.</h2>
+              <p class="muted">Captain Salah. Vice Haaland. Wait for press conference before confirming the transfer.</p>
+            </div>
+            <div class="fantasy-command-action">
+              <span>Recommended action</span>
+              <strong>Use FT</strong>
+            </div>
+          </div>
+          <div class="fantasy-command-grid">
+            ${statPanel("Gameweek", "GW4", "Deadline Friday 18:30")}
+            ${statPanel("Strategy", "Balanced", "Protect upside without forcing risk")}
+            ${statPanel("Squad health", "82/100", "One high rotation risk")}
+            ${statPanel("Projected points", "61.4", "Starting XI projection")}
+            ${statPanel("Free transfers", "1", "No hit required")}
+            ${statPanel("Bank", "£1.5m", "Enough for priority route")}
+          </div>
+          <div class="fantasy-strategy-strip" aria-label="Strategy mode selector">
+            ${["Balanced", "Protect rank", "Chase rank", "Aggressive", "Value"]
+              .map((mode) => `<button class="${mode === "Balanced" ? "is-active" : ""}" type="button">${escapeHtml(mode)}</button>`)
+              .join("")}
+          </div>
+        </article>
+      </section>
+
+      <section class="section split fantasy-workbench">
+        <article class="panel fantasy-pitch-panel">
+          <div class="fantasy-section-head">
+            <div>
+              <span class="metric-label">My squad</span>
+              <h2>Pitch view</h2>
+              <p class="muted">Mock 3-4-3 layout with captaincy, bench order, projected points, start probability, fixture difficulty, and risk flags.</p>
+            </div>
+            <span class="stat-chip">3-4-3</span>
+          </div>
+          <div class="fantasy-pitch">
+            ${pitchLines.map(([label, players]) => fantasyPitchLine(label, players)).join("")}
+          </div>
+          <div class="fantasy-bench">
+            <span class="metric-label">Bench order</span>
+            <div class="fantasy-bench-grid">
+              ${benchPlayers.map((player) => fantasyPlayerCard(player)).join("")}
+            </div>
+          </div>
+          <div class="fantasy-player-actions">
+            ${["Start", "Bench", "Captain", "Vice", "Sell", "Compare", "Watchlist", "Player intelligence", "Ask OG: keep?", "Ask OG: replace?", "Ask OG: worth -4?"].map((action) => `<button type="button">${escapeHtml(action)}</button>`).join("")}
+          </div>
+        </article>
+
+        <article class="panel fantasy-decision-panel">
+          <div class="fantasy-section-head">
+            <div>
+              <span class="metric-label">Decision panel</span>
+              <h2>This week's move</h2>
+            </div>
+          </div>
+          <div class="fantasy-decision-grid">
+            ${fantasyDecisionCard("Captaincy", "Salah / Haaland VC", "Safe captain remains Salah. Haaland is the best vice route.", ["HIGH_EXPECTED_MINUTES", "PENALTY_INVOLVEMENT", "HOME_ATTACK_ENVIRONMENT"])}
+            ${fantasyDecisionCard("Transfer", "Sell Foden -> Buy Eze", "Expected 5GW gain +9.6 points. No hit required. Confirm after team news.", ["BUY_PRIORITY", "NO_HIT", "FIXTURE_SWING"])}
+            ${fantasyDecisionCard("Bench", "Andersen, Rogers, Muniz", "Bench can absorb one rotation risk without forcing a points hit.", ["BENCH_COVER", "ROTATION_COVER"])}
+            ${fantasyDecisionCard("Wildcard", "Low pressure", "Structure remains healthy. Preserve chip unless injuries stack up.", ["SQUAD_HEALTH_82", "CHIP_HOLD"])}
+          </div>
+          <div class="notice notice-warning">Deadline alert: do not confirm the transfer until the pending fitness update clears.</div>
+        </article>
+      </section>
+
+      <section class="section">
+        <article class="panel fantasy-briefing">
+          <span class="metric-label">AI Gameweek Briefing</span>
+          <h2>GW4 briefing</h2>
+          <p>Your squad is in a strong position this week. The model recommends using one free transfer to replace the highest rotation-risk midfielder, whose minutes security is now weaker than the available fixture-swing alternatives.</p>
+          <p>Captaincy should stay on Salah. Haaland is a strong vice-captain, but his away fixture and slightly lower expected minutes keep him second. No points hit is recommended.</p>
+          <div class="fantasy-briefing-grid">
+            ${fantasyDecisionCard("This week's move", "Use 1 FT", "Foden to Eze if news remains stable.")}
+            ${fantasyDecisionCard("Risk alerts", "1 high watch", "Rotation and press-conference dependency.")}
+            ${fantasyDecisionCard("Next week", "Monitor wildcard", "Fixture swing improves for three targets.")}
+          </div>
+        </article>
+      </section>
+
+      <section class="section split">
+        <article class="panel fantasy-advisor">
+          <div class="fantasy-section-head">
+            <div>
+              <span class="metric-label">Transfer advisor</span>
+              <h2>Buy / Sell / Hold / Avoid</h2>
+              <p class="muted">The strongest proven FPL lane is transfer and squad decision intelligence.</p>
+            </div>
+          </div>
+          <div class="fantasy-tabs">
+            ${["Buy", "Sell", "Hold", "Avoid", "Differentials", "Traps", "Price alerts"].map((tab, index) => `<button class="${index === 0 ? "is-active" : ""}" type="button">${escapeHtml(tab)}</button>`).join("")}
+          </div>
+          <div class="table-shell">
+            <table>
+              <thead>
+                <tr>
+                  <th>Player</th>
+                  <th>Price</th>
+                  <th>5GW xPts</th>
+                  <th>Start</th>
+                  <th>Fixture swing</th>
+                  <th>OG label</th>
+                </tr>
+              </thead>
+              <tbody>${fantasyTransferRows(transferRows)}</tbody>
+            </table>
+          </div>
+        </article>
+        <article class="panel fantasy-search-panel">
+          <span class="metric-label">Player search + watchlist</span>
+          <h2>Find the next move.</h2>
+          <div class="fantasy-search-grid">
+            <input class="text-input" type="text" value="Saka" aria-label="Search player" />
+            <select class="text-input" aria-label="Position filter"><option>All positions</option><option>MID</option><option>FWD</option><option>DEF</option></select>
+            <select class="text-input" aria-label="Price filter"><option>Any price</option><option>Under £7.5m</option><option>Premium</option></select>
+            <select class="text-input" aria-label="Risk filter"><option>Any risk</option><option>Low risk</option><option>Rotation watch</option></select>
+          </div>
+          <article class="fantasy-player-detail">
+            <strong>Saka</strong>
+            <span>MID - ARS - £10.0m</span>
+            <p>Verdict: Hold / captain alternative. Strong fixture run, high start probability, strong penalty involvement, and safe rank protection.</p>
+            ${fantasyFeaturePills(["HOLD", "SAFE_ALT_CAPTAIN", "HIGH_OWNERSHIP_PROTECTION"])}
+          </article>
+          <div class="fantasy-watchlist">
+            <h3>Watchlist</h3>
+            ${["Eze - fixture swing starts GW5", "Bowen - price rise risk", "Palmer - chase-rank captain option", "Mbeumo - value route"].map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
+          </div>
+        </article>
+      </section>
+
+      <section class="section split">
+        <article class="panel fantasy-drafts">
+          <span class="metric-label">Saved squads / draft builder</span>
+          <h2>Plan multiple routes.</h2>
+          <div class="fantasy-draft-grid">
+            ${[
+              ["Current squad", "61.4 GW xPts", "Health 82", "£1.5m bank"],
+              ["Safe draft", "64.1 GW xPts", "Health 88", "No hit"],
+              ["Aggressive draft", "66.8 GW xPts", "Health 76", "-4 upside"],
+              ["Wildcard draft", "72.2 GW xPts", "Health 91", "GW6 target"],
+            ]
+              .map(
+                ([name, points, health, note]) => `
+                  <article>
+                    <strong>${escapeHtml(name)}</strong>
+                    <span>${escapeHtml(points)}</span>
+                    <span>${escapeHtml(health)}</span>
+                    <small>${escapeHtml(note)}</small>
+                  </article>
+                `
+              )
+              .join("")}
+          </div>
+        </article>
+        <article class="panel fantasy-chip-panel">
+          <span class="metric-label">Chip planner</span>
+          <h2>Preserve chips unless pressure rises.</h2>
+          <ul class="feature-list">
+            <li>Wildcard: watch GW6-GW8 fixture swing.</li>
+            <li>Bench Boost: not ready, bench strength still uneven.</li>
+            <li>Triple Captain: preserve for double gameweek profile.</li>
+            <li>Free Hit: hold unless blank-gameweek pressure appears.</li>
+          </ul>
+        </article>
+      </section>
+
       <section class="section">
         <div class="section-head">
           <div>
@@ -10071,24 +10341,6 @@
           ${statPanel("Strict rank-1 transfer", "5.7812", "Strongest early decision lane")}
           ${statPanel("Strategy modes", "5", "Balanced, protect rank, chase rank, aggressive, value")}
         </div>
-      </section>
-
-      <section class="section split">
-        <article class="panel">
-          <span class="metric-label">What the user gets</span>
-          <h3>One pre-deadline answer for the whole squad.</h3>
-          <p class="muted">The product job is simple: reduce deadline panic, avoid bad transfers, protect rank when needed, and identify when a differential is real enough to chase.</p>
-          ${fantasyFeaturePills(decisionActions)}
-        </article>
-        <article class="panel">
-          <span class="metric-label">Backend estate</span>
-          <h3>Built as an intelligence system.</h3>
-          <ul class="feature-list">
-            <li>FPL rules, game-state adapter, player mapping, fixture difficulty, and projection inputs.</li>
-            <li>Expected points, captaincy, transfer advisor, squad optimizer, chip planner, and briefing generator.</li>
-            <li>Historical importer, leak-safe lagger, baseline evaluator, OG replay, and OG-vs-baseline comparison.</li>
-          </ul>
-        </article>
       </section>
 
       <section class="section">
