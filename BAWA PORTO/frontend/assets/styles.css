@@ -3460,6 +3460,28 @@ tbody tr:hover {
   gap: 10px;
 }
 
+.fantasy-typeahead {
+  position: static;
+  max-height: none;
+  margin-top: -4px;
+  border-radius: 18px;
+}
+
+.fantasy-typeahead button {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+.fantasy-typeahead small {
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
 .fantasy-sell-options {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }

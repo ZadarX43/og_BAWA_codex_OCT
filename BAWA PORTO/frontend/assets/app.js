@@ -48,6 +48,7 @@
     weeklyResults: null,
     resultsArchive: null,
     liveResultsFeed: null,
+    fantasyPayload: null,
     teamIntelligenceIndex: [],
     clubSquadIntelligenceIndex: [],
     fixtureDecisionIndex: [],
@@ -409,12 +410,31 @@
     ["colwill", "bench", 3, false, false],
   ].map(([id, role, benchOrder, captain, vice]) => ({ id, role, benchOrder, captain, vice }));
 
-  const fantasyDefaultState = () => ({
+  const fantasyReferencePlayers = () => {
+    const payloadPlayers = Array.isArray(state.fantasyPayload?.players) ? state.fantasyPayload.players : [];
+    const seen = new Set();
+    return [...payloadPlayers, ...FANTASY_PLAYER_POOL]
+      .filter((player) => player?.id && player?.name)
+      .filter((player) => {
+        const key = String(player.id);
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+  };
+
+  const fantasyDefaultState = () => {
+    const payloadSummary = state.fantasyPayload?.summary || {};
+    const payloadSquad =
+      Array.isArray(state.fantasyPayload?.sample_squad) && state.fantasyPayload.sample_squad.length
+        ? state.fantasyPayload.sample_squad
+        : FANTASY_INITIAL_SQUAD.map((item) => ({ ...item }));
+    return {
     teamId: "",
-    imported: false,
+    imported: Boolean(state.fantasyPayload?.sample_squad?.length),
     strategy: "Balanced",
-    bank: 1.5,
-    freeTransfers: 1,
+    bank: Number.isFinite(Number(payloadSummary.bank)) ? Number(payloadSummary.bank) : 1.5,
+    freeTransfers: Number.isFinite(Number(payloadSummary.free_transfers)) ? Number(payloadSummary.free_transfers) : 1,
     selectedPlayerId: "foden",
     incomingPlayerId: "eze",
     outgoingPlayerId: "foden",
@@ -424,11 +444,13 @@
     priceFilter: "ALL",
     riskFilter: "ALL",
     watchlist: ["eze", "bowen", "palmer", "mbeumo"],
+    benchShortlist: [],
     lockedTargets: [],
     ignored: [],
     savedDrafts: [],
-    squad: FANTASY_INITIAL_SQUAD.map((item) => ({ ...item })),
-  });
+    squad: payloadSquad,
+    };
+  };
 
   const normalizeFantasyState = (value = {}) => {
     const fallback = fantasyDefaultState();
@@ -440,11 +462,12 @@
       bank: Number.isFinite(Number(value.bank)) ? Number(value.bank) : fallback.bank,
       freeTransfers: Number.isFinite(Number(value.freeTransfers)) ? Math.max(0, Math.floor(Number(value.freeTransfers))) : fallback.freeTransfers,
       watchlist: Array.isArray(value.watchlist) ? value.watchlist.map(String).filter(Boolean) : fallback.watchlist,
+      benchShortlist: Array.isArray(value.benchShortlist) ? value.benchShortlist.map(String).filter(Boolean) : fallback.benchShortlist,
       lockedTargets: Array.isArray(value.lockedTargets) ? value.lockedTargets.map(String).filter(Boolean) : fallback.lockedTargets,
       ignored: Array.isArray(value.ignored) ? value.ignored.map(String).filter(Boolean) : fallback.ignored,
       savedDrafts: Array.isArray(value.savedDrafts) ? value.savedDrafts.filter((item) => item?.id).slice(0, 8) : [],
       squad: squad
-        .filter((item) => FANTASY_PLAYER_POOL.some((player) => player.id === item?.id))
+        .filter((item) => fantasyReferencePlayers().some((player) => player.id === item?.id))
         .map((item) => ({
           id: String(item.id),
           role: item.role === "bench" ? "bench" : "starter",
@@ -10088,7 +10111,7 @@
 
   const fantasyState = () => normalizeFantasyState(state.runtime.fantasy || {});
 
-  const fantasyPlayerById = (id) => FANTASY_PLAYER_POOL.find((player) => player.id === String(id || ""));
+  const fantasyPlayerById = (id) => fantasyReferencePlayers().find((player) => player.id === String(id || ""));
 
   const fantasySquadRows = () =>
     fantasyState()
@@ -10178,10 +10201,14 @@
     const cheapDefender = queryValue.includes("cheap defender");
     const arsenalDefender = queryValue.includes("arsenal defender");
     const haalandReplacement = queryValue.includes("haaland replacement");
+    const bestMidfielder = queryValue.includes("midfielder");
+    const bestDefender = queryValue.includes("defender");
+    const bestForward = queryValue.includes("forward") || queryValue.includes("striker");
+    const bestGoalkeeper = queryValue.includes("goalkeeper") || queryValue.includes("keeper");
     const text = queryValue
       .replace(/best|player|under|cheap|replacement|arsenal|defender|midfielder|forward|goalkeeper|£|\d+(\.\d+)?/g, "")
       .trim();
-    return FANTASY_PLAYER_POOL.filter((player) => {
+    return fantasyReferencePlayers().filter((player) => {
       if (fantasy.ignored.includes(player.id)) return false;
       if (fantasy.positionFilter !== "ALL" && player.position !== fantasy.positionFilter) return false;
       if (fantasy.priceFilter === "UNDER_7_5" && player.price > 7.5) return false;
@@ -10192,9 +10219,37 @@
       if (cheapDefender && !(player.position === "DEF" && player.price <= 5)) return false;
       if (arsenalDefender && !(player.position === "DEF" && player.club === "ARS")) return false;
       if (haalandReplacement && player.position !== "FWD") return false;
+      if (bestMidfielder && player.position !== "MID") return false;
+      if (bestDefender && player.position !== "DEF") return false;
+      if (bestForward && player.position !== "FWD") return false;
+      if (bestGoalkeeper && player.position !== "GK") return false;
       if (text && !`${player.name} ${player.club} ${player.position} ${player.label} ${player.note}`.toLowerCase().includes(text)) return false;
       return true;
     }).slice(0, 8);
+  };
+
+  const fantasyAutocompleteSuggestions = () => {
+    const fantasy = fantasyState();
+    const queryText = String(fantasy.searchQuery || "").trim().toLowerCase();
+    const payloadSuggestions = Array.isArray(state.fantasyPayload?.autocomplete) ? state.fantasyPayload.autocomplete : [];
+    const generatedSuggestions = fantasyReferencePlayers().flatMap((player) => [
+      { type: "player", label: player.name, value: player.name, player_id: player.id },
+      { type: "team", label: player.club, value: player.club, player_id: "" },
+      { type: "position", label: player.position, value: player.position, player_id: "" },
+      { type: "label", label: player.label, value: player.label, player_id: "" },
+    ]);
+    const seen = new Set();
+    return [...payloadSuggestions, ...generatedSuggestions]
+      .filter((item) => item?.label)
+      .filter((item) => {
+        const haystack = `${item.type || ""} ${item.label || ""} ${item.value || ""}`.toLowerCase();
+        if (queryText && !haystack.includes(queryText)) return false;
+        const key = `${item.type}|${String(item.label).toLowerCase()}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      })
+      .slice(0, 8);
   };
 
   const fantasyTransferImpact = () => {
@@ -10301,14 +10356,64 @@
   };
 
   const fantasyImportDemoSquad = (teamId) => {
+    const payloadSummary = state.fantasyPayload?.summary || {};
+    const payloadSquad = Array.isArray(state.fantasyPayload?.sample_squad) && state.fantasyPayload.sample_squad.length
+      ? state.fantasyPayload.sample_squad
+      : fantasyDefaultState().squad;
     fantasyUpdate(
       {
         ...fantasyDefaultState(),
         teamId: String(teamId || "1234567").trim() || "1234567",
         imported: true,
+        bank: Number.isFinite(Number(payloadSummary.bank)) ? Number(payloadSummary.bank) : fantasyDefaultState().bank,
+        freeTransfers: Number.isFinite(Number(payloadSummary.free_transfers)) ? Number(payloadSummary.free_transfers) : fantasyDefaultState().freeTransfers,
+        squad: payloadSquad,
       },
-      "Demo FPL squad imported. Official team-ID adapter can replace this payload when the backend connector is live."
+      state.fantasyPayload
+        ? "Derived OG FPL squad imported from the website payload. Official team-ID adapter can refresh this same state contract."
+        : "Demo FPL squad imported. Official team-ID adapter can replace this payload when the backend connector is live."
     );
+  };
+
+  const importFantasySquadFromTeamId = async (teamId) => {
+    const managerId = String(teamId || "").trim();
+    if (workerConfigured() && managerId) {
+      try {
+        const { response, payload } = await fetchWorkerJson(`/api/fpl/manager/${encodeURIComponent(managerId)}/squad`, {
+          method: "GET",
+        });
+        if (response?.ok && Array.isArray(payload?.squad) && payload.squad.length) {
+          const knownIds = new Set(fantasyReferencePlayers().map((player) => String(player.id)));
+          const normalizedSquad = payload.squad
+            .filter((slot) => knownIds.has(String(slot.id)))
+            .map((slot) => ({
+              id: String(slot.id),
+              role: slot.role === "bench" ? "bench" : "starter",
+              benchOrder: Number(slot.benchOrder || 0),
+              captain: Boolean(slot.captain),
+              vice: Boolean(slot.vice),
+            }));
+          if (normalizedSquad.length >= 11) {
+            fantasyUpdate(
+              {
+                teamId: managerId,
+                imported: true,
+                bank: Number.isFinite(Number(payload.bank)) ? Number(payload.bank) : fantasyState().bank,
+                freeTransfers: Number.isFinite(Number(payload.free_transfers)) ? Number(payload.free_transfers) : fantasyState().freeTransfers,
+                squad: normalizedSquad,
+              },
+              payload.source === "official_fpl"
+                ? "Official FPL team-ID squad imported and matched to derived OG recommendations."
+                : "FPL squad adapter returned a derived squad snapshot."
+            );
+            return;
+          }
+        }
+      } catch (error) {
+        if (debugMode) console.warn("FPL manager import fallback:", error);
+      }
+    }
+    fantasyImportDemoSquad(managerId);
   };
 
   const fantasySaveDraft = () => {
@@ -10678,6 +10783,18 @@
               <option value="WATCH" ${fantasy.riskFilter === "WATCH" ? "selected" : ""}>Rotation watch</option>
             </select>
           </div>
+          <div class="matches-typeahead fantasy-typeahead" aria-label="Fantasy autocomplete">
+            ${fantasyAutocompleteSuggestions()
+              .map(
+                (item) => `
+                  <button type="button" data-action="fantasy-autocomplete" data-query="${escapeHtml(item.value)}" data-player-id="${escapeHtml(item.player_id || "")}">
+                    <span>${escapeHtml(item.label)}</span>
+                    <small>${escapeHtml(item.type)}</small>
+                  </button>
+                `
+              )
+              .join("")}
+          </div>
           <div class="fantasy-search-results">
             ${fantasyFilteredPlayers()
               .map(
@@ -10689,6 +10806,7 @@
                     ${fantasyFeaturePills([player.label, `${player.xpts1}/${player.xpts3}/${player.xpts5} xPts`, `Start ${player.startPct}%`, player.risk])}
                     <div class="fantasy-result-actions">
                       <button type="button" data-action="fantasy-watchlist" data-player-id="${escapeHtml(player.id)}">${fantasy.watchlist.includes(player.id) ? "Remove watch" : "Add to watchlist"}</button>
+                      <button type="button" data-action="fantasy-bench-shortlist" data-player-id="${escapeHtml(player.id)}">${fantasy.benchShortlist.includes(player.id) ? "Remove bench short" : "Bench shortlist"}</button>
                       <button type="button" data-action="fantasy-compare" data-player-id="${escapeHtml(player.id)}">Compare</button>
                       <button type="button" data-action="fantasy-transfer-in" data-player-id="${escapeHtml(player.id)}">Transfer in</button>
                       <button type="button" data-action="fantasy-lock-target" data-player-id="${escapeHtml(player.id)}">${fantasy.lockedTargets.includes(player.id) ? "Unlock" : "Lock target"}</button>
@@ -10706,6 +10824,14 @@
               .filter(Boolean)
               .map((player) => `<span>${escapeHtml(`${player.name} - ${player.note}`)}</span>`)
               .join("") || "<span>No watched players yet.</span>"}
+          </div>
+          <div class="fantasy-watchlist">
+            <h3>Bench shortlist</h3>
+            ${fantasy.benchShortlist
+              .map(fantasyPlayerById)
+              .filter(Boolean)
+              .map((player) => `<span>${escapeHtml(`${player.name} - ${player.position} - ${player.club} - ${player.xpts5} 5GW xPts`)}</span>`)
+              .join("") || "<span>No bench shortlist players yet.</span>"}
           </div>
         </article>
       </section>
@@ -15559,6 +15685,21 @@
       return;
     }
 
+    const fantasyAutocompleteTarget = event.target.closest("[data-action='fantasy-autocomplete']");
+    if (fantasyAutocompleteTarget) {
+      event.preventDefault();
+      const playerId = String(fantasyAutocompleteTarget.dataset.playerId || "");
+      fantasyUpdate(
+        {
+          searchQuery: String(fantasyAutocompleteTarget.dataset.query || ""),
+          selectedPlayerId: playerId || fantasyState().selectedPlayerId,
+        },
+        playerId ? "Player suggestion selected." : "Search suggestion selected."
+      );
+      render();
+      return;
+    }
+
     const fantasyStartTarget = event.target.closest("[data-action='fantasy-start']");
     if (fantasyStartTarget) {
       event.preventDefault();
@@ -15634,6 +15775,14 @@
     if (fantasyWatchTarget) {
       event.preventDefault();
       fantasyToggleList("watchlist", fantasyWatchTarget.dataset.playerId, "Watchlist updated.");
+      render();
+      return;
+    }
+
+    const fantasyBenchShortlistTarget = event.target.closest("[data-action='fantasy-bench-shortlist']");
+    if (fantasyBenchShortlistTarget) {
+      event.preventDefault();
+      fantasyToggleList("benchShortlist", fantasyBenchShortlistTarget.dataset.playerId, "Bench shortlist updated.");
       render();
       return;
     }
@@ -15972,7 +16121,7 @@
     if (event.target.id === "fantasy-import-form") {
       event.preventDefault();
       const formData = new FormData(event.target);
-      fantasyImportDemoSquad(formData.get("team_id"));
+      await importFantasySquadFromTeamId(formData.get("team_id"));
       render();
       return;
     }
@@ -16061,6 +16210,7 @@
         fixtureDecisionIndex,
         fixtureLineupIndex,
         fixtureH2HIndex,
+        fantasyPayload,
       ] = await Promise.all([
         fetchJson(`${DATA_ROOT}/publish_summary.json`),
         fetchJson(`${DATA_ROOT}/public_predictions.json`),
@@ -16070,6 +16220,7 @@
         fetchOptionalJson(`${DATA_ROOT}/fixture_decision_intelligence/index.json`),
         fetchOptionalJson(`${DATA_ROOT}/fixture_lineup_intelligence/index.json`),
         fetchOptionalJson(`${DATA_ROOT}/fixture_h2h_support/index.json`),
+        fetchOptionalJson(`${DATA_ROOT}/og_fpl/fpl_edge_payload.json`),
       ]);
       const weeklyResults = await fetchOptionalJson(`${DATA_ROOT}/weekly_results.json`);
       const resultsArchive = await fetchOptionalJson(`${DATA_ROOT}/results_archive.json`);
@@ -16081,6 +16232,8 @@
       state.weeklyResults = weeklyResults;
       state.resultsArchive = resultsArchive;
       state.liveResultsFeed = liveResultsFeed;
+      state.fantasyPayload = fantasyPayload || null;
+      state.runtime.fantasy = normalizeFantasyState(state.runtime.fantasy || {});
       state.fixtureIntelligence = fixtureIntelligenceRows;
       state.teamIntelligenceIndex = Array.isArray(teamIntelligenceIndex) ? teamIntelligenceIndex : [];
       state.clubSquadIntelligenceIndex = Array.isArray(clubSquadIntelligenceIndex) ? clubSquadIntelligenceIndex : [];

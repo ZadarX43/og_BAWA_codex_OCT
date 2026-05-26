@@ -60,6 +60,7 @@ const PREMIUM_CACHE_TTL_SECONDS = 300;
 const PREMIUM_CACHE_VERSION = "v1";
 const WIDGET_FOOTBALL_PROXY_VERSION = "v1";
 const WIDGET_FOOTBALL_STANDINGS_CACHE_TTL_SECONDS = 600;
+const FPL_PUBLIC_API_BASE = "https://fantasy.premierleague.com/api";
 const AUTH_MAGIC_LINK_TTL_SECONDS = 15 * 60;
 const AUTH_SESSION_TTL_SECONDS = 7 * 24 * 60 * 60;
 const AUTH_REQUEST_IP_COOLDOWN_SECONDS = 60;
@@ -5140,6 +5141,93 @@ async function loadPremiumPredictions(request, env) {
   return loaded;
 }
 
+const fplFetchJson = async (path) => {
+  const response = await fetch(`${FPL_PUBLIC_API_BASE}${path}`, {
+    headers: {
+      accept: "application/json",
+      "user-agent": "OddsGeniusFPLAdapter/0.1",
+    },
+  });
+  if (!response.ok) {
+    throw new Error(`FPL upstream ${path} returned ${response.status}`);
+  }
+  return response.json();
+};
+
+const fplCurrentEventId = (bootstrap) => {
+  const events = Array.isArray(bootstrap?.events) ? bootstrap.events : [];
+  const current = events.find((event) => event?.is_current);
+  if (current?.id) return current.id;
+  const next = events.find((event) => event?.is_next);
+  if (next?.id) return next.id;
+  const finished = [...events].reverse().find((event) => event?.finished);
+  return finished?.id || events[0]?.id || 1;
+};
+
+const fplPosition = (elementType) =>
+  ({
+    1: "GK",
+    2: "DEF",
+    3: "MID",
+    4: "FWD",
+  })[Number(elementType)] || "";
+
+const fplPlayerName = (element) =>
+  String(element?.web_name || `${element?.first_name || ""} ${element?.second_name || ""}`).trim();
+
+async function handleFplManagerSquad(request, managerId) {
+  if (!managerId || !/^\d+$/.test(String(managerId))) {
+    return requestError("A numeric FPL team ID is required.");
+  }
+  try {
+    const bootstrap = await fplFetchJson("/bootstrap-static/");
+    const eventId = new URL(request.url).searchParams.get("event") || fplCurrentEventId(bootstrap);
+    const picks = await fplFetchJson(`/entry/${encodeURIComponent(managerId)}/event/${encodeURIComponent(eventId)}/picks/`);
+    const playerById = new Map((bootstrap.elements || []).map((player) => [Number(player.id), player]));
+    const teamById = new Map((bootstrap.teams || []).map((team) => [Number(team.id), team]));
+    const squad = (picks.picks || []).map((pick) => {
+      const player = playerById.get(Number(pick.element)) || {};
+      const team = teamById.get(Number(player.team)) || {};
+      const multiplier = Number(pick.multiplier || 0);
+      const position = Number(pick.position || 0);
+      return {
+        id: String(player.id || pick.element),
+        fpl_player_id: String(player.id || pick.element),
+        name: fplPlayerName(player),
+        position: fplPosition(player.element_type),
+        club: String(team.short_name || team.name || ""),
+        price: Number(player.now_cost || 0) / 10,
+        role: position <= 11 ? "starter" : "bench",
+        benchOrder: position > 11 ? position - 11 : 0,
+        captain: Boolean(pick.is_captain),
+        vice: Boolean(pick.is_vice_captain),
+        startPct:
+          player.chance_of_playing_this_round == null ? 76 : Math.max(0, Math.min(100, Number(player.chance_of_playing_this_round))),
+        risk: player.news ? "News watch" : "Official FPL import",
+      };
+    });
+    return json({
+      ok: true,
+      source: "official_fpl",
+      manager_id: String(managerId),
+      event: Number(eventId),
+      bank: Number(picks.entry_history?.bank || 0) / 10,
+      free_transfers: Number(picks.transfers?.limit || 1),
+      squad,
+      reason_tokens: ["OFFICIAL_FPL_MANAGER_PICKS", "USER_TEAM_ID_CONTEXT", "OG_DERIVED_RECOMMENDATION_JOIN_REQUIRED"],
+    });
+  } catch (error) {
+    return json(
+      {
+        ok: false,
+        status: "fpl_manager_import_failed",
+        message: error?.message || "Could not import FPL manager squad.",
+      },
+      502
+    );
+  }
+}
+
 async function handleRequest(request, env) {
   const url = new URL(request.url);
   const { pathname } = url;
@@ -5195,6 +5283,7 @@ async function handleRequest(request, env) {
         "GET /api/site/fixtures/:fixture_key/stats",
         "GET /api/site/teams/:competition_key/:team_slug",
         "GET /api/site/teams/:competition_key/:team_slug/premium",
+        "GET /api/fpl/manager/:manager_id/squad",
         "GET /api/widgets/football/standings",
         "GET /api/widgets/football/fixture-lookup",
         "POST /api/telegram/webhook",
@@ -5550,6 +5639,16 @@ async function handleRequest(request, env) {
         decodeURIComponent(siteTeamMatch[2] || "")
       )
     );
+    return withCors(response, request, env);
+  }
+
+  const fplManagerSquadMatch = pathname.match(/^\/api\/fpl\/manager\/(\d+)\/squad$/);
+  if (fplManagerSquadMatch) {
+    if (request.method !== "GET") {
+      response = methodNotAllowed("GET");
+      return withCors(response, request, env);
+    }
+    response = await handleFplManagerSquad(request, decodeURIComponent(fplManagerSquadMatch[1] || ""));
     return withCors(response, request, env);
   }
 
