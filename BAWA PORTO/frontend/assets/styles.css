@@ -3181,6 +3181,26 @@ tbody tr:hover {
   gap: 10px;
 }
 
+.fantasy-import-row {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.8fr) auto minmax(240px, 1fr);
+  gap: 12px;
+  align-items: end;
+}
+
+.fantasy-import-row label {
+  display: grid;
+  gap: 6px;
+}
+
+.fantasy-import-row label span {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
 .fantasy-command-grid .panel {
   min-height: 126px;
   border-radius: 18px;
@@ -3300,6 +3320,11 @@ tbody tr:hover {
   outline: none;
 }
 
+.fantasy-player-card.is-selected {
+  border-color: rgba(138, 247, 185, 0.78);
+  box-shadow: 0 0 0 2px rgba(138, 247, 185, 0.12);
+}
+
 .fantasy-player-top,
 .fantasy-player-metrics {
   display: flex;
@@ -3382,13 +3407,27 @@ tbody tr:hover {
 
 .fantasy-decision-card,
 .fantasy-draft-grid article,
-.fantasy-player-detail {
+.fantasy-player-detail,
+.fantasy-transfer-builder,
+.fantasy-rule-stack {
   display: grid;
   gap: 8px;
   padding: 16px;
   border: 1px solid rgba(213, 232, 222, 0.13);
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.035);
+}
+
+.fantasy-selected-player {
+  border-color: rgba(116, 232, 213, 0.22);
+}
+
+.fantasy-rule-stack.is-valid {
+  border-color: rgba(138, 247, 185, 0.24);
+}
+
+.fantasy-rule-stack.is-invalid {
+  border-color: rgba(255, 113, 91, 0.4);
 }
 
 .fantasy-decision-card strong {
@@ -3412,6 +3451,56 @@ tbody tr:hover {
   display: grid;
   grid-template-columns: 1.3fr repeat(3, minmax(0, 1fr));
   gap: 10px;
+}
+
+.fantasy-search-results,
+.fantasy-sell-options,
+.fantasy-result-actions {
+  display: grid;
+  gap: 10px;
+}
+
+.fantasy-sell-options {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.fantasy-sell-options button,
+.fantasy-result-actions button,
+.compact-button {
+  min-height: 38px;
+  border: 1px solid rgba(213, 232, 222, 0.14);
+  border-radius: 999px;
+  padding: 0 12px;
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--text);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.fantasy-sell-options button {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: center;
+  border-radius: 14px;
+}
+
+.fantasy-sell-options button.is-active,
+.fantasy-result-actions button:hover,
+.compact-button:hover {
+  border-color: rgba(138, 247, 185, 0.52);
+  background: rgba(138, 247, 185, 0.12);
+}
+
+.fantasy-impact-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.fantasy-impact-grid .panel {
+  min-height: 112px;
+  padding: 14px;
 }
 
 .fantasy-watchlist {
@@ -9010,7 +9099,9 @@ code {
   }
 
   .fantasy-command-grid,
-  .fantasy-search-grid {
+  .fantasy-search-grid,
+  .fantasy-import-row,
+  .fantasy-impact-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -9044,7 +9135,10 @@ code {
 
   .fantasy-command-grid,
   .fantasy-search-grid,
-  .fantasy-draft-grid {
+  .fantasy-draft-grid,
+  .fantasy-import-row,
+  .fantasy-impact-grid,
+  .fantasy-sell-options {
     grid-template-columns: 1fr;
   }
 
