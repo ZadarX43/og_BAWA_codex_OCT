@@ -567,6 +567,7 @@
     importedPlayers: [],
     transferBuilderOpen: false,
     setupComplete: false,
+    introDismissed: false,
     hitMode: "Sometimes",
     favouriteClubs: [],
     fantasyTeamView: "pitch",
@@ -599,6 +600,7 @@
       importedPlayers,
       transferBuilderOpen: Boolean(value.transferBuilderOpen),
       setupComplete: Boolean(value.setupComplete),
+      introDismissed: Boolean(value.introDismissed),
       hitMode: ["Never", "Sometimes", "Aggressive"].includes(value.hitMode) ? value.hitMode : fallback.hitMode,
       favouriteClubs: Array.isArray(value.favouriteClubs) ? value.favouriteClubs.map(String).filter(Boolean).slice(0, 12) : fallback.favouriteClubs,
       fantasyTeamView: value.fantasyTeamView === "list" ? "list" : "pitch",
@@ -11345,6 +11347,29 @@
     </section>
   `;
 
+  const fantasyIntroOverlay = (fantasy = fantasyState()) =>
+    fantasy.setupComplete || fantasy.introDismissed
+      ? ""
+      : `
+        <section class="fantasy-intro-overlay" aria-label="Fantasy onboarding intro">
+          <div class="fantasy-intro-backdrop"></div>
+          <article class="fantasy-intro-card">
+            <div class="fantasy-intro-routes">
+              <a href="#fantasy-my-team" data-action="fantasy-dismiss-intro"><span></span>Your Squad</a>
+              <a href="#fantasy-transfers" data-action="fantasy-dismiss-intro"><span></span>Your Transfers</a>
+              <a href="#fantasy-watchlist" data-action="fantasy-dismiss-intro"><span></span>Your Watchlist</a>
+              <a href="#fantasy-drafts" data-action="fantasy-dismiss-intro"><span></span>Your Plans</a>
+            </div>
+            <h2>Fantasy, shaped around your deadline.</h2>
+            <p>Import your squad, choose your strategy, and OG will turn the numbers into one clear move before the deadline.</p>
+            <div class="fantasy-intro-actions">
+              <a class="button" href="#fantasy-setup" data-action="fantasy-dismiss-intro">Start setup</a>
+              <button class="ghost-button" type="button" data-action="fantasy-dismiss-intro">Got it</button>
+            </div>
+          </article>
+        </section>
+      `;
+
   const fantasySetupFlow = (fantasy = fantasyState()) => {
     const clubOptions = [...new Set(fantasyReferencePlayers().map((player) => player.club).filter(Boolean))].sort().slice(0, 12);
     const playerOptions = fantasyReferencePlayers()
@@ -11665,6 +11690,7 @@
       </section>
 
       ${fantasyHub({ paidReady, recommendedAction, transferSummary, health })}
+      ${fantasyIntroOverlay(fantasy)}
       ${fantasySetupFlow(fantasy)}
 
       <section class="section fantasy-command-bar fantasy-command-first" id="fantasy-decision">
@@ -16959,6 +16985,18 @@
       event.preventDefault();
       fantasyUpdate({ strategy: fantasyStrategyTarget.dataset.value }, `Strategy mode set to ${fantasyStrategyTarget.dataset.value}.`);
       render();
+      return;
+    }
+
+    const fantasyDismissIntroTarget = event.target.closest("[data-action='fantasy-dismiss-intro']");
+    if (fantasyDismissIntroTarget) {
+      event.preventDefault();
+      const href = fantasyDismissIntroTarget.getAttribute("href") || "";
+      fantasyUpdate({ introDismissed: true }, "Fantasy intro dismissed.");
+      render();
+      if (href.startsWith("#")) {
+        window.requestAnimationFrame(() => document.querySelector(href)?.scrollIntoView({ behavior: "smooth", block: "start" }));
+      }
       return;
     }
 

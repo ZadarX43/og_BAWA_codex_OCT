@@ -3176,6 +3176,101 @@ tbody tr:hover {
   line-height: 1.55;
 }
 
+.fantasy-intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  padding: 26px;
+}
+
+.fantasy-intro-backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 72% 24%, rgba(116, 232, 213, 0.12), transparent 34%),
+    rgba(12, 2, 19, 0.84);
+  backdrop-filter: blur(6px);
+}
+
+.fantasy-intro-card {
+  position: relative;
+  width: min(680px, calc(100vw - 36px));
+  display: grid;
+  gap: 22px;
+  justify-items: center;
+  padding: clamp(26px, 5vw, 54px);
+  border: 1px solid rgba(116, 232, 213, 0.28);
+  border-radius: 34px;
+  background:
+    linear-gradient(145deg, rgba(105, 58, 190, 0.24), rgba(6, 17, 24, 0.92)),
+    rgba(18, 4, 28, 0.96);
+  box-shadow: 0 40px 110px rgba(0, 0, 0, 0.48);
+  text-align: center;
+}
+
+.fantasy-intro-card h2 {
+  max-width: 12ch;
+  margin: 0;
+  font-size: clamp(2.4rem, 6vw, 4.8rem);
+  line-height: 0.96;
+}
+
+.fantasy-intro-card p {
+  max-width: 46ch;
+  margin: 0;
+  color: rgba(213, 232, 222, 0.78);
+  font-size: 1.04rem;
+  line-height: 1.55;
+}
+
+.fantasy-intro-routes {
+  width: min(520px, 100%);
+  display: grid;
+  gap: 10px;
+}
+
+.fantasy-intro-routes a {
+  min-height: 58px;
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 14px;
+  align-items: center;
+  padding: 0 22px;
+  border: 1px solid rgba(138, 247, 185, 0.36);
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, rgba(116, 232, 213, 0.08), rgba(127, 75, 255, 0.18)),
+    rgba(255, 255, 255, 0.035);
+  color: var(--text);
+  font-size: 1.12rem;
+  font-weight: 950;
+  text-align: left;
+  text-decoration: none;
+}
+
+.fantasy-intro-routes span {
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(233, 246, 241, 0.76);
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px rgba(116, 232, 213, 0.12);
+}
+
+.fantasy-intro-actions {
+  width: min(420px, 100%);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.fantasy-intro-actions .button,
+.fantasy-intro-actions .ghost-button {
+  width: 100%;
+  min-height: 52px;
+}
+
 .fantasy-command-panel {
   display: grid;
   gap: 18px;
@@ -10070,6 +10165,30 @@ code {
 
   .fantasy-player-result {
     padding: 13px;
+  }
+
+  .fantasy-intro-overlay {
+    padding: 14px;
+  }
+
+  .fantasy-intro-card {
+    gap: 16px;
+    border-radius: 24px;
+    padding: 22px;
+  }
+
+  .fantasy-intro-card h2 {
+    max-width: 11ch;
+  }
+
+  .fantasy-intro-routes a {
+    min-height: 50px;
+    padding: 0 16px;
+    font-size: 0.98rem;
+  }
+
+  .fantasy-intro-actions {
+    grid-template-columns: 1fr;
   }
 
   .fantasy-follow-row {
