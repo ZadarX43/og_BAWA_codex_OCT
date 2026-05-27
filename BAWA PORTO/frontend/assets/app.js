@@ -3476,6 +3476,138 @@
     `;
   };
 
+  const renderAccountFantasyWorkspace = (signedIn = false) => {
+    const fantasy = fantasyState();
+    const validation = fantasyValidateLineup();
+    const captain = fantasyCaptainSlot()?.player;
+    const vice = fantasyViceSlot()?.player;
+    const transferImpact = fantasyTransferImpact();
+    const chip = fantasyChipValidation();
+    const paidReady = accessTierRank(currentAccessTier()) >= 1;
+    if (!signedIn && !fantasy.savedPlans.length && !fantasy.savedDrafts.length) {
+      return "";
+    }
+    return `
+      <section class="section" id="fantasy-workspace">
+        <div class="section-head">
+          <div>
+            <h2>Fantasy decision workspace</h2>
+            <p class="section-copy">Your FPL command centre lives here once plans and drafts are saved: squad state, deadline plan, captaincy, transfer logic, chip posture, and rule checks.</p>
+          </div>
+          <span class="pill">${escapeHtml(`${fantasy.savedPlans.length} plans · ${fantasy.savedDrafts.length} drafts`)}</span>
+        </div>
+        <div class="split fantasy-account-grid">
+          <article class="panel fantasy-account-summary">
+            <div class="fantasy-section-head">
+              <div>
+                <span class="metric-label">Current fantasy state</span>
+                <h3>${escapeHtml(`GW${fantasy.gameweek}: ${validation.valid ? "Ready to review" : "Needs fixing"}`)}</h3>
+                <p class="muted">${escapeHtml(validation.valid ? "Your pitch state is legal under the current FPL rules contract." : validation.issues[0])}</p>
+              </div>
+              <a class="button" href="./fantasy.html">Open Fantasy</a>
+            </div>
+            <div class="stats-grid">
+              ${statPanel("Deadline", fantasyDeadlineLabel(), "Subject to official FPL changes")}
+              ${statPanel("Strategy", fantasy.strategy, "Saved decision lens")}
+              ${statPanel("Squad health", `${fantasySquadHealth()}/100`, validation.valid ? "Rules passed" : "Rules blocked")}
+              ${statPanel("Bank", fantasyMoney(fantasy.bank), `${fantasy.freeTransfers} free transfer${fantasy.freeTransfers === 1 ? "" : "s"}`)}
+              ${statPanel("Captain", captain?.name || "Pending", vice ? `${vice.name} vice` : "Vice pending")}
+              ${statPanel("Chip", fantasy.chipIntent === "NONE" ? "Hold" : fantasy.chipIntent.replace("_", " "), chip.message)}
+            </div>
+            <div class="fantasy-rule-stack ${validation.valid && chip.ok ? "is-valid" : "is-invalid"}">
+              <strong>${escapeHtml(validation.valid && chip.ok ? "Plan guardrails pass" : "Plan guardrails need attention")}</strong>
+              <ul class="feature-list compact-list">
+                ${(validation.valid ? [chip.message] : [...validation.issues, chip.message]).slice(0, 4).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+              </ul>
+            </div>
+          </article>
+          <article class="panel fantasy-account-summary">
+            <span class="metric-label">Recommended next move</span>
+            <h3>${escapeHtml(transferImpact?.recommendation || "Generate a gameweek plan")}</h3>
+            <p class="muted">${
+              transferImpact
+                ? escapeHtml(`${transferImpact.outgoing.name} to ${transferImpact.incoming.name}. Bank after ${fantasyMoney(transferImpact.bankAfter)}. Net ${transferImpact.netGain >= 0 ? "+" : ""}${transferImpact.netGain} over 5GW after hit cost.`)
+                : "Open Fantasy, search a player, and choose Transfer in to create a route."
+            }</p>
+            <div class="fantasy-impact-grid">
+              ${statPanel("Transfer cost", transferImpact ? `${transferImpact.transferCost} pts` : "0 pts", transferImpact?.hitRequired ? "Hit required" : "No hit")}
+              ${statPanel("5GW gain", transferImpact ? `${transferImpact.gain >= 0 ? "+" : ""}${transferImpact.gain}` : "Pending", "Expected points")}
+              ${statPanel("Club rule", transferImpact ? (transferImpact.clubLimitOk ? "OK" : "Blocked") : "Pending", "Max 3 per club")}
+              ${statPanel("Budget", transferImpact ? fantasyMoney(transferImpact.bankAfter) : fantasyMoney(fantasy.bank), transferImpact?.affordable === false ? "Blocked" : "Available")}
+            </div>
+            ${
+              paidReady
+                ? `<div class="notice">Premium account state is active. Saved plans can become server-synced once the Worker account endpoint is wired.</div>`
+                : `<div class="notice">Standard mode can preview the workspace. Founder/Premium unlocks personalised saved decision intelligence.</div>`
+            }
+          </article>
+        </div>
+        <div class="split fantasy-account-grid">
+          <article class="panel">
+            <div class="fantasy-section-head">
+              <div>
+                <span class="metric-label">Saved gameweek plans</span>
+                <h3>Return to the exact decision.</h3>
+              </div>
+              <a class="ghost-button" href="./fantasy.html">Create plan</a>
+            </div>
+            <div class="fantasy-plan-list">
+              ${
+                fantasy.savedPlans.length
+                  ? fantasy.savedPlans
+                      .map(
+                        (plan) => `
+                          <article>
+                            <strong>${escapeHtml(`GW${plan.gameweek}: ${plan.transfer}`)}</strong>
+                            <span>${escapeHtml(`Captain ${plan.captain || "Pending"} / VC ${plan.vice || "Pending"}`)}</span>
+                            <small>${escapeHtml(`${plan.strategy} · ${plan.deadline} · Bank ${fantasyMoney(plan.bank)} · FT ${plan.freeTransfers} · ${plan.chip === "NONE" ? "No chip" : plan.chip}`)}</small>
+                            <div class="saved-paper-slip-actions">
+                              <a href="./fantasy.html">Open</a>
+                              <button type="button" data-action="remove-fantasy-plan" data-plan-id="${escapeHtml(plan.id)}">Remove</button>
+                            </div>
+                          </article>
+                        `
+                      )
+                      .join("")
+                  : `<p class="muted">No saved plans yet. Open Fantasy, generate the gameweek plan, then save it here.</p>`
+              }
+            </div>
+          </article>
+          <article class="panel">
+            <div class="fantasy-section-head">
+              <div>
+                <span class="metric-label">Saved squad drafts</span>
+                <h3>Compare routes before deadline.</h3>
+              </div>
+              <a class="ghost-button" href="./fantasy.html">Build draft</a>
+            </div>
+            <div class="fantasy-plan-list">
+              ${
+                fantasy.savedDrafts.length
+                  ? fantasy.savedDrafts
+                      .map(
+                        (draft) => `
+                          <article>
+                            <strong>${escapeHtml(draft.name || "Saved draft")}</strong>
+                            <span>${escapeHtml(`${draft.projected || "—"} projected · Health ${draft.health || "—"}`)}</span>
+                            <small>${escapeHtml(`${draft.strategy || fantasy.strategy} · Bank ${fantasyMoney(draft.bank ?? fantasy.bank)} · FT ${draft.freeTransfers ?? fantasy.freeTransfers}`)}</small>
+                            <div class="saved-paper-slip-actions">
+                              <button type="button" data-action="load-fantasy-draft" data-draft-id="${escapeHtml(draft.id)}">Load</button>
+                              <button type="button" data-action="remove-fantasy-draft" data-draft-id="${escapeHtml(draft.id)}">Remove</button>
+                            </div>
+                          </article>
+                        `
+                      )
+                      .join("")
+                  : `<p class="muted">No saved drafts yet. Save safe, aggressive, wildcard, or no-premium drafts from the Fantasy pitch.</p>`
+              }
+            </div>
+          </article>
+        </div>
+      </section>
+    `;
+  };
+
   const matchesBottomNav = () => `
     <nav class="x-bottom-nav" aria-label="Matches timeline navigation">
       <a href="./index.html"><span>Home</span></a>
@@ -10735,6 +10867,34 @@
     );
   };
 
+  const fantasyRemoveSavedPlan = (planId) => {
+    const fantasy = fantasyState();
+    fantasyUpdate({ savedPlans: fantasy.savedPlans.filter((plan) => plan.id !== String(planId || "")) }, "Fantasy plan removed.");
+  };
+
+  const fantasyRemoveSavedDraft = (draftId) => {
+    const fantasy = fantasyState();
+    fantasyUpdate({ savedDrafts: fantasy.savedDrafts.filter((draft) => draft.id !== String(draftId || "")) }, "Fantasy draft removed.");
+  };
+
+  const fantasyLoadSavedDraft = (draftId) => {
+    const fantasy = fantasyState();
+    const draft = fantasy.savedDrafts.find((item) => item.id === String(draftId || ""));
+    if (!draft || !Array.isArray(draft.squad)) {
+      fantasyUpdate({}, "Draft could not be loaded.");
+      return;
+    }
+    fantasyUpdate(
+      {
+        strategy: FANTASY_STRATEGY_MODES.includes(draft.strategy) ? draft.strategy : fantasy.strategy,
+        bank: Number.isFinite(Number(draft.bank)) ? Number(draft.bank) : fantasy.bank,
+        freeTransfers: Number.isFinite(Number(draft.freeTransfers)) ? Number(draft.freeTransfers) : fantasy.freeTransfers,
+        squad: draft.squad,
+      },
+      `${draft.name || "Saved draft"} loaded into the Fantasy pitch.`
+    );
+  };
+
   const fantasyFeaturePills = (items = []) => `
     <div class="timeline-tier-pills fantasy-pill-grid">
       ${items.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
@@ -11934,6 +12094,7 @@
                 <div class="page-subnav-scroll">
                   <a class="page-subnav-link is-active" href="#account-overview">Workspace</a>
                   <a class="page-subnav-link" href="#paper-slips">Paper slips</a>
+                  <a class="page-subnav-link" href="#fantasy-workspace">Fantasy</a>
                   <a class="page-subnav-link" href="#activity-desk">Activity</a>
                   <a class="page-subnav-link" href="#devices">Devices</a>
                   <a class="page-subnav-link" href="#preferences">Preferences</a>
@@ -11965,6 +12126,7 @@
                 : ""
             }
             ${renderAccountPaperSlipWorkspace(signedIn)}
+            ${renderAccountFantasyWorkspace(signedIn)}
             <section class="section split" id="account-overview">
               <article class="panel">
                 <h3>Member workspace</h3>
@@ -16241,6 +16403,30 @@
       const chipIntent = String(fantasyChipIntentTarget.dataset.value || "NONE");
       const chipCheck = fantasyChipValidation(chipIntent, fantasyState().gameweek);
       fantasyUpdate({ chipIntent }, chipCheck.ok ? `${chipIntent.replace("_", " ")} selected for modelling.` : chipCheck.message);
+      render();
+      return;
+    }
+
+    const fantasyRemovePlanTarget = event.target.closest("[data-action='remove-fantasy-plan']");
+    if (fantasyRemovePlanTarget) {
+      event.preventDefault();
+      fantasyRemoveSavedPlan(fantasyRemovePlanTarget.dataset.planId);
+      render();
+      return;
+    }
+
+    const fantasyLoadDraftTarget = event.target.closest("[data-action='load-fantasy-draft']");
+    if (fantasyLoadDraftTarget) {
+      event.preventDefault();
+      fantasyLoadSavedDraft(fantasyLoadDraftTarget.dataset.draftId);
+      render();
+      return;
+    }
+
+    const fantasyRemoveDraftTarget = event.target.closest("[data-action='remove-fantasy-draft']");
+    if (fantasyRemoveDraftTarget) {
+      event.preventDefault();
+      fantasyRemoveSavedDraft(fantasyRemoveDraftTarget.dataset.draftId);
       render();
       return;
     }

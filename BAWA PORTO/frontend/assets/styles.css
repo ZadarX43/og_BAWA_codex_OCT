@@ -3608,6 +3608,16 @@ tbody tr:hover {
   background: rgba(138, 247, 185, 0.16);
 }
 
+.fantasy-account-grid {
+  margin-top: 16px;
+  align-items: start;
+}
+
+.fantasy-account-summary {
+  display: grid;
+  gap: 18px;
+}
+
 .fantasy-draft-grid strong,
 .fantasy-draft-grid span,
 .fantasy-draft-grid small {
