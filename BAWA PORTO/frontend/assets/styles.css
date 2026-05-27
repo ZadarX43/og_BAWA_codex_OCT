@@ -3181,6 +3181,26 @@ tbody tr:hover {
   gap: 10px;
 }
 
+.fantasy-command-controls {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) auto auto;
+  gap: 10px;
+  align-items: end;
+}
+
+.fantasy-command-controls label {
+  display: grid;
+  gap: 6px;
+}
+
+.fantasy-command-controls label span {
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
 .fantasy-import-row {
   display: grid;
   grid-template-columns: minmax(220px, 0.8fr) auto minmax(240px, 1fr);
@@ -3449,7 +3469,7 @@ tbody tr:hover {
 
 .fantasy-search-grid {
   display: grid;
-  grid-template-columns: 1.3fr repeat(3, minmax(0, 1fr));
+  grid-template-columns: minmax(220px, 1.4fr) repeat(4, minmax(0, 1fr));
   gap: 10px;
 }
 
@@ -3540,6 +3560,52 @@ tbody tr:hover {
 
 .fantasy-draft-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.fantasy-plan-list {
+  display: grid;
+  gap: 10px;
+}
+
+.fantasy-plan-list article {
+  display: grid;
+  gap: 5px;
+  padding: 14px;
+  border: 1px solid rgba(138, 247, 185, 0.16);
+  border-radius: 16px;
+  background: rgba(138, 247, 185, 0.055);
+}
+
+.fantasy-plan-list strong,
+.fantasy-plan-list span,
+.fantasy-plan-list small {
+  display: block;
+}
+
+.fantasy-plan-list small {
+  color: var(--muted);
+}
+
+.fantasy-chip-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.fantasy-chip-grid button {
+  min-height: 44px;
+  border: 1px solid rgba(213, 232, 222, 0.14);
+  border-radius: 999px;
+  padding: 0 12px;
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--text);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.fantasy-chip-grid button.is-active {
+  border-color: rgba(138, 247, 185, 0.58);
+  background: rgba(138, 247, 185, 0.16);
 }
 
 .fantasy-draft-grid strong,
@@ -9121,6 +9187,7 @@ code {
   }
 
   .fantasy-command-grid,
+  .fantasy-command-controls,
   .fantasy-search-grid,
   .fantasy-import-row,
   .fantasy-impact-grid {
@@ -9156,11 +9223,13 @@ code {
   }
 
   .fantasy-command-grid,
+  .fantasy-command-controls,
   .fantasy-search-grid,
   .fantasy-draft-grid,
   .fantasy-import-row,
   .fantasy-impact-grid,
-  .fantasy-sell-options {
+  .fantasy-sell-options,
+  .fantasy-chip-grid {
     grid-template-columns: 1fr;
   }
 

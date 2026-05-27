@@ -367,6 +367,60 @@
   };
 
   const FANTASY_STRATEGY_MODES = ["Balanced", "Protect rank", "Chase rank", "Aggressive", "Value"];
+  const FPL_RULES = {
+    season: "2025/26",
+    squadSize: 15,
+    budget: 100,
+    maxClub: 3,
+    squadCounts: { GK: 2, DEF: 5, MID: 5, FWD: 3 },
+    starterMin: { GK: 1, DEF: 3, MID: 2, FWD: 1 },
+    starterMax: { GK: 1, DEF: 5, MID: 5, FWD: 3 },
+    freeTransferCap: 5,
+    hitCost: -4,
+    maxTransfersPerGameweek: 20,
+    firstChipDeadlineGw: 19,
+    secondChipStartGw: 20,
+    deadlines: {
+      1: "Fri 15 Aug 18:30",
+      2: "Fri 22 Aug 18:30",
+      3: "Sat 30 Aug 11:00",
+      4: "Sat 13 Sep 11:00",
+      5: "Sat 20 Sep 11:00",
+      6: "Sat 27 Sep 11:00",
+      7: "Fri 3 Oct 18:30",
+      8: "Sat 18 Oct 11:00",
+      9: "Fri 24 Oct 18:30",
+      10: "Sat 1 Nov 13:30",
+      11: "Sat 8 Nov 11:00",
+      12: "Sat 22 Nov 11:00",
+      13: "Sat 29 Nov 13:30",
+      14: "Tue 2 Dec 18:00",
+      15: "Sat 6 Dec 11:00",
+      16: "Sat 13 Dec 13:30",
+      17: "Sat 20 Dec 11:00",
+      18: "Fri 26 Dec 18:30",
+      19: "Tue 30 Dec 18:00",
+      20: "Sat 3 Jan 11:00",
+      21: "Tue 6 Jan 18:30",
+      22: "Sat 17 Jan 11:00",
+      23: "Sat 24 Jan 11:00",
+      24: "Sat 31 Jan 13:30",
+      25: "Fri 6 Feb 18:30",
+      26: "Tue 10 Feb 18:00",
+      27: "Sat 21 Feb 13:30",
+      28: "Fri 27 Feb 18:30",
+      29: "Tue 3 Mar 18:00",
+      30: "Sat 14 Mar 13:30",
+      31: "Fri 20 Mar 18:30",
+      32: "Fri 10 Apr 18:30",
+      33: "Sat 18 Apr 11:00",
+      34: "Fri 24 Apr 18:30",
+      35: "Fri 1 May 18:30",
+      36: "Sat 9 May 11:00",
+      37: "Fri 15 May 18:30",
+      38: "Sun 24 May 14:30",
+    },
+  };
 
   const FANTASY_PLAYER_POOL = [
     { id: "raya", name: "Raya", position: "GK", club: "ARS", fixture: "vs FUL (H)", price: 5.5, xpts1: 4.8, xpts3: 14.1, xpts5: 23.6, startPct: 96, risk: "Stable", label: "HOLD", swing: "+6", ownership: "Template", difficulty: "Green", note: "Clean-sheet route with strong defence context." },
@@ -432,9 +486,11 @@
     return {
     teamId: "",
     imported: Boolean(state.fantasyPayload?.sample_squad?.length),
+    gameweek: 4,
     strategy: "Balanced",
     bank: Number.isFinite(Number(payloadSummary.bank)) ? Number(payloadSummary.bank) : 1.5,
     freeTransfers: Number.isFinite(Number(payloadSummary.free_transfers)) ? Number(payloadSummary.free_transfers) : 1,
+    chipIntent: "NONE",
     selectedPlayerId: "foden",
     incomingPlayerId: "eze",
     outgoingPlayerId: "foden",
@@ -443,11 +499,18 @@
     positionFilter: "ALL",
     priceFilter: "ALL",
     riskFilter: "ALL",
+    clubFilter: "ALL",
+    ownershipFilter: "ALL",
+    fixtureFilter: "ALL",
+    pointsFilter: "ALL",
     watchlist: ["eze", "bowen", "palmer", "mbeumo"],
     benchShortlist: [],
     lockedTargets: [],
     ignored: [],
     savedDrafts: [],
+    savedPlans: [],
+    transferHistory: [],
+    generatedPlanAt: "",
     squad: payloadSquad,
     };
   };
@@ -458,14 +521,22 @@
     return {
       ...fallback,
       ...value,
+      gameweek: Number.isFinite(Number(value.gameweek)) ? Math.max(1, Math.min(38, Math.floor(Number(value.gameweek)))) : fallback.gameweek,
       strategy: FANTASY_STRATEGY_MODES.includes(value.strategy) ? value.strategy : fallback.strategy,
       bank: Number.isFinite(Number(value.bank)) ? Number(value.bank) : fallback.bank,
-      freeTransfers: Number.isFinite(Number(value.freeTransfers)) ? Math.max(0, Math.floor(Number(value.freeTransfers))) : fallback.freeTransfers,
+      freeTransfers: Number.isFinite(Number(value.freeTransfers)) ? Math.max(0, Math.min(FPL_RULES.freeTransferCap, Math.floor(Number(value.freeTransfers)))) : fallback.freeTransfers,
+      chipIntent: ["NONE", "BENCH_BOOST", "FREE_HIT", "TRIPLE_CAPTAIN", "WILDCARD"].includes(value.chipIntent) ? value.chipIntent : fallback.chipIntent,
       watchlist: Array.isArray(value.watchlist) ? value.watchlist.map(String).filter(Boolean) : fallback.watchlist,
       benchShortlist: Array.isArray(value.benchShortlist) ? value.benchShortlist.map(String).filter(Boolean) : fallback.benchShortlist,
       lockedTargets: Array.isArray(value.lockedTargets) ? value.lockedTargets.map(String).filter(Boolean) : fallback.lockedTargets,
       ignored: Array.isArray(value.ignored) ? value.ignored.map(String).filter(Boolean) : fallback.ignored,
       savedDrafts: Array.isArray(value.savedDrafts) ? value.savedDrafts.filter((item) => item?.id).slice(0, 8) : [],
+      savedPlans: Array.isArray(value.savedPlans) ? value.savedPlans.filter((item) => item?.id).slice(0, 12) : [],
+      transferHistory: Array.isArray(value.transferHistory) ? value.transferHistory.filter((item) => item?.id).slice(0, 40) : [],
+      clubFilter: String(value.clubFilter || fallback.clubFilter || "ALL"),
+      ownershipFilter: String(value.ownershipFilter || fallback.ownershipFilter || "ALL"),
+      fixtureFilter: String(value.fixtureFilter || fallback.fixtureFilter || "ALL"),
+      pointsFilter: String(value.pointsFilter || fallback.pointsFilter || "ALL"),
       squad: squad
         .filter((item) => fantasyReferencePlayers().some((player) => player.id === item?.id))
         .map((item) => ({
@@ -474,6 +545,8 @@
           benchOrder: Number.isFinite(Number(item.benchOrder)) ? Number(item.benchOrder) : 0,
           captain: Boolean(item.captain),
           vice: Boolean(item.vice),
+          purchasePrice: Number.isFinite(Number(item.purchasePrice)) ? Number(item.purchasePrice) : undefined,
+          currentPrice: Number.isFinite(Number(item.currentPrice)) ? Number(item.currentPrice) : undefined,
         })),
     };
   };
@@ -10119,9 +10192,43 @@
       .filter((slot) => slot.player);
 
   const fantasySquadValue = () =>
-    fantasySquadRows().reduce((total, slot) => total + Number(slot.player.price || 0), 0);
+    fantasySquadRows().reduce((total, slot) => total + Number(slot.currentPrice ?? slot.player.price ?? 0), 0);
 
   const fantasyMoney = (value) => `£${Number(value || 0).toFixed(1)}m`;
+
+  const fantasySellingPrice = (slot = {}) => {
+    const current = Number(slot.currentPrice ?? slot.player?.price ?? 0);
+    const purchase = Number(slot.purchasePrice ?? current);
+    if (!Number.isFinite(current) || !Number.isFinite(purchase)) return current || 0;
+    if (current <= purchase) return current;
+    return Number((purchase + Math.floor((Math.round((current - purchase) * 10) || 0) / 2) / 10).toFixed(1));
+  };
+
+  const fantasyTransferCost = (transferCount = 1, freeTransfers = fantasyState().freeTransfers, chipIntent = fantasyState().chipIntent) => {
+    const chip = String(chipIntent || "NONE").toUpperCase();
+    if (chip === "WILDCARD" || chip === "FREE_HIT") return 0;
+    return Math.min(0, Math.max(0, Number(transferCount || 0) - Number(freeTransfers || 0)) * FPL_RULES.hitCost);
+  };
+
+  const fantasyDeadlineLabel = () => FPL_RULES.deadlines[fantasyState().gameweek] || "Deadline pending";
+
+  const fantasyChipOptions = () => [
+    { id: "NONE", label: "No chip" },
+    { id: "WILDCARD", label: "Wildcard" },
+    { id: "FREE_HIT", label: "Free Hit" },
+    { id: "BENCH_BOOST", label: "Bench Boost" },
+    { id: "TRIPLE_CAPTAIN", label: "Triple Captain" },
+  ];
+
+  const fantasyChipValidation = (chipIntent = fantasyState().chipIntent, gameweek = fantasyState().gameweek) => {
+    const chip = String(chipIntent || "NONE").toUpperCase();
+    if (chip === "NONE") return { ok: true, label: "No chip active", message: "Preserve chip unless pressure rises." };
+    if ((chip === "WILDCARD" || chip === "FREE_HIT") && Number(gameweek) <= 1) {
+      return { ok: false, label: "Unavailable", message: `${chip.replace("_", " ")} is unavailable before the first Gameweek deadline.` };
+    }
+    const windowLabel = Number(gameweek) <= FPL_RULES.firstChipDeadlineGw ? "first-half chip window" : "second-half chip window";
+    return { ok: true, label: windowLabel, message: `${chip.replace("_", " ")} can be modelled for this Gameweek. Only one chip can be active.` };
+  };
 
   const fantasyStarterRows = () => fantasySquadRows().filter((slot) => slot.role === "starter");
 
@@ -10173,12 +10280,13 @@
       return acc;
     }, {});
     const issues = [];
-    if (rows.length !== 15) issues.push("Squad must contain 15 players.");
+    const warnings = [];
+    if (rows.length !== FPL_RULES.squadSize) issues.push(`Squad must contain ${FPL_RULES.squadSize} players.`);
     if (squadCounts.GK !== 2 || squadCounts.DEF !== 5 || squadCounts.MID !== 5 || squadCounts.FWD !== 3) {
       issues.push("Squad shape must be 2 GK, 5 DEF, 5 MID, 3 FWD.");
     }
     Object.entries(clubCounts).forEach(([club, count]) => {
-      if (count > 3) issues.push(`Max 3 players per club: ${club} has ${count}.`);
+      if (count > FPL_RULES.maxClub) issues.push(`Max 3 players per club: ${club} has ${count}.`);
     });
     if (starters.length !== 11) issues.push("Lineup must have 11 starters.");
     if (bench.length !== 4) issues.push("Bench must have 4 players.");
@@ -10191,7 +10299,20 @@
     if (!captain || captain.role !== "starter") issues.push("Captain must be a starter.");
     if (!vice || vice.role !== "starter") issues.push("Vice-captain must be a starter.");
     if (captain && vice && captain.id === vice.id) issues.push("Captain and vice-captain must be different players.");
-    return { valid: !issues.length, issues };
+    const benchOrders = bench.map((slot) => Number(slot.benchOrder || 0)).filter(Boolean);
+    if (benchOrders.length !== 4 || new Set(benchOrders).size !== benchOrders.length) {
+      issues.push("Bench order must contain four unique priorities.");
+    }
+    if (fantasy.freeTransfers > FPL_RULES.freeTransferCap) {
+      issues.push(`Free transfers cannot exceed ${FPL_RULES.freeTransferCap}.`);
+    }
+    const squadValue = fantasySquadValue();
+    if (squadValue > FPL_RULES.budget + 20) {
+      warnings.push("Squad value is high; use selling price and bank for transfer affordability.");
+    }
+    const chip = fantasyChipValidation();
+    if (!chip.ok) issues.push(chip.message);
+    return { valid: !issues.length, issues, warnings };
   };
 
   const fantasyFilteredPlayers = () => {
@@ -10215,6 +10336,11 @@
       if (fantasy.priceFilter === "PREMIUM" && player.price < 9) return false;
       if (fantasy.riskFilter === "LOW" && fantasyRiskClass(player.risk) !== "fantasy-risk-ok") return false;
       if (fantasy.riskFilter === "WATCH" && fantasyRiskClass(player.risk) === "fantasy-risk-ok") return false;
+      if (fantasy.clubFilter !== "ALL" && player.club !== fantasy.clubFilter) return false;
+      if (fantasy.ownershipFilter !== "ALL" && String(player.ownership || "").toUpperCase() !== fantasy.ownershipFilter) return false;
+      if (fantasy.fixtureFilter !== "ALL" && String(player.difficulty || "").toUpperCase() !== fantasy.fixtureFilter) return false;
+      if (fantasy.pointsFilter === "TOP_5GW" && Number(player.xpts5 || 0) < 25) return false;
+      if (fantasy.pointsFilter === "TOP_3GW" && Number(player.xpts3 || 0) < 15) return false;
       if (underMatch && player.price > Number(underMatch[1])) return false;
       if (cheapDefender && !(player.position === "DEF" && player.price <= 5)) return false;
       if (arsenalDefender && !(player.position === "DEF" && player.club === "ARS")) return false;
@@ -10258,20 +10384,48 @@
     const outgoingSlot = fantasySquadRows().find((slot) => slot.id === fantasy.outgoingPlayerId);
     const outgoing = outgoingSlot?.player || null;
     if (!incoming || !outgoing) return null;
-    const bankAfter = Number((fantasy.bank + outgoing.price - incoming.price).toFixed(1));
-    const hitRequired = fantasy.freeTransfers < 1;
+    const sellingPrice = fantasySellingPrice(outgoingSlot);
+    const bankAfter = Number((fantasy.bank + sellingPrice - incoming.price).toFixed(1));
+    const transferCost = fantasyTransferCost(1, fantasy.freeTransfers, fantasy.chipIntent);
+    const hitRequired = transferCost < 0;
     const gain = Number((incoming.xpts5 - outgoing.xpts5).toFixed(1));
     const riskReduced = fantasyRiskClass(outgoing.risk) !== "fantasy-risk-ok" && fantasyRiskClass(incoming.risk) === "fantasy-risk-ok";
+    const nextSquad = fantasySquadRows().map((slot) => (slot.id === outgoing.id ? { ...slot, player: incoming, id: incoming.id } : slot));
+    const clubCounts = nextSquad.reduce((acc, slot) => {
+      acc[slot.player.club] = (acc[slot.player.club] || 0) + 1;
+      return acc;
+    }, {});
+    const clubLimitOk = Object.values(clubCounts).every((count) => count <= FPL_RULES.maxClub);
+    const alreadyOwned = fantasySquadRows().some((slot) => slot.id === incoming.id && slot.id !== outgoing.id);
     return {
       incoming,
       outgoing,
       bankBefore: fantasy.bank,
       bankAfter,
+      sellingPrice,
+      transferCost,
       affordable: bankAfter >= 0,
+      clubLimitOk,
+      alreadyOwned,
       hitRequired,
       gain,
+      netGain: Number((gain + transferCost).toFixed(1)),
       riskReduced,
       healthChange: riskReduced ? "+6" : gain > 4 ? "+3" : "0",
+      recommendation:
+        alreadyOwned
+          ? "Blocked: already owned"
+          : !clubLimitOk
+            ? "Blocked: club limit"
+            : bankAfter < 0
+              ? "Blocked: over budget"
+              : transferCost < 0 && gain < 4
+                ? "Watch: hit not justified"
+                : transferCost < 0
+                  ? "Hit possible"
+                  : gain >= 4
+                    ? "Use free transfer"
+                    : "Watch / roll",
     };
   };
 
@@ -10288,6 +10442,11 @@
 
   const fantasySetCaptain = (playerId, type) => {
     const target = String(playerId || "");
+    const targetSlot = fantasySquadRows().find((slot) => slot.id === target);
+    if (!targetSlot || targetSlot.role !== "starter") {
+      fantasyUpdate({}, type === "captain" ? "Captain blocked: player must be in the starting XI." : "Vice-captain blocked: player must be in the starting XI.");
+      return;
+    }
     fantasyUpdateSquad(
       (squad) =>
         squad.map((slot) => ({
@@ -10302,16 +10461,44 @@
   const fantasySetRole = (playerId, role) => {
     const target = String(playerId || "");
     fantasyUpdateSquad((squad) => {
+      const rows = squad.map((slot) => ({ ...slot, player: fantasyPlayerById(slot.id) })).filter((slot) => slot.player);
+      const targetRow = rows.find((slot) => slot.id === target);
       const maxBench = Math.max(0, ...squad.map((slot) => Number(slot.benchOrder || 0)));
+      if (!targetRow || targetRow.role === role) return squad;
+      if (role === "starter") {
+        const currentStarters = rows.filter((slot) => slot.role === "starter");
+        const swapOut =
+          currentStarters
+            .filter((slot) => slot.id !== target && slot.player.position === targetRow.player.position && !slot.captain && !slot.vice)
+            .sort((left, right) => Number(left.player.xpts1 || 0) - Number(right.player.xpts1 || 0))[0] ||
+          currentStarters
+            .filter((slot) => slot.id !== target && !slot.captain && !slot.vice)
+            .sort((left, right) => Number(left.player.xpts1 || 0) - Number(right.player.xpts1 || 0))[0];
+        return squad.map((slot) => {
+          if (slot.id === target) return { ...slot, role: "starter", benchOrder: 0 };
+          if (swapOut && slot.id === swapOut.id) return { ...slot, role: "bench", benchOrder: maxBench + 1, captain: false, vice: false };
+          return slot;
+        });
+      }
+      const currentBench = rows.filter((slot) => slot.role === "bench");
+      const swapIn =
+        currentBench
+          .filter((slot) => slot.id !== target && slot.player.position === targetRow.player.position)
+          .sort((left, right) => Number(right.player.xpts1 || 0) - Number(left.player.xpts1 || 0))[0] ||
+        currentBench
+          .filter((slot) => slot.id !== target)
+          .sort((left, right) => Number(right.player.xpts1 || 0) - Number(left.player.xpts1 || 0))[0];
       return squad.map((slot) =>
         slot.id === target
           ? {
               ...slot,
-              role,
-              benchOrder: role === "bench" ? maxBench + 1 : 0,
-              captain: role === "starter" ? slot.captain : false,
-              vice: role === "starter" ? slot.vice : false,
+              role: "bench",
+              benchOrder: maxBench + 1,
+              captain: false,
+              vice: false,
             }
+          : swapIn && slot.id === swapIn.id
+            ? { ...slot, role: "starter", benchOrder: 0 }
           : slot
       );
     }, role === "starter" ? "Player moved into the XI. Check lineup validity." : "Player moved to bench. Check formation validity.");
@@ -10327,8 +10514,8 @@
 
   const fantasyApplyTransfer = () => {
     const impact = fantasyTransferImpact();
-    if (!impact || !impact.affordable) {
-      fantasyUpdate({}, "Transfer blocked: budget would go negative.");
+    if (!impact || !impact.affordable || !impact.clubLimitOk || impact.alreadyOwned) {
+      fantasyUpdate({}, impact?.recommendation || "Transfer blocked by FPL rules.");
       return;
     }
     fantasyUpdateSquad((squad) => {
@@ -10341,17 +10528,33 @@
               captain: false,
               vice: false,
               role: outgoingSlot?.role || slot.role,
+              purchasePrice: impact.incoming.price,
+              currentPrice: impact.incoming.price,
             }
           : slot
       );
     }, `Transfer drafted: ${impact.outgoing.name} to ${impact.incoming.name}.`);
     const fantasy = fantasyState();
+    const historyItem = {
+      id: `transfer_${Date.now()}`,
+      gameweek: fantasy.gameweek,
+      outgoing: impact.outgoing.name,
+      incoming: impact.incoming.name,
+      bankBefore: impact.bankBefore,
+      bankAfter: impact.bankAfter,
+      transferCost: impact.transferCost,
+      gain: impact.gain,
+      recommendation: impact.recommendation,
+      createdAt: new Date().toISOString(),
+    };
+    const chipPreservesTransfers = ["WILDCARD", "FREE_HIT"].includes(String(fantasy.chipIntent || "").toUpperCase());
     fantasyUpdate({
       bank: impact.bankAfter,
-      freeTransfers: Math.max(0, fantasy.freeTransfers - 1),
+      freeTransfers: chipPreservesTransfers ? fantasy.freeTransfers : Math.max(0, fantasy.freeTransfers - 1),
       selectedPlayerId: impact.incoming.id,
       outgoingPlayerId: "",
       watchlist: fantasy.watchlist.filter((item) => item !== impact.incoming.id),
+      transferHistory: [historyItem, ...fantasy.transferHistory].slice(0, 40),
     }, `Transfer drafted: ${impact.outgoing.name} to ${impact.incoming.name}.`);
   };
 
@@ -10418,6 +10621,11 @@
 
   const fantasySaveDraft = () => {
     const fantasy = fantasyState();
+    const validation = fantasyValidateLineup();
+    if (!validation.valid) {
+      fantasyUpdate({}, `Draft blocked: ${validation.issues[0]}`);
+      return;
+    }
     const draft = {
       id: `fantasy_draft_${Date.now()}`,
       name: `Draft ${fantasy.savedDrafts.length + 1}`,
@@ -10430,6 +10638,101 @@
       health: fantasySquadHealth(),
     };
     fantasyUpdate({ savedDrafts: [draft, ...fantasy.savedDrafts].slice(0, 8) }, "Draft saved to this browser.");
+  };
+
+  const fantasySaveGameweekPlan = () => {
+    const fantasy = fantasyState();
+    const validation = fantasyValidateLineup();
+    const impact = fantasyTransferImpact();
+    const captain = fantasyCaptainSlot()?.player;
+    const vice = fantasyViceSlot()?.player;
+    if (!validation.valid) {
+      fantasyUpdate({}, `Plan blocked: ${validation.issues[0]}`);
+      return;
+    }
+    const plan = {
+      id: `fantasy_plan_${Date.now()}`,
+      gameweek: fantasy.gameweek,
+      deadline: fantasyDeadlineLabel(),
+      strategy: fantasy.strategy,
+      captain: captain?.name || "",
+      vice: vice?.name || "",
+      transfer:
+        impact && impact.affordable && impact.clubLimitOk && !impact.alreadyOwned
+          ? `${impact.outgoing.name} -> ${impact.incoming.name}`
+          : "Roll / watch",
+      chip: fantasy.chipIntent,
+      bank: fantasy.bank,
+      freeTransfers: fantasy.freeTransfers,
+      projected: Number(fantasyProjectedPoints().toFixed(1)),
+      health: fantasySquadHealth(),
+      createdAt: new Date().toISOString(),
+    };
+    fantasyUpdate(
+      {
+        savedPlans: [plan, ...fantasy.savedPlans].slice(0, 12),
+        generatedPlanAt: plan.createdAt,
+      },
+      `GW${fantasy.gameweek} plan saved.`
+    );
+  };
+
+  const fantasyGeneratePlan = () => {
+    const validation = fantasyValidateLineup();
+    const impact = fantasyTransferImpact();
+    const captain = fantasyCaptainSlot()?.player;
+    const chip = fantasyChipValidation();
+    const transferMessage =
+      impact && impact.affordable && impact.clubLimitOk && !impact.alreadyOwned
+        ? `${impact.recommendation}: ${impact.outgoing.name} to ${impact.incoming.name}. Net ${impact.netGain >= 0 ? "+" : ""}${impact.netGain} over 5GW after hit cost.`
+        : "Roll transfer unless a stronger target clears budget and club limits.";
+    const message = validation.valid
+      ? `Plan generated: captain ${captain?.name || "pending"}. ${transferMessage} ${chip.message}`
+      : `Plan needs fixing: ${validation.issues[0]}`;
+    fantasyUpdate({ generatedPlanAt: new Date().toISOString() }, message);
+  };
+
+  const fantasyAddManualPlayer = (playerId) => {
+    const fantasy = fantasyState();
+    const player = fantasyPlayerById(playerId);
+    if (!player) {
+      fantasyUpdate({}, "Manual add blocked: player unavailable.");
+      return;
+    }
+    const rows = fantasySquadRows();
+    if (rows.some((slot) => slot.id === player.id)) {
+      fantasyUpdate({ selectedPlayerId: player.id }, "Player is already in your squad.");
+      return;
+    }
+    if (rows.length >= FPL_RULES.squadSize) {
+      fantasyUpdate({ incomingPlayerId: player.id, selectedPlayerId: player.id }, "Squad is full. Use Transfer in and choose who to sell.");
+      return;
+    }
+    const counts = fantasyPositionCounts(rows);
+    if ((counts[player.position] || 0) >= FPL_RULES.squadCounts[player.position]) {
+      fantasyUpdate({}, `Manual add blocked: ${player.position} slots are full.`);
+      return;
+    }
+    const clubCount = rows.filter((slot) => slot.player.club === player.club).length;
+    if (clubCount >= FPL_RULES.maxClub) {
+      fantasyUpdate({}, `Manual add blocked: max ${FPL_RULES.maxClub} players from ${player.club}.`);
+      return;
+    }
+    if (fantasy.bank - player.price < 0) {
+      fantasyUpdate({}, `Manual add blocked: ${player.name} would exceed your remaining budget.`);
+      return;
+    }
+    fantasyUpdate(
+      {
+        bank: Number((fantasy.bank - player.price).toFixed(1)),
+        squad: [
+          ...fantasy.squad,
+          { id: player.id, role: "bench", benchOrder: Math.max(0, ...fantasy.squad.map((slot) => Number(slot.benchOrder || 0))) + 1, captain: false, vice: false, purchasePrice: player.price, currentPrice: player.price },
+        ],
+        selectedPlayerId: player.id,
+      },
+      `${player.name} added to your squad bench.`
+    );
   };
 
   const fantasyFeaturePills = (items = []) => `
@@ -10550,6 +10853,7 @@
     const health = fantasySquadHealth();
     const captain = fantasyCaptainSlot()?.player;
     const vice = fantasyViceSlot()?.player;
+    const chip = fantasyChipValidation();
     const pitchLines = ["FWD", "MID", "DEF", "GK"].map((position) => [
       position,
       fantasyStarterRows().filter((slot) => slot.player.position === position),
@@ -10558,6 +10862,15 @@
     const transferRows = fantasyFilteredPlayers().filter((player) => !fantasySquadRows().some((slot) => slot.id === player.id));
     const transferImpact = fantasyTransferImpact();
     const sellCandidates = fantasySquadRows().filter((slot) => slot.player.position === transferImpact?.incoming?.position);
+    const clubOptions = [...new Set(fantasyReferencePlayers().map((player) => player.club).filter(Boolean))].sort();
+    const recommendedAction =
+      !validation.valid
+        ? "Fix lineup"
+        : transferImpact?.affordable && transferImpact?.clubLimitOk && !transferImpact?.alreadyOwned
+          ? transferImpact.recommendation
+          : health < 70
+            ? "Monitor wildcard"
+            : "Roll / watch";
     return `
       <section class="section split fantasy-hero">
         <article class="hero-main">
@@ -10596,12 +10909,12 @@
           <div class="fantasy-command-top">
             <div>
               <span class="metric-label">Gameweek command bar</span>
-              <h2>GW4 decision: ${escapeHtml(transferImpact?.affordable ? "Use 1 free transfer." : "Transfer blocked by budget.")}</h2>
-              <p class="muted">Captain ${escapeHtml(captain?.name || "pending")}. Vice ${escapeHtml(vice?.name || "pending")}. ${escapeHtml(validation.valid ? "Lineup is valid." : validation.issues[0])}</p>
+              <h2>GW${escapeHtml(fantasy.gameweek)} decision: ${escapeHtml(recommendedAction)}.</h2>
+              <p class="muted">Captain ${escapeHtml(captain?.name || "pending")}. Vice ${escapeHtml(vice?.name || "pending")}. Deadline ${escapeHtml(fantasyDeadlineLabel())}. ${escapeHtml(validation.valid ? "Lineup is valid." : validation.issues[0])}</p>
             </div>
             <div class="fantasy-command-action">
               <span>Recommended action</span>
-              <strong>${escapeHtml(transferImpact?.affordable ? "Use FT" : "Hold")}</strong>
+              <strong>${escapeHtml(recommendedAction)}</strong>
             </div>
           </div>
           <form id="fantasy-import-form" class="fantasy-import-row">
@@ -10613,17 +10926,47 @@
             <span class="muted">Official FPL team-ID import can feed this same state contract once the backend connector is live.</span>
           </form>
           <div class="fantasy-command-grid">
-            ${statPanel("Gameweek", "GW4", "Deadline Friday 18:30")}
+            ${statPanel("Gameweek", `GW${fantasy.gameweek}`, `Deadline ${fantasyDeadlineLabel()}`)}
             ${statPanel("Strategy", fantasy.strategy, "Recommendations adapt by risk mode")}
             ${statPanel("Squad health", `${health}/100`, validation.valid ? "Formation valid" : "Needs attention")}
             ${statPanel("Projected points", projectedPoints, "Starting XI projection")}
-            ${statPanel("Free transfers", fantasy.freeTransfers, transferImpact?.hitRequired ? "Hit needed" : "No hit required")}
-            ${statPanel("Bank", fantasyMoney(fantasy.bank), `Squad value ${fantasyMoney(fantasySquadValue())}`)}
+            ${statPanel("Free transfers", fantasy.freeTransfers, transferImpact?.hitRequired ? `${Math.abs(transferImpact.transferCost)} point hit` : "No hit required")}
+            ${statPanel("Bank", fantasyMoney(fantasy.bank), transferImpact ? `After move ${fantasyMoney(transferImpact.bankAfter)}` : `Squad value ${fantasyMoney(fantasySquadValue())}`)}
+          </div>
+          <div class="fantasy-command-controls">
+            <label>
+              <span>Gameweek</span>
+              <select class="text-input" data-role="fantasy-gameweek">
+                ${Array.from({ length: 38 }, (_, index) => index + 1)
+                  .map((gw) => `<option value="${gw}" ${gw === fantasy.gameweek ? "selected" : ""}>GW${gw}</option>`)
+                  .join("")}
+              </select>
+            </label>
+            <label>
+              <span>Free transfers</span>
+              <input class="text-input" type="number" min="0" max="${FPL_RULES.freeTransferCap}" value="${escapeHtml(fantasy.freeTransfers)}" data-role="fantasy-free-transfers" />
+            </label>
+            <label>
+              <span>Bank</span>
+              <input class="text-input" type="number" min="0" step="0.1" value="${escapeHtml(fantasy.bank)}" data-role="fantasy-bank" />
+            </label>
+            <label>
+              <span>Chip</span>
+              <select class="text-input" data-role="fantasy-chip">
+                ${fantasyChipOptions().map((option) => `<option value="${option.id}" ${option.id === fantasy.chipIntent ? "selected" : ""}>${escapeHtml(option.label)}</option>`).join("")}
+              </select>
+            </label>
+            <button class="button" type="button" data-action="fantasy-generate-plan">Generate gameweek plan</button>
+            <button class="ghost-button" type="button" data-action="fantasy-save-plan">Save plan</button>
           </div>
           <div class="fantasy-strategy-strip" aria-label="Strategy mode selector">
             ${FANTASY_STRATEGY_MODES
               .map((mode) => `<button class="${mode === fantasy.strategy ? "is-active" : ""}" type="button" data-action="fantasy-strategy" data-value="${escapeHtml(mode)}">${escapeHtml(mode)}</button>`)
               .join("")}
+          </div>
+          <div class="fantasy-rule-stack ${chip.ok ? "is-valid" : "is-invalid"}">
+            <strong>${escapeHtml(chip.label)}</strong>
+            <p class="muted">${escapeHtml(chip.message)}</p>
           </div>
           ${fantasy.message ? `<div class="notice">${escapeHtml(fantasy.message)}</div>` : ""}
         </article>
@@ -10682,9 +11025,9 @@
           </div>
           <div class="fantasy-decision-grid">
             ${fantasyDecisionCard("Captaincy", `${captain?.name || "Pending"} / ${vice?.name || "Pending"} VC`, `${captain?.name || "Captain"} remains the safer captain route in ${fantasy.strategy} mode.`, ["HIGH_EXPECTED_MINUTES", "PENALTY_INVOLVEMENT", "HOME_ATTACK_ENVIRONMENT"])}
-            ${fantasyDecisionCard("Transfer", transferImpact ? `Sell ${transferImpact.outgoing.name} -> Buy ${transferImpact.incoming.name}` : "Select transfer", transferImpact ? `Expected 5GW gain ${transferImpact.gain >= 0 ? "+" : ""}${transferImpact.gain} points. Bank after ${fantasyMoney(transferImpact.bankAfter)}.` : "Search a player and choose Transfer in.", [transferImpact?.affordable ? "AFFORDABLE" : "BUDGET_BLOCK", transferImpact?.hitRequired ? "HIT_REQUIRED" : "NO_HIT", "FIXTURE_SWING"])}
+            ${fantasyDecisionCard("Transfer", transferImpact ? `Sell ${transferImpact.outgoing.name} -> Buy ${transferImpact.incoming.name}` : "Select transfer", transferImpact ? `${transferImpact.recommendation}. 5GW gain ${transferImpact.gain >= 0 ? "+" : ""}${transferImpact.gain}; net ${transferImpact.netGain >= 0 ? "+" : ""}${transferImpact.netGain} after hit. Bank after ${fantasyMoney(transferImpact.bankAfter)}.` : "Search a player and choose Transfer in.", [transferImpact?.affordable ? "AFFORDABLE" : "BUDGET_BLOCK", transferImpact?.clubLimitOk ? "CLUB_LIMIT_OK" : "CLUB_LIMIT_BLOCK", transferImpact?.hitRequired ? "HIT_REQUIRED" : "NO_HIT"])}
             ${fantasyDecisionCard("Bench", benchPlayers.map((slot) => slot.player.name).join(", "), "Bench order updates as you start or bench players. Formation rules are checked live.", ["BENCH_COVER", "FORMATION_CHECK"])}
-            ${fantasyDecisionCard("Wildcard", health > 75 ? "Low pressure" : "Monitor", "Structure remains healthy. Preserve chip unless injuries stack up.", [`SQUAD_HEALTH_${health}`, "CHIP_HOLD"])}
+            ${fantasyDecisionCard("Chip / Wildcard", fantasy.chipIntent === "NONE" ? (health > 75 ? "Low pressure" : "Monitor") : fantasy.chipIntent.replace("_", " "), chip.message, [`SQUAD_HEALTH_${health}`, chip.ok ? "CHIP_RULE_OK" : "CHIP_RULE_BLOCK"])}
           </div>
           <div class="notice notice-warning">Deadline alert: ${escapeHtml(transferImpact?.riskReduced ? "transfer reduces rotation risk, but still wait for press conference." : "do not confirm transfer until team news risk clears.")}</div>
         </article>
@@ -10720,7 +11063,7 @@
             <div>
               <span class="metric-label">Transfer builder</span>
               <h3>${transferImpact ? `Buy ${escapeHtml(transferImpact.incoming.name)}` : "Choose a target"}</h3>
-              <p class="muted">${transferImpact ? `Who are you selling? Budget before ${fantasyMoney(transferImpact.bankBefore)}, after ${fantasyMoney(transferImpact.bankAfter)}.` : "Click Transfer in from search or the advisor table."}</p>
+              <p class="muted">${transferImpact ? `${transferImpact.recommendation}. Selling price ${fantasyMoney(transferImpact.sellingPrice)}. Budget before ${fantasyMoney(transferImpact.bankBefore)}, after ${fantasyMoney(transferImpact.bankAfter)}.` : "Click Transfer in from search or the advisor table."}</p>
             </div>
             ${
               transferImpact
@@ -10739,10 +11082,11 @@
                   <div class="fantasy-impact-grid">
                     ${statPanel("Budget after", fantasyMoney(transferImpact.bankAfter), transferImpact.affordable ? "Affordable" : "Blocked")}
                     ${statPanel("5GW gain", `${transferImpact.gain >= 0 ? "+" : ""}${transferImpact.gain}`, "Expected points")}
+                    ${statPanel("Net gain", `${transferImpact.netGain >= 0 ? "+" : ""}${transferImpact.netGain}`, transferImpact.hitRequired ? `${Math.abs(transferImpact.transferCost)} point hit` : "No hit")}
                     ${statPanel("Risk change", transferImpact.riskReduced ? "Reduced" : "Neutral", `${transferImpact.outgoing.risk} -> ${transferImpact.incoming.risk}`)}
-                    ${statPanel("Health", transferImpact.healthChange, "Projected squad health")}
+                    ${statPanel("Club limit", transferImpact.clubLimitOk ? "OK" : "Blocked", transferImpact.alreadyOwned ? "Already owned" : "Max 3 per club")}
                   </div>
-                  <button class="button" type="button" data-action="fantasy-apply-transfer" ${transferImpact.affordable ? "" : "disabled"}>Apply to draft</button>
+                  <button class="button" type="button" data-action="fantasy-apply-transfer" ${transferImpact.affordable && transferImpact.clubLimitOk && !transferImpact.alreadyOwned ? "" : "disabled"}>Apply to draft</button>
                 `
                 : ""
             }
@@ -10769,6 +11113,10 @@
           <h2>Find the next move.</h2>
           <div class="fantasy-search-grid">
             <input class="text-input" type="text" value="${escapeHtml(fantasy.searchQuery)}" data-role="fantasy-search" aria-label="Search player" />
+            <select class="text-input" data-role="fantasy-club-filter" aria-label="Club filter">
+              <option value="ALL" ${fantasy.clubFilter === "ALL" ? "selected" : ""}>All clubs</option>
+              ${clubOptions.map((club) => `<option value="${escapeHtml(club)}" ${fantasy.clubFilter === club ? "selected" : ""}>${escapeHtml(club)}</option>`).join("")}
+            </select>
             <select class="text-input" data-role="fantasy-position-filter" aria-label="Position filter">
               ${["ALL", "GK", "DEF", "MID", "FWD"].map((option) => `<option value="${option}" ${fantasy.positionFilter === option ? "selected" : ""}>${option === "ALL" ? "All positions" : option}</option>`).join("")}
             </select>
@@ -10781,6 +11129,25 @@
               <option value="ALL" ${fantasy.riskFilter === "ALL" ? "selected" : ""}>Any risk</option>
               <option value="LOW" ${fantasy.riskFilter === "LOW" ? "selected" : ""}>Low risk</option>
               <option value="WATCH" ${fantasy.riskFilter === "WATCH" ? "selected" : ""}>Rotation watch</option>
+            </select>
+            <select class="text-input" data-role="fantasy-ownership-filter" aria-label="Ownership filter">
+              <option value="ALL" ${fantasy.ownershipFilter === "ALL" ? "selected" : ""}>Any ownership</option>
+              <option value="TEMPLATE" ${fantasy.ownershipFilter === "TEMPLATE" ? "selected" : ""}>Template</option>
+              <option value="HIGH" ${fantasy.ownershipFilter === "HIGH" ? "selected" : ""}>High</option>
+              <option value="MEDIUM" ${fantasy.ownershipFilter === "MEDIUM" ? "selected" : ""}>Medium</option>
+              <option value="LOW" ${fantasy.ownershipFilter === "LOW" ? "selected" : ""}>Low</option>
+              <option value="RISING" ${fantasy.ownershipFilter === "RISING" ? "selected" : ""}>Rising</option>
+            </select>
+            <select class="text-input" data-role="fantasy-fixture-filter" aria-label="Fixture difficulty filter">
+              <option value="ALL" ${fantasy.fixtureFilter === "ALL" ? "selected" : ""}>Any fixture</option>
+              <option value="GREEN" ${fantasy.fixtureFilter === "GREEN" ? "selected" : ""}>Green fixture</option>
+              <option value="AMBER" ${fantasy.fixtureFilter === "AMBER" ? "selected" : ""}>Amber fixture</option>
+              <option value="RED" ${fantasy.fixtureFilter === "RED" ? "selected" : ""}>Red fixture</option>
+            </select>
+            <select class="text-input" data-role="fantasy-points-filter" aria-label="Expected points filter">
+              <option value="ALL" ${fantasy.pointsFilter === "ALL" ? "selected" : ""}>Any xPts</option>
+              <option value="TOP_3GW" ${fantasy.pointsFilter === "TOP_3GW" ? "selected" : ""}>15+ next 3GW</option>
+              <option value="TOP_5GW" ${fantasy.pointsFilter === "TOP_5GW" ? "selected" : ""}>25+ next 5GW</option>
             </select>
           </div>
           <div class="matches-typeahead fantasy-typeahead" aria-label="Fantasy autocomplete">
@@ -10809,6 +11176,7 @@
                       <button type="button" data-action="fantasy-bench-shortlist" data-player-id="${escapeHtml(player.id)}">${fantasy.benchShortlist.includes(player.id) ? "Remove bench short" : "Bench shortlist"}</button>
                       <button type="button" data-action="fantasy-compare" data-player-id="${escapeHtml(player.id)}">Compare</button>
                       <button type="button" data-action="fantasy-transfer-in" data-player-id="${escapeHtml(player.id)}">Transfer in</button>
+                      <button type="button" data-action="fantasy-manual-add" data-player-id="${escapeHtml(player.id)}">Manual add</button>
                       <button type="button" data-action="fantasy-lock-target" data-player-id="${escapeHtml(player.id)}">${fantasy.lockedTargets.includes(player.id) ? "Unlock" : "Lock target"}</button>
                       <button type="button" data-action="fantasy-ignore" data-player-id="${escapeHtml(player.id)}">Ignore</button>
                     </div>
@@ -10842,7 +11210,27 @@
           <h2>Plan multiple routes.</h2>
           <div class="cta-row">
             <button class="button" type="button" data-action="fantasy-save-draft">Save current draft</button>
+            <button class="ghost-button" type="button" data-action="fantasy-save-plan">Save GW plan</button>
             <button class="ghost-button" type="button" data-action="fantasy-reset">Reset demo squad</button>
+          </div>
+          <div class="fantasy-plan-list">
+            <h3>Saved gameweek plans</h3>
+            ${
+              fantasy.savedPlans.length
+                ? fantasy.savedPlans
+                    .slice(0, 4)
+                    .map(
+                      (plan) => `
+                        <article>
+                          <strong>${escapeHtml(`GW${plan.gameweek}: ${plan.transfer}`)}</strong>
+                          <span>${escapeHtml(`Captain ${plan.captain} / VC ${plan.vice}`)}</span>
+                          <small>${escapeHtml(`${plan.strategy} · ${plan.deadline} · Bank ${fantasyMoney(plan.bank)} · FT ${plan.freeTransfers}`)}</small>
+                        </article>
+                      `
+                    )
+                    .join("")
+                : `<p class="muted">No saved gameweek plans yet. Generate and save one when the squad is legal.</p>`
+            }
           </div>
           <div class="fantasy-draft-grid">
             ${[
@@ -10865,8 +11253,20 @@
         </article>
         <article class="panel fantasy-chip-panel">
           <span class="metric-label">Chip planner</span>
-          <h2>Preserve chips unless pressure rises.</h2>
+          <h2>${escapeHtml(fantasy.chipIntent === "NONE" ? "Preserve chips unless pressure rises." : `${fantasy.chipIntent.replace("_", " ")} model active.`)}</h2>
+          <div class="fantasy-chip-grid">
+            ${fantasyChipOptions()
+              .map(
+                (option) => `
+                  <button class="${option.id === fantasy.chipIntent ? "is-active" : ""}" type="button" data-action="fantasy-chip-intent" data-value="${escapeHtml(option.id)}">
+                    ${escapeHtml(option.label)}
+                  </button>
+                `
+              )
+              .join("")}
+          </div>
           <ul class="feature-list">
+            <li>${escapeHtml(chip.message)}</li>
             <li>Wildcard: watch GW6-GW8 fixture swing.</li>
             <li>Bench Boost: not ready, bench strength still uneven.</li>
             <li>Triple Captain: preserve for double gameweek profile.</li>
@@ -15763,6 +16163,14 @@
       return;
     }
 
+    const fantasyManualAddTarget = event.target.closest("[data-action='fantasy-manual-add']");
+    if (fantasyManualAddTarget) {
+      event.preventDefault();
+      fantasyAddManualPlayer(fantasyManualAddTarget.dataset.playerId);
+      render();
+      return;
+    }
+
     const fantasyCompareTarget = event.target.closest("[data-action='fantasy-compare']");
     if (fantasyCompareTarget) {
       event.preventDefault();
@@ -15807,6 +16215,32 @@
     if (fantasyApplyTransferTarget) {
       event.preventDefault();
       fantasyApplyTransfer();
+      render();
+      return;
+    }
+
+    const fantasyGeneratePlanTarget = event.target.closest("[data-action='fantasy-generate-plan']");
+    if (fantasyGeneratePlanTarget) {
+      event.preventDefault();
+      fantasyGeneratePlan();
+      render();
+      return;
+    }
+
+    const fantasySavePlanTarget = event.target.closest("[data-action='fantasy-save-plan']");
+    if (fantasySavePlanTarget) {
+      event.preventDefault();
+      fantasySaveGameweekPlan();
+      render();
+      return;
+    }
+
+    const fantasyChipIntentTarget = event.target.closest("[data-action='fantasy-chip-intent']");
+    if (fantasyChipIntentTarget) {
+      event.preventDefault();
+      const chipIntent = String(fantasyChipIntentTarget.dataset.value || "NONE");
+      const chipCheck = fantasyChipValidation(chipIntent, fantasyState().gameweek);
+      fantasyUpdate({ chipIntent }, chipCheck.ok ? `${chipIntent.replace("_", " ")} selected for modelling.` : chipCheck.message);
       render();
       return;
     }
@@ -16085,6 +16519,13 @@
       return;
     }
 
+    const fantasyClubFilter = event.target.closest("[data-role='fantasy-club-filter']");
+    if (fantasyClubFilter) {
+      fantasyUpdate({ clubFilter: String(fantasyClubFilter.value || "ALL") }, "");
+      render();
+      return;
+    }
+
     const fantasyPriceFilter = event.target.closest("[data-role='fantasy-price-filter']");
     if (fantasyPriceFilter) {
       fantasyUpdate({ priceFilter: String(fantasyPriceFilter.value || "ALL") }, "");
@@ -16095,6 +16536,57 @@
     const fantasyRiskFilter = event.target.closest("[data-role='fantasy-risk-filter']");
     if (fantasyRiskFilter) {
       fantasyUpdate({ riskFilter: String(fantasyRiskFilter.value || "ALL") }, "");
+      render();
+      return;
+    }
+
+    const fantasyOwnershipFilter = event.target.closest("[data-role='fantasy-ownership-filter']");
+    if (fantasyOwnershipFilter) {
+      fantasyUpdate({ ownershipFilter: String(fantasyOwnershipFilter.value || "ALL") }, "");
+      render();
+      return;
+    }
+
+    const fantasyFixtureFilter = event.target.closest("[data-role='fantasy-fixture-filter']");
+    if (fantasyFixtureFilter) {
+      fantasyUpdate({ fixtureFilter: String(fantasyFixtureFilter.value || "ALL") }, "");
+      render();
+      return;
+    }
+
+    const fantasyPointsFilter = event.target.closest("[data-role='fantasy-points-filter']");
+    if (fantasyPointsFilter) {
+      fantasyUpdate({ pointsFilter: String(fantasyPointsFilter.value || "ALL") }, "");
+      render();
+      return;
+    }
+
+    const fantasyGameweekInput = event.target.closest("[data-role='fantasy-gameweek']");
+    if (fantasyGameweekInput) {
+      fantasyUpdate({ gameweek: Number(fantasyGameweekInput.value) }, "Gameweek updated.");
+      render();
+      return;
+    }
+
+    const fantasyFreeTransfersInput = event.target.closest("[data-role='fantasy-free-transfers']");
+    if (fantasyFreeTransfersInput) {
+      fantasyUpdate({ freeTransfers: Number(fantasyFreeTransfersInput.value) }, "Free transfers updated.");
+      render();
+      return;
+    }
+
+    const fantasyBankInput = event.target.closest("[data-role='fantasy-bank']");
+    if (fantasyBankInput) {
+      fantasyUpdate({ bank: Number(fantasyBankInput.value) }, "Bank updated.");
+      render();
+      return;
+    }
+
+    const fantasyChipInput = event.target.closest("[data-role='fantasy-chip']");
+    if (fantasyChipInput) {
+      const chipIntent = String(fantasyChipInput.value || "NONE");
+      const chipCheck = fantasyChipValidation(chipIntent, fantasyState().gameweek);
+      fantasyUpdate({ chipIntent }, chipCheck.ok ? `${chipIntent.replace("_", " ")} selected for modelling.` : chipCheck.message);
       render();
       return;
     }
