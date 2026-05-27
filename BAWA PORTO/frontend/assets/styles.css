@@ -3617,8 +3617,48 @@ tbody tr:hover {
 
 .fantasy-search-grid {
   display: grid;
-  grid-template-columns: minmax(220px, 1.4fr) repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
+}
+
+.fantasy-search-simple {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.fantasy-search-simple .text-input {
+  min-height: 58px;
+  border-radius: 18px;
+  font-size: 1rem;
+  font-weight: 850;
+}
+
+.fantasy-filter-drawer {
+  border: 1px solid rgba(213, 232, 222, 0.12);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.fantasy-filter-drawer > summary {
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  color: var(--muted);
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.fantasy-filter-drawer[open] {
+  padding-bottom: 14px;
+}
+
+.fantasy-filter-drawer[open] .fantasy-search-grid {
+  margin-inline: 14px;
 }
 
 .fantasy-search-results,
@@ -3626,6 +3666,57 @@ tbody tr:hover {
 .fantasy-result-actions {
   display: grid;
   gap: 10px;
+}
+
+.fantasy-player-result {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(160px, 0.42fr);
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid rgba(213, 232, 222, 0.13);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.fantasy-player-result-main {
+  display: grid;
+  gap: 6px;
+}
+
+.fantasy-player-result-main strong {
+  font-size: 1.16rem;
+}
+
+.fantasy-player-result-main span,
+.fantasy-player-result-main p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.fantasy-player-result-metrics {
+  display: grid;
+  gap: 6px;
+}
+
+.fantasy-player-result-metrics span {
+  min-height: 34px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: center;
+  padding: 7px 10px;
+  border: 1px solid rgba(213, 232, 222, 0.11);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.035);
+  color: rgba(213, 232, 222, 0.8);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.fantasy-player-result-metrics strong {
+  color: var(--text);
+  font-size: 1rem;
 }
 
 .fantasy-secondary-actions {
@@ -9480,7 +9571,9 @@ code {
 
   .fantasy-command-grid,
   .fantasy-command-controls,
+  .fantasy-search-simple,
   .fantasy-search-grid,
+  .fantasy-player-result,
   .fantasy-draft-grid,
   .fantasy-import-row,
   .fantasy-impact-grid,
@@ -9541,5 +9634,18 @@ code {
   .fantasy-player-actions {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .fantasy-player-result {
+    padding: 13px;
+  }
+
+  .fantasy-player-result-main strong {
+    font-size: 1rem;
+  }
+
+  .fantasy-player-result-main span,
+  .fantasy-player-result-main p {
+    font-size: 0.86rem;
   }
 }

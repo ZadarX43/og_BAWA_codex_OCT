@@ -549,7 +549,7 @@
     incomingPlayerId: "eze",
     outgoingPlayerId: "foden",
     message: "",
-    searchQuery: "Saka",
+    searchQuery: "",
     positionFilter: "ALL",
     priceFilter: "ALL",
     riskFilter: "ALL",
@@ -11116,9 +11116,63 @@
     );
   };
 
+  const fantasyHumanizeSignal = (value = "") => {
+    const key = String(value || "").trim();
+    const lookup = {
+      BUY_PRIORITY: "Buy priority",
+      BUY_SOON: "Buy soon",
+      HOLD: "Hold",
+      HOLD_THROUGH_BAD_FIXTURE: "Hold for now",
+      SELL_SOON: "Sell soon",
+      AVOID_TRAP: "Trap risk",
+      DIFFERENTIAL: "Differential",
+      WATCHLIST: "Watchlist",
+      LIKELY_START: "Likely starter",
+      MUST_CHECK_TEAM_NEWS: "Check team news",
+      POPULAR: "Popular pick",
+      AVAILABLE: "Available",
+      FUTURE_NEUTRAL: "Neutral run",
+      FUTURE_GOOD: "Good fixture run",
+      FUTURE_BAD: "Difficult fixture run",
+      NO_RISE_SIGNAL: "No rise signal",
+      NO_FALL_SIGNAL: "No fall signal",
+      HIGH_EXPECTED_MINUTES: "Strong minutes",
+      PENALTY_INVOLVEMENT: "Set-piece/penalty route",
+      HOME_ATTACK_ENVIRONMENT: "Good attack setup",
+      AFFORDABLE: "Affordable",
+      BUDGET_BLOCK: "Over budget",
+      CLUB_LIMIT_OK: "Club rule OK",
+      CLUB_LIMIT_BLOCK: "Club rule block",
+      HIT_REQUIRED: "Hit required",
+      NO_HIT: "No hit",
+      BENCH_COVER: "Bench cover",
+      FORMATION_CHECK: "Formation checked",
+      CHIP_RULE_OK: "Chip rule OK",
+      CHIP_RULE_BLOCK: "Chip blocked",
+    };
+    if (lookup[key]) return lookup[key];
+    if (/^points=/i.test(key)) return "";
+    if (/^[A-Z0-9_]+$/.test(key)) {
+      return key.toLowerCase().replaceAll("_", " ").replace(/\b\w/g, (char) => char.toUpperCase());
+    }
+    return key.replaceAll("_", " ");
+  };
+
+  const fantasyReadablePlayerNote = (player = {}) => {
+    const note = String(player.note || "").trim();
+    const rawTokenHeavy = note.includes(";") || /\b(points|ownership|price)=/i.test(note) || /[A-Z]{3,}_[A-Z_]{3,}/.test(note);
+    if (!note || rawTokenHeavy) {
+      const label = fantasyHumanizeSignal(player.label || "Watchlist");
+      const risk = fantasyHumanizeSignal(player.risk || "Team news normal");
+      const fixture = String(player.fixture || "").trim();
+      return `${label || "Watch profile"}. ${risk || "Review before deadline"}${fixture ? ` for ${fixture}` : ""}.`;
+    }
+    return note;
+  };
+
   const fantasyFeaturePills = (items = []) => `
     <div class="timeline-tier-pills fantasy-pill-grid">
-      ${items.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
+      ${items.map(fantasyHumanizeSignal).filter(Boolean).slice(0, 4).map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
     </div>
   `;
 
@@ -11200,6 +11254,62 @@
         `
       )
       .join("");
+
+  const fantasySearchTypeaheadHtml = () =>
+    String(fantasyState().searchQuery || "").trim().length < 2
+      ? ""
+      : fantasyAutocompleteSuggestions()
+      .map(
+        (item) => `
+          <button type="button" data-action="fantasy-autocomplete" data-query="${escapeHtml(item.value)}" data-player-id="${escapeHtml(item.player_id || "")}">
+            <span>${escapeHtml(item.label)}</span>
+            <small>${escapeHtml(item.type)}</small>
+          </button>
+        `
+      )
+      .join("");
+
+  const fantasySearchResultCards = (players = fantasyFilteredPlayers()) => {
+    if (!players.length) {
+      return `<div class="notice">No matching players yet. Try a name, club, position, or a phrase like cheap defender.</div>`;
+    }
+    return players
+      .map(
+        (player) => `
+          <article class="fantasy-player-result">
+            <div class="fantasy-player-result-main">
+              <strong>${escapeHtml(player.name)}</strong>
+              <span>${escapeHtml(`${player.position} - ${player.club} - ${fantasyMoney(player.price)}`)}</span>
+              <p>${escapeHtml(fantasyReadablePlayerNote(player))}</p>
+            </div>
+            <div class="fantasy-player-result-metrics">
+              <span><strong>${escapeHtml(String(player.xpts5 || "—"))}</strong> 5GW xPts</span>
+              <span><strong>${escapeHtml(`${player.startPct || "—"}%`)}</strong> start</span>
+              <span>${escapeHtml(fantasyHumanizeSignal(player.label || "Watchlist"))}</span>
+            </div>
+            <div class="fantasy-result-actions">
+              <button class="fantasy-primary-transfer" type="button" data-action="fantasy-transfer-in" data-player-id="${escapeHtml(player.id)}">Transfer in</button>
+              <div class="fantasy-secondary-actions">
+                <button type="button" data-action="fantasy-watchlist" data-player-id="${escapeHtml(player.id)}">${fantasyState().watchlist.includes(player.id) ? "Remove watch" : "Watchlist"}</button>
+                <button type="button" data-action="fantasy-compare" data-player-id="${escapeHtml(player.id)}">Compare</button>
+                <button type="button" data-action="fantasy-ignore" data-player-id="${escapeHtml(player.id)}">Ignore</button>
+              </div>
+            </div>
+          </article>
+        `
+      )
+      .join("");
+  };
+
+  const updateFantasySearchDom = () => {
+    const results = app.querySelector("[data-role='fantasy-search-results']");
+    const typeahead = app.querySelector("[data-role='fantasy-typeahead']");
+    const count = app.querySelector("[data-role='fantasy-search-count']");
+    const players = fantasyFilteredPlayers();
+    if (results) results.innerHTML = fantasySearchResultCards(players);
+    if (typeahead) typeahead.innerHTML = fantasySearchTypeaheadHtml();
+    if (count) count.textContent = `${players.length} shown`;
+  };
 
   const fantasyView = () => {
     const tier = currentAccessTier();
@@ -11424,7 +11534,7 @@
             <span class="metric-label">Selected player</span>
             <strong>${escapeHtml(selectedPlayer.name)}</strong>
             <span>${escapeHtml(`${selectedPlayer.position} - ${selectedPlayer.club} - ${fantasyMoney(selectedPlayer.price)}`)}</span>
-            <p>${escapeHtml(selectedPlayer.note)}</p>
+            <p>${escapeHtml(fantasyReadablePlayerNote(selectedPlayer))}</p>
             ${fantasyFeaturePills([selectedPlayer.label, `${selectedPlayer.xpts5} 5GW xPts`, `Start ${selectedPlayer.startPct}%`, selectedPlayer.risk])}
           </article>
           <div class="fantasy-player-actions">
@@ -11560,86 +11670,65 @@
         </article>
         <article class="panel fantasy-search-panel" id="fantasy-watchlist">
           <span class="metric-label">Player search + watchlist</span>
-          <h2>Find the next move.</h2>
-          <div class="fantasy-search-grid">
-            <input class="text-input" type="text" value="${escapeHtml(fantasy.searchQuery)}" data-role="fantasy-search" aria-label="Search player" />
-            <select class="text-input" data-role="fantasy-club-filter" aria-label="Club filter">
-              <option value="ALL" ${fantasy.clubFilter === "ALL" ? "selected" : ""}>All clubs</option>
-              ${clubOptions.map((club) => `<option value="${escapeHtml(club)}" ${fantasy.clubFilter === club ? "selected" : ""}>${escapeHtml(club)}</option>`).join("")}
-            </select>
-            <select class="text-input" data-role="fantasy-position-filter" aria-label="Position filter">
-              ${["ALL", "GK", "DEF", "MID", "FWD"].map((option) => `<option value="${option}" ${fantasy.positionFilter === option ? "selected" : ""}>${option === "ALL" ? "All positions" : option}</option>`).join("")}
-            </select>
-            <select class="text-input" data-role="fantasy-price-filter" aria-label="Price filter">
-              <option value="ALL" ${fantasy.priceFilter === "ALL" ? "selected" : ""}>Any price</option>
-              <option value="UNDER_7_5" ${fantasy.priceFilter === "UNDER_7_5" ? "selected" : ""}>Under £7.5m</option>
-              <option value="PREMIUM" ${fantasy.priceFilter === "PREMIUM" ? "selected" : ""}>Premium</option>
-            </select>
-            <select class="text-input" data-role="fantasy-risk-filter" aria-label="Risk filter">
-              <option value="ALL" ${fantasy.riskFilter === "ALL" ? "selected" : ""}>Any risk</option>
-              <option value="LOW" ${fantasy.riskFilter === "LOW" ? "selected" : ""}>Low risk</option>
-              <option value="WATCH" ${fantasy.riskFilter === "WATCH" ? "selected" : ""}>Rotation watch</option>
-            </select>
-            <select class="text-input" data-role="fantasy-ownership-filter" aria-label="Ownership filter">
-              <option value="ALL" ${fantasy.ownershipFilter === "ALL" ? "selected" : ""}>Any ownership</option>
-              <option value="TEMPLATE" ${fantasy.ownershipFilter === "TEMPLATE" ? "selected" : ""}>Template</option>
-              <option value="HIGH" ${fantasy.ownershipFilter === "HIGH" ? "selected" : ""}>High</option>
-              <option value="MEDIUM" ${fantasy.ownershipFilter === "MEDIUM" ? "selected" : ""}>Medium</option>
-              <option value="LOW" ${fantasy.ownershipFilter === "LOW" ? "selected" : ""}>Low</option>
-              <option value="RISING" ${fantasy.ownershipFilter === "RISING" ? "selected" : ""}>Rising</option>
-            </select>
-            <select class="text-input" data-role="fantasy-fixture-filter" aria-label="Fixture difficulty filter">
-              <option value="ALL" ${fantasy.fixtureFilter === "ALL" ? "selected" : ""}>Any fixture</option>
-              <option value="GREEN" ${fantasy.fixtureFilter === "GREEN" ? "selected" : ""}>Green fixture</option>
-              <option value="AMBER" ${fantasy.fixtureFilter === "AMBER" ? "selected" : ""}>Amber fixture</option>
-              <option value="RED" ${fantasy.fixtureFilter === "RED" ? "selected" : ""}>Red fixture</option>
-            </select>
-            <select class="text-input" data-role="fantasy-points-filter" aria-label="Expected points filter">
-              <option value="ALL" ${fantasy.pointsFilter === "ALL" ? "selected" : ""}>Any xPts</option>
-              <option value="TOP_3GW" ${fantasy.pointsFilter === "TOP_3GW" ? "selected" : ""}>15+ next 3GW</option>
-              <option value="TOP_5GW" ${fantasy.pointsFilter === "TOP_5GW" ? "selected" : ""}>25+ next 5GW</option>
-            </select>
+          <h2>Search players</h2>
+          <p class="muted">Type a player, club, position, or simple need like cheap defender. Pick Transfer in to open the budget and sell flow.</p>
+          <div class="fantasy-search-simple">
+            <input class="text-input" type="search" value="${escapeHtml(fantasy.searchQuery)}" placeholder="Search Saka, Arsenal defender, cheap midfielder..." data-role="fantasy-search" aria-label="Search player" autocomplete="off" />
+            <span class="pill" data-role="fantasy-search-count">${escapeHtml(`${fantasyFilteredPlayers().length} shown`)}</span>
           </div>
-          <div class="matches-typeahead fantasy-typeahead" aria-label="Fantasy autocomplete">
-            ${fantasyAutocompleteSuggestions()
-              .map(
-                (item) => `
-                  <button type="button" data-action="fantasy-autocomplete" data-query="${escapeHtml(item.value)}" data-player-id="${escapeHtml(item.player_id || "")}">
-                    <span>${escapeHtml(item.label)}</span>
-                    <small>${escapeHtml(item.type)}</small>
-                  </button>
-                `
-              )
-              .join("")}
+          <div class="matches-typeahead fantasy-typeahead" data-role="fantasy-typeahead" aria-label="Fantasy autocomplete">
+            ${fantasySearchTypeaheadHtml()}
           </div>
-          <div class="fantasy-search-results">
-            ${fantasyFilteredPlayers()
-              .map(
-                (player) => `
-                  <article class="fantasy-player-detail">
-                    <strong>${escapeHtml(player.name)}</strong>
-                    <span>${escapeHtml(`${player.position} - ${player.club} - ${fantasyMoney(player.price)} - ${player.fixture}`)}</span>
-                    <p>${escapeHtml(player.note)}</p>
-                    ${fantasyFeaturePills([player.label, `${player.xpts1}/${player.xpts3}/${player.xpts5} xPts`, `Start ${player.startPct}%`, player.risk])}
-                    <div class="fantasy-result-actions">
-                      <button class="fantasy-primary-transfer" type="button" data-action="fantasy-transfer-in" data-player-id="${escapeHtml(player.id)}">Transfer in</button>
-                      <div class="fantasy-secondary-actions">
-                        <button type="button" data-action="fantasy-watchlist" data-player-id="${escapeHtml(player.id)}">${fantasy.watchlist.includes(player.id) ? "Remove watch" : "Watchlist"}</button>
-                        <button type="button" data-action="fantasy-compare" data-player-id="${escapeHtml(player.id)}">Compare</button>
-                        <button type="button" data-action="fantasy-ignore" data-player-id="${escapeHtml(player.id)}">Ignore</button>
-                      </div>
-                    </div>
-                  </article>
-                `
-              )
-              .join("")}
+          <details class="fantasy-filter-drawer">
+            <summary>Filters</summary>
+            <div class="fantasy-search-grid">
+              <select class="text-input" data-role="fantasy-club-filter" aria-label="Club filter">
+                <option value="ALL" ${fantasy.clubFilter === "ALL" ? "selected" : ""}>All clubs</option>
+                ${clubOptions.map((club) => `<option value="${escapeHtml(club)}" ${fantasy.clubFilter === club ? "selected" : ""}>${escapeHtml(club)}</option>`).join("")}
+              </select>
+              <select class="text-input" data-role="fantasy-position-filter" aria-label="Position filter">
+                ${["ALL", "GK", "DEF", "MID", "FWD"].map((option) => `<option value="${option}" ${fantasy.positionFilter === option ? "selected" : ""}>${option === "ALL" ? "All positions" : option}</option>`).join("")}
+              </select>
+              <select class="text-input" data-role="fantasy-price-filter" aria-label="Price filter">
+                <option value="ALL" ${fantasy.priceFilter === "ALL" ? "selected" : ""}>Any price</option>
+                <option value="UNDER_7_5" ${fantasy.priceFilter === "UNDER_7_5" ? "selected" : ""}>Under £7.5m</option>
+                <option value="PREMIUM" ${fantasy.priceFilter === "PREMIUM" ? "selected" : ""}>Premium</option>
+              </select>
+              <select class="text-input" data-role="fantasy-risk-filter" aria-label="Risk filter">
+                <option value="ALL" ${fantasy.riskFilter === "ALL" ? "selected" : ""}>Any risk</option>
+                <option value="LOW" ${fantasy.riskFilter === "LOW" ? "selected" : ""}>Low risk</option>
+                <option value="WATCH" ${fantasy.riskFilter === "WATCH" ? "selected" : ""}>Rotation watch</option>
+              </select>
+              <select class="text-input" data-role="fantasy-ownership-filter" aria-label="Ownership filter">
+                <option value="ALL" ${fantasy.ownershipFilter === "ALL" ? "selected" : ""}>Any ownership</option>
+                <option value="TEMPLATE" ${fantasy.ownershipFilter === "TEMPLATE" ? "selected" : ""}>Template</option>
+                <option value="HIGH" ${fantasy.ownershipFilter === "HIGH" ? "selected" : ""}>High</option>
+                <option value="MEDIUM" ${fantasy.ownershipFilter === "MEDIUM" ? "selected" : ""}>Medium</option>
+                <option value="LOW" ${fantasy.ownershipFilter === "LOW" ? "selected" : ""}>Low</option>
+                <option value="RISING" ${fantasy.ownershipFilter === "RISING" ? "selected" : ""}>Rising</option>
+              </select>
+              <select class="text-input" data-role="fantasy-fixture-filter" aria-label="Fixture difficulty filter">
+                <option value="ALL" ${fantasy.fixtureFilter === "ALL" ? "selected" : ""}>Any fixture</option>
+                <option value="GREEN" ${fantasy.fixtureFilter === "GREEN" ? "selected" : ""}>Green fixture</option>
+                <option value="AMBER" ${fantasy.fixtureFilter === "AMBER" ? "selected" : ""}>Amber fixture</option>
+                <option value="RED" ${fantasy.fixtureFilter === "RED" ? "selected" : ""}>Red fixture</option>
+              </select>
+              <select class="text-input" data-role="fantasy-points-filter" aria-label="Expected points filter">
+                <option value="ALL" ${fantasy.pointsFilter === "ALL" ? "selected" : ""}>Any xPts</option>
+                <option value="TOP_3GW" ${fantasy.pointsFilter === "TOP_3GW" ? "selected" : ""}>15+ next 3GW</option>
+                <option value="TOP_5GW" ${fantasy.pointsFilter === "TOP_5GW" ? "selected" : ""}>25+ next 5GW</option>
+              </select>
+            </div>
+          </details>
+          <div class="fantasy-search-results" data-role="fantasy-search-results">
+            ${fantasySearchResultCards()}
           </div>
           <div class="fantasy-watchlist">
             <h3>Watchlist</h3>
             ${fantasy.watchlist
               .map(fantasyPlayerById)
               .filter(Boolean)
-              .map((player) => `<span>${escapeHtml(`${player.name} - ${player.note}`)}</span>`)
+              .map((player) => `<span>${escapeHtml(`${player.name} - ${fantasyReadablePlayerNote(player)}`)}</span>`)
               .join("") || "<span>No watched players yet.</span>"}
           </div>
           <div class="fantasy-watchlist">
@@ -17080,7 +17169,7 @@
     const fantasySearchInput = event.target.closest("[data-role='fantasy-search']");
     if (fantasySearchInput) {
       fantasyUpdate({ searchQuery: String(fantasySearchInput.value || "") }, "");
-      render();
+      updateFantasySearchDom();
       return;
     }
 
@@ -17166,6 +17255,26 @@
     const internalReviewOutcomeNoteTarget = event.target.closest("[data-role='internal-review-outcome-note']");
     if (internalReviewOutcomeNoteTarget) {
       state.runtime.internalReviewOutcomeNote = String(internalReviewOutcomeNoteTarget.value || "");
+    }
+  });
+
+  app.addEventListener("change", (event) => {
+    const fantasyFilters = [
+      ["fantasy-position-filter", "positionFilter", "ALL"],
+      ["fantasy-club-filter", "clubFilter", "ALL"],
+      ["fantasy-price-filter", "priceFilter", "ALL"],
+      ["fantasy-risk-filter", "riskFilter", "ALL"],
+      ["fantasy-ownership-filter", "ownershipFilter", "ALL"],
+      ["fantasy-fixture-filter", "fixtureFilter", "ALL"],
+      ["fantasy-points-filter", "pointsFilter", "ALL"],
+    ];
+    for (const [role, field, fallback] of fantasyFilters) {
+      const target = event.target.closest(`[data-role='${role}']`);
+      if (target) {
+        fantasyUpdate({ [field]: String(target.value || fallback) }, "");
+        updateFantasySearchDom();
+        return;
+      }
     }
   });
 
