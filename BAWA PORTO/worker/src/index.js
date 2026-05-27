@@ -17,6 +17,7 @@ import {
   getAccountRiskState,
   getAccountSessionById,
   getAccountStateByEmail,
+  getFantasyWorkspaceState,
   listAccountAdminNotesByUser,
   listAccountSessionsByUser,
   listAccountRiskFlagsByUser,
@@ -37,6 +38,7 @@ import {
   touchAccountSessionSeen,
   upsertNotificationAlerts,
   updateNotificationPreferences,
+  upsertFantasyWorkspaceState,
 } from "./account_store.js";
 import { issuePremiumToken, verifyPremiumAccess } from "./auth.js";
 import {
@@ -2676,6 +2678,135 @@ async function handleAccountState(request, env) {
   });
 }
 
+async function ensureAccountStateForSession(accountDb, sessionAccess) {
+  if (!accountDb || !sessionAccess?.email) {
+    return null;
+  }
+  return (
+    (await getAccountStateByEmail(accountDb, sessionAccess.email)) ||
+    (await mirrorSubscriptionFromRecord(
+      accountDb,
+      {
+        customer_id: sessionAccess.customer_id,
+        subscription_id: sessionAccess.subscription_id,
+        status: sessionAccess.subscription_status,
+        email: sessionAccess.email,
+      },
+      {
+        email: sessionAccess.email,
+        emailVerifiedAt: new Date().toISOString(),
+      }
+    ))
+  );
+}
+
+async function handleAccountFantasyState(request, env) {
+  const sessionAccess = await verifySessionAccess(request, env);
+  if (!sessionAccess.ok) {
+    return json(
+      {
+        ok: false,
+        authenticated: false,
+        entitled: false,
+        status: sessionAccess.status || "unauthenticated",
+        message: sessionAccess.message || "Sign in to load your Fantasy workspace.",
+      },
+      401,
+      sessionFailureHeaders(sessionAccess.status)
+    );
+  }
+
+  const accountDb = getAccountDb(env);
+  if (!accountDb) {
+    return configError("ACCOUNT_DB D1 binding is required for Fantasy workspace state.", ["ACCOUNT_DB"]);
+  }
+
+  const accountState = await ensureAccountStateForSession(accountDb, sessionAccess);
+  if (!accountState?.user?.id) {
+    return json(
+      {
+        ok: false,
+        status: "account_state_missing",
+        message: "Unable to load Fantasy workspace for this account yet.",
+      },
+      500
+    );
+  }
+
+  return json({
+    ok: true,
+    status: "fantasy_workspace_loaded",
+    fantasy_workspace: await getFantasyWorkspaceState(accountDb, accountState.user.id),
+  });
+}
+
+async function handleAccountFantasyUpdate(request, env) {
+  const sessionAccess = await verifySessionAccess(request, env);
+  if (!sessionAccess.ok) {
+    return json(
+      {
+        ok: false,
+        authenticated: false,
+        entitled: false,
+        status: sessionAccess.status || "unauthenticated",
+        message: sessionAccess.message || "Sign in to save your Fantasy workspace.",
+      },
+      401,
+      sessionFailureHeaders(sessionAccess.status)
+    );
+  }
+
+  const accountDb = getAccountDb(env);
+  if (!accountDb) {
+    return configError("ACCOUNT_DB D1 binding is required for Fantasy workspace state.", ["ACCOUNT_DB"]);
+  }
+
+  let payload;
+  try {
+    payload = await request.json();
+  } catch (error) {
+    return requestError("Fantasy workspace body must be valid JSON.", error.message);
+  }
+
+  const accountState = await ensureAccountStateForSession(accountDb, sessionAccess);
+  if (!accountState?.user?.id) {
+    return json(
+      {
+        ok: false,
+        status: "account_state_missing",
+        message: "Unable to save Fantasy workspace for this account yet.",
+      },
+      500
+    );
+  }
+
+  const workspace = await upsertFantasyWorkspaceState(accountDb, accountState.user.id, payload || {});
+
+  try {
+    await recordAuthEvent(accountDb, {
+      user_id: accountState.user.id,
+      email_normalized: sessionAccess.email,
+      event_type: "fantasy_workspace_updated",
+      ip_hint: getRequestIp(request) || null,
+      user_agent_hint: getUserAgentHint(request),
+      metadata: {
+        gameweek: workspace?.gameweek || null,
+        saved_plans: Array.isArray(workspace?.saved_plans) ? workspace.saved_plans.length : 0,
+        saved_drafts: Array.isArray(workspace?.saved_drafts) ? workspace.saved_drafts.length : 0,
+      },
+    });
+  } catch (error) {
+    console.warn("fantasy workspace audit event failed", error);
+  }
+
+  return json({
+    ok: true,
+    status: "fantasy_workspace_saved",
+    message: "Fantasy workspace saved to your account.",
+    fantasy_workspace: workspace,
+  });
+}
+
 async function handleAccountSessionsState(request, env) {
   const sessionAccess = await verifySessionAccess(request, env);
   if (!sessionAccess.ok) {
@@ -5270,6 +5401,8 @@ async function handleRequest(request, env) {
         "POST /internal/accounts/:user_id/flags/:flag_id/dismiss",
         "POST /internal/accounts/:user_id/review-outcome",
         "POST /api/account/preferences",
+        "GET /api/account/fantasy",
+        "PUT /api/account/fantasy",
         "GET /api/account/alerts",
         "POST /api/account/alerts/refresh",
         "POST /api/account/alerts/dispatch",
@@ -5501,6 +5634,19 @@ async function handleRequest(request, env) {
       return withCors(response, request, env);
     }
     response = await handleAccountPreferencesUpdate(request, env);
+    return withCors(response, request, env);
+  }
+
+  if (pathname === "/api/account/fantasy") {
+    if (request.method === "GET") {
+      response = await handleAccountFantasyState(request, env);
+      return withCors(response, request, env);
+    }
+    if (request.method === "PUT" || request.method === "POST") {
+      response = await handleAccountFantasyUpdate(request, env);
+      return withCors(response, request, env);
+    }
+    response = methodNotAllowed("GET,PUT,POST");
     return withCors(response, request, env);
   }
 

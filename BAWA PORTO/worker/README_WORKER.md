@@ -1,6 +1,6 @@
 # README_WORKER
 
-Updated: `2026-05-04`
+Updated: `2026-05-27`
 
 ## Purpose
 
@@ -13,7 +13,7 @@ Current status:
 - premium token route wired for developer/test issuance
 - premium route is token-protected and schema-filtered
 - magic-link request, verify, session, and logout now have a real first implementation
-- optional D1-backed account-state mirroring now exists for users, subscriptions, Telegram links, preferences, and auth events
+- optional D1-backed account-state mirroring now exists for users, subscriptions, Telegram links, preferences, auth events, and Fantasy workspace state
 - portal route remains a placeholder
 - transactional email delivery still requires provider secrets before production auth is fully live
 
@@ -30,6 +30,8 @@ Current status:
 - `GET /api/account/state`
 - `GET /api/account/alerts`
 - `POST /api/account/preferences`
+- `GET /api/account/fantasy`
+- `PUT /api/account/fantasy`
 - `POST /api/account/alerts/refresh`
 - `POST /api/account/alerts/dispatch`
 - `POST /api/account/telegram/link/start`
@@ -249,6 +251,14 @@ Current response metadata:
 - updates followed teams, leagues, markets, and fixtures
 - returns refreshed account state for the account page
 
+`GET /api/account/fantasy` / `PUT /api/account/fantasy`:
+
+- require a verified premium session
+- require `ACCOUNT_DB`
+- persist derived Fantasy workspace state against the signed-in account
+- store squad slots, saved gameweek plans, saved drafts, transfer history, watchlist, bench shortlist, locked targets, ignored players, bank, free transfers, gameweek, chip intent, strategy mode, and manager ID
+- keep the frontend contract derived-only: no raw official FPL data is exposed through the public static bundle
+
 `GET /api/account/alerts`:
 
 - requires a verified premium session
@@ -318,6 +328,7 @@ Initial schema lives at:
 - `worker/migrations/0001_account_state.sql`
 - `worker/migrations/0002_notification_preferences_expansion.sql`
 - `worker/migrations/0003_notification_alert_queue.sql`
+- `worker/migrations/0009_fpl_workspace_state.sql`
 
 Suggested setup once you create the D1 database in Cloudflare:
 

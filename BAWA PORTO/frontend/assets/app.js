@@ -97,6 +97,9 @@
       accountStateError: "",
       accountSessionsError: "",
       accountSessionsMessage: "",
+      fantasySyncStatus: "",
+      fantasySyncMessage: "",
+      fantasyServerUpdatedAt: "",
       demoAccount: null,
       dashboardClassFilter: "ALL",
       dashboardReasonFilter: "ALL",
@@ -511,6 +514,7 @@
     savedPlans: [],
     transferHistory: [],
     generatedPlanAt: "",
+    updatedAt: "",
     squad: payloadSquad,
     };
   };
@@ -533,6 +537,7 @@
       savedDrafts: Array.isArray(value.savedDrafts) ? value.savedDrafts.filter((item) => item?.id).slice(0, 8) : [],
       savedPlans: Array.isArray(value.savedPlans) ? value.savedPlans.filter((item) => item?.id).slice(0, 12) : [],
       transferHistory: Array.isArray(value.transferHistory) ? value.transferHistory.filter((item) => item?.id).slice(0, 40) : [],
+      updatedAt: String(value.updatedAt || value.updated_at || fallback.updatedAt || ""),
       clubFilter: String(value.clubFilter || fallback.clubFilter || "ALL"),
       ownershipFilter: String(value.ownershipFilter || fallback.ownershipFilter || "ALL"),
       fixtureFilter: String(value.fixtureFilter || fallback.fixtureFilter || "ALL"),
@@ -565,6 +570,68 @@
     } catch {
       return;
     }
+  };
+
+  const fantasyServerPayload = () => {
+    const fantasy = fantasyState();
+    return {
+      ruleset_name: "official_fpl_2026_27",
+      season: "2026/27",
+      gameweek: fantasy.gameweek,
+      manager_id: fantasy.teamId || "",
+      strategy_mode: fantasy.strategy,
+      bank_tenths: Math.round(Number(fantasy.bank || 0) * 10),
+      free_transfers: fantasy.freeTransfers,
+      chip_intent: fantasy.chipIntent,
+      squad: fantasy.squad,
+      saved_plans: fantasy.savedPlans,
+      saved_drafts: fantasy.savedDrafts,
+      transfer_history: fantasy.transferHistory,
+      watchlist: fantasy.watchlist,
+      bench_shortlist: fantasy.benchShortlist,
+      locked_targets: fantasy.lockedTargets,
+      ignored: fantasy.ignored,
+    };
+  };
+
+  const fantasyStateFromServerWorkspace = (workspace) => {
+    if (!workspace || typeof workspace !== "object") {
+      return null;
+    }
+    return normalizeFantasyState({
+      teamId: workspace.manager_id || workspace.managerId || "",
+      gameweek: workspace.gameweek,
+      strategy: workspace.strategy_mode || workspace.strategy,
+      bank: Number.isFinite(Number(workspace.bank_tenths)) ? Number(workspace.bank_tenths) / 10 : workspace.bank,
+      freeTransfers: workspace.free_transfers ?? workspace.freeTransfers,
+      chipIntent: workspace.chip_intent || workspace.chipIntent,
+      squad: workspace.squad,
+      savedPlans: workspace.saved_plans || workspace.savedPlans,
+      savedDrafts: workspace.saved_drafts || workspace.savedDrafts,
+      transferHistory: workspace.transfer_history || workspace.transferHistory,
+      watchlist: workspace.watchlist,
+      benchShortlist: workspace.bench_shortlist || workspace.benchShortlist,
+      lockedTargets: workspace.locked_targets || workspace.lockedTargets,
+      ignored: workspace.ignored,
+      updatedAt: workspace.updated_at || workspace.updatedAt || "",
+    });
+  };
+
+  const applyServerFantasyWorkspace = (workspace, { force = false } = {}) => {
+    const serverState = fantasyStateFromServerWorkspace(workspace);
+    if (!serverState) {
+      return false;
+    }
+    const localUpdatedAt = Date.parse(fantasyState().updatedAt || "");
+    const serverUpdatedAt = Date.parse(serverState.updatedAt || "");
+    const shouldApply = force || !Number.isFinite(localUpdatedAt) || (Number.isFinite(serverUpdatedAt) && serverUpdatedAt >= localUpdatedAt);
+    state.runtime.fantasyServerUpdatedAt = serverState.updatedAt || "";
+    if (shouldApply) {
+      state.runtime.fantasy = serverState;
+      writeFantasyState();
+      return true;
+    }
+    return false;
   };
 
   const paperSlipPickId = ({ fixtureKey, marketKey, pick }) =>
@@ -3494,8 +3561,16 @@
             <h2>Fantasy decision workspace</h2>
             <p class="section-copy">Your FPL command centre lives here once plans and drafts are saved: squad state, deadline plan, captaincy, transfer logic, chip posture, and rule checks.</p>
           </div>
-          <span class="pill">${escapeHtml(`${fantasy.savedPlans.length} plans · ${fantasy.savedDrafts.length} drafts`)}</span>
+          <div class="section-actions">
+            <span class="pill">${escapeHtml(`${fantasy.savedPlans.length} plans · ${fantasy.savedDrafts.length} drafts`)}</span>
+            <button class="ghost-button" type="button" data-action="sync-fantasy-workspace">Sync account</button>
+          </div>
         </div>
+        ${
+          state.runtime.fantasySyncMessage
+            ? `<div class="notice fantasy-sync-notice fantasy-sync-${escapeHtml(state.runtime.fantasySyncStatus || "local")}">${escapeHtml(state.runtime.fantasySyncMessage)}</div>`
+            : ""
+        }
         <div class="split fantasy-account-grid">
           <article class="panel fantasy-account-summary">
             <div class="fantasy-section-head">
@@ -3537,7 +3612,7 @@
             </div>
             ${
               paidReady
-                ? `<div class="notice">Premium account state is active. Saved plans can become server-synced once the Worker account endpoint is wired.</div>`
+                ? `<div class="notice">Premium account state is active. Sync keeps saved plans, drafts, watchlists, budget, chip intent, captaincy, and transfer history available across devices.</div>`
                 : `<div class="notice">Standard mode can preview the workspace. Founder/Premium unlocks personalised saved decision intelligence.</div>`
             }
           </article>
@@ -10562,7 +10637,11 @@
   };
 
   const fantasyUpdate = (patch = {}, message = "") => {
-    state.runtime.fantasy = normalizeFantasyState({ ...fantasyState(), ...patch, message });
+    state.runtime.fantasy = normalizeFantasyState({ ...fantasyState(), ...patch, message, updatedAt: new Date().toISOString() });
+    if (message) {
+      state.runtime.fantasySyncMessage = "Saved locally. Sync to account when you want it available on other devices.";
+      state.runtime.fantasySyncStatus = "local";
+    }
     writeFantasyState();
   };
 
@@ -11118,7 +11197,13 @@
             </label>
             <button class="button" type="button" data-action="fantasy-generate-plan">Generate gameweek plan</button>
             <button class="ghost-button" type="button" data-action="fantasy-save-plan">Save plan</button>
+            <button class="ghost-button" type="button" data-action="sync-fantasy-workspace">Sync account</button>
           </div>
+          ${
+            state.runtime.fantasySyncMessage
+              ? `<div class="notice fantasy-sync-notice fantasy-sync-${escapeHtml(state.runtime.fantasySyncStatus || "local")}">${escapeHtml(state.runtime.fantasySyncMessage)}</div>`
+              : ""
+          }
           <div class="fantasy-strategy-strip" aria-label="Strategy mode selector">
             ${FANTASY_STRATEGY_MODES
               .map((mode) => `<button class="${mode === fantasy.strategy ? "is-active" : ""}" type="button" data-action="fantasy-strategy" data-value="${escapeHtml(mode)}">${escapeHtml(mode)}</button>`)
@@ -14945,6 +15030,76 @@
     }
   };
 
+  const loadAccountFantasyWorkspace = async () => {
+    state.runtime.fantasySyncStatus = "";
+    if (demoAccountActive()) {
+      state.runtime.fantasySyncMessage = "Demo Fantasy workspace is stored in this browser.";
+      return;
+    }
+    if (!workerConfigured() || !state.runtime.sessionAuthenticated) {
+      return;
+    }
+    try {
+      const { response, payload } = await fetchWorkerJson("/api/account/fantasy", {
+        method: "GET",
+        withToken: true,
+      });
+      if (!response.ok || !payload?.ok) {
+        state.runtime.fantasySyncStatus = "error";
+        state.runtime.fantasySyncMessage = payload?.message || "Unable to load Fantasy workspace from account.";
+        return;
+      }
+      const applied = applyServerFantasyWorkspace(payload.fantasy_workspace);
+      state.runtime.fantasySyncStatus = applied ? "synced" : "local";
+      state.runtime.fantasySyncMessage = payload.fantasy_workspace
+        ? applied
+          ? "Fantasy workspace loaded from your account."
+          : "This browser has a newer Fantasy workspace. Sync it to update your account."
+        : "No account Fantasy workspace yet. Save a plan or draft, then sync it.";
+    } catch (error) {
+      state.runtime.fantasySyncStatus = "error";
+      state.runtime.fantasySyncMessage = error.message || "Unable to load Fantasy workspace from account.";
+    }
+  };
+
+  const saveAccountFantasyWorkspace = async ({ renderAfter = true } = {}) => {
+    if (demoAccountActive()) {
+      state.runtime.fantasySyncStatus = "local";
+      state.runtime.fantasySyncMessage = "Demo Fantasy workspace is stored in this browser.";
+      if (renderAfter) render();
+      return false;
+    }
+    if (!workerConfigured() || !state.runtime.sessionAuthenticated) {
+      state.runtime.fantasySyncStatus = "local";
+      state.runtime.fantasySyncMessage = "Sign in to sync Fantasy plans and drafts across devices.";
+      if (renderAfter) render();
+      return false;
+    }
+    state.runtime.fantasySyncStatus = "saving";
+    state.runtime.fantasySyncMessage = "Syncing Fantasy workspace to your account…";
+    if (renderAfter) render();
+    try {
+      const { response, payload } = await fetchWorkerJson("/api/account/fantasy", {
+        method: "PUT",
+        withToken: true,
+        body: fantasyServerPayload(),
+      });
+      if (!response.ok || !payload?.ok) {
+        throw new Error(payload?.message || "Unable to sync Fantasy workspace.");
+      }
+      applyServerFantasyWorkspace(payload.fantasy_workspace, { force: true });
+      state.runtime.fantasySyncStatus = "synced";
+      state.runtime.fantasySyncMessage = payload.message || "Fantasy workspace synced to your account.";
+      if (renderAfter) render();
+      return true;
+    } catch (error) {
+      state.runtime.fantasySyncStatus = "error";
+      state.runtime.fantasySyncMessage = error.message || "Unable to sync Fantasy workspace.";
+      if (renderAfter) render();
+      return false;
+    }
+  };
+
   const loadAccountSessions = async () => {
     if (demoAccountActive()) {
       applyDemoAccountRuntime(currentDemoTier());
@@ -14987,6 +15142,7 @@
     await loadAccountState();
     await loadAccountSessions();
     await loadAccountAlerts();
+    await loadAccountFantasyWorkspace();
   };
 
   const loadAccountAlerts = async () => {
@@ -16377,6 +16533,7 @@
     if (fantasyApplyTransferTarget) {
       event.preventDefault();
       fantasyApplyTransfer();
+      await saveAccountFantasyWorkspace({ renderAfter: false });
       render();
       return;
     }
@@ -16393,6 +16550,15 @@
     if (fantasySavePlanTarget) {
       event.preventDefault();
       fantasySaveGameweekPlan();
+      await saveAccountFantasyWorkspace({ renderAfter: false });
+      render();
+      return;
+    }
+
+    const fantasySyncTarget = event.target.closest("[data-action='sync-fantasy-workspace']");
+    if (fantasySyncTarget) {
+      event.preventDefault();
+      await saveAccountFantasyWorkspace();
       render();
       return;
     }
@@ -16411,6 +16577,7 @@
     if (fantasyRemovePlanTarget) {
       event.preventDefault();
       fantasyRemoveSavedPlan(fantasyRemovePlanTarget.dataset.planId);
+      await saveAccountFantasyWorkspace({ renderAfter: false });
       render();
       return;
     }
@@ -16419,6 +16586,7 @@
     if (fantasyLoadDraftTarget) {
       event.preventDefault();
       fantasyLoadSavedDraft(fantasyLoadDraftTarget.dataset.draftId);
+      await saveAccountFantasyWorkspace({ renderAfter: false });
       render();
       return;
     }
@@ -16427,6 +16595,7 @@
     if (fantasyRemoveDraftTarget) {
       event.preventDefault();
       fantasyRemoveSavedDraft(fantasyRemoveDraftTarget.dataset.draftId);
+      await saveAccountFantasyWorkspace({ renderAfter: false });
       render();
       return;
     }
@@ -16435,6 +16604,7 @@
     if (fantasySaveDraftTarget) {
       event.preventDefault();
       fantasySaveDraft();
+      await saveAccountFantasyWorkspace({ renderAfter: false });
       render();
       return;
     }
@@ -16800,6 +16970,7 @@
       event.preventDefault();
       const formData = new FormData(event.target);
       await importFantasySquadFromTeamId(formData.get("team_id"));
+      await saveAccountFantasyWorkspace({ renderAfter: false });
       render();
       return;
     }
@@ -16925,6 +17096,7 @@
       await loadSelectedFixtureLineupIntelligence();
       await loadSelectedFixtureDecisionIntelligence();
       await loadProtectedPremiumPredictions();
+      await loadAccountFantasyWorkspace();
       render();
     } catch (error) {
       renderError(error);

@@ -77,6 +77,109 @@ const buildDefaultNotificationPreferences = (userId, existing = {}) => {
   };
 };
 
+const FANTASY_STRATEGY_MODES = ["balanced", "protect_rank", "chase_rank", "aggressive", "value"];
+const FANTASY_CHIP_INTENTS = ["NONE", "BENCH_BOOST", "FREE_HIT", "TRIPLE_CAPTAIN", "WILDCARD"];
+
+const normalizeFantasyJsonList = (value, limit = 24) => {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+  return value
+    .filter((item) => item && typeof item === "object")
+    .map((item) => ({ ...item }))
+    .slice(0, limit);
+};
+
+const normalizeFantasyIdList = (value, limit = 80) => {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+  return Array.from(new Set(value.map((item) => String(item || "").trim()).filter(Boolean))).slice(0, limit);
+};
+
+const normalizeFantasySquad = (value) => {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+  return value
+    .filter((slot) => slot && typeof slot === "object" && String(slot.id || "").trim())
+    .map((slot) => ({
+      id: String(slot.id || "").trim(),
+      role: slot.role === "bench" ? "bench" : "starter",
+      benchOrder: Number.isFinite(Number(slot.benchOrder)) ? Math.max(0, Math.floor(Number(slot.benchOrder))) : 0,
+      captain: Boolean(slot.captain),
+      vice: Boolean(slot.vice),
+      purchasePrice: Number.isFinite(Number(slot.purchasePrice)) ? Number(slot.purchasePrice) : undefined,
+      currentPrice: Number.isFinite(Number(slot.currentPrice)) ? Number(slot.currentPrice) : undefined,
+    }))
+    .slice(0, 15);
+};
+
+const fantasyWorkspaceFromRow = (row) => {
+  if (!row) {
+    return null;
+  }
+  return {
+    user_id: row.user_id,
+    ruleset_name: row.ruleset_name || "official_fpl_2026_27",
+    season: row.season || "2026/27",
+    gameweek: row.gameweek ?? null,
+    manager_id: row.manager_id || "",
+    strategy_mode: row.strategy_mode || "balanced",
+    bank_tenths: row.bank_tenths ?? 0,
+    free_transfers: row.free_transfers ?? 1,
+    chip_intent: row.chip_intent || "NONE",
+    squad: fromJson(row.squad_json, []),
+    saved_plans: fromJson(row.saved_plans_json, []),
+    saved_drafts: fromJson(row.saved_drafts_json, []),
+    transfer_history: fromJson(row.transfer_history_json, []),
+    watchlist: fromJson(row.watchlist_json, []),
+    bench_shortlist: fromJson(row.bench_shortlist_json, []),
+    locked_targets: fromJson(row.locked_targets_json, []),
+    ignored: fromJson(row.ignored_json, []),
+    updated_at: row.updated_at || null,
+  };
+};
+
+const buildFantasyWorkspacePayload = (userId, input = {}, existing = {}) => {
+  const now = isoNow();
+  const strategyMode = FANTASY_STRATEGY_MODES.includes(String(input.strategy_mode || input.strategy || ""))
+    ? String(input.strategy_mode || input.strategy)
+    : existing.strategy_mode || "balanced";
+  const chipIntent = FANTASY_CHIP_INTENTS.includes(String(input.chip_intent || input.chipIntent || "").toUpperCase())
+    ? String(input.chip_intent || input.chipIntent).toUpperCase()
+    : existing.chip_intent || "NONE";
+  const gameweek = Number(input.gameweek ?? existing.gameweek ?? 1);
+  const bankTenths = Number.isFinite(Number(input.bank_tenths))
+    ? Math.round(Number(input.bank_tenths))
+    : Number.isFinite(Number(input.bank))
+      ? Math.round(Number(input.bank) * 10)
+      : Number(existing.bank_tenths ?? 0);
+  const freeTransfers = Number(input.free_transfers ?? input.freeTransfers ?? existing.free_transfers ?? 1);
+  return {
+    user_id: userId,
+    ruleset_name: String(input.ruleset_name || input.rulesetName || existing.ruleset_name || "official_fpl_2026_27").slice(0, 80),
+    season: String(input.season || existing.season || "2026/27").slice(0, 24),
+    gameweek: Number.isFinite(gameweek) ? Math.max(1, Math.min(38, Math.floor(gameweek))) : 1,
+    manager_id: String(input.manager_id || input.managerId || input.teamId || existing.manager_id || "").slice(0, 64),
+    strategy_mode: strategyMode,
+    bank_tenths: Number.isFinite(bankTenths) ? Math.max(0, Math.min(2000, bankTenths)) : 0,
+    free_transfers: Number.isFinite(freeTransfers) ? Math.max(0, Math.min(5, Math.floor(freeTransfers))) : 1,
+    chip_intent: chipIntent,
+    squad_json: toJson(normalizeFantasySquad(input.squad ?? fromJson(existing.squad_json, []))),
+    saved_plans_json: toJson(normalizeFantasyJsonList(input.saved_plans ?? input.savedPlans ?? fromJson(existing.saved_plans_json, []), 12)),
+    saved_drafts_json: toJson(normalizeFantasyJsonList(input.saved_drafts ?? input.savedDrafts ?? fromJson(existing.saved_drafts_json, []), 8)),
+    transfer_history_json: toJson(
+      normalizeFantasyJsonList(input.transfer_history ?? input.transferHistory ?? fromJson(existing.transfer_history_json, []), 40)
+    ),
+    watchlist_json: toJson(normalizeFantasyIdList(input.watchlist ?? fromJson(existing.watchlist_json, []), 80)),
+    bench_shortlist_json: toJson(normalizeFantasyIdList(input.bench_shortlist ?? input.benchShortlist ?? fromJson(existing.bench_shortlist_json, []), 40)),
+    locked_targets_json: toJson(normalizeFantasyIdList(input.locked_targets ?? input.lockedTargets ?? fromJson(existing.locked_targets_json, []), 40)),
+    ignored_json: toJson(normalizeFantasyIdList(input.ignored ?? fromJson(existing.ignored_json, []), 80)),
+    updated_at: now,
+  };
+};
+
 const callMaybeMock = async (db, op, args, sqlRunner) => {
   if (db && typeof db.__ogCall === "function") {
     return db.__ogCall(op, args);
@@ -1244,6 +1347,112 @@ export async function getAccountStateByUserId(db, userId) {
     return null;
   }
   return getAccountStateByEmail(db, user.email_normalized);
+}
+
+export async function getFantasyWorkspaceState(db, userId) {
+  if (!db || !userId) {
+    return null;
+  }
+  const row = await callMaybeMock(
+    db,
+    "get_fantasy_workspace_state",
+    { user_id: userId },
+    () =>
+      first(
+        db,
+        `-- og:get_fantasy_workspace_state
+        SELECT user_id, ruleset_name, season, gameweek, manager_id, strategy_mode,
+               bank_tenths, free_transfers, chip_intent, squad_json, saved_plans_json,
+               saved_drafts_json, transfer_history_json, watchlist_json, bench_shortlist_json,
+               locked_targets_json, ignored_json, updated_at
+        FROM fpl_workspace_state
+        WHERE user_id = ?1
+        LIMIT 1`,
+        [userId]
+      )
+  );
+  return fantasyWorkspaceFromRow(row);
+}
+
+export async function upsertFantasyWorkspaceState(db, userId, input = {}) {
+  if (!db || !userId) {
+    return null;
+  }
+  const existing = await callMaybeMock(
+    db,
+    "get_fantasy_workspace_state",
+    { user_id: userId },
+    () =>
+      first(
+        db,
+        `-- og:get_fantasy_workspace_state
+        SELECT user_id, ruleset_name, season, gameweek, manager_id, strategy_mode,
+               bank_tenths, free_transfers, chip_intent, squad_json, saved_plans_json,
+               saved_drafts_json, transfer_history_json, watchlist_json, bench_shortlist_json,
+               locked_targets_json, ignored_json, updated_at
+        FROM fpl_workspace_state
+        WHERE user_id = ?1
+        LIMIT 1`,
+        [userId]
+      )
+  );
+  const payload = buildFantasyWorkspacePayload(userId, input || {}, existing || {});
+  await callMaybeMock(
+    db,
+    "upsert_fantasy_workspace_state",
+    payload,
+    () =>
+      run(
+        db,
+        `-- og:upsert_fantasy_workspace_state
+        INSERT INTO fpl_workspace_state (
+          user_id, ruleset_name, season, gameweek, manager_id, strategy_mode,
+          bank_tenths, free_transfers, chip_intent, squad_json, saved_plans_json,
+          saved_drafts_json, transfer_history_json, watchlist_json, bench_shortlist_json,
+          locked_targets_json, ignored_json, updated_at
+        )
+        VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18)
+        ON CONFLICT(user_id) DO UPDATE SET
+          ruleset_name = excluded.ruleset_name,
+          season = excluded.season,
+          gameweek = excluded.gameweek,
+          manager_id = excluded.manager_id,
+          strategy_mode = excluded.strategy_mode,
+          bank_tenths = excluded.bank_tenths,
+          free_transfers = excluded.free_transfers,
+          chip_intent = excluded.chip_intent,
+          squad_json = excluded.squad_json,
+          saved_plans_json = excluded.saved_plans_json,
+          saved_drafts_json = excluded.saved_drafts_json,
+          transfer_history_json = excluded.transfer_history_json,
+          watchlist_json = excluded.watchlist_json,
+          bench_shortlist_json = excluded.bench_shortlist_json,
+          locked_targets_json = excluded.locked_targets_json,
+          ignored_json = excluded.ignored_json,
+          updated_at = excluded.updated_at`,
+        [
+          payload.user_id,
+          payload.ruleset_name,
+          payload.season,
+          payload.gameweek,
+          payload.manager_id,
+          payload.strategy_mode,
+          payload.bank_tenths,
+          payload.free_transfers,
+          payload.chip_intent,
+          payload.squad_json,
+          payload.saved_plans_json,
+          payload.saved_drafts_json,
+          payload.transfer_history_json,
+          payload.watchlist_json,
+          payload.bench_shortlist_json,
+          payload.locked_targets_json,
+          payload.ignored_json,
+          payload.updated_at,
+        ]
+      )
+  );
+  return getFantasyWorkspaceState(db, userId);
 }
 
 export async function updateNotificationPreferences(db, userId, input = {}) {

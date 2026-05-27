@@ -129,6 +129,7 @@ class MockD1 {
     this.accountRiskStates = [];
     this.accountRiskFlags = [];
     this.accountAdminNotes = [];
+    this.fantasyWorkspaceStates = [];
   }
 
   prepare() {
@@ -323,6 +324,17 @@ class MockD1 {
         );
       case "get_notification_preferences":
         return this.notificationPreferences.find((row) => row.user_id === args.user_id) || null;
+      case "get_fantasy_workspace_state":
+        return this.fantasyWorkspaceStates.find((row) => row.user_id === args.user_id) || null;
+      case "upsert_fantasy_workspace_state": {
+        const existing = this.fantasyWorkspaceStates.find((row) => row.user_id === args.user_id);
+        if (existing) {
+          Object.assign(existing, args);
+        } else {
+          this.fantasyWorkspaceStates.push({ ...args });
+        }
+        return { success: true };
+      }
       case "revoke_telegram_links_for_user":
         this.telegramLinks = this.telegramLinks.map((row) =>
           row.user_id === args.user_id && row.link_status !== "revoked"
@@ -2455,6 +2467,89 @@ const testAccountPreferencesUpdate = async (fetchHarness) => {
   assert.deepEqual(prefsPayload.account.notification_preferences.favourite_markets, ["BTTS", "OU25"]);
 };
 
+const testAccountFantasyWorkspacePersistence = async (fetchHarness) => {
+  const env = createEnv();
+  await writeSubscriberRecord(
+    env,
+    buildSubscriberRecord({
+      email: "fantasy@example.com",
+    })
+  );
+
+  const requestResponse = await worker.fetch(
+    jsonRequest("http://localhost/api/auth/magic-link/request", "POST", {
+      email: "fantasy@example.com",
+    }),
+    env
+  );
+  assert.equal(requestResponse.status, 200);
+  const emailBody = fetchHarness.sentEmails.at(-1);
+  const verifyMatch = String(emailBody?.html || "").match(/verify\?token=([^"&]+)/);
+  assert.ok(verifyMatch?.[1], "expected magic-link token in email body");
+  const token = decodeURIComponent(verifyMatch[1]);
+
+  const tokenResponse = await worker.fetch(
+    makeGetRequest(`http://localhost/api/auth/magic-link/verify?token=${encodeURIComponent(token)}`),
+    env
+  );
+  const sessionCookie = extractCookieValue(tokenResponse.headers.get("set-cookie"), "og_premium_session");
+  assert.ok(sessionCookie, "expected premium session cookie after verify");
+
+  const saveResponse = await worker.fetch(
+    jsonRequest(
+      "http://localhost/api/account/fantasy",
+      "PUT",
+      {
+        ruleset_name: "official_fpl_2026_27",
+        season: "2026/27",
+        gameweek: 4,
+        manager_id: "1234567",
+        strategy_mode: "chase_rank",
+        bank_tenths: 15,
+        free_transfers: 2,
+        chip_intent: "NONE",
+        squad: [
+          { id: "salah", role: "starter", captain: true, vice: false, benchOrder: 0 },
+          { id: "haaland", role: "starter", captain: false, vice: true, benchOrder: 0 },
+        ],
+        saved_plans: [{ id: "plan_1", gameweek: 4, transfer: "Roll / watch" }],
+        saved_drafts: [{ id: "draft_1", name: "Safe draft" }],
+        transfer_history: [{ id: "transfer_1", outgoing: "Foden", incoming: "Eze" }],
+        watchlist: ["eze", "palmer"],
+        bench_shortlist: ["rogers"],
+        locked_targets: ["saka"],
+        ignored: ["trap_player"],
+      },
+      {
+        cookie: `og_premium_session=${sessionCookie}`,
+      }
+    ),
+    env
+  );
+  const savePayload = await saveResponse.json();
+  assert.equal(saveResponse.status, 200);
+  assert.equal(savePayload.status, "fantasy_workspace_saved");
+  assert.equal(savePayload.fantasy_workspace.gameweek, 4);
+  assert.equal(savePayload.fantasy_workspace.strategy_mode, "chase_rank");
+  assert.equal(savePayload.fantasy_workspace.saved_plans.length, 1);
+  assert.equal(savePayload.fantasy_workspace.saved_drafts.length, 1);
+  assert.deepEqual(savePayload.fantasy_workspace.watchlist, ["eze", "palmer"]);
+
+  const loadResponse = await worker.fetch(
+    makeGetRequest("http://localhost/api/account/fantasy", {
+      cookie: `og_premium_session=${sessionCookie}`,
+    }),
+    env
+  );
+  const loadPayload = await loadResponse.json();
+  assert.equal(loadResponse.status, 200);
+  assert.equal(loadPayload.status, "fantasy_workspace_loaded");
+  assert.equal(loadPayload.fantasy_workspace.manager_id, "1234567");
+  assert.equal(loadPayload.fantasy_workspace.bank_tenths, 15);
+  assert.equal(loadPayload.fantasy_workspace.transfer_history.length, 1);
+  assert.equal(env.ACCOUNT_DB.authEvents.some((row) => row.event_type === "fantasy_workspace_updated"), true);
+};
+
 const testAccountAlertsQueueAndDispatch = async (fetchHarness) => {
   const env = createEnv();
   await writeSubscriberRecord(
@@ -2801,6 +2896,7 @@ const main = async () => {
     await testTelegramTestAlertRoute(fetchHarness);
     await testTelegramFixtureAlertRoute(fetchHarness);
     await testAccountPreferencesUpdate(fetchHarness);
+    await testAccountFantasyWorkspacePersistence(fetchHarness);
     await testAccountAlertsQueueAndDispatch(fetchHarness);
     await testWidgetStandingsProxy(fetchHarness);
     await testWidgetFixtureLookupProxy(fetchHarness);
@@ -2832,6 +2928,7 @@ const main = async () => {
     console.log("- Telegram test alert route: passed");
     console.log("- Telegram fixture alert route: passed");
     console.log("- Account preferences update route: passed");
+    console.log("- Fantasy workspace account persistence route: passed");
     console.log("- account alerts queue + dispatch routes: passed");
     console.log("- widget standings proxy cache path: passed");
     console.log("- widget fixture lookup proxy cache path: passed");

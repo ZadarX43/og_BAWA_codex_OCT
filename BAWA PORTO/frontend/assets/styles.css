@@ -3618,6 +3618,23 @@ tbody tr:hover {
   gap: 18px;
 }
 
+.fantasy-sync-notice {
+  margin-bottom: 16px;
+}
+
+.fantasy-sync-synced {
+  border-color: rgba(138, 247, 185, 0.34);
+}
+
+.fantasy-sync-saving,
+.fantasy-sync-local {
+  border-color: rgba(111, 210, 225, 0.34);
+}
+
+.fantasy-sync-error {
+  border-color: rgba(255, 150, 107, 0.42);
+}
+
 .fantasy-draft-grid strong,
 .fantasy-draft-grid span,
 .fantasy-draft-grid small {
