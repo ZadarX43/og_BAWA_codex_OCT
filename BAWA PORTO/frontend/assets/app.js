@@ -11232,11 +11232,6 @@
               <button class="ghost-button" type="button" data-action="fantasy-save-plan">Save plan</button>
               <button class="ghost-button" type="button" data-action="sync-fantasy-workspace">Sync account</button>
             </div>
-            ${
-              state.runtime.fantasySyncMessage
-                ? `<div class="notice fantasy-sync-notice fantasy-sync-${escapeHtml(state.runtime.fantasySyncStatus || "local")}">${escapeHtml(syncCopy)}</div>`
-                : ""
-            }
             <div class="fantasy-strategy-strip" aria-label="Strategy mode selector">
               ${FANTASY_STRATEGY_MODES
                 .map((mode) => `<button class="${mode === fantasy.strategy ? "is-active" : ""}" type="button" data-action="fantasy-strategy" data-value="${escapeHtml(mode)}">${escapeHtml(mode)}</button>`)
@@ -11248,6 +11243,11 @@
             </div>
             ${fantasy.message ? `<div class="notice">${escapeHtml(fantasy.message)}</div>` : ""}
           </details>
+          ${
+            state.runtime.fantasySyncMessage
+              ? `<div class="notice fantasy-sync-notice fantasy-sync-${escapeHtml(state.runtime.fantasySyncStatus || "local")}">${escapeHtml(syncCopy)}</div>`
+              : ""
+          }
         </article>
       </section>
 
