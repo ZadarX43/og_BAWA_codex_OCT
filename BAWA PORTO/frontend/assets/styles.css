@@ -3538,6 +3538,54 @@ tbody tr:hover {
   background: rgba(255, 255, 255, 0.035);
 }
 
+.fantasy-transfer-builder.is-open {
+  border-color: rgba(138, 247, 185, 0.32);
+  box-shadow: 0 0 0 1px rgba(138, 247, 185, 0.08), 0 18px 44px rgba(0, 0, 0, 0.24);
+}
+
+.fantasy-transfer-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.fantasy-transfer-steps article {
+  display: grid;
+  gap: 5px;
+  padding: 12px;
+  border: 1px solid rgba(213, 232, 222, 0.12);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.fantasy-transfer-steps span {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(138, 247, 185, 0.16);
+  color: var(--signal-mint);
+  font-weight: 950;
+}
+
+.fantasy-transfer-steps p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.fantasy-builder-label {
+  color: rgba(233, 246, 241, 0.92);
+}
+
+.fantasy-builder-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 .fantasy-selected-player {
   border-color: rgba(116, 232, 213, 0.22);
 }
@@ -3754,6 +3802,18 @@ tbody tr:hover {
 .fantasy-account-grid {
   margin-top: 16px;
   align-items: start;
+}
+
+.fantasy-account-review {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.fantasy-account-review .panel {
+  display: grid;
+  gap: 10px;
 }
 
 .fantasy-account-summary {
@@ -9424,6 +9484,8 @@ code {
   .fantasy-draft-grid,
   .fantasy-import-row,
   .fantasy-impact-grid,
+  .fantasy-transfer-steps,
+  .fantasy-account-review,
   .fantasy-sell-options,
   .fantasy-secondary-actions,
   .fantasy-chip-grid {
@@ -9443,13 +9505,37 @@ code {
   .fantasy-player-card,
   .fantasy-bench-grid .fantasy-player-card {
     width: 100%;
-    min-height: 118px;
+    min-height: 104px;
+    padding: 9px;
+    border-radius: 14px;
+    gap: 4px;
   }
 
   .fantasy-pitch-players,
   .fantasy-bench-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px;
+  }
+
+  .fantasy-player-top span {
+    min-width: 22px;
+    min-height: 22px;
+    font-size: 0.64rem;
+  }
+
+  .fantasy-player-card b {
+    font-size: 0.82rem;
+  }
+
+  .fantasy-player-card > span:not(.fantasy-player-top):not(.fantasy-player-metrics),
+  .fantasy-player-card small {
+    font-size: 0.68rem;
+  }
+
+  .fantasy-player-card em {
+    padding: 3px 6px;
+    font-size: 0.56rem;
   }
 
   .fantasy-player-actions {

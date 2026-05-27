@@ -659,6 +659,8 @@ const installMockFetch = () => {
     telegramSendFetches: 0,
     widgetStandingsFetches: 0,
     widgetFixtureLookupFetches: 0,
+    fplBootstrapFetches: 0,
+    fplPicksFetches: 0,
     stripeCheckoutFetches: 0,
     stripePortalFetches: 0,
     stripeSubscriptionFetches: 0,
@@ -759,6 +761,46 @@ const installMockFetch = () => {
           headers: {
             "content-type": "application/json; charset=utf-8",
           },
+        }
+      );
+    }
+
+    if (url === "https://fantasy.premierleague.com/api/bootstrap-static/") {
+      counters.fplBootstrapFetches += 1;
+      return new Response(
+        JSON.stringify({
+          events: [{ id: 4, is_current: true }],
+          teams: [{ id: 1, name: "Arsenal", short_name: "ARS" }],
+          elements: [
+            {
+              id: 301,
+              web_name: "Saka",
+              element_type: 3,
+              team: 1,
+              now_cost: 98,
+              chance_of_playing_this_round: 92,
+              news: "",
+            },
+          ],
+        }),
+        {
+          status: 200,
+          headers: { "content-type": "application/json; charset=utf-8" },
+        }
+      );
+    }
+
+    if (url === "https://fantasy.premierleague.com/api/entry/1234567/event/4/picks/") {
+      counters.fplPicksFetches += 1;
+      return new Response(
+        JSON.stringify({
+          picks: [{ element: 301, position: 5, multiplier: 1, is_captain: false, is_vice_captain: true }],
+          entry_history: { bank: 15 },
+          transfers: { limit: 2 },
+        }),
+        {
+          status: 200,
+          headers: { "content-type": "application/json; charset=utf-8" },
         }
       );
     }
@@ -2515,6 +2557,7 @@ const testAccountFantasyWorkspacePersistence = async (fetchHarness) => {
         saved_plans: [{ id: "plan_1", gameweek: 4, transfer: "Roll / watch" }],
         saved_drafts: [{ id: "draft_1", name: "Safe draft" }],
         transfer_history: [{ id: "transfer_1", outgoing: "Foden", incoming: "Eze" }],
+        imported_players: [{ id: "fpl_1", fplPlayerId: "1", name: "Imported Player", position: "MID", club: "ARS" }],
         watchlist: ["eze", "palmer"],
         bench_shortlist: ["rogers"],
         locked_targets: ["saka"],
@@ -2533,6 +2576,7 @@ const testAccountFantasyWorkspacePersistence = async (fetchHarness) => {
   assert.equal(savePayload.fantasy_workspace.strategy_mode, "chase_rank");
   assert.equal(savePayload.fantasy_workspace.saved_plans.length, 1);
   assert.equal(savePayload.fantasy_workspace.saved_drafts.length, 1);
+  assert.equal(savePayload.fantasy_workspace.imported_players.length, 1);
   assert.deepEqual(savePayload.fantasy_workspace.watchlist, ["eze", "palmer"]);
 
   const loadResponse = await worker.fetch(
@@ -2547,6 +2591,7 @@ const testAccountFantasyWorkspacePersistence = async (fetchHarness) => {
   assert.equal(loadPayload.fantasy_workspace.manager_id, "1234567");
   assert.equal(loadPayload.fantasy_workspace.bank_tenths, 15);
   assert.equal(loadPayload.fantasy_workspace.transfer_history.length, 1);
+  assert.equal(loadPayload.fantasy_workspace.imported_players[0].id, "fpl_1");
   assert.equal(env.ACCOUNT_DB.authEvents.some((row) => row.event_type === "fantasy_workspace_updated"), true);
 };
 
@@ -2787,6 +2832,22 @@ const testWidgetFixtureLookupProxy = async (fetchHarness) => {
   assert.equal(fetchHarness.counters.widgetFixtureLookupFetches, 1);
 };
 
+const testFplManagerSquadImportProxy = async (fetchHarness) => {
+  const env = createEnv();
+  const response = await worker.fetch(makeGetRequest("http://localhost/api/fpl/manager/1234567/squad"), env);
+  const payload = await response.json();
+  assert.equal(response.status, 200);
+  assert.equal(payload.source, "official_fpl");
+  assert.equal(payload.manager_id, "1234567");
+  assert.equal(payload.bank, 1.5);
+  assert.equal(payload.free_transfers, 2);
+  assert.equal(payload.squad[0].fpl_player_id, "301");
+  assert.equal(payload.squad[0].name, "Saka");
+  assert.equal(payload.squad[0].position, "MID");
+  assert.equal(fetchHarness.counters.fplBootstrapFetches, 1);
+  assert.equal(fetchHarness.counters.fplPicksFetches, 1);
+};
+
 const testAnalystLeagueMarketDeployStaysWebsiteOnly = async (fetchHarness) => {
   const env = createEnv();
   await writeSubscriberRecord(
@@ -2900,6 +2961,7 @@ const main = async () => {
     await testAccountAlertsQueueAndDispatch(fetchHarness);
     await testWidgetStandingsProxy(fetchHarness);
     await testWidgetFixtureLookupProxy(fetchHarness);
+    await testFplManagerSquadImportProxy(fetchHarness);
     await testMarketOnlyObserveDoesNotAutoQueue(fetchHarness);
     await testAnalystLeagueMarketDeployStaysWebsiteOnly(fetchHarness);
     await testStripeCheckoutSmoke(fetchHarness);
@@ -2932,6 +2994,7 @@ const main = async () => {
     console.log("- account alerts queue + dispatch routes: passed");
     console.log("- widget standings proxy cache path: passed");
     console.log("- widget fixture lookup proxy cache path: passed");
+    console.log("- FPL manager squad import proxy: passed");
     console.log("- market-only observe suppression: passed");
     console.log("- analyst league+market deploy stays website-only: passed");
     console.log("- Stripe checkout smoke path: passed");

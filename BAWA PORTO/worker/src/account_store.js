@@ -133,6 +133,7 @@ const fantasyWorkspaceFromRow = (row) => {
     saved_plans: fromJson(row.saved_plans_json, []),
     saved_drafts: fromJson(row.saved_drafts_json, []),
     transfer_history: fromJson(row.transfer_history_json, []),
+    imported_players: fromJson(row.imported_players_json, []),
     watchlist: fromJson(row.watchlist_json, []),
     bench_shortlist: fromJson(row.bench_shortlist_json, []),
     locked_targets: fromJson(row.locked_targets_json, []),
@@ -171,6 +172,9 @@ const buildFantasyWorkspacePayload = (userId, input = {}, existing = {}) => {
     saved_drafts_json: toJson(normalizeFantasyJsonList(input.saved_drafts ?? input.savedDrafts ?? fromJson(existing.saved_drafts_json, []), 8)),
     transfer_history_json: toJson(
       normalizeFantasyJsonList(input.transfer_history ?? input.transferHistory ?? fromJson(existing.transfer_history_json, []), 40)
+    ),
+    imported_players_json: toJson(
+      normalizeFantasyJsonList(input.imported_players ?? input.importedPlayers ?? fromJson(existing.imported_players_json, []), 120)
     ),
     watchlist_json: toJson(normalizeFantasyIdList(input.watchlist ?? fromJson(existing.watchlist_json, []), 80)),
     bench_shortlist_json: toJson(normalizeFantasyIdList(input.bench_shortlist ?? input.benchShortlist ?? fromJson(existing.bench_shortlist_json, []), 40)),
@@ -1363,8 +1367,8 @@ export async function getFantasyWorkspaceState(db, userId) {
         `-- og:get_fantasy_workspace_state
         SELECT user_id, ruleset_name, season, gameweek, manager_id, strategy_mode,
                bank_tenths, free_transfers, chip_intent, squad_json, saved_plans_json,
-               saved_drafts_json, transfer_history_json, watchlist_json, bench_shortlist_json,
-               locked_targets_json, ignored_json, updated_at
+               saved_drafts_json, transfer_history_json, imported_players_json, watchlist_json,
+               bench_shortlist_json, locked_targets_json, ignored_json, updated_at
         FROM fpl_workspace_state
         WHERE user_id = ?1
         LIMIT 1`,
@@ -1388,8 +1392,8 @@ export async function upsertFantasyWorkspaceState(db, userId, input = {}) {
         `-- og:get_fantasy_workspace_state
         SELECT user_id, ruleset_name, season, gameweek, manager_id, strategy_mode,
                bank_tenths, free_transfers, chip_intent, squad_json, saved_plans_json,
-               saved_drafts_json, transfer_history_json, watchlist_json, bench_shortlist_json,
-               locked_targets_json, ignored_json, updated_at
+               saved_drafts_json, transfer_history_json, imported_players_json, watchlist_json,
+               bench_shortlist_json, locked_targets_json, ignored_json, updated_at
         FROM fpl_workspace_state
         WHERE user_id = ?1
         LIMIT 1`,
@@ -1408,10 +1412,10 @@ export async function upsertFantasyWorkspaceState(db, userId, input = {}) {
         INSERT INTO fpl_workspace_state (
           user_id, ruleset_name, season, gameweek, manager_id, strategy_mode,
           bank_tenths, free_transfers, chip_intent, squad_json, saved_plans_json,
-          saved_drafts_json, transfer_history_json, watchlist_json, bench_shortlist_json,
-          locked_targets_json, ignored_json, updated_at
+          saved_drafts_json, transfer_history_json, imported_players_json, watchlist_json,
+          bench_shortlist_json, locked_targets_json, ignored_json, updated_at
         )
-        VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18)
+        VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19)
         ON CONFLICT(user_id) DO UPDATE SET
           ruleset_name = excluded.ruleset_name,
           season = excluded.season,
@@ -1425,6 +1429,7 @@ export async function upsertFantasyWorkspaceState(db, userId, input = {}) {
           saved_plans_json = excluded.saved_plans_json,
           saved_drafts_json = excluded.saved_drafts_json,
           transfer_history_json = excluded.transfer_history_json,
+          imported_players_json = excluded.imported_players_json,
           watchlist_json = excluded.watchlist_json,
           bench_shortlist_json = excluded.bench_shortlist_json,
           locked_targets_json = excluded.locked_targets_json,
@@ -1444,6 +1449,7 @@ export async function upsertFantasyWorkspaceState(db, userId, input = {}) {
           payload.saved_plans_json,
           payload.saved_drafts_json,
           payload.transfer_history_json,
+          payload.imported_players_json,
           payload.watchlist_json,
           payload.bench_shortlist_json,
           payload.locked_targets_json,
