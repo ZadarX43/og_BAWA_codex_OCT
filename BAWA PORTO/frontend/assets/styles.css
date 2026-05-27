@@ -3108,12 +3108,6 @@ tbody tr:hover {
   line-height: 1.45;
 }
 
-.fantasy-hero .hero-main {
-  background:
-    linear-gradient(140deg, rgba(116, 232, 213, 0.13), transparent 42%),
-    linear-gradient(180deg, rgba(9, 22, 29, 0.98), rgba(6, 16, 20, 0.96));
-}
-
 .fantasy-access-card {
   min-height: 330px;
   align-content: start;
@@ -3144,12 +3138,75 @@ tbody tr:hover {
   border-color: rgba(116, 232, 213, 0.24);
 }
 
+.fantasy-command-first {
+  padding-top: 12px;
+}
+
 .fantasy-command-top,
 .fantasy-section-head {
   display: flex;
   justify-content: space-between;
   gap: 18px;
   align-items: flex-start;
+}
+
+.fantasy-command-top h1 {
+  margin-bottom: 10px;
+  font-size: clamp(2.65rem, 5vw, 5.4rem);
+  line-height: 0.94;
+}
+
+.fantasy-command-summary {
+  max-width: 82ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: 1.02rem;
+  line-height: 1.7;
+}
+
+.fantasy-command-summary strong {
+  display: inline;
+  margin-top: 0;
+  color: var(--text);
+  font-size: inherit;
+  letter-spacing: 0;
+}
+
+.fantasy-primary-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.fantasy-primary-actions .button,
+.fantasy-primary-actions .ghost-button {
+  min-height: 44px;
+}
+
+.fantasy-setup-drawer {
+  border: 1px solid rgba(213, 232, 222, 0.12);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.fantasy-setup-drawer > summary {
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  color: var(--muted);
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.fantasy-setup-drawer[open] {
+  padding-bottom: 16px;
+}
+
+.fantasy-setup-drawer[open] > *:not(summary) {
+  margin-inline: 16px;
 }
 
 .fantasy-command-action {
@@ -3225,6 +3282,43 @@ tbody tr:hover {
   min-height: 126px;
   border-radius: 18px;
   padding: 16px;
+}
+
+.fantasy-command-grid-compact .panel {
+  min-height: 104px;
+}
+
+.fantasy-page-tabs {
+  position: sticky;
+  top: 10px;
+  z-index: 12;
+  display: flex;
+  gap: 10px;
+  width: min(var(--max), calc(100vw - 32px));
+  margin: -10px auto 16px;
+  padding: 8px;
+  border: 1px solid rgba(213, 232, 222, 0.12);
+  border-radius: 999px;
+  background: rgba(8, 18, 27, 0.88);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(18px);
+}
+
+.fantasy-page-tabs a {
+  flex: 1;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  color: var(--muted);
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.fantasy-page-tabs a:first-child {
+  background: rgba(138, 247, 185, 0.14);
+  color: var(--text);
 }
 
 .fantasy-strategy-strip,
@@ -3480,6 +3574,12 @@ tbody tr:hover {
   gap: 10px;
 }
 
+.fantasy-secondary-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
 .fantasy-typeahead {
   position: static;
   max-height: none;
@@ -3519,6 +3619,14 @@ tbody tr:hover {
   cursor: pointer;
 }
 
+.fantasy-result-actions .fantasy-primary-transfer {
+  min-height: 48px;
+  border-color: rgba(138, 247, 185, 0.62);
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #07141a;
+  font-weight: 950;
+}
+
 .fantasy-sell-options button {
   display: flex;
   justify-content: space-between;
@@ -3556,6 +3664,35 @@ tbody tr:hover {
   border-radius: 14px;
   color: var(--muted);
   background: rgba(255, 255, 255, 0.028);
+}
+
+.fantasy-advanced-proof {
+  border: 1px solid rgba(213, 232, 222, 0.14);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.fantasy-advanced-proof > summary {
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  color: var(--text);
+  font-size: 1.15rem;
+  font-weight: 950;
+  cursor: pointer;
+}
+
+.fantasy-advanced-body {
+  display: grid;
+  gap: 18px;
+  padding: 0 0 18px;
+}
+
+.section-nested {
+  width: 100%;
+  margin-top: 0;
+  padding-top: 0;
 }
 
 .fantasy-draft-grid {
@@ -9225,6 +9362,17 @@ code {
     grid-template-columns: 1fr;
   }
 
+  .fantasy-page-tabs {
+    overflow-x: auto;
+    justify-content: flex-start;
+    border-radius: 22px;
+  }
+
+  .fantasy-page-tabs a {
+    flex: 0 0 auto;
+    min-width: 112px;
+  }
+
   .fantasy-pitch {
     min-height: 620px;
   }
@@ -9246,7 +9394,22 @@ code {
 
   .fantasy-command-action {
     min-width: 0;
+    padding: 12px 14px;
     text-align: left;
+  }
+
+  .fantasy-command-top h1 {
+    font-size: clamp(2rem, 10vw, 3rem);
+  }
+
+  .fantasy-command-summary {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .fantasy-primary-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .fantasy-command-grid,
@@ -9256,6 +9419,7 @@ code {
   .fantasy-import-row,
   .fantasy-impact-grid,
   .fantasy-sell-options,
+  .fantasy-secondary-actions,
   .fantasy-chip-grid {
     grid-template-columns: 1fr;
   }

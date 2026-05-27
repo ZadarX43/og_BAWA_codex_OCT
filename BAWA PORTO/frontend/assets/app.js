@@ -11110,114 +11110,125 @@
           : health < 70
             ? "Monitor wildcard"
             : "Roll / watch";
+    const transferSummary =
+      transferImpact?.affordable && transferImpact?.clubLimitOk && !transferImpact?.alreadyOwned
+        ? `Sell ${transferImpact.outgoing.name} -> Buy ${transferImpact.incoming.name}`
+        : "Choose a transfer target";
+    const riskSummary = transferImpact?.riskReduced
+      ? "Wait for press conference before confirming."
+      : validation.valid
+        ? "Lineup legal. Monitor team news."
+        : validation.issues[0];
+    const syncCopy = state.runtime.fantasySyncMessage
+      ? state.runtime.fantasySyncMessage
+          .replace("Fantasy workspace synced to your account.", "Synced to your account.")
+          .replace("Demo Fantasy workspace is stored in this browser.", "Stored in this browser.")
+          .replace("Saved locally. Sync to account when you want it available on other devices.", "Save to account when ready.")
+      : state.runtime.sessionAuthenticated
+        ? "Save to account"
+        : demoAccountActive()
+          ? "Stored in this browser"
+          : "Sign in to sync";
     return `
-      <section class="section split fantasy-hero">
-        <article class="hero-main">
-          <p class="hero-kicker">Fantasy 26/27</p>
-          <h1>Fantasy Football Intelligence System.</h1>
-          <p>Our Fantasy Football Intelligence system suggests what to do with your whole squad before the deadline: transfers, captaincy, benching, chips, trap flags, and rank strategy in one paid intelligence layer.</p>
-          <div class="pill-row">
-            <span class="stat-chip">FPL 26/27</span>
-            <span class="stat-chip">Paid members</span>
-            <span class="stat-chip">Squad decisions</span>
-          </div>
-          <div class="cta-row">
-            <a class="button button-large" href="${paidReady ? "./account.html#preferences" : "./pricing.html"}">${paidReady ? "Open account workspace" : "Join Founder access"}</a>
-            <a class="ghost-button" href="./methodology.html">Methodology</a>
-          </div>
-        </article>
-        <aside class="hero-side">
-          <div class="metric">
-            <span class="metric-label">Historical baseline</span>
-            <span class="metric-value">10 seasons</span>
-          </div>
-          <div class="metric">
-            <span class="metric-label">Replay windows</span>
-            <span class="metric-value">360</span>
-          </div>
-          <div class="metric">
-            <span class="metric-label">Best early edge</span>
-            <span class="metric-value">Transfers</span>
-          </div>
-        </aside>
-      </section>
-      ${demoAccountSimulatorPanel()}
+      ${debugMode ? demoAccountSimulatorPanel() : ""}
 
-      <section class="section fantasy-command-bar">
+      <section class="section fantasy-command-bar fantasy-command-first" id="fantasy-decision">
         <article class="panel fantasy-command-panel">
           <div class="fantasy-command-top">
             <div>
-              <span class="metric-label">Gameweek command bar</span>
-              <h2>GW${escapeHtml(fantasy.gameweek)} decision: ${escapeHtml(recommendedAction)}.</h2>
-              <p class="muted">Captain ${escapeHtml(captain?.name || "pending")}. Vice ${escapeHtml(vice?.name || "pending")}. Deadline ${escapeHtml(fantasyDeadlineLabel())}. ${escapeHtml(validation.valid ? "Lineup is valid." : validation.issues[0])}</p>
+              <span class="metric-label">Fantasy</span>
+              <h1>GW${escapeHtml(fantasy.gameweek)}: ${escapeHtml(recommendedAction)}.</h1>
+              <p class="fantasy-command-summary">
+                <strong>Captain:</strong> ${escapeHtml(captain?.name || "Pending")} ·
+                <strong>Vice:</strong> ${escapeHtml(vice?.name || "Pending")} ·
+                <strong>Transfer:</strong> ${escapeHtml(transferSummary)} ·
+                <strong>Risk:</strong> ${escapeHtml(riskSummary)}
+              </p>
             </div>
             <div class="fantasy-command-action">
               <span>Recommended action</span>
               <strong>${escapeHtml(recommendedAction)}</strong>
             </div>
           </div>
-          <form id="fantasy-import-form" class="fantasy-import-row">
-            <label>
-              <span>FPL team ID</span>
-              <input class="text-input" name="team_id" type="text" value="${escapeHtml(fantasy.teamId)}" placeholder="e.g. 1234567" />
-            </label>
-            <button class="button" type="submit">${fantasy.imported ? "Refresh squad" : "Import demo squad"}</button>
-            <span class="muted">Official FPL team-ID import can feed this same state contract once the backend connector is live.</span>
-          </form>
-          <div class="fantasy-command-grid">
-            ${statPanel("Gameweek", `GW${fantasy.gameweek}`, `Deadline ${fantasyDeadlineLabel()}`)}
-            ${statPanel("Strategy", fantasy.strategy, "Recommendations adapt by risk mode")}
-            ${statPanel("Squad health", `${health}/100`, validation.valid ? "Formation valid" : "Needs attention")}
-            ${statPanel("Projected points", projectedPoints, "Starting XI projection")}
-            ${statPanel("Free transfers", fantasy.freeTransfers, transferImpact?.hitRequired ? `${Math.abs(transferImpact.transferCost)} point hit` : "No hit required")}
-            ${statPanel("Bank", fantasyMoney(fantasy.bank), transferImpact ? `After move ${fantasyMoney(transferImpact.bankAfter)}` : `Squad value ${fantasyMoney(fantasySquadValue())}`)}
-          </div>
-          <div class="fantasy-command-controls">
-            <label>
-              <span>Gameweek</span>
-              <select class="text-input" data-role="fantasy-gameweek">
-                ${Array.from({ length: 38 }, (_, index) => index + 1)
-                  .map((gw) => `<option value="${gw}" ${gw === fantasy.gameweek ? "selected" : ""}>GW${gw}</option>`)
-                  .join("")}
-              </select>
-            </label>
-            <label>
-              <span>Free transfers</span>
-              <input class="text-input" type="number" min="0" max="${FPL_RULES.freeTransferCap}" value="${escapeHtml(fantasy.freeTransfers)}" data-role="fantasy-free-transfers" />
-            </label>
-            <label>
-              <span>Bank</span>
-              <input class="text-input" type="number" min="0" step="0.1" value="${escapeHtml(fantasy.bank)}" data-role="fantasy-bank" />
-            </label>
-            <label>
-              <span>Chip</span>
-              <select class="text-input" data-role="fantasy-chip">
-                ${fantasyChipOptions().map((option) => `<option value="${option.id}" ${option.id === fantasy.chipIntent ? "selected" : ""}>${escapeHtml(option.label)}</option>`).join("")}
-              </select>
-            </label>
-            <button class="button" type="button" data-action="fantasy-generate-plan">Generate gameweek plan</button>
+          <div class="fantasy-primary-actions">
+            <a class="button" href="#fantasy-setup">Import squad</a>
+            <a class="ghost-button" href="#fantasy-transfers">Review transfer</a>
             <button class="ghost-button" type="button" data-action="fantasy-save-plan">Save plan</button>
             <button class="ghost-button" type="button" data-action="sync-fantasy-workspace">Sync account</button>
           </div>
-          ${
-            state.runtime.fantasySyncMessage
-              ? `<div class="notice fantasy-sync-notice fantasy-sync-${escapeHtml(state.runtime.fantasySyncStatus || "local")}">${escapeHtml(state.runtime.fantasySyncMessage)}</div>`
-              : ""
-          }
-          <div class="fantasy-strategy-strip" aria-label="Strategy mode selector">
-            ${FANTASY_STRATEGY_MODES
-              .map((mode) => `<button class="${mode === fantasy.strategy ? "is-active" : ""}" type="button" data-action="fantasy-strategy" data-value="${escapeHtml(mode)}">${escapeHtml(mode)}</button>`)
-              .join("")}
-          </div>
-          <div class="fantasy-rule-stack ${chip.ok ? "is-valid" : "is-invalid"}">
-            <strong>${escapeHtml(chip.label)}</strong>
-            <p class="muted">${escapeHtml(chip.message)}</p>
-          </div>
-          ${fantasy.message ? `<div class="notice">${escapeHtml(fantasy.message)}</div>` : ""}
+          <details class="fantasy-setup-drawer" id="fantasy-setup">
+            <summary>Setup and strategy</summary>
+            <form id="fantasy-import-form" class="fantasy-import-row">
+              <label>
+                <span>FPL team ID</span>
+                <input class="text-input" name="team_id" type="text" value="${escapeHtml(fantasy.teamId)}" placeholder="e.g. 1234567" />
+              </label>
+              <button class="button" type="submit">${fantasy.imported ? "Refresh squad" : "Import demo squad"}</button>
+              <span class="muted">Official FPL team-ID import can feed this same state contract once the backend connector is live.</span>
+            </form>
+            <div class="fantasy-command-grid fantasy-command-grid-compact">
+              ${statPanel("Gameweek", `GW${fantasy.gameweek}`, `Deadline ${fantasyDeadlineLabel()}`)}
+              ${statPanel("Strategy", fantasy.strategy, "Recommendations adapt by risk mode")}
+              ${statPanel("Squad health", `${health}/100`, validation.valid ? "Formation valid" : "Needs attention")}
+              ${statPanel("Projected points", projectedPoints, "Starting XI projection")}
+              ${statPanel("Free transfers", fantasy.freeTransfers, transferImpact?.hitRequired ? `${Math.abs(transferImpact.transferCost)} point hit` : "No hit required")}
+              ${statPanel("Bank", fantasyMoney(fantasy.bank), transferImpact ? `After move ${fantasyMoney(transferImpact.bankAfter)}` : `Squad value ${fantasyMoney(fantasySquadValue())}`)}
+            </div>
+            <div class="fantasy-command-controls">
+              <label>
+                <span>Gameweek</span>
+                <select class="text-input" data-role="fantasy-gameweek">
+                  ${Array.from({ length: 38 }, (_, index) => index + 1)
+                    .map((gw) => `<option value="${gw}" ${gw === fantasy.gameweek ? "selected" : ""}>GW${gw}</option>`)
+                    .join("")}
+                </select>
+              </label>
+              <label>
+                <span>Free transfers</span>
+                <input class="text-input" type="number" min="0" max="${FPL_RULES.freeTransferCap}" value="${escapeHtml(fantasy.freeTransfers)}" data-role="fantasy-free-transfers" />
+              </label>
+              <label>
+                <span>Bank</span>
+                <input class="text-input" type="number" min="0" step="0.1" value="${escapeHtml(fantasy.bank)}" data-role="fantasy-bank" />
+              </label>
+              <label>
+                <span>Chip</span>
+                <select class="text-input" data-role="fantasy-chip">
+                  ${fantasyChipOptions().map((option) => `<option value="${option.id}" ${option.id === fantasy.chipIntent ? "selected" : ""}>${escapeHtml(option.label)}</option>`).join("")}
+                </select>
+              </label>
+              <button class="button" type="button" data-action="fantasy-generate-plan">Generate gameweek plan</button>
+              <button class="ghost-button" type="button" data-action="fantasy-save-plan">Save plan</button>
+              <button class="ghost-button" type="button" data-action="sync-fantasy-workspace">Sync account</button>
+            </div>
+            ${
+              state.runtime.fantasySyncMessage
+                ? `<div class="notice fantasy-sync-notice fantasy-sync-${escapeHtml(state.runtime.fantasySyncStatus || "local")}">${escapeHtml(syncCopy)}</div>`
+                : ""
+            }
+            <div class="fantasy-strategy-strip" aria-label="Strategy mode selector">
+              ${FANTASY_STRATEGY_MODES
+                .map((mode) => `<button class="${mode === fantasy.strategy ? "is-active" : ""}" type="button" data-action="fantasy-strategy" data-value="${escapeHtml(mode)}">${escapeHtml(mode)}</button>`)
+                .join("")}
+            </div>
+            <div class="fantasy-rule-stack ${chip.ok ? "is-valid" : "is-invalid"}">
+              <strong>${escapeHtml(chip.label)}</strong>
+              <p class="muted">${escapeHtml(chip.message)}</p>
+            </div>
+            ${fantasy.message ? `<div class="notice">${escapeHtml(fantasy.message)}</div>` : ""}
+          </details>
         </article>
       </section>
 
-      <section class="section split fantasy-workbench">
+      <nav class="fantasy-page-tabs" aria-label="Fantasy page sections">
+        <a href="#fantasy-my-team">My Team</a>
+        <a href="#fantasy-transfers">Transfers</a>
+        <a href="#fantasy-watchlist">Watchlist</a>
+        <a href="#fantasy-drafts">Drafts</a>
+        <a href="#fantasy-briefing">Briefing</a>
+      </nav>
+
+      <section class="section split fantasy-workbench" id="fantasy-my-team">
         <article class="panel fantasy-pitch-panel">
           <div class="fantasy-section-head">
             <div>
@@ -11278,7 +11289,7 @@
         </article>
       </section>
 
-      <section class="section">
+      <section class="section" id="fantasy-briefing">
         <article class="panel fantasy-briefing">
           <span class="metric-label">AI Gameweek Briefing</span>
           <h2>GW4 briefing</h2>
@@ -11292,7 +11303,7 @@
         </article>
       </section>
 
-      <section class="section split">
+      <section class="section split" id="fantasy-transfers">
         <article class="panel fantasy-advisor">
           <div class="fantasy-section-head">
             <div>
@@ -11302,7 +11313,7 @@
             </div>
           </div>
           <div class="fantasy-tabs">
-            ${["Buy", "Sell", "Hold", "Avoid", "Differentials", "Traps", "Price alerts"].map((tab, index) => `<button class="${index === 0 ? "is-active" : ""}" type="button">${escapeHtml(tab)}</button>`).join("")}
+            ${["Buy", "Sell", "Hold", "Avoid", "Differentials", "Traps"].map((tab, index) => `<button class="${index === 0 ? "is-active" : ""}" type="button">${escapeHtml(tab)}</button>`).join("")}
           </div>
           <article class="fantasy-transfer-builder">
             <div>
@@ -11353,7 +11364,7 @@
             </table>
           </div>
         </article>
-        <article class="panel fantasy-search-panel">
+        <article class="panel fantasy-search-panel" id="fantasy-watchlist">
           <span class="metric-label">Player search + watchlist</span>
           <h2>Find the next move.</h2>
           <div class="fantasy-search-grid">
@@ -11417,13 +11428,12 @@
                     <p>${escapeHtml(player.note)}</p>
                     ${fantasyFeaturePills([player.label, `${player.xpts1}/${player.xpts3}/${player.xpts5} xPts`, `Start ${player.startPct}%`, player.risk])}
                     <div class="fantasy-result-actions">
-                      <button type="button" data-action="fantasy-watchlist" data-player-id="${escapeHtml(player.id)}">${fantasy.watchlist.includes(player.id) ? "Remove watch" : "Add to watchlist"}</button>
-                      <button type="button" data-action="fantasy-bench-shortlist" data-player-id="${escapeHtml(player.id)}">${fantasy.benchShortlist.includes(player.id) ? "Remove bench short" : "Bench shortlist"}</button>
-                      <button type="button" data-action="fantasy-compare" data-player-id="${escapeHtml(player.id)}">Compare</button>
-                      <button type="button" data-action="fantasy-transfer-in" data-player-id="${escapeHtml(player.id)}">Transfer in</button>
-                      <button type="button" data-action="fantasy-manual-add" data-player-id="${escapeHtml(player.id)}">Manual add</button>
-                      <button type="button" data-action="fantasy-lock-target" data-player-id="${escapeHtml(player.id)}">${fantasy.lockedTargets.includes(player.id) ? "Unlock" : "Lock target"}</button>
-                      <button type="button" data-action="fantasy-ignore" data-player-id="${escapeHtml(player.id)}">Ignore</button>
+                      <button class="fantasy-primary-transfer" type="button" data-action="fantasy-transfer-in" data-player-id="${escapeHtml(player.id)}">Transfer in</button>
+                      <div class="fantasy-secondary-actions">
+                        <button type="button" data-action="fantasy-watchlist" data-player-id="${escapeHtml(player.id)}">${fantasy.watchlist.includes(player.id) ? "Remove watch" : "Watchlist"}</button>
+                        <button type="button" data-action="fantasy-compare" data-player-id="${escapeHtml(player.id)}">Compare</button>
+                        <button type="button" data-action="fantasy-ignore" data-player-id="${escapeHtml(player.id)}">Ignore</button>
+                      </div>
                     </div>
                   </article>
                 `
@@ -11449,7 +11459,7 @@
         </article>
       </section>
 
-      <section class="section split">
+      <section class="section split" id="fantasy-drafts">
         <article class="panel fantasy-drafts">
           <span class="metric-label">Saved squads / draft builder</span>
           <h2>Plan multiple routes.</h2>
@@ -11520,7 +11530,10 @@
         </article>
       </section>
 
-      <section class="section">
+      <details class="section fantasy-advanced-proof">
+        <summary>Why this works</summary>
+        <div class="fantasy-advanced-body">
+      <section class="section section-nested">
         <div class="section-head">
           <div>
             <h2>Deadline decisions, not captaincy noise.</h2>
@@ -11535,7 +11548,7 @@
         </div>
       </section>
 
-      <section class="section">
+      <section class="section section-nested">
         <div class="card-grid">
           <article class="panel fantasy-access-card">
             <div class="timeline-tier-panel-head">
@@ -11589,7 +11602,7 @@
         </div>
       </section>
 
-      <section class="section split">
+      <section class="section split section-nested">
         <article class="panel">
           <span class="metric-label">Product line</span>
           <h3>Tell me what to do before deadline.</h3>
@@ -11601,6 +11614,8 @@
           <p class="muted">Next build step is the user-squad flow: import squad, select strategy mode, generate deadline briefing, then save decision history to Account.</p>
         </article>
       </section>
+        </div>
+      </details>
     `;
   };
 
