@@ -3189,6 +3189,45 @@ tbody tr:hover {
   min-height: 44px;
 }
 
+.fantasy-decision-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.fantasy-decision-strip article {
+  min-height: 118px;
+  display: grid;
+  gap: 6px;
+  align-content: start;
+  padding: 16px;
+  border: 1px solid rgba(213, 232, 222, 0.13);
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.025)),
+    rgba(6, 17, 24, 0.62);
+}
+
+.fantasy-decision-strip span {
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 950;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.fantasy-decision-strip strong {
+  color: var(--text);
+  font-size: 1.12rem;
+  line-height: 1.18;
+}
+
+.fantasy-decision-strip small {
+  color: var(--muted);
+  font-size: 0.84rem;
+  line-height: 1.42;
+}
+
 .fantasy-setup-drawer {
   border: 1px solid rgba(213, 232, 222, 0.12);
   border-radius: 18px;
@@ -9622,6 +9661,7 @@ code {
 
   .fantasy-command-grid,
   .fantasy-command-controls,
+  .fantasy-decision-strip,
   .fantasy-search-grid,
   .fantasy-start-steps,
   .fantasy-rules-grid,
@@ -9700,6 +9740,7 @@ code {
 
   .fantasy-command-grid,
   .fantasy-command-controls,
+  .fantasy-decision-strip,
   .fantasy-search-simple,
   .fantasy-search-grid,
   .fantasy-start-steps,

@@ -11238,6 +11238,31 @@
     </article>
   `;
 
+  const fantasyCommandSummaryCards = ({ captain, vice, transferSummary, health, validation, syncCopy }) => `
+    <div class="fantasy-decision-strip" aria-label="Fantasy decision summary">
+      <article>
+        <span>Captain</span>
+        <strong>${escapeHtml(captain?.name || "Pending")}</strong>
+        <small>${escapeHtml(vice?.name ? `Vice: ${vice.name}` : "Choose vice-captain")}</small>
+      </article>
+      <article>
+        <span>Transfer</span>
+        <strong>${escapeHtml(transferSummary)}</strong>
+        <small>Budget, hit cost and club rules checked.</small>
+      </article>
+      <article>
+        <span>Lineup</span>
+        <strong>${escapeHtml(validation.valid ? "Valid XI" : "Needs fixing")}</strong>
+        <small>${escapeHtml(validation.valid ? `${health}/100 squad health` : validation.issues[0] || "Review lineup")}</small>
+      </article>
+      <article>
+        <span>Plan</span>
+        <strong>${escapeHtml(syncCopy)}</strong>
+        <small>Save drafts before changing your real FPL team.</small>
+      </article>
+    </div>
+  `;
+
   const fantasyTransferRows = (rows = []) =>
     rows
       .map(
@@ -11248,7 +11273,7 @@
             <td>${escapeHtml(String(row.xpts5 || row.points))}</td>
             <td>${escapeHtml(`${row.startPct || String(row.start).replace("%", "")}%`)}</td>
             <td>${escapeHtml(row.swing)}</td>
-            <td><span class="chip">${escapeHtml(row.label)}</span></td>
+            <td><span class="chip">${escapeHtml(fantasyHumanizeSignal(row.label))}</span></td>
             <td><button class="ghost-button compact-button" type="button" data-action="fantasy-transfer-in" data-player-id="${escapeHtml(row.id)}">Transfer in</button></td>
           </tr>
         `
@@ -11517,6 +11542,7 @@
               <strong>${escapeHtml(recommendedAction)}</strong>
             </div>
           </div>
+          ${fantasyCommandSummaryCards({ captain, vice, transferSummary, health, validation, syncCopy })}
           <div class="fantasy-primary-actions">
             <a class="button" href="#fantasy-setup">Import squad</a>
             <a class="ghost-button" href="#fantasy-transfers">Review transfer</a>
@@ -11604,7 +11630,7 @@
             <div>
               <span class="metric-label">My squad</span>
               <h2>Pitch view</h2>
-              <p class="muted">Interactive ${escapeHtml(fantasyFormation())} layout with captaincy, bench order, projected points, start probability, fixture difficulty, and risk flags.</p>
+              <p class="muted">Tap a player to start, bench, captain, sell, compare or watchlist. The page keeps formation and captain rules in check.</p>
             </div>
             <span class="stat-chip">${escapeHtml(fantasyFormation())}</span>
           </div>
@@ -11661,7 +11687,7 @@
 
       <section class="section" id="fantasy-briefing">
         <article class="panel fantasy-briefing">
-          <span class="metric-label">AI Gameweek Briefing</span>
+          <span class="metric-label">Gameweek briefing</span>
           <h2>GW4 briefing</h2>
           <p>Your squad is in a ${health >= 80 ? "strong" : "workable"} position this week. The current plan is ${transferImpact ? `sell ${escapeHtml(transferImpact.outgoing.name)} and buy ${escapeHtml(transferImpact.incoming.name)}` : "select a transfer target from search"}, while preserving chip flexibility.</p>
           <p>Captaincy should stay on ${escapeHtml(captain?.name || "the safest premium")}. ${escapeHtml(vice?.name || "Vice")} is the vice-captain route. ${escapeHtml(transferImpact?.hitRequired ? "A hit would be required, so the system is more cautious." : "No points hit is recommended.")}</p>
