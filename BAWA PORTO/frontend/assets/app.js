@@ -552,11 +552,14 @@
     searchQuery: "",
     positionFilter: "ALL",
     priceFilter: "ALL",
+    sortFilter: "TOTAL_POINTS",
     riskFilter: "ALL",
     clubFilter: "ALL",
+    playerScope: "ALL",
     ownershipFilter: "ALL",
     fixtureFilter: "ALL",
     pointsFilter: "ALL",
+    fantasyPlayerPage: 1,
     watchlist: ["eze", "bowen", "palmer", "mbeumo"],
     benchShortlist: [],
     lockedTargets: [],
@@ -579,7 +582,7 @@
 
   const normalizeFantasyState = (value = {}) => {
     const fallback = fantasyDefaultState();
-    const squad = Array.isArray(value.squad) && value.squad.length ? value.squad : fallback.squad;
+    const squad = Array.isArray(value.squad) ? value.squad : fallback.squad;
     const importedPlayers = normalizeFantasyImportedPlayers(value.importedPlayers || value.imported_players || fallback.importedPlayers);
     const referenceIds = new Set(fantasyReferencePlayers(importedPlayers).map((player) => String(player.id)));
     return {
@@ -606,9 +609,14 @@
       fantasyTeamView: value.fantasyTeamView === "list" ? "list" : "pitch",
       updatedAt: String(value.updatedAt || value.updated_at || fallback.updatedAt || ""),
       clubFilter: String(value.clubFilter || fallback.clubFilter || "ALL"),
+      sortFilter: String(value.sortFilter || fallback.sortFilter || "TOTAL_POINTS"),
+      playerScope: ["ALL", "WATCHLIST"].includes(value.playerScope) ? value.playerScope : fallback.playerScope,
       ownershipFilter: String(value.ownershipFilter || fallback.ownershipFilter || "ALL"),
       fixtureFilter: String(value.fixtureFilter || fallback.fixtureFilter || "ALL"),
       pointsFilter: String(value.pointsFilter || fallback.pointsFilter || "ALL"),
+      fantasyPlayerPage: Number.isFinite(Number(value.fantasyPlayerPage))
+        ? Math.max(1, Math.floor(Number(value.fantasyPlayerPage)))
+        : fallback.fantasyPlayerPage,
       squad: squad
         .filter((item) => referenceIds.has(String(item?.id || "")))
         .map((item) => ({
@@ -3612,6 +3620,62 @@
     `;
   };
 
+  const renderFantasySavedPlanCard = (plan, { account = false } = {}) => {
+    const canLoad = Array.isArray(plan?.squad) && plan.squad.length;
+    const created = formatDateTime(plan?.createdAt || plan?.created_at);
+    return `
+      <article class="fantasy-saved-card fantasy-saved-plan-card">
+        <div class="fantasy-saved-card-head">
+          <div>
+            <span class="metric-label">${escapeHtml(account ? "Saved plan" : "Gameweek plan")}</span>
+            <strong>${escapeHtml(`GW${plan?.gameweek || "?"}: ${plan?.transfer || "Plan saved"}`)}</strong>
+            <p>${escapeHtml(`Captain ${plan?.captain || "Pending"} / VC ${plan?.vice || "Pending"}`)}</p>
+          </div>
+          <span class="fantasy-saved-badge">${escapeHtml(canLoad ? "Reopenable" : "Summary")}</span>
+        </div>
+        <div class="fantasy-saved-meta">
+          ${statPanel("Strategy", plan?.strategy || "Balanced", "Decision lens")}
+          ${statPanel("Bank", fantasyMoney(plan?.bank ?? fantasyState().bank), `${plan?.freeTransfers ?? fantasyState().freeTransfers} FT`)}
+          ${statPanel("Projected", plan?.projected ? String(plan.projected) : "Pending", "GW xPts")}
+          ${statPanel("Saved", created || "Local", "Account workspace")}
+        </div>
+        <div class="fantasy-saved-actions">
+          <button class="button" type="button" data-action="load-fantasy-plan" data-plan-id="${escapeHtml(plan?.id || "")}" ${canLoad ? "" : "disabled"}>Load plan</button>
+          <a class="ghost-button" href="./fantasy.html#fantasy-drafts">Open Fantasy</a>
+          <button class="ghost-button" type="button" data-action="remove-fantasy-plan" data-plan-id="${escapeHtml(plan?.id || "")}">Remove</button>
+        </div>
+      </article>
+    `;
+  };
+
+  const renderFantasySavedDraftCard = (draft, { account = false } = {}) => {
+    const canLoad = Array.isArray(draft?.squad) && draft.squad.length;
+    const created = formatDateTime(draft?.createdAt || draft?.created_at);
+    return `
+      <article class="fantasy-saved-card fantasy-saved-draft-card">
+        <div class="fantasy-saved-card-head">
+          <div>
+            <span class="metric-label">${escapeHtml(account ? "Saved draft" : "Squad draft")}</span>
+            <strong>${escapeHtml(draft?.name || "Saved draft")}</strong>
+            <p>${escapeHtml(`${draft?.strategy || fantasyState().strategy} · ${draft?.projected || "—"} projected · Health ${draft?.health || "—"}`)}</p>
+          </div>
+          <span class="fantasy-saved-badge">${escapeHtml(canLoad ? "Squad snapshot" : "Summary")}</span>
+        </div>
+        <div class="fantasy-saved-meta">
+          ${statPanel("Bank", fantasyMoney(draft?.bank ?? fantasyState().bank), `${draft?.freeTransfers ?? fantasyState().freeTransfers} FT`)}
+          ${statPanel("Players", canLoad ? String(draft.squad.length) : "Pending", "FPL squad")}
+          ${statPanel("Health", draft?.health ? `${draft.health}/100` : "Pending", "Rules and risk")}
+          ${statPanel("Saved", created || "Local", "Account workspace")}
+        </div>
+        <div class="fantasy-saved-actions">
+          <button class="button" type="button" data-action="load-fantasy-draft" data-draft-id="${escapeHtml(draft?.id || "")}" ${canLoad ? "" : "disabled"}>Load draft</button>
+          <a class="ghost-button" href="./fantasy.html#fantasy-my-team">Open pitch</a>
+          <button class="ghost-button" type="button" data-action="remove-fantasy-draft" data-draft-id="${escapeHtml(draft?.id || "")}">Remove</button>
+        </div>
+      </article>
+    `;
+  };
+
   const renderAccountFantasyWorkspace = (signedIn = false) => {
     const fantasy = fantasyState();
     const validation = fantasyValidateLineup();
@@ -3711,63 +3775,41 @@
           </article>
         </div>
         <div class="split fantasy-account-grid">
-          <article class="panel">
+          <article class="panel fantasy-saved-workspace-panel">
             <div class="fantasy-section-head">
               <div>
-                <span class="metric-label">Saved gameweek plans</span>
-                <h3>Return to the exact decision.</h3>
+                <span class="metric-label">Saved Fantasy plans</span>
+                <h3>Reopen the exact deadline decision.</h3>
+                <p class="muted">Plans saved from Fantasy now carry the squad snapshot, captaincy, chip posture, transfer history, bank and free-transfer state so they can be reopened across devices after account sync.</p>
               </div>
               <a class="ghost-button" href="./fantasy.html">Create plan</a>
             </div>
-            <div class="fantasy-plan-list">
+            <div class="fantasy-saved-card-list">
               ${
                 fantasy.savedPlans.length
                   ? fantasy.savedPlans
-                      .map(
-                        (plan) => `
-                          <article>
-                            <strong>${escapeHtml(`GW${plan.gameweek}: ${plan.transfer}`)}</strong>
-                            <span>${escapeHtml(`Captain ${plan.captain || "Pending"} / VC ${plan.vice || "Pending"}`)}</span>
-                            <small>${escapeHtml(`${plan.strategy} · ${plan.deadline} · Bank ${fantasyMoney(plan.bank)} · FT ${plan.freeTransfers} · ${plan.chip === "NONE" ? "No chip" : plan.chip}`)}</small>
-                            <div class="saved-paper-slip-actions">
-                              <a href="./fantasy.html">Open</a>
-                              <button type="button" data-action="remove-fantasy-plan" data-plan-id="${escapeHtml(plan.id)}">Remove</button>
-                            </div>
-                          </article>
-                        `
-                      )
+                      .map((plan) => renderFantasySavedPlanCard(plan, { account: true }))
                       .join("")
-                  : `<p class="muted">No saved plans yet. Open Fantasy, generate the gameweek plan, then save it here.</p>`
+                  : `<div class="notice">No saved plans yet. Open Fantasy, generate the gameweek plan, then save it here.</div>`
               }
             </div>
           </article>
-          <article class="panel">
+          <article class="panel fantasy-saved-workspace-panel">
             <div class="fantasy-section-head">
               <div>
                 <span class="metric-label">Saved squad drafts</span>
                 <h3>Compare routes before deadline.</h3>
+                <p class="muted">Drafts are for testing safe, aggressive, wildcard, no-premium, and fixture-swing routes without touching your official FPL team.</p>
               </div>
               <a class="ghost-button" href="./fantasy.html">Build draft</a>
             </div>
-            <div class="fantasy-plan-list">
+            <div class="fantasy-saved-card-list">
               ${
                 fantasy.savedDrafts.length
                   ? fantasy.savedDrafts
-                      .map(
-                        (draft) => `
-                          <article>
-                            <strong>${escapeHtml(draft.name || "Saved draft")}</strong>
-                            <span>${escapeHtml(`${draft.projected || "—"} projected · Health ${draft.health || "—"}`)}</span>
-                            <small>${escapeHtml(`${draft.strategy || fantasy.strategy} · Bank ${fantasyMoney(draft.bank ?? fantasy.bank)} · FT ${draft.freeTransfers ?? fantasy.freeTransfers}`)}</small>
-                            <div class="saved-paper-slip-actions">
-                              <button type="button" data-action="load-fantasy-draft" data-draft-id="${escapeHtml(draft.id)}">Load</button>
-                              <button type="button" data-action="remove-fantasy-draft" data-draft-id="${escapeHtml(draft.id)}">Remove</button>
-                            </div>
-                          </article>
-                        `
-                      )
+                      .map((draft) => renderFantasySavedDraftCard(draft, { account: true }))
                       .join("")
-                  : `<p class="muted">No saved drafts yet. Save safe, aggressive, wildcard, or no-premium drafts from the Fantasy pitch.</p>`
+                  : `<div class="notice">No saved drafts yet. Save safe, aggressive, wildcard, or no-premium drafts from the Fantasy pitch.</div>`
               }
             </div>
           </article>
@@ -10496,6 +10538,43 @@
 
   const fantasyMoney = (value) => `£${Number(value || 0).toFixed(1)}m`;
 
+  const fantasyOptionalNumberLabel = (value, { suffix = "", digits = 1, fallback = "OG pending" } = {}) => {
+    const number = Number(String(value ?? "").replace("%", ""));
+    if (!Number.isFinite(number)) return fallback;
+    return `${number.toFixed(digits)}${suffix}`;
+  };
+
+  const fantasyPositionName = (position = "") =>
+    position === "GK" ? "Goalkeepers" : position === "DEF" ? "Defenders" : position === "MID" ? "Midfielders" : "Forwards";
+
+  const fantasyShortPosition = (position = "") => (position === "GK" ? "GKP" : position || "FPL");
+
+  const fantasyPlayerTotalPoints = (player = {}) => {
+    const direct = Number(player.tp ?? player.totalPoints ?? player.total_points ?? player.points);
+    if (Number.isFinite(direct) && direct > 0) return Math.round(direct);
+    const derived = Number(player.xpts5 || 0) * 7.7;
+    return Math.max(0, Math.min(260, Math.round(derived)));
+  };
+
+  const fantasyPlayerPointsLabel = (player = {}) => {
+    const total = fantasyPlayerTotalPoints(player);
+    if (total > 0) return `${total} TP`;
+    const xpts = Number(player.xpts1 || 0);
+    return xpts > 0 ? `${xpts.toFixed(1)} xPts` : "OG pending";
+  };
+
+  const fantasyClubBadge = (club = "") => {
+    const initials = String(club || "OG")
+      .replace(/[^a-zA-Z0-9 ]/g, "")
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0])
+      .join("")
+      .toUpperCase();
+    return initials || "OG";
+  };
+
   const fantasySellingPrice = (slot = {}) => {
     const current = Number(slot.currentPrice ?? slot.player?.price ?? 0);
     const purchase = Number(slot.purchasePrice ?? current);
@@ -10615,7 +10694,27 @@
     return { valid: !issues.length, issues, warnings };
   };
 
-  const fantasyFilteredPlayers = () => {
+  const fantasyValidateSquadDraft = () => {
+    const rows = fantasySquadRows();
+    const squadCounts = fantasyPositionCounts(rows);
+    const clubCounts = rows.reduce((acc, slot) => {
+      acc[slot.player.club] = (acc[slot.player.club] || 0) + 1;
+      return acc;
+    }, {});
+    const issues = [];
+    if (rows.length !== FPL_RULES.squadSize) issues.push(`Pick ${FPL_RULES.squadSize - rows.length} more players.`);
+    if (squadCounts.GK !== 2) issues.push("Pick 2 goalkeepers.");
+    if (squadCounts.DEF !== 5) issues.push("Pick 5 defenders.");
+    if (squadCounts.MID !== 5) issues.push("Pick 5 midfielders.");
+    if (squadCounts.FWD !== 3) issues.push("Pick 3 forwards.");
+    if (Number(fantasyState().bank || 0) < 0) issues.push("Squad is over budget.");
+    Object.entries(clubCounts).forEach(([club, count]) => {
+      if (count > FPL_RULES.maxClub) issues.push(`Max 3 players per club: ${club} has ${count}.`);
+    });
+    return { valid: !issues.length, issues };
+  };
+
+  const fantasyFilteredPlayers = (limit = 80) => {
     const fantasy = fantasyState();
     const queryValue = String(fantasy.searchQuery || "").trim().toLowerCase();
     const underMatch = queryValue.match(/under\s*£?(\d+(?:\.\d+)?)/);
@@ -10629,7 +10728,16 @@
     const text = queryValue
       .replace(/best|player|under|cheap|replacement|arsenal|defender|midfielder|forward|goalkeeper|£|\d+(\.\d+)?/g, "")
       .trim();
-    return fantasyReferencePlayers().filter((player) => {
+    const sortPlayers = (players = []) =>
+      players.slice().sort((left, right) => {
+        const sortKey = fantasy.sortFilter || "TOTAL_POINTS";
+        if (sortKey === "PRICE") return Number(right.price || 0) - Number(left.price || 0);
+        if (sortKey === "XPTS_5") return Number(right.xpts5 || 0) - Number(left.xpts5 || 0);
+        if (sortKey === "XPTS_1") return Number(right.xpts1 || 0) - Number(left.xpts1 || 0);
+        return fantasyPlayerTotalPoints(right) - fantasyPlayerTotalPoints(left);
+      });
+    const filteredPlayers = fantasyReferencePlayers().filter((player) => {
+      if (fantasy.playerScope === "WATCHLIST" && !fantasy.watchlist.includes(player.id)) return false;
       if (fantasy.ignored.includes(player.id)) return false;
       if (fantasy.positionFilter !== "ALL" && player.position !== fantasy.positionFilter) return false;
       if (fantasy.priceFilter === "UNDER_7_5" && player.price > 7.5) return false;
@@ -10651,7 +10759,11 @@
       if (bestGoalkeeper && player.position !== "GK") return false;
       if (text && !`${player.name} ${player.club} ${player.position} ${player.label} ${player.note}`.toLowerCase().includes(text)) return false;
       return true;
-    }).slice(0, 8);
+    });
+    const sortedPlayers = sortPlayers(filteredPlayers);
+    return ["GK", "DEF", "MID", "FWD"]
+      .flatMap((position) => sortedPlayers.filter((player) => player.position === position))
+      .slice(0, limit);
   };
 
   const fantasyAutocompleteSuggestions = () => {
@@ -10822,6 +10934,7 @@
       fantasyUpdate({}, impact?.recommendation || "Transfer blocked by FPL rules.");
       return;
     }
+    const verdict = fantasyTransferVerdict(impact);
     fantasyUpdateSquad((squad) => {
       const outgoingSlot = squad.find((slot) => slot.id === impact.outgoing.id);
       return squad.map((slot) =>
@@ -10848,7 +10961,7 @@
       bankAfter: impact.bankAfter,
       transferCost: impact.transferCost,
       gain: impact.gain,
-      recommendation: impact.recommendation,
+      recommendation: `${verdict.label}: ${verdict.title}`,
       createdAt: new Date().toISOString(),
     };
     const chipPreservesTransfers = ["WILDCARD", "FREE_HIT"].includes(String(fantasy.chipIntent || "").toUpperCase());
@@ -10856,6 +10969,7 @@
       bank: impact.bankAfter,
       freeTransfers: chipPreservesTransfers ? fantasy.freeTransfers : Math.max(0, fantasy.freeTransfers - 1),
       selectedPlayerId: impact.incoming.id,
+      incomingPlayerId: "",
       outgoingPlayerId: "",
       transferBuilderOpen: false,
       watchlist: fantasy.watchlist.filter((item) => item !== impact.incoming.id),
@@ -10982,7 +11096,7 @@
     fantasyImportDemoSquad(managerId);
   };
 
-  const fantasySaveDraft = () => {
+  const fantasySaveDraft = (draftName = "") => {
     const fantasy = fantasyState();
     const validation = fantasyValidateLineup();
     if (!validation.valid) {
@@ -10991,7 +11105,7 @@
     }
     const draft = {
       id: `fantasy_draft_${Date.now()}`,
-      name: `Draft ${fantasy.savedDrafts.length + 1}`,
+      name: String(draftName || "").trim() || `Draft ${fantasy.savedDrafts.length + 1}`,
       createdAt: new Date().toISOString(),
       strategy: fantasy.strategy,
       bank: fantasy.bank,
@@ -11008,7 +11122,9 @@
     const validation = fantasyValidateLineup();
     const impact = fantasyTransferImpact();
     const captain = fantasyCaptainSlot()?.player;
+    const captainSlot = fantasyCaptainSlot();
     const vice = fantasyViceSlot()?.player;
+    const viceSlot = fantasyViceSlot();
     if (!validation.valid) {
       fantasyUpdate({}, `Plan blocked: ${validation.issues[0]}`);
       return;
@@ -11029,6 +11145,11 @@
       freeTransfers: fantasy.freeTransfers,
       projected: Number(fantasyProjectedPoints().toFixed(1)),
       health: fantasySquadHealth(),
+      squad: fantasy.squad,
+      captainId: captainSlot?.id || "",
+      viceId: viceSlot?.id || "",
+      transferHistory: fantasy.transferHistory.slice(0, 8),
+      selectedPlayerId: fantasy.selectedPlayerId,
       createdAt: new Date().toISOString(),
     };
     fantasyUpdate(
@@ -11068,7 +11189,19 @@
       return;
     }
     if (rows.length >= FPL_RULES.squadSize) {
-      fantasyUpdate({ incomingPlayerId: player.id, selectedPlayerId: player.id }, "Squad is full. Use Transfer in and choose who to sell.");
+      const samePosition =
+        rows.find((slot) => slot.player.position === player.position && slot.id === fantasy.outgoingPlayerId) ||
+        rows.find((slot) => slot.player.position === player.position && slot.id === fantasy.selectedPlayerId) ||
+        rows.find((slot) => slot.player.position === player.position);
+      fantasyUpdate(
+        {
+          incomingPlayerId: player.id,
+          outgoingPlayerId: samePosition?.id || fantasy.outgoingPlayerId,
+          selectedPlayerId: player.id,
+          transferBuilderOpen: true,
+        },
+        `${player.name} selected. Squad is full, so choose who to sell in the transfer builder.`
+      );
       return;
     }
     const counts = fantasyPositionCounts(rows);
@@ -11098,9 +11231,150 @@
     );
   };
 
+  const fantasyRemoveSquadPlayer = (playerId) => {
+    const target = String(playerId || "");
+    const slot = fantasySquadRows().find((row) => row.id === target);
+    if (!slot) {
+      fantasyUpdate({}, "Remove blocked: player is not in your squad.");
+      return;
+    }
+    const refund = fantasySellingPrice(slot);
+    const nextSquad = fantasyState().squad.filter((row) => row.id !== target);
+    fantasyUpdate(
+      {
+        bank: Number((fantasyState().bank + refund).toFixed(1)),
+        squad: nextSquad,
+        selectedPlayerId: nextSquad[0]?.id || "",
+      },
+      `${slot.player.name} removed from your draft squad.`
+    );
+  };
+
+  const fantasyBuildAutoPickSquad = () => {
+    const desired = { GK: 2, DEF: 5, MID: 5, FWD: 3 };
+    const starterTargets = { GK: 1, DEF: 3, MID: 4, FWD: 3 };
+    const picks = [];
+    const clubCounts = {};
+    let bank = FPL_RULES.budget;
+    const scorePlayer = (player) => {
+      const total = fantasyPlayerTotalPoints(player);
+      const xpts = Number(player.xpts5 || 0) * 6 + Number(player.xpts1 || 0) * 3;
+      return (total || xpts || 1) / Math.max(4, Number(player.price || 4)) + total * 0.018;
+    };
+    const remainingSlotsAfter = (position, pickedCount) => {
+      const selectedByPosition = fantasyPositionCounts(picks.map((slot) => ({ player: fantasyPlayerById(slot.id) })).filter((slot) => slot.player));
+      return Object.entries(desired).reduce((total, [key, needed]) => {
+        const current = (selectedByPosition[key] || 0) + (key === position ? pickedCount : 0);
+        return total + Math.max(0, needed - current);
+      }, 0);
+    };
+    ["GK", "DEF", "MID", "FWD"].forEach((position) => {
+      const candidates = fantasyReferencePlayers()
+        .filter((player) => player.position === position)
+        .sort((left, right) => scorePlayer(right) - scorePlayer(left));
+      while (picks.filter((slot) => fantasyPlayerById(slot.id)?.position === position).length < desired[position]) {
+        const remainingAfterThis = remainingSlotsAfter(position, 1);
+        const candidate = candidates.find((player) => {
+          if (picks.some((slot) => slot.id === player.id)) return false;
+          if ((clubCounts[player.club] || 0) >= FPL_RULES.maxClub) return false;
+          return Number(player.price || 0) <= bank - Math.max(0, remainingAfterThis) * 4;
+        });
+        if (!candidate) break;
+        clubCounts[candidate.club] = (clubCounts[candidate.club] || 0) + 1;
+        bank = Number((bank - Number(candidate.price || 0)).toFixed(1));
+        const positionPicked = picks.filter((slot) => fantasyPlayerById(slot.id)?.position === position).length;
+        const role = positionPicked < starterTargets[position] ? "starter" : "bench";
+        picks.push({
+          id: candidate.id,
+          role,
+          benchOrder: role === "bench" ? picks.filter((slot) => slot.role === "bench").length + 1 : 0,
+          captain: false,
+          vice: false,
+          purchasePrice: candidate.price,
+          currentPrice: candidate.price,
+        });
+      }
+    });
+    const starterSlots = picks
+      .map((slot) => ({ ...slot, player: fantasyPlayerById(slot.id) }))
+      .filter((slot) => slot.player && slot.role === "starter")
+      .sort((left, right) => fantasyPlayerTotalPoints(right.player) - fantasyPlayerTotalPoints(left.player));
+    return {
+      squad: picks.map((slot) => ({
+        ...slot,
+        captain: starterSlots[0]?.id === slot.id,
+        vice: starterSlots[1]?.id === slot.id,
+      })),
+      bank,
+    };
+  };
+
+  const fantasyAutoPickSquad = () => {
+    const built = fantasyBuildAutoPickSquad();
+    const picked = built.squad.length === FPL_RULES.squadSize ? built.squad : fantasyDefaultState().squad;
+    const pickedValue = picked
+      .map((slot) => fantasyPlayerById(slot.id))
+      .filter(Boolean)
+      .reduce((total, player) => total + Number(player.price || 0), 0);
+    fantasyUpdate(
+      {
+        squad: picked,
+        bank: built.squad.length === FPL_RULES.squadSize ? built.bank : Number(Math.max(0, FPL_RULES.budget - pickedValue).toFixed(1)),
+        selectedPlayerId: picked[0]?.id || "",
+        incomingPlayerId: "",
+        outgoingPlayerId: "",
+        transferBuilderOpen: false,
+      },
+      "Auto Pick filled a valid 15-player draft. Review captain, bench and transfer plan before saving."
+    );
+  };
+
+  const fantasyClearDraftSquad = () => {
+    fantasyUpdate(
+      {
+        squad: [],
+        bank: FPL_RULES.budget,
+        selectedPlayerId: "",
+        incomingPlayerId: "",
+        outgoingPlayerId: "",
+        transferBuilderOpen: false,
+      },
+      "Draft squad cleared. Use + beside a player to add them to the pitch."
+    );
+  };
+
   const fantasyRemoveSavedPlan = (planId) => {
     const fantasy = fantasyState();
     fantasyUpdate({ savedPlans: fantasy.savedPlans.filter((plan) => plan.id !== String(planId || "")) }, "Fantasy plan removed.");
+  };
+
+  const fantasyLoadSavedPlan = (planId) => {
+    const fantasy = fantasyState();
+    const plan = fantasy.savedPlans.find((item) => item.id === String(planId || ""));
+    if (!plan) {
+      fantasyUpdate({}, "Saved plan could not be loaded.");
+      return;
+    }
+    if (!Array.isArray(plan.squad) || !plan.squad.length) {
+      fantasyUpdate({}, "This older saved plan has no squad snapshot. Open Fantasy and save a fresh plan to make it reopenable.");
+      return;
+    }
+    fantasyUpdate(
+      {
+        gameweek: Number.isFinite(Number(plan.gameweek)) ? Number(plan.gameweek) : fantasy.gameweek,
+        strategy: FANTASY_STRATEGY_MODES.includes(plan.strategy) ? plan.strategy : fantasy.strategy,
+        bank: Number.isFinite(Number(plan.bank)) ? Number(plan.bank) : fantasy.bank,
+        freeTransfers: Number.isFinite(Number(plan.freeTransfers)) ? Number(plan.freeTransfers) : fantasy.freeTransfers,
+        chipIntent: String(plan.chip || "NONE"),
+        squad: plan.squad,
+        selectedPlayerId: plan.selectedPlayerId || plan.captainId || plan.squad[0]?.id || fantasy.selectedPlayerId,
+        transferHistory: Array.isArray(plan.transferHistory) ? plan.transferHistory : fantasy.transferHistory,
+        incomingPlayerId: "",
+        outgoingPlayerId: "",
+        transferBuilderOpen: false,
+      },
+      `GW${plan.gameweek || fantasy.gameweek} saved plan loaded into Fantasy.`
+    );
   };
 
   const fantasyRemoveSavedDraft = (draftId) => {
@@ -11244,6 +11518,7 @@
       ${["GK", "DEF", "MID", "FWD"]
         .map((position) => {
           const positionRows = rows.filter((slot) => slot.player.position === position);
+          const emptyRows = Array.from({ length: Math.max(0, (FPL_RULES.squadCounts[position] || 0) - positionRows.length) }, (_, index) => index);
           return `
             <article>
               <h3>${escapeHtml(position === "GK" ? "Goalkeepers" : position === "DEF" ? "Defenders" : position === "MID" ? "Midfielders" : "Forwards")}</h3>
@@ -11256,6 +11531,19 @@
                         <small>${escapeHtml(`${slot.player.club} · ${slot.role === "starter" ? "Starting XI" : `Bench ${slot.benchOrder || ""}`}`)}</small>
                       </span>
                       <em>${escapeHtml(`${slot.player.xpts1} xPts`)}</em>
+                    </button>
+                  `
+                )
+                .join("")}
+              ${emptyRows
+                .map(
+                  () => `
+                    <button class="is-empty" type="button" data-action="fantasy-quick-filter" data-scope="ALL" data-position="${escapeHtml(position)}" data-club="ALL">
+                      <span>
+                        <strong>${escapeHtml(`Select ${fantasyShortPosition(position)}`)}</strong>
+                        <small>Open matching players</small>
+                      </span>
+                      <em>+</em>
                     </button>
                   `
                 )
@@ -11323,6 +11611,142 @@
       </article>
     </div>
   `;
+
+  const fantasyTransferVerdict = (impact = null) => {
+    if (!impact) {
+      return {
+        state: "watch",
+        label: "Watch",
+        title: "Choose who to sell",
+        reasons: ["Pick a same-position player from your squad to complete the check."],
+      };
+    }
+    if (impact.alreadyOwned) {
+      return { state: "blocked", label: "Blocked", title: "Already owned", reasons: ["This player is already in your squad."] };
+    }
+    if (!impact.clubLimitOk) {
+      return { state: "blocked", label: "Blocked", title: "Max 3 club rule", reasons: ["This move would take you over 3 players from one Premier League club."] };
+    }
+    if (!impact.affordable) {
+      return { state: "blocked", label: "Blocked", title: "Over budget", reasons: [`Bank after move would be ${fantasyMoney(impact.bankAfter)}.`] };
+    }
+    const reasons = [];
+    reasons.push(`${impact.gain >= 0 ? "+" : ""}${impact.gain} projected 5GW gain.`);
+    if (impact.riskReduced) reasons.push("Lower rotation or availability risk.");
+    if (impact.hitRequired) reasons.push(`${Math.abs(impact.transferCost)} point hit included.`);
+    else reasons.push("No points hit needed.");
+    if (impact.hitRequired && impact.netGain < 2) {
+      return { state: "avoid", label: "Avoid", title: "Hit not justified", reasons };
+    }
+    if (impact.gain < -1) {
+      return { state: "avoid", label: "Avoid", title: "Projected drop", reasons };
+    }
+    if (impact.gain >= 3 || impact.riskReduced) {
+      return { state: "recommended", label: "Recommended", title: impact.hitRequired ? "Aggressive move" : "Use free transfer", reasons };
+    }
+    return { state: "watch", label: "Watch", title: "Marginal move", reasons };
+  };
+
+  const fantasyTransferBuilderPanel = ({ transferTarget = null, transferImpact = null, sellCandidates = [] } = {}) => {
+    const fantasy = fantasyState();
+    const verdict = fantasyTransferVerdict(transferImpact);
+    const hasTarget = Boolean(transferTarget);
+    const activeOutgoing = transferImpact?.outgoing?.id || fantasy.outgoingPlayerId;
+    return `
+      <article class="fantasy-transfer-builder ${fantasy.transferBuilderOpen ? "is-open" : ""}" id="fantasy-transfer-builder">
+        <div class="fantasy-transfer-builder-head">
+          <div>
+            <span class="metric-label">Transfer builder</span>
+            <h3>${hasTarget ? `Buy ${escapeHtml(transferTarget.name)}` : "Choose a transfer target"}</h3>
+            <p class="muted">${hasTarget ? "Select who you would sell. OG checks budget, free transfers, club limits, and projected gain before anything touches your saved draft." : "Click Transfer in from search. This is a planning tool only; it does not change your official FPL team."}</p>
+          </div>
+          ${
+            hasTarget
+              ? `<div class="fantasy-buy-card">
+                  <span class="fantasy-squad-shirt">${escapeHtml(fantasyClubBadge(transferTarget.club))}</span>
+                  <strong>${escapeHtml(transferTarget.name)}</strong>
+                  <small>${escapeHtml(`${fantasyShortPosition(transferTarget.position)} · ${transferTarget.club} · ${fantasyMoney(transferTarget.price)}`)}</small>
+                </div>`
+              : ""
+          }
+        </div>
+        ${
+          hasTarget
+            ? `
+              <strong class="fantasy-builder-label">Choose who to sell</strong>
+              <div class="fantasy-sell-options fantasy-sell-options-clean">
+                ${
+                  sellCandidates.length
+                    ? sellCandidates
+                        .map((slot) => {
+                          const sellingPrice = fantasySellingPrice(slot);
+                          const gain = Number((transferTarget.xpts5 - slot.player.xpts5).toFixed(1));
+                          return `
+                            <button class="${slot.id === activeOutgoing ? "is-active" : ""}" type="button" data-action="fantasy-transfer-out" data-player-id="${escapeHtml(slot.id)}">
+                              <span>
+                                <strong>${escapeHtml(slot.player.name)}</strong>
+                                <small>${escapeHtml(`${slot.player.club} · ${slot.role === "starter" ? "Starting XI" : `Bench ${slot.benchOrder || ""}`}`)}</small>
+                              </span>
+                              <span>
+                                <strong>${escapeHtml(fantasyMoney(sellingPrice))}</strong>
+                                <small>${escapeHtml(`${gain >= 0 ? "+" : ""}${gain} 5GW`)}</small>
+                              </span>
+                            </button>
+                          `;
+                        })
+                        .join("")
+                    : `<div class="notice">No valid same-position sell options in your squad yet. Build or import a squad first.</div>`
+                }
+              </div>
+              <article class="fantasy-transfer-verdict fantasy-transfer-verdict-${escapeHtml(verdict.state)}">
+                <span>${escapeHtml(verdict.label)}</span>
+                <strong>${escapeHtml(verdict.title)}</strong>
+                <ul>
+                  ${verdict.reasons.map((reason) => `<li>${escapeHtml(reason)}</li>`).join("")}
+                </ul>
+              </article>
+              <div class="fantasy-transfer-rule-grid">
+                ${statPanel("Bank before", fantasyMoney(transferImpact?.bankBefore ?? fantasy.bank), "Current draft bank")}
+                ${statPanel("Selling price", transferImpact ? fantasyMoney(transferImpact.sellingPrice) : "Choose sell", "FPL sell value")}
+                ${statPanel("Buying price", fantasyMoney(transferTarget.price), "Incoming player")}
+                ${statPanel("Bank after", transferImpact ? fantasyMoney(transferImpact.bankAfter) : "Pending", transferImpact?.affordable ? "Affordable" : transferImpact ? "Blocked" : "Choose sell")}
+                ${statPanel("Free transfers", String(fantasy.freeTransfers), transferImpact?.hitRequired ? `${Math.abs(transferImpact.transferCost)} point hit` : "No hit")}
+                ${statPanel("Club rule", transferImpact ? (transferImpact.clubLimitOk ? "OK" : "Blocked") : "Pending", "Max 3 per club")}
+                ${statPanel("Already owned", transferImpact ? (transferImpact.alreadyOwned ? "Yes" : "No") : "Pending", "Duplicate check")}
+                ${statPanel("OG gain", transferImpact ? `${transferImpact.gain >= 0 ? "+" : ""}${transferImpact.gain}` : "Pending", "5GW projection")}
+              </div>
+              <div class="fantasy-builder-actions">
+                <button class="button" type="button" data-action="fantasy-apply-transfer" ${transferImpact && transferImpact.affordable && transferImpact.clubLimitOk && !transferImpact.alreadyOwned ? "" : "disabled"}>Apply to draft</button>
+                <button class="ghost-button" type="button" data-action="fantasy-save-draft">Save draft</button>
+                <button class="ghost-button" type="button" data-action="fantasy-save-plan">Save GW plan</button>
+              </div>
+              <p class="fantasy-transfer-footnote">Planning only. Your official FPL team changes only when you copy the move into FPL yourself.</p>
+            `
+            : ""
+        }
+      </article>
+    `;
+  };
+
+  const fantasyRecentTransferPanel = () => {
+    const fantasy = fantasyState();
+    const recent = fantasy.transferHistory?.[0];
+    if (!recent) return "";
+    return `
+      <article class="fantasy-recent-transfer">
+        <div>
+          <span class="metric-label">Draft updated</span>
+          <strong>${escapeHtml(`${recent.outgoing} -> ${recent.incoming}`)}</strong>
+          <p>${escapeHtml(`${recent.recommendation}. Bank after ${fantasyMoney(recent.bankAfter)}. 5GW gain ${recent.gain >= 0 ? "+" : ""}${recent.gain}.`)}</p>
+        </div>
+        <div class="fantasy-recent-transfer-actions">
+          <button class="button" type="button" data-action="fantasy-save-plan">Save GW${escapeHtml(String(fantasy.gameweek))} plan</button>
+          <button class="ghost-button" type="button" data-action="fantasy-save-draft" data-draft-name="Wildcard draft">Save wildcard draft</button>
+          <button class="ghost-button" type="button" data-action="fantasy-save-draft" data-draft-name="No-Haaland draft">Save No-Haaland draft</button>
+        </div>
+      </article>
+    `;
+  };
 
   const fantasyHub = ({ paidReady, recommendedAction, transferSummary, health }) => `
     <section class="section fantasy-hub" aria-label="Fantasy hub">
@@ -11430,19 +11854,22 @@
 
   const fantasyTransferRows = (rows = []) =>
     rows
-      .map(
-        (row) => `
+      .map((row) => {
+        const xptsLabel = fantasyOptionalNumberLabel(row.xpts5 ?? row.points);
+        const startLabel = fantasyOptionalNumberLabel(row.startPct ?? row.start, { suffix: "%", digits: 0, fallback: "Line pending" });
+        const swingLabel = row.swing ? String(row.swing) : "Neutral";
+        return `
           <tr>
             <td><strong>${escapeHtml(row.name || row.player)}</strong><br /><span class="muted">${escapeHtml(`${row.position} - ${row.club}`)}</span></td>
             <td>${escapeHtml(fantasyMoney(row.price))}</td>
-            <td>${escapeHtml(String(row.xpts5 || row.points))}</td>
-            <td>${escapeHtml(`${row.startPct || String(row.start).replace("%", "")}%`)}</td>
-            <td>${escapeHtml(row.swing)}</td>
+            <td>${escapeHtml(xptsLabel)}</td>
+            <td>${escapeHtml(startLabel)}</td>
+            <td>${escapeHtml(swingLabel)}</td>
             <td><span class="chip">${escapeHtml(fantasyHumanizeSignal(row.label))}</span></td>
             <td><button class="ghost-button compact-button" type="button" data-action="fantasy-transfer-in" data-player-id="${escapeHtml(row.id)}">Transfer in</button></td>
           </tr>
-        `
-      )
+        `;
+      })
       .join("");
 
   const fantasySearchTypeaheadHtml = () =>
@@ -11459,46 +11886,119 @@
       )
       .join("");
 
+  const fantasyPlayerPageData = () => {
+    const perPage = 26;
+    const allPlayers = fantasyFilteredPlayers(1000);
+    const pageCount = Math.max(1, Math.ceil(allPlayers.length / perPage));
+    const page = Math.max(1, Math.min(pageCount, Number(fantasyState().fantasyPlayerPage || 1)));
+    const start = (page - 1) * perPage;
+    return {
+      allPlayers,
+      page,
+      pageCount,
+      perPage,
+      visiblePlayers: allPlayers.slice(start, start + perPage),
+      start: allPlayers.length ? start + 1 : 0,
+      end: Math.min(allPlayers.length, start + perPage),
+    };
+  };
+
+  const fantasyPlayerPoolMenu = (clubOptions = []) => {
+    const fantasy = fantasyState();
+    const teamButtons = clubOptions.slice(0, 20).map(
+      (club) => `
+        <button type="button" data-action="fantasy-quick-filter" data-scope="ALL" data-position="ALL" data-club="${escapeHtml(club)}">
+          <span class="fantasy-mini-badge">${escapeHtml(fantasyClubBadge(club))}</span>${escapeHtml(club)}
+        </button>
+      `
+    );
+    return `
+      <details class="fantasy-player-menu">
+        <summary>${escapeHtml(fantasy.playerScope === "WATCHLIST" ? "Watchlist" : fantasy.positionFilter !== "ALL" ? fantasyPositionName(fantasy.positionFilter) : fantasy.clubFilter !== "ALL" ? fantasy.clubFilter : "All players")}</summary>
+        <div class="fantasy-player-menu-panel">
+          <strong>Global</strong>
+          <div class="fantasy-player-menu-grid">
+            <button type="button" data-action="fantasy-quick-filter" data-scope="ALL" data-position="ALL" data-club="ALL">All players</button>
+            <button type="button" data-action="fantasy-quick-filter" data-scope="WATCHLIST" data-position="ALL" data-club="ALL">Watchlist</button>
+          </div>
+          <strong>Position</strong>
+          <div class="fantasy-player-menu-grid">
+            ${["GK", "DEF", "MID", "FWD"].map((position) => `<button type="button" data-action="fantasy-quick-filter" data-scope="ALL" data-position="${position}" data-club="ALL">${escapeHtml(fantasyPositionName(position))}</button>`).join("")}
+          </div>
+          <strong>Teams</strong>
+          <div class="fantasy-player-menu-grid fantasy-player-team-grid">
+            ${teamButtons.join("")}
+          </div>
+        </div>
+      </details>
+    `;
+  };
+
   const fantasySearchResultCards = (players = fantasyFilteredPlayers()) => {
     if (!players.length) {
       return `<div class="notice">No matching players yet. Try a name, club, position, or a phrase like cheap defender.</div>`;
     }
-    return players
-      .map(
-        (player) => `
-          <article class="fantasy-player-result">
-            <div class="fantasy-player-result-main">
-              <strong>${escapeHtml(player.name)}</strong>
-              <span>${escapeHtml(`${player.position} - ${player.club} - ${fantasyMoney(player.price)}`)}</span>
-              <p>${escapeHtml(fantasyReadablePlayerNote(player))}</p>
+    const squadIds = new Set(fantasySquadRows().map((slot) => slot.id));
+    return ["GK", "DEF", "MID", "FWD"]
+      .map((position) => {
+        const positionRows = players.filter((player) => player.position === position);
+        if (!positionRows.length) return "";
+        return `
+          <section class="fantasy-player-section">
+            <div class="fantasy-player-section-head">
+              <strong>${escapeHtml(fantasyPositionName(position))}</strong>
+              <span>Player</span>
+              <span>Price</span>
+              <span>TP</span>
+              <span>Add</span>
             </div>
-            <div class="fantasy-player-result-metrics">
-              <span><strong>${escapeHtml(String(player.xpts5 || "—"))}</strong> 5GW xPts</span>
-              <span><strong>${escapeHtml(`${player.startPct || "—"}%`)}</strong> start</span>
-              <span>${escapeHtml(fantasyHumanizeSignal(player.label || "Watchlist"))}</span>
-            </div>
-            <div class="fantasy-result-actions">
-              <button class="fantasy-primary-transfer" type="button" data-action="fantasy-transfer-in" data-player-id="${escapeHtml(player.id)}">Transfer in</button>
-              <div class="fantasy-secondary-actions">
-                <button type="button" data-action="fantasy-watchlist" data-player-id="${escapeHtml(player.id)}">${fantasyState().watchlist.includes(player.id) ? "Remove watch" : "Watchlist"}</button>
-                <button type="button" data-action="fantasy-compare" data-player-id="${escapeHtml(player.id)}">Compare</button>
-                <button type="button" data-action="fantasy-ignore" data-player-id="${escapeHtml(player.id)}">Ignore</button>
-              </div>
-            </div>
-          </article>
-        `
-      )
+            ${positionRows
+              .map((player) => {
+                const inSquad = squadIds.has(player.id);
+                return `
+                  <article class="fantasy-player-row ${inSquad ? "is-selected" : ""}">
+                    <button class="fantasy-player-info-button" type="button" data-action="fantasy-select-player" data-player-id="${escapeHtml(player.id)}" aria-label="${escapeHtml(`${player.name} details`)}">i</button>
+                    <span class="fantasy-shirt-badge">${escapeHtml(fantasyClubBadge(player.club))}</span>
+                    <div class="fantasy-player-row-main">
+                      <strong>${escapeHtml(player.name)}</strong>
+                      <small>${escapeHtml(`${player.club} · ${fantasyShortPosition(player.position)}`)}</small>
+                    </div>
+                    <span class="fantasy-player-row-price">${escapeHtml(fantasyMoney(player.price))}</span>
+                    <span class="fantasy-player-row-points">${escapeHtml(String(fantasyPlayerTotalPoints(player)))}</span>
+                    <button class="fantasy-player-add-button ${inSquad ? "is-remove" : ""}" type="button" data-action="${inSquad ? "fantasy-remove-squad-player" : "fantasy-manual-add"}" data-player-id="${escapeHtml(player.id)}" aria-label="${escapeHtml(inSquad ? `Remove ${player.name}` : `Add ${player.name}`)}">${inSquad ? "-" : "+"}</button>
+                  </article>
+                `;
+              })
+              .join("")}
+          </section>
+        `;
+      })
       .join("");
   };
 
   const updateFantasySearchDom = () => {
-    const results = app.querySelector("[data-role='fantasy-search-results']");
-    const typeahead = app.querySelector("[data-role='fantasy-typeahead']");
-    const count = app.querySelector("[data-role='fantasy-search-count']");
-    const players = fantasyFilteredPlayers();
-    if (results) results.innerHTML = fantasySearchResultCards(players);
-    if (typeahead) typeahead.innerHTML = fantasySearchTypeaheadHtml();
-    if (count) count.textContent = `${players.length} shown`;
+    const pageData = fantasyPlayerPageData();
+    app.querySelectorAll("[data-role='fantasy-search']").forEach((input) => {
+      if (input.value !== fantasyState().searchQuery) input.value = fantasyState().searchQuery;
+    });
+    app.querySelectorAll("[data-role='fantasy-search-results']").forEach((results) => {
+      results.innerHTML = fantasySearchResultCards(pageData.visiblePlayers);
+    });
+    app.querySelectorAll("[data-role='fantasy-typeahead']").forEach((typeahead) => {
+      typeahead.innerHTML = fantasySearchTypeaheadHtml();
+    });
+    app.querySelectorAll("[data-role='fantasy-search-count']").forEach((count) => {
+      count.textContent = `${pageData.start}-${pageData.end} of ${pageData.allPlayers.length} players`;
+    });
+    app.querySelectorAll("[data-role='fantasy-player-page-current']").forEach((item) => {
+      item.textContent = `${pageData.page} / ${pageData.pageCount}`;
+    });
+    app.querySelectorAll("[data-action='fantasy-player-page-prev']").forEach((button) => {
+      button.disabled = pageData.page <= 1;
+    });
+    app.querySelectorAll("[data-action='fantasy-player-page-next']").forEach((button) => {
+      button.disabled = pageData.page >= pageData.pageCount;
+    });
   };
 
   const fantasyStarterGuide = () => `
@@ -11585,6 +12085,207 @@
     </details>
   `;
 
+  const fantasySquadSlotCard = (slot = null, position = "MID") => {
+    if (!slot?.player) {
+      return `
+        <button class="fantasy-squad-slot is-empty" type="button" data-action="fantasy-quick-filter" data-scope="ALL" data-position="${escapeHtml(position)}" data-club="ALL">
+          <span>+</span>
+          <strong>${escapeHtml(fantasyShortPosition(position))}</strong>
+        </button>
+      `;
+    }
+    const selected = fantasyState().selectedPlayerId === slot.id;
+    const badge = slot.captain ? "C" : slot.vice ? "VC" : "";
+    return `
+      <button class="fantasy-squad-slot ${selected ? "is-selected" : ""}" type="button" data-action="fantasy-select-player" data-player-id="${escapeHtml(slot.id)}">
+        <span class="fantasy-squad-shirt">${escapeHtml(fantasyClubBadge(slot.player.club))}</span>
+        <strong>${escapeHtml(slot.player.name)}</strong>
+        <small>${escapeHtml(`${fantasyMoney(slot.player.price)} · ${fantasyPlayerPointsLabel(slot.player)}`)}</small>
+        ${badge ? `<em>${escapeHtml(badge)}</em>` : ""}
+      </button>
+    `;
+  };
+
+  const fantasySquadPositionLine = (position, rows = []) => {
+    const count = FPL_RULES.squadCounts[position] || 0;
+    const slots = Array.from({ length: count }, (_, index) => rows[index] || null);
+    return `
+      <div class="fantasy-squad-position-line fantasy-squad-position-${escapeHtml(position.toLowerCase())}">
+        ${slots.map((slot) => fantasySquadSlotCard(slot, position)).join("")}
+      </div>
+    `;
+  };
+
+  const fantasySquadSelectionPitch = (rows = fantasySquadRows()) => {
+    const grouped = ["GK", "DEF", "MID", "FWD"].reduce((acc, position) => {
+      acc[position] = rows.filter((slot) => slot.player.position === position);
+      return acc;
+    }, {});
+    return `
+      <div class="fantasy-squad-pitch" aria-label="Fantasy squad pitch">
+        <div class="fantasy-squad-pitch-banner">
+          <strong>Fantasy</strong>
+          <strong>Fantasy</strong>
+        </div>
+        ${["GK", "DEF", "MID", "FWD"].map((position) => fantasySquadPositionLine(position, grouped[position])).join("")}
+      </div>
+    `;
+  };
+
+  const fantasySelectedPlayerDrawer = () => {
+    const fantasy = fantasyState();
+    const selectedSlot = fantasySquadRows().find((slot) => slot.id === fantasy.selectedPlayerId);
+    const selectedPlayer = selectedSlot?.player || fantasyPlayerById(fantasy.selectedPlayerId);
+    if (!selectedPlayer) {
+      return `
+        <article class="fantasy-selected-drawer is-empty">
+          <strong>Select a player</strong>
+          <p>Tap a player on the pitch or use the player list to add someone to your squad.</p>
+        </article>
+      `;
+    }
+    const inSquad = Boolean(selectedSlot);
+    const roleLabel = selectedSlot?.role === "starter" ? "Starting XI" : selectedSlot?.role === "bench" ? `Bench ${selectedSlot.benchOrder || ""}` : "Player pool";
+    return `
+      <article class="fantasy-selected-drawer">
+        <div class="fantasy-selected-player">
+          <span class="fantasy-squad-shirt">${escapeHtml(fantasyClubBadge(selectedPlayer.club))}</span>
+          <div>
+            <strong>${escapeHtml(selectedPlayer.name)}</strong>
+            <p>${escapeHtml(`${fantasyShortPosition(selectedPlayer.position)} · ${selectedPlayer.club} · ${fantasyMoney(selectedPlayer.price)} · ${fantasyPlayerPointsLabel(selectedPlayer)}`)}</p>
+            <small>${escapeHtml(`${roleLabel}. ${fantasyReadablePlayerNote(selectedPlayer)}`)}</small>
+          </div>
+        </div>
+        <div class="fantasy-selected-actions">
+          ${
+            inSquad
+              ? `
+                <button type="button" data-action="fantasy-start" data-player-id="${escapeHtml(selectedPlayer.id)}">Start</button>
+                <button type="button" data-action="fantasy-bench" data-player-id="${escapeHtml(selectedPlayer.id)}">Bench</button>
+                <button type="button" data-action="fantasy-captain" data-player-id="${escapeHtml(selectedPlayer.id)}">Captain</button>
+                <button type="button" data-action="fantasy-vice" data-player-id="${escapeHtml(selectedPlayer.id)}">Vice</button>
+                <button type="button" data-action="fantasy-transfer-out" data-player-id="${escapeHtml(selectedPlayer.id)}">Sell</button>
+                <button type="button" data-action="fantasy-remove-squad-player" data-player-id="${escapeHtml(selectedPlayer.id)}">Remove</button>
+              `
+              : `
+                <button type="button" data-action="fantasy-manual-add" data-player-id="${escapeHtml(selectedPlayer.id)}">Add</button>
+                <button type="button" data-action="fantasy-transfer-in" data-player-id="${escapeHtml(selectedPlayer.id)}">Transfer in</button>
+              `
+          }
+          <button type="button" data-action="fantasy-watchlist" data-player-id="${escapeHtml(selectedPlayer.id)}">${fantasy.watchlist.includes(selectedPlayer.id) ? "Watching" : "Watch"}</button>
+        </div>
+      </article>
+    `;
+  };
+
+  const fantasyPlayerSelectionPanel = ({ clubOptions = [] } = {}) => {
+    const fantasy = fantasyState();
+    const pageData = fantasyPlayerPageData();
+    return `
+      <article class="panel fantasy-player-selection-panel">
+        <div class="fantasy-builder-title">
+          <h2>Player Selection</h2>
+          <p>Select a maximum of 3 players from a single team. Use search or the filters, then tap + to add a player to your draft.</p>
+        </div>
+        <label class="fantasy-find-player">
+          <span>Find a player</span>
+          <input class="text-input" type="search" value="${escapeHtml(fantasy.searchQuery)}" placeholder="Search by name" data-role="fantasy-search" aria-label="Search player" autocomplete="off" />
+        </label>
+        <div class="matches-typeahead fantasy-typeahead fantasy-builder-typeahead" data-role="fantasy-typeahead" aria-label="Fantasy autocomplete">
+          ${fantasySearchTypeaheadHtml()}
+        </div>
+        <div class="fantasy-player-filter-bar">
+          ${fantasyPlayerPoolMenu(clubOptions)}
+          <select class="text-input" data-role="fantasy-sort-filter" aria-label="Sort players">
+            <option value="TOTAL_POINTS" ${fantasy.sortFilter === "TOTAL_POINTS" ? "selected" : ""}>Total points</option>
+            <option value="XPTS_5" ${fantasy.sortFilter === "XPTS_5" ? "selected" : ""}>OG 5GW xPts</option>
+            <option value="XPTS_1" ${fantasy.sortFilter === "XPTS_1" ? "selected" : ""}>OG 1GW xPts</option>
+            <option value="PRICE" ${fantasy.sortFilter === "PRICE" ? "selected" : ""}>Price</option>
+          </select>
+          <select class="text-input" data-role="fantasy-price-filter" aria-label="Maximum price">
+            <option value="ALL" ${fantasy.priceFilter === "ALL" ? "selected" : ""}>£14.7m</option>
+            <option value="UNDER_7_5" ${fantasy.priceFilter === "UNDER_7_5" ? "selected" : ""}>Under £7.5m</option>
+            <option value="PREMIUM" ${fantasy.priceFilter === "PREMIUM" ? "selected" : ""}>Premium</option>
+          </select>
+          <button type="button" data-action="fantasy-reset-player-filters">Reset</button>
+        </div>
+        <div class="fantasy-player-count" data-role="fantasy-search-count">${escapeHtml(`${pageData.start}-${pageData.end} of ${pageData.allPlayers.length} players`)}</div>
+        <div class="fantasy-player-table" data-role="fantasy-search-results">
+          ${fantasySearchResultCards(pageData.visiblePlayers)}
+        </div>
+        <div class="fantasy-player-pagination">
+          <button type="button" data-action="fantasy-player-page-prev" ${pageData.page <= 1 ? "disabled" : ""}>Previous</button>
+          <span data-role="fantasy-player-page-current">${escapeHtml(`${pageData.page} / ${pageData.pageCount}`)}</span>
+          <button type="button" data-action="fantasy-player-page-next" ${pageData.page >= pageData.pageCount ? "disabled" : ""}>Next</button>
+        </div>
+      </article>
+    `;
+  };
+
+  const fantasySquadSelectionPanel = ({ validation, projectedPoints } = {}) => {
+    const fantasy = fantasyState();
+    const rows = fantasySquadRows();
+    const missingCount = Math.max(0, FPL_RULES.squadSize - rows.length);
+    const enterLabel = validation?.valid ? "Enter Squad" : missingCount ? `Pick ${missingCount} more` : "Fix squad";
+    return `
+      <article class="panel fantasy-squad-selection-panel">
+        <div class="fantasy-squad-selection-head">
+          <div>
+            <h2>Squad Selection</h2>
+            <p>Select a maximum of 3 players from a single team or use Auto Pick if you are short of time.</p>
+          </div>
+          <div class="fantasy-view-toggle" aria-label="Fantasy team view">
+            <button class="${fantasy.fantasyTeamView === "pitch" ? "is-active" : ""}" type="button" data-action="fantasy-team-view" data-value="pitch">Pitch View</button>
+            <button class="${fantasy.fantasyTeamView === "list" ? "is-active" : ""}" type="button" data-action="fantasy-team-view" data-value="list">List View</button>
+          </div>
+        </div>
+        <div class="fantasy-squad-meta">
+          <article>
+            <span>Team Name</span>
+            <strong>Odds Genius XI</strong>
+          </article>
+          <article>
+            <strong class="fantasy-squad-count ${rows.length === FPL_RULES.squadSize ? "is-complete" : ""}">${escapeHtml(`${rows.length} / ${FPL_RULES.squadSize}`)}</strong>
+            <span>Players selected</span>
+          </article>
+          <article>
+            <strong class="fantasy-bank-pill">${escapeHtml(fantasyMoney(fantasy.bank || (FPL_RULES.budget - fantasySquadValue())))}</strong>
+            <span>Bank</span>
+          </article>
+        </div>
+        <div class="fantasy-squad-requirements" aria-label="Squad requirements">
+          ${["GK", "DEF", "MID", "FWD"].map((position) => {
+            const current = rows.filter((slot) => slot.player.position === position).length;
+            const needed = FPL_RULES.squadCounts[position] || 0;
+            return `<button class="${current === needed ? "is-complete" : ""}" type="button" data-action="fantasy-quick-filter" data-scope="ALL" data-position="${escapeHtml(position)}" data-club="ALL">${escapeHtml(`${fantasyShortPosition(position)} ${current}/${needed}`)}</button>`;
+          }).join("")}
+        </div>
+        ${
+          fantasy.fantasyTeamView === "list"
+            ? fantasySquadListView(rows)
+            : fantasySquadSelectionPitch(rows)
+        }
+        ${fantasySelectedPlayerDrawer()}
+        <div class="fantasy-squad-selection-actions">
+          <button class="ghost-button" type="button" data-action="fantasy-auto-pick">Auto Pick</button>
+          <button class="ghost-button" type="button" data-action="fantasy-reset">Reset</button>
+          <button class="button" type="button" data-action="fantasy-enter-squad" ${validation?.valid ? "" : "disabled"}>${escapeHtml(enterLabel)}</button>
+        </div>
+        <div class="fantasy-squad-status ${validation?.valid ? "is-valid" : "is-invalid"}">
+          <strong>${validation?.valid ? "Squad ready" : "Squad needs fixing"}</strong>
+          <span>${escapeHtml(validation?.valid ? "You can now enter this squad, then review captain, bench and transfer advice below." : validation?.issues?.[0] || "Complete your 15-player squad.")}</span>
+        </div>
+      </article>
+    `;
+  };
+
+  const fantasySquadBuilder = ({ clubOptions, validation, projectedPoints }) => `
+    <section class="section fantasy-squad-builder" id="fantasy-my-team">
+      ${fantasyPlayerSelectionPanel({ clubOptions })}
+      ${fantasySquadSelectionPanel({ validation, projectedPoints })}
+    </section>
+  `;
+
   const fantasyView = () => {
     const tier = currentAccessTier();
     const paidReady = accessTierRank(tier) >= 1;
@@ -11614,6 +12315,7 @@
     const selectedSlot = fantasySquadRows().find((slot) => slot.id === fantasy.selectedPlayerId);
     const selectedPlayer = selectedSlot?.player || fantasyPlayerById(fantasy.selectedPlayerId) || fantasyPlayerById("foden");
     const validation = fantasyValidateLineup();
+    const squadValidation = fantasyValidateSquadDraft();
     const projectedPoints = Number(fantasyProjectedPoints().toFixed(1));
     const health = fantasySquadHealth();
     const captain = fantasyCaptainSlot()?.player;
@@ -11626,7 +12328,8 @@
     const benchPlayers = fantasyBenchRows();
     const transferRows = fantasyFilteredPlayers().filter((player) => !fantasySquadRows().some((slot) => slot.id === player.id));
     const transferImpact = fantasyTransferImpact();
-    const sellCandidates = fantasySquadRows().filter((slot) => slot.player.position === transferImpact?.incoming?.position);
+    const transferTarget = fantasyPlayerById(fantasy.incomingPlayerId);
+    const sellCandidates = transferTarget ? fantasySquadRows().filter((slot) => slot.player.position === transferTarget.position) : [];
     const clubOptions = [...new Set(fantasyReferencePlayers().map((player) => player.club).filter(Boolean))].sort();
     const recommendedAction =
       !validation.valid
@@ -11689,8 +12392,8 @@
         </aside>
       </section>
 
-      ${fantasyHub({ paidReady, recommendedAction, transferSummary, health })}
       ${fantasyIntroOverlay(fantasy)}
+      ${fantasySquadBuilder({ clubOptions, validation: squadValidation, projectedPoints })}
       ${fantasySetupFlow(fantasy)}
 
       <section class="section fantasy-command-bar fantasy-command-first" id="fantasy-decision">
@@ -11785,61 +12488,7 @@
         <a href="#fantasy-briefing">Briefing</a>
       </nav>
 
-      <section class="section split fantasy-workbench" id="fantasy-my-team">
-        <article class="panel fantasy-pitch-panel">
-          <div class="fantasy-section-head">
-            <div>
-              <span class="metric-label">My squad</span>
-              <h2>Pitch view</h2>
-              <p class="muted">Tap a player to start, bench, captain, sell, compare or watchlist. The page keeps formation and captain rules in check.</p>
-            </div>
-            <div class="fantasy-view-toggle" aria-label="Fantasy team view">
-              <button class="${fantasy.fantasyTeamView === "pitch" ? "is-active" : ""}" type="button" data-action="fantasy-team-view" data-value="pitch">Pitch View</button>
-              <button class="${fantasy.fantasyTeamView === "list" ? "is-active" : ""}" type="button" data-action="fantasy-team-view" data-value="list">List View</button>
-            </div>
-          </div>
-          ${
-            fantasy.fantasyTeamView === "list"
-              ? fantasySquadListView()
-              : `<div class="fantasy-pitch">
-                  <div class="fantasy-pitch-banner">
-                    <strong>OG Fantasy</strong>
-                    <span>${escapeHtml(fantasyFormation())}</span>
-                  </div>
-                  ${pitchLines.map(([label, players]) => fantasyPitchLine(label, players)).join("")}
-                </div>`
-          }
-          <div class="fantasy-bench">
-            <span class="metric-label">Bench order</span>
-            <div class="fantasy-bench-grid">
-              ${benchPlayers.map((player) => fantasyPlayerCard(player)).join("")}
-            </div>
-          </div>
-          <article class="fantasy-player-detail fantasy-selected-player">
-            <span class="metric-label">Selected player</span>
-            <strong>${escapeHtml(selectedPlayer.name)}</strong>
-            <span>${escapeHtml(`${selectedPlayer.position} - ${selectedPlayer.club} - ${fantasyMoney(selectedPlayer.price)}`)}</span>
-            <p>${escapeHtml(fantasyReadablePlayerNote(selectedPlayer))}</p>
-            ${fantasyFeaturePills([selectedPlayer.label, `${selectedPlayer.xpts5} 5GW xPts`, `Start ${selectedPlayer.startPct}%`, selectedPlayer.risk])}
-          </article>
-          <div class="fantasy-player-actions">
-            <button type="button" data-action="fantasy-start" data-player-id="${escapeHtml(selectedPlayer.id)}">Start</button>
-            <button type="button" data-action="fantasy-bench" data-player-id="${escapeHtml(selectedPlayer.id)}">Bench</button>
-            <button type="button" data-action="fantasy-captain" data-player-id="${escapeHtml(selectedPlayer.id)}">Captain</button>
-            <button type="button" data-action="fantasy-vice" data-player-id="${escapeHtml(selectedPlayer.id)}">Vice</button>
-            <button type="button" data-action="fantasy-transfer-out" data-player-id="${escapeHtml(selectedPlayer.id)}">Sell</button>
-            <button type="button" data-action="fantasy-compare" data-player-id="${escapeHtml(selectedPlayer.id)}">Compare</button>
-            <button type="button" data-action="fantasy-watchlist" data-player-id="${escapeHtml(selectedPlayer.id)}">${fantasy.watchlist.includes(selectedPlayer.id) ? "Remove watch" : "Watchlist"}</button>
-            <button type="button" data-action="fantasy-lock-target" data-player-id="${escapeHtml(selectedPlayer.id)}">${fantasy.lockedTargets.includes(selectedPlayer.id) ? "Unlock target" : "Lock target"}</button>
-          </div>
-          <div class="fantasy-rule-stack ${validation.valid ? "is-valid" : "is-invalid"}">
-            <strong>${validation.valid ? "Lineup valid" : "Lineup needs fixing"}</strong>
-            <ul class="feature-list">
-              ${(validation.valid ? ["11 starters, legal formation, captain and vice are active."] : validation.issues).map((issue) => `<li>${escapeHtml(issue)}</li>`).join("")}
-            </ul>
-          </div>
-        </article>
-
+      <section class="section fantasy-decision-workbench" id="fantasy-decision-panel">
         <article class="panel fantasy-decision-panel">
           <div class="fantasy-section-head">
             <div>
@@ -11882,7 +12531,7 @@
           </div>
           <div class="fantasy-search-simple">
             <input class="text-input" type="search" value="${escapeHtml(fantasy.searchQuery)}" placeholder="Search Saka, Arsenal defender, cheap midfielder..." data-role="fantasy-search" aria-label="Search player" autocomplete="off" />
-            <span class="pill" data-role="fantasy-search-count">${escapeHtml(`${fantasyFilteredPlayers().length} shown`)}</span>
+            <span class="pill" data-role="fantasy-search-count">${escapeHtml(`${fantasyFilteredPlayers().length} players shown`)}</span>
           </div>
           <div class="matches-typeahead fantasy-typeahead" data-role="fantasy-typeahead" aria-label="Fantasy autocomplete">
             ${fantasySearchTypeaheadHtml()}
@@ -11943,59 +12592,8 @@
           <div class="fantasy-tabs">
             ${["Buy", "Sell", "Hold", "Avoid", "Differentials", "Traps"].map((tab, index) => `<button class="${index === 0 ? "is-active" : ""}" type="button">${escapeHtml(tab)}</button>`).join("")}
           </div>
-          <article class="fantasy-transfer-builder ${fantasy.transferBuilderOpen ? "is-open" : ""}" id="fantasy-transfer-builder">
-            <div>
-              <span class="metric-label">Transfer builder</span>
-              <h3>${transferImpact ? `${escapeHtml(transferImpact.outgoing.name)} -> ${escapeHtml(transferImpact.incoming.name)}` : "Choose a transfer target"}</h3>
-              <p class="muted">${transferImpact ? `${transferImpact.recommendation}. Selling price ${fantasyMoney(transferImpact.sellingPrice)}. Budget before ${fantasyMoney(transferImpact.bankBefore)}, after ${fantasyMoney(transferImpact.bankAfter)}.` : "Click Transfer in from search. The builder then asks who you are selling and checks budget, club limits, hit cost, and expected gain."}</p>
-            </div>
-            ${
-              transferImpact
-                ? `
-                  <div class="fantasy-transfer-steps">
-                    <article>
-                      <span>1</span>
-                      <strong>Target</strong>
-                      <p>${escapeHtml(`${transferImpact.incoming.name} · ${transferImpact.incoming.position} · ${fantasyMoney(transferImpact.incoming.price)}`)}</p>
-                    </article>
-                    <article>
-                      <span>2</span>
-                      <strong>Sell</strong>
-                      <p>${escapeHtml(`${transferImpact.outgoing.name} · selling price ${fantasyMoney(transferImpact.sellingPrice)}`)}</p>
-                    </article>
-                    <article>
-                      <span>3</span>
-                      <strong>Decision</strong>
-                      <p>${escapeHtml(`${transferImpact.recommendation} · net ${transferImpact.netGain >= 0 ? "+" : ""}${transferImpact.netGain} over 5GW`)}</p>
-                    </article>
-                  </div>
-                  <strong class="fantasy-builder-label">Choose who you are selling</strong>
-                  <div class="fantasy-sell-options">
-                    ${sellCandidates
-                      .map(
-                        (slot) => `
-                          <button class="${slot.id === fantasy.outgoingPlayerId ? "is-active" : ""}" type="button" data-action="fantasy-transfer-out" data-player-id="${escapeHtml(slot.id)}">
-                            ${escapeHtml(slot.player.name)} <span>${escapeHtml(fantasyMoney(slot.player.price))}</span>
-                          </button>
-                        `
-                      )
-                      .join("")}
-                  </div>
-                  <div class="fantasy-impact-grid">
-                    ${statPanel("Budget after", fantasyMoney(transferImpact.bankAfter), transferImpact.affordable ? "Affordable" : "Blocked")}
-                    ${statPanel("5GW gain", `${transferImpact.gain >= 0 ? "+" : ""}${transferImpact.gain}`, "Expected points")}
-                    ${statPanel("Net gain", `${transferImpact.netGain >= 0 ? "+" : ""}${transferImpact.netGain}`, transferImpact.hitRequired ? `${Math.abs(transferImpact.transferCost)} point hit` : "No hit")}
-                    ${statPanel("Risk change", transferImpact.riskReduced ? "Reduced" : "Neutral", `${transferImpact.outgoing.risk} -> ${transferImpact.incoming.risk}`)}
-                    ${statPanel("Club limit", transferImpact.clubLimitOk ? "OK" : "Blocked", transferImpact.alreadyOwned ? "Already owned" : "Max 3 per club")}
-                  </div>
-                  <div class="fantasy-builder-actions">
-                    <button class="button" type="button" data-action="fantasy-apply-transfer" ${transferImpact.affordable && transferImpact.clubLimitOk && !transferImpact.alreadyOwned ? "" : "disabled"}>Apply to draft</button>
-                    <button class="ghost-button" type="button" data-action="fantasy-save-plan">Save GW plan</button>
-                  </div>
-                `
-                : ""
-            }
-          </article>
+          ${fantasyRecentTransferPanel()}
+          ${fantasyTransferBuilderPanel({ transferTarget, transferImpact, sellCandidates })}
           <div class="table-shell">
             <table>
               <thead>
@@ -12043,36 +12641,23 @@
               fantasy.savedPlans.length
                 ? fantasy.savedPlans
                     .slice(0, 4)
-                    .map(
-                      (plan) => `
-                        <article>
-                          <strong>${escapeHtml(`GW${plan.gameweek}: ${plan.transfer}`)}</strong>
-                          <span>${escapeHtml(`Captain ${plan.captain} / VC ${plan.vice}`)}</span>
-                          <small>${escapeHtml(`${plan.strategy} · ${plan.deadline} · Bank ${fantasyMoney(plan.bank)} · FT ${plan.freeTransfers}`)}</small>
-                        </article>
-                      `
-                    )
+                    .map((plan) => renderFantasySavedPlanCard(plan))
                     .join("")
                 : `<p class="muted">No saved gameweek plans yet. Generate and save one when the squad is legal.</p>`
             }
           </div>
           <div class="fantasy-draft-grid">
-            ${[
-              { name: "Current squad", projected: projectedPoints, health, note: `${fantasyMoney(fantasy.bank)} bank` },
-              ...fantasy.savedDrafts,
-            ]
-              .slice(0, 5)
-              .map(
-                (draft) => `
-                  <article>
-                    <strong>${escapeHtml(draft.name)}</strong>
-                    <span>${escapeHtml(`${draft.projected} GW xPts`)}</span>
-                    <span>${escapeHtml(`Health ${draft.health}`)}</span>
-                    <small>${escapeHtml(draft.note || `${draft.strategy || fantasy.strategy} - ${fantasyMoney(draft.bank ?? fantasy.bank)} bank`)}</small>
-                  </article>
-                `
-              )
-              .join("")}
+            ${fantasy.savedDrafts.length
+              ? fantasy.savedDrafts.slice(0, 4).map((draft) => renderFantasySavedDraftCard(draft)).join("")
+              : `<article class="fantasy-saved-card">
+                  <div class="fantasy-saved-card-head">
+                    <div>
+                      <span class="metric-label">Current squad</span>
+                      <strong>${escapeHtml(`${projectedPoints} GW xPts`)}</strong>
+                      <p>${escapeHtml(`Health ${health} · ${fantasyMoney(fantasy.bank)} bank`)}</p>
+                    </div>
+                  </div>
+                </article>`}
           </div>
         </article>
         <article class="panel fantasy-chip-panel">
@@ -17085,6 +17670,62 @@
       return;
     }
 
+    const fantasyQuickFilterTarget = event.target.closest("[data-action='fantasy-quick-filter']");
+    if (fantasyQuickFilterTarget) {
+      event.preventDefault();
+      fantasyUpdate(
+        {
+          playerScope: fantasyQuickFilterTarget.dataset.scope || "ALL",
+          positionFilter: fantasyQuickFilterTarget.dataset.position || "ALL",
+          clubFilter: fantasyQuickFilterTarget.dataset.club || "ALL",
+          fantasyPlayerPage: 1,
+        },
+        ""
+      );
+      render();
+      return;
+    }
+
+    const fantasyResetPlayerFiltersTarget = event.target.closest("[data-action='fantasy-reset-player-filters']");
+    if (fantasyResetPlayerFiltersTarget) {
+      event.preventDefault();
+      fantasyUpdate(
+        {
+          playerScope: "ALL",
+          positionFilter: "ALL",
+          clubFilter: "ALL",
+          priceFilter: "ALL",
+          riskFilter: "ALL",
+          ownershipFilter: "ALL",
+          fixtureFilter: "ALL",
+          pointsFilter: "ALL",
+          sortFilter: "TOTAL_POINTS",
+          fantasyPlayerPage: 1,
+          searchQuery: "",
+        },
+        "Player filters reset."
+      );
+      render();
+      return;
+    }
+
+    const fantasyPagePrevTarget = event.target.closest("[data-action='fantasy-player-page-prev']");
+    if (fantasyPagePrevTarget) {
+      event.preventDefault();
+      fantasyUpdate({ fantasyPlayerPage: Math.max(1, Number(fantasyState().fantasyPlayerPage || 1) - 1) }, "");
+      render();
+      return;
+    }
+
+    const fantasyPageNextTarget = event.target.closest("[data-action='fantasy-player-page-next']");
+    if (fantasyPageNextTarget) {
+      event.preventDefault();
+      const pageData = fantasyPlayerPageData();
+      fantasyUpdate({ fantasyPlayerPage: Math.min(pageData.pageCount, Number(fantasyState().fantasyPlayerPage || 1) + 1) }, "");
+      render();
+      return;
+    }
+
     const fantasyTransferInTarget = event.target.closest("[data-action='fantasy-transfer-in']");
     if (fantasyTransferInTarget) {
       event.preventDefault();
@@ -17126,6 +17767,22 @@
     if (fantasyManualAddTarget) {
       event.preventDefault();
       fantasyAddManualPlayer(fantasyManualAddTarget.dataset.playerId);
+      render();
+      return;
+    }
+
+    const fantasyAutoPickTarget = event.target.closest("[data-action='fantasy-auto-pick']");
+    if (fantasyAutoPickTarget) {
+      event.preventDefault();
+      fantasyAutoPickSquad();
+      render();
+      return;
+    }
+
+    const fantasyRemoveSquadPlayerTarget = event.target.closest("[data-action='fantasy-remove-squad-player']");
+    if (fantasyRemoveSquadPlayerTarget) {
+      event.preventDefault();
+      fantasyRemoveSquadPlayer(fantasyRemoveSquadPlayerTarget.dataset.playerId);
       render();
       return;
     }
@@ -17188,6 +17845,28 @@
       return;
     }
 
+    const fantasyEnterSquadTarget = event.target.closest("[data-action='fantasy-enter-squad']");
+    if (fantasyEnterSquadTarget) {
+      event.preventDefault();
+      const draftCheck = fantasyValidateSquadDraft();
+      if (!draftCheck.valid) {
+        fantasyUpdate({}, `Squad entry blocked: ${draftCheck.issues[0]}`);
+        render();
+        return;
+      }
+      fantasyUpdate(
+        {
+          setupComplete: true,
+          generatedPlanAt: new Date().toISOString(),
+        },
+        "Squad entered. Review captain, bench and transfer advice next."
+      );
+      await saveAccountFantasyWorkspace({ renderAfter: false });
+      render();
+      window.requestAnimationFrame(() => document.getElementById("fantasy-decision")?.scrollIntoView({ behavior: "smooth", block: "start" }));
+      return;
+    }
+
     const fantasySavePlanTarget = event.target.closest("[data-action='fantasy-save-plan']");
     if (fantasySavePlanTarget) {
       event.preventDefault();
@@ -17224,11 +17903,24 @@
       return;
     }
 
+    const fantasyLoadPlanTarget = event.target.closest("[data-action='load-fantasy-plan']");
+    if (fantasyLoadPlanTarget) {
+      event.preventDefault();
+      fantasyLoadSavedPlan(fantasyLoadPlanTarget.dataset.planId);
+      await saveAccountFantasyWorkspace({ renderAfter: false });
+      state.runtime.fantasySyncStatus = demoAccountActive() ? "local" : "synced";
+      state.runtime.fantasySyncMessage = "Saved Fantasy plan loaded. Open Fantasy to review the pitch, captaincy, transfer state, and chip posture.";
+      render();
+      return;
+    }
+
     const fantasyLoadDraftTarget = event.target.closest("[data-action='load-fantasy-draft']");
     if (fantasyLoadDraftTarget) {
       event.preventDefault();
       fantasyLoadSavedDraft(fantasyLoadDraftTarget.dataset.draftId);
       await saveAccountFantasyWorkspace({ renderAfter: false });
+      state.runtime.fantasySyncStatus = demoAccountActive() ? "local" : "synced";
+      state.runtime.fantasySyncMessage = "Saved Fantasy draft loaded. Open Fantasy to inspect or edit the squad pitch.";
       render();
       return;
     }
@@ -17245,7 +17937,7 @@
     const fantasySaveDraftTarget = event.target.closest("[data-action='fantasy-save-draft']");
     if (fantasySaveDraftTarget) {
       event.preventDefault();
-      fantasySaveDraft();
+      fantasySaveDraft(fantasySaveDraftTarget.dataset.draftName || "");
       await saveAccountFantasyWorkspace({ renderAfter: false });
       render();
       return;
@@ -17254,7 +17946,7 @@
     const fantasyResetTarget = event.target.closest("[data-action='fantasy-reset']");
     if (fantasyResetTarget) {
       event.preventDefault();
-      fantasyUpdate(fantasyDefaultState(), "Demo squad reset.");
+      fantasyClearDraftSquad();
       render();
       return;
     }
@@ -17506,55 +18198,64 @@
     const fantasySearchInput = event.target.closest("[data-role='fantasy-search']");
     if (fantasySearchInput) {
       fantasyUpdate({ searchQuery: String(fantasySearchInput.value || "") }, "");
+      state.runtime.fantasy = normalizeFantasyState({ ...fantasyState(), fantasyPlayerPage: 1 });
+      writeFantasyState();
       updateFantasySearchDom();
       return;
     }
 
     const fantasyPositionFilter = event.target.closest("[data-role='fantasy-position-filter']");
     if (fantasyPositionFilter) {
-      fantasyUpdate({ positionFilter: String(fantasyPositionFilter.value || "ALL") }, "");
+      fantasyUpdate({ positionFilter: String(fantasyPositionFilter.value || "ALL"), fantasyPlayerPage: 1 }, "");
       render();
       return;
     }
 
     const fantasyClubFilter = event.target.closest("[data-role='fantasy-club-filter']");
     if (fantasyClubFilter) {
-      fantasyUpdate({ clubFilter: String(fantasyClubFilter.value || "ALL") }, "");
+      fantasyUpdate({ clubFilter: String(fantasyClubFilter.value || "ALL"), fantasyPlayerPage: 1 }, "");
       render();
       return;
     }
 
     const fantasyPriceFilter = event.target.closest("[data-role='fantasy-price-filter']");
     if (fantasyPriceFilter) {
-      fantasyUpdate({ priceFilter: String(fantasyPriceFilter.value || "ALL") }, "");
+      fantasyUpdate({ priceFilter: String(fantasyPriceFilter.value || "ALL"), fantasyPlayerPage: 1 }, "");
+      render();
+      return;
+    }
+
+    const fantasySortFilter = event.target.closest("[data-role='fantasy-sort-filter']");
+    if (fantasySortFilter) {
+      fantasyUpdate({ sortFilter: String(fantasySortFilter.value || "TOTAL_POINTS"), fantasyPlayerPage: 1 }, "");
       render();
       return;
     }
 
     const fantasyRiskFilter = event.target.closest("[data-role='fantasy-risk-filter']");
     if (fantasyRiskFilter) {
-      fantasyUpdate({ riskFilter: String(fantasyRiskFilter.value || "ALL") }, "");
+      fantasyUpdate({ riskFilter: String(fantasyRiskFilter.value || "ALL"), fantasyPlayerPage: 1 }, "");
       render();
       return;
     }
 
     const fantasyOwnershipFilter = event.target.closest("[data-role='fantasy-ownership-filter']");
     if (fantasyOwnershipFilter) {
-      fantasyUpdate({ ownershipFilter: String(fantasyOwnershipFilter.value || "ALL") }, "");
+      fantasyUpdate({ ownershipFilter: String(fantasyOwnershipFilter.value || "ALL"), fantasyPlayerPage: 1 }, "");
       render();
       return;
     }
 
     const fantasyFixtureFilter = event.target.closest("[data-role='fantasy-fixture-filter']");
     if (fantasyFixtureFilter) {
-      fantasyUpdate({ fixtureFilter: String(fantasyFixtureFilter.value || "ALL") }, "");
+      fantasyUpdate({ fixtureFilter: String(fantasyFixtureFilter.value || "ALL"), fantasyPlayerPage: 1 }, "");
       render();
       return;
     }
 
     const fantasyPointsFilter = event.target.closest("[data-role='fantasy-points-filter']");
     if (fantasyPointsFilter) {
-      fantasyUpdate({ pointsFilter: String(fantasyPointsFilter.value || "ALL") }, "");
+      fantasyUpdate({ pointsFilter: String(fantasyPointsFilter.value || "ALL"), fantasyPlayerPage: 1 }, "");
       render();
       return;
     }
@@ -17600,6 +18301,7 @@
       ["fantasy-position-filter", "positionFilter", "ALL"],
       ["fantasy-club-filter", "clubFilter", "ALL"],
       ["fantasy-price-filter", "priceFilter", "ALL"],
+      ["fantasy-sort-filter", "sortFilter", "TOTAL_POINTS"],
       ["fantasy-risk-filter", "riskFilter", "ALL"],
       ["fantasy-ownership-filter", "ownershipFilter", "ALL"],
       ["fantasy-fixture-filter", "fixtureFilter", "ALL"],
@@ -17608,7 +18310,7 @@
     for (const [role, field, fallback] of fantasyFilters) {
       const target = event.target.closest(`[data-role='${role}']`);
       if (target) {
-        fantasyUpdate({ [field]: String(target.value || fallback) }, "");
+        fantasyUpdate({ [field]: String(target.value || fallback), fantasyPlayerPage: 1 }, "");
         updateFantasySearchDom();
         return;
       }
