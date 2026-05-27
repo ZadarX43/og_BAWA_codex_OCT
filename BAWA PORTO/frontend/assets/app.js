@@ -11215,7 +11215,7 @@
         <b>${escapeHtml(`${player.xpts1} xPts`)}</b>
         <small>${escapeHtml(`Start ${player.startPct}%`)}</small>
       </span>
-      <em>${escapeHtml(player.risk || "Stable")}</em>
+      <em>${escapeHtml(fantasyHumanizeSignal(player.risk || "Stable"))}</em>
     </button>
   `;
   };
@@ -11310,6 +11310,90 @@
     if (typeahead) typeahead.innerHTML = fantasySearchTypeaheadHtml();
     if (count) count.textContent = `${players.length} shown`;
   };
+
+  const fantasyStarterGuide = () => `
+    <section class="section fantasy-start-guide" aria-label="Fantasy start guide">
+      <article class="panel fantasy-start-panel">
+        <div class="fantasy-section-head">
+          <div>
+            <span class="metric-label">Start here</span>
+            <h2>Use the page in this order.</h2>
+            <p class="muted">You do not need to understand every FPL rule first. Import the squad, read the recommendation, test a transfer, then save the plan.</p>
+          </div>
+        </div>
+        <div class="fantasy-start-steps">
+          <a href="#fantasy-setup">
+            <span>1</span>
+            <strong>Import squad</strong>
+            <small>Use your FPL team ID so the assistant knows your 15 players, bank, free transfers, captain and bench.</small>
+          </a>
+          <a href="#fantasy-decision">
+            <span>2</span>
+            <strong>Read the move</strong>
+            <small>The top panel gives the plain answer: captain, vice, transfer, risk, and whether to roll or act.</small>
+          </a>
+          <a href="#fantasy-transfers">
+            <span>3</span>
+            <strong>Try a transfer</strong>
+            <small>Search a player and tap Transfer in. The builder asks who you sell and checks budget, hit cost and club limits.</small>
+          </a>
+          <a href="#fantasy-drafts">
+            <span>4</span>
+            <strong>Save plan</strong>
+            <small>Save safe, aggressive or wildcard drafts, then sync the plan to your account for deadline review.</small>
+          </a>
+        </div>
+      </article>
+    </section>
+  `;
+
+  const fantasyOfficialRulesGuide = (chip = fantasyChipValidation(), validation = fantasyValidateLineup()) => `
+    <details class="section fantasy-rules-guide">
+      <summary>FPL rules this page checks</summary>
+      <div class="fantasy-rules-grid">
+        <article>
+          <strong>Squad and lineup</strong>
+          <p>One team per person. Your squad is 15 players: 2 GK, 5 DEF, 5 MID, 3 FWD. Your XI must include 1 goalkeeper, at least 3 defenders, and at least 1 forward.</p>
+          <span>${escapeHtml(validation.valid ? "Current lineup passes." : validation.issues[0] || "Lineup check pending.")}</span>
+        </article>
+        <article>
+          <strong>Captain and bench</strong>
+          <p>Captain and vice must be starters. If your captain plays 0 minutes, the vice gets the bonus. Bench order controls automatic substitutions after the Gameweek ends.</p>
+          <span>Click a player on the pitch to start, bench, captain, vice or sell.</span>
+        </article>
+        <article>
+          <strong>Transfers and budget</strong>
+          <p>Unused free transfers can roll up to 5. Extra transfers cost 4 points unless a Wildcard or Free Hit is active. Confirmed FPL transfers cannot be reversed.</p>
+          <span>Budget, selling price, hit cost and max 3 per club are checked in the transfer builder.</span>
+        </article>
+        <article>
+          <strong>Chips</strong>
+          <p>Only one chip can be active in a Gameweek. Bench Boost, Triple Captain, Free Hit and Wildcard are each available twice, split across the season windows.</p>
+          <span>${escapeHtml(chip.message)}</span>
+        </article>
+        <article>
+          <strong>Deadlines</strong>
+          <p>Changes after the deadline apply to the next deadline. Official deadlines are normally 90 minutes before the first match of the Gameweek and can change.</p>
+          <span>${escapeHtml(`Current page deadline: ${fantasyDeadlineLabel()}`)}</span>
+        </article>
+        <article>
+          <strong>Double and blank Gameweeks</strong>
+          <p>Players with two fixtures can score in both. If a player appears in any match that Gameweek, they will not be auto-subbed for a match they miss.</p>
+          <span>Fixture swing and blank/double pressure feed transfer and chip advice.</span>
+        </article>
+        <article>
+          <strong>Prices and Free Hit</strong>
+          <p>Prices can move by £0.1m per day once the season starts. Free Hit restores your previous squad and bank at the next deadline, with price changes reflected.</p>
+          <span>Drafts help you test moves before touching the real FPL site.</span>
+        </article>
+        <article>
+          <strong>FDR, ICT and points updates</strong>
+          <p>FDR, ICT, bonus, form and official updates are context signals. Points update during matches, bonus follows later, and final corrections can happen before Gameweek finalisation.</p>
+          <span>OG turns those signals into readable transfer, captaincy and risk guidance.</span>
+        </article>
+      </div>
+    </details>
+  `;
 
   const fantasyView = () => {
     const tier = currentAccessTier();
@@ -11502,6 +11586,9 @@
           }
         </article>
       </section>
+
+      ${fantasyStarterGuide()}
+      ${fantasyOfficialRulesGuide(chip, validation)}
 
       <nav class="fantasy-page-tabs" aria-label="Fantasy page sections">
         <a href="#fantasy-my-team">My Team</a>
@@ -11805,10 +11892,11 @@
           </div>
           <ul class="feature-list">
             <li>${escapeHtml(chip.message)}</li>
-            <li>Wildcard: watch GW6-GW8 fixture swing.</li>
-            <li>Bench Boost: not ready, bench strength still uneven.</li>
-            <li>Triple Captain: preserve for double gameweek profile.</li>
-            <li>Free Hit: hold unless blank-gameweek pressure appears.</li>
+            <li>Only one chip can be active in a Gameweek.</li>
+            <li>Wildcard and Free Hit make transfers free, but still require a valid squad and budget.</li>
+            <li>Free Hit restores your previous squad and bank at the next deadline.</li>
+            <li>Triple Captain passes to your vice if the captain plays 0 minutes.</li>
+            <li>First-half chips must be used before the GW19 deadline; the second set opens from GW20.</li>
           </ul>
         </article>
       </section>
