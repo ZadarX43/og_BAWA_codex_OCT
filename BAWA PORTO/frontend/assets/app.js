@@ -12127,7 +12127,7 @@
           <strong>Fantasy</strong>
           <strong>Fantasy</strong>
         </div>
-        ${["GK", "DEF", "MID", "FWD"].map((position) => fantasySquadPositionLine(position, grouped[position])).join("")}
+        ${["FWD", "MID", "DEF", "GK"].map((position) => fantasySquadPositionLine(position, grouped[position])).join("")}
       </div>
     `;
   };

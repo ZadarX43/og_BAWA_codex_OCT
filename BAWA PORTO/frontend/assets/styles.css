@@ -4137,21 +4137,25 @@ tbody tr:hover {
 
 .fantasy-squad-pitch {
   position: relative;
-  min-height: 680px;
+  min-height: 700px;
   overflow: hidden;
   display: grid;
   align-content: stretch;
-  gap: 18px;
-  padding: 82px 34px 34px;
+  gap: 16px;
+  padding: 88px 34px 38px;
   border-radius: 18px;
   clip-path: polygon(13% 0, 87% 0, 100% 24%, 100% 100%, 0 100%, 0 24%);
   background:
-    linear-gradient(116deg, transparent 0 7.8%, rgba(255, 255, 255, 0.92) 7.95% 8.2%, transparent 8.4% 91.6%, rgba(255, 255, 255, 0.92) 91.8% 92.05%, transparent 92.25%),
-    linear-gradient(180deg, transparent 15.4%, rgba(255, 255, 255, 0.9) 15.55% 15.85%, transparent 16.05% 85.6%, rgba(255, 255, 255, 0.9) 85.8% 86.1%, transparent 86.3%),
-    radial-gradient(ellipse at 50% 100%, transparent 0 18%, rgba(255, 255, 255, 0.68) 18.35% 18.85%, transparent 19.2%),
-    radial-gradient(ellipse at 50% 17%, transparent 0 12%, rgba(255, 255, 255, 0.48) 12.4% 12.9%, transparent 13.25%),
-    repeating-linear-gradient(180deg, rgba(0, 171, 86, 0.96) 0 118px, rgba(0, 151, 77, 0.96) 118px 236px),
+    radial-gradient(ellipse at 50% 84%, transparent 0 16%, rgba(255, 255, 255, 0.48) 16.3% 16.75%, transparent 17.05%),
+    linear-gradient(180deg, transparent 17.8%, rgba(255, 255, 255, 0.88) 18.05% 18.35%, transparent 18.65%),
+    linear-gradient(180deg, transparent 49.7%, rgba(255, 255, 255, 0.7) 49.95% 50.25%, transparent 50.55%),
+    linear-gradient(180deg, transparent 83.8%, rgba(255, 255, 255, 0.9) 84.05% 84.4%, transparent 84.75%),
+    repeating-linear-gradient(180deg, rgba(0, 176, 91, 0.96) 0 128px, rgba(0, 154, 79, 0.96) 128px 256px),
     #00a85d;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.12),
+    inset 0 -34px 70px rgba(0, 94, 48, 0.26),
+    0 22px 60px rgba(0, 0, 0, 0.16);
 }
 
 .fantasy-squad-pitch::before,
@@ -4162,22 +4166,22 @@ tbody tr:hover {
 }
 
 .fantasy-squad-pitch::before {
-  top: 62px;
-  left: 35%;
-  width: 30%;
-  height: 118px;
+  left: 33%;
+  bottom: -2px;
+  width: 34%;
+  height: 124px;
   border: 3px solid rgba(255, 255, 255, 0.8);
-  border-top: 0;
+  border-bottom: 0;
   opacity: 0.8;
 }
 
 .fantasy-squad-pitch::after {
-  top: 44px;
-  left: 43%;
-  width: 14%;
-  height: 40px;
+  left: 42%;
+  bottom: -2px;
+  width: 16%;
+  height: 52px;
   border: 3px solid rgba(255, 255, 255, 0.82);
-  border-top: 0;
+  border-bottom: 0;
   opacity: 0.78;
 }
 
@@ -4208,6 +4212,7 @@ tbody tr:hover {
 
 .fantasy-squad-position-gk {
   grid-template-columns: repeat(2, minmax(104px, 150px));
+  align-self: end;
 }
 
 .fantasy-squad-position-def,
@@ -4217,6 +4222,7 @@ tbody tr:hover {
 
 .fantasy-squad-position-fwd {
   grid-template-columns: repeat(3, minmax(104px, 150px));
+  align-self: start;
 }
 
 .fantasy-squad-slot {
