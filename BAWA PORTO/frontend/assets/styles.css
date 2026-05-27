@@ -3108,6 +3108,12 @@ tbody tr:hover {
   line-height: 1.45;
 }
 
+.fantasy-hero .hero-main {
+  background:
+    linear-gradient(140deg, rgba(116, 232, 213, 0.13), transparent 42%),
+    linear-gradient(180deg, rgba(9, 22, 29, 0.98), rgba(6, 16, 20, 0.96));
+}
+
 .fantasy-access-card {
   min-height: 330px;
   align-content: start;

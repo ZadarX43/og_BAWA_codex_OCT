@@ -11132,6 +11132,37 @@
     return `
       ${debugMode ? demoAccountSimulatorPanel() : ""}
 
+      <section class="section split fantasy-hero">
+        <article class="hero-main">
+          <p class="hero-kicker">Fantasy 26/27</p>
+          <h1>Fantasy Football Intelligence System.</h1>
+          <p>Our Fantasy Football Intelligence system suggests what to do with your whole squad before the deadline: transfers, captaincy, benching, chips, trap flags, and rank strategy in one paid intelligence layer.</p>
+          <div class="pill-row">
+            <span class="stat-chip">FPL 26/27</span>
+            <span class="stat-chip">Paid members</span>
+            <span class="stat-chip">Squad decisions</span>
+          </div>
+          <div class="cta-row">
+            <a class="button button-large" href="${paidReady ? "./account.html#preferences" : "./pricing.html"}">${paidReady ? "Open account workspace" : "Join Founder access"}</a>
+            <a class="ghost-button" href="./methodology.html">Methodology</a>
+          </div>
+        </article>
+        <aside class="hero-side">
+          <div class="metric">
+            <span class="metric-label">Historical baseline</span>
+            <span class="metric-value">10 seasons</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Replay windows</span>
+            <span class="metric-value">360</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Best early edge</span>
+            <span class="metric-value">Transfers</span>
+          </div>
+        </aside>
+      </section>
+
       <section class="section fantasy-command-bar fantasy-command-first" id="fantasy-decision">
         <article class="panel fantasy-command-panel">
           <div class="fantasy-command-top">
