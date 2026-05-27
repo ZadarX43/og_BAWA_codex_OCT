@@ -3138,6 +3138,44 @@ tbody tr:hover {
   margin-top: 16px;
 }
 
+.fantasy-hub {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.fantasy-hub-card {
+  min-height: 260px;
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  padding: 24px;
+  border: 1px solid rgba(213, 232, 222, 0.13);
+  border-radius: 26px;
+  background:
+    linear-gradient(145deg, rgba(116, 232, 213, 0.08), transparent 52%),
+    rgba(6, 17, 24, 0.9);
+}
+
+.fantasy-hub-primary {
+  border-color: rgba(138, 247, 185, 0.28);
+  background:
+    linear-gradient(145deg, rgba(138, 247, 185, 0.14), transparent 54%),
+    rgba(6, 17, 24, 0.92);
+}
+
+.fantasy-hub-card h2 {
+  margin: 0;
+  font-size: clamp(1.75rem, 2.3vw, 2.75rem);
+  line-height: 1;
+}
+
+.fantasy-hub-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
 .fantasy-command-panel {
   display: grid;
   gap: 18px;
@@ -3321,6 +3359,101 @@ tbody tr:hover {
   font-weight: 900;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+}
+
+.fantasy-setup-flow {
+  padding-top: 4px;
+}
+
+.fantasy-setup-main {
+  display: grid;
+  gap: 18px;
+  border-color: rgba(116, 232, 213, 0.2);
+}
+
+.fantasy-setup-flow.is-complete .fantasy-setup-main {
+  border-color: rgba(138, 247, 185, 0.24);
+}
+
+.fantasy-import-row-clean {
+  grid-template-columns: minmax(260px, 1fr) auto minmax(240px, 0.8fr);
+}
+
+.fantasy-preference-grid,
+.fantasy-follow-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.fantasy-preference-grid article,
+.fantasy-follow-grid article {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid rgba(213, 232, 222, 0.12);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.fantasy-choice-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.fantasy-choice-row button,
+.fantasy-follow-list button,
+.fantasy-view-toggle button,
+.fantasy-follow-row button,
+.fantasy-squad-list button {
+  min-height: 42px;
+  border: 1px solid rgba(213, 232, 222, 0.14);
+  border-radius: 999px;
+  padding: 0 14px;
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--text);
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.fantasy-choice-row button.is-active,
+.fantasy-follow-list button.is-active,
+.fantasy-view-toggle button.is-active,
+.fantasy-squad-list button.is-active {
+  border-color: rgba(138, 247, 185, 0.58);
+  background: rgba(138, 247, 185, 0.16);
+}
+
+.fantasy-follow-list {
+  display: grid;
+  gap: 10px;
+}
+
+.fantasy-follow-list button {
+  min-height: 58px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  border-radius: 18px;
+  text-align: left;
+}
+
+.fantasy-follow-list small,
+.fantasy-squad-list small {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.fantasy-follow-list em {
+  color: var(--signal-mint);
+  font-style: normal;
+  font-size: 0.8rem;
+  font-weight: 950;
 }
 
 .fantasy-command-grid .panel {
@@ -3511,6 +3644,11 @@ tbody tr:hover {
   align-items: start;
 }
 
+.fantasy-transfer-workspace {
+  grid-template-columns: minmax(0, 0.95fr) minmax(420px, 1.05fr);
+  align-items: start;
+}
+
 .fantasy-pitch-panel,
 .fantasy-decision-panel,
 .fantasy-briefing,
@@ -3527,17 +3665,39 @@ tbody tr:hover {
   display: grid;
   gap: 16px;
   min-height: 680px;
-  padding: 26px 18px;
+  overflow: hidden;
+  padding: 68px 18px 26px;
   border: 1px solid rgba(138, 247, 185, 0.22);
   border-radius: 28px;
   background:
+    linear-gradient(90deg, transparent 8%, rgba(255, 255, 255, 0.76) 8.15% 8.35%, transparent 8.5% 91.5%, rgba(255, 255, 255, 0.76) 91.65% 91.85%, transparent 92%),
+    linear-gradient(180deg, transparent 10%, rgba(255, 255, 255, 0.76) 10.15% 10.35%, transparent 10.5% 89.5%, rgba(255, 255, 255, 0.76) 89.65% 89.85%, transparent 90%),
     linear-gradient(90deg, transparent 49.5%, rgba(255, 255, 255, 0.13) 50%, transparent 50.5%),
     radial-gradient(circle at 50% 50%, transparent 0 15%, rgba(255, 255, 255, 0.14) 15.2% 15.7%, transparent 16%),
-    linear-gradient(180deg, rgba(31, 98, 67, 0.64), rgba(10, 59, 47, 0.82)),
+    linear-gradient(180deg, rgba(44, 158, 88, 0.88), rgba(7, 126, 69, 0.94)),
     rgba(11, 48, 38, 0.92);
   box-shadow:
     inset 0 0 0 2px rgba(255, 255, 255, 0.05),
     inset 0 0 70px rgba(0, 0, 0, 0.24);
+}
+
+.fantasy-pitch-banner {
+  position: absolute;
+  inset: 0 0 auto;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 22px;
+  background: linear-gradient(90deg, var(--accent), #6580ff);
+  color: #260039;
+  font-weight: 950;
+}
+
+.fantasy-pitch-banner span {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(38, 0, 57, 0.12);
 }
 
 .fantasy-pitch-line {
@@ -3579,8 +3739,9 @@ tbody tr:hover {
   border-radius: 18px;
   padding: 12px;
   background:
-    linear-gradient(180deg, rgba(9, 22, 29, 0.92), rgba(5, 15, 18, 0.9)),
+    linear-gradient(180deg, rgba(9, 22, 29, 0.82), rgba(5, 15, 18, 0.82)),
     rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(2px);
   color: var(--text);
   text-align: left;
   cursor: pointer;
@@ -3668,6 +3829,53 @@ tbody tr:hover {
 .fantasy-bench-grid .fantasy-player-card {
   width: min(154px, 100%);
   min-height: 126px;
+}
+
+.fantasy-view-toggle {
+  display: inline-flex;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid rgba(213, 232, 222, 0.12);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.fantasy-view-toggle button {
+  min-width: 104px;
+  border-radius: 14px;
+}
+
+.fantasy-squad-list {
+  display: grid;
+  gap: 14px;
+}
+
+.fantasy-squad-list article {
+  display: grid;
+  gap: 8px;
+  padding: 16px;
+  border: 1px solid rgba(213, 232, 222, 0.12);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.fantasy-squad-list h3 {
+  margin: 0;
+}
+
+.fantasy-squad-list button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  border-radius: 15px;
+  text-align: left;
+}
+
+.fantasy-squad-list em {
+  color: var(--signal-mint);
+  font-style: normal;
+  font-weight: 950;
 }
 
 .fantasy-decision-grid,
@@ -3961,6 +4169,48 @@ tbody tr:hover {
   border-radius: 14px;
   color: var(--muted);
   background: rgba(255, 255, 255, 0.028);
+}
+
+.fantasy-watchlist-panel {
+  display: grid;
+  gap: 18px;
+}
+
+.fantasy-follow-rows {
+  display: grid;
+  gap: 10px;
+}
+
+.fantasy-follow-row {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) auto auto auto;
+  gap: 12px;
+  align-items: center;
+  padding: 14px;
+  border: 1px solid rgba(213, 232, 222, 0.12);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.fantasy-avatar {
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(116, 232, 213, 0.85), rgba(138, 247, 185, 0.72));
+  color: #07141a;
+  font-weight: 950;
+}
+
+.fantasy-follow-row strong,
+.fantasy-follow-row span {
+  display: block;
+}
+
+.fantasy-follow-row span {
+  color: var(--muted);
 }
 
 .fantasy-advanced-proof {
@@ -9662,6 +9912,9 @@ code {
   .fantasy-command-grid,
   .fantasy-command-controls,
   .fantasy-decision-strip,
+  .fantasy-hub,
+  .fantasy-preference-grid,
+  .fantasy-follow-grid,
   .fantasy-search-grid,
   .fantasy-start-steps,
   .fantasy-rules-grid,
@@ -9671,6 +9924,10 @@ code {
   }
 
   .fantasy-workbench {
+    grid-template-columns: 1fr;
+  }
+
+  .fantasy-transfer-workspace {
     grid-template-columns: 1fr;
   }
 
@@ -9741,6 +9998,9 @@ code {
   .fantasy-command-grid,
   .fantasy-command-controls,
   .fantasy-decision-strip,
+  .fantasy-hub,
+  .fantasy-preference-grid,
+  .fantasy-follow-grid,
   .fantasy-search-simple,
   .fantasy-search-grid,
   .fantasy-start-steps,
@@ -9810,6 +10070,21 @@ code {
 
   .fantasy-player-result {
     padding: 13px;
+  }
+
+  .fantasy-follow-row {
+    grid-template-columns: 44px minmax(0, 1fr);
+  }
+
+  .fantasy-follow-row button {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  .fantasy-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 13px;
   }
 
   .fantasy-player-result-main strong {

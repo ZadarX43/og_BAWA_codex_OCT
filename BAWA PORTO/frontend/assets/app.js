@@ -566,6 +566,10 @@
     transferHistory: [],
     importedPlayers: [],
     transferBuilderOpen: false,
+    setupComplete: false,
+    hitMode: "Sometimes",
+    favouriteClubs: [],
+    fantasyTeamView: "pitch",
     generatedPlanAt: "",
     updatedAt: "",
     squad: payloadSquad,
@@ -594,6 +598,10 @@
       transferHistory: Array.isArray(value.transferHistory) ? value.transferHistory.filter((item) => item?.id).slice(0, 40) : [],
       importedPlayers,
       transferBuilderOpen: Boolean(value.transferBuilderOpen),
+      setupComplete: Boolean(value.setupComplete),
+      hitMode: ["Never", "Sometimes", "Aggressive"].includes(value.hitMode) ? value.hitMode : fallback.hitMode,
+      favouriteClubs: Array.isArray(value.favouriteClubs) ? value.favouriteClubs.map(String).filter(Boolean).slice(0, 12) : fallback.favouriteClubs,
+      fantasyTeamView: value.fantasyTeamView === "list" ? "list" : "pitch",
       updatedAt: String(value.updatedAt || value.updated_at || fallback.updatedAt || ""),
       clubFilter: String(value.clubFilter || fallback.clubFilter || "ALL"),
       ownershipFilter: String(value.ownershipFilter || fallback.ownershipFilter || "ALL"),
@@ -11229,6 +11237,57 @@
     </div>
   `;
 
+  const fantasySquadListView = (rows = fantasySquadRows()) => `
+    <div class="fantasy-squad-list" aria-label="Fantasy squad list">
+      ${["GK", "DEF", "MID", "FWD"]
+        .map((position) => {
+          const positionRows = rows.filter((slot) => slot.player.position === position);
+          return `
+            <article>
+              <h3>${escapeHtml(position === "GK" ? "Goalkeepers" : position === "DEF" ? "Defenders" : position === "MID" ? "Midfielders" : "Forwards")}</h3>
+              ${positionRows
+                .map(
+                  (slot) => `
+                    <button class="${fantasyState().selectedPlayerId === slot.id ? "is-active" : ""}" type="button" data-action="fantasy-select-player" data-player-id="${escapeHtml(slot.id)}">
+                      <span>
+                        <strong>${escapeHtml(slot.player.name)}</strong>
+                        <small>${escapeHtml(`${slot.player.club} · ${slot.role === "starter" ? "Starting XI" : `Bench ${slot.benchOrder || ""}`}`)}</small>
+                      </span>
+                      <em>${escapeHtml(`${slot.player.xpts1} xPts`)}</em>
+                    </button>
+                  `
+                )
+                .join("")}
+            </article>
+          `;
+        })
+        .join("")}
+    </div>
+  `;
+
+  const fantasyWatchlistRows = (ids = fantasyState().watchlist) => {
+    const players = ids.map(fantasyPlayerById).filter(Boolean);
+    if (!players.length) {
+      return `<div class="notice">No watched players yet. Use search or setup to add players you want OG to monitor.</div>`;
+    }
+    return players
+      .map(
+        (player) => `
+          <article class="fantasy-follow-row">
+            <div class="fantasy-avatar">${escapeHtml(player.name.slice(0, 2).toUpperCase())}</div>
+            <div>
+              <strong>${escapeHtml(player.name)}</strong>
+              <span>${escapeHtml(`${player.club} · ${player.position} · ${fantasyMoney(player.price)}`)}</span>
+            </div>
+            <button type="button" data-action="fantasy-watchlist" data-player-id="${escapeHtml(player.id)}">Watching</button>
+            <button type="button" data-action="fantasy-transfer-in" data-player-id="${escapeHtml(player.id)}">Transfer in</button>
+            <button type="button" data-action="fantasy-compare" data-player-id="${escapeHtml(player.id)}">Compare</button>
+          </article>
+        `
+      )
+      .join("");
+  };
+
   const fantasyDecisionCard = (label, value, note, tokens = []) => `
     <article class="fantasy-decision-card">
       <span class="metric-label">${escapeHtml(label)}</span>
@@ -11262,6 +11321,87 @@
       </article>
     </div>
   `;
+
+  const fantasyHub = ({ paidReady, recommendedAction, transferSummary, health }) => `
+    <section class="section fantasy-hub" aria-label="Fantasy hub">
+      <article class="fantasy-hub-card fantasy-hub-primary">
+        <span class="metric-label">Step 1</span>
+        <h2>Import My Squad</h2>
+        <p>Use your FPL team ID so OG can read your 15 players, bank, free transfers, captain and bench.</p>
+        <a class="button" href="${paidReady ? "#fantasy-setup" : "./pricing.html"}">${paidReady ? "Import squad" : "Join to import"}</a>
+      </article>
+      <article class="fantasy-hub-card">
+        <span class="metric-label">Step 2</span>
+        <h2>Get This Week's Move</h2>
+        <p>${escapeHtml(`Current read: ${recommendedAction}. Squad health ${health}/100.`)}</p>
+        <a class="ghost-button" href="#fantasy-decision">Read decision</a>
+      </article>
+      <article class="fantasy-hub-card">
+        <span class="metric-label">Step 3</span>
+        <h2>Build Transfer Plan</h2>
+        <p>${escapeHtml(transferSummary)}. Test it safely before touching the official FPL site.</p>
+        <a class="ghost-button" href="#fantasy-transfers">Open transfers</a>
+      </article>
+    </section>
+  `;
+
+  const fantasySetupFlow = (fantasy = fantasyState()) => {
+    const clubOptions = [...new Set(fantasyReferencePlayers().map((player) => player.club).filter(Boolean))].sort().slice(0, 12);
+    const playerOptions = fantasyReferencePlayers()
+      .slice()
+      .sort((left, right) => Number(right.xpts5 || 0) - Number(left.xpts5 || 0))
+      .slice(0, 8);
+    return `
+      <section class="section fantasy-setup-flow ${fantasy.setupComplete ? "is-complete" : ""}" id="fantasy-setup">
+        <article class="panel fantasy-setup-main">
+          <div class="fantasy-section-head">
+            <div>
+              <span class="metric-label">${fantasy.setupComplete ? "Workspace ready" : "Set up in 60 seconds"}</span>
+              <h2>Shape your Fantasy assistant around you.</h2>
+              <p class="muted">Keep this simple: squad ID, strategy, hit appetite, clubs and players to watch. OG uses this to make deadline advice feel personal.</p>
+            </div>
+            <button class="ghost-button" type="button" data-action="fantasy-complete-setup">${fantasy.setupComplete ? "Update setup" : "Finish setup"}</button>
+          </div>
+          <form id="fantasy-import-form" class="fantasy-import-row fantasy-import-row-clean">
+            <label>
+              <span>FPL team ID</span>
+              <input class="text-input" name="team_id" type="text" value="${escapeHtml(fantasy.teamId)}" placeholder="e.g. 1234567" />
+            </label>
+            <button class="button" type="submit">${fantasy.imported ? "Refresh squad" : "Import squad"}</button>
+            <span class="muted">Official FPL import feeds the same saved account workspace.</span>
+          </form>
+          <div class="fantasy-preference-grid">
+            <article>
+              <strong>Strategy mode</strong>
+              <div class="fantasy-choice-row">
+                ${FANTASY_STRATEGY_MODES.map((mode) => `<button class="${mode === fantasy.strategy ? "is-active" : ""}" type="button" data-action="fantasy-strategy" data-value="${escapeHtml(mode)}">${escapeHtml(mode)}</button>`).join("")}
+              </div>
+            </article>
+            <article>
+              <strong>Take points hits?</strong>
+              <div class="fantasy-choice-row">
+                ${["Never", "Sometimes", "Aggressive"].map((mode) => `<button class="${mode === fantasy.hitMode ? "is-active" : ""}" type="button" data-action="fantasy-hit-mode" data-value="${escapeHtml(mode)}">${escapeHtml(mode)}</button>`).join("")}
+              </div>
+            </article>
+          </div>
+          <div class="fantasy-follow-grid">
+            <article>
+              <strong>Clubs to follow</strong>
+              <div class="fantasy-follow-list">
+                ${clubOptions.map((club) => `<button class="${fantasy.favouriteClubs.includes(club) ? "is-active" : ""}" type="button" data-action="fantasy-favourite-club" data-value="${escapeHtml(club)}"><span>${escapeHtml(club)}</span><em>${fantasy.favouriteClubs.includes(club) ? "Following" : "Follow"}</em></button>`).join("")}
+              </div>
+            </article>
+            <article>
+              <strong>Players to watch</strong>
+              <div class="fantasy-follow-list">
+                ${playerOptions.map((player) => `<button class="${fantasy.watchlist.includes(player.id) ? "is-active" : ""}" type="button" data-action="fantasy-watchlist" data-player-id="${escapeHtml(player.id)}"><span>${escapeHtml(player.name)}<small>${escapeHtml(`${player.club} · ${player.position}`)}</small></span><em>${fantasy.watchlist.includes(player.id) ? "Watching" : "Watch"}</em></button>`).join("")}
+              </div>
+            </article>
+          </div>
+        </article>
+      </section>
+    `;
+  };
 
   const fantasyTransferRows = (rows = []) =>
     rows
@@ -11524,6 +11664,9 @@
         </aside>
       </section>
 
+      ${fantasyHub({ paidReady, recommendedAction, transferSummary, health })}
+      ${fantasySetupFlow(fantasy)}
+
       <section class="section fantasy-command-bar fantasy-command-first" id="fantasy-decision">
         <article class="panel fantasy-command-panel">
           <div class="fantasy-command-top">
@@ -11549,16 +11692,8 @@
             <button class="ghost-button" type="button" data-action="fantasy-save-plan">Save plan</button>
             <button class="ghost-button" type="button" data-action="sync-fantasy-workspace">Sync account</button>
           </div>
-          <details class="fantasy-setup-drawer" id="fantasy-setup">
+          <details class="fantasy-setup-drawer" id="fantasy-settings">
             <summary>Setup and strategy</summary>
-            <form id="fantasy-import-form" class="fantasy-import-row">
-              <label>
-                <span>FPL team ID</span>
-                <input class="text-input" name="team_id" type="text" value="${escapeHtml(fantasy.teamId)}" placeholder="e.g. 1234567" />
-              </label>
-              <button class="button" type="submit">${fantasy.imported ? "Refresh squad" : "Import demo squad"}</button>
-              <span class="muted">Official FPL team-ID import can feed this same state contract once the backend connector is live.</span>
-            </form>
             <div class="fantasy-command-grid fantasy-command-grid-compact">
               ${statPanel("Gameweek", `GW${fantasy.gameweek}`, `Deadline ${fantasyDeadlineLabel()}`)}
               ${statPanel("Strategy", fantasy.strategy, "Recommendations adapt by risk mode")}
@@ -11613,10 +11748,10 @@
         </article>
       </section>
 
-      ${fantasyStarterGuide()}
       ${fantasyOfficialRulesGuide(chip, validation)}
 
       <nav class="fantasy-page-tabs" aria-label="Fantasy page sections">
+        <a href="#fantasy-setup">Setup</a>
         <a href="#fantasy-my-team">My Team</a>
         <a href="#fantasy-transfers">Transfers</a>
         <a href="#fantasy-watchlist">Watchlist</a>
@@ -11632,11 +11767,22 @@
               <h2>Pitch view</h2>
               <p class="muted">Tap a player to start, bench, captain, sell, compare or watchlist. The page keeps formation and captain rules in check.</p>
             </div>
-            <span class="stat-chip">${escapeHtml(fantasyFormation())}</span>
+            <div class="fantasy-view-toggle" aria-label="Fantasy team view">
+              <button class="${fantasy.fantasyTeamView === "pitch" ? "is-active" : ""}" type="button" data-action="fantasy-team-view" data-value="pitch">Pitch View</button>
+              <button class="${fantasy.fantasyTeamView === "list" ? "is-active" : ""}" type="button" data-action="fantasy-team-view" data-value="list">List View</button>
+            </div>
           </div>
-          <div class="fantasy-pitch">
-            ${pitchLines.map(([label, players]) => fantasyPitchLine(label, players)).join("")}
-          </div>
+          ${
+            fantasy.fantasyTeamView === "list"
+              ? fantasySquadListView()
+              : `<div class="fantasy-pitch">
+                  <div class="fantasy-pitch-banner">
+                    <strong>OG Fantasy</strong>
+                    <span>${escapeHtml(fantasyFormation())}</span>
+                  </div>
+                  ${pitchLines.map(([label, players]) => fantasyPitchLine(label, players)).join("")}
+                </div>`
+          }
           <div class="fantasy-bench">
             <span class="metric-label">Bench order</span>
             <div class="fantasy-bench-grid">
@@ -11699,13 +11845,73 @@
         </article>
       </section>
 
-      <section class="section split" id="fantasy-transfers">
+      <section class="section split fantasy-transfer-workspace" id="fantasy-transfers">
+        <article class="panel fantasy-search-panel" id="fantasy-player-pool">
+          <div class="fantasy-section-head">
+            <div>
+              <span class="metric-label">Player pool</span>
+              <h2>Find the next move.</h2>
+              <p class="muted">Search a player, club, position, or simple need. Pick Transfer in to open the budget and sell flow.</p>
+            </div>
+          </div>
+          <div class="fantasy-search-simple">
+            <input class="text-input" type="search" value="${escapeHtml(fantasy.searchQuery)}" placeholder="Search Saka, Arsenal defender, cheap midfielder..." data-role="fantasy-search" aria-label="Search player" autocomplete="off" />
+            <span class="pill" data-role="fantasy-search-count">${escapeHtml(`${fantasyFilteredPlayers().length} shown`)}</span>
+          </div>
+          <div class="matches-typeahead fantasy-typeahead" data-role="fantasy-typeahead" aria-label="Fantasy autocomplete">
+            ${fantasySearchTypeaheadHtml()}
+          </div>
+          <details class="fantasy-filter-drawer">
+            <summary>Filters</summary>
+            <div class="fantasy-search-grid">
+              <select class="text-input" data-role="fantasy-club-filter" aria-label="Club filter">
+                <option value="ALL" ${fantasy.clubFilter === "ALL" ? "selected" : ""}>All clubs</option>
+                ${clubOptions.map((club) => `<option value="${escapeHtml(club)}" ${fantasy.clubFilter === club ? "selected" : ""}>${escapeHtml(club)}</option>`).join("")}
+              </select>
+              <select class="text-input" data-role="fantasy-position-filter" aria-label="Position filter">
+                ${["ALL", "GK", "DEF", "MID", "FWD"].map((option) => `<option value="${option}" ${fantasy.positionFilter === option ? "selected" : ""}>${option === "ALL" ? "All positions" : option}</option>`).join("")}
+              </select>
+              <select class="text-input" data-role="fantasy-price-filter" aria-label="Price filter">
+                <option value="ALL" ${fantasy.priceFilter === "ALL" ? "selected" : ""}>Any price</option>
+                <option value="UNDER_7_5" ${fantasy.priceFilter === "UNDER_7_5" ? "selected" : ""}>Under £7.5m</option>
+                <option value="PREMIUM" ${fantasy.priceFilter === "PREMIUM" ? "selected" : ""}>Premium</option>
+              </select>
+              <select class="text-input" data-role="fantasy-risk-filter" aria-label="Risk filter">
+                <option value="ALL" ${fantasy.riskFilter === "ALL" ? "selected" : ""}>Any risk</option>
+                <option value="LOW" ${fantasy.riskFilter === "LOW" ? "selected" : ""}>Low risk</option>
+                <option value="WATCH" ${fantasy.riskFilter === "WATCH" ? "selected" : ""}>Rotation watch</option>
+              </select>
+              <select class="text-input" data-role="fantasy-ownership-filter" aria-label="Ownership filter">
+                <option value="ALL" ${fantasy.ownershipFilter === "ALL" ? "selected" : ""}>Any ownership</option>
+                <option value="TEMPLATE" ${fantasy.ownershipFilter === "TEMPLATE" ? "selected" : ""}>Template</option>
+                <option value="HIGH" ${fantasy.ownershipFilter === "HIGH" ? "selected" : ""}>High</option>
+                <option value="MEDIUM" ${fantasy.ownershipFilter === "MEDIUM" ? "selected" : ""}>Medium</option>
+                <option value="LOW" ${fantasy.ownershipFilter === "LOW" ? "selected" : ""}>Low</option>
+                <option value="RISING" ${fantasy.ownershipFilter === "RISING" ? "selected" : ""}>Rising</option>
+              </select>
+              <select class="text-input" data-role="fantasy-fixture-filter" aria-label="Fixture difficulty filter">
+                <option value="ALL" ${fantasy.fixtureFilter === "ALL" ? "selected" : ""}>Any fixture</option>
+                <option value="GREEN" ${fantasy.fixtureFilter === "GREEN" ? "selected" : ""}>Green fixture</option>
+                <option value="AMBER" ${fantasy.fixtureFilter === "AMBER" ? "selected" : ""}>Amber fixture</option>
+                <option value="RED" ${fantasy.fixtureFilter === "RED" ? "selected" : ""}>Red fixture</option>
+              </select>
+              <select class="text-input" data-role="fantasy-points-filter" aria-label="Expected points filter">
+                <option value="ALL" ${fantasy.pointsFilter === "ALL" ? "selected" : ""}>Any xPts</option>
+                <option value="TOP_3GW" ${fantasy.pointsFilter === "TOP_3GW" ? "selected" : ""}>15+ next 3GW</option>
+                <option value="TOP_5GW" ${fantasy.pointsFilter === "TOP_5GW" ? "selected" : ""}>25+ next 5GW</option>
+              </select>
+            </div>
+          </details>
+          <div class="fantasy-search-results" data-role="fantasy-search-results">
+            ${fantasySearchResultCards()}
+          </div>
+        </article>
         <article class="panel fantasy-advisor">
           <div class="fantasy-section-head">
             <div>
-              <span class="metric-label">Transfer advisor</span>
-              <h2>Buy / Sell / Hold / Avoid</h2>
-              <p class="muted">The strongest proven FPL lane is transfer and squad decision intelligence.</p>
+              <span class="metric-label">Transfer plan</span>
+              <h2>Budget and sell check.</h2>
+              <p class="muted">OG checks affordability, free-transfer cost, squad rules, club limits and expected points gain before you save anything.</p>
             </div>
           </div>
           <div class="fantasy-tabs">
@@ -11781,77 +11987,18 @@
             </table>
           </div>
         </article>
-        <article class="panel fantasy-search-panel" id="fantasy-watchlist">
-          <span class="metric-label">Player search + watchlist</span>
-          <h2>Search players</h2>
-          <p class="muted">Type a player, club, position, or simple need like cheap defender. Pick Transfer in to open the budget and sell flow.</p>
-          <div class="fantasy-search-simple">
-            <input class="text-input" type="search" value="${escapeHtml(fantasy.searchQuery)}" placeholder="Search Saka, Arsenal defender, cheap midfielder..." data-role="fantasy-search" aria-label="Search player" autocomplete="off" />
-            <span class="pill" data-role="fantasy-search-count">${escapeHtml(`${fantasyFilteredPlayers().length} shown`)}</span>
-          </div>
-          <div class="matches-typeahead fantasy-typeahead" data-role="fantasy-typeahead" aria-label="Fantasy autocomplete">
-            ${fantasySearchTypeaheadHtml()}
-          </div>
-          <details class="fantasy-filter-drawer">
-            <summary>Filters</summary>
-            <div class="fantasy-search-grid">
-              <select class="text-input" data-role="fantasy-club-filter" aria-label="Club filter">
-                <option value="ALL" ${fantasy.clubFilter === "ALL" ? "selected" : ""}>All clubs</option>
-                ${clubOptions.map((club) => `<option value="${escapeHtml(club)}" ${fantasy.clubFilter === club ? "selected" : ""}>${escapeHtml(club)}</option>`).join("")}
-              </select>
-              <select class="text-input" data-role="fantasy-position-filter" aria-label="Position filter">
-                ${["ALL", "GK", "DEF", "MID", "FWD"].map((option) => `<option value="${option}" ${fantasy.positionFilter === option ? "selected" : ""}>${option === "ALL" ? "All positions" : option}</option>`).join("")}
-              </select>
-              <select class="text-input" data-role="fantasy-price-filter" aria-label="Price filter">
-                <option value="ALL" ${fantasy.priceFilter === "ALL" ? "selected" : ""}>Any price</option>
-                <option value="UNDER_7_5" ${fantasy.priceFilter === "UNDER_7_5" ? "selected" : ""}>Under £7.5m</option>
-                <option value="PREMIUM" ${fantasy.priceFilter === "PREMIUM" ? "selected" : ""}>Premium</option>
-              </select>
-              <select class="text-input" data-role="fantasy-risk-filter" aria-label="Risk filter">
-                <option value="ALL" ${fantasy.riskFilter === "ALL" ? "selected" : ""}>Any risk</option>
-                <option value="LOW" ${fantasy.riskFilter === "LOW" ? "selected" : ""}>Low risk</option>
-                <option value="WATCH" ${fantasy.riskFilter === "WATCH" ? "selected" : ""}>Rotation watch</option>
-              </select>
-              <select class="text-input" data-role="fantasy-ownership-filter" aria-label="Ownership filter">
-                <option value="ALL" ${fantasy.ownershipFilter === "ALL" ? "selected" : ""}>Any ownership</option>
-                <option value="TEMPLATE" ${fantasy.ownershipFilter === "TEMPLATE" ? "selected" : ""}>Template</option>
-                <option value="HIGH" ${fantasy.ownershipFilter === "HIGH" ? "selected" : ""}>High</option>
-                <option value="MEDIUM" ${fantasy.ownershipFilter === "MEDIUM" ? "selected" : ""}>Medium</option>
-                <option value="LOW" ${fantasy.ownershipFilter === "LOW" ? "selected" : ""}>Low</option>
-                <option value="RISING" ${fantasy.ownershipFilter === "RISING" ? "selected" : ""}>Rising</option>
-              </select>
-              <select class="text-input" data-role="fantasy-fixture-filter" aria-label="Fixture difficulty filter">
-                <option value="ALL" ${fantasy.fixtureFilter === "ALL" ? "selected" : ""}>Any fixture</option>
-                <option value="GREEN" ${fantasy.fixtureFilter === "GREEN" ? "selected" : ""}>Green fixture</option>
-                <option value="AMBER" ${fantasy.fixtureFilter === "AMBER" ? "selected" : ""}>Amber fixture</option>
-                <option value="RED" ${fantasy.fixtureFilter === "RED" ? "selected" : ""}>Red fixture</option>
-              </select>
-              <select class="text-input" data-role="fantasy-points-filter" aria-label="Expected points filter">
-                <option value="ALL" ${fantasy.pointsFilter === "ALL" ? "selected" : ""}>Any xPts</option>
-                <option value="TOP_3GW" ${fantasy.pointsFilter === "TOP_3GW" ? "selected" : ""}>15+ next 3GW</option>
-                <option value="TOP_5GW" ${fantasy.pointsFilter === "TOP_5GW" ? "selected" : ""}>25+ next 5GW</option>
-              </select>
+      </section>
+
+      <section class="section" id="fantasy-watchlist">
+        <article class="panel fantasy-watchlist-panel">
+          <div class="fantasy-section-head">
+            <div>
+              <span class="metric-label">Watchlist</span>
+              <h2>Players OG should keep in view.</h2>
+              <p class="muted">Simple follow rows. Later these power deadline alerts, price moves, team news and transfer reminders.</p>
             </div>
-          </details>
-          <div class="fantasy-search-results" data-role="fantasy-search-results">
-            ${fantasySearchResultCards()}
           </div>
-          <div class="fantasy-watchlist">
-            <h3>Watchlist</h3>
-            ${fantasy.watchlist
-              .map(fantasyPlayerById)
-              .filter(Boolean)
-              .map((player) => `<span>${escapeHtml(`${player.name} - ${fantasyReadablePlayerNote(player)}`)}</span>`)
-              .join("") || "<span>No watched players yet.</span>"}
-          </div>
-          <div class="fantasy-watchlist">
-            <h3>Bench shortlist</h3>
-            ${fantasy.benchShortlist
-              .map(fantasyPlayerById)
-              .filter(Boolean)
-              .map((player) => `<span>${escapeHtml(`${player.name} - ${player.position} - ${player.club} - ${player.xpts5} 5GW xPts`)}</span>`)
-              .join("") || "<span>No bench shortlist players yet.</span>"}
-          </div>
+          <div class="fantasy-follow-rows">${fantasyWatchlistRows()}</div>
         </article>
       </section>
 
@@ -16811,6 +16958,44 @@
     if (fantasyStrategyTarget) {
       event.preventDefault();
       fantasyUpdate({ strategy: fantasyStrategyTarget.dataset.value }, `Strategy mode set to ${fantasyStrategyTarget.dataset.value}.`);
+      render();
+      return;
+    }
+
+    const fantasyTeamViewTarget = event.target.closest("[data-action='fantasy-team-view']");
+    if (fantasyTeamViewTarget) {
+      event.preventDefault();
+      fantasyUpdate({ fantasyTeamView: fantasyTeamViewTarget.dataset.value === "list" ? "list" : "pitch" }, "Team view updated.");
+      render();
+      return;
+    }
+
+    const fantasyHitModeTarget = event.target.closest("[data-action='fantasy-hit-mode']");
+    if (fantasyHitModeTarget) {
+      event.preventDefault();
+      fantasyUpdate({ hitMode: fantasyHitModeTarget.dataset.value }, `Hit appetite set to ${fantasyHitModeTarget.dataset.value}.`);
+      render();
+      return;
+    }
+
+    const fantasyFavouriteClubTarget = event.target.closest("[data-action='fantasy-favourite-club']");
+    if (fantasyFavouriteClubTarget) {
+      event.preventDefault();
+      const club = String(fantasyFavouriteClubTarget.dataset.value || "");
+      const current = fantasyState().favouriteClubs;
+      fantasyUpdate(
+        { favouriteClubs: current.includes(club) ? current.filter((item) => item !== club) : [...current, club].slice(0, 12) },
+        "Club preferences updated."
+      );
+      render();
+      return;
+    }
+
+    const fantasyCompleteSetupTarget = event.target.closest("[data-action='fantasy-complete-setup']");
+    if (fantasyCompleteSetupTarget) {
+      event.preventDefault();
+      fantasyUpdate({ setupComplete: true }, "Fantasy setup saved.");
+      await saveAccountFantasyWorkspace({ renderAfter: false });
       render();
       return;
     }
