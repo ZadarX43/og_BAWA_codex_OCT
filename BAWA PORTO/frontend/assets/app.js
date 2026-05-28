@@ -6483,9 +6483,9 @@
     <section class="section founder-proof-section">
       <div class="section-head founder-proof-head">
         <div>
-          <h2>Founder proof layer.</h2>
+          <h2>Verified Performance Layer.</h2>
           <p class="section-copy">
-            These are the headline calibrated proof lanes for pre-season access. The broader product estate sits underneath, but this is the opening commercial proof.
+            Headline calibrated proof for the launch window. The full product estate sits underneath, but these are the first trust markers new users should see clearly.
           </p>
         </div>
         <a class="ghost-button" href="./methodology.html">Read methodology</a>
@@ -6805,7 +6805,7 @@
     <section class="section world-cup-founder-module">
       <article class="world-cup-founder-copy">
         <span class="metric-label">OG Founder Early Access</span>
-        <h2>World Cup + pre-season edition.</h2>
+        <h2>World Cup Intelligence Pack.</h2>
         <p>
           A launch window for public proof, premium fixture context, and player-event beta intelligence while the product hardens in the open.
         </p>
@@ -6818,14 +6818,75 @@
       <article class="world-cup-founder-actions">
         <div class="metric">
           <span class="metric-label">Launch edition</span>
-          <span class="metric-value">Football v0.12</span>
+          <span class="metric-value">World Cup + pre-season</span>
         </div>
         <div class="cta-row">
-          <a class="button" href="./pricing.html">Secure founder access</a>
+          <a class="button" href="./pricing.html">Join Founder Access</a>
           <a class="ghost-button" href="./methodology.html">Read methodology</a>
           <a class="ghost-button" href="./results.html">See live proof</a>
         </div>
       </article>
+    </section>
+  `;
+
+  const homepageProductPreviewCard = () => `
+    <article class="home-product-preview-card" aria-label="Example Odds Genius prediction card">
+      <div class="home-preview-top">
+        <span class="metric-label">Live Prediction Preview</span>
+        <span class="home-preview-state">Deploy</span>
+      </div>
+      <div class="home-preview-fixture">
+        <div>
+          <span>World Cup preview</span>
+          <strong>Brazil x Germany</strong>
+        </div>
+        <span class="home-preview-kickoff">Before kick-off</span>
+      </div>
+      <div class="home-preview-market">
+        <span>Over 2.5 Goals</span>
+        <strong>Model edge detected</strong>
+      </div>
+      <div class="home-preview-metrics">
+        <article>
+          <span>Model probability</span>
+          <strong>72.4%</strong>
+        </article>
+        <article>
+          <span>Bookmaker implied</span>
+          <strong>58.1%</strong>
+        </article>
+        <article>
+          <span>Edge</span>
+          <strong>+14.3%</strong>
+        </article>
+      </div>
+      <div class="home-preview-token-list">
+        <span>High goal pressure</span>
+        <span>BTTS alignment</span>
+        <span>Weather stable</span>
+        <span>No injury veto</span>
+      </div>
+      <a class="ghost-button" href="./matches.html">View match intelligence</a>
+    </article>
+  `;
+
+  const homepageActionCards = () => `
+    <section class="section home-action-grid" aria-label="Odds Genius product actions">
+      <a class="home-action-card" href="./matches.html">
+        <span class="metric-label">Prediction Desk</span>
+        <strong>Open today's football intelligence.</strong>
+        <span>Fixture reads, market states, kick-off order, and saved paper slips.</span>
+      </a>
+      <a class="home-action-card" href="./results.html">
+        <span class="metric-label">Proof Layer</span>
+        <strong>Check the public results trail.</strong>
+        <span>Settled proof, calibrated lanes, and visible deploy/watch/avoid discipline.</span>
+      </a>
+      <a class="home-action-card home-action-card-premium" href="./pricing.html">
+        <span class="metric-label">Founder Access</span>
+        <strong>Join the World Cup + pre-season window.</strong>
+        <span>Unlock premium context while the product hardens in public.</span>
+      </a>
     </section>
   `;
 
@@ -6919,58 +6980,31 @@
     <section class="hero launch-hero">
       <div class="hero-main launch-hero-main">
         <div class="launch-hero-copy">
-          <p class="hero-kicker launch-system-title">Sports Prediction Intelligence System</p>
-          <h1 class="launch-title">Football <span>v0.1.2</span></h1>
+          <p class="hero-kicker launch-system-title">Odds Genius Football Intelligence</p>
+          <h1 class="launch-title">Find the strongest football prediction edges before kick-off.</h1>
           <div class="launch-proof-lines" aria-label="System positioning">
-            <strong>Advanced Machine Learning Systems.</strong>
-            <strong>Exclusive Modelling Architecture.</strong>
-            <strong>Industry Leading Benchmarks.</strong>
+            <strong>Model-led match intelligence across FTR, goals, BTTS, Correct Score and player-event markets.</strong>
+            <span>Built to show deploy, watch and avoid states without forcing noise.</span>
           </div>
           ${heroProofTicker()}
-          <div class="launch-founder-headline">
-            <span>OG Founder<br class="mobile-break" /> Early Access</span>
-            <strong>Memberships<br class="mobile-break" /> Now Open.</strong>
-          </div>
-          <h2 class="launch-window-title">World Cup 2026 <span>+ 26/27 Pre-Season<br class="mobile-break" /> Membership</span></h2>
           <div class="hero-actions launch-hero-actions">
-            <a class="button button-large" href="./pricing.html">Secure founder access</a>
-            <a class="ghost-button" href="./results.html">See public proof</a>
-            <a class="ghost-button" href="./matches.html">Open matches desk</a>
+            <a class="button button-large" href="./matches.html">Open prediction desk</a>
+            <a class="ghost-button" href="./results.html">View proof layer</a>
+            <a class="ghost-button" href="./pricing.html">Join Founder Access</a>
           </div>
           <p class="footer-note">Historical walk-forward validation. Not a guarantee of future results.</p>
         </div>
       </div>
       <aside class="hero-side launch-founder-side">
-        <article class="launch-founder-card">
-          <span class="metric-label">Founder access</span>
-          <h3>Memberships now open.</h3>
-          <div class="launch-founder-metrics">
-            <div>
-              <strong>First 250</strong>
-              <span>founders</span>
-            </div>
-            <div>
-              <strong>£20/month</strong>
-              <span>while active</span>
-            </div>
-            <div>
-              <strong>Protected</strong>
-              <span>premium route</span>
-            </div>
-            <div>
-              <strong>Launch edition</strong>
-              <span>Football v0.1.2</span>
-            </div>
-          </div>
-        </article>
+        ${homepageProductPreviewCard()}
       </aside>
     </section>
 
-    ${founderProofSection()}
+    ${homepageActionCards()}
 
     <section class="section split launch-capabilities-section">
       ${launchCapabilityGrid(
-        "Models",
+        "Prediction Markets",
         [
           { label: "FTR", detail: "Home / draw / away posture" },
           { label: "BTTS", detail: "Two-way scoring pressure" },
@@ -6981,7 +7015,7 @@
         "Public pages show the approved signal. Premium adds the fixture intelligence behind the read."
       )}
       ${launchCapabilityGrid(
-        "Player Events",
+        "Player Intelligence",
         [
           "Shots",
           "Shots on Target",
@@ -6998,6 +7032,18 @@
     </section>
 
     <section class="section split">
+      <div>
+        <div class="section-head">
+          <div>
+            <h2>Today's Prediction Desk</h2>
+            <p class="section-copy">
+              Fixtures are grouped by competition first so you can orient fast, then expand only the ones worth reading more closely.
+            </p>
+          </div>
+          <a class="ghost-button" href="./matches.html">Open matches</a>
+        </div>
+        ${renderPublicFixtureGroups(publicDeskRows)}
+      </div>
       <article class="panel featured-proof-panel">
         <span class="metric-label">Recent public live results</span>
         <h3>Settled outcomes stay visible.</h3>
@@ -7006,9 +7052,16 @@
           <a class="button" href="./results.html">Open results page</a>
         </div>
       </article>
+    </section>
+
+    ${worldCupFounderModule()}
+
+    ${founderProofSection()}
+
+    <section class="section split">
       <article class="panel">
         <span class="metric-label">Founder Early Access</span>
-        <h3>World Cup + pre-season edition.</h3>
+        <h3>Founder membership, without the noise.</h3>
         <p class="muted">
           Founder access is a discounted early seat for the football intelligence system: core fixture reads,
           proof archive, premium market posture, and selected beta surfaces as they harden.
@@ -7022,23 +7075,8 @@
           <a class="button" href="./pricing.html">See access tiers</a>
         </div>
       </article>
-    </section>
-
-    <section class="section split">
-      <div>
-        <div class="section-head">
-          <div>
-            <h2>Today on the desk</h2>
-            <p class="section-copy">
-              Fixtures are grouped by competition first so you can orient fast, then expand only the ones worth reading more closely.
-            </p>
-          </div>
-          <a class="ghost-button" href="./dashboard.html">Open dashboard</a>
-        </div>
-        ${renderPublicFixtureGroups(publicDeskRows)}
-      </div>
       <article class="panel">
-        <h3>How to read it</h3>
+        <h3>How Odds Genius Works</h3>
         <ul class="method-list">
           <li>Start with the league group, not a flat prediction table.</li>
           <li>Expand a fixture only when the state, market, or timing makes it worth more attention.</li>
@@ -7052,7 +7090,7 @@
 
     <section class="section split">
       <article class="panel">
-        <h3>The decision layer is the moat.</h3>
+        <h3>Decision Confidence</h3>
         <ul class="method-list">
           <li>Core models estimate probability.</li>
           <li>Poisson goal mass checks match structure.</li>
@@ -7062,7 +7100,7 @@
         </ul>
       </article>
       <article class="panel">
-        <h3>No edge is also information</h3>
+        <h3>Disciplined by Design</h3>
         <ul class="method-list">
           <li>Restraint is part of the product, not a missing feature.</li>
           <li>A pass state should still teach the user something about price, volatility, and uncertainty.</li>
